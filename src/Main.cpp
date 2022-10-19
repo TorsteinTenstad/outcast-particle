@@ -1,9 +1,9 @@
 #include "Platform/Platform.hpp"
+#include "particle.h"
 
 int main()
 {
 	util::Platform platform;
-
 #if defined(_DEBUG)
 	std::cout << "Hello World!" << std::endl;
 #endif
@@ -36,6 +36,5 @@ int main()
 		window.draw(shape);
 		window.display();
 	}
-
 	return 0;
 }
