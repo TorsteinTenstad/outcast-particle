@@ -26,7 +26,8 @@
 		"*.stats": "cpp",
 		"*.desktop": "properties",
 		".clang-format": "yaml",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"xiosbase": "cpp"
 	},
 	"terminal.integrated.defaultProfile.windows": "Git Bash",
 	"terminal.integrated.env.windows": {
