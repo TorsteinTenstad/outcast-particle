@@ -1,6 +1,6 @@
 #include "render_system.hpp"
 
-void RenderSystem::Update(sf::RenderWindow& window, std::map<int, DrawInfo> drawinfo)
+void RenderSystem::Update(sf::RenderWindow& window, std::map<int, DrawInfo> drawinfo, std::map<int, Position> position)
 {
 	for (auto const& [entity_id, entity_drawinfo] : drawinfo)
 	{
@@ -14,6 +14,7 @@ void RenderSystem::Update(sf::RenderWindow& window, std::map<int, DrawInfo> draw
 			textures_[entity_drawinfo.image_path].loadFromFile(entity_drawinfo.image_path);
 		}
 		sprites_[entity_id].setTexture(textures_[entity_drawinfo.image_path]);
+		sprites_[entity_id].setPosition(position[entity_id].position);
 		window.draw(sprites_[entity_id]);
 	}
 }

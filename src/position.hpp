@@ -2,7 +2,6 @@
 
 class Position
 {
-private:
-	int x;
-	int y;
+public:
+	sf::Vector2f position;
 };

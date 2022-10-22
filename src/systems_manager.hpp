@@ -7,6 +7,7 @@ class SystemsManager
 {
 private:
 	std::map<int, DrawInfo> draw_info_;
+	std::map<int, Position> position_;
 	RenderSystem render_system_;
 
 public:
