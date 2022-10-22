@@ -1,7 +1,7 @@
 #pragma once
 #include "PCH.hpp"
 #include "draw_info.hpp"
-#include "position.hpp"
+#include "physics_components.hpp"
 
 class RenderSystem
 {

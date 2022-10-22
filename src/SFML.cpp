@@ -31,7 +31,6 @@ SFML::SFML()
 				window.setView(sf::View(visibleArea));
 			}
 		}
-
 		window.clear();
 		float dt = timer.GetElapsedSeconds();
 		systems_manager.Update(window, dt);
