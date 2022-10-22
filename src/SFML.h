@@ -1,7 +1,20 @@
 #include "Platform/Platform.hpp"
+#include "systems_manager.hpp"
 
-class SFML
+class RenderSystem
+{
+private:
+	util::Platform platform_;
+	sf::RenderWindow window_;
+
+public:
+	RenderSystem();
+	Update(float dt);
+};
+
+class EventSystem
 {
 public:
-	SFML();
-};
+	EventSystem();
+	Update(float dt);
+}

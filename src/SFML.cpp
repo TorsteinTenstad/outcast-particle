@@ -10,11 +10,9 @@ SFML::SFML()
 	window.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "outcast-particle");
 	platform.setIcon(window.getSystemHandle());
 
-	sf::CircleShape shape = sf::CircleShape(100);
-	shape.setFillColor(sf::Color::White);
+	SystemsManager systems_manager = SystemsManager();
 
 	sf::Event event;
-
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
@@ -33,7 +31,8 @@ SFML::SFML()
 		}
 
 		window.clear();
-		window.draw(shape);
+		float dt = 0.5;
+		systems_manager.Update(window, dt);
 		window.display();
 	}
 }
