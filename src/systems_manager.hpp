@@ -1,4 +1,5 @@
 #include "PCH.hpp"
+#include "acceleration_system.hpp"
 #include "draw_info.hpp"
 #include "render_system.hpp"
 #include "velocity_system.hpp"
@@ -10,8 +11,10 @@ private:
 	std::map<int, DrawInfo> draw_info_;
 	std::map<int, Position> position_;
 	std::map<int, Velocity> velocity_;
+	std::map<int, Acceleration> acceleration_;
 	RenderSystem render_system_;
 	VelocitySystem velocity_system_;
+	AccelerationSystem acceleration_system_;
 
 public:
 	SystemsManager();
