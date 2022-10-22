@@ -11,6 +11,7 @@ SFML::SFML()
 	platform.setIcon(window.getSystemHandle());
 
 	SystemsManager systems_manager = SystemsManager();
+	systems_manager.AddEntity();
 
 	sf::Event event;
 	while (window.isOpen())
