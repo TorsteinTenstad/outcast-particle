@@ -1,7 +1,8 @@
+#pragma once
 #include "PCH.hpp"
 
 class DrawInfo
 {
-private:
-	std::string image_path_;
+public:
+	std::string image_path;
 };

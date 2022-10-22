@@ -14,6 +14,7 @@ SFML::SFML()
 	systems_manager.AddEntity();
 
 	sf::Event event;
+	Timer timer = Timer();
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
@@ -32,7 +33,7 @@ SFML::SFML()
 		}
 
 		window.clear();
-		float dt = 0.5;
+		float dt = timer.GetElapsedSeconds();
 		systems_manager.Update(window, dt);
 		window.display();
 	}

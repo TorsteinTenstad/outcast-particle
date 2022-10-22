@@ -2,11 +2,13 @@
 
 SystemsManager::SystemsManager()
 {
+	render_system_ = RenderSystem();
 }
 
 void SystemsManager::Update(sf::RenderWindow& window, float dt)
 {
-	render_system_.Update(draw_info_)
+	(void)dt;
+	render_system_.Update(window, draw_info_);
 }
 
 void SystemsManager::AddEntity()

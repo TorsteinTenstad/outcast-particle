@@ -1,20 +1,13 @@
 #include "Platform/Platform.hpp"
 #include "systems_manager.hpp"
+#include "timer.hpp"
 
-class RenderSystem
+class SFML
 {
-private:
-	util::Platform platform_;
-	sf::RenderWindow window_;
+	//private:
+	//	util::Platform platform_;
+	//	sf::RenderWindow window_;
 
 public:
-	RenderSystem();
-	Update(float dt);
+	SFML();
 };
-
-class EventSystem
-{
-public:
-	EventSystem();
-	Update(float dt);
-}

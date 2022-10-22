@@ -1,7 +1,8 @@
 #include "PCH.hpp"
 
-class DrawInfo
+class Position
 {
 private:
-	std::string image_path_;
-}
+	int x;
+	int y;
+};

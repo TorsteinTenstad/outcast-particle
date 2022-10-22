@@ -4,14 +4,16 @@ void RenderSystem::Update(sf::RenderWindow& window, std::map<int, DrawInfo> draw
 {
 	for (auto const& [entity_id, entity_drawinfo] : drawinfo)
 	{
-		sf::Sprite sprite;
+		if (sprites_.count(entity_id) == 0)
+		{
+			sprites_[entity_id] = sf::Sprite();
+		}
 		if (textures_.count(entity_drawinfo.image_path) == 0)
 		{
-			sf::Texture texture;
-			texture.loadFromFile(entity_drawinfo.image_path);
-			textures_[entity_drawinfo.image_path] = texture;
+			textures_[entity_drawinfo.image_path] = sf::Texture();
+			textures_[entity_drawinfo.image_path].loadFromFile(entity_drawinfo.image_path);
 		}
-		sprite.setTexture(textures_[entity_drawinfo.image_path]);
-		window.draw(sprite);
+		sprites_[entity_id].setTexture(textures_[entity_drawinfo.image_path]);
+		window.draw(sprites_[entity_id]);
 	}
 }
