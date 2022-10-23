@@ -19,7 +19,7 @@ void SystemsManager::Update(sf::RenderWindow& window, float dt)
 void SystemsManager::AddEntity()
 {
 	DrawInfo d;
-	d.image_path = "content\\sfml.png";
+	d.image_path = "content\\particle_+.png";
 	draw_info_[1] = d;
 	Position p;
 	p.position = sf::Vector2f(825, 350);
