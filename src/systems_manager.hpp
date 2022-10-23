@@ -3,6 +3,7 @@
 #include "draw_info.hpp"
 #include "electric_force_system.hpp"
 #include "event_system.hpp"
+#include "force_system.hpp"
 #include "render_system.hpp"
 #include "velocity_system.hpp"
 #include <map>
@@ -15,6 +16,7 @@ private:
 	std::map<int, Velocity> velocity_;
 	std::map<int, Acceleration> acceleration_;
 	std::map<int, ReceivedForces> received_forces_;
+	std::map<int, AffectedByKeyboardForces> affected_by_keyboard_forces_;
 	std::map<int, Charge> charge_;
 
 	EventSystem event_system_;
@@ -22,6 +24,7 @@ private:
 	VelocitySystem velocity_system_;
 	RenderSystem render_system_;
 	ElectricForceSystem electric_force_system_;
+	ForceSystem force_system_;
 
 public:
 	SystemsManager();

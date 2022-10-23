@@ -1,3 +1,4 @@
+#include "PCH.hpp"
 #include "electric_force_system.hpp"
 #include "physics_components.hpp"
 
@@ -10,7 +11,7 @@ static sf::Vector2f TotalForce(ReceivedForces forces)
 class ForceSystem
 {
 public:
-	void Update(std::map<int, Acceleration> acceleration_map, std::map<int, ReceivedForces> forces_map)
+	void Update(std::map<int, Acceleration>& acceleration_map, std::map<int, ReceivedForces>& forces_map)
 	{
 		for (auto const& [entity_id, received_forces] : forces_map)
 		{
