@@ -22,8 +22,8 @@ public:
 			{
 				textures_[entity_drawinfo.image_path] = sf::Texture();
 				textures_[entity_drawinfo.image_path].loadFromFile(entity_drawinfo.image_path);
-				sprites_[entity_id].setOrigin(textures_[entity_drawinfo.image_path].getSize().x / 2, textures_[entity_drawinfo.image_path].getSize().y / 2);
 			}
+			sprites_[entity_id].setOrigin(textures_[entity_drawinfo.image_path].getSize().x / 2, textures_[entity_drawinfo.image_path].getSize().y / 2);
 			sprites_[entity_id].setTexture(textures_[entity_drawinfo.image_path]);
 			sprites_[entity_id].setPosition(position_map[entity_id].position);
 			window.draw(sprites_[entity_id]);

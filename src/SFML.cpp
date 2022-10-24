@@ -11,8 +11,22 @@ SFML::SFML()
 	platform.setIcon(window.getSystemHandle());
 
 	SystemsManager systems_manager = SystemsManager();
-	systems_manager.AddPlayerEntity(0, 0, 0, 0, -10000);
-	systems_manager.AddParticleEntity(1920 / 2, 1080 / 2, 10000);
+	//systems_manager.AddPlayerEntity(1920 / 2, 1080 / 2, 0, 0, -10);
+	systems_manager.AddMovingParticleEntity(1920 / 2 + 100, 1080 / 2 + 100, -100, 100, -10);
+	systems_manager.AddMovingParticleEntity(1920 / 2 + 100, 1080 / 2 - 100, 100, 100, -10);
+	systems_manager.AddMovingParticleEntity(1920 / 2 - 100, 1080 / 2 + 100, -100, -100, -10);
+	systems_manager.AddMovingParticleEntity(1920 / 2 - 100, 1080 / 2 - 100, 100, -100, -10);
+	systems_manager.AddParticleEntity(1920 / 2, 1080 / 2, 10000000);
+	//for (int x = 0; x < 1920; x += 128)
+	{
+		//systems_manager.AddParticleEntity(x, 0, -10);
+		//systems_manager.AddParticleEntity(x, 1080, -10);
+	}
+	//for (int y = 0; y < 1080; y += 128)
+	{
+		//systems_manager.AddParticleEntity(0, y, -10);
+		//systems_manager.AddParticleEntity(1920, y, -10);
+	}
 	systems_manager.SaveEntitiesToFile("oa_test.txt");
 
 	Timer timer = Timer();

@@ -48,6 +48,28 @@ void SystemsManager::AddPlayerEntity(float pos_x, float pos_y, float vel_x, floa
 	player_[id] = Player();
 }
 
+void SystemsManager::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
+{
+	int id = CreateEntityId();
+	if (charge > 0)
+	{
+		draw_info_[id] = { "content\\particle_100_red+.png" };
+	}
+	else if (charge < 0)
+	{
+		draw_info_[id] = { "content\\particle_100_green-.png" };
+	}
+	else
+	{
+		draw_info_[id] = { "content\\particle_100_blue.png" };
+	}
+	position_[id] = { sf::Vector2f(pos_x, pos_y) };
+	velocity_[id] = { sf::Vector2f(vel_x, vel_y) };
+	acceleration_[id] = { sf::Vector2f(0, 0) };
+	charge_[id] = { charge };
+	received_forces_[id] = ReceivedForces();
+}
+
 void SystemsManager::AddParticleEntity(float pos_x, float pos_y, float charge)
 {
 	int id = CreateEntityId();
@@ -61,7 +83,7 @@ void SystemsManager::AddParticleEntity(float pos_x, float pos_y, float charge)
 	}
 	else
 	{
-		draw_info_[id] = { "content\\particle_100_blue-.png" };
+		draw_info_[id] = { "" };
 	}
 	position_[id] = { sf::Vector2f(pos_x, pos_y) };
 	charge_[id] = { charge };
