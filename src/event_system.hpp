@@ -1,13 +1,16 @@
 #pragma once
 #include "PCH.hpp"
-#include "affected_by_keyboard_forces_component.hpp"
 #include "physics_components.hpp"
+#include "player_component.hpp"
 #include "received_forces_component.hpp"
 
 class EventSystem
 {
+private:
+	float keyboard_force_magnitude_ = 3000;
+
 public:
-	void Update(sf::RenderWindow& window, std::map<int, AffectedByKeyboardForces>& affected_by_keyboard_forces_map, std::map<int, ReceivedForces>& received_forces_map)
+	void Update(sf::RenderWindow& window, std::map<int, Player>& player_map, std::map<int, ReceivedForces>& received_forces_map)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -24,50 +27,49 @@ public:
 			}
 			if (event.type == sf::Event::KeyPressed)
 			{
-				for (auto& [entity_id, _] : affected_by_keyboard_forces_map)
+				for (auto& [entity_id, _] : player_map)
 				{
 					(void)_;
-					float force_magnitude = 3000;
 					if (event.key.code == sf::Keyboard::A)
 					{
-						received_forces_map[entity_id].keyboard_force.x = -force_magnitude;
+						received_forces_map[entity_id].keyboard_force.x = -keyboard_force_magnitude_;
 					}
 					if (event.key.code == sf::Keyboard::D)
 					{
-						received_forces_map[entity_id].keyboard_force.x = force_magnitude;
+						received_forces_map[entity_id].keyboard_force.x = keyboard_force_magnitude_;
 					}
 					if (event.key.code == sf::Keyboard::W)
 					{
-						received_forces_map[entity_id].keyboard_force.y = -force_magnitude;
+						received_forces_map[entity_id].keyboard_force.y = -keyboard_force_magnitude_;
 					}
 					if (event.key.code == sf::Keyboard::S)
 					{
-						received_forces_map[entity_id].keyboard_force.y = force_magnitude;
+						received_forces_map[entity_id].keyboard_force.y = keyboard_force_magnitude_;
 					}
 				}
 			}
 
 			if (event.type == sf::Event::KeyReleased)
 			{
-				for (auto& [entity_id, _] : affected_by_keyboard_forces_map)
+				for (auto& [entity_id, _] : player_map)
 				{
 					(void)_;
-					float force_magnitude = 0;
+					float keyboard_force_magnitude_ = 0;
 					if (event.key.code == sf::Keyboard::A)
 					{
-						received_forces_map[entity_id].keyboard_force.x = -force_magnitude;
+						received_forces_map[entity_id].keyboard_force.x = -keyboard_force_magnitude_;
 					}
 					if (event.key.code == sf::Keyboard::D)
 					{
-						received_forces_map[entity_id].keyboard_force.x = force_magnitude;
+						received_forces_map[entity_id].keyboard_force.x = keyboard_force_magnitude_;
 					}
 					if (event.key.code == sf::Keyboard::W)
 					{
-						received_forces_map[entity_id].keyboard_force.y = -force_magnitude;
+						received_forces_map[entity_id].keyboard_force.y = -keyboard_force_magnitude_;
 					}
 					if (event.key.code == sf::Keyboard::S)
 					{
-						received_forces_map[entity_id].keyboard_force.y = force_magnitude;
+						received_forces_map[entity_id].keyboard_force.y = keyboard_force_magnitude_;
 					}
 				}
 			}

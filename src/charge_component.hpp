@@ -1,5 +1,5 @@
 class Charge
 {
 public:
-	float charge;
+	float charge = 0;
 };

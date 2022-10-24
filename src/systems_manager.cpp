@@ -12,7 +12,7 @@ SystemsManager::SystemsManager()
 
 void SystemsManager::Update(sf::RenderWindow& window, float dt)
 {
-	event_system_.Update(window, affected_by_keyboard_forces_, received_forces_);
+	event_system_.Update(window, player_, received_forces_);
 	electric_force_system_.Update(position_, charge_, received_forces_);
 	force_system_.Update(acceleration_, received_forces_);
 	acceleration_system_.Update(velocity_, acceleration_, dt);
@@ -20,36 +20,57 @@ void SystemsManager::Update(sf::RenderWindow& window, float dt)
 	render_system_.Update(window, draw_info_, position_);
 }
 
-void SystemsManager::AddEntity()
+int SystemsManager::CreateEntityId()
 {
-	DrawInfo d;
-	d.image_path = "content\\particle_100_blue-.png";
-	draw_info_[1] = d;
-	Position p;
-	p.position = sf::Vector2f(400, 350);
-	position_[1] = p;
-	Velocity v;
-	v.velocity = sf::Vector2f(0, 500);
-	velocity_[1] = v;
-	Acceleration a;
-	a.acceleration = sf::Vector2f(0, 0);
-	acceleration_[1] = a;
-	Charge c;
-	c.charge = -10000;
-	charge_[1] = c;
-	ReceivedForces rf;
-	rf.mass = 1;
-	received_forces_[1] = rf;
-	AffectedByKeyboardForces abkf;
-	affected_by_keyboard_forces_[1] = abkf;
+	return next_available_entity_id_++;
+}
 
-	DrawInfo d2;
-	d2.image_path = "content\\particle_100_red+.png";
-	draw_info_[2] = d2;
-	Position p2;
-	p2.position = sf::Vector2f(825, 350);
-	position_[2] = p2;
-	Charge c2;
-	c2.charge = 10000;
-	charge_[2] = c2;
+void SystemsManager::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
+{
+	int id = CreateEntityId();
+	if (charge > 0)
+	{
+		draw_info_[id] = { "content\\particle_100_blue+.png" };
+	}
+	else if (charge < 0)
+	{
+		draw_info_[id] = { "content\\particle_100_blue-.png" };
+	}
+	else
+	{
+		draw_info_[id] = { "content\\particle_100_blue.png" };
+	}
+	position_[id] = { sf::Vector2f(pos_x, pos_y) };
+	velocity_[id] = { sf::Vector2f(vel_x, vel_y) };
+	acceleration_[id] = { sf::Vector2f(0, 0) };
+	charge_[id] = { charge };
+	received_forces_[id] = ReceivedForces();
+	player_[id] = Player();
+}
+
+void SystemsManager::AddParticleEntity(float pos_x, float pos_y, float charge)
+{
+	int id = CreateEntityId();
+	if (charge > 0)
+	{
+		draw_info_[id] = { "content\\particle_100_red+.png" };
+	}
+	else if (charge < 0)
+	{
+		draw_info_[id] = { "content\\particle_100_green-.png" };
+	}
+	else
+	{
+		draw_info_[id] = { "content\\particle_100_blue-.png" };
+	}
+	position_[id] = { sf::Vector2f(pos_x, pos_y) };
+	charge_[id] = { charge };
+}
+
+void SystemsManager::SaveEntitiesToFile(std::string path)
+{
+}
+
+void SystemsManager::LoadEntitiesFromFile(std::string path)
+{
 }

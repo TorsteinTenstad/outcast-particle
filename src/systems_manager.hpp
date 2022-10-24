@@ -16,7 +16,7 @@ private:
 	std::map<int, Velocity> velocity_;
 	std::map<int, Acceleration> acceleration_;
 	std::map<int, ReceivedForces> received_forces_;
-	std::map<int, AffectedByKeyboardForces> affected_by_keyboard_forces_;
+	std::map<int, Player> player_;
 	std::map<int, Charge> charge_;
 
 	EventSystem event_system_;
@@ -26,8 +26,14 @@ private:
 	ElectricForceSystem electric_force_system_;
 	ForceSystem force_system_;
 
+	int next_available_entity_id_ = 0;
+	int CreateEntityId();
+
 public:
 	SystemsManager();
+	void LoadEntitiesFromFile(std::string path);
+	void SaveEntitiesFromFile(std::string path);
 	void Update(sf::RenderWindow& window, float dt);
-	void AddEntity();
+	void AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
+	void AddParticleEntity(float pos_x, float pos_y, float charge);
 };

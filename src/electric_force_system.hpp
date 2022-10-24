@@ -1,12 +1,12 @@
 #pragma once
 #include "charge_component.hpp"
-#include "distance.hpp"
 #include "physics_components.hpp"
 #include "received_forces_component.hpp"
+#include "utilityfunctions.hpp"
 
 static sf::Vector2f CalculateElectricForce(Position particle_to, Position particle_from, Charge charge_a, Charge charge_b)
 {
-	float distance = Distance(particle_to.position, particle_from.position);
+	float distance = Magnitude(particle_to.position - particle_from.position);
 	return ((charge_a.charge * charge_b.charge * (particle_to.position - particle_from.position)) / (distance * distance * distance));
 }
 

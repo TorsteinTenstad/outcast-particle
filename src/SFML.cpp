@@ -11,7 +11,8 @@ SFML::SFML()
 	platform.setIcon(window.getSystemHandle());
 
 	SystemsManager systems_manager = SystemsManager();
-	systems_manager.AddEntity();
+	systems_manager.AddPlayerEntity(0, 0, 0, 0, -10000);
+	systems_manager.AddParticleEntity(1920 / 2, 1080 / 2, 10000);
 
 	Timer timer = Timer();
 	while (window.isOpen())
