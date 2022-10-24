@@ -69,8 +69,10 @@ void SystemsManager::AddParticleEntity(float pos_x, float pos_y, float charge)
 
 void SystemsManager::SaveEntitiesToFile(std::string path)
 {
+	(void)path;
 }
 
 void SystemsManager::LoadEntitiesFromFile(std::string path)
 {
+	(void)path;
 }

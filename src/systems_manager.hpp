@@ -32,7 +32,7 @@ private:
 public:
 	SystemsManager();
 	void LoadEntitiesFromFile(std::string path);
-	void SaveEntitiesFromFile(std::string path);
+	void SaveEntitiesToFile(std::string path);
 	void Update(sf::RenderWindow& window, float dt);
 	void AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	void AddParticleEntity(float pos_x, float pos_y, float charge);
