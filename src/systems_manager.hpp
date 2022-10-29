@@ -4,6 +4,7 @@
 #include "electric_force_system.hpp"
 #include "event_system.hpp"
 #include "force_system.hpp"
+#include "keyboard_force_system.hpp"
 #include "render_system.hpp"
 #include "velocity_system.hpp"
 #include <map>
@@ -20,11 +21,12 @@ private:
 	std::map<int, Charge> charge_;
 
 	EventSystem event_system_;
+	KeyboardForceSystem keyboard_force_system_;
+	ElectricForceSystem electric_force_system_;
+	ForceSystem force_system_;
 	AccelerationSystem acceleration_system_;
 	VelocitySystem velocity_system_;
 	RenderSystem render_system_;
-	ElectricForceSystem electric_force_system_;
-	ForceSystem force_system_;
 
 	int next_available_entity_id_ = 0;
 	int CreateEntityId();

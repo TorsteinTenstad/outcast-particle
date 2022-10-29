@@ -3,16 +3,18 @@
 SystemsManager::SystemsManager()
 {
 	event_system_ = EventSystem();
+	keyboard_force_system_ = KeyboardForceSystem();
+	electric_force_system_ = ElectricForceSystem();
+	force_system_ = ForceSystem();
 	acceleration_system_ = AccelerationSystem();
 	velocity_system_ = VelocitySystem();
 	render_system_ = RenderSystem();
-	electric_force_system_ = ElectricForceSystem();
-	force_system_ = ForceSystem();
 }
 
 void SystemsManager::Update(sf::RenderWindow& window, float dt)
 {
-	event_system_.Update(window, player_, received_forces_);
+	event_system_.Update(window, player_);
+	keyboard_force_system_.Update(player_, received_forces_);
 	electric_force_system_.Update(position_, charge_, received_forces_);
 	force_system_.Update(acceleration_, received_forces_);
 	acceleration_system_.Update(velocity_, acceleration_, dt);

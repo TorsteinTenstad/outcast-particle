@@ -11,12 +11,12 @@ SFML::SFML()
 	platform.setIcon(window.getSystemHandle());
 
 	SystemsManager systems_manager = SystemsManager();
-	//systems_manager.AddPlayerEntity(1920 / 2, 1080 / 2, 0, 0, -10);
-	systems_manager.AddMovingParticleEntity(1920 / 2 + 100, 1080 / 2 + 100, -100, 100, -10);
-	systems_manager.AddMovingParticleEntity(1920 / 2 + 100, 1080 / 2 - 100, 100, 100, -10);
-	systems_manager.AddMovingParticleEntity(1920 / 2 - 100, 1080 / 2 + 100, -100, -100, -10);
-	systems_manager.AddMovingParticleEntity(1920 / 2 - 100, 1080 / 2 - 100, 100, -100, -10);
-	systems_manager.AddParticleEntity(1920 / 2, 1080 / 2, 10000000);
+	systems_manager.AddPlayerEntity(1920, 1080, 0, 0, -100);
+	systems_manager.AddMovingParticleEntity(1920 / 2 + 300, 1080 / 2 + 300, -100, 100, -100);
+	systems_manager.AddMovingParticleEntity(1920 / 2 + 300, 1080 / 2 - 300, 100, 100, -100);
+	systems_manager.AddMovingParticleEntity(1920 / 2 - 300, 1080 / 2 + 300, -100, -100, -100);
+	systems_manager.AddMovingParticleEntity(1920 / 2 - 300, 1080 / 2 - 300, 100, -100, -100);
+	systems_manager.AddParticleEntity(1920 / 2, 1080 / 2, 1000000);
 	//for (int x = 0; x < 1920; x += 128)
 	{
 		//systems_manager.AddParticleEntity(x, 0, -10);
