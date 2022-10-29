@@ -36,7 +36,7 @@ public:
 	Level();
 	void LoadEntitiesFromFile(std::string path);
 	void SaveEntitiesToFile(std::string path);
-	void Update(sf::RenderWindow& window, float dt);
+	void Update(float dt);
 	void AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	void AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	void AddParticleEntity(float pos_x, float pos_y, float charge);

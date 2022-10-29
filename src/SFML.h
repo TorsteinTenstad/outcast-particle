@@ -6,8 +6,6 @@
 class SFML
 {
 private:
-	sf::RenderWindow window_;
-
 public:
 	SFML();
 	void RunWindow(Game& game);

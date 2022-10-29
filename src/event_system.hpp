@@ -1,5 +1,6 @@
 #pragma once
 #include "PCH.hpp"
+#include "globals.hpp"
 #include "physics_components.hpp"
 #include "player_component.hpp"
 #include "received_forces_component.hpp"
@@ -8,20 +9,20 @@ class EventSystem
 {
 private:
 public:
-	void Update(sf::RenderWindow& window, std::map<int, Player>& player_map)
+	void Update(std::map<int, Player>& player_map)
 	{
 		sf::Event event;
-		while (window.pollEvent(event))
+		while (globals.render_window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				window.close();
+				globals.render_window.close();
 			}
 			if (event.type == sf::Event::Resized)
 			{
 				// update the view to the new size of the window
 				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-				window.setView(sf::View(visibleArea));
+				globals.render_window.setView(sf::View(visibleArea));
 			}
 			if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
 			{

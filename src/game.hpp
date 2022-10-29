@@ -8,5 +8,5 @@ private:
 
 public:
 	Game();
-	void Update(sf::RenderWindow& window, float dt);
+	void Update(float dt);
 };

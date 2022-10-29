@@ -5,21 +5,21 @@ SFML::SFML()
 {
 	util::Platform platform;
 	// in Windows at least, this must be called before creating the window
-	float screenScalingFactor = platform.getScreenScalingFactor(window_.getSystemHandle());
+	float screenScalingFactor = platform.getScreenScalingFactor(globals.render_window.getSystemHandle());
 	// Use the screenScalingFactor
-	window_.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "outcast-particle");
-	window_.setFramerateLimit(60);
-	platform.setIcon(window_.getSystemHandle());
+	globals.render_window.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "outcast-particle");
+	globals.render_window.setFramerateLimit(60);
+	platform.setIcon(globals.render_window.getSystemHandle());
 }
 
 void SFML::RunWindow(Game& game)
 {
 	Timer timer = Timer();
-	while (window_.isOpen())
+	while (globals.render_window.isOpen())
 	{
-		window_.clear();
+		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
-		game.Update(window_, dt);
-		window_.display();
+		game.Update(dt);
+		globals.render_window.display();
 	}
 }

@@ -12,7 +12,7 @@ Game::Game()
 	levels_.push_back(level);
 }
 
-void Game::Update(sf::RenderWindow& window, float dt)
+void Game::Update(float dt)
 {
-	levels_[0].Update(window, dt);
+	levels_[0].Update(dt);
 }

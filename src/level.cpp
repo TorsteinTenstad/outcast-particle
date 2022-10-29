@@ -11,15 +11,15 @@ Level::Level()
 	render_system_ = RenderSystem();
 }
 
-void Level::Update(sf::RenderWindow& window, float dt)
+void Level::Update(float dt)
 {
-	event_system_.Update(window, player_);
+	event_system_.Update(player_);
 	keyboard_force_system_.Update(player_, received_forces_);
 	electric_force_system_.Update(position_, charge_, received_forces_);
 	force_system_.Update(acceleration_, received_forces_);
 	acceleration_system_.Update(velocity_, acceleration_, dt);
 	velocity_system_.Update(position_, velocity_, dt);
-	render_system_.Update(window, draw_info_, position_);
+	render_system_.Update(draw_info_, position_);
 }
 
 int Level::CreateEntityId()
