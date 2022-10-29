@@ -24,7 +24,7 @@ class ReceivedForces
 public:
 	float mass = 1;
 	sf::Vector2f electric_force = sf::Vector2f(0, 0);
-	sf::Vector2f keyboard_force = sf::Vector2f(0, 0);
+	sf::Vector2f player_force = sf::Vector2f(0, 0);
 };
 
 class Charge

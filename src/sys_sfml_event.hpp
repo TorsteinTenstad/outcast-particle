@@ -1,15 +1,15 @@
 #pragma once
 #include "PCH.hpp"
-#include "comp_cursor.hpp"
 #include "comp_physics.hpp"
 #include "comp_player.hpp"
+#include "cursor_and_keys.hpp"
 #include "globals.hpp"
 
 class SFMLEventSystem
 {
 private:
 public:
-	void Update(Cursor& cursor, std::map<int, Player>& player_map)
+	void Update(CursorAndKeys& cursor_and_keys, std::map<int, Player>& player_map)
 	{
 		sf::Event event;
 		while (globals.render_window.pollEvent(event))
@@ -64,17 +64,17 @@ public:
 				}
 			}
 			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
-			cursor.position.x = mouse_pos.x;
-			cursor.position.y = mouse_pos.y;
+			cursor_and_keys.cursor_position.x = mouse_pos.x;
+			cursor_and_keys.cursor_position.y = mouse_pos.y;
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
-					cursor.left_button_is_pressed = true;
+					cursor_and_keys.left_button_is_pressed = true;
 				}
 				if (event.mouseButton.button == sf::Mouse::Right)
 				{
-					cursor.right_button_is_pressed = true;
+					cursor_and_keys.right_button_is_pressed = true;
 				}
 			}
 
@@ -82,11 +82,11 @@ public:
 			{
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
-					cursor.left_button_is_pressed = false;
+					cursor_and_keys.left_button_is_pressed = false;
 				}
 				if (event.mouseButton.button == sf::Mouse::Right)
 				{
-					cursor.right_button_is_pressed = false;
+					cursor_and_keys.right_button_is_pressed = false;
 				}
 			}
 		}

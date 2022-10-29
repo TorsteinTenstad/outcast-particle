@@ -1,7 +1,7 @@
 #include "comp_physics.hpp"
 #include "comp_player.hpp"
 
-class KeyboardForceSystem
+class PlayerSystem
 {
 public:
 	void Update(std::map<int, Player>& player_map, std::map<int, ReceivedForces>& received_forces_map)
@@ -26,8 +26,8 @@ public:
 			{
 				y_direction += 1;
 			}
-			received_forces_map[entity_id].keyboard_force.x = x_direction * player.move_force;
-			received_forces_map[entity_id].keyboard_force.y = y_direction * player.move_force;
+			received_forces_map[entity_id].player_force.x = x_direction * player.move_force;
+			received_forces_map[entity_id].player_force.y = y_direction * player.move_force;
 		}
 	}
 };

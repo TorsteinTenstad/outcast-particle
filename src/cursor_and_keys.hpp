@@ -1,9 +1,9 @@
 #pragma once
 
-class Cursor
+class CursorAndKeys
 {
 public:
-	sf::Vector2f position;
+	sf::Vector2f cursor_position;
 	bool right_button_is_pressed = false;
 	bool left_button_is_pressed = false;
 };

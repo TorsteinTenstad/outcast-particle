@@ -1,13 +1,13 @@
 #pragma once
 #include "PCH.hpp"
-#include "comp_cursor.hpp"
 #include "comp_draw_info.hpp"
+#include "cursor_and_keys.hpp"
 #include "sys_acceleration.hpp"
 #include "sys_cursor_interaction.hpp"
 #include "sys_display_velocity.hpp"
 #include "sys_electric_force.hpp"
 #include "sys_force.hpp"
-#include "sys_keyboard_force.hpp"
+#include "sys_player.hpp"
 #include "sys_sfml_event.hpp"
 #include "sys_sfml_render.hpp"
 #include "sys_velocity.hpp"
@@ -30,14 +30,14 @@ private:
 	SFMLEventSystem event_system_;
 	CursorInteractionSystem cursor_interaction_system_;
 	DisplayVelocitySystem display_velocity_system_;
-	KeyboardForceSystem keyboard_force_system_;
+	PlayerSystem player_system_;
 	ElectricForceSystem electric_force_system_;
 	ForceSystem force_system_;
 	AccelerationSystem acceleration_system_;
 	VelocitySystem velocity_system_;
 	SFMLRenderSystem render_system_;
 
-	Cursor cursor_;
+	CursorAndKeys cursor_and_keys_;
 
 	int next_available_entity_id_ = 0;
 	int CreateEntityId();

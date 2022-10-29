@@ -1,11 +1,11 @@
 #include "PCH.hpp"
-#include "sys_electric_force.hpp"
 #include "comp_physics.hpp"
+#include "sys_electric_force.hpp"
 #include "utilityfunctions.hpp"
 
 static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_limit)
 {
-	sf::Vector2f total_force = entity.electric_force + entity.keyboard_force;
+	sf::Vector2f total_force = entity.electric_force + entity.player_force;
 	sf::Vector2f acceleration = total_force / entity.mass;
 
 	float magnitude = Magnitude(acceleration);
