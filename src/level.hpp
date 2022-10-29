@@ -1,13 +1,13 @@
 #pragma once
 #include "PCH.hpp"
-#include "acceleration_system.hpp"
-#include "draw_info.hpp"
-#include "electric_force_system.hpp"
-#include "event_system.hpp"
-#include "force_system.hpp"
-#include "keyboard_force_system.hpp"
-#include "render_system.hpp"
-#include "velocity_system.hpp"
+#include "comp_draw_info.hpp"
+#include "sys_acceleration.hpp"
+#include "sys_electric_force.hpp"
+#include "sys_event.hpp"
+#include "sys_force.hpp"
+#include "sys_keyboard_force.hpp"
+#include "sys_render.hpp"
+#include "sys_velocity.hpp"
 #include <map>
 
 class Level

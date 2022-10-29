@@ -1,9 +1,8 @@
 #pragma once
 #include "PCH.hpp"
-#include "draw_info.hpp"
+#include "comp_draw_info.hpp"
+#include "comp_physics.hpp"
 #include "globals.hpp"
-#include "physics_components.hpp"
-#include "received_forces_component.hpp"
 
 class RenderSystem
 {

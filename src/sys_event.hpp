@@ -1,9 +1,8 @@
 #pragma once
 #include "PCH.hpp"
 #include "globals.hpp"
-#include "physics_components.hpp"
-#include "player_component.hpp"
-#include "received_forces_component.hpp"
+#include "comp_physics.hpp"
+#include "comp_player.hpp"
 
 class EventSystem
 {

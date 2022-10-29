@@ -1,4 +1,4 @@
-#include "physics_components.hpp"
+#include "comp_physics.hpp"
 
 class AccelerationSystem
 {

@@ -1,7 +1,5 @@
 #pragma once
-#include "charge_component.hpp"
-#include "physics_components.hpp"
-#include "received_forces_component.hpp"
+#include "comp_physics.hpp"
 #include "utilityfunctions.hpp"
 
 static sf::Vector2f CalculateElectricForce(Position particle_to, Position particle_from, Charge charge_a, Charge charge_b)
