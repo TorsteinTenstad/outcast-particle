@@ -1,6 +1,6 @@
-#include "systems_manager.hpp"
+#include "level.hpp"
 
-SystemsManager::SystemsManager()
+Level::Level()
 {
 	event_system_ = EventSystem();
 	keyboard_force_system_ = KeyboardForceSystem();
@@ -11,7 +11,7 @@ SystemsManager::SystemsManager()
 	render_system_ = RenderSystem();
 }
 
-void SystemsManager::Update(sf::RenderWindow& window, float dt)
+void Level::Update(sf::RenderWindow& window, float dt)
 {
 	event_system_.Update(window, player_);
 	keyboard_force_system_.Update(player_, received_forces_);
@@ -22,12 +22,12 @@ void SystemsManager::Update(sf::RenderWindow& window, float dt)
 	render_system_.Update(window, draw_info_, position_);
 }
 
-int SystemsManager::CreateEntityId()
+int Level::CreateEntityId()
 {
 	return next_available_entity_id_++;
 }
 
-void SystemsManager::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
+void Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
 {
 	int id = CreateEntityId();
 	if (charge > 0)
@@ -50,7 +50,7 @@ void SystemsManager::AddPlayerEntity(float pos_x, float pos_y, float vel_x, floa
 	player_[id] = Player();
 }
 
-void SystemsManager::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
+void Level::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
 {
 	int id = CreateEntityId();
 	if (charge > 0)
@@ -72,7 +72,7 @@ void SystemsManager::AddMovingParticleEntity(float pos_x, float pos_y, float vel
 	received_forces_[id] = ReceivedForces();
 }
 
-void SystemsManager::AddParticleEntity(float pos_x, float pos_y, float charge)
+void Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 {
 	int id = CreateEntityId();
 	if (charge > 0)
@@ -91,12 +91,12 @@ void SystemsManager::AddParticleEntity(float pos_x, float pos_y, float charge)
 	charge_[id] = { charge };
 }
 
-void SystemsManager::SaveEntitiesToFile(std::string path)
+void Level::SaveEntitiesToFile(std::string path)
 {
 	(void)path;
 }
 
-void SystemsManager::LoadEntitiesFromFile(std::string path)
+void Level::LoadEntitiesFromFile(std::string path)
 {
 	(void)path;
 }

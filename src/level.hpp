@@ -1,3 +1,4 @@
+#pragma once
 #include "PCH.hpp"
 #include "acceleration_system.hpp"
 #include "draw_info.hpp"
@@ -9,7 +10,7 @@
 #include "velocity_system.hpp"
 #include <map>
 
-class SystemsManager
+class Level
 {
 private:
 	std::map<int, DrawInfo> draw_info_;
@@ -32,7 +33,7 @@ private:
 	int CreateEntityId();
 
 public:
-	SystemsManager();
+	Level();
 	void LoadEntitiesFromFile(std::string path);
 	void SaveEntitiesToFile(std::string path);
 	void Update(sf::RenderWindow& window, float dt);
