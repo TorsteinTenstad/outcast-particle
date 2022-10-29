@@ -20,7 +20,7 @@ public:
 			{
 				if (cursor.left_button_is_pressed)
 				{
-					position_map_[entity_id].position = cursor.position;
+					position_map_[entity_id].position = cursor.position - draggable_entity.offset;
 				}
 				else
 				{
@@ -30,6 +30,7 @@ public:
 			else if (cursor.left_button_is_pressed && Magnitude(cursor.position - position_map_[entity_id].position) < radius_map_[entity_id].radius)
 			{
 				draggable_entity.being_dragged = true;
+				draggable_entity.offset = cursor.position - position_map_[entity_id].position;
 			}
 		}
 	}

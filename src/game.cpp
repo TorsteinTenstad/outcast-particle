@@ -11,8 +11,7 @@ Game::Game()
 	level1.AddParticleEntity(1920 / 2, 1080 / 2, 1000000);
 
 	Level level2 = Level();
-	level2.AddPlayerEntity(1920, 1080, 0, 0, -100);
-	level2.AddParticleEntity(0, 0, 1000000);
+	level2.AddPlayerEntity(1920 / 2, 1080 / 2, 0, 0, -100);
 
 	levels_.push_back(level1);
 	levels_.push_back(level2);

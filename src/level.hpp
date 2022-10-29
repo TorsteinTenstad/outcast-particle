@@ -4,6 +4,7 @@
 #include "comp_draw_info.hpp"
 #include "sys_acceleration.hpp"
 #include "sys_cursor_interaction.hpp"
+#include "sys_display_velocity.hpp"
 #include "sys_electric_force.hpp"
 #include "sys_force.hpp"
 #include "sys_keyboard_force.hpp"
@@ -28,6 +29,7 @@ private:
 
 	SFMLEventSystem event_system_;
 	CursorInteractionSystem cursor_interaction_system_;
+	DisplayVelocitySystem display_velocity_system_;
 	KeyboardForceSystem keyboard_force_system_;
 	ElectricForceSystem electric_force_system_;
 	ForceSystem force_system_;
@@ -45,7 +47,7 @@ public:
 	void LoadEntitiesFromFile(std::string path);
 	void SaveEntitiesToFile(std::string path);
 	void Update(float dt);
-	void AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
-	void AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
-	void AddParticleEntity(float pos_x, float pos_y, float charge);
+	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
+	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
+	int AddParticleEntity(float pos_x, float pos_y, float charge);
 };

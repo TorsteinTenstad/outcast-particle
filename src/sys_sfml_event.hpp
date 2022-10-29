@@ -46,6 +46,14 @@ public:
 						player.moving_right = (event.type == sf::Event::KeyPressed);
 					}
 				}
+			}
+
+			if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					globals.edit_mode = !globals.edit_mode;
+				}
 				if (event.key.code == sf::Keyboard::Num0)
 				{
 					globals.active_level = 0;

@@ -1,4 +1,5 @@
 #pragma once
+#include "PCH.hpp"
 
 class ClickedOn
 {
@@ -10,4 +11,5 @@ class Draggable
 {
 public:
 	bool being_dragged;
+	sf::Vector2f offset;
 };

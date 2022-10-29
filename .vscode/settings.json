@@ -111,7 +111,18 @@
 		"cstdarg": "cpp",
 		"cwctype": "cpp",
 		"memory_resource": "cpp",
-		"string_view": "cpp"
+		"string_view": "cpp",
+		"*.ipp": "cpp",
+		"csignal": "cpp",
+		"strstream": "cpp",
+		"complex": "cpp",
+		"unordered_set": "cpp",
+		"rope": "cpp",
+		"slist": "cpp",
+		"cfenv": "cpp",
+		"cinttypes": "cpp",
+		"typeindex": "cpp",
+		"valarray": "cpp"
 	},
 	"terminal.integrated.defaultProfile.windows": "Git Bash",
 	"terminal.integrated.env.windows": {
