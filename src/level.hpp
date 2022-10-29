@@ -1,12 +1,14 @@
 #pragma once
 #include "PCH.hpp"
+#include "comp_cursor.hpp"
 #include "comp_draw_info.hpp"
 #include "sys_acceleration.hpp"
+#include "sys_cursor_interaction.hpp"
 #include "sys_electric_force.hpp"
-#include "sys_event.hpp"
 #include "sys_force.hpp"
 #include "sys_keyboard_force.hpp"
-#include "sys_render.hpp"
+#include "sys_sfml_event.hpp"
+#include "sys_sfml_render.hpp"
 #include "sys_velocity.hpp"
 #include <map>
 
@@ -20,14 +22,20 @@ private:
 	std::map<int, ReceivedForces> received_forces_;
 	std::map<int, Player> player_;
 	std::map<int, Charge> charge_;
+	std::map<int, Draggable> draggable_;
+	std::map<int, Radius> radius_;
+	std::map<int, ClickedOn> clicked_on_;
 
-	EventSystem event_system_;
+	SFMLEventSystem event_system_;
+	CursorInteractionSystem cursor_interaction_system_;
 	KeyboardForceSystem keyboard_force_system_;
 	ElectricForceSystem electric_force_system_;
 	ForceSystem force_system_;
 	AccelerationSystem acceleration_system_;
 	VelocitySystem velocity_system_;
-	RenderSystem render_system_;
+	SFMLRenderSystem render_system_;
+
+	Cursor cursor_;
 
 	int next_available_entity_id_ = 0;
 	int CreateEntityId();

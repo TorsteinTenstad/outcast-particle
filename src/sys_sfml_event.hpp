@@ -1,14 +1,15 @@
 #pragma once
 #include "PCH.hpp"
-#include "globals.hpp"
+#include "comp_cursor.hpp"
 #include "comp_physics.hpp"
 #include "comp_player.hpp"
+#include "globals.hpp"
 
-class EventSystem
+class SFMLEventSystem
 {
 private:
 public:
-	void Update(std::map<int, Player>& player_map)
+	void Update(Cursor& cursor, std::map<int, Player>& player_map)
 	{
 		sf::Event event;
 		while (globals.render_window.pollEvent(event))
@@ -52,6 +53,32 @@ public:
 				if (event.key.code == sf::Keyboard::Num1)
 				{
 					globals.active_level = 1;
+				}
+			}
+			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
+			cursor.position.x = mouse_pos.x;
+			cursor.position.y = mouse_pos.y;
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					cursor.left_button_is_pressed = true;
+				}
+				if (event.mouseButton.button == sf::Mouse::Right)
+				{
+					cursor.right_button_is_pressed = true;
+				}
+			}
+
+			if (event.type == sf::Event::MouseButtonReleased)
+			{
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					cursor.left_button_is_pressed = false;
+				}
+				if (event.mouseButton.button == sf::Mouse::Right)
+				{
+					cursor.right_button_is_pressed = false;
 				}
 			}
 		}

@@ -2,23 +2,25 @@
 
 Level::Level()
 {
-	event_system_ = EventSystem();
+	event_system_ = SFMLEventSystem();
+	cursor_interaction_system_ = CursorInteractionSystem();
 	keyboard_force_system_ = KeyboardForceSystem();
 	electric_force_system_ = ElectricForceSystem();
 	force_system_ = ForceSystem();
 	acceleration_system_ = AccelerationSystem();
 	velocity_system_ = VelocitySystem();
-	render_system_ = RenderSystem();
+	render_system_ = SFMLRenderSystem();
 }
 
 void Level::Update(float dt)
 {
-	event_system_.Update(player_);
+	event_system_.Update(cursor_, player_);
 	keyboard_force_system_.Update(player_, received_forces_);
 	electric_force_system_.Update(position_, charge_, received_forces_);
 	force_system_.Update(acceleration_, received_forces_);
 	acceleration_system_.Update(velocity_, acceleration_, dt);
 	velocity_system_.Update(position_, velocity_, dt);
+	cursor_interaction_system_.Update(cursor_, draggable_, radius_, clicked_on_, position_);
 	render_system_.Update(draw_info_, position_);
 }
 
@@ -89,6 +91,8 @@ void Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 	}
 	position_[id] = { sf::Vector2f(pos_x, pos_y) };
 	charge_[id] = { charge };
+	draggable_[id] = {};
+	radius_[id] = { 50 };
 }
 
 void Level::SaveEntitiesToFile(std::string path)

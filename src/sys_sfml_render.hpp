@@ -4,7 +4,7 @@
 #include "comp_physics.hpp"
 #include "globals.hpp"
 
-class RenderSystem
+class SFMLRenderSystem
 {
 private:
 	std::map<std::string, sf::Texture> textures_;

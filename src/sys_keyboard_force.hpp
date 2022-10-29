@@ -1,3 +1,6 @@
+#include "comp_physics.hpp"
+#include "comp_player.hpp"
+
 class KeyboardForceSystem
 {
 public:
