@@ -18,16 +18,16 @@ public:
 		{
 			if (draggable_entity.being_dragged)
 			{
-				if (cursor_and_keys.left_button_is_pressed)
-				{
-					position_map_[entity_id].position = cursor_and_keys.cursor_position - draggable_entity.offset;
-				}
-				else
+				if (cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left])
 				{
 					draggable_entity.being_dragged = false;
 				}
+				else
+				{
+					position_map_[entity_id].position = cursor_and_keys.cursor_position - draggable_entity.offset;
+				}
 			}
-			else if (cursor_and_keys.left_button_is_pressed && Magnitude(cursor_and_keys.cursor_position - position_map_[entity_id].position) < radius_map_[entity_id].radius)
+			else if (cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left] && Magnitude(cursor_and_keys.cursor_position - position_map_[entity_id].position) < radius_map_[entity_id].radius)
 			{
 				draggable_entity.being_dragged = true;
 				draggable_entity.offset = cursor_and_keys.cursor_position - position_map_[entity_id].position;

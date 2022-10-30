@@ -11,6 +11,7 @@ private:
 public:
 	void Update(CursorAndKeys& cursor_and_keys)
 	{
+		cursor_and_keys.ResetFrameEvents();
 		sf::Event event;
 		while (globals.render_window.pollEvent(event))
 		{
@@ -24,17 +25,6 @@ public:
 				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 				globals.render_window.setView(sf::View(visibleArea));
 			}
-
-			for (auto& [_, pressed_this_frame] : cursor_and_keys.key_pressed_this_frame)
-			{
-				(void)_;
-				pressed_this_frame = false;
-			}
-			for (auto& [_, released_this_frame] : cursor_and_keys.key_released_this_frame)
-			{
-				(void)_;
-				released_this_frame = false;
-			}
 			if (event.type == sf::Event::KeyPressed)
 			{
 				cursor_and_keys.key_pressed_this_frame[event.key.code] = true;
@@ -45,32 +35,19 @@ public:
 				cursor_and_keys.key_released_this_frame[event.key.code] = true;
 				cursor_and_keys.key_down[event.key.code] = false;
 			}
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				cursor_and_keys.mouse_button_pressed_this_frame[event.mouseButton.button] = true;
+				cursor_and_keys.mouse_button_down[event.mouseButton.button] = true;
+			}
+			if (event.type == sf::Event::MouseButtonReleased)
+			{
+				cursor_and_keys.mouse_button_released_this_frame[event.mouseButton.button] = true;
+				cursor_and_keys.mouse_button_down[event.mouseButton.button] = false;
+			}
 			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
 			cursor_and_keys.cursor_position.x = mouse_pos.x;
 			cursor_and_keys.cursor_position.y = mouse_pos.y;
-			if (event.type == sf::Event::MouseButtonPressed)
-			{
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					cursor_and_keys.left_button_is_pressed = true;
-				}
-				if (event.mouseButton.button == sf::Mouse::Right)
-				{
-					cursor_and_keys.right_button_is_pressed = true;
-				}
-			}
-
-			if (event.type == sf::Event::MouseButtonReleased)
-			{
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					cursor_and_keys.left_button_is_pressed = false;
-				}
-				if (event.mouseButton.button == sf::Mouse::Right)
-				{
-					cursor_and_keys.right_button_is_pressed = false;
-				}
-			}
 		}
 	}
 };

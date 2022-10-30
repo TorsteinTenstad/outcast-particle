@@ -4,8 +4,10 @@ class CursorAndKeys
 {
 public:
 	sf::Vector2f cursor_position;
-	bool right_button_is_pressed = false;
-	bool left_button_is_pressed = false;
+
+	std::map<int, bool> mouse_button_down;
+	std::map<int, bool> mouse_button_pressed_this_frame;
+	std::map<int, bool> mouse_button_released_this_frame;
 
 	std::map<int, bool> key_down;
 	std::map<int, bool> key_pressed_this_frame;
@@ -13,11 +15,30 @@ public:
 
 	CursorAndKeys()
 	{
-		for (int key = sf::Keyboard::A; sf::Keyboard::A != sf::Keyboard::Pause; key++)
+		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
 		{
 			key_down[key] = false;
 			key_pressed_this_frame[key] = false;
 			key_released_this_frame[key] = false;
+		}
+		for (int button = 0; button < sf::Mouse::ButtonCount; button++)
+		{
+			mouse_button_down[button] = false;
+			mouse_button_pressed_this_frame[button] = false;
+			mouse_button_released_this_frame[button] = false;
+		}
+	}
+	void ResetFrameEvents()
+	{
+		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
+		{
+			key_pressed_this_frame[key] = false;
+			key_released_this_frame[key] = false;
+		}
+		for (int button = 0; button < sf::Mouse::ButtonCount; button++)
+		{
+			mouse_button_pressed_this_frame[button] = false;
+			mouse_button_released_this_frame[button] = false;
 		}
 	}
 };

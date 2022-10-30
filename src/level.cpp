@@ -16,6 +16,20 @@ Level::Level()
 void Level::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
+
+	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape])
+	{
+		globals.edit_mode = !globals.edit_mode;
+	}
+	if (cursor_and_keys_.key_down[sf::Keyboard::Num0])
+	{
+		globals.active_level = 0;
+	}
+	if (cursor_and_keys_.key_down[sf::Keyboard::Num1])
+	{
+		globals.active_level = 1;
+	}
+
 	if (!globals.edit_mode)
 	{
 		player_system_.Update(cursor_and_keys_, player_, received_forces_);
