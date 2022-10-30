@@ -14,7 +14,7 @@ void Level::Update(CursorAndKeys cursor_and_keys, float dt)
 	{
 		edit_mode_system_.Update(cursor_and_keys, draggable_, radius_, position_, velocity_);
 	}
-	render_system_.Update(draw_info_, position_);
+	render_system_.Update(draw_info_, position_, width_and_hight_, boarder_);
 	if (globals.edit_mode)
 	{
 		display_velocity_system_.Update(position_, velocity_);
@@ -84,4 +84,14 @@ void Level::SaveEntitiesToFile(std::string path)
 void Level::LoadEntitiesFromFile(std::string path)
 {
 	(void)path;
+}
+
+int Level::AddButton(float pos_x, float pos_y, float width, float hight, std::string path)
+{
+	int id = CreateEntityId();
+	draw_info_[id].image_path = path;
+	position_[id].position = sf::Vector2f(pos_x, pos_y);
+	width_and_hight_[id].width_and_hight = sf::Vector2f(width, hight);
+	boarder_[id] = {};
+	return id;
 }

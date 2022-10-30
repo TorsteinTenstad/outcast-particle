@@ -23,7 +23,10 @@ private:
 	std::map<int, Player> player_;
 	std::map<int, Charge> charge_;
 	std::map<int, Draggable> draggable_;
+	std::map<int, Draggable> draggable_;
 	std::map<int, Radius> radius_;
+	std::map<int, WidthAndHight> width_and_hight_;
+	std::map<int, Boarder> boarder_;
 
 	EditModeSystem edit_mode_system_;
 	DisplayVelocitySystem display_velocity_system_;
@@ -44,4 +47,6 @@ public:
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);
+
+	int AddButton(float pos_x, float pos_y, float width, float hight, std::string path);
 };
