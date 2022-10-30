@@ -3,7 +3,7 @@
 #include "comp_draw_info.hpp"
 #include "cursor_and_keys.hpp"
 #include "sys_acceleration.hpp"
-#include "sys_cursor_interaction.hpp"
+#include "sys_edit_mode.hpp"
 #include "sys_display_velocity.hpp"
 #include "sys_electric_force.hpp"
 #include "sys_force.hpp"
@@ -28,7 +28,7 @@ private:
 	std::map<int, ClickedOn> clicked_on_;
 
 	SFMLEventSystem event_system_;
-	CursorInteractionSystem cursor_interaction_system_;
+	EditModeSystem edit_mode_system_;
 	DisplayVelocitySystem display_velocity_system_;
 	PlayerSystem player_system_;
 	ElectricForceSystem electric_force_system_;

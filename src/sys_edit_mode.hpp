@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-class CursorInteractionSystem
+class EditModeSystem
 {
 public:
 	void Update(CursorAndKeys& cursor_and_keys, std::map<int, Draggable>& draggable_map, std::map<int, Radius>& radius_map_, std::map<int, ClickedOn>& clicked_on_map, std::map<int, Position>& position_map_)

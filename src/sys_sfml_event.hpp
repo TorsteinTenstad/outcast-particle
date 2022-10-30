@@ -9,7 +9,7 @@ class SFMLEventSystem
 {
 private:
 public:
-	void Update(CursorAndKeys& cursor_and_keys, std::map<int, Player>& player_map)
+	void Update(CursorAndKeys& cursor_and_keys)
 	{
 		sf::Event event;
 		while (globals.render_window.pollEvent(event))
@@ -24,44 +24,26 @@ public:
 				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
 				globals.render_window.setView(sf::View(visibleArea));
 			}
-			if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
-			{
-				for (auto& [_, player] : player_map)
-				{
-					(void)_;
-					if (event.key.code == sf::Keyboard::W)
-					{
-						player.moving_up = (event.type == sf::Event::KeyPressed);
-					}
-					if (event.key.code == sf::Keyboard::A)
-					{
-						player.moving_left = (event.type == sf::Event::KeyPressed);
-					}
-					if (event.key.code == sf::Keyboard::S)
-					{
-						player.moving_down = (event.type == sf::Event::KeyPressed);
-					}
-					if (event.key.code == sf::Keyboard::D)
-					{
-						player.moving_right = (event.type == sf::Event::KeyPressed);
-					}
-				}
-			}
 
+			for (auto& [_, pressed_this_frame] : cursor_and_keys.key_pressed_this_frame)
+			{
+				(void)_;
+				pressed_this_frame = false;
+			}
+			for (auto& [_, released_this_frame] : cursor_and_keys.key_released_this_frame)
+			{
+				(void)_;
+				released_this_frame = false;
+			}
 			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == sf::Keyboard::Escape)
-				{
-					globals.edit_mode = !globals.edit_mode;
-				}
-				if (event.key.code == sf::Keyboard::Num0)
-				{
-					globals.active_level = 0;
-				}
-				if (event.key.code == sf::Keyboard::Num1)
-				{
-					globals.active_level = 1;
-				}
+				cursor_and_keys.key_pressed_this_frame[event.key.code] = true;
+				cursor_and_keys.key_down[event.key.code] = true;
+			}
+			if (event.type == sf::Event::KeyReleased)
+			{
+				cursor_and_keys.key_released_this_frame[event.key.code] = true;
+				cursor_and_keys.key_down[event.key.code] = false;
 			}
 			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
 			cursor_and_keys.cursor_position.x = mouse_pos.x;

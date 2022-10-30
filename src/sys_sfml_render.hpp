@@ -11,7 +11,7 @@ private:
 	std::map<int, sf::Sprite> sprites_;
 
 public:
-	void Update(std::map<int, DrawInfo> drawinfo_map, std::map<int, Position> position_map)
+	void Update(std::map<int, DrawInfo>& drawinfo_map, std::map<int, Position>& position_map)
 	{
 		for (auto const& [entity_id, entity_drawinfo] : drawinfo_map)
 		{

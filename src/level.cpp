@@ -3,7 +3,7 @@
 Level::Level()
 {
 	event_system_ = SFMLEventSystem();
-	cursor_interaction_system_ = CursorInteractionSystem();
+	edit_mode_system_ = EditModeSystem();
 	display_velocity_system_ = DisplayVelocitySystem();
 	player_system_ = PlayerSystem();
 	electric_force_system_ = ElectricForceSystem();
@@ -15,10 +15,10 @@ Level::Level()
 
 void Level::Update(float dt)
 {
-	event_system_.Update(cursor_and_keys_, player_);
+	event_system_.Update(cursor_and_keys_);
 	if (!globals.edit_mode)
 	{
-		player_system_.Update(player_, received_forces_);
+		player_system_.Update(cursor_and_keys_, player_, received_forces_);
 		electric_force_system_.Update(position_, charge_, received_forces_);
 		force_system_.Update(acceleration_, received_forces_);
 		acceleration_system_.Update(velocity_, acceleration_, dt);
@@ -26,7 +26,7 @@ void Level::Update(float dt)
 	}
 	else
 	{
-		cursor_interaction_system_.Update(cursor_and_keys_, draggable_, radius_, clicked_on_, position_);
+		edit_mode_system_.Update(cursor_and_keys_, draggable_, radius_, clicked_on_, position_);
 	}
 	render_system_.Update(draw_info_, position_);
 	if (globals.edit_mode)

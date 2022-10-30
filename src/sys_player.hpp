@@ -4,25 +4,25 @@
 class PlayerSystem
 {
 public:
-	void Update(std::map<int, Player>& player_map, std::map<int, ReceivedForces>& received_forces_map)
+	void Update(CursorAndKeys& cursor_and_keys, std::map<int, Player>& player_map, std::map<int, ReceivedForces>& received_forces_map)
 	{
 		for (auto& [entity_id, player] : player_map)
 		{
 			int x_direction = 0;
-			if (player.moving_left)
+			if (cursor_and_keys.key_down[sf::Keyboard::A])
 			{
 				x_direction -= 1;
 			}
-			if (player.moving_right)
+			if (cursor_and_keys.key_down[sf::Keyboard::D])
 			{
 				x_direction += 1;
 			}
 			int y_direction = 0;
-			if (player.moving_up)
+			if (cursor_and_keys.key_down[sf::Keyboard::W])
 			{
 				y_direction -= 1;
 			}
-			if (player.moving_down)
+			if (cursor_and_keys.key_down[sf::Keyboard::S])
 			{
 				y_direction += 1;
 			}
