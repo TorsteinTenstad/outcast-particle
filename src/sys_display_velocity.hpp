@@ -6,7 +6,7 @@
 
 static float Angle(sf::Vector2f v)
 {
-	return std::atan2(v.y, v.x) * (180 / PI);
+	return std::atan2(v.y, v.x);
 }
 
 class DisplayVelocitySystem
@@ -20,7 +20,7 @@ public:
 			float indicator_width = 10;
 			sf::RectangleShape indicator = sf::RectangleShape(sf::Vector2f(indicator_lenght, indicator_width));
 			indicator.setOrigin(0, indicator_width / 2);
-			indicator.setRotation(Angle(velocity.velocity));
+			indicator.setRotation(Angle(velocity.velocity) * (180 / PI));
 			indicator.setPosition(position_map[entity_id].position);
 			globals.render_window.draw(indicator);
 		}

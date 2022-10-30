@@ -24,7 +24,6 @@ private:
 	std::map<int, Charge> charge_;
 	std::map<int, Draggable> draggable_;
 	std::map<int, Radius> radius_;
-	std::map<int, ClickedOn> clicked_on_;
 
 	EditModeSystem edit_mode_system_;
 	DisplayVelocitySystem display_velocity_system_;

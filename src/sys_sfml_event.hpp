@@ -48,6 +48,10 @@ public:
 			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
 			cursor_and_keys.cursor_position.x = mouse_pos.x;
 			cursor_and_keys.cursor_position.y = mouse_pos.y;
+			if (event.type == sf::Event::MouseWheelScrolled)
+			{
+				cursor_and_keys.mouse_wheel_delta = event.mouseWheelScroll.delta;
+			}
 		}
 	}
 };

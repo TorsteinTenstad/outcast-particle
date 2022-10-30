@@ -4,6 +4,7 @@ class CursorAndKeys
 {
 public:
 	sf::Vector2f cursor_position;
+	float mouse_wheel_delta = 0;
 
 	std::map<int, bool> mouse_button_down;
 	std::map<int, bool> mouse_button_pressed_this_frame;

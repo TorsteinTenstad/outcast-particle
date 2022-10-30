@@ -12,7 +12,7 @@ void Level::Update(CursorAndKeys cursor_and_keys, float dt)
 	}
 	else
 	{
-		edit_mode_system_.Update(cursor_and_keys, draggable_, radius_, clicked_on_, position_);
+		edit_mode_system_.Update(cursor_and_keys, draggable_, radius_, position_, velocity_);
 	}
 	render_system_.Update(draw_info_, position_);
 	if (globals.edit_mode)

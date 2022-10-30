@@ -35,5 +35,6 @@ void Game::Update(float dt)
 	{
 		globals.active_level = 1;
 	}
+	
 	levels_[globals.active_level].Update(cursor_and_keys_, dt);
 }
