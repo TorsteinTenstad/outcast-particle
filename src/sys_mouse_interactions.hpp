@@ -12,13 +12,13 @@ public:
 	{
 		for (auto& [entity_id, clicked_on] : clicked_on_map)
 		{
+			clicked_on.clicked_this_frame = false;
+			clicked_on.released_this_frame = cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
 			if (radius_map.count(entity_id))
 			{
 				if (Magnitude(cursor_and_keys.cursor_position - position_map[entity_id].position) < radius_map[entity_id].radius)
 				{
-					clicked_on.clicked_on = cursor_and_keys.mouse_button_down[sf::Mouse::Left];
 					clicked_on.clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
-					clicked_on.released_this_frame = cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
 				}
 			}
 			if (width_and_hight_map.count(entity_id))
@@ -31,10 +31,16 @@ public:
 				float m_y = cursor_and_keys.cursor_position.y;
 				if (e_x < m_x && m_x < e_x + w && e_y < m_y && m_y < e_y + h)
 				{
-					clicked_on.clicked_on = cursor_and_keys.mouse_button_down[sf::Mouse::Left];
 					clicked_on.clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
-					clicked_on.released_this_frame = cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
 				}
+			}
+			if (clicked_on.clicked_this_frame)
+			{
+				clicked_on.clicked_on = true;
+			}
+			if (clicked_on.released_this_frame)
+			{
+				clicked_on.clicked_on = false;
 			}
 		}
 	}

@@ -3,6 +3,7 @@
 void Level::Update(CursorAndKeys cursor_and_keys, float dt)
 {
 	mouse_interaction_system_.Update(cursor_and_keys, clicked_on_, position_, radius_, width_and_hight_);
+	level_button_system_.Update(clicked_on_, level_button_);
 	if (!globals.edit_mode)
 	{
 		player_system_.Update(cursor_and_keys, player_, received_forces_);
@@ -88,7 +89,7 @@ void Level::LoadEntitiesFromFile(std::string path)
 	(void)path;
 }
 
-int Level::AddButton(float pos_x, float pos_y, float width, float hight, std::string path)
+int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path)
 {
 	int id = CreateEntityId();
 	draw_info_[id].image_path = path;
@@ -96,5 +97,6 @@ int Level::AddButton(float pos_x, float pos_y, float width, float hight, std::st
 	width_and_hight_[id].width_and_hight = sf::Vector2f(width, hight);
 	boarder_[id] = {};
 	clicked_on_[id] = {};
+	level_button_[id] = { level };
 	return id;
 }

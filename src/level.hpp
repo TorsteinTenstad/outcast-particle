@@ -2,12 +2,14 @@
 #include "PCH.hpp"
 #include "comp_area.hpp"
 #include "comp_draw_info.hpp"
+#include "comp_level_button.hpp"
 #include "cursor_and_keys.hpp"
 #include "sys_acceleration.hpp"
 #include "sys_display_velocity.hpp"
 #include "sys_edit_mode.hpp"
 #include "sys_electric_force.hpp"
 #include "sys_force.hpp"
+#include "sys_level_button.hpp"
 #include "sys_mouse_interactions.hpp"
 #include "sys_player.hpp"
 #include "sys_sfml_render.hpp"
@@ -29,8 +31,10 @@ private:
 	std::map<int, Radius> radius_;
 	std::map<int, WidthAndHight> width_and_hight_;
 	std::map<int, Boarder> boarder_;
+	std::map<int, LevelButton> level_button_;
 
 	EditModeSystem edit_mode_system_;
+	LevelButtonSystem level_button_system_;
 	MouseInterationSystem mouse_interaction_system_;
 	DisplayVelocitySystem display_velocity_system_;
 	PlayerSystem player_system_;
@@ -51,5 +55,5 @@ public:
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 
-	int AddButton(float pos_x, float pos_y, float width, float hight, std::string path);
+	int AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path);
 };
