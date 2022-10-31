@@ -27,14 +27,14 @@ Game::Game()
 	globals.render_window.clear();
 	levels_[1].Update(cursor_and_keys_, 0);
 	texture.update(globals.render_window);
-	texture.copyToImage().saveToFile("level1.png");
-	levels_[0].AddLevelButton(1, 100, 100, 400, 225, "level1.png");
+	levels_[0].render_system_.RegisterTexture("level1", texture);
+	levels_[0].AddLevelButton(1, 100, 100, 400, 225, "level1");
 
 	globals.render_window.clear();
 	levels_[2].Update(cursor_and_keys_, 0);
 	texture.update(globals.render_window);
-	texture.copyToImage().saveToFile("level2.png");
-	levels_[0].AddLevelButton(2, 100, 425, 400, 225, "level2.png");
+	levels_[0].render_system_.RegisterTexture("level2", texture);
+	levels_[0].AddLevelButton(2, 100, 425, 400, 225, "level2");
 }
 
 void Game::Update(float dt)

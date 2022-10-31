@@ -11,7 +11,6 @@ public:
 	{
 		for (auto const& [entity_id, level_button] : level_button_map)
 		{
-			std::cout << clicked_on_map[entity_id].clicked_this_frame << std::endl;
 			if (clicked_on_map[entity_id].clicked_this_frame)
 			{
 				globals.active_level = level_button.level;

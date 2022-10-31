@@ -12,6 +12,10 @@ private:
 	std::map<int, sf::RectangleShape> rectangle_shapes_;
 
 public:
+	void RegisterTexture(std::string identifier, sf::Texture texture)
+	{
+		textures_[identifier] = texture;
+	}
 	void Update(std::map<int, DrawInfo>& drawinfo_map, std::map<int, Position>& position_map, std::map<int, WidthAndHight>& width_and_hight_map, std::map<int, Boarder>& boarder_map)
 	{
 		for (auto const& [entity_id, entity_drawinfo] : drawinfo_map)

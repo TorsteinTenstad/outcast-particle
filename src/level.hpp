@@ -18,6 +18,18 @@
 
 class Level
 {
+public:
+	EditModeSystem edit_mode_system_;
+	LevelButtonSystem level_button_system_;
+	MouseInterationSystem mouse_interaction_system_;
+	DisplayVelocitySystem display_velocity_system_;
+	PlayerSystem player_system_;
+	ElectricForceSystem electric_force_system_;
+	ForceSystem force_system_;
+	AccelerationSystem acceleration_system_;
+	VelocitySystem velocity_system_;
+	SFMLRenderSystem render_system_;
+
 private:
 	std::map<int, DrawInfo> draw_info_;
 	std::map<int, Position> position_;
@@ -32,17 +44,6 @@ private:
 	std::map<int, WidthAndHight> width_and_hight_;
 	std::map<int, Boarder> boarder_;
 	std::map<int, LevelButton> level_button_;
-
-	EditModeSystem edit_mode_system_;
-	LevelButtonSystem level_button_system_;
-	MouseInterationSystem mouse_interaction_system_;
-	DisplayVelocitySystem display_velocity_system_;
-	PlayerSystem player_system_;
-	ElectricForceSystem electric_force_system_;
-	ForceSystem force_system_;
-	AccelerationSystem acceleration_system_;
-	VelocitySystem velocity_system_;
-	SFMLRenderSystem render_system_;
 
 	int next_available_entity_id_ = 0;
 	int CreateEntityId();
