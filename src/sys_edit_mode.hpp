@@ -1,7 +1,6 @@
 #pragma once
-#include "comp_draggable.hpp"
+#include "comp_mouse_interactions.hpp"
 #include "comp_physics.hpp"
-#include "comp_radius.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include "utilityfunctions.hpp"
@@ -13,13 +12,13 @@ private:
 	float default_velocity_angle_change_sensitivity_ = PI / 90;
 
 public:
-	void Update(CursorAndKeys& cursor_and_keys, std::map<int, Draggable>& draggable_map, std::map<int, Radius>& radius_map, std::map<int, Position>& position_map, std::map<int, Velocity>& velocity_map)
+	void Update(CursorAndKeys& cursor_and_keys, std::map<int, ClickedOn>& clicked_on_map, std::map<int, Draggable>& draggable_map, std::map<int, Position>& position_map, std::map<int, Velocity>& velocity_map)
 	{
 		for (auto& [entity_id, draggable_entity] : draggable_map)
 		{
 			if (draggable_entity.being_dragged)
 			{
-				if (cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left])
+				if (clicked_on_map[entity_id].released_this_frame)
 				{
 					draggable_entity.being_dragged = false;
 				}
@@ -59,7 +58,7 @@ public:
 					velocity_map[entity_id].velocity.y = velocity_magnitude * std::sin(velocity_angle);
 				}
 			}
-			else if (cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left] && Magnitude(cursor_and_keys.cursor_position - position_map[entity_id].position) < radius_map[entity_id].radius)
+			else if (clicked_on_map[entity_id].clicked_this_frame)
 			{
 				draggable_entity.being_dragged = true;
 				draggable_entity.offset = cursor_and_keys.cursor_position - position_map[entity_id].position;
