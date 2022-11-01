@@ -25,16 +25,20 @@ Game::Game()
 	texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
 
 	globals.render_window.clear();
-	levels_[1].Update(cursor_and_keys_, 0);
+	globals.active_level = 1;
+	Update(0);
 	texture.update(globals.render_window);
-	levels_[0].render_system_.RegisterTexture("level1", texture);
+	render_system_.RegisterTexture("level1", texture);
 	levels_[0].AddLevelButton(1, 100, 100, 400, 225, "level1");
 
 	globals.render_window.clear();
-	levels_[2].Update(cursor_and_keys_, 0);
+	globals.active_level = 2;
+	Update(0);
 	texture.update(globals.render_window);
-	levels_[0].render_system_.RegisterTexture("level2", texture);
+	render_system_.RegisterTexture("level2", texture);
 	levels_[0].AddLevelButton(2, 100, 425, 400, 225, "level2");
+
+	globals.active_level = 0;
 }
 
 void Game::Update(float dt)
@@ -58,5 +62,23 @@ void Game::Update(float dt)
 		globals.active_level = 2;
 	}
 
-	levels_[globals.active_level].Update(cursor_and_keys_, dt);
+	mouse_interaction_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	level_button_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	if (!globals.edit_mode)
+	{
+		player_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		electric_force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		acceleration_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	}
+	else
+	{
+		edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	}
+	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	if (globals.edit_mode)
+	{
+		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	}
 }

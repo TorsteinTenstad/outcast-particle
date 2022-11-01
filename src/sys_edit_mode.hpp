@@ -2,18 +2,25 @@
 #include "comp_mouse_interactions.hpp"
 #include "comp_physics.hpp"
 #include "cursor_and_keys.hpp"
+#include "game_system.hpp"
 #include "globals.hpp"
 #include "utilityfunctions.hpp"
 
-class EditModeSystem
+class EditModeSystem : public GameSystem
 {
 private:
 	float default_velocity_magnitude_change_sensitivity_ = 20;
 	float default_velocity_angle_change_sensitivity_ = PI / 90;
 
 public:
-	void Update(CursorAndKeys& cursor_and_keys, std::map<int, ClickedOn>& clicked_on_map, std::map<int, Draggable>& draggable_map, std::map<int, Position>& position_map, std::map<int, Velocity>& velocity_map)
+	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
+		(void)dt;
+		std::map<int, Position>& position_map = level.position_;
+		std::map<int, Velocity>& velocity_map = level.velocity_;
+		std::map<int, Draggable>& draggable_map = level.draggable_;
+		std::map<int, ClickedOn>& clicked_on_map = level.clicked_on_;
+
 		for (auto& [entity_id, draggable_entity] : draggable_map)
 		{
 			if (draggable_entity.being_dragged)

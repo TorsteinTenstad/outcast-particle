@@ -3,34 +3,17 @@
 #include "comp_area.hpp"
 #include "comp_draw_info.hpp"
 #include "comp_level_button.hpp"
+#include "comp_mouse_interactions.hpp"
+#include "comp_physics.hpp"
+#include "comp_player.hpp"
 #include "cursor_and_keys.hpp"
-#include "sys_acceleration.hpp"
-#include "sys_display_velocity.hpp"
-#include "sys_edit_mode.hpp"
-#include "sys_electric_force.hpp"
-#include "sys_force.hpp"
-#include "sys_level_button.hpp"
-#include "sys_mouse_interactions.hpp"
-#include "sys_player.hpp"
-#include "sys_sfml_render.hpp"
-#include "sys_velocity.hpp"
-#include <map>
 
 class Level
 {
-public:
-	EditModeSystem edit_mode_system_;
-	LevelButtonSystem level_button_system_;
-	MouseInterationSystem mouse_interaction_system_;
-	DisplayVelocitySystem display_velocity_system_;
-	PlayerSystem player_system_;
-	ElectricForceSystem electric_force_system_;
-	ForceSystem force_system_;
-	AccelerationSystem acceleration_system_;
-	VelocitySystem velocity_system_;
-	SFMLRenderSystem render_system_;
-
 private:
+	int next_available_entity_id_ = 0;
+
+public:
 	std::map<int, DrawInfo> draw_info_;
 	std::map<int, Position> position_;
 	std::map<int, Velocity> velocity_;
@@ -45,16 +28,11 @@ private:
 	std::map<int, Boarder> boarder_;
 	std::map<int, LevelButton> level_button_;
 
-	int next_available_entity_id_ = 0;
 	int CreateEntityId();
-
-public:
 	void LoadEntitiesFromFile(std::string path);
 	void SaveEntitiesToFile(std::string path);
-	void Update(CursorAndKeys cursor_and_keys, float dt);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
-
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path);
 };

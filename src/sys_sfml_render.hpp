@@ -2,9 +2,11 @@
 #include "PCH.hpp"
 #include "comp_draw_info.hpp"
 #include "comp_physics.hpp"
+#include "game_system.hpp"
 #include "globals.hpp"
+#include "level.hpp"
 
-class SFMLRenderSystem
+class SFMLRenderSystem : public GameSystem
 {
 private:
 	std::map<std::string, sf::Texture> textures_;
@@ -16,9 +18,16 @@ public:
 	{
 		textures_[identifier] = texture;
 	}
-	void Update(std::map<int, DrawInfo>& drawinfo_map, std::map<int, Position>& position_map, std::map<int, WidthAndHight>& width_and_hight_map, std::map<int, Boarder>& boarder_map)
+	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		for (auto const& [entity_id, entity_drawinfo] : drawinfo_map)
+		(void)cursor_and_keys;
+		(void)dt;
+		std::map<int, DrawInfo>& draw_info_map = level.draw_info_;
+		std::map<int, Position>& position_map = level.position_;
+		std::map<int, WidthAndHight>& width_and_hight_map = level.width_and_hight_;
+		std::map<int, Boarder>& boarder_map = level.boarder_;
+
+		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
 			if (textures_.count(entity_drawinfo.image_path) == 0)
 			{

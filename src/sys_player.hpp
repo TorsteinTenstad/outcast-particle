@@ -1,11 +1,17 @@
 #include "comp_physics.hpp"
 #include "comp_player.hpp"
+#include "game_system.hpp"
+#include "level.hpp"
 
-class PlayerSystem
+class PlayerSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, std::map<int, Player>& player_map, std::map<int, ReceivedForces>& received_forces_map)
+	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
+		(void)dt;
+		std::map<int, ReceivedForces>& received_forces_map = level.received_forces_;
+		std::map<int, Player>& player_map = level.player_;
+
 		for (auto& [entity_id, player] : player_map)
 		{
 			int x_direction = 0;

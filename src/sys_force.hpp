@@ -1,5 +1,7 @@
 #include "PCH.hpp"
 #include "comp_physics.hpp"
+#include "game_system.hpp"
+#include "level.hpp"
 #include "sys_electric_force.hpp"
 #include "utilityfunctions.hpp"
 
@@ -16,15 +18,20 @@ static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_l
 	return acceleration;
 }
 
-class ForceSystem
+class ForceSystem : public GameSystem
 {
 private:
 	float global_max_acceleration_ = 10000;
 
 public:
-	void Update(std::map<int, Acceleration>& acceleration_map, std::map<int, ReceivedForces>& forces_map)
+	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		for (auto const& [entity_id, received_forces] : forces_map)
+		(void)cursor_and_keys;
+		(void)dt;
+		std::map<int, Acceleration>& acceleration_map = level.acceleration_;
+		std::map<int, ReceivedForces>& received_forces_map = level.received_forces_;
+
+		for (auto const& [entity_id, received_forces] : received_forces_map)
 		{
 			acceleration_map[entity_id].acceleration = CalcAcceleration(received_forces, global_max_acceleration_);
 		}

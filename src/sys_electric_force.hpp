@@ -1,5 +1,7 @@
 #pragma once
 #include "comp_physics.hpp"
+#include "game_system.hpp"
+#include "level.hpp"
 #include "utilityfunctions.hpp"
 
 static sf::Vector2f CalculateElectricForce(Position particle_to, Position particle_from, Charge charge_a, Charge charge_b)
@@ -8,12 +10,18 @@ static sf::Vector2f CalculateElectricForce(Position particle_to, Position partic
 	return ((charge_a.charge * charge_b.charge * (particle_to.position - particle_from.position)) / (distance * distance * distance));
 }
 
-class ElectricForceSystem
+class ElectricForceSystem : public GameSystem
 {
 public:
-	void Update(std::map<int, Position>& position_map, std::map<int, Charge>& charge_map, std::map<int, ReceivedForces>& forces_map)
+	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		for (auto& [entity_id_to, entity_forces] : forces_map)
+		(void)cursor_and_keys;
+		(void)dt;
+		std::map<int, Position>& position_map = level.position_;
+		std::map<int, ReceivedForces>& received_forces_map = level.received_forces_;
+		std::map<int, Charge>& charge_map = level.charge_;
+
+		for (auto& [entity_id_to, entity_forces] : received_forces_map)
 		{
 			sf::Vector2f electric_force;
 			for (auto const& [entity_id_from, entity_charge] : charge_map)

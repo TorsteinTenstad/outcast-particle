@@ -1,28 +1,5 @@
 #include "level.hpp"
 
-void Level::Update(CursorAndKeys cursor_and_keys, float dt)
-{
-	mouse_interaction_system_.Update(cursor_and_keys, clicked_on_, position_, radius_, width_and_hight_);
-	level_button_system_.Update(clicked_on_, level_button_);
-	if (!globals.edit_mode)
-	{
-		player_system_.Update(cursor_and_keys, player_, received_forces_);
-		electric_force_system_.Update(position_, charge_, received_forces_);
-		force_system_.Update(acceleration_, received_forces_);
-		acceleration_system_.Update(velocity_, acceleration_, dt);
-		velocity_system_.Update(position_, velocity_, dt);
-	}
-	else
-	{
-		edit_mode_system_.Update(cursor_and_keys, clicked_on_, draggable_, position_, velocity_);
-	}
-	render_system_.Update(draw_info_, position_, width_and_hight_, boarder_);
-	if (globals.edit_mode)
-	{
-		display_velocity_system_.Update(position_, velocity_);
-	}
-}
-
 int Level::CreateEntityId()
 {
 	return next_available_entity_id_++;

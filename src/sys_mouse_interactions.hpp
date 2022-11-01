@@ -3,13 +3,21 @@
 #include "comp_mouse_interactions.hpp"
 #include "comp_physics.hpp"
 #include "cursor_and_keys.hpp"
+#include "game_system.hpp"
+#include "level.hpp"
 #include "utilityfunctions.hpp"
 
-class MouseInterationSystem
+class MouseInterationSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, std::map<int, ClickedOn>& clicked_on_map, std::map<int, Position>& position_map, std::map<int, Radius>& radius_map, std::map<int, WidthAndHight>& width_and_hight_map)
+	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
+		(void)dt;
+		std::map<int, Position>& position_map = level.position_;
+		std::map<int, ClickedOn>& clicked_on_map = level.clicked_on_;
+		std::map<int, Radius>& radius_map = level.radius_;
+		std::map<int, WidthAndHight>& width_and_hight_map = level.width_and_hight_;
+
 		for (auto& [entity_id, clicked_on] : clicked_on_map)
 		{
 			clicked_on.clicked_this_frame = false;
