@@ -2,7 +2,7 @@
 
 int Level::CreateEntityId()
 {
-	return next_available_entity_id_++;
+	return globals.next_available_entity_id++;
 }
 
 int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
@@ -69,11 +69,22 @@ void Level::LoadEntitiesFromFile(std::string path)
 int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path)
 {
 	int id = CreateEntityId();
-	draw_info_[id].image_path = path;
-	position_[id].position = sf::Vector2f(pos_x, pos_y);
-	width_and_hight_[id].width_and_hight = sf::Vector2f(width, hight);
-	boarder_[id] = {};
+	draw_info_[id] = { path };
+	position_[id] = { sf::Vector2f(pos_x, pos_y) };
+	width_and_hight_[id] = { sf::Vector2f(width, hight) };
+	boarder_[id] = { 5, sf::Color::White };
 	clicked_on_[id] = {};
 	level_button_[id] = { level };
+	return id;
+}
+
+int Level::AddLaser()
+{
+	int id = CreateEntityId();
+	draw_info_[id] = { "content\\laser.png" };
+	position_[id] = { sf::Vector2f(1000, 0) };
+	width_and_hight_[id] = { sf::Vector2f(50, 1000) };
+	draggable_[id] = {};
+	clicked_on_[id] = {};
 	return id;
 }

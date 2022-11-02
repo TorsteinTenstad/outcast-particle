@@ -7,12 +7,11 @@
 #include "comp_physics.hpp"
 #include "comp_player.hpp"
 #include "cursor_and_keys.hpp"
+#include "globals.hpp"
 
 class Level
 {
 private:
-	int next_available_entity_id_ = 0;
-
 public:
 	std::map<int, DrawInfo> draw_info_;
 	std::map<int, Position> position_;
@@ -35,4 +34,5 @@ public:
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path);
+	int AddLaser();
 };

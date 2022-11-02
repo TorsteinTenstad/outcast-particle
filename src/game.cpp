@@ -16,6 +16,7 @@ Game::Game()
 
 	Level level2 = Level();
 	level2.AddPlayerEntity(1920 / 2, 1080 / 2, 0, 0, -100);
+	level2.AddLaser();
 
 	levels_.push_back(menu);
 	levels_.push_back(level1);
