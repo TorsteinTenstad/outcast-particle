@@ -28,6 +28,7 @@ public:
 	std::map<int, LevelButton> level_button_;
 
 	int CreateEntityId();
+	int CopyEntity(int from_id);
 	void LoadEntitiesFromFile(std::string path);
 	void SaveEntitiesToFile(std::string path);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);

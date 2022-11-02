@@ -37,22 +37,24 @@ public:
 				cursor_and_keys.key_released_this_frame[event.key.code] = true;
 				cursor_and_keys.key_down[event.key.code] = false;
 			}
-			if (event.type == sf::Event::MouseButtonPressed)
-			{
-				cursor_and_keys.mouse_button_pressed_this_frame[event.mouseButton.button] = true;
-				cursor_and_keys.mouse_button_down[event.mouseButton.button] = true;
-			}
-			if (event.type == sf::Event::MouseButtonReleased)
-			{
-				cursor_and_keys.mouse_button_released_this_frame[event.mouseButton.button] = true;
-				cursor_and_keys.mouse_button_down[event.mouseButton.button] = false;
-			}
 			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
 			cursor_and_keys.cursor_position.x = mouse_pos.x;
 			cursor_and_keys.cursor_position.y = mouse_pos.y;
 			if (event.type == sf::Event::MouseWheelScrolled)
 			{
 				cursor_and_keys.mouse_wheel_delta = event.mouseWheelScroll.delta;
+			}
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				cursor_and_keys.mouse_button_pressed_this_frame[event.mouseButton.button] = true;
+				cursor_and_keys.mouse_button_down[event.mouseButton.button] = true;
+				cursor_and_keys.mouse_button_last_pressed_position[event.mouseButton.button] = sf::Vector2f(mouse_pos.x, mouse_pos.y);
+			}
+			if (event.type == sf::Event::MouseButtonReleased)
+			{
+				cursor_and_keys.mouse_button_released_this_frame[event.mouseButton.button] = true;
+				cursor_and_keys.mouse_button_down[event.mouseButton.button] = false;
+				cursor_and_keys.mouse_button_last_released_position[event.mouseButton.button] = sf::Vector2f(mouse_pos.x, mouse_pos.y);
 			}
 		}
 	}

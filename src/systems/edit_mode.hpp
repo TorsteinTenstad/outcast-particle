@@ -41,6 +41,13 @@ public:
 				if (clicked_on_map[entity_id].released_this_frame)
 				{
 					draggable_entity.being_dragged = false;
+
+					if (cursor_and_keys.key_down[sf::Keyboard::LControl])
+					{
+						// Make a copy of the entity and place the copy where the entity was picked up:
+						int id = level.CopyEntity(entity_id);
+						level.position_[id].position = cursor_and_keys.mouse_button_last_pressed_position[sf::Mouse::Left] - draggable_entity.offset;
+					}
 				}
 				else
 				{
@@ -56,7 +63,7 @@ public:
 
 					float velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_;
 					float velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_;
-					if (cursor_and_keys.key_down[sf::Keyboard::LControl])
+					if (cursor_and_keys.key_down[sf::Keyboard::LAlt])
 					{
 						velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_ / 4;
 						velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_ / 4;

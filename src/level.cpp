@@ -5,6 +5,64 @@ int Level::CreateEntityId()
 	return globals.next_available_entity_id++;
 }
 
+int Level::CopyEntity(int from_id)
+{
+	int id = CreateEntityId();
+	if (draw_info_.count(from_id))
+	{
+		draw_info_[id] = draw_info_[from_id];
+	}
+	if (position_.count(from_id))
+	{
+		position_[id] = position_[from_id];
+	}
+	if (velocity_.count(from_id))
+	{
+		velocity_[id] = velocity_[from_id];
+	}
+	if (acceleration_.count(from_id))
+	{
+		acceleration_[id] = acceleration_[from_id];
+	}
+	if (received_forces_.count(from_id))
+	{
+		received_forces_[id] = received_forces_[from_id];
+	}
+	if (player_.count(from_id))
+	{
+		player_[id] = player_[from_id];
+	}
+	if (charge_.count(from_id))
+	{
+		charge_[id] = charge_[from_id];
+	}
+	if (draggable_.count(from_id))
+	{
+		draggable_[id] = draggable_[from_id];
+	}
+	if (clicked_on_.count(from_id))
+	{
+		clicked_on_[id] = clicked_on_[from_id];
+	}
+	if (radius_.count(from_id))
+	{
+		radius_[id] = radius_[from_id];
+	}
+	if (width_and_hight_.count(from_id))
+	{
+		width_and_hight_[id] = width_and_hight_[from_id];
+	}
+	if (boarder_.count(from_id))
+	{
+		boarder_[id] = boarder_[from_id];
+	}
+	if (level_button_.count(from_id))
+	{
+		level_button_[id] = level_button_[from_id];
+	}
+	return id;
+}
+
 int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 {
 	int id = CreateEntityId();
