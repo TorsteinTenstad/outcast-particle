@@ -6,6 +6,19 @@
 #include "globals.hpp"
 #include "utilityfunctions.hpp"
 
+static float RoundToNearest(float x, float y)
+{
+	float rest = std::fmod(x, y);
+	if (rest < y / 2)
+	{
+		return x - rest;
+	}
+	else
+	{
+		return x + y - rest;
+	}
+}
+
 class EditModeSystem : public GameSystem
 {
 private:
@@ -32,6 +45,11 @@ public:
 				else
 				{
 					position_map[entity_id].position = cursor_and_keys.cursor_position - draggable_entity.offset;
+					if (cursor_and_keys.key_down[sf::Keyboard::LShift])
+					{
+						position_map[entity_id].position.x = RoundToNearest(position_map[entity_id].position.x, 48);
+						position_map[entity_id].position.y = RoundToNearest(position_map[entity_id].position.y, 48);
+					}
 
 					float velocity_magnitude = Magnitude(velocity_map[entity_id].velocity);
 					float velocity_angle = Angle(velocity_map[entity_id].velocity);

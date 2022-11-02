@@ -88,3 +88,14 @@ int Level::AddLaser()
 	clicked_on_[id] = {};
 	return id;
 }
+
+int Level::AddBlock(float pos_x, float pos_y)
+{
+	int id = CreateEntityId();
+	draw_info_[id] = { "content\\block.png" };
+	position_[id] = { sf::Vector2f(pos_x, pos_y) };
+	width_and_hight_[id] = { sf::Vector2f(48, 48) };
+	draggable_[id] = {};
+	clicked_on_[id] = {};
+	return id;
+}

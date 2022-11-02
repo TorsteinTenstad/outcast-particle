@@ -35,4 +35,5 @@ public:
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path);
 	int AddLaser();
+	int AddBlock(float pos_x, float pos_y);
 };
