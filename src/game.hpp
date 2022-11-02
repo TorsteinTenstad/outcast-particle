@@ -1,17 +1,17 @@
 #pragma once
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
-#include "sys_acceleration.hpp"
-#include "sys_display_velocity.hpp"
-#include "sys_edit_mode.hpp"
-#include "sys_electric_force.hpp"
-#include "sys_force.hpp"
-#include "sys_level_button.hpp"
-#include "sys_mouse_interactions.hpp"
-#include "sys_player.hpp"
-#include "sys_sfml_event.hpp"
-#include "sys_sfml_render.hpp"
-#include "sys_velocity.hpp"
+#include "systems/acceleration.hpp"
+#include "systems/display_velocity.hpp"
+#include "systems/edit_mode.hpp"
+#include "systems/electric_force.hpp"
+#include "systems/force.hpp"
+#include "systems/level_button.hpp"
+#include "systems/mouse_interactions.hpp"
+#include "systems/player.hpp"
+#include "systems/sfml_event.hpp"
+#include "systems/sfml_render.hpp"
+#include "systems/velocity.hpp"
 
 class Game
 {

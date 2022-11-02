@@ -1,7 +1,7 @@
 #pragma once
 #include "PCH.hpp"
-#include "comp_level_button.hpp"
-#include "comp_mouse_interactions.hpp"
+#include "components/level_button.hpp"
+#include "components/mouse_interactions.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"

@@ -12,4 +12,3 @@ int main()
 	sfml_app.RunWindow(game);
 	return 0;
 }
-

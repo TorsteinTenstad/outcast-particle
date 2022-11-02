@@ -1,6 +1,6 @@
 #pragma once
 #include "PCH.hpp"
-#include "comp_physics.hpp"
+#include "components/physics.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"

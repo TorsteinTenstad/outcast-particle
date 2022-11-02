@@ -1,11 +1,11 @@
 #pragma once
 #include "PCH.hpp"
-#include "comp_area.hpp"
-#include "comp_draw_info.hpp"
-#include "comp_level_button.hpp"
-#include "comp_mouse_interactions.hpp"
-#include "comp_physics.hpp"
-#include "comp_player.hpp"
+#include "components/area.hpp"
+#include "components/draw_info.hpp"
+#include "components/level_button.hpp"
+#include "components/mouse_interactions.hpp"
+#include "components/physics.hpp"
+#include "components/player.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 

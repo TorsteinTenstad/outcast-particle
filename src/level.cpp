@@ -83,7 +83,7 @@ int Level::AddLaser()
 	int id = CreateEntityId();
 	draw_info_[id] = { "content\\laser.png" };
 	position_[id] = { sf::Vector2f(1000, 0) };
-	width_and_hight_[id] = { sf::Vector2f(50, 1000) };
+	width_and_hight_[id] = { sf::Vector2f(48, 480) };
 	draggable_[id] = {};
 	clicked_on_[id] = {};
 	return id;

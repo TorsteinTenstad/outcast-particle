@@ -1,8 +1,8 @@
 #include "PCH.hpp"
-#include "comp_physics.hpp"
+#include "components/physics.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "sys_electric_force.hpp"
+#include "systems/electric_force.hpp"
 #include "utilityfunctions.hpp"
 
 static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_limit)

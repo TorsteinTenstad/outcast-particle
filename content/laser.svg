@@ -28,13 +28,13 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.0902083"
-     inkscape:cx="90.421609"
-     inkscape:cy="3.8273697"
-     inkscape:window-width="3840"
-     inkscape:window-height="2066"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:zoom="0.9520327"
+     inkscape:cx="-32.561907"
+     inkscape:cy="29.410754"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -48,7 +48,7 @@
          id="stop16648" />
       <stop
          style="stop-color:#ff0000;stop-opacity:0;"
-         offset="0.58218932"
+         offset="0.99989998"
          id="stop16646" />
     </linearGradient>
     <linearGradient
@@ -56,7 +56,7 @@
        id="linearGradient15812">
       <stop
          style="stop-color:#ffffff;stop-opacity:1;"
-         offset="0.11568876"
+         offset="0.29996997"
          id="stop15808" />
       <stop
          style="stop-color:#ff0000;stop-opacity:1;"
@@ -75,22 +75,22 @@
        inkscape:collect="always"
        xlink:href="#linearGradient15812"
        id="linearGradient15814"
-       x1="75.26757"
+       x1="57.78294"
        y1="133.64932"
        x2="97.904549"
        y2="133.64932"
        gradientUnits="userSpaceOnUse"
        spreadMethod="pad"
-       gradientTransform="matrix(2.3577235,0,0,1,-130.76291,-15.84794)" />
+       gradientTransform="matrix(1.4146341,0,0,1,-60.065146,-15.84794)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient16650"
        id="linearGradient16641"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.3577235,0,0,1,-80.762905,-15.84794)"
-       x1="78.866943"
+       gradientTransform="matrix(3.3008129,0,0,1,-171.46067,-15.847943)"
+       x1="76.341072"
        y1="133.64932"
-       x2="97.817825"
+       x2="96.437263"
        y2="133.64932"
        spreadMethod="pad" />
   </defs>
@@ -98,7 +98,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     style="display:inline">
+     style="display:none">
     <rect
        style="display:inline;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:0.253"
        id="rect19559"
@@ -114,19 +114,19 @@
      transform="translate(-45.9815,-69.695229)"
      style="display:inline">
     <rect
-       style="fill:url(#linearGradient15814);fill-opacity:1;fill-rule:evenodd;stroke-width:0.388478"
+       style="fill:url(#linearGradient15814);fill-opacity:1;fill-rule:evenodd;stroke-width:0.300914"
        id="rect13241"
-       width="50"
+       width="30"
        height="100"
        x="45.981499"
        y="69.695229"
        ry="0" />
     <rect
-       style="fill:url(#linearGradient16641);fill-opacity:1;fill-rule:evenodd;stroke-width:0.388478"
+       style="fill:url(#linearGradient16641);fill-opacity:1;fill-rule:evenodd;stroke-width:0.459653"
        id="rect13241-7"
-       width="50"
+       width="70"
        height="100"
-       x="95.981499"
+       x="75.981499"
        y="69.695229"
        ry="0" />
   </g>

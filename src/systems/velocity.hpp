@@ -1,5 +1,5 @@
 #include "PCH.hpp"
-#include "comp_physics.hpp"
+#include "components/physics.hpp"
 #include "game_system.hpp"
 
 class VelocitySystem : public GameSystem

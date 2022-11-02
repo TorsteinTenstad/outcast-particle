@@ -1,5 +1,5 @@
 #pragma once
-#include "comp_physics.hpp"
+#include "components/physics.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 #include "utilityfunctions.hpp"

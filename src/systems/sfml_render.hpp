@@ -1,7 +1,7 @@
 #pragma once
 #include "PCH.hpp"
-#include "comp_draw_info.hpp"
-#include "comp_physics.hpp"
+#include "components/draw_info.hpp"
+#include "components/physics.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"

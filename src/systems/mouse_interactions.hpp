@@ -1,7 +1,7 @@
 #pragma once
-#include "comp_area.hpp"
-#include "comp_mouse_interactions.hpp"
-#include "comp_physics.hpp"
+#include "components/area.hpp"
+#include "components/mouse_interactions.hpp"
+#include "components/physics.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
