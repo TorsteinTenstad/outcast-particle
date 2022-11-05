@@ -4,20 +4,7 @@
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
-#include "utilityfunctions.hpp"
-
-static float RoundToNearest(float x, float y)
-{
-	float rest = std::fmod(x, y);
-	if (rest < y / 2)
-	{
-		return x - rest;
-	}
-	else
-	{
-		return x + y - rest;
-	}
-}
+#include "utils.hpp"
 
 class EditModeSystem : public GameSystem
 {

@@ -8,6 +8,8 @@
 #include "components/player.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
+#include "utils.hpp"
+#include <experimental/filesystem>
 #include <typeindex>
 #include <variant>
 
@@ -31,7 +33,7 @@ class Level
 {
 private:
 	static int next_available_entity_id_;
-	std::map<std::type_index, ComponentMap> components_;
+	std::map<const char*, ComponentMap> components_;
 
 	template <class Component>
 	void RegisterComponent();
@@ -39,7 +41,8 @@ private:
 public:
 	template <class Component>
 	std::map<int, Component>& GetComponent();
-
+	void SaveToFolder(std::string folder_path) const;
+	void LoadFromFolder(std::string folder_path);
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);

@@ -5,18 +5,58 @@ int Level::next_available_entity_id_ = 0;
 template <class Component>
 void Level::RegisterComponent()
 {
+	static int i = 0;
 	std::map<int, Component> t_map;
-	components_[typeid(Component)] = t_map;
+	components_[typeid(Component).name()] = t_map;
 }
 
 template <class Component>
 std::map<int, Component>& Level::GetComponent()
 {
-	if (components_.count(typeid(Component)) == 0)
+	if (components_.count(typeid(Component).name()) == 0)
 	{
 		RegisterComponent<Component>();
 	}
-	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
+	return std::get<std::map<int, Component>>(components_[typeid(Component).name()]);
+}
+
+void Level::SaveToFolder(std::string folder_path) const
+{
+	for (auto& [component_typeid_name, component_map_variant] : components_)
+	{
+		std::visit([folder_path, component_typeid_name](auto& component_map) {
+			for (const auto& [entity_id, component] : component_map)
+			{
+				std::string unique_id = folder_path + std::to_string(entity_id) + "-" + std::string(component_typeid_name);
+				SaveToBinaryFile(component, unique_id.c_str());
+			}
+		},
+			component_map_variant);
+	}
+}
+
+void Level::LoadFromFolder(std::string folder_path)
+{
+	//for (auto& [_, component_map_variant] : components_)
+	//{
+	//	(void)_;
+	//		std::visit([](auto& component_map) { component_map.clear(); }, component_map_variant);
+	//	}
+	for (const auto& entry : std::experimental::filesystem::directory_iterator(folder_path))
+	{
+		std::string filename = entry.path().filename().string();
+		size_t separator_index = filename.find("-");
+		int entity_id = stoi(filename.substr(0, separator_index));
+		std::string component_typeid_name = filename.substr(separator_index + 1, filename.length());
+		std::cout << entity_id << "," << component_typeid_name << "\n";
+		std::visit([entry, entity_id, component_typeid_name](auto& component_map) { LoadFromBinaryFile(component_map[entity_id], entry.path().string().c_str()); },
+			components_[component_typeid_name.c_str()]);
+	}
+}
+
+int Level::CreateEntityId()
+{
+	return next_available_entity_id_++;
 }
 
 int Level::CopyEntity(int from_id)
@@ -34,11 +74,6 @@ int Level::CopyEntity(int from_id)
 			component_map_variant);
 	}
 	return to_id;
-}
-
-int Level::CreateEntityId()
-{
-	return next_available_entity_id_++;
 }
 
 int Level::AddParticleEntity(float pos_x, float pos_y, float charge)

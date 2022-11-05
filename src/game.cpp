@@ -22,6 +22,10 @@ Game::Game()
 	level2.AddBlock(96, 0);
 	level2.AddBlock(200, 200);
 
+	level1.SaveToFolder("content/levels/level1/");
+	Level level3;
+	level3.LoadFromFolder("content/levels/level1/");
+
 	levels_.push_back(menu);
 	levels_.push_back(level1);
 	levels_.push_back(level2);
