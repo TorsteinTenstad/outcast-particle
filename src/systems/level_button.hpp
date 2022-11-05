@@ -13,8 +13,8 @@ public:
 	{
 		(void)cursor_and_keys;
 		(void)dt;
-		std::map<int, ClickedOn>& clicked_on_map = level.clicked_on_;
-		std::map<int, LevelButton>& level_button_map = level.level_button_;
+		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
+		std::map<int, LevelButton>& level_button_map = level.GetComponent<LevelButton>();
 
 		for (auto const& [entity_id, level_button] : level_button_map)
 		{

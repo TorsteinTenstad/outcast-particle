@@ -8,8 +8,8 @@ public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
 		(void)cursor_and_keys;
-		std::map<int, Position>& position_map = level.position_;
-		std::map<int, Velocity>& velocity_map = level.velocity_;
+		std::map<int, Position>& position_map = level.GetComponent<Position>();
+		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
 
 		for (auto const& [entity_id, entity_velocity] : velocity_map)
 		{

@@ -29,10 +29,10 @@ public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
 		(void)dt;
-		std::map<int, Position>& position_map = level.position_;
-		std::map<int, Velocity>& velocity_map = level.velocity_;
-		std::map<int, Draggable>& draggable_map = level.draggable_;
-		std::map<int, ClickedOn>& clicked_on_map = level.clicked_on_;
+		std::map<int, Position>& position_map = level.GetComponent<Position>();
+		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
+		std::map<int, Draggable>& draggable_map = level.GetComponent<Draggable>();
+		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
 
 		for (auto& [entity_id, draggable_entity] : draggable_map)
 		{

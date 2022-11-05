@@ -17,9 +17,9 @@ public:
 	{
 		(void)cursor_and_keys;
 		(void)dt;
-		std::map<int, Position>& position_map = level.position_;
-		std::map<int, ReceivedForces>& received_forces_map = level.received_forces_;
-		std::map<int, Charge>& charge_map = level.charge_;
+		std::map<int, Position>& position_map = level.GetComponent<Position>();
+		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
+		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
 
 		for (auto& [entity_id_to, entity_forces] : received_forces_map)
 		{

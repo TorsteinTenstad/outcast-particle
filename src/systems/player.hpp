@@ -9,8 +9,8 @@ public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
 		(void)dt;
-		std::map<int, ReceivedForces>& received_forces_map = level.received_forces_;
-		std::map<int, Player>& player_map = level.player_;
+		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
+		std::map<int, Player>& player_map = level.GetComponent<Player>();
 
 		for (auto& [entity_id, player] : player_map)
 		{

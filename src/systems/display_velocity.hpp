@@ -18,8 +18,8 @@ public:
 	{
 		(void)cursor_and_keys;
 		(void)dt;
-		std::map<int, Position>& position_map = level.position_;
-		std::map<int, Velocity>& velocity_map = level.velocity_;
+		std::map<int, Position>& position_map = level.GetComponent<Position>();
+		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
 
 		for (auto const& [entity_id, velocity] : velocity_map)
 		{

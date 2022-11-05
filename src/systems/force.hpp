@@ -28,8 +28,8 @@ public:
 	{
 		(void)cursor_and_keys;
 		(void)dt;
-		std::map<int, Acceleration>& acceleration_map = level.acceleration_;
-		std::map<int, ReceivedForces>& received_forces_map = level.received_forces_;
+		std::map<int, Acceleration>& acceleration_map = level.GetComponent<Acceleration>();
+		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
 
 		for (auto const& [entity_id, received_forces] : received_forces_map)
 		{

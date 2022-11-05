@@ -22,10 +22,10 @@ public:
 	{
 		(void)cursor_and_keys;
 		(void)dt;
-		std::map<int, DrawInfo>& draw_info_map = level.draw_info_;
-		std::map<int, Position>& position_map = level.position_;
-		std::map<int, WidthAndHight>& width_and_hight_map = level.width_and_hight_;
-		std::map<int, Boarder>& boarder_map = level.boarder_;
+		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
+		std::map<int, Position>& position_map = level.GetComponent<Position>();
+		std::map<int, WidthAndHight>& width_and_hight_map = level.GetComponent<WidthAndHight>();
+		std::map<int, Boarder>& boarder_map = level.GetComponent<Boarder>();
 
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{

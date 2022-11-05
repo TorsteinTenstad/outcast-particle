@@ -13,10 +13,10 @@ public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
 		(void)dt;
-		std::map<int, Position>& position_map = level.position_;
-		std::map<int, ClickedOn>& clicked_on_map = level.clicked_on_;
-		std::map<int, Radius>& radius_map = level.radius_;
-		std::map<int, WidthAndHight>& width_and_hight_map = level.width_and_hight_;
+		std::map<int, Position>& position_map = level.GetComponent<Position>();
+		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
+		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
+		std::map<int, WidthAndHight>& width_and_hight_map = level.GetComponent<WidthAndHight>();
 
 		for (auto& [entity_id, clicked_on] : clicked_on_map)
 		{

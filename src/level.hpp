@@ -12,11 +12,22 @@
 #include <variant>
 
 typedef std::variant<
+	std::map<int, DrawInfo>,
 	std::map<int, Position>,
-	std::map<int, Charge>>
+	std::map<int, Velocity>,
+	std::map<int, Acceleration>,
+	std::map<int, ReceivedForces>,
+	std::map<int, Player>,
+	std::map<int, Charge>,
+	std::map<int, Draggable>,
+	std::map<int, ClickedOn>,
+	std::map<int, Radius>,
+	std::map<int, WidthAndHight>,
+	std::map<int, Boarder>,
+	std::map<int, LevelButton>>
 	ComponentMap;
 
-class Level_
+class Level
 {
 private:
 	static int next_available_entity_id_;
@@ -31,30 +42,6 @@ public:
 
 	int CreateEntityId();
 	int CopyEntity(int from_id);
-};
-
-class Level
-{
-private:
-public:
-	std::map<int, DrawInfo> draw_info_;
-	std::map<int, Position> position_;
-	std::map<int, Velocity> velocity_;
-	std::map<int, Acceleration> acceleration_;
-	std::map<int, ReceivedForces> received_forces_;
-	std::map<int, Player> player_;
-	std::map<int, Charge> charge_;
-	std::map<int, Draggable> draggable_;
-	std::map<int, ClickedOn> clicked_on_;
-	std::map<int, Radius> radius_;
-	std::map<int, WidthAndHight> width_and_hight_;
-	std::map<int, Boarder> boarder_;
-	std::map<int, LevelButton> level_button_;
-
-	int CreateEntityId();
-	int CopyEntity(int from_id);
-	void LoadEntitiesFromFile(std::string path);
-	void SaveEntitiesToFile(std::string path);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
