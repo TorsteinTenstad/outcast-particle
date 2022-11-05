@@ -8,6 +8,30 @@
 #include "components/player.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
+#include <typeindex>
+#include <variant>
+
+typedef std::variant<
+	std::map<int, Position>,
+	std::map<int, Charge>>
+	ComponentMap;
+
+class Level_
+{
+private:
+	static int next_available_entity_id_;
+	std::map<std::type_index, ComponentMap> components_;
+
+	template <class Component>
+	void RegisterComponent();
+
+public:
+	template <class Component>
+	std::map<int, Component>& GetComponent();
+
+	int CreateEntityId();
+	int CopyEntity(int from_id);
+};
 
 class Level
 {

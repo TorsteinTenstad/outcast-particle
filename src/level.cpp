@@ -1,5 +1,40 @@
 #include "level.hpp"
 
+int Level_::next_available_entity_id_ = 0;
+
+template <class Component>
+void Level_::RegisterComponent()
+{
+	std::map<int, Component> t_map;
+	components_[typeid(Component)] = t_map;
+}
+
+template <class Component>
+std::map<int, Component>& Level_::GetComponent()
+{
+	if (components_.count(typeid(Component)) == 0)
+	{
+		RegisterComponent<Component>();
+	}
+	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
+}
+
+int Level_::CopyEntity(int from_id)
+{
+	int to_id = CreateEntityId();
+	for (auto& [_, component_map_variant] : components_)
+	{
+		(void)_;
+		std::visit([from_id, to_id](auto& component_map) { component_map[to_id] = component_map[from_id]; }, component_map_variant);
+	}
+	return to_id;
+}
+
+int Level_::CreateEntityId()
+{
+	return next_available_entity_id_++;
+}
+
 int Level::CreateEntityId()
 {
 	return globals.next_available_entity_id++;
