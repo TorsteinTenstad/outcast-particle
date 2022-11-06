@@ -32,6 +32,23 @@ public:
 			{
 				y_direction += 1;
 			}
+			if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::Space])
+			{
+				float& charge = level.GetComponent<Charge>()[entity_id].charge;
+				charge = -charge;
+				if (charge > 0)
+				{
+					level.GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue+.png" };
+				}
+				else if (charge < 0)
+				{
+					level.GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue-.png" };
+				}
+				else
+				{
+					level.GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue.png" };
+				}
+			}
 			received_forces_map[entity_id].player_force.x = x_direction * player.move_force;
 			received_forces_map[entity_id].player_force.y = y_direction * player.move_force;
 		}
