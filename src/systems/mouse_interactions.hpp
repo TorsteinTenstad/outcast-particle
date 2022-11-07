@@ -16,7 +16,7 @@ public:
 		std::map<int, Position>& position_map = level.GetComponent<Position>();
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, WidthAndHight>& width_and_hight_map = level.GetComponent<WidthAndHight>();
+		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
 
 		for (auto& [entity_id, clicked_on] : clicked_on_map)
 		{
@@ -29,10 +29,10 @@ public:
 					clicked_on.clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
 				}
 			}
-			if (width_and_hight_map.count(entity_id))
+			if (width_and_height_map.count(entity_id))
 			{
-				float w = width_and_hight_map[entity_id].width_and_hight.x;
-				float h = width_and_hight_map[entity_id].width_and_hight.y;
+				float w = width_and_height_map[entity_id].width_and_height.x;
+				float h = width_and_height_map[entity_id].width_and_height.y;
 				float e_x = position_map[entity_id].position.x;
 				float e_y = position_map[entity_id].position.y;
 				float m_x = cursor_and_keys.cursor_position.x;

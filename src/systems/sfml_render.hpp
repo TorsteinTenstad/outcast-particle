@@ -24,8 +24,8 @@ public:
 		(void)dt;
 		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
 		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, WidthAndHight>& width_and_hight_map = level.GetComponent<WidthAndHight>();
-		std::map<int, Boarder>& boarder_map = level.GetComponent<Boarder>();
+		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		std::map<int, Border>& border_map = level.GetComponent<Border>();
 
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
@@ -34,19 +34,19 @@ public:
 				textures_[entity_drawinfo.image_path] = sf::Texture();
 				textures_[entity_drawinfo.image_path].loadFromFile(entity_drawinfo.image_path);
 			}
-			if (width_and_hight_map.count(entity_id))
+			if (width_and_height_map.count(entity_id))
 			{
 				if (rectangle_shapes_.count(entity_id) == 0)
 				{
 					rectangle_shapes_[entity_id] = sf::RectangleShape();
 				}
 				rectangle_shapes_[entity_id].setTexture(&textures_[entity_drawinfo.image_path]);
-				rectangle_shapes_[entity_id].setSize(width_and_hight_map[entity_id].width_and_hight);
+				rectangle_shapes_[entity_id].setSize(width_and_height_map[entity_id].width_and_height);
 				rectangle_shapes_[entity_id].setPosition(position_map[entity_id].position);
-				if (boarder_map.count(entity_id))
+				if (border_map.count(entity_id))
 				{
-					rectangle_shapes_[entity_id].setOutlineThickness(boarder_map[entity_id].thickness);
-					rectangle_shapes_[entity_id].setOutlineColor(boarder_map[entity_id].color);
+					rectangle_shapes_[entity_id].setOutlineThickness(border_map[entity_id].thickness);
+					rectangle_shapes_[entity_id].setOutlineColor(border_map[entity_id].color);
 				}
 				globals.render_window.draw(rectangle_shapes_[entity_id]);
 			}

@@ -92,13 +92,13 @@ int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, f
 	return id;
 }
 
-int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path)
+int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path)
 {
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id] = { path };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	GetComponent<WidthAndHight>()[id] = { sf::Vector2f(width, hight) };
-	GetComponent<Boarder>()[id] = { 5, sf::Color::White };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
+	GetComponent<Border>()[id] = { 5, sf::Color::White };
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<LevelButton>()[id] = { level };
 	return id;
@@ -109,7 +109,7 @@ int Level::AddLaser()
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id] = { "content\\laser.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(1000, 0) };
-	GetComponent<WidthAndHight>()[id] = { sf::Vector2f(48, 480) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 480) };
 	GetComponent<Draggable>()[id] = {};
 	GetComponent<ClickedOn>()[id] = {};
 	return id;
@@ -120,7 +120,7 @@ int Level::AddBlock(float pos_x, float pos_y)
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id] = { "content\\block.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	GetComponent<WidthAndHight>()[id] = { sf::Vector2f(48, 48) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 48) };
 	GetComponent<Draggable>()[id] = {};
 	GetComponent<ClickedOn>()[id] = {};
 	return id;

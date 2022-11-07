@@ -6,13 +6,13 @@ public:
 	float radius;
 };
 
-class WidthAndHight
+class WidthAndHeight
 {
 public:
-	sf::Vector2f width_and_hight;
+	sf::Vector2f width_and_height;
 };
 
-class Boarder
+class Border
 {
 public:
 	int thickness = 5;

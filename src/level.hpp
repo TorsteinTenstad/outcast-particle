@@ -22,8 +22,8 @@ typedef std::variant<
 	std::map<int, Draggable>,
 	std::map<int, ClickedOn>,
 	std::map<int, Radius>,
-	std::map<int, WidthAndHight>,
-	std::map<int, Boarder>,
+	std::map<int, WidthAndHeight>,
+	std::map<int, Border>,
 	std::map<int, LevelButton>>
 	ComponentMap;
 
@@ -45,7 +45,7 @@ public:
 	int AddParticleEntity(float pos_x, float pos_y, float charge);
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
-	int AddLevelButton(int level, float pos_x, float pos_y, float width, float hight, std::string path);
+	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
 	int AddLaser();
 	int AddBlock(float pos_x, float pos_y);
 };
