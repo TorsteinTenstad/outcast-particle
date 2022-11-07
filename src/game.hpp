@@ -34,5 +34,6 @@ private:
 
 public:
 	Game();
+	void InitSystems();
 	void Update(float dt);
 };

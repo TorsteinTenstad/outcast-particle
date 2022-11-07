@@ -8,9 +8,8 @@ Globals& globals = globals_;
 int main()
 {
 	SFML sfml_app = SFML();
-	
 	Game game = Game();
+	game.InitSystems(); 
 	sfml_app.RunWindow(game);
 	return 0;
 }
-
