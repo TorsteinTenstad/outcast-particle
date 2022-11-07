@@ -29,7 +29,7 @@ public:
 			}
 			if (event.type == sf::Event::KeyPressed)
 			{
-				cursor_and_keys.key_pressed_this_frame[event.key.code] = true;
+				cursor_and_keys.key_pressed_this_frame[event.key.code] = !cursor_and_keys.key_down[event.key.code];
 				cursor_and_keys.key_down[event.key.code] = true;
 			}
 			if (event.type == sf::Event::KeyReleased)
