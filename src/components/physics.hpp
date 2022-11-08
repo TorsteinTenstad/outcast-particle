@@ -5,6 +5,11 @@ class Position
 {
 public:
 	sf::Vector2f position = sf::Vector2f(0, 0);
+
+	std::string to_string()
+	{
+		return "(" + std::to_string(position.x) + "," + std::to_string(position.x) + ")";
+	}
 };
 
 class Velocity

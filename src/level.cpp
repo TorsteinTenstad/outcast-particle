@@ -1,13 +1,12 @@
 #include "level.hpp"
 
-int Level::next_available_entity_id_ = 0;
+int Level::next_available_entity_id_ = 1;
 
 template <class Component>
 void Level::RegisterComponent()
 {
-	static int i = 0;
-	std::map<int, Component> t_map;
-	components_[typeid(Component).name()] = t_map;
+	std::map<int, Component> component_map;
+	components_[typeid(Component).name()] = component_map;
 }
 
 template <class Component>
@@ -49,7 +48,10 @@ void Level::LoadFromFolder(std::string folder_path)
 		int entity_id = stoi(filename.substr(0, separator_index));
 		std::string component_typeid_name = filename.substr(separator_index + 1, filename.length());
 		std::cout << entity_id << "," << component_typeid_name << "\n";
-		std::visit([entry, entity_id, component_typeid_name](auto& component_map) { LoadFromBinaryFile(component_map[entity_id], entry.path().string().c_str()); },
+		std::visit([entry, entity_id, component_typeid_name](auto& component_map) {
+			component_map[entity_id];
+			LoadFromBinaryFile(component_map[entity_id], entry.path().string().c_str());
+		},
 			components_[component_typeid_name.c_str()]);
 	}
 }

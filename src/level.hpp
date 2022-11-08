@@ -35,10 +35,9 @@ private:
 	static int next_available_entity_id_;
 	std::map<const char*, ComponentMap> components_;
 
+public:
 	template <class Component>
 	void RegisterComponent();
-
-public:
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 	void SaveToFolder(std::string folder_path) const;

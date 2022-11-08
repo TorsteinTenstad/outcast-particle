@@ -31,17 +31,15 @@ static float RoundToNearest(float x, float y)
 template <class T>
 static void SaveToBinaryFile(const T& obj, const char* path)
 {
-	auto* bytes = reinterpret_cast<const char*>(&obj);
 	std::ofstream file;
 	file.open(path);
-	file.write(bytes, sizeof(T));
+	file.write((char*)&obj, sizeof(T));
 }
 
 template <class T>
 static void LoadFromBinaryFile(T& obj, const char* path)
 {
-	auto* bytes = reinterpret_cast<char*>(&obj);
 	std::ifstream file;
 	file.open(path);
-	file.read(bytes, sizeof(T));
+	file.read((char*)&obj, sizeof(T));
 }
