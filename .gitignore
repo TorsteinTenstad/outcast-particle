@@ -12,3 +12,6 @@ Thumbs.db
 
 # Project specific
 #
+
+# Python
+__pycache__
