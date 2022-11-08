@@ -2,7 +2,8 @@ import yaml as ya
 from yaml.loader import SafeLoader
 import copy
 
-def get_blueprints(path):
+def get_blueprints(path: str):
+	if not path.endswith(".yaml"): return {}
 	with open(path) as file:
 		data = ya.load(file, Loader=SafeLoader)
 		handle_tags(data)

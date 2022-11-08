@@ -1,5 +1,6 @@
 from os import listdir
-from blueprints import get_blueprints, stringify_blueprints
+from cpp_blueprints import get_blueprints
+from yaml_blueprints import stringify_blueprints
 
 path_components = "../src/components/"
 path_blueprints = "../src/blueprints/"
