@@ -89,6 +89,7 @@ int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, f
 		GetComponent<DrawInfo>()[id] = { "content\\particle_100_blue.png" };
 	}
 	GetComponent<Player>()[id] = Player();
+	GetComponent<Intersection>()[id] = {};
 	return id;
 }
 

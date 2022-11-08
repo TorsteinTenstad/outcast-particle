@@ -40,6 +40,7 @@ public:
 				{
 					rectangle_shapes_[entity_id] = sf::RectangleShape();
 				}
+				rectangle_shapes_[entity_id].setOrigin(width_and_height_map[entity_id].width_and_height.x / 2, width_and_height_map[entity_id].width_and_height.y / 2);
 				rectangle_shapes_[entity_id].setTexture(&textures_[entity_drawinfo.image_path]);
 				rectangle_shapes_[entity_id].setSize(width_and_height_map[entity_id].width_and_height);
 				rectangle_shapes_[entity_id].setPosition(position_map[entity_id].position);

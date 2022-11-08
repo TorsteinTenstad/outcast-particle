@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/intersection.hpp"
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/draw_info.hpp"
@@ -24,6 +25,7 @@ typedef std::variant<
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
+	std::map<int, Intersection>,
 	std::map<int, LevelButton>>
 	ComponentMap;
 

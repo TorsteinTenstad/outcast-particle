@@ -33,11 +33,8 @@ public:
 			{
 				float w = width_and_height_map[entity_id].width_and_height.x;
 				float h = width_and_height_map[entity_id].width_and_height.y;
-				float e_x = position_map[entity_id].position.x;
-				float e_y = position_map[entity_id].position.y;
-				float m_x = cursor_and_keys.cursor_position.x;
-				float m_y = cursor_and_keys.cursor_position.y;
-				if (e_x < m_x && m_x < e_x + w && e_y < m_y && m_y < e_y + h)
+				sf::Vector2f offset = Abs(position_map[entity_id].position - cursor_and_keys.cursor_position);
+				if (offset.x < w / 2 && offset.y < h / 2)
 				{
 					clicked_on.clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
 				}

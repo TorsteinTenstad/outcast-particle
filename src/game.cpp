@@ -34,14 +34,14 @@ Game::Game()
 	Update(0);
 	texture.update(globals.render_window);
 	render_system_.RegisterTexture("level1", texture);
-	levels_[0].AddLevelButton(1, 100, 100, 400, 225, "level1");
+	levels_[0].AddLevelButton(1, 300, 300, 400, 225, "level1");
 
 	globals.render_window.clear();
 	globals.active_level = 2;
 	Update(0);
 	texture.update(globals.render_window);
 	render_system_.RegisterTexture("level2", texture);
-	levels_[0].AddLevelButton(2, 100, 425, 400, 225, "level2");
+	levels_[0].AddLevelButton(2, 300, 625, 400, 225, "level2");
 
 	globals.active_level = 0;
 }
@@ -84,6 +84,7 @@ void Game::Update(float dt)
 		force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		acceleration_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
 	else
 	{
