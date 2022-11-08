@@ -6,6 +6,7 @@
 #include "components/mouse_interactions.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
+#include "components/tag.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include <typeindex>
@@ -24,6 +25,7 @@ typedef std::variant<
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
+	std::map<int, Tag>,
 	std::map<int, LevelButton>>
 	ComponentMap;
 
@@ -48,4 +50,7 @@ public:
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
 	int AddLaser();
 	int AddBlock(float pos_x, float pos_y);
+
+	void SaveToFolder(std::string folder_path);
+	void LoadFromFolder(std::string folder_path);
 };
