@@ -1,15 +1,15 @@
 import re
-from blueprints import handle_tags, handle_all_extends
+from blueprints import handle_tags, handle_all_extends, merge
 
-def get_blueprints(path):
-	if not path.endswith(".cpp"): return {}
+def get_blueprints(path, data = {}):
+	if not path.endswith("pp"): return {}
 	with open(path, 'r') as file:
-		data = cpp_to_dict(file.read())
+		merge(cpp_to_dict(file.read()), data)
 		handle_tags(data)
 		handle_all_extends(data)
-		return data
 
 def cpp_to_dict(cpp):
+	# TODO: fix for attributes of components.hpp
 	cpp_blueprints = cpp.split("\nclass ")
 	cpp_blueprints.pop(0)
 	blueprints = {}
@@ -22,7 +22,7 @@ def cpp_to_dict(cpp):
 		if extends:
 			blueprint["extends"] = extends
 		assignments = re.findall(
-			"[\[\w+\]]*[\n\t ]*\w+ \w+ = \{.*\}\;", cpp_blueprint)
+			"[\[\w+\]]*[\n\t ]*\w+ \w+ = .*\;", cpp_blueprint)
 		for assignment in assignments:
 			left, right = striplist(assignment.split("="))
 			above, left = left.split("\n") if "\n" in left else ("", left)
