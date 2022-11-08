@@ -1,6 +1,13 @@
 
 def gen_level_serialization(data):
-	cpp = "#include \"level.hpp\"\n"
+	cpp = """
+#include \"level.hpp\"
+/*
+Warning!
+Code is generated.
+Changes will be overwritten.
+*/
+"""
 	cpp += gen_components(data["components"])
 	cpp += gen_save_to_folder(data["blueprints"])
 	cpp += gen_load_from_folder(data["blueprints"])
