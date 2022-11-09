@@ -88,7 +88,7 @@ int Level::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float 
 	return id;
 }
 
-int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
+int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge, float player_force)
 {
 	int id = AddMovingParticleEntity(pos_x, pos_y, vel_x, vel_y, charge);
 	if (charge > 0)
@@ -103,7 +103,7 @@ int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, f
 	{
 		GetComponent<DrawInfo>()[id] = { "content\\particle_100_blue.png" };
 	}
-	GetComponent<Player>()[id] = Player();
+	GetComponent<Player>()[id].move_force = player_force;
 	GetComponent<Intersection>()[id] = {};
 	return id;
 }
@@ -120,12 +120,16 @@ int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, floa
 	return id;
 }
 
-int Level::AddLaser()
+int Level::AddLaser(float pos_x, float pos_y, float width, float height)
 {
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id] = { "content\\laser.png" };
-	GetComponent<Position>()[id] = { sf::Vector2f(1000, 0) };
-	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 480) };
+	if (width > height)
+	{
+		GetComponent<DrawInfo>()[id] = { "content\\laser_horisontal.png" };
+	}
+	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
 	GetComponent<Draggable>()[id] = {};
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<KillOnIntersection>()[id] = {};

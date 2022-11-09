@@ -7,7 +7,7 @@ Game::Game()
 	Level menu = Level();
 
 	Level level1 = Level();
-	level1.AddPlayerEntity(1920, 1080, 0, 0, -100);
+	level1.AddPlayerEntity(1920, 1080, 0, 0, -100, 3000);
 	level1.AddMovingParticleEntity(1920 / 2 + 300, 1080 / 2 + 300, -100, 100, -100);
 	level1.AddMovingParticleEntity(1920 / 2 + 300, 1080 / 2 - 300, 100, 100, -100);
 	level1.AddMovingParticleEntity(1920 / 2 - 300, 1080 / 2 + 300, -100, -100, -100);
@@ -15,13 +15,18 @@ Game::Game()
 	level1.AddParticleEntity(1920 / 2, 1080 / 2, 1000000);
 
 	Level level2 = Level();
-	level2.AddPlayerEntity(1920 / 2, 1080 / 2, 0, 0, -100);
-	level2.AddLaser();
+	level2.AddPlayerEntity(1920 / 10, 1080 / 2, 0, 0, -100, 100);
+	level2.AddLaser(1920 / 2, 24, 1920, 48);
+	level2.AddLaser(24, 1080 / 2, 48, 1080);
+	level2.AddLaser(1920 / 2, 1080 - 24, 1920, 48);
+	level2.AddLaser(1920 - 24, 1080 / 2, 48, 1080);
 	level2.AddGoal();
-	level2.AddBlock(0, 0);
-	level2.AddBlock(48, 0);
-	level2.AddBlock(96, 0);
-	level2.AddBlock(200, 200);
+	//level2.AddBlock(0, 0);
+	//level2.AddBlock(48, 0);
+	//level2.AddBlock(96, 0);
+	//level2.AddBlock(200, 200);
+	level2.AddParticleEntity(1920 / 5, 1080 / 10, 1000000);
+	level2.AddParticleEntity(1920 / 5, 1080 / 10 * 9, 1000000);
 
 	levels_.push_back(menu);
 	levels_.push_back(level1);

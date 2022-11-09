@@ -17,8 +17,9 @@ public:
 		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
 		std::map<int, Player>& player_map = level.GetComponent<Player>();
 		std::map<int, Goal>& goal_map = level.GetComponent<Goal>();
-		for (auto& [entity_id, player] : player_map)
+		for (auto& [entity_id, _] : player_map)
 		{
+			(void)_;
 			for (auto& intersection_id : intersection_map[entity_id].intersecting_ids)
 			{
 				if (goal_map.count(intersection_id) != 0)

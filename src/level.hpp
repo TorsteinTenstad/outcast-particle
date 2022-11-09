@@ -51,9 +51,9 @@ public:
 	void DeleteEntity(int id);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
-	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
+	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge, float player_force);
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
-	int AddLaser();
+	int AddLaser(float pos_x, float pos_y, float width, float height);
 	int AddBlock(float pos_x, float pos_y);
 	int AddGoal();
 };
