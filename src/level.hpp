@@ -1,5 +1,7 @@
 #pragma once
+#include "Components/goal.hpp"
 #include "Components/intersection.hpp"
+#include "Components/kill_on_intersection.hpp"
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/draw_info.hpp"
@@ -25,6 +27,8 @@ typedef std::variant<
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
+	std::map<int, KillOnIntersection>,
+	std::map<int, Goal>,
 	std::map<int, Intersection>,
 	std::map<int, LevelButton>>
 	ComponentMap;
@@ -44,10 +48,12 @@ public:
 
 	int CreateEntityId();
 	int CopyEntity(int from_id);
+	void DeleteEntity(int id);
 	int AddParticleEntity(float pos_x, float pos_y, float charge);
 	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
 	int AddLaser();
 	int AddBlock(float pos_x, float pos_y);
+	int AddGoal();
 };

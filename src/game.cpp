@@ -17,6 +17,7 @@ Game::Game()
 	Level level2 = Level();
 	level2.AddPlayerEntity(1920 / 2, 1080 / 2, 0, 0, -100);
 	level2.AddLaser();
+	level2.AddGoal();
 	level2.AddBlock(0, 0);
 	level2.AddBlock(48, 0);
 	level2.AddBlock(96, 0);
@@ -85,6 +86,8 @@ void Game::Update(float dt)
 		acceleration_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		goal_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
 	else
 	{

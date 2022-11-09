@@ -36,6 +36,21 @@ int Level::CopyEntity(int from_id)
 	return to_id;
 }
 
+void Level::DeleteEntity(int id)
+{
+	for (auto& [_, component_map_variant] : components_)
+	{
+		(void)_;
+		std::visit([id](auto& component_map) {
+			if (component_map.count(id) != 0)
+			{
+				component_map.erase(id);
+			}
+		},
+			component_map_variant);
+	}
+}
+
 int Level::CreateEntityId()
 {
 	return next_available_entity_id_++;
@@ -113,6 +128,7 @@ int Level::AddLaser()
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 480) };
 	GetComponent<Draggable>()[id] = {};
 	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<KillOnIntersection>()[id] = {};
 	return id;
 }
 
@@ -124,5 +140,18 @@ int Level::AddBlock(float pos_x, float pos_y)
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 48) };
 	GetComponent<Draggable>()[id] = {};
 	GetComponent<ClickedOn>()[id] = {};
+	return id;
+}
+
+int Level::AddGoal()
+{
+	int id = CreateEntityId();
+	GetComponent<DrawInfo>()[id] = { "content\\goal.png" };
+	GetComponent<Position>()[id] = { sf::Vector2f(1500, 500) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(96, 96) };
+	GetComponent<Draggable>()[id] = {};
+	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<Goal>()[id] = {};
+	GetComponent<KillOnIntersection>()[id] = {};
 	return id;
 }

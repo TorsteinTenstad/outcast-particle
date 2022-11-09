@@ -6,7 +6,9 @@
 #include "systems/edit_mode.hpp"
 #include "systems/electric_force.hpp"
 #include "systems/force.hpp"
+#include "systems/goal.hpp"
 #include "systems/intersection.hpp"
+#include "systems/kill_on_intersection.hpp"
 #include "systems/level_button.hpp"
 #include "systems/mouse_interactions.hpp"
 #include "systems/player.hpp"
@@ -31,7 +33,8 @@ private:
 	VelocitySystem velocity_system_;
 	IntersectionSystem intersection_system_;
 	SFMLRenderSystem render_system_;
-
+	KillOnIntersectionSystem kill_on_intersection_system_;
+	GoalSystem goal_system_;
 	CursorAndKeys cursor_and_keys_;
 
 public:

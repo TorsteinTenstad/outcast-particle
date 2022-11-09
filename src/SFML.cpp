@@ -19,6 +19,7 @@ void SFML::RunWindow(Game& game)
 	{
 		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
+		//std::cout << 1 / dt << "\n";
 		game.Update(dt);
 		globals.render_window.display();
 	}
