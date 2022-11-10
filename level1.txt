@@ -1,0 +1,6 @@
+"Static-Particle":Position{position=(1920.000000,1080.000000)}Charge{charge=-100.000000}
+"Static-Particle":Position{position=(1260.000000,840.000000)}Charge{charge=-100.000000}
+"Static-Particle":Position{position=(1260.000000,240.000000)}Charge{charge=-100.000000}
+"Static-Particle":Position{position=(660.000000,840.000000)}Charge{charge=-100.000000}
+"Static-Particle":Position{position=(660.000000,240.000000)}Charge{charge=-100.000000}
+"Static-Particle":Position{position=(960.000000,540.000000)}Charge{charge=1000000.000000}
