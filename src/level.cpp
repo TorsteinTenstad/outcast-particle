@@ -69,6 +69,7 @@ int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 int Level::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
 {
 	int id = AddParticleEntity(pos_x, pos_y, charge);
+	GetComponent<Tag>()[id].tag = "Moving-Particle";
 	GetComponent<Velocity>()[id] = { sf::Vector2f(vel_x, vel_y) };
 	GetComponent<Acceleration>()[id] = { sf::Vector2f(0, 0) };
 	GetComponent<ReceivedForces>()[id] = ReceivedForces();
@@ -78,6 +79,7 @@ int Level::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float 
 int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
 {
 	int id = AddMovingParticleEntity(pos_x, pos_y, vel_x, vel_y, charge);
+	GetComponent<Tag>()[id].tag = "Player";
 	if (charge > 0)
 	{
 		GetComponent<DrawInfo>()[id] = { "content\\particle_100_blue+.png" };
