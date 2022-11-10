@@ -2,6 +2,7 @@
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/draw_info.hpp"
+#include "components/example_component.hpp"
 #include "components/level_button.hpp"
 #include "components/mouse_interactions.hpp"
 #include "components/physics.hpp"
@@ -51,6 +52,6 @@ public:
 	int AddLaser();
 	int AddBlock(float pos_x, float pos_y);
 
-	void SaveToFolder(std::string folder_path);
-	void LoadFromFolder(std::string folder_path);
+	void SaveToFile(std::string savefile_path);
+	void LoadFromFile(std::string savefile_path);
 };

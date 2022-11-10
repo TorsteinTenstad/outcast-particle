@@ -44,6 +44,8 @@ int Level::CreateEntityId()
 int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 {
 	int id = CreateEntityId();
+
+	GetComponent<Tag>()[id] = { "Static-Particle" };
 	if (charge > 0)
 	{
 		GetComponent<DrawInfo>()[id] = { "content\\particle_100_red+.png" };
