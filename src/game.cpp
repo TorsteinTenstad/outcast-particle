@@ -52,12 +52,8 @@ Game::Game()
 	globals.active_level = 0;
 }
 
-void Game::InitSystems()
+void Game::Init()
 {
-	for (auto& level : levels_)
-	{
-		player_system_.Init(level);
-	}
 }
 
 void Game::Update(float dt)

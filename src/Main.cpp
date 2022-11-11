@@ -9,7 +9,7 @@ int main()
 {
 	SFML sfml_app = SFML();
 	Game game = Game();
-	game.InitSystems();
+	game.Init();
 	sfml_app.RunWindow(game);
 	return 0;
 }
