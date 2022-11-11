@@ -1,12 +1,16 @@
 #pragma once
 #include "PCH.hpp"
 
-std::string GetSubstrBetween(std::string s, std::string prefix, std::string postfix)
+inline std::string GetSubstrBetween(std::string s, std::string prefix, std::string postfix)
 {
-	return "";
+	auto prefix_idx = s.find(prefix);
+	s = s.substr(prefix_idx + prefix.length());
+	auto postfix_idx = s.find(postfix);
+	s = s.substr(0, postfix_idx);
+	return s;
 }
 
-std::vector<std::string> SplitString(std::string s, std::string delimiter)
+inline std::vector<std::string> SplitString(std::string s, std::string delimiter)
 {
 	int last_delimiter_idx = 0;
 	std::vector<std::string> substrings;
@@ -25,31 +29,42 @@ std::vector<std::string> SplitString(std::string s, std::string delimiter)
 	return substrings;
 }
 
-template <typename T>
-std::string ToString(T x)
+inline std::string ToString(int x)
 {
 	return std::to_string(x);
 }
-template std::string ToString(int);
-template std::string ToString(float);
-template std::string ToString(bool);
-
-template <>
-std::string ToString(sf::Vector2f x)
+inline std::string ToString(float x)
+{
+	return std::to_string(x);
+}
+inline std::string ToString(bool x)
+{
+	return std::to_string(x);
+}
+inline std::string ToString(sf::Vector2f x)
 {
 	return "(" + ToString(x.x) + "," + ToString(x.y) + ")";
 }
 
-template <typename T>
-void FromString(T& x, std::string s)
+inline void FromString(int& x, std::string s)
 {
-	x = (T)stod(s);
+	x = stoi(s);
+	std::cout << s << ": " << x << "\n";
 }
-template void FromString(int&, std::string);
-template void FromString(float&, std::string);
-template void FromString(bool&, std::string);
-
-template <>
-void FromString(sf::Vector2f& x, std::string s)
+inline void FromString(float& x, std::string s)
 {
+	x = stod(s);
+	std::cout << s << ": " << x << "\n";
+}
+inline void FromString(bool& x, std::string s)
+{
+	x = (s == "true");
+	std::cout << s << ": " << x << "\n";
+}
+inline void FromString(sf::Vector2f& x, std::string s)
+{
+	std::vector<std::string> x_y = SplitString(s.substr(1, s.length() - 1), ",");
+	std::cout << x_y[0] << "," << x_y[1] << "\t";
+	FromString(x.x, x_y[0]);
+	FromString(x.y, x_y[1]);
 }

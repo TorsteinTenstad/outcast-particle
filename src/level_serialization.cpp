@@ -15,7 +15,7 @@ void SerializeComponent(ExampleComponent c, std::string& str_rep)
 	str_rep += "Position{";
 	str_rep += "a=";
 	str_rep += ToString(c.a);
-	str_rep += ",b=";
+	str_rep += ";b=";
 	str_rep += ToString(c.b);
 	str_rep += "}";
 }
@@ -43,10 +43,10 @@ void SerializeComponent(Velocity c, std::string& str_rep)
 
 void DeserializeComponent(ExampleComponent& c, std::string str_rep)
 {
-	std::vector<std::string> variables = SplitString(str_rep, ",");
+	std::vector<std::string> variables = SplitString(str_rep, ";");
 	for (auto variable : variables)
 	{
-		std::vector<std::string> statement_parts = SplitString(variable, ",");
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
 		if (statement_parts[0] == "a")
 		{
 			FromString(c.a, statement_parts[1]);
@@ -60,10 +60,10 @@ void DeserializeComponent(ExampleComponent& c, std::string str_rep)
 
 void DeserializeComponent(Position& c, std::string str_rep)
 {
-	std::vector<std::string> variables = SplitString(str_rep, ",");
+	std::vector<std::string> variables = SplitString(str_rep, ";");
 	for (auto variable : variables)
 	{
-		std::vector<std::string> statement_parts = SplitString(variable, ",");
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
 		if (statement_parts[0] == "position")
 		{
 			FromString(c.position, statement_parts[1]);
@@ -72,10 +72,10 @@ void DeserializeComponent(Position& c, std::string str_rep)
 }
 void DeserializeComponent(Charge& c, std::string str_rep)
 {
-	std::vector<std::string> variables = SplitString(str_rep, ",");
+	std::vector<std::string> variables = SplitString(str_rep, ";");
 	for (auto variable : variables)
 	{
-		std::vector<std::string> statement_parts = SplitString(variable, ",");
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
 		if (statement_parts[0] == "charge")
 		{
 			FromString(c.charge, statement_parts[1]);
@@ -84,10 +84,10 @@ void DeserializeComponent(Charge& c, std::string str_rep)
 }
 void DeserializeComponent(Velocity& c, std::string str_rep)
 {
-	std::vector<std::string> variables = SplitString(str_rep, ",");
+	std::vector<std::string> variables = SplitString(str_rep, ";");
 	for (auto variable : variables)
 	{
-		std::vector<std::string> statement_parts = SplitString(variable, ",");
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
 		if (statement_parts[0] == "velocity")
 		{
 			FromString(c.velocity, statement_parts[1]);
@@ -151,7 +151,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		}
 		if (tag == "Moving-Particle")
 		{
-			GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue+.png" };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_green-.png" };
 			GetComponent<Draggable>()[entity_id] = {};
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Acceleration>()[entity_id] = {};

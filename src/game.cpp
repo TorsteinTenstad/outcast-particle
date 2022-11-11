@@ -24,6 +24,8 @@ Game::Game()
 	level2.AddBlock(96, 0);
 	level2.AddBlock(200, 200);
 
+	level2.LoadFromFile("level1.txt");
+
 	levels_.push_back(menu);
 	levels_.push_back(level1);
 	levels_.push_back(level2);
