@@ -25,6 +25,8 @@ private:
 	float default_velocity_magnitude_change_sensitivity_ = 20;
 	float default_velocity_angle_change_sensitivity_ = PI / 90;
 
+	std::vector<int> selected_entities;
+
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
@@ -33,6 +35,8 @@ public:
 		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
 		std::map<int, Draggable>& draggable_map = level.GetComponent<Draggable>();
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
+		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
 
 		for (auto& [entity_id, draggable_entity] : draggable_map)
 		{
@@ -51,6 +55,50 @@ public:
 				}
 				else
 				{
+					if (width_and_height_map.count(entity_id))
+					{
+						if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::R])
+						{
+							width_and_height_map[entity_id].width_and_height = sf::Vector2f(width_and_height_map[entity_id].width_and_height.y, width_and_height_map[entity_id].width_and_height.x);
+							if (draw_info_map.count(entity_id))
+							{
+								if (draw_info_map[entity_id].image_path == "content\\laser_vertical.png")
+								{
+									draw_info_map[entity_id].image_path = "content\\laser_horisontal.png";
+								}
+								else if (draw_info_map[entity_id].image_path == "content\\laser_horisontal.png")
+								{
+									draw_info_map[entity_id].image_path = "content\\laser_vertical.png";
+								}
+							}
+						}
+
+						if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::W])
+						{
+							width_and_height_map[entity_id].width_and_height.y += 48;
+						}
+						if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::S])
+						{
+							width_and_height_map[entity_id].width_and_height.y -= 48;
+							if (width_and_height_map[entity_id].width_and_height.y < 48)
+							{
+								width_and_height_map[entity_id].width_and_height.y = 48;
+							}
+						}
+						if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::D])
+						{
+							width_and_height_map[entity_id].width_and_height.x += 48;
+						}
+						if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::A])
+						{
+							width_and_height_map[entity_id].width_and_height.x -= 48;
+							if (width_and_height_map[entity_id].width_and_height.x < 48)
+							{
+								width_and_height_map[entity_id].width_and_height.x = 48;
+							}
+						}
+					}
+
 					position_map[entity_id].position = cursor_and_keys.cursor_position - draggable_entity.offset;
 					if (cursor_and_keys.key_down[sf::Keyboard::LShift])
 					{
@@ -58,36 +106,39 @@ public:
 						position_map[entity_id].position.y = RoundToNearest(position_map[entity_id].position.y, 48);
 					}
 
-					float velocity_magnitude = Magnitude(velocity_map[entity_id].velocity);
-					float velocity_angle = Angle(velocity_map[entity_id].velocity);
+					if (velocity_map.count(entity_id))
+					{
+						float velocity_magnitude = Magnitude(velocity_map[entity_id].velocity);
+						float velocity_angle = Angle(velocity_map[entity_id].velocity);
 
-					float velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_;
-					float velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_;
-					if (cursor_and_keys.key_down[sf::Keyboard::LAlt])
-					{
-						velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_ / 4;
-						velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_ / 4;
-					}
+						float velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_;
+						float velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_;
+						if (cursor_and_keys.key_down[sf::Keyboard::LAlt])
+						{
+							velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_ / 4;
+							velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_ / 4;
+						}
 
-					if (cursor_and_keys.key_down[sf::Keyboard::W])
-					{
-						velocity_magnitude += velocity_magnitude_change_sensitivity;
-					}
-					if (cursor_and_keys.key_down[sf::Keyboard::S])
-					{
-						velocity_magnitude -= velocity_magnitude_change_sensitivity;
-					}
-					if (cursor_and_keys.key_down[sf::Keyboard::D])
-					{
-						velocity_angle += velocity_angle_change_sensitivity;
-					}
-					if (cursor_and_keys.key_down[sf::Keyboard::A])
-					{
-						velocity_angle -= velocity_angle_change_sensitivity;
-					}
+						if (cursor_and_keys.key_down[sf::Keyboard::W])
+						{
+							velocity_magnitude += velocity_magnitude_change_sensitivity;
+						}
+						if (cursor_and_keys.key_down[sf::Keyboard::S])
+						{
+							velocity_magnitude -= velocity_magnitude_change_sensitivity;
+						}
+						if (cursor_and_keys.key_down[sf::Keyboard::D])
+						{
+							velocity_angle += velocity_angle_change_sensitivity;
+						}
+						if (cursor_and_keys.key_down[sf::Keyboard::A])
+						{
+							velocity_angle -= velocity_angle_change_sensitivity;
+						}
 
-					velocity_map[entity_id].velocity.x = velocity_magnitude * std::cos(velocity_angle);
-					velocity_map[entity_id].velocity.y = velocity_magnitude * std::sin(velocity_angle);
+						velocity_map[entity_id].velocity.x = velocity_magnitude * std::cos(velocity_angle);
+						velocity_map[entity_id].velocity.y = velocity_magnitude * std::sin(velocity_angle);
+					}
 				}
 			}
 			else if (clicked_on_map[entity_id].clicked_this_frame)

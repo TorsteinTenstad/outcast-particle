@@ -123,10 +123,10 @@ int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, floa
 int Level::AddLaser(float pos_x, float pos_y, float width, float height)
 {
 	int id = CreateEntityId();
-	GetComponent<DrawInfo>()[id] = { "content\\laser.png" };
+	GetComponent<DrawInfo>()[id] = { "content\\laser_vertical.png" };
 	if (width > height)
 	{
-		GetComponent<DrawInfo>()[id] = { "content\\laser_horisontal.png" };
+		GetComponent<DrawInfo>()[id].image_path = "content\\laser_horisontal.png";
 	}
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };

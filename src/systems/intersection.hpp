@@ -69,17 +69,5 @@ public:
 				}
 			}
 		}
-		for (auto& [entity_id, intersection] : intersection_map)
-		{
-			if (intersection.intersecting_ids.size() > 0)
-			{
-				std::cout << entity_id << ": ";
-				for (auto& id : intersection.intersecting_ids)
-				{
-					std::cout << id << ", ";
-				}
-				std::cout << std::endl;
-			}
-		}
 	}
 };

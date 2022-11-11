@@ -48,7 +48,7 @@ void Game::Init()
 		render_system_.RegisterTexture(identifier, texture);
 		levels_[0].AddLevelButton(i, 300, 300 + (i - 1) * (255), 400, 225, identifier);
 	}
-	globals.active_level = 0;
+	globals.active_level = 2;
 }
 
 void Game::Update(float dt)
