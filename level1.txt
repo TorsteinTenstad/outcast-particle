@@ -1,4 +1,4 @@
-"Player":Position{position=(1920.000000,1080.000000)}Charge{charge=-100.000000}Velocity{velocity=(0.000000,0.000000)}
+"Player":Position{position=(1920.000000,1080.000000)}Charge{charge=-100.000000}Velocity{velocity=(0.000000,0.000000)}ExampleComponent{a=3;b=69.000000}
 "Moving-Particle":Position{position=(1260.000000,840.000000)}Charge{charge=-100.000000}Velocity{velocity=(-100.000000,100.000000)}
 "Moving-Particle":Position{position=(1260.000000,240.000000)}Charge{charge=-100.000000}Velocity{velocity=(100.000000,100.000000)}
 "Moving-Particle":Position{position=(660.000000,840.000000)}Charge{charge=-100.000000}Velocity{velocity=(-100.000000,-100.000000)}

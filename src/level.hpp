@@ -27,6 +27,7 @@ typedef std::variant<
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
 	std::map<int, Tag>,
+	std::map<int, ExampleComponent>,
 	std::map<int, LevelButton>>
 	ComponentMap;
 

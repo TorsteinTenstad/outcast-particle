@@ -12,7 +12,7 @@ void DeserializeComponent(Velocity& c, std::string str_rep);
 
 void SerializeComponent(ExampleComponent c, std::string& str_rep)
 {
-	str_rep += "Position{";
+	str_rep += "ExampleComponent{";
 	str_rep += "a=";
 	str_rep += ToString(c.a);
 	str_rep += ";b=";
@@ -121,6 +121,7 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Velocity>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<ExampleComponent>()[entity_id], entity_string);
 		}
 		f << entity_string << "\n";
 		entity_string.clear();
@@ -173,6 +174,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<Charge>()[entity_id], GetSubstrBetween(line, "Charge{", "}"));
 			DeserializeComponent(GetComponent<Velocity>()[entity_id], GetSubstrBetween(line, "Velocity{", "}"));
+			DeserializeComponent(GetComponent<ExampleComponent>()[entity_id], GetSubstrBetween(line, "ExampleComponent{", "}"));
 		}
 	}
 }

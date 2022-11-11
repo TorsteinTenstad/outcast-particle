@@ -3,6 +3,6 @@
 class ExampleComponent
 {
 public:
-	int a;
+	int a = 3;
 	float b;
 };
