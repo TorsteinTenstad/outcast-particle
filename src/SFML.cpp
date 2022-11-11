@@ -12,7 +12,7 @@ SFML::SFML()
 	platform.setIcon(globals.render_window.getSystemHandle());
 }
 
-void SFML::RunWindow(Game& game)
+void SFML::RunWindow(std::function<void(float)> update_func)
 {
 	Timer timer = Timer();
 	while (globals.render_window.isOpen())
@@ -20,7 +20,7 @@ void SFML::RunWindow(Game& game)
 		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
 		//std::cout << 1 / dt << "\n";
-		game.Update(dt);
+		update_func(dt);
 		globals.render_window.display();
 	}
 }

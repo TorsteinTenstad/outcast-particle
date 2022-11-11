@@ -31,29 +31,24 @@ Game::Game()
 	levels_.push_back(menu);
 	levels_.push_back(level1);
 	levels_.push_back(level2);
-
-	sf::Texture texture;
-	texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
-
-	globals.render_window.clear();
-	globals.active_level = 1;
-	Update(0);
-	texture.update(globals.render_window);
-	render_system_.RegisterTexture("level1", texture);
-	levels_[0].AddLevelButton(1, 300, 300, 400, 225, "level1");
-
-	globals.render_window.clear();
-	globals.active_level = 2;
-	Update(0);
-	texture.update(globals.render_window);
-	render_system_.RegisterTexture("level2", texture);
-	levels_[0].AddLevelButton(2, 300, 625, 400, 225, "level2");
-
-	globals.active_level = 0;
 }
 
 void Game::Init()
 {
+	sf::Texture texture;
+	std::string identifier;
+	for (unsigned i = 1; i < levels_.size(); ++i)
+	{
+		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
+		globals.render_window.clear();
+		globals.active_level = i;
+		Update(0);
+		texture.update(globals.render_window);
+		identifier = "level" + std::to_string(i);
+		render_system_.RegisterTexture(identifier, texture);
+		levels_[0].AddLevelButton(i, 300, 300 + (i - 1) * (255), 400, 225, identifier);
+	}
+	globals.active_level = 0;
 }
 
 void Game::Update(float dt)
