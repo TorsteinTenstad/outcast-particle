@@ -22,7 +22,7 @@ typedef std::variant<
 	std::map<int, ReceivedForces>,
 	std::map<int, Player>,
 	std::map<int, Charge>,
-	std::map<int, Draggable>,
+	std::map<int, Editable>,
 	std::map<int, ClickedOn>,
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,

@@ -21,10 +21,7 @@ Game::Game()
 	level2.AddLaser(1920 / 2, 1080 - 24, 1920, 48);
 	level2.AddLaser(1920 - 24, 1080 / 2, 48, 1080);
 	level2.AddGoal();
-	//level2.AddBlock(0, 0);
-	//level2.AddBlock(48, 0);
-	//level2.AddBlock(96, 0);
-	//level2.AddBlock(200, 200);
+	level2.AddBlock(200, 200);
 	level2.AddParticleEntity(1920 / 5, 1080 / 10, 1000000);
 	level2.AddParticleEntity(1920 / 5, 1080 / 10 * 9, 1000000);
 
@@ -55,7 +52,7 @@ void Game::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
 
-	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape])
+	if (cursor_and_keys_.key_pressed_this_frame[EDIT_MODE_KEY])
 	{
 		globals.edit_mode = !globals.edit_mode;
 	}

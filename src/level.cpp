@@ -73,7 +73,7 @@ int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 	}
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<Charge>()[id] = { charge };
-	GetComponent<Draggable>()[id] = {};
+	GetComponent<Editable>()[id] = {};
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<Radius>()[id] = { 50 };
 	return id;
@@ -82,6 +82,7 @@ int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 int Level::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge)
 {
 	int id = AddParticleEntity(pos_x, pos_y, charge);
+	GetComponent<Editable>()[id].is_velocity_editable = true;
 	GetComponent<Velocity>()[id] = { sf::Vector2f(vel_x, vel_y) };
 	GetComponent<Acceleration>()[id] = { sf::Vector2f(0, 0) };
 	GetComponent<ReceivedForces>()[id] = ReceivedForces();
@@ -130,7 +131,7 @@ int Level::AddLaser(float pos_x, float pos_y, float width, float height)
 	}
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	GetComponent<Draggable>()[id] = {};
+	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<KillOnIntersection>()[id] = {};
 	return id;
@@ -142,7 +143,7 @@ int Level::AddBlock(float pos_x, float pos_y)
 	GetComponent<DrawInfo>()[id] = { "content\\block.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 48) };
-	GetComponent<Draggable>()[id] = {};
+	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
 	GetComponent<ClickedOn>()[id] = {};
 	return id;
 }
@@ -153,7 +154,7 @@ int Level::AddGoal()
 	GetComponent<DrawInfo>()[id] = { "content\\goal.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(1500, 500) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(96, 96) };
-	GetComponent<Draggable>()[id] = {};
+	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<Goal>()[id] = {};
 	GetComponent<KillOnIntersection>()[id] = {};

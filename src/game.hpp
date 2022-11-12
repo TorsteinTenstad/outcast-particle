@@ -1,4 +1,5 @@
 #pragma once
+#include "controls_config.hpp"
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
 #include "systems/acceleration.hpp"

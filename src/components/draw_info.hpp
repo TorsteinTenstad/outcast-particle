@@ -5,4 +5,5 @@ class DrawInfo
 {
 public:
 	std::string image_path;
+	bool rotated = false;
 };
