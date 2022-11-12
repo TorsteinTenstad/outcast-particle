@@ -86,6 +86,7 @@ void Game::Update(float dt)
 	{
 		edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
+	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	if (globals.edit_mode)
 	{

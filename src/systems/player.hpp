@@ -51,19 +51,6 @@ public:
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_map[entity_id].default_charge = -player_map[entity_id].default_charge;
 			}
-
-			if (charge_map[entity_id].charge > 0)
-			{
-				level.GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue+.png" };
-			}
-			else if (charge_map[entity_id].charge < 0)
-			{
-				level.GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue-.png" };
-			}
-			else
-			{
-				level.GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue.png" };
-			}
 		}
 	}
 };

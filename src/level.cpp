@@ -59,21 +59,10 @@ int Level::CreateEntityId()
 int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 {
 	int id = CreateEntityId();
-	if (charge > 0)
-	{
-		GetComponent<DrawInfo>()[id] = { "content\\particle_100_red+.png" };
-	}
-	else if (charge < 0)
-	{
-		GetComponent<DrawInfo>()[id] = { "content\\particle_100_green-.png" };
-	}
-	else
-	{
-		GetComponent<DrawInfo>()[id] = { "" };
-	}
+	GetComponent<ChargeDependentDrawInfo>()[id] = { "content\\particle_100_red+.png", "content\\particle_100_red.png", "content\\particle_100_green-.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<Charge>()[id] = { charge };
-	GetComponent<Editable>()[id] = {};
+	GetComponent<Editable>()[id].is_charge_editable = true;
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<Radius>()[id] = { 50 };
 	return id;
@@ -92,18 +81,7 @@ int Level::AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float 
 int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge, float player_force)
 {
 	int id = AddMovingParticleEntity(pos_x, pos_y, vel_x, vel_y, charge);
-	if (charge > 0)
-	{
-		GetComponent<DrawInfo>()[id] = { "content\\particle_100_blue+.png" };
-	}
-	else if (charge < 0)
-	{
-		GetComponent<DrawInfo>()[id] = { "content\\particle_100_blue-.png" };
-	}
-	else
-	{
-		GetComponent<DrawInfo>()[id] = { "content\\particle_100_blue.png" };
-	}
+	GetComponent<ChargeDependentDrawInfo>()[id] = { "content\\particle_100_blue+.png", "content\\particle_100_blue.png", "content\\particle_100_blue-.png" };
 	GetComponent<Player>()[id].move_force = player_force;
 	GetComponent<Intersection>()[id] = {};
 	return id;
@@ -124,11 +102,7 @@ int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, floa
 int Level::AddLaser(float pos_x, float pos_y, float width, float height)
 {
 	int id = CreateEntityId();
-	GetComponent<DrawInfo>()[id] = { "content\\laser_vertical.png" };
-	if (width > height)
-	{
-		GetComponent<DrawInfo>()[id].image_path = "content\\laser_horisontal.png";
-	}
+	GetComponent<OrientationDependentDrawInfo>()[id] = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
 	GetComponent<Editable>()[id].is_height_and_widht_editable = true;

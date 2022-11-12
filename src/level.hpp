@@ -16,6 +16,8 @@
 
 typedef std::variant<
 	std::map<int, DrawInfo>,
+	std::map<int, ChargeDependentDrawInfo>,
+	std::map<int, OrientationDependentDrawInfo>,
 	std::map<int, Position>,
 	std::map<int, Velocity>,
 	std::map<int, Acceleration>,

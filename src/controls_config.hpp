@@ -9,8 +9,10 @@
 #define PLAYER_GO_NEUTRAL_KEY sf::Keyboard::RShift
 
 #define EDIT_MODE_KEY sf::Keyboard::Tab
+#define EDIT_MODE_SWITCH_CHARGE_KEY sf::Keyboard::Space
 #define SELECT_MULTIPLE_ENTITIES_KEY sf::Keyboard::LControl
 #define COPY_ENTITY_KEY sf::Keyboard::LAlt
+#define DELETE_ENTITY_KEY sf::Keyboard::Delete
 #define DECREASE_SENSITIVITY_KEY sf::Keyboard::RShift
 #define ROTATE_ENTITY_KEY sf::Keyboard::R
 #define INCREMENT_HEIGHT_KEY sf::Keyboard::W

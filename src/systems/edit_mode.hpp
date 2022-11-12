@@ -24,18 +24,33 @@ public:
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
+		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
+
+		// Copy all selected entities on mouse press while COPY_ENTITY_KEY is down:
+		for (auto& [entity_id, editable_entity] : editable_map)
+		{
+			if (editable_entity.selected && cursor_and_keys.key_down[COPY_ENTITY_KEY] && cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left])
+			{
+				int id = level.CopyEntity(entity_id);
+				position_map[id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
+				editable_map[id].selected = false;
+			}
+		}
 
 		// Select/Deselect entities:
 		for (auto& [entity_id, editable_entity] : editable_map)
 		{
 			if (cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left])
 			{
-				editable_entity.drag_offset = cursor_and_keys.cursor_position - position_map[entity_id].position;
+				if (!cursor_and_keys.key_down[COPY_ENTITY_KEY])
+				{
+					editable_entity.drag_offset = cursor_and_keys.cursor_position - position_map[entity_id].position;
+				}
 				if (clicked_on_map[entity_id].clicked_this_frame)
 				{
 					editable_entity.selected = true;
 				}
-				else if (!cursor_and_keys.key_down[SELECT_MULTIPLE_ENTITIES_KEY])
+				else if (!(cursor_and_keys.key_down[SELECT_MULTIPLE_ENTITIES_KEY] || cursor_and_keys.key_down[COPY_ENTITY_KEY]))
 				{
 					editable_entity.selected = false;
 				}
@@ -53,16 +68,14 @@ public:
 		// Edit entities:
 		for (auto& [entity_id, editable_entity] : editable_map)
 		{
-			// Copy all selected entities on mouse release while COPY_ENTITY_KEY is down:
-			if (editable_entity.selected && cursor_and_keys.key_down[COPY_ENTITY_KEY] && cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left])
+			// Delete entities:
+			if (editable_entity.selected && cursor_and_keys.key_pressed_this_frame[DELETE_ENTITY_KEY])
 			{
-				int id = level.CopyEntity(entity_id);
-				position_map[id].position = cursor_and_keys.mouse_button_last_pressed_position[sf::Mouse::Left] - editable_entity.drag_offset;
-				editable_map[id].selected = false;
+				level.DeleteEntity(entity_id);
 			}
 
 			// Move all selected entities with the curser when holding down left mousebutton:
-			if (editable_entity.selected && cursor_and_keys.mouse_button_down[sf::Mouse::Left])
+			if (editable_entity.selected && cursor_and_keys.mouse_button_down[sf::Mouse::Left] && !cursor_and_keys.key_down[COPY_ENTITY_KEY])
 			{
 				position_map[entity_id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
 				if (cursor_and_keys.key_down[sf::Keyboard::LShift])
@@ -86,6 +99,11 @@ public:
 						position_map[entity_id].position.y += radius_map[entity_id].radius;
 					}
 				}
+			}
+
+			if (editable_entity.selected && editable_entity.is_charge_editable && cursor_and_keys.key_pressed_this_frame[EDIT_MODE_SWITCH_CHARGE_KEY])
+			{
+				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 			}
 
 			// Edit velocity of all selected entites with editable velocity:
