@@ -147,10 +147,6 @@ public:
 				if (cursor_and_keys.key_pressed_this_frame[ROTATE_ENTITY_KEY])
 				{
 					width_and_height_map[entity_id].width_and_height = sf::Vector2f(width_and_height_map[entity_id].width_and_height.y, width_and_height_map[entity_id].width_and_height.x);
-					if (draw_info_map.count(entity_id))
-					{
-						draw_info_map[entity_id].rotated = draw_info_map[entity_id].rotated;
-					}
 				}
 				if (cursor_and_keys.key_pressed_this_frame[INCREMENT_HEIGHT_KEY])
 				{

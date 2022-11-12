@@ -5,7 +5,7 @@ class DrawInfo
 {
 public:
 	std::string image_path;
-	bool rotated = false;
+	bool scale_to_fit = false;
 };
 
 class ChargeDependentDrawInfo

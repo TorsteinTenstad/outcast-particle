@@ -44,7 +44,10 @@ public:
 					rectangle_shapes_[entity_id] = sf::RectangleShape();
 				}
 				rectangle_shapes_[entity_id].setSize(width_and_height_map[entity_id].width_and_height);
-				rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, width_and_height_map[entity_id].width_and_height.x, width_and_height_map[entity_id].width_and_height.y));
+				if (!entity_drawinfo.scale_to_fit)
+				{
+					rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, width_and_height_map[entity_id].width_and_height.x, width_and_height_map[entity_id].width_and_height.y));
+				}
 				rectangle_shapes_[entity_id].setTexture(&textures_[entity_drawinfo.image_path]);
 				rectangle_shapes_[entity_id].setOrigin(width_and_height_map[entity_id].width_and_height.x / 2, width_and_height_map[entity_id].width_and_height.y / 2);
 				rectangle_shapes_[entity_id].setPosition(position_map[entity_id].position);
@@ -66,7 +69,10 @@ public:
 					circle_shapes_[entity_id] = sf::CircleShape();
 				}
 				circle_shapes_[entity_id].setRadius(radius_map[entity_id].radius);
-				circle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, 2 * radius_map[entity_id].radius, 2 * radius_map[entity_id].radius));
+				if (!entity_drawinfo.scale_to_fit)
+				{
+					circle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, 2 * radius_map[entity_id].radius, 2 * radius_map[entity_id].radius));
+				}
 				circle_shapes_[entity_id].setTexture(&textures_[entity_drawinfo.image_path]);
 				circle_shapes_[entity_id].setOrigin(radius_map[entity_id].radius, radius_map[entity_id].radius);
 				circle_shapes_[entity_id].setPosition(position_map[entity_id].position);
