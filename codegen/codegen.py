@@ -7,19 +7,19 @@ path_components = "../src/components/"
 path_blueprints = "../src/blueprints/"
 
 data = {
-	"blueprints": {},
-	"components": {}
+    "blueprints": {},
+    "components": {}
 }
 
 for (path, content, class_type) in [
-		(path_blueprints, "blueprints", ClassType.blueprint),
-		(path_components, "components", ClassType.component)]:
-	for filename in listdir(path):
-		if filename.endswith("pp"):
-			get_cpp_blueprints(
-				path + filename, class_type, data[content])
+    (path_blueprints, "blueprints", ClassType.blueprint),
+        (path_components, "components", ClassType.component)]:
+    for filename in listdir(path):
+        if filename.endswith("pp"):
+            get_cpp_blueprints(
+                path + filename, class_type, data[content])
 
 print(json.dumps(data, indent=2))
 
 with open("level_serialization.cpp", "w") as file:
-	file.write(gen_level_serialization(data))
+    file.write(gen_level_serialization(data))

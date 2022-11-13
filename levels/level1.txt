@@ -1,6 +1,6 @@
-"Player":Position{position=(1920.000000,1080.000000)}Charge{charge=-100.000000}Velocity{velocity=(0.000000,0.000000)}
-"Moving-Particle":Position{position=(1260.000000,840.000000)}Charge{charge=-100.000000}Velocity{velocity=(-100.000000,100.000000)}
-"Moving-Particle":Position{position=(1260.000000,240.000000)}Charge{charge=-100.000000}Velocity{velocity=(100.000000,100.000000)}
-"Moving-Particle":Position{position=(660.000000,840.000000)}Charge{charge=-100.000000}Velocity{velocity=(-100.000000,-100.000000)}
-"Moving-Particle":Position{position=(660.000000,240.000000)}Charge{charge=-100.000000}Velocity{velocity=(100.000000,-100.000000)}
-"Static-Particle":Position{position=(960.000000,540.000000)}Charge{charge=1000000.000000}
+"BPPlayer":Position{position=(1920.000000,1080.000000)}Charge{charge=-100.000000}Velocity{velocity=(0.000000,0.000000)}
+"BPMovingParticle":Position{position=(1260.000000,840.000000)}Charge{charge=-100.000000}Velocity{velocity=(-100.000000,100.000000)}
+"BPMovingParticle":Position{position=(1260.000000,240.000000)}Charge{charge=-100.000000}Velocity{velocity=(100.000000,100.000000)}
+"BPMovingParticle":Position{position=(660.000000,840.000000)}Charge{charge=-100.000000}Velocity{velocity=(-100.000000,-100.000000)}
+"BPMovingParticle":Position{position=(660.000000,240.000000)}Charge{charge=-100.000000}Velocity{velocity=(100.000000,-100.000000)}
+"BPStaticParticle":Position{position=(960.000000,540.000000)}Charge{charge=1000000.000000}

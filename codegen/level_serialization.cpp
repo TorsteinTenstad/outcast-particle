@@ -543,14 +543,14 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPStaticParticle")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPMovingParticle")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -558,7 +558,7 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Velocity>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPPlayer")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -566,35 +566,35 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Velocity>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPWall")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPGloal")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPLaser")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
-
+		
 		if (tag == "BPElectricField")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
-
+		
 		f << entity_string << "\n";
 		entity_string.clear();
 	}
@@ -623,7 +623,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<Position>()[entity_id],
 				GetSubstrBetween(line, "Position{", "}"));
 		}
-
+		
 		if (tag == "BPStaticParticle")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -637,7 +637,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<Charge>()[entity_id],
 				GetSubstrBetween(line, "Charge{", "}"));
 		}
-
+		
 		if (tag == "BPMovingParticle")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -655,7 +655,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<Velocity>()[entity_id],
 				GetSubstrBetween(line, "Velocity{", "}"));
 		}
-
+		
 		if (tag == "BPPlayer")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -674,7 +674,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<Velocity>()[entity_id],
 				GetSubstrBetween(line, "Velocity{", "}"));
 		}
-
+		
 		if (tag == "BPWall")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -686,7 +686,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
-
+		
 		if (tag == "BPGloal")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -698,7 +698,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
-
+		
 		if (tag == "BPLaser")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -711,7 +711,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
-
+		
 		if (tag == "BPElectricField")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
@@ -723,6 +723,6 @@ void Level::LoadFromFile(std::string savefile_path)
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
-
+		
 	}
 }

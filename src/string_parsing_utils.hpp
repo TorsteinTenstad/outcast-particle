@@ -29,6 +29,10 @@ inline std::vector<std::string> SplitString(std::string s, std::string delimiter
 	return substrings;
 }
 
+inline std::string ToString(std::string x)
+{
+	return x;
+}
 inline std::string ToString(int x)
 {
 	return std::to_string(x);
@@ -45,14 +49,18 @@ inline std::string ToString(sf::Vector2f x)
 {
 	return "(" + ToString(x.x) + "," + ToString(x.y) + ")";
 }
-inline std::string ToString(std::string x)
+inline std::string ToString(sf::Color x)
 {
-	return x;
+	return "(" + ToString(x.r) + "," + ToString(x.g) + "," + ToString(x.b) + ")";
 }
 
 inline void FromString(std::string& x, std::string s)
 {
 	x = s;
+}
+inline void FromString(int& x, std::string s)
+{
+	x = stod(s);
 }
 inline void FromString(float& x, std::string s)
 {
@@ -67,4 +75,8 @@ inline void FromString(sf::Vector2f& x, std::string s)
 	std::vector<std::string> x_y = SplitString(s.substr(1, s.length() - 1), ",");
 	FromString(x.x, x_y[0]);
 	FromString(x.y, x_y[1]);
+}
+inline void FromString(sf::Color& x, std::string s)
+{
+	x = sf::Color(255, 0, 255);
 }
