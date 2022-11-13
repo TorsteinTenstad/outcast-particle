@@ -12,9 +12,13 @@ Game::Game()
 	Level level2 = Level();
 	level2.LoadFromFile("levels/level2.txt");
 
+	Level level3 = Level();
+	level3.LoadFromFile("levels/level3.txt");
+
 	levels_.push_back(menu);
 	levels_.push_back(level1);
 	levels_.push_back(level2);
+	levels_.push_back(level3);
 }
 
 void Game::Init()
