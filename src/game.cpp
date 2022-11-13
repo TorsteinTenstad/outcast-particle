@@ -39,8 +39,17 @@ void Game::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
 
-	if (cursor_and_keys_.key_pressed_this_frame[MENU_KEY])
+	if (cursor_and_keys_.key_pressed_this_frame[MENU_KEY] && globals.active_level != 0)
 	{
+		if (globals.edit_mode)
+		{
+			levels_[globals.active_level].SaveToFile("levels/level" + std::to_string(globals.active_level) + ".txt");
+		}
+		for (unsigned i = 1; i < levels_.size(); ++i)
+		{
+			levels_[i].LoadFromFile("levels/level" + std::to_string(i) + ".txt");
+		}
+		globals.edit_mode = false;
 		globals.active_level = 0;
 	}
 
