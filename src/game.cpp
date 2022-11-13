@@ -77,6 +77,7 @@ void Game::Update(float dt)
 		intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		goal_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		collision_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
 	else
 	{

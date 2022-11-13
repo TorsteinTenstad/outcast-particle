@@ -3,6 +3,7 @@
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
 #include "systems/acceleration.hpp"
+#include "systems/collision.hpp"
 #include "systems/display_velocity.hpp"
 #include "systems/edit_mode.hpp"
 #include "systems/electric_force.hpp"
@@ -39,6 +40,7 @@ private:
 	KillOnIntersectionSystem kill_on_intersection_system_;
 	GoalSystem goal_system_;
 	CursorAndKeys cursor_and_keys_;
+	CollisionSystem collision_system_;
 
 public:
 	Game();

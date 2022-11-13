@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/collision.hpp"
 #include "Components/goal.hpp"
 #include "Components/intersection.hpp"
 #include "Components/kill_on_intersection.hpp"
@@ -24,6 +25,7 @@ typedef std::variant<
 	std::map<int, Acceleration>,
 	std::map<int, ReceivedForces>,
 	std::map<int, Player>,
+	std::map<int, Collision>,
 	std::map<int, Charge>,
 	std::map<int, Editable>,
 	std::map<int, ClickedOn>,

@@ -157,7 +157,7 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
-		if (tag == "Gloal")
+		if (tag == "Goal")
 		{
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
@@ -218,6 +218,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<ReceivedForces>()[entity_id];
 			GetComponent<Player>()[entity_id];
 			GetComponent<Radius>()[entity_id] = { 50 };
+			GetComponent<Collision>()[entity_id];
 
 			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<Charge>()[entity_id], GetSubstrBetween(line, "Charge{", "}"));
@@ -228,11 +229,12 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png" };
 			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			GetComponent<ClickedOn>()[entity_id];
+			GetComponent<Collision>()[entity_id];
 
 			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id], GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
-		if (tag == "Gloal")
+		if (tag == "Goal")
 		{
 			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png" };
 			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
