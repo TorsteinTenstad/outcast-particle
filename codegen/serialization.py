@@ -65,7 +65,7 @@ void Level::SaveToFile(std::string savefile_path)
 	for (auto& [entity_id, tag_component] : tags)
 	{
 		std::string tag = tag_component.tag;
-		f << "\"" << tag << "\":";
+		f << "\\"" << tag << "\\":";
 """
     end = """
 		f << entity_string << "\\n";

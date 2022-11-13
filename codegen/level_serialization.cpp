@@ -84,6 +84,28 @@ void DeserializeComponent(Border& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(Collision c, std::string& str_rep)
+{
+	str_rep += "Collision{";
+	str_rep += "collision=";
+	str_rep += ToString(c.collision);
+	str_rep += "}";
+}
+
+void DeserializeComponent(Collision& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+		if (statement_parts[0] == "collision")
+		{
+			FromString(c.collision, statement_parts[1]);
+		}
+	}
+}
+
 void SerializeComponent(DrawInfo c, std::string& str_rep)
 {
 	str_rep += "DrawInfo{";
@@ -425,6 +447,9 @@ void SerializeComponent(ReceivedForces c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "player_force=";
 	str_rep += ToString(c.player_force);
+	str_rep += ";";
+	str_rep += "electric_field_force=";
+	str_rep += ToString(c.electric_field_force);
 	str_rep += "}";
 }
 
@@ -449,6 +474,11 @@ void DeserializeComponent(ReceivedForces& c, std::string str_rep)
 		{
 			FromString(c.player_force, statement_parts[1]);
 		}
+
+		if (statement_parts[0] == "electric_field_force")
+		{
+			FromString(c.electric_field_force, statement_parts[1]);
+		}
 	}
 }
 
@@ -470,6 +500,28 @@ void DeserializeComponent(Charge& c, std::string str_rep)
 		if (statement_parts[0] == "charge")
 		{
 			FromString(c.charge, statement_parts[1]);
+		}
+	}
+}
+
+void SerializeComponent(ElectricField c, std::string& str_rep)
+{
+	str_rep += "ElectricField{";
+	str_rep += "electric_field_vector=";
+	str_rep += ToString(c.electric_field_vector);
+	str_rep += "}";
+}
+
+void DeserializeComponent(ElectricField& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+		if (statement_parts[0] == "electric_field_vector")
+		{
+			FromString(c.electric_field_vector, statement_parts[1]);
 		}
 	}
 }
@@ -536,7 +588,7 @@ void Level::SaveToFile(std::string savefile_path)
 	for (auto& [entity_id, tag_component] : tags)
 	{
 		std::string tag = tag_component.tag;
-		f << """ << tag << "":";
+		f << "\"" << tag << "\":";
 
 		if (tag == "BPEntity")
 		{
@@ -574,7 +626,7 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
 		
-		if (tag == "BPGloal")
+		if (tag == "BPGoal")
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
@@ -592,6 +644,7 @@ void Level::SaveToFile(std::string savefile_path)
 		{
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<ElectricField>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
 		
@@ -646,6 +699,8 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<Radius>()[entity_id] = { 50 };
 			GetComponent<Acceleration>()[entity_id] = {};
 			GetComponent<ReceivedForces>()[entity_id] = {};
+			GetComponent<Intersection>()[entity_id] = {};
+			GetComponent<Collision>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -664,6 +719,8 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<Radius>()[entity_id] = { 50 };
 			GetComponent<Acceleration>()[entity_id] = {};
 			GetComponent<ReceivedForces>()[entity_id] = {};
+			GetComponent<Intersection>()[entity_id] = {};
+			GetComponent<Collision>()[entity_id] = {};
 			GetComponent<Player>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
@@ -679,6 +736,8 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png" };
+			GetComponent<Collision>()[entity_id] = {};
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -687,10 +746,13 @@ void Level::LoadFromFile(std::string savefile_path)
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
 		
-		if (tag == "BPGloal")
+		if (tag == "BPGoal")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png" };
+			GetComponent<Goal>()[entity_id] = {};
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
+			GetComponent<KillOnIntersection>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -703,6 +765,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			GetComponent<KillOnIntersection>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
@@ -716,10 +779,13 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "content\\electric_field.png" };
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
 				GetSubstrBetween(line, "Position{", "}"));
+			DeserializeComponent(GetComponent<ElectricField>()[entity_id],
+				GetSubstrBetween(line, "ElectricField{", "}"));
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}

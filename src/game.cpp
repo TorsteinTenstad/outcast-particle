@@ -11,7 +11,6 @@ Game::Game()
 
 	Level level2 = Level();
 	level2.LoadFromFile("levels/level2.txt");
-	level2.AddElectricField(100, 1080 / 2, 100, 100, sf::Vector2f(100, 100));
 
 	levels_.push_back(menu);
 	levels_.push_back(level1);
