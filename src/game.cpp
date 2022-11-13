@@ -27,11 +27,15 @@ Game::Game()
 	level2.AddParticleEntity(1920 / 5, 1080 / 10, 1000000);
 	level2.AddParticleEntity(1920 / 5, 1080 / 10 * 9, 1000000);
 
-	level2.LoadFromFile("level1.txt");
+	level2.SaveToFile("level2.txt");
+
+	Level level3 = Level();
+	level3.LoadFromFile("level2.txt");
 
 	levels_.push_back(menu);
 	levels_.push_back(level1);
 	levels_.push_back(level2);
+	levels_.push_back(level3);
 }
 
 void Game::Init()

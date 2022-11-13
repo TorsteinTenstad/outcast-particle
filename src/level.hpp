@@ -5,7 +5,6 @@
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/draw_info.hpp"
-#include "components/example_component.hpp"
 #include "components/level_button.hpp"
 #include "components/mouse_interactions.hpp"
 #include "components/physics.hpp"
@@ -32,7 +31,6 @@ typedef std::variant<
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
 	std::map<int, Tag>,
-	std::map<int, ExampleComponent>,
 	std::map<int, KillOnIntersection>,
 	std::map<int, Goal>,
 	std::map<int, Intersection>,

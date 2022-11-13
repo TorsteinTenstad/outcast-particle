@@ -1,22 +1,29 @@
+#pragma once
+#include "PCH.hpp"
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 
-void SerializeComponent(ExampleComponent c, std::string& str_rep);
+void SerializeComponent(ChargeDependentDrawInfo c, std::string& str_rep); //Is unused, but serves as an example of serialization of components with multiple members
 void SerializeComponent(Position c, std::string& str_rep);
 void SerializeComponent(Charge c, std::string& str_rep);
 void SerializeComponent(Velocity c, std::string& str_rep);
+void SerializeComponent(WidthAndHeight c, std::string& str_rep);
 
+void DeserializeComponent(ChargeDependentDrawInfo& c, std::string str_rep); //Is unused, but serves as an example of deserialization of components with multiple members
 void DeserializeComponent(Position& c, std::string str_rep);
 void DeserializeComponent(Charge& c, std::string str_rep);
 void DeserializeComponent(Velocity& c, std::string str_rep);
+void DeserializeComponent(WidthAndHeight& c, std::string str_rep);
 
-void SerializeComponent(ExampleComponent c, std::string& str_rep)
+void SerializeComponent(ChargeDependentDrawInfo c, std::string& str_rep)
 {
-	str_rep += "ExampleComponent{";
-	str_rep += "a=";
-	str_rep += ToString(c.a);
-	str_rep += ";b=";
-	str_rep += ToString(c.b);
+	str_rep += "ChargeDependentDrawInfo{";
+	str_rep += "positive_charge_image_path=";
+	str_rep += ToString(c.positive_charge_image_path);
+	str_rep += ";neutral_charge_image_path=";
+	str_rep += ToString(c.neutral_charge_image_path);
+	str_rep += ";negative_charge_image_path=";
+	str_rep += ToString(c.negative_charge_image_path);
 	str_rep += "}";
 }
 void SerializeComponent(Position c, std::string& str_rep)
@@ -40,20 +47,31 @@ void SerializeComponent(Velocity c, std::string& str_rep)
 	str_rep += ToString(c.velocity);
 	str_rep += "}";
 }
+void SerializeComponent(WidthAndHeight c, std::string& str_rep)
+{
+	str_rep += "WidthAndHeight{";
+	str_rep += "width_and_height=";
+	str_rep += ToString(c.width_and_height);
+	str_rep += "}";
+}
 
-void DeserializeComponent(ExampleComponent& c, std::string str_rep)
+void DeserializeComponent(ChargeDependentDrawInfo& c, std::string str_rep)
 {
 	std::vector<std::string> variables = SplitString(str_rep, ";");
 	for (auto variable : variables)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
-		if (statement_parts[0] == "a")
+		if (statement_parts[0] == "positive_charge_image_path")
 		{
-			FromString(c.a, statement_parts[1]);
+			FromString(c.positive_charge_image_path, statement_parts[1]);
 		}
-		if (statement_parts[0] == "b")
+		if (statement_parts[0] == "neutral_charge_image_path")
 		{
-			FromString(c.b, statement_parts[1]);
+			FromString(c.neutral_charge_image_path, statement_parts[1]);
+		}
+		if (statement_parts[0] == "negative_charge_image_path")
+		{
+			FromString(c.negative_charge_image_path, statement_parts[1]);
 		}
 	}
 }
@@ -94,6 +112,18 @@ void DeserializeComponent(Velocity& c, std::string str_rep)
 		}
 	}
 }
+void DeserializeComponent(WidthAndHeight& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+		if (statement_parts[0] == "width_and_height")
+		{
+			FromString(c.width_and_height, statement_parts[1]);
+		}
+	}
+}
 
 void Level::SaveToFile(std::string savefile_path)
 {
@@ -121,7 +151,21 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Velocity>()[entity_id], entity_string);
-			SerializeComponent(GetComponent<ExampleComponent>()[entity_id], entity_string);
+		}
+		if (tag == "Wall")
+		{
+			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+		}
+		if (tag == "Gloal")
+		{
+			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+		}
+		if (tag == "Laser")
+		{
+			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
 		f << entity_string << "\n";
 		entity_string.clear();
@@ -143,20 +187,22 @@ void Level::LoadFromFile(std::string savefile_path)
 		std::string tag = GetSubstrBetween(line, "\"", "\"");
 		if (tag == "Static-Particle")
 		{
-			GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_red+.png" };
-			GetComponent<Draggable>()[entity_id] = {};
-			GetComponent<ClickedOn>()[entity_id] = {};
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_100_red+.png", "content\\particle_100_green.png", "content\\particle_100_green-.png" };
+			GetComponent<Editable>()[entity_id] = { true, true, false, sf::Vector2f(0, 0), false };
+			GetComponent<ClickedOn>()[entity_id];
+			GetComponent<Radius>()[entity_id] = { 50 };
 
 			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<Charge>()[entity_id], GetSubstrBetween(line, "Charge{", "}"));
 		}
 		if (tag == "Moving-Particle")
 		{
-			GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_green-.png" };
-			GetComponent<Draggable>()[entity_id] = {};
-			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<Acceleration>()[entity_id] = {};
-			GetComponent<ReceivedForces>()[entity_id] = {};
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_100_red+.png", "content\\particle_100_green.png", "content\\particle_100_green-.png" };
+			GetComponent<Editable>()[entity_id] = { true, true, false, sf::Vector2f(0, 0), false };
+			GetComponent<ClickedOn>()[entity_id];
+			GetComponent<Acceleration>()[entity_id];
+			GetComponent<ReceivedForces>()[entity_id];
+			GetComponent<Radius>()[entity_id] = { 50 };
 
 			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<Charge>()[entity_id], GetSubstrBetween(line, "Charge{", "}"));
@@ -164,17 +210,48 @@ void Level::LoadFromFile(std::string savefile_path)
 		}
 		if (tag == "Player")
 		{
-			GetComponent<DrawInfo>()[entity_id] = { "content\\particle_100_blue+.png" };
-			GetComponent<Draggable>()[entity_id] = {};
-			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<Acceleration>()[entity_id] = {};
-			GetComponent<ReceivedForces>()[entity_id] = {};
-			GetComponent<Player>()[entity_id] = {};
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_100_blue+.png", "content\\particle_100_blue.png", "content\\particle_100_blue-.png" };
+			GetComponent<Editable>()[entity_id] = { true, true, false, sf::Vector2f(0, 0), false };
+			GetComponent<ClickedOn>()[entity_id];
+			GetComponent<Acceleration>()[entity_id];
+			GetComponent<ReceivedForces>()[entity_id];
+			GetComponent<Player>()[entity_id];
+			GetComponent<Radius>()[entity_id] = { 50 };
 
 			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<Charge>()[entity_id], GetSubstrBetween(line, "Charge{", "}"));
 			DeserializeComponent(GetComponent<Velocity>()[entity_id], GetSubstrBetween(line, "Velocity{", "}"));
-			DeserializeComponent(GetComponent<ExampleComponent>()[entity_id], GetSubstrBetween(line, "ExampleComponent{", "}"));
+		}
+		if (tag == "Wall")
+		{
+			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png" };
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
+			GetComponent<ClickedOn>()[entity_id];
+
+			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
+			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id], GetSubstrBetween(line, "WidthAndHeight{", "}"));
+		}
+		if (tag == "Gloal")
+		{
+			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png" };
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
+			GetComponent<ClickedOn>()[entity_id];
+			GetComponent<Goal>()[entity_id];
+			GetComponent<KillOnIntersection>()[entity_id];
+
+			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
+			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id], GetSubstrBetween(line, "WidthAndHeight{", "}"));
+		}
+		if (tag == "Laser")
+		{
+			GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
+			GetComponent<ClickedOn>()[entity_id];
+			GetComponent<Goal>()[entity_id];
+			GetComponent<KillOnIntersection>()[entity_id];
+
+			DeserializeComponent(GetComponent<Position>()[entity_id], GetSubstrBetween(line, "Position{", "}"));
+			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id], GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}
 	}
 }

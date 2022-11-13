@@ -105,6 +105,7 @@ int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, floa
 int Level::AddLaser(float pos_x, float pos_y, float width, float height)
 {
 	int id = CreateEntityId();
+	GetComponent<Tag>()[id].tag = "Laser";
 	GetComponent<OrientationDependentDrawInfo>()[id] = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
@@ -117,6 +118,7 @@ int Level::AddLaser(float pos_x, float pos_y, float width, float height)
 int Level::AddBlock(float pos_x, float pos_y)
 {
 	int id = CreateEntityId();
+	GetComponent<Tag>()[id].tag = "Wall";
 	GetComponent<DrawInfo>()[id] = { "content\\block.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(48, 48) };
@@ -128,6 +130,7 @@ int Level::AddBlock(float pos_x, float pos_y)
 int Level::AddGoal()
 {
 	int id = CreateEntityId();
+	GetComponent<Tag>()[id].tag = "Gloal";
 	GetComponent<DrawInfo>()[id] = { "content\\goal.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(1500, 500) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(96, 96) };

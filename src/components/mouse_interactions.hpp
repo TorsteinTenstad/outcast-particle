@@ -4,11 +4,11 @@
 class Editable
 {
 public:
-	bool selected = false;
 	bool is_charge_editable = false;
 	bool is_velocity_editable = false;
 	bool is_height_and_widht_editable = false;
 	sf::Vector2f drag_offset;
+	bool selected = false;
 };
 
 class ClickedOn

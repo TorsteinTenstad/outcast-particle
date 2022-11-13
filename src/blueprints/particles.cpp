@@ -1,9 +1,9 @@
 #include "level.hpp"
 
-class BPParticle
+class BPStaticParticle
 {
-	DrawInfo draw_info = { "content\\particle_100_red+.png" };
-	Draggable draggable = {};
+	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_100_red+.png", "content\\particle_100_green.png", "content\\particle_100_green-.png" };
+	Editable editable = { true, false, false, sf::Vector2f(0, 0), false };
 	ClickedOn clicked_on = {};
 	Radius radius = { 50 };
 
@@ -13,18 +13,18 @@ class BPParticle
 	Position position = { sf::Vector2f(0, 0) };
 };
 
-class BPMovingParticle : BPParticle
+class BPMovingParticle : public BPStaticParticle
 {
-	DrawInfo draw_info = { "content\\particle_100_blue+.png" };
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
+	Editable editable = { true, true, false, sf::Vector2f(0, 0), false };
 
 	// [Serialize]
 	Velocity velocity = { sf::Vector2f(0, 0) };
 };
 
-class BPPlayer : BPMovingParticle
+class BPPlayer : public BPMovingParticle
 {
-	DrawInfo draw_info = { "content\\particle_100_blue+.png" };
+	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_100_blue+.png", "content\\particle_100_blue.png", "content\\particle_100_blue-.png" };
 	Player player = {};
 };
