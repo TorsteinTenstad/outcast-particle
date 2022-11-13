@@ -3,5 +3,5 @@
 class Collision
 {
 public:
-	float collision = 1;
+	float bounce_factor = 1;
 };

@@ -37,14 +37,18 @@ public:
 						{
 							if (distance.y * velocity_map[entity_id].velocity.y < 0)
 							{
-								velocity_map[entity_id].velocity.y *= -1;
+								velocity_map[entity_id].velocity.y *= -(collision.bounce_factor * collision_map[intersection_id].bounce_factor);
+								velocity_map[entity_id].velocity.x *= (1 - 1.25 * dt);
+								position_map[entity_id].position.y = position_map[entity_id].last_frame_position.y;
 							}
 						}
 						else
 						{
 							if (distance.x * velocity_map[entity_id].velocity.x < 0)
 							{
-								velocity_map[entity_id].velocity.x *= -1;
+								velocity_map[entity_id].velocity.x *= -(collision.bounce_factor * collision_map[intersection_id].bounce_factor);
+								velocity_map[entity_id].velocity.y *= (1 - 1.25 * dt);
+								position_map[entity_id].position.x = position_map[entity_id].last_frame_position.x;
 							}
 						}
 					}

@@ -13,6 +13,7 @@ public:
 
 		for (auto const& [entity_id, entity_velocity] : velocity_map)
 		{
+			position_map[entity_id].last_frame_position = position_map[entity_id].position;
 			position_map[entity_id].position = position_map[entity_id].position + entity_velocity.velocity * dt;
 		}
 	}

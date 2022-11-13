@@ -87,8 +87,8 @@ void DeserializeComponent(Border& c, std::string str_rep)
 void SerializeComponent(Collision c, std::string& str_rep)
 {
 	str_rep += "Collision{";
-	str_rep += "collision=";
-	str_rep += ToString(c.collision);
+	str_rep += "bounce_factor=";
+	str_rep += ToString(c.bounce_factor);
 	str_rep += "}";
 }
 
@@ -99,9 +99,9 @@ void DeserializeComponent(Collision& c, std::string str_rep)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
 
-		if (statement_parts[0] == "collision")
+		if (statement_parts[0] == "bounce_factor")
 		{
-			FromString(c.collision, statement_parts[1]);
+			FromString(c.bounce_factor, statement_parts[1]);
 		}
 	}
 }
@@ -736,7 +736,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png" };
-			GetComponent<Collision>()[entity_id] = {};
+			GetComponent<Collision>()[entity_id] = { 0.2 };
 			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));

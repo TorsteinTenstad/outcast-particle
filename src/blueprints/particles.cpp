@@ -38,7 +38,7 @@ class BPPlayer : public BPMovingParticle
 class BPWall : public BPEntity
 {
 	DrawInfo draw_info = { "content\\block.png" };
-	Collision collision = {};
+	Collision collision = { 0.2 };
 	Editable editable = { false, false, true, sf::Vector2f(0, 0), false };
 
 	// [Serialize]
