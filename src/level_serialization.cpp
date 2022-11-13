@@ -185,6 +185,7 @@ void Level::LoadFromFile(std::string savefile_path)
 	{
 		int entity_id = CreateEntityId();
 		std::string tag = GetSubstrBetween(line, "\"", "\"");
+		GetComponent<Tag>()[entity_id].tag = tag;
 		if (tag == "Static-Particle")
 		{
 			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_100_red+.png", "content\\particle_100_green.png", "content\\particle_100_green-.png" };
