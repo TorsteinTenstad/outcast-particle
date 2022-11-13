@@ -87,6 +87,7 @@ int Level::AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, f
 	GetComponent<ChargeDependentDrawInfo>()[id] = { "content\\particle_100_blue+.png", "content\\particle_100_blue.png", "content\\particle_100_blue-.png" };
 	GetComponent<Player>()[id].move_force = player_force;
 	GetComponent<Intersection>()[id] = {};
+	GetComponent<Collision>();
 	return id;
 }
 
@@ -130,7 +131,7 @@ int Level::AddBlock(float pos_x, float pos_y)
 int Level::AddGoal()
 {
 	int id = CreateEntityId();
-	GetComponent<Tag>()[id].tag = "Gloal";
+	GetComponent<Tag>()[id].tag = "Goal";
 	GetComponent<DrawInfo>()[id] = { "content\\goal.png" };
 	GetComponent<Position>()[id] = { sf::Vector2f(1500, 500) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(96, 96) };
@@ -138,5 +139,18 @@ int Level::AddGoal()
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<Goal>()[id] = {};
 	GetComponent<KillOnIntersection>()[id] = {};
+	return id;
+}
+
+int Level::AddElectricField(float pos_x, float pos_y, float width, float height, sf::Vector2f electric_field_vector)
+{
+	int id = CreateEntityId();
+	GetComponent<Tag>()[id].tag = "ElectricField";
+	GetComponent<DrawInfo>()[id] = { "content\\electric_field.png" };
+	GetComponent<Position>()[id] = { sf::Vector2f(500, 300) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(480, 96) };
+	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
+	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<ElectricField>()[id] = { sf::Vector2f(1, 1) };
 	return id;
 }

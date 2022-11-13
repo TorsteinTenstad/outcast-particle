@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/collision.hpp"
 #include "Components/goal.hpp"
 #include "Components/intersection.hpp"
 #include "Components/kill_on_intersection.hpp"
@@ -24,6 +25,7 @@ typedef std::variant<
 	std::map<int, Acceleration>,
 	std::map<int, ReceivedForces>,
 	std::map<int, Player>,
+	std::map<int, Collision>,
 	std::map<int, Charge>,
 	std::map<int, Editable>,
 	std::map<int, ClickedOn>,
@@ -33,6 +35,7 @@ typedef std::variant<
 	std::map<int, Tag>,
 	std::map<int, KillOnIntersection>,
 	std::map<int, Goal>,
+	std::map<int, ElectricField>,
 	std::map<int, Intersection>,
 	std::map<int, LevelButton>>
 	ComponentMap;
@@ -58,6 +61,7 @@ public:
 	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge, float player_force);
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
 	int AddLaser(float pos_x, float pos_y, float width, float height);
+	int AddElectricField(float pos_x, float pos_y, float width, float height, sf::Vector2f electric_field_vector);
 	int AddBlock(float pos_x, float pos_y);
 	int AddGoal();
 
