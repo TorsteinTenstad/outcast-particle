@@ -25,10 +25,18 @@ public:
 	float mass = 1;
 	sf::Vector2f electric_force = sf::Vector2f(0, 0);
 	sf::Vector2f player_force = sf::Vector2f(0, 0);
+	sf::Vector2f electric_field_force = sf::Vector2f(0, 0);
+
 };
 
 class Charge
 {
 public:
 	float charge = 0;
+};
+
+class ElectricField
+{
+public:
+	sf::Vector2f electric_field_vector;
 };

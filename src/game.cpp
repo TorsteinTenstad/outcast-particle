@@ -11,6 +11,7 @@ Game::Game()
 
 	Level level2 = Level();
 	level2.LoadFromFile("levels/level2.txt");
+	level2.AddElectricField(100, 1080 / 2, 100, 100, sf::Vector2f(100, 100));
 
 	levels_.push_back(menu);
 	levels_.push_back(level1);
@@ -71,6 +72,7 @@ void Game::Update(float dt)
 	{
 		player_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		electric_force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		electric_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		acceleration_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);

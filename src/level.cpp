@@ -141,3 +141,16 @@ int Level::AddGoal()
 	GetComponent<KillOnIntersection>()[id] = {};
 	return id;
 }
+
+int Level::AddElectricField(float pos_x, float pos_y, float width, float height, sf::Vector2f electric_field_vector)
+{
+	int id = CreateEntityId();
+	GetComponent<Tag>()[id].tag = "ElectricField";
+	GetComponent<DrawInfo>()[id] = { "content\\electric_field.png" };
+	GetComponent<Position>()[id] = { sf::Vector2f(500, 300) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(480, 96) };
+	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
+	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<ElectricField>()[id] = { sf::Vector2f(1, 1) };
+	return id;
+}
