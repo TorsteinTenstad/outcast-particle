@@ -7,19 +7,20 @@ SFML::SFML()
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(globals.render_window.getSystemHandle());
 	// Use the screenScalingFactor
-	globals.render_window.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "outcast-particle");
+	globals.render_window.create(sf::VideoMode(1920 * screenScalingFactor, 1080 * screenScalingFactor), "outcast-particle"); //, sf::Style::Fullscreen);
 	globals.render_window.setFramerateLimit(60);
 	platform.setIcon(globals.render_window.getSystemHandle());
 }
 
-void SFML::RunWindow(Game& game)
+void SFML::RunWindow(std::function<void(float)> update_func)
 {
 	Timer timer = Timer();
 	while (globals.render_window.isOpen())
 	{
 		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
-		game.Update(dt);
+		//std::cout << 1 / dt << "\n";
+		update_func(dt);
 		globals.render_window.display();
 	}
 }
