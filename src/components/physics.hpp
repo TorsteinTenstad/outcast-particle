@@ -5,7 +5,6 @@ class Position
 {
 public:
 	sf::Vector2f position = sf::Vector2f(0, 0);
-	sf::Vector2f last_frame_position = sf::Vector2f(0, 0);
 };
 
 class Velocity

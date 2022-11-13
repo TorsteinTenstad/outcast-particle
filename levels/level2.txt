@@ -12,7 +12,7 @@
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(480.000000,387.000000)}Charge{charge=100000.000000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(694.000000,397.000000)}Charge{charge=100000.000000}
 "BPWall":Tag{tag=BPWall}Position{position=(278.000000,300.000000)}WidthAndHeight{width_and_height=(144.000000,48.000000)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(254.000000,222.000000)}Charge{charge=-100.000000}Velocity{velocity=(-0.697576,-9.975630)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(271.000000,207.000000)}Charge{charge=-100.000000}Velocity{velocity=(-0.697576,-9.975630)}
 "BPWall":Tag{tag=BPWall}Position{position=(178.000000,197.000000)}WidthAndHeight{width_and_height=(48.000000,144.000000)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1118.000000,396.000000)}Charge{charge=100000.000000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(897.000000,390.000000)}Charge{charge=100000.000000}
