@@ -89,6 +89,9 @@ void SerializeComponent(Collision c, std::string& str_rep)
 	str_rep += "Collision{";
 	str_rep += "bounce_factor=";
 	str_rep += ToString(c.bounce_factor);
+	str_rep += ";";
+	str_rep += "last_frame_position=";
+	str_rep += ToString(c.last_frame_position);
 	str_rep += "}";
 }
 
@@ -103,6 +106,11 @@ void DeserializeComponent(Collision& c, std::string str_rep)
 		{
 			FromString(c.bounce_factor, statement_parts[1]);
 		}
+
+		if (statement_parts[0] == "last_frame_position")
+		{
+			FromString(c.last_frame_position, statement_parts[1]);
+		}
 	}
 }
 
@@ -111,6 +119,9 @@ void SerializeComponent(DrawInfo c, std::string& str_rep)
 	str_rep += "DrawInfo{";
 	str_rep += "scale_to_fit=";
 	str_rep += ToString(c.scale_to_fit);
+	str_rep += ";";
+	str_rep += "draw_priority=";
+	str_rep += ToString(c.draw_priority);
 	str_rep += ";";
 	str_rep += "image_path=";
 	str_rep += ToString(c.image_path);
@@ -127,6 +138,11 @@ void DeserializeComponent(DrawInfo& c, std::string str_rep)
 		if (statement_parts[0] == "scale_to_fit")
 		{
 			FromString(c.scale_to_fit, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "draw_priority")
+		{
+			FromString(c.draw_priority, statement_parts[1]);
 		}
 
 		if (statement_parts[0] == "image_path")
@@ -735,7 +751,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		if (tag == "BPWall")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png" };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, -10 };
 			GetComponent<Collision>()[entity_id] = { 0.2 };
 			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -749,7 +765,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		if (tag == "BPGoal")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png" };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png", false, -1 };
 			GetComponent<Goal>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			GetComponent<KillOnIntersection>()[entity_id] = {};
@@ -778,7 +794,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		if (tag == "BPElectricField")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<DrawInfo>()[entity_id] = { "content\\electric_field.png" };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\electric_field.png", false, -5 };
 			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));

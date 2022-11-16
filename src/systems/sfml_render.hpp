@@ -12,6 +12,7 @@ private:
 	std::map<std::string, sf::Texture> textures_;
 	std::map<int, sf::RectangleShape> rectangle_shapes_;
 	std::map<int, sf::CircleShape> circle_shapes_;
+	std::map<int, std::vector<int>> draw_order_;
 
 public:
 	void RegisterTexture(std::string identifier, sf::Texture texture)
@@ -28,8 +29,10 @@ public:
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 
+		draw_order_.clear();
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
+			draw_order_[entity_drawinfo.draw_priority].push_back(entity_id);
 			if (textures_.count(entity_drawinfo.image_path) == 0)
 			{
 				textures_[entity_drawinfo.image_path] = sf::Texture();
@@ -60,7 +63,6 @@ public:
 				{
 					rectangle_shapes_[entity_id].setOutlineThickness(0);
 				}
-				globals.render_window.draw(rectangle_shapes_[entity_id]);
 			}
 			else if (radius_map.count(entity_id))
 			{
@@ -85,7 +87,20 @@ public:
 				{
 					circle_shapes_[entity_id].setOutlineThickness(0);
 				}
-				globals.render_window.draw(circle_shapes_[entity_id]);
+			}
+		}
+		for (auto [draw_priority, entity_ids] : draw_order_)
+		{
+			for (auto entity_id : entity_ids)
+			{
+				if (rectangle_shapes_.count(entity_id) != 0)
+				{
+					globals.render_window.draw(rectangle_shapes_[entity_id]);
+				}
+				if (circle_shapes_.count(entity_id) != 0)
+				{
+					globals.render_window.draw(circle_shapes_[entity_id]);
+				}
 			}
 		}
 	}

@@ -37,7 +37,7 @@ class BPPlayer : public BPMovingParticle
 
 class BPWall : public BPEntity
 {
-	DrawInfo draw_info = { "content\\block.png" };
+	DrawInfo draw_info = { "content\\block.png", false, -10 };
 	Collision collision = { 0.2 };
 	Editable editable = { false, false, true, sf::Vector2f(0, 0), false };
 
@@ -47,7 +47,7 @@ class BPWall : public BPEntity
 
 class BPGoal : public BPEntity
 {
-	DrawInfo draw_info = { "content\\goal.png" };
+	DrawInfo draw_info = { "content\\goal.png", false, -1 };
 	Goal goal = {};
 	Editable editable = { false, false, true, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
@@ -68,7 +68,7 @@ class BPLaser : public BPEntity
 
 class BPElectricField : public BPEntity
 {
-	DrawInfo draw_info = { "content\\electric_field.png" };
+	DrawInfo draw_info = { "content\\electric_field.png", false, -5 };
 	Editable editable = { false, false, true, sf::Vector2f(0, 0), false };
 
 	// [Serialize]

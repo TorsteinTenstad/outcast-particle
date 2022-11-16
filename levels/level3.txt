@@ -6,7 +6,7 @@
 "BPLaser":Tag{tag=BPLaser}Position{position=(1896.000000,504.000000)}WidthAndHeight{width_and_height=(48.000000,912.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(984.000000,288.000000)}WidthAndHeight{width_and_height=(48.000000,480.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(984.000000,864.000000)}WidthAndHeight{width_and_height=(48.000000,192.000000)}
-"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(570.000000,366.000000)}Charge{charge=100000.000000}
+"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(530.000000,482.000000)}Charge{charge=100000.000000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1440.000000,24.000000)}WidthAndHeight{width_and_height=(864.000000,48.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1440.000000,24.000000)}WidthAndHeight{width_and_height=(864.000000,48.000000)}
 "BPWall":Tag{tag=BPWall}Position{position=(1896.000000,24.000000)}WidthAndHeight{width_and_height=(48.000000,48.000000)}
