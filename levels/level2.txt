@@ -4,7 +4,6 @@
 "BPWall":Tag{tag=BPWall}Position{position=(24.000000,504.000000)}WidthAndHeight{width_and_height=(48.000000,912.000000)}
 "BPWall":Tag{tag=BPWall}Position{position=(960.000000,984.000000)}WidthAndHeight{width_and_height=(1920.000000,48.000000)}
 "BPWall":Tag{tag=BPWall}Position{position=(1896.000000,504.000000)}WidthAndHeight{width_and_height=(48.000000,912.000000)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1020.000000,24.000000)}WidthAndHeight{width_and_height=(984.000000,48.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(792.000000,360.000000)}WidthAndHeight{width_and_height=(912.000000,48.000000)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(240.000000,696.000000)}ElectricField{electric_field_vector=(-3.000000,0.000000)}WidthAndHeight{width_and_height=(384.000000,240.000000)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(98.000000,194.000000)}Charge{charge=100000.000000}
@@ -28,3 +27,4 @@
 "BPWall":Tag{tag=BPWall}Position{position=(1272.000000,336.000000)}WidthAndHeight{width_and_height=(48.000000,96.000000)}
 "BPWall":Tag{tag=BPWall}Position{position=(312.000000,336.000000)}WidthAndHeight{width_and_height=(48.000000,96.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(936.000000,840.000000)}WidthAndHeight{width_and_height=(1008.000000,48.000000)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1008.000000,24.000000)}WidthAndHeight{width_and_height=(960.000000,48.000000)}

@@ -26,6 +26,16 @@ public:
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
 
+		//Change level size:
+		if (cursor_and_keys.key_pressed_this_frame[INCREASE_LEVEL_SIZE_KEY])
+		{
+			level.size += sf::Vector2f(48, 48 * 9 / 16);
+		}
+		if (cursor_and_keys.key_pressed_this_frame[DECREASE_LEVEL_SIZE_KEY])
+		{
+			level.size -= sf::Vector2f(48, 48 * 9 / 16);
+		}
+
 		// Copy entities::
 		for (auto& [entity_id, editable_entity] : editable_map)
 		{

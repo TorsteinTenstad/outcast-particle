@@ -30,6 +30,7 @@ public:
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 
 		draw_order_.clear();
+		globals.render_window.setView(sf::View(level.size / 2.f, level.size));
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
 			draw_order_[entity_drawinfo.draw_priority].push_back(entity_id);

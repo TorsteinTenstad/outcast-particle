@@ -37,7 +37,7 @@ public:
 				cursor_and_keys.key_released_this_frame[event.key.code] = true;
 				cursor_and_keys.key_down[event.key.code] = false;
 			}
-			auto mouse_pos = sf::Mouse::getPosition(globals.render_window);
+			auto mouse_pos = globals.render_window.mapPixelToCoords(sf::Mouse::getPosition(globals.render_window));
 			cursor_and_keys.cursor_position.x = mouse_pos.x;
 			cursor_and_keys.cursor_position.y = mouse_pos.y;
 			if (event.type == sf::Event::MouseWheelScrolled)

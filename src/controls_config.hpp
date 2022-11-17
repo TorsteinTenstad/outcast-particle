@@ -10,6 +10,8 @@
 
 #define MENU_KEY sf::Keyboard::Escape
 #define EDIT_MODE_KEY sf::Keyboard::Tab
+#define INCREASE_LEVEL_SIZE_KEY sf::Keyboard::Up
+#define DECREASE_LEVEL_SIZE_KEY sf::Keyboard::Down
 #define EDIT_MODE_SWITCH_CHARGE_KEY sf::Keyboard::Space
 #define SELECT_MULTIPLE_ENTITIES_KEY sf::Keyboard::LControl
 #define COPY_ENTITY_KEY sf::Keyboard::LAlt
