@@ -1,3 +1,4 @@
+name=Untitled;size=(1920.000000,1080.000000);editable=0
 "BPGoal":Tag{tag=BPGoal}Position{position=(144.000000,888.000000)}WidthAndHeight{width_and_height=(192.000000,144.000000)}
 "BPWall":Tag{tag=BPWall}Position{position=(264.000000,24.000000)}WidthAndHeight{width_and_height=(528.000000,48.000000)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1154.000000,386.000000)}Charge{charge=100000.000000}

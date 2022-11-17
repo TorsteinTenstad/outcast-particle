@@ -43,6 +43,7 @@ typedef std::variant<
 class Level
 {
 private:
+	bool editable = false;
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
@@ -51,7 +52,9 @@ private:
 
 public:
 	bool edit_mode = false;
+	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(1920, 1080);
+
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 
