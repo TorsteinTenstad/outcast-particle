@@ -13,6 +13,7 @@
 #include "systems/intersection.hpp"
 #include "systems/kill_on_intersection.hpp"
 #include "systems/level_button.hpp"
+#include "systems/magnetic_field_force.hpp"
 #include "systems/mouse_interactions.hpp"
 #include "systems/player.hpp"
 #include "systems/set_draw_info.hpp"
@@ -43,6 +44,7 @@ private:
 	CursorAndKeys cursor_and_keys_;
 	CollisionSystem collision_system_;
 	ElectricFieldForceSystem electric_field_force_system;
+	MagneticFieldForceSystem magnetic_field_force_system;
 
 public:
 	Game();

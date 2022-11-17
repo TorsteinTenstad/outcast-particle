@@ -164,3 +164,16 @@ int Level::AddElectricField(float pos_x, float pos_y, float width, float height,
 	GetComponent<ElectricField>()[id] = { sf::Vector2f(1, 1) };
 	return id;
 }
+
+int Level::AddMagneticField(float pos_x, float pos_y, float width, float height, float magnetic_field_strength)
+{
+	int id = CreateEntityId();
+	GetComponent<Tag>()[id].tag = "BPMagneticField";
+	GetComponent<DrawInfo>()[id] = {};
+	GetComponent<Position>()[id] = { sf::Vector2f(500, 500) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(600, 600) };
+	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
+	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<MagneticField>()[id] = {};
+	return id;
+}

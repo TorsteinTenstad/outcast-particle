@@ -36,6 +36,7 @@ typedef std::variant<
 	std::map<int, KillOnIntersection>,
 	std::map<int, Goal>,
 	std::map<int, ElectricField>,
+	std::map<int, MagneticField>,
 	std::map<int, Intersection>,
 	std::map<int, LevelButton>>
 	ComponentMap;
@@ -69,6 +70,7 @@ public:
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
 	int AddLaser(float pos_x, float pos_y, float width, float height);
 	int AddElectricField(float pos_x, float pos_y, float width, float height, sf::Vector2f electric_field_vector);
+	int AddMagneticField(float pos_x, float pos_y, float width, float height, float magnetic_field_strength);
 	int AddBlock(float pos_x, float pos_y);
 	int AddGoal();
 

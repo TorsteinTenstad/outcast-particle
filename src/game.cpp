@@ -14,6 +14,7 @@ Game::Game()
 
 	Level level3 = Level();
 	level3.LoadFromFile("levels/level3.txt");
+	level3.AddMagneticField(500, 500, 500, 600, 100000);
 
 	levels_.push_back(menu);
 	levels_.push_back(level1);
@@ -63,6 +64,7 @@ void Game::Update(float dt)
 		player_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		electric_force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		electric_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		magnetic_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		acceleration_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);

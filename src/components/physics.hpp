@@ -26,6 +26,7 @@ public:
 	sf::Vector2f electric_force = sf::Vector2f(0, 0);
 	sf::Vector2f player_force = sf::Vector2f(0, 0);
 	sf::Vector2f electric_field_force = sf::Vector2f(0, 0);
+	sf::Vector2f magnetic_field_force = sf::Vector2f(0, 0);
 };
 
 class Charge
@@ -38,4 +39,10 @@ class ElectricField
 {
 public:
 	sf::Vector2f electric_field_vector = sf::Vector2f(0, 0);
+};
+
+class MagneticField
+{
+public:
+	float magnetic_field_strength = -100;
 };

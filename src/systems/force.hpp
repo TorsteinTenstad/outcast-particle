@@ -7,7 +7,7 @@
 
 static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_limit)
 {
-	sf::Vector2f total_force = entity.electric_force + entity.player_force + entity.electric_field_force;
+	sf::Vector2f total_force = entity.electric_force + entity.player_force + entity.electric_field_force + entity.magnetic_field_force;
 	sf::Vector2f acceleration = total_force / entity.mass;
 
 	float magnitude = Magnitude(acceleration);
