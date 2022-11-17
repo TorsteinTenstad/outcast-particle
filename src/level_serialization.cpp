@@ -677,6 +677,7 @@ void Level::LoadFromFile(std::string savefile_path)
 
 	std::ifstream f(savefile_path);
 	std::string line;
+
 	getline(f, line);
 	std::vector<std::string> level_properties = SplitString(line, ";");
 	for (auto& property_str : level_properties)
@@ -686,6 +687,7 @@ void Level::LoadFromFile(std::string savefile_path)
 	FromString(name, level_properties[0]);
 	FromString(size, level_properties[1]);
 	FromString(editable, level_properties[2]);
+
 	while (getline(f, line))
 	{
 		int entity_id = CreateEntityId();
