@@ -672,6 +672,7 @@ void Level::SaveToFile(std::string savefile_path)
 
 void Level::LoadFromFile(std::string savefile_path)
 {
+	savefile_path_ = savefile_path;
 	for (auto& [_, component_map_variant] : components_)
 	{
 		std::visit([](auto& component_map) { component_map.clear(); }, component_map_variant);

@@ -1,3 +1,4 @@
+name=Untitled;size=(1920.000000,1080.000000);editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(191.000000,540.000000)}Charge{charge=-100.000000}Velocity{velocity=(10.000000,0.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(960.000000,1056.000000)}WidthAndHeight{width_and_height=(1920.000000,48.000000)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(696.000000,300.000000)}WidthAndHeight{width_and_height=(48.000000,504.000000)}

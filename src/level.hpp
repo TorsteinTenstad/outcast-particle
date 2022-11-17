@@ -43,7 +43,8 @@ typedef std::variant<
 class Level
 {
 private:
-	bool editable = false;
+	std::string savefile_path_;
+
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
@@ -51,6 +52,7 @@ private:
 	void RegisterComponent();
 
 public:
+	bool editable = false;
 	bool edit_mode = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(1920, 1080);
@@ -72,4 +74,6 @@ public:
 
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
+	void SaveToFile();
+	void LoadFromFile();
 };

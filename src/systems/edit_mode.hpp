@@ -22,9 +22,29 @@ public:
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
+
+		if (level.editable && cursor_and_keys.key_pressed_this_frame[EDIT_MODE_KEY])
+		{
+			if (level.edit_mode)
+			{
+				level.SaveToFile();
+				for (auto& [entity_id, editable_entity] : editable_map)
+				{
+					border_map.erase(entity_id);
+				}
+			}
+			else
+			{
+				level.LoadFromFile();
+			}
+			level.edit_mode = !level.edit_mode;
+		}
+		if (!level.edit_mode)
+		{
+			return;
+		}
 
 		//Change level size:
 		if (cursor_and_keys.key_pressed_this_frame[INCREASE_LEVEL_SIZE_KEY])

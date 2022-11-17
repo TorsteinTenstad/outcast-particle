@@ -56,6 +56,16 @@ int Level::CreateEntityId()
 	return next_available_entity_id_++;
 }
 
+void Level::LoadFromFile()
+{
+	LoadFromFile(savefile_path_);
+}
+
+void Level::SaveToFile()
+{
+	SaveToFile(savefile_path_);
+}
+
 int Level::AddParticleEntity(float pos_x, float pos_y, float charge)
 {
 	int id = CreateEntityId();

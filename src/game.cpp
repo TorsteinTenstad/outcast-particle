@@ -56,19 +56,6 @@ void Game::Update(float dt)
 		levels_[globals.active_level].edit_mode = false;
 		globals.active_level = 0;
 	}
-
-	if (cursor_and_keys_.key_pressed_this_frame[EDIT_MODE_KEY] && globals.active_level != 0)
-	{
-		if (levels_[globals.active_level].edit_mode)
-		{
-			levels_[globals.active_level].SaveToFile("levels/level" + std::to_string(globals.active_level) + ".txt");
-		}
-		else
-		{
-			levels_[globals.active_level].LoadFromFile("levels/level" + std::to_string(globals.active_level) + ".txt");
-		}
-		levels_[globals.active_level].edit_mode = !levels_[globals.active_level].edit_mode;
-	}
 	mouse_interaction_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	level_button_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	if (!levels_[globals.active_level].edit_mode)
@@ -84,10 +71,7 @@ void Game::Update(float dt)
 		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		collision_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
-	else
-	{
-		edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	}
+	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	if (levels_[globals.active_level].edit_mode)

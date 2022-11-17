@@ -39,7 +39,9 @@ inline std::string ToString(int x)
 }
 inline std::string ToString(float x)
 {
-	return std::to_string(x);
+	std::stringstream s;
+	s << x;
+	return s.str();
 }
 inline std::string ToString(bool x)
 {
@@ -68,7 +70,7 @@ inline void FromString(float& x, std::string s)
 }
 inline void FromString(bool& x, std::string s)
 {
-	x = (s == "true");
+	x = (s == "1");
 }
 inline void FromString(sf::Vector2f& x, std::string s)
 {
