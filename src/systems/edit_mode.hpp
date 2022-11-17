@@ -26,7 +26,7 @@ public:
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
 
-		// Copy all selected entities on mouse press while COPY_ENTITY_KEY is down:
+		// Copy entities::
 		for (auto& [entity_id, editable_entity] : editable_map)
 		{
 			if (editable_entity.selected && cursor_and_keys.key_down[COPY_ENTITY_KEY] && cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left])
@@ -68,45 +68,27 @@ public:
 		// Edit entities:
 		for (auto& [entity_id, editable_entity] : editable_map)
 		{
+			bool snap_to_grid = false;
 			// Delete entities:
 			if (editable_entity.selected && cursor_and_keys.key_pressed_this_frame[DELETE_ENTITY_KEY])
 			{
 				level.DeleteEntity(entity_id);
 			}
 
-			// Move all selected entities with the curser when holding down left mousebutton:
+			// Move entities with the curser:
 			if (editable_entity.selected && cursor_and_keys.mouse_button_down[sf::Mouse::Left] && !cursor_and_keys.key_down[COPY_ENTITY_KEY])
 			{
+				snap_to_grid = true;
 				position_map[entity_id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
-				if (cursor_and_keys.key_down[sf::Keyboard::LShift])
-				{
-					if (width_and_height_map.count(entity_id))
-					{
-						position_map[entity_id].position.x -= width_and_height_map[entity_id].width_and_height.x / 2;
-						position_map[entity_id].position.y -= width_and_height_map[entity_id].width_and_height.y / 2;
-						position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, 48);
-						position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, 48);
-						position_map[entity_id].position.x += width_and_height_map[entity_id].width_and_height.x / 2;
-						position_map[entity_id].position.y += width_and_height_map[entity_id].width_and_height.y / 2;
-					}
-					if (radius_map.count(entity_id))
-					{
-						position_map[entity_id].position.x -= radius_map[entity_id].radius;
-						position_map[entity_id].position.y -= radius_map[entity_id].radius;
-						position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, 48);
-						position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, 48);
-						position_map[entity_id].position.x += radius_map[entity_id].radius;
-						position_map[entity_id].position.y += radius_map[entity_id].radius;
-					}
-				}
 			}
 
+			// Edit charge:
 			if (editable_entity.selected && editable_entity.is_charge_editable && cursor_and_keys.key_pressed_this_frame[EDIT_MODE_SWITCH_CHARGE_KEY])
 			{
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 			}
 
-			// Edit velocity of all selected entites with editable velocity:
+			// Edit velocity:
 			if (editable_entity.selected && editable_entity.is_velocity_editable)
 			{
 				float velocity_magnitude = Magnitude(velocity_map[entity_id].velocity);
@@ -150,10 +132,12 @@ public:
 				}
 				if (cursor_and_keys.key_pressed_this_frame[INCREMENT_HEIGHT_KEY])
 				{
+					snap_to_grid = true;
 					width_and_height_map[entity_id].width_and_height.y += 48;
 				}
 				if (cursor_and_keys.key_pressed_this_frame[DECREMENT_HEIGHT_KEY])
 				{
+					snap_to_grid = true;
 					width_and_height_map[entity_id].width_and_height.y -= 48;
 					if (width_and_height_map[entity_id].width_and_height.y < 48)
 					{
@@ -162,15 +146,50 @@ public:
 				}
 				if (cursor_and_keys.key_pressed_this_frame[INCREMENT_WIDTH_KEY])
 				{
+					snap_to_grid = true;
 					width_and_height_map[entity_id].width_and_height.x += 48;
 				}
 				if (cursor_and_keys.key_pressed_this_frame[DECREMENT_WIDTH_KEY])
 				{
+					snap_to_grid = true;
 					width_and_height_map[entity_id].width_and_height.x -= 48;
 					if (width_and_height_map[entity_id].width_and_height.x < 48)
 					{
 						width_and_height_map[entity_id].width_and_height.x = 48;
 					}
+				}
+			}
+
+			//Limit position:
+			if (position_map[entity_id].position.x < 0)
+			{
+				position_map[entity_id].position.x = 0;
+			}
+			if (position_map[entity_id].position.y < 0)
+			{
+				position_map[entity_id].position.y = 0;
+			}
+
+			//Snap to grid:
+			if (snap_to_grid && !cursor_and_keys.key_down[SNAP_TO_GRID_KEY])
+			{
+				if (width_and_height_map.count(entity_id))
+				{
+					position_map[entity_id].position.x -= width_and_height_map[entity_id].width_and_height.x / 2;
+					position_map[entity_id].position.y -= width_and_height_map[entity_id].width_and_height.y / 2;
+					position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, 48);
+					position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, 48);
+					position_map[entity_id].position.x += width_and_height_map[entity_id].width_and_height.x / 2;
+					position_map[entity_id].position.y += width_and_height_map[entity_id].width_and_height.y / 2;
+				}
+				if (radius_map.count(entity_id))
+				{
+					position_map[entity_id].position.x -= radius_map[entity_id].radius;
+					position_map[entity_id].position.y -= radius_map[entity_id].radius;
+					position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, 48);
+					position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, 48);
+					position_map[entity_id].position.x += radius_map[entity_id].radius;
+					position_map[entity_id].position.y += radius_map[entity_id].radius;
 				}
 			}
 		}

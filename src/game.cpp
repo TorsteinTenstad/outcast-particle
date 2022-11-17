@@ -45,7 +45,7 @@ void Game::Update(float dt)
 
 	if (cursor_and_keys_.key_pressed_this_frame[MENU_KEY] && globals.active_level != 0)
 	{
-		if (globals.edit_mode)
+		if (levels_[globals.active_level].edit_mode)
 		{
 			levels_[globals.active_level].SaveToFile("levels/level" + std::to_string(globals.active_level) + ".txt");
 		}
@@ -53,13 +53,13 @@ void Game::Update(float dt)
 		{
 			levels_[i].LoadFromFile("levels/level" + std::to_string(i) + ".txt");
 		}
-		globals.edit_mode = false;
+		levels_[globals.active_level].edit_mode = false;
 		globals.active_level = 0;
 	}
 
 	if (cursor_and_keys_.key_pressed_this_frame[EDIT_MODE_KEY] && globals.active_level != 0)
 	{
-		if (globals.edit_mode)
+		if (levels_[globals.active_level].edit_mode)
 		{
 			levels_[globals.active_level].SaveToFile("levels/level" + std::to_string(globals.active_level) + ".txt");
 		}
@@ -67,11 +67,11 @@ void Game::Update(float dt)
 		{
 			levels_[globals.active_level].LoadFromFile("levels/level" + std::to_string(globals.active_level) + ".txt");
 		}
-		globals.edit_mode = !globals.edit_mode;
+		levels_[globals.active_level].edit_mode = !levels_[globals.active_level].edit_mode;
 	}
 	mouse_interaction_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	level_button_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	if (!globals.edit_mode)
+	if (!levels_[globals.active_level].edit_mode)
 	{
 		player_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		electric_force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
@@ -90,7 +90,7 @@ void Game::Update(float dt)
 	}
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	if (globals.edit_mode)
+	if (levels_[globals.active_level].edit_mode)
 	{
 		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}

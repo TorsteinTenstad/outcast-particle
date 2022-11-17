@@ -50,6 +50,8 @@ private:
 	void RegisterComponent();
 
 public:
+	bool edit_mode = false;
+	sf::Vector2f size = sf::Vector2f(1920, 1080);
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 
