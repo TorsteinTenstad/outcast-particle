@@ -39,8 +39,20 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-	event_system_.Update(cursor_and_keys_);
+	for (int i = 0; i < physics_ticks_per_frame_; ++i)
+	{
+		UpdatePhysics(dt / physics_ticks_per_frame_);
+	}
 
+	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	if (levels_[globals.active_level].edit_mode)
+	{
+		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	}
+}
+void Game::UpdatePhysics(float dt)
+{
+	event_system_.Update(cursor_and_keys_);
 	if (cursor_and_keys_.key_pressed_this_frame[MENU_KEY] && globals.active_level != 0)
 	{
 		if (levels_[globals.active_level].edit_mode)
@@ -72,9 +84,4 @@ void Game::Update(float dt)
 	}
 	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	if (levels_[globals.active_level].edit_mode)
-	{
-		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	}
 }

@@ -9,8 +9,8 @@
 class EditModeSystem : public GameSystem
 {
 private:
-	float default_velocity_magnitude_change_sensitivity_ = 20;
-	float default_velocity_angle_change_sensitivity_ = PI / 90;
+	float default_velocity_magnitude_change_sensitivity_ = 100;
+	float default_velocity_angle_change_sensitivity_ = PI / 2;
 
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
@@ -134,19 +134,19 @@ public:
 
 				if (cursor_and_keys.key_down[INCREMENT_VELOCITY_KEY])
 				{
-					velocity_magnitude += velocity_magnitude_change_sensitivity;
+					velocity_magnitude += velocity_magnitude_change_sensitivity * dt;
 				}
 				if (cursor_and_keys.key_down[DECREMENT_VELOCITY_KEY])
 				{
-					velocity_magnitude -= velocity_magnitude_change_sensitivity;
+					velocity_magnitude -= velocity_magnitude_change_sensitivity * dt;
 				}
 				if (cursor_and_keys.key_down[INCREMENT_VELOCITY_ANGLE_KEY])
 				{
-					velocity_angle += velocity_angle_change_sensitivity;
+					velocity_angle += velocity_angle_change_sensitivity * dt;
 				}
 				if (cursor_and_keys.key_down[DECREMENT_VELOCITY_ANGLE_KEY])
 				{
-					velocity_angle -= velocity_angle_change_sensitivity;
+					velocity_angle -= velocity_angle_change_sensitivity * dt;
 				}
 
 				velocity_map[entity_id].velocity.x = velocity_magnitude * std::cos(velocity_angle);

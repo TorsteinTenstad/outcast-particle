@@ -20,11 +20,7 @@ void SFML::RunWindow(std::function<void(float)> update_func)
 		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
 		std::cout << 1 / dt << "\n";
-		for (int i = 0; i < 10; i++)
-		{
-			update_func(dt / 10);
-		}
-
+		update_func(dt);
 		globals.render_window.display();
 	}
 }

@@ -1,5 +1,5 @@
 name=Untitled;size=(2112,1188);editable=1
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(1106,626)}Charge{charge=-1000}Velocity{velocity=(-2228.64,77.8342)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(530,866)}Charge{charge=1000}Velocity{velocity=(-332.726,1.76876)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(1456,388)}WidthAndHeight{width_and_height=(144,144)}
 "BPWall":Tag{tag=BPWall}Position{position=(24,480)}WidthAndHeight{width_and_height=(48,960)}
 "BPWall":Tag{tag=BPWall}Position{position=(960,984)}WidthAndHeight{width_and_height=(1920,48)}
@@ -15,6 +15,5 @@ name=Untitled;size=(2112,1188);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(984,24)}WidthAndHeight{width_and_height=(48,48)}
 "BPWall":Tag{tag=BPWall}Position{position=(984,552)}WidthAndHeight{width_and_height=(48,48)}
 "BPWall":Tag{tag=BPWall}Position{position=(984,744)}WidthAndHeight{width_and_height=(48,48)}
-"BPMagneticField":Tag{tag=BPMagneticField}Position{position=(528,504)}MagneticField{magnetic_field_strength=-1}WidthAndHeight{width_and_height=(768,816)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(1436.6,678.05)}Charge{charge=-1000}Velocity{velocity=(-229.86,8.02775)}
+"BPMagneticField":Tag{tag=BPMagneticField}Position{position=(528,528)}MagneticField{magnetic_field_strength=-1}WidthAndHeight{width_and_height=(768,768)}
 "BPWall":Tag{tag=BPWall}Position{position=(857.5,0)}WidthAndHeight{width_and_height=(48,48)}

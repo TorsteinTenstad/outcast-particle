@@ -24,6 +24,7 @@
 class Game
 {
 private:
+	int physics_ticks_per_frame_ = 10;
 	std::vector<Level> levels_;
 
 	SFMLEventSystem event_system_;
@@ -50,4 +51,5 @@ public:
 	Game();
 	void Init();
 	void Update(float dt);
+	void UpdatePhysics(float dt);
 };
