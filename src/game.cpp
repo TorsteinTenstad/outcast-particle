@@ -22,7 +22,9 @@ void Game::Init()
 	float button_w = 400;
 	float button_h = 225;
 	float spacing = 50;
-	float columns = 4;
+	float n_columns = 4;
+	int c = 0;
+	int r = 0;
 	for (unsigned i = 1; i < levels_.size(); ++i)
 	{
 		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
@@ -32,7 +34,14 @@ void Game::Init()
 		texture.update(globals.render_window);
 		identifier = "level" + std::to_string(i);
 		render_system_.RegisterTexture(identifier, texture);
-		levels_[0].AddLevelButton(i, 300, 300 + (i - 1) * (255), 400, 225, identifier);
+		levels_[0].AddLevelButton(i, spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
+
+		c++;
+		if (c == n_columns)
+		{
+			r++;
+			c = 0;
+		}
 	}
 	globals.active_level = 0;
 }
