@@ -90,6 +90,11 @@ public:
 				}
 			}
 		}
+		sf::RectangleShape background(level.size);
+		sf::Texture background_texture;
+		background_texture.loadFromFile("content/background.png");
+		background.setTexture(&background_texture);
+		globals.render_window.draw(background);
 		for (auto [draw_priority, entity_ids] : draw_order_)
 		{
 			for (auto entity_id : entity_ids)
