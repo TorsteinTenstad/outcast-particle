@@ -10,7 +10,7 @@
 static sf::Vector2f CalculateMagneticFieldForce(Charge charge_particle, Velocity velocity_particle, MagneticField magnetic_field_strength)
 {
 	sf::Vector2f magnetic_field_vector = sf::Vector2f(velocity_particle.velocity.y, -1 * velocity_particle.velocity.x);
-	return magnetic_field_vector * charge_particle.charge * magnetic_field_strength.magnetic_field_strength;
+	return magnetic_field_vector * charge_particle.charge * magnetic_field_strength.magnetic_field_strength / 1000.f;
 }
 
 class MagneticFieldForceSystem : public GameSystem

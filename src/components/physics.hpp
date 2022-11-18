@@ -44,5 +44,5 @@ public:
 class MagneticField
 {
 public:
-	float magnetic_field_strength = -100;
+	float magnetic_field_strength = -1;
 };

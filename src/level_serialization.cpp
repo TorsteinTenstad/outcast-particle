@@ -465,6 +465,9 @@ void SerializeComponent(ReceivedForces c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "electric_field_force=";
 	str_rep += ToString(c.electric_field_force);
+	str_rep += ";";
+	str_rep += "magnetic_field_force=";
+	str_rep += ToString(c.magnetic_field_force);
 	str_rep += "}";
 }
 
@@ -493,6 +496,11 @@ void DeserializeComponent(ReceivedForces& c, std::string str_rep)
 		if (statement_parts[0] == "electric_field_force")
 		{
 			FromString(c.electric_field_force, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "magnetic_field_force")
+		{
+			FromString(c.magnetic_field_force, statement_parts[1]);
 		}
 	}
 }
@@ -537,6 +545,28 @@ void DeserializeComponent(ElectricField& c, std::string str_rep)
 		if (statement_parts[0] == "electric_field_vector")
 		{
 			FromString(c.electric_field_vector, statement_parts[1]);
+		}
+	}
+}
+
+void SerializeComponent(MagneticField c, std::string& str_rep)
+{
+	str_rep += "MagneticField{";
+	str_rep += "magnetic_field_strength=";
+	str_rep += ToString(c.magnetic_field_strength);
+	str_rep += "}";
+}
+
+void DeserializeComponent(MagneticField& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+		if (statement_parts[0] == "magnetic_field_strength")
+		{
+			FromString(c.magnetic_field_strength, statement_parts[1]);
 		}
 	}
 }
@@ -660,6 +690,14 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<ElectricField>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+		}
+
+		if (tag == "BPMagneticField")
+		{
+			SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<MagneticField>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
 		}
 
@@ -813,6 +851,21 @@ void Level::LoadFromFile(std::string savefile_path)
 				GetSubstrBetween(line, "Position{", "}"));
 			DeserializeComponent(GetComponent<ElectricField>()[entity_id],
 				GetSubstrBetween(line, "ElectricField{", "}"));
+			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
+				GetSubstrBetween(line, "WidthAndHeight{", "}"));
+		}
+
+		if (tag == "BPMagneticField")
+		{
+			GetComponent<ClickedOn>()[entity_id] = {};
+			GetComponent<DrawInfo>()[entity_id] = { "content\\magnetic_field.png", false, -5 };
+			GetComponent<Editable>()[entity_id] = { false, false, true, sf::Vector2f(0, 0), false };
+			DeserializeComponent(GetComponent<Tag>()[entity_id],
+				GetSubstrBetween(line, "Tag{", "}"));
+			DeserializeComponent(GetComponent<Position>()[entity_id],
+				GetSubstrBetween(line, "Position{", "}"));
+			DeserializeComponent(GetComponent<MagneticField>()[entity_id],
+				GetSubstrBetween(line, "MagneticField{", "}"));
 			DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
 				GetSubstrBetween(line, "WidthAndHeight{", "}"));
 		}

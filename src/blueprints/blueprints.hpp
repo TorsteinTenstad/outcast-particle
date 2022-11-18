@@ -76,3 +76,14 @@ class BPElectricField : public BPEntity
 	// [Serialize]
 	WidthAndHeight width_and_height = {};
 };
+
+class BPMagneticField : public BPEntity
+{
+	DrawInfo draw_info = { "content\\magnetic_field.png", false, -5 };
+	Editable editable = { false, false, true, sf::Vector2f(0, 0), false };
+
+	// [Serialize]
+	MagneticField magnetid_field = {};
+	// [Serialize]
+	WidthAndHeight width_and_height = {};
+};

@@ -5,27 +5,24 @@ Game::Game()
 	cursor_and_keys_ = CursorAndKeys();
 
 	Level menu = Level();
-
-	Level level1 = Level();
-	level1.LoadFromFile("levels/level1.txt");
-
-	Level level2 = Level();
-	level2.LoadFromFile("levels/level2.txt");
-
-	Level level3 = Level();
-	level3.LoadFromFile("levels/level3.txt");
-	level3.AddMagneticField(500, 500, 500, 600, 100000);
-
 	levels_.push_back(menu);
-	levels_.push_back(level1);
-	levels_.push_back(level2);
-	levels_.push_back(level3);
 }
 
 void Game::Init()
 {
+	for (const auto& entry : std::experimental::filesystem::directory_iterator("levels/"))
+	{
+		Level level = Level();
+		level.LoadFromFile(entry.path().string());
+		levels_.push_back(level);
+	}
 	sf::Texture texture;
 	std::string identifier;
+
+	float button_w = 400;
+	float button_h = 225;
+	float spacing = 50;
+	float columns = 4;
 	for (unsigned i = 1; i < levels_.size(); ++i)
 	{
 		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);

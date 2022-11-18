@@ -169,11 +169,11 @@ int Level::AddMagneticField(float pos_x, float pos_y, float width, float height,
 {
 	int id = CreateEntityId();
 	GetComponent<Tag>()[id].tag = "BPMagneticField";
-	GetComponent<DrawInfo>()[id] = {};
+	GetComponent<DrawInfo>()[id].draw_priority = -72;
 	GetComponent<Position>()[id] = { sf::Vector2f(500, 500) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(600, 600) };
 	GetComponent<Editable>()[id].is_height_and_widht_editable = true;
 	GetComponent<ClickedOn>()[id] = {};
-	GetComponent<MagneticField>()[id] = {};
+	GetComponent<MagneticField>()[id].magnetic_field_strength = magnetic_field_strength;
 	return id;
 }
