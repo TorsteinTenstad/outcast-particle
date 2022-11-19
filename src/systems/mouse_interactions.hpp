@@ -17,35 +17,46 @@ public:
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
 
+		std::map<int, std::vector<int>> priority;
 		for (auto& [entity_id, clicked_on] : clicked_on_map)
 		{
-			clicked_on.clicked_this_frame = false;
-			clicked_on.released_this_frame = cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
-			if (radius_map.count(entity_id))
+			priority[draw_info_map[entity_id].draw_priority].push_back(entity_id);
+		}
+		for (auto it = priority.rbegin(); it != priority.rend(); it++)
+		{
+			for (auto entity_id : it->second)
 			{
-				if (Magnitude(cursor_and_keys.cursor_position - position_map[entity_id].position) < radius_map[entity_id].radius)
+				clicked_on_map[entity_id].clicked_this_frame = false;
+				clicked_on_map[entity_id].released_this_frame = cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
+				if (radius_map.count(entity_id))
 				{
-					clicked_on.clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
+					if (Magnitude(cursor_and_keys.cursor_position - position_map[entity_id].position) < radius_map[entity_id].radius)
+					{
+						clicked_on_map[entity_id].clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
+					}
 				}
-			}
-			if (width_and_height_map.count(entity_id))
-			{
-				float w = width_and_height_map[entity_id].width_and_height.x;
-				float h = width_and_height_map[entity_id].width_and_height.y;
-				sf::Vector2f offset = Abs(position_map[entity_id].position - cursor_and_keys.cursor_position);
-				if (offset.x < w / 2 && offset.y < h / 2)
+				if (width_and_height_map.count(entity_id))
 				{
-					clicked_on.clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
+					float w = width_and_height_map[entity_id].width_and_height.x;
+					float h = width_and_height_map[entity_id].width_and_height.y;
+					sf::Vector2f offset = Abs(position_map[entity_id].position - cursor_and_keys.cursor_position);
+					if (offset.x < w / 2 && offset.y < h / 2)
+					{
+						clicked_on_map[entity_id].clicked_this_frame = cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left];
+					}
 				}
-			}
-			if (clicked_on.clicked_this_frame)
-			{
-				clicked_on.clicked_on = true;
-			}
-			if (clicked_on.released_this_frame)
-			{
-				clicked_on.clicked_on = false;
+				if (clicked_on_map[entity_id].clicked_this_frame)
+				{
+					clicked_on_map[entity_id].clicked_on = true;
+					return;
+				}
+				if (clicked_on_map[entity_id].released_this_frame)
+				{
+					clicked_on_map[entity_id].clicked_on = false;
+					return;
+				}
 			}
 		}
 	}

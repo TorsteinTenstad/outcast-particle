@@ -15,6 +15,6 @@ public:
 class Border
 {
 public:
-	int thickness = 5;
+	int thickness = 20;
 	sf::Color color = sf::Color::White;
 };

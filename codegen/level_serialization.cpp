@@ -781,7 +781,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
-			GetComponent<Editable>()[entity_id] = { true, false, 0, sf::Vector2f(0, 0), false };
+			GetComponent<Editable>()[entity_id] = { true, true, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			GetComponent<Acceleration>()[entity_id] = {};
 			GetComponent<ReceivedForces>()[entity_id] = {};
@@ -801,7 +801,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_blue+.png", "content\\particle_blue.png", "content\\particle_blue-.png" };
-			GetComponent<Editable>()[entity_id] = { true, false, 0, sf::Vector2f(0, 0), false };
+			GetComponent<Editable>()[entity_id] = { true, true, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			GetComponent<Acceleration>()[entity_id] = {};
 			GetComponent<ReceivedForces>()[entity_id] = {};

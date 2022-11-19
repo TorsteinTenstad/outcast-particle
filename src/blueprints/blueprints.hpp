@@ -27,6 +27,7 @@ class BPStaticParticle : public BPEntity
 
 class BPMovingParticle : public BPStaticParticle
 {
+	Editable editable = { true, true, 0, sf::Vector2f(0, 0), false };
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
 	Intersection intersection = {};

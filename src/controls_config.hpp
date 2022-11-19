@@ -17,7 +17,7 @@
 #define COPY_ENTITY_KEY sf::Keyboard::LAlt
 #define DELETE_ENTITY_KEY sf::Keyboard::Delete
 #define SNAP_TO_GRID_KEY sf::Keyboard::LShift
-#define DECREASE_SENSITIVITY_KEY sf::Keyboard::RShift
+#define ALT_SENSITIVITY_KEY sf::Keyboard::RShift
 #define ROTATE_ENTITY_KEY sf::Keyboard::R
 #define INCREMENT_HEIGHT_KEY sf::Keyboard::W
 #define DECREMENT_HEIGHT_KEY sf::Keyboard::S

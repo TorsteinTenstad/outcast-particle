@@ -10,7 +10,7 @@
 class EditModeSystem : public GameSystem
 {
 private:
-	float default_velocity_magnitude_change_sensitivity_ = 100;
+	float default_velocity_magnitude_change_sensitivity_ = 400;
 	float default_velocity_angle_change_sensitivity_ = PI / 2;
 
 public:
@@ -47,7 +47,6 @@ public:
 			return;
 		}
 		// Set bacground:
-		
 
 		// Change level size:
 		if (cursor_and_keys.key_pressed_this_frame[INCREASE_LEVEL_SIZE_KEY])
@@ -127,31 +126,22 @@ public:
 				float velocity_magnitude = Magnitude(velocity_map[entity_id].velocity);
 				float velocity_angle = Angle(velocity_map[entity_id].velocity);
 
-				float velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_;
-				float velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_;
-				if (cursor_and_keys.key_down[DECREASE_SENSITIVITY_KEY])
-				{
-					velocity_magnitude_change_sensitivity = default_velocity_magnitude_change_sensitivity_ / 4;
-					velocity_angle_change_sensitivity = default_velocity_angle_change_sensitivity_ / 4;
-				}
-
 				if (cursor_and_keys.key_down[INCREMENT_VELOCITY_KEY])
 				{
-					velocity_magnitude += velocity_magnitude_change_sensitivity * dt;
+					velocity_magnitude += default_velocity_magnitude_change_sensitivity_ * dt / (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 				}
 				if (cursor_and_keys.key_down[DECREMENT_VELOCITY_KEY])
 				{
-					velocity_magnitude -= velocity_magnitude_change_sensitivity * dt;
+					velocity_magnitude -= default_velocity_magnitude_change_sensitivity_ * dt / (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 				}
 				if (cursor_and_keys.key_down[INCREMENT_VELOCITY_ANGLE_KEY])
 				{
-					velocity_angle += velocity_angle_change_sensitivity * dt;
+					velocity_angle += default_velocity_angle_change_sensitivity_ * dt / (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 				}
 				if (cursor_and_keys.key_down[DECREMENT_VELOCITY_ANGLE_KEY])
 				{
-					velocity_angle -= velocity_angle_change_sensitivity * dt;
+					velocity_angle -= default_velocity_angle_change_sensitivity_ * dt / (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 				}
-
 				velocity_map[entity_id].velocity.x = velocity_magnitude * std::cos(velocity_angle);
 				velocity_map[entity_id].velocity.y = velocity_magnitude * std::sin(velocity_angle);
 			}
@@ -166,12 +156,12 @@ public:
 				if (cursor_and_keys.key_pressed_this_frame[INCREMENT_HEIGHT_KEY])
 				{
 					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.y += editable_entity.width_and_height_edit;
+					width_and_height_map[entity_id].width_and_height.y += editable_entity.width_and_height_edit * (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 				}
 				if (cursor_and_keys.key_pressed_this_frame[DECREMENT_HEIGHT_KEY])
 				{
 					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.y -= editable_entity.width_and_height_edit;
+					width_and_height_map[entity_id].width_and_height.y -= editable_entity.width_and_height_edit * (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 					if (width_and_height_map[entity_id].width_and_height.y < editable_entity.width_and_height_edit)
 					{
 						width_and_height_map[entity_id].width_and_height.y = editable_entity.width_and_height_edit;
@@ -185,7 +175,7 @@ public:
 				if (cursor_and_keys.key_pressed_this_frame[DECREMENT_WIDTH_KEY])
 				{
 					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.x -= editable_entity.width_and_height_edit;
+					width_and_height_map[entity_id].width_and_height.x -= editable_entity.width_and_height_edit * (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 					if (width_and_height_map[entity_id].width_and_height.x < editable_entity.width_and_height_edit)
 					{
 						width_and_height_map[entity_id].width_and_height.x = editable_entity.width_and_height_edit;

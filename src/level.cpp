@@ -98,7 +98,7 @@ int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, floa
 	GetComponent<DrawInfo>()[id] = { path, true };
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	GetComponent<Border>()[id] = { 5, sf::Color::White };
+	GetComponent<Border>()[id] = { 20, sf::Color::White };
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<LevelButton>()[id] = { level };
 	return id;
