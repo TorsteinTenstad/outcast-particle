@@ -56,7 +56,9 @@ public:
 	bool editable = false;
 	bool edit_mode = false;
 	std::string name = "Untitled";
-	sf::Vector2f size = sf::Vector2f(1920, 1080);
+	sf::Vector2f size = sf::Vector2f(1920 * 4, 1080 * 4);
+
+	Level();
 
 	template <class Component>
 	std::map<int, Component>& GetComponent();
@@ -64,18 +66,10 @@ public:
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
-	int AddParticleEntity(float pos_x, float pos_y, float charge);
-	int AddMovingParticleEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge);
-	int AddPlayerEntity(float pos_x, float pos_y, float vel_x, float vel_y, float charge, float player_force);
 	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string path);
-	int AddLaser(float pos_x, float pos_y, float width, float height);
-	int AddElectricField(float pos_x, float pos_y, float width, float height, sf::Vector2f electric_field_vector);
-	int AddMagneticField(float pos_x, float pos_y, float width, float height, float magnetic_field_strength);
-	int AddBlock(float pos_x, float pos_y);
-	int AddGoal();
+	void SaveToFile();
+	void LoadFromFile();
 
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
-	void SaveToFile();
-	void LoadFromFile();
 };

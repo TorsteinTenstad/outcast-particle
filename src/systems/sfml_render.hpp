@@ -14,7 +14,21 @@ private:
 	std::map<int, sf::CircleShape> circle_shapes_;
 	std::map<int, std::vector<int>> draw_order_;
 
+	sf::RectangleShape background_;
+	sf::Texture background_texture_;
+	sf::RectangleShape grid_background_;
+	sf::Texture grid_background_texture_;
+
 public:
+	SFMLRenderSystem()
+	{
+		background_texture_.loadFromFile("content/background.png");
+		background_texture_.setRepeated(true);
+		background_.setTexture(&background_texture_);
+		grid_background_texture_.loadFromFile("content/grid.png");
+		grid_background_texture_.setRepeated(true);
+		grid_background_.setTexture(&grid_background_texture_);
+	}
 	void RegisterTexture(std::string identifier, sf::Texture texture)
 	{
 		textures_[identifier] = texture;
@@ -90,11 +104,14 @@ public:
 				}
 			}
 		}
-		sf::RectangleShape background(level.size);
-		sf::Texture background_texture;
-		background_texture.loadFromFile("content/background.png");
-		background.setTexture(&background_texture);
-		globals.render_window.draw(background);
+		background_.setSize(level.size);
+		globals.render_window.draw(background_);
+		if (level.edit_mode)
+		{
+			grid_background_.setSize(level.size);
+			grid_background_.setTextureRect(sf::IntRect(0, 0, level.size.x, level.size.y));
+			globals.render_window.draw(grid_background_);
+		}
 		for (auto [draw_priority, entity_ids] : draw_order_)
 		{
 			for (auto entity_id : entity_ids)

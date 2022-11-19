@@ -15,11 +15,20 @@ SFML::SFML()
 void SFML::RunWindow(std::function<void(float)> update_func)
 {
 	Timer timer = Timer();
+	float seconds_since_last_fps_print = 0;
+	int fps = 0;
 	while (globals.render_window.isOpen())
 	{
 		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
-		std::cout << 1 / dt << "\n";
+		seconds_since_last_fps_print += dt;
+		fps++;
+		if (seconds_since_last_fps_print > 1)
+		{
+			std::cout << "FPS: " << fps << "\n";
+			fps = 0;
+			seconds_since_last_fps_print = 0;
+		}
 		update_func(dt);
 		globals.render_window.display();
 	}

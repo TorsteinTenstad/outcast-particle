@@ -2,13 +2,13 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="100mm"
-   height="100mm"
-   viewBox="0 0 100 100"
+   width="30mm"
+   height="30mm"
+   viewBox="0 0 30 30"
    version="1.1"
    id="svg5"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
-   sodipodi:docname="particle_red.svg"
+   sodipodi:docname="particle_blue.svg"
    inkscape:export-filename="particles.png"
    inkscape:export-xdpi="76.199997"
    inkscape:export-ydpi="76.199997"
@@ -27,14 +27,14 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.74564394"
-     inkscape:cx="214.57963"
-     inkscape:cy="287.67082"
-     inkscape:window-width="958"
-     inkscape:window-height="1008"
-     inkscape:window-x="-7"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:zoom="5.9651515"
+     inkscape:cx="98.237237"
+     inkscape:cy="117.51588"
+     inkscape:window-width="3840"
+     inkscape:window-height="2066"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
      id="defs2" />
@@ -43,34 +43,34 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#23629e;fill-opacity:1;stroke-width:0.288787"
+       style="fill:#23629e;fill-opacity:1;stroke-width:0.086636"
        id="path111"
-       cx="50"
-       cy="50"
-       r="50" />
+       cx="15"
+       cy="15"
+       r="15" />
     <circle
-       style="fill:#59b5ff;fill-opacity:1;stroke-width:0.445956"
+       style="fill:#59b5ff;fill-opacity:1;stroke-width:0.133787"
        id="path113"
-       cx="50"
-       cy="50"
-       r="40" />
+       cx="15"
+       cy="15"
+       r="12" />
     <rect
-       style="fill:#ffffff;fill-opacity:1;stroke-width:0.332465"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.0997397"
        id="rect4790"
-       width="60"
-       height="10"
-       x="20"
-       y="45"
-       ry="5"
-       rx="5" />
+       width="18"
+       height="3"
+       x="6"
+       y="13.5"
+       ry="1.5"
+       rx="1.5" />
     <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.304254;stroke-opacity:0"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.0896775;stroke-opacity:0"
        id="rect4792"
-       width="10"
-       height="60"
-       x="45.152126"
-       y="20.152126"
-       ry="5"
-       rx="5" />
+       width="2.9103227"
+       height="17.910322"
+       x="13.544839"
+       y="6.0448389"
+       ry="1.4925269"
+       rx="1.4551613" />
   </g>
 </svg>

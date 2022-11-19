@@ -21,12 +21,6 @@ public:
 			{
 				globals.render_window.close();
 			}
-			if (event.type == sf::Event::Resized)
-			{
-				// update the view to the new size of the window
-				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-				globals.render_window.setView(sf::View(visibleArea));
-			}
 			if (event.type == sf::Event::KeyPressed)
 			{
 				cursor_and_keys.key_pressed_this_frame[event.key.code] = !cursor_and_keys.key_down[event.key.code];

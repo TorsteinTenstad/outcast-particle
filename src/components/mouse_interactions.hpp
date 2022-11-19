@@ -1,12 +1,13 @@
 #pragma once
 #include "PCH.hpp"
+#include "globals.hpp"
 
 class Editable
 {
 public:
 	bool is_charge_editable = false;
 	bool is_velocity_editable = false;
-	bool is_height_and_widht_editable = false;
+	float width_and_height_edit = 0;
 	sf::Vector2f drag_offset;
 	bool selected = false;
 };

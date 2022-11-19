@@ -1,4 +1,4 @@
-name=Untitled;size=(2928,1647);editable=1
+name=Untitled;size=(7680,4320);editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(1586,290)}Charge{charge=200}Velocity{velocity=(-9.99963,-1.5099e-006)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(1128,288)}WidthAndHeight{width_and_height=(240,384)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1394,482)}Charge{charge=-100000}

@@ -19,8 +19,8 @@ void Game::Init()
 	sf::Texture texture;
 	std::string identifier;
 
-	float button_w = 400;
-	float button_h = 225;
+	float button_w = 1280;
+	float button_h = 720;
 	float spacing = 50;
 	float n_columns = 4;
 	int c = 0;
