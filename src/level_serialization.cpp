@@ -122,6 +122,9 @@ void SerializeComponent(DrawInfo c, std::string& str_rep)
 	str_rep += "draw_priority=";
 	str_rep += ToString(c.draw_priority);
 	str_rep += ";";
+	str_rep += "quarter_turn_rotations=";
+	str_rep += ToString(c.quarter_turn_rotations);
+	str_rep += ";";
 	str_rep += "image_path=";
 	str_rep += ToString(c.image_path);
 	str_rep += "}";
@@ -142,6 +145,11 @@ void DeserializeComponent(DrawInfo& c, std::string str_rep)
 		if (statement_parts[0] == "draw_priority")
 		{
 			FromString(c.draw_priority, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "quarter_turn_rotations")
+		{
+			FromString(c.quarter_turn_rotations, statement_parts[1]);
 		}
 
 		if (statement_parts[0] == "image_path")
@@ -530,8 +538,8 @@ void DeserializeComponent(Charge& c, std::string str_rep)
 void SerializeComponent(ElectricField c, std::string& str_rep)
 {
 	str_rep += "ElectricField{";
-	str_rep += "electric_field_vector=";
-	str_rep += ToString(c.electric_field_vector);
+	str_rep += "field_vector=";
+	str_rep += ToString(c.field_vector);
 	str_rep += "}";
 }
 
@@ -542,9 +550,9 @@ void DeserializeComponent(ElectricField& c, std::string str_rep)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
 
-		if (statement_parts[0] == "electric_field_vector")
+		if (statement_parts[0] == "field_vector")
 		{
-			FromString(c.electric_field_vector, statement_parts[1]);
+			FromString(c.field_vector, statement_parts[1]);
 		}
 	}
 }
@@ -552,8 +560,8 @@ void DeserializeComponent(ElectricField& c, std::string str_rep)
 void SerializeComponent(MagneticField c, std::string& str_rep)
 {
 	str_rep += "MagneticField{";
-	str_rep += "magnetic_field_strength=";
-	str_rep += ToString(c.magnetic_field_strength);
+	str_rep += "field_strength=";
+	str_rep += ToString(c.field_strength);
 	str_rep += "}";
 }
 
@@ -564,9 +572,9 @@ void DeserializeComponent(MagneticField& c, std::string str_rep)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
 
-		if (statement_parts[0] == "magnetic_field_strength")
+		if (statement_parts[0] == "field_strength")
 		{
-			FromString(c.magnetic_field_strength, statement_parts[1]);
+			FromString(c.field_strength, statement_parts[1]);
 		}
 	}
 }
@@ -834,7 +842,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
-			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1 };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
 			GetComponent<Collision>()[entity_id] = { 0.2 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
@@ -848,7 +856,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
-			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png", false, -1 };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png", false, -2, 0 };
 			GetComponent<Goal>()[entity_id] = {};
 			GetComponent<KillOnIntersection>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -863,7 +871,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
-			GetComponent<DrawInfo>()[entity_id] = { "content\\electric_field.png", false, -5 };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\electric_field.png", false, -5, 0 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -878,7 +886,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
-			GetComponent<DrawInfo>()[entity_id] = { "content\\magnetic_field.png", false, -5 };
+			GetComponent<DrawInfo>()[entity_id] = { "content\\magnetic_field.png", false, -5, 0 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],

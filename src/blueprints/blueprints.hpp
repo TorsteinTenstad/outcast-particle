@@ -45,7 +45,7 @@ class BPPlayer : public BPMovingParticle
 
 class BPLaser : public BPEntity
 {
-	OrientationDependentDrawInfo orientation_dependent_drawinfo = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
+	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
 	Editable editable = { false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
 
@@ -55,20 +55,20 @@ class BPLaser : public BPEntity
 
 class BPWall : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\block.png", false, 1 };
+	DrawInfo draw_info = { "content\\block.png", false, 1, 0 };
 	Collision collision = { 0.2 };
 };
 
 class BPGoal : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\goal.png", false, -1 };
+	DrawInfo draw_info = { "content\\goal.png", false, -2, 0 };
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
 };
 
 class BPElectricField : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\electric_field.png", false, -5 };
+	DrawInfo draw_info = { "content\\electric_field.png", false, -5, 0 };
 
 	// [Serialize]
 	ElectricField electric_field = {};
@@ -76,7 +76,7 @@ class BPElectricField : public BPTileBasedEntity
 
 class BPMagneticField : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\magnetic_field.png", false, -5 };
+	DrawInfo draw_info = { "content\\magnetic_field.png", false, -5, 0 };
 
 	// [Serialize]
 	MagneticField magnetic_field = {};

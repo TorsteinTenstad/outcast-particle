@@ -25,6 +25,9 @@ public:
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
+		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
+		std::map<int, ElectricField>& electric_field_map = level.GetComponent<ElectricField>();
+		std::map<int, MagneticField>& magnetic_field_map = level.GetComponent<MagneticField>();
 
 		if (level.editable && cursor_and_keys.key_pressed_this_frame[EDIT_MODE_KEY])
 		{
@@ -146,12 +149,25 @@ public:
 				velocity_map[entity_id].velocity.y = velocity_magnitude * std::sin(velocity_angle);
 			}
 
+			// Edit magnetic field:
+			if (editable_entity.selected && magnetic_field_map.count(entity_id) > 0)
+			{
+				if (cursor_and_keys.key_pressed_this_frame[EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION_KEY])
+				{
+					magnetic_field_map[entity_id].field_strength *= -1;
+				}
+			}
+
 			// Edit width, height and rotation of all selected entites with editable width and height:
 			if (editable_entity.selected && editable_entity.width_and_height_edit > 0 && width_and_height_map.count(entity_id) > 0)
 			{
 				if (cursor_and_keys.key_pressed_this_frame[ROTATE_ENTITY_KEY])
 				{
 					width_and_height_map[entity_id].width_and_height = sf::Vector2f(width_and_height_map[entity_id].width_and_height.y, width_and_height_map[entity_id].width_and_height.x);
+					if (electric_field_map.count(entity_id))
+					{
+						electric_field_map[entity_id].field_vector = GetQuarterTurnRotation(electric_field_map[entity_id].field_vector);
+					}
 				}
 				if (cursor_and_keys.key_pressed_this_frame[INCREMENT_HEIGHT_KEY])
 				{

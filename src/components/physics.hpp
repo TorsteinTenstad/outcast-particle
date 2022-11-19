@@ -38,11 +38,11 @@ public:
 class ElectricField
 {
 public:
-	sf::Vector2f electric_field_vector = sf::Vector2f(0, 0);
+	sf::Vector2f field_vector = sf::Vector2f(0, 0);
 };
 
 class MagneticField
 {
 public:
-	float magnetic_field_strength = -1;
+	float field_strength = 5;
 };

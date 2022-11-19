@@ -7,9 +7,9 @@
 #include "level.hpp"
 #include "utilityfunctions.hpp"
 
-static sf::Vector2f CalculateElectricFieldForce(Charge charge_particle, ElectricField electric_field_vector)
+static sf::Vector2f CalculateElectricFieldForce(Charge particle, ElectricField electric_field)
 {
-	return (electric_field_vector.electric_field_vector * charge_particle.charge);
+	return (electric_field.field_vector * particle.charge);
 }
 
 class ElectricFieldForceSystem : public GameSystem
@@ -32,7 +32,7 @@ public:
 				{
 					if (electric_field_vector_map.count(intersection_id) != 0)
 					{
-						electric_field_force = electric_field_force + CalculateElectricFieldForce(charge_map[entity_id], electric_field_vector_map[intersection_id]);
+						electric_field_force += CalculateElectricFieldForce(charge_map[entity_id], electric_field_vector_map[intersection_id]);
 					}
 				}
 				received_forces.electric_field_force = electric_field_force;

@@ -55,53 +55,44 @@ public:
 				textures_[entity_drawinfo.image_path].setRepeated(true);
 				textures_[entity_drawinfo.image_path].setSmooth(true);
 			}
+			sf::Shape* shape;
 			if (width_and_height_map.count(entity_id))
 			{
-				if (rectangle_shapes_.count(entity_id) == 0)
+				sf::Vector2f w_h = width_and_height_map[entity_id].width_and_height;
+				if (entity_drawinfo.quarter_turn_rotations % 2 == 1)
 				{
-					rectangle_shapes_[entity_id] = sf::RectangleShape();
+					w_h.x = width_and_height_map[entity_id].width_and_height.y;
+					w_h.y = width_and_height_map[entity_id].width_and_height.x;
 				}
-				rectangle_shapes_[entity_id].setSize(width_and_height_map[entity_id].width_and_height);
+				rectangle_shapes_[entity_id].setSize(w_h);
 				if (!entity_drawinfo.scale_to_fit)
 				{
-					rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, width_and_height_map[entity_id].width_and_height.x, width_and_height_map[entity_id].width_and_height.y));
+					rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, w_h.x, w_h.y));
 				}
-				rectangle_shapes_[entity_id].setTexture(&textures_[entity_drawinfo.image_path]);
-				rectangle_shapes_[entity_id].setOrigin(width_and_height_map[entity_id].width_and_height.x / 2, width_and_height_map[entity_id].width_and_height.y / 2);
-				rectangle_shapes_[entity_id].setPosition(position_map[entity_id].position);
-				if (border_map.count(entity_id))
-				{
-					rectangle_shapes_[entity_id].setOutlineThickness(border_map[entity_id].thickness);
-					rectangle_shapes_[entity_id].setOutlineColor(border_map[entity_id].color);
-				}
-				else
-				{
-					rectangle_shapes_[entity_id].setOutlineThickness(0);
-				}
+				rectangle_shapes_[entity_id].setOrigin(w_h.x / 2, w_h.y / 2);
+				shape = &rectangle_shapes_[entity_id];
 			}
 			else if (radius_map.count(entity_id))
 			{
-				if (circle_shapes_.count(entity_id) == 0)
-				{
-					circle_shapes_[entity_id] = sf::CircleShape();
-				}
 				circle_shapes_[entity_id].setRadius(radius_map[entity_id].radius);
 				if (!entity_drawinfo.scale_to_fit)
 				{
 					circle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, 2 * radius_map[entity_id].radius, 2 * radius_map[entity_id].radius));
 				}
-				circle_shapes_[entity_id].setTexture(&textures_[entity_drawinfo.image_path]);
 				circle_shapes_[entity_id].setOrigin(radius_map[entity_id].radius, radius_map[entity_id].radius);
-				circle_shapes_[entity_id].setPosition(position_map[entity_id].position);
-				if (border_map.count(entity_id))
-				{
-					circle_shapes_[entity_id].setOutlineThickness(border_map[entity_id].thickness);
-					circle_shapes_[entity_id].setOutlineColor(border_map[entity_id].color);
-				}
-				else
-				{
-					circle_shapes_[entity_id].setOutlineThickness(0);
-				}
+				shape = &circle_shapes_[entity_id];
+			}
+			shape->setTexture(&textures_[entity_drawinfo.image_path]);
+			shape->setPosition(position_map[entity_id].position);
+			shape->setRotation(90 * entity_drawinfo.quarter_turn_rotations);
+			if (border_map.count(entity_id))
+			{
+				shape->setOutlineThickness(border_map[entity_id].thickness);
+				shape->setOutlineColor(border_map[entity_id].color);
+			}
+			else
+			{
+				shape->setOutlineThickness(0);
 			}
 		}
 		background_.setSize(level.size);
