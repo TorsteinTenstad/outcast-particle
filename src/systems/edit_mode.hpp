@@ -49,7 +49,6 @@ public:
 		{
 			return;
 		}
-		// Set bacground:
 
 		// Change level size:
 		if (cursor_and_keys.key_pressed_this_frame[INCREASE_LEVEL_SIZE_KEY])

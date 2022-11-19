@@ -6,7 +6,7 @@
 #define PLAYER_MOVE_UP_KEY sf::Keyboard::W
 #define PLAYER_MOVE_DOWN_KEY sf::Keyboard::S
 #define PLAYER_SWITCH_CHARGE_KEY sf::Keyboard::Space
-#define PLAYER_GO_NEUTRAL_KEY sf::Keyboard::RShift
+#define PLAYER_GO_NEUTRAL_KEY sf::Keyboard::Enter
 
 #define MENU_KEY sf::Keyboard::Escape
 #define EDIT_MODE_KEY sf::Keyboard::Tab
