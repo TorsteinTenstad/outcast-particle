@@ -7,7 +7,7 @@ name=Untitled;size=(7680,4320);editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,2160)}WidthAndHeight{width_and_height=(60,4080)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(7620,2160)}WidthAndHeight{width_and_height=(60,4080)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(960,3840)}Charge{charge=-10000}Velocity{velocity=(-4.25322e-005,-973.024)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(960,3840)}Charge{charge=-10000}Velocity{velocity=(-4.25322e-005,-973.024)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0;default_charge=0}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3840,60)}WidthAndHeight{width_and_height=(7440,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(7620,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(5940,2640)}WidthAndHeight{width_and_height=(60,3120)}

@@ -7,7 +7,7 @@ name=Untitled;size=(4800,2712);editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(2220,2220)}WidthAndHeight{width_and_height=(2772,60)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(240,480)}Charge{charge=100000}
 "BPWall":Tag{tag=BPWall}Position{position=(480,660)}WidthAndHeight{width_and_height=(720,120)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(660,420)}Charge{charge=-1000}Velocity{velocity=(-0.697576,-9.97563)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(660,420)}Charge{charge=-1000}Velocity{velocity=(-0.697576,-9.97563)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0;default_charge=0}
 "BPWall":Tag{tag=BPWall}Position{position=(3660,2220)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3300,780)}WidthAndHeight{width_and_height=(120,360)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(4560,1920)}Charge{charge=-100000}

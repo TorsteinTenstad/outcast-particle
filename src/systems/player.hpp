@@ -37,16 +37,16 @@ public:
 			received_forces_map[entity_id].player_force.x = x_direction * player.move_force;
 			received_forces_map[entity_id].player_force.y = y_direction * player.move_force;
 
-			if (cursor_and_keys.key_pressed_this_frame[PLAYER_GO_NEUTRAL_KEY])
+			if (cursor_and_keys.key_pressed_this_frame[PLAYER_GO_NEUTRAL_KEY] && player.can_go_neutral)
 			{
 				player_map[entity_id].default_charge = charge_map[entity_id].charge;
 				charge_map[entity_id].charge = 0;
 			}
-			if (cursor_and_keys.key_released_this_frame[PLAYER_GO_NEUTRAL_KEY])
+			if (cursor_and_keys.key_released_this_frame[PLAYER_GO_NEUTRAL_KEY] && player.can_go_neutral)
 			{
 				charge_map[entity_id].charge = player_map[entity_id].default_charge;
 			}
-			if (cursor_and_keys.key_pressed_this_frame[PLAYER_SWITCH_CHARGE_KEY])
+			if (cursor_and_keys.key_pressed_this_frame[PLAYER_SWITCH_CHARGE_KEY] && player.can_switch_charge)
 			{
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_map[entity_id].default_charge = -player_map[entity_id].default_charge;

@@ -582,6 +582,12 @@ void DeserializeComponent(MagneticField& c, std::string str_rep)
 void SerializeComponent(Player c, std::string& str_rep)
 {
 	str_rep += "Player{";
+	str_rep += "can_switch_charge=";
+	str_rep += ToString(c.can_switch_charge);
+	str_rep += ";";
+	str_rep += "can_go_neutral=";
+	str_rep += ToString(c.can_go_neutral);
+	str_rep += ";";
 	str_rep += "move_force=";
 	str_rep += ToString(c.move_force);
 	str_rep += ";";
@@ -596,6 +602,16 @@ void DeserializeComponent(Player& c, std::string str_rep)
 	for (auto variable : variables)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+		if (statement_parts[0] == "can_switch_charge")
+		{
+			FromString(c.can_switch_charge, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "can_go_neutral")
+		{
+			FromString(c.can_go_neutral, statement_parts[1]);
+		}
 
 		if (statement_parts[0] == "move_force")
 		{
@@ -677,6 +693,7 @@ void Level::SaveToFile(std::string savefile_path)
 			SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
 			SerializeComponent(GetComponent<Velocity>()[entity_id], entity_string);
+			SerializeComponent(GetComponent<Player>()[entity_id], entity_string);
 		}
 
 		if (tag == "BPLaser")
@@ -813,7 +830,6 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<ReceivedForces>()[entity_id] = {};
 			GetComponent<Intersection>()[entity_id] = {};
 			GetComponent<Collision>()[entity_id] = {};
-			GetComponent<Player>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -822,6 +838,8 @@ void Level::LoadFromFile(std::string savefile_path)
 				GetSubstrBetween(line, "Charge{", "}"));
 			DeserializeComponent(GetComponent<Velocity>()[entity_id],
 				GetSubstrBetween(line, "Velocity{", "}"));
+			DeserializeComponent(GetComponent<Player>()[entity_id],
+				GetSubstrBetween(line, "Player{", "}"));
 		}
 
 		if (tag == "BPLaser")
