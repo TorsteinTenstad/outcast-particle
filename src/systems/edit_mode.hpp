@@ -63,7 +63,6 @@ public:
 		// Copy entities:
 		for (auto& [entity_id, editable_entity] : editable_map)
 		{
-			std::cout << cursor_and_keys.key_down[COPY_ENTITY_KEY] << "\n";
 			if (editable_entity.selected && cursor_and_keys.key_down[COPY_ENTITY_KEY] && cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left])
 			{
 				int id = level.CopyEntity(entity_id);

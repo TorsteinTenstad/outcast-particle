@@ -35,20 +35,24 @@ public:
 						sf::Vector2f distance = position_map[entity_id].position - position_map[intersection_id].position;
 						if (abs(distance.x) - width_and_height_map[intersection_id].width_and_height.x / 2 < abs(distance.y) - width_and_height_map[intersection_id].width_and_height.y / 2)
 						{
+							std::cout << "about to flip y" << std::endl;
 							if (distance.y * velocity_map[entity_id].velocity.y < 0)
 							{
 								velocity_map[entity_id].velocity.y *= -(collision.bounce_factor * collision_map[intersection_id].bounce_factor);
 								velocity_map[entity_id].velocity.x *= (1 - 1.25 * dt);
 								position_map[entity_id].position.y = collision.last_frame_position.y;
+								std::cout << "flip y" << std::endl;
 							}
 						}
 						else
 						{
+							std::cout << "about to flip x" << std::endl;
 							if (distance.x * velocity_map[entity_id].velocity.x < 0)
 							{
 								velocity_map[entity_id].velocity.x *= -(collision.bounce_factor * collision_map[intersection_id].bounce_factor);
 								velocity_map[entity_id].velocity.y *= (1 - 1.25 * dt);
 								position_map[entity_id].position.x = collision.last_frame_position.x;
+								std::cout << "flip x" << std::endl;
 							}
 						}
 					}
