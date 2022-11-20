@@ -1,12 +1,12 @@
 name=Untitled;size=(7680,4320);editable=1
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(2160,360)}Charge{charge=-1000}Velocity{velocity=(-1863.61,1.66603)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(2160,300)}Charge{charge=-1000}Velocity{velocity=(-1863.61,1.66603)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(6960,3120)}WidthAndHeight{width_and_height=(600,600)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,2160)}WidthAndHeight{width_and_height=(60,4092)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(4260,4260)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,4260)}WidthAndHeight{width_and_height=(120,120)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(2160,2160)}WidthAndHeight{width_and_height=(4080,4080)}MagneticField{field_strength=1}
-"BPElectricField":Tag{tag=BPElectricField}Position{position=(6000,2160)}WidthAndHeight{width_and_height=(2400,480)}ElectricField{field_vector=(0,10)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(5940,1680)}WidthAndHeight{width_and_height=(2400,480)}ElectricField{field_vector=(0,0)}
 "BPWall":Tag{tag=BPWall}Position{position=(4260,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2160,4260)}WidthAndHeight{width_and_height=(4092,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2160,60)}WidthAndHeight{width_and_height=(4092,60)}

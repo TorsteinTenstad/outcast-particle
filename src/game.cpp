@@ -65,11 +65,11 @@ void Game::UpdatePhysics(float dt)
 	{
 		if (levels_[globals.active_level].edit_mode)
 		{
-			levels_[globals.active_level].SaveToFile("levels/level" + std::to_string(globals.active_level) + ".txt");
+			levels_[globals.active_level].SaveToFile();
 		}
 		for (unsigned i = 1; i < levels_.size(); ++i)
 		{
-			levels_[i].LoadFromFile("levels/level" + std::to_string(i) + ".txt");
+			levels_[i].LoadFromFile();
 		}
 		levels_[globals.active_level].edit_mode = false;
 		globals.active_level = 0;
@@ -92,4 +92,12 @@ void Game::UpdatePhysics(float dt)
 	}
 	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+}
+
+Game::~Game()
+{
+	if (levels_[globals.active_level].edit_mode)
+	{
+		levels_[globals.active_level].SaveToFile();
+	}
 }

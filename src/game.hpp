@@ -49,6 +49,7 @@ private:
 
 public:
 	Game();
+	~Game();
 	void Init();
 	void Update(float dt);
 	void UpdatePhysics(float dt);

@@ -185,7 +185,7 @@ public:
 				if (cursor_and_keys.key_pressed_this_frame[INCREMENT_WIDTH_KEY])
 				{
 					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.x += editable_entity.width_and_height_edit;
+					width_and_height_map[entity_id].width_and_height.x += editable_entity.width_and_height_edit * (cursor_and_keys.key_down[ALT_SENSITIVITY_KEY] ? 4 : 1);
 				}
 				if (cursor_and_keys.key_pressed_this_frame[DECREMENT_WIDTH_KEY])
 				{
