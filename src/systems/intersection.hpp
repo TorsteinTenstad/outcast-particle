@@ -50,6 +50,9 @@ public:
 		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
 		for (auto& [entity_id, intersection] : intersection_map)
 		{
+			assert(radius_map.count(entity_id) > 0);
+			assert(width_and_height_map.count(entity_id) == 0);
+			
 			intersection.intersecting_ids.clear();
 			for (auto const& [entity_id_b, entity_radius_b] : radius_map)
 			{
