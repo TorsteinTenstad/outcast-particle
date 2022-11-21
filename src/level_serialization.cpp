@@ -89,8 +89,8 @@ void SerializeComponent(Collision c, std::string& str_rep)
 	str_rep += "bounce_factor=";
 	str_rep += ToString(c.bounce_factor);
 	str_rep += ";";
-	str_rep += "last_frame_position=";
-	str_rep += ToString(c.last_frame_position);
+	str_rep += "friction=";
+	str_rep += ToString(c.friction);
 	str_rep += "}";
 }
 
@@ -106,9 +106,9 @@ void DeserializeComponent(Collision& c, std::string str_rep)
 			FromString(c.bounce_factor, statement_parts[1]);
 		}
 
-		if (statement_parts[0] == "last_frame_position")
+		if (statement_parts[0] == "friction")
 		{
-			FromString(c.last_frame_position, statement_parts[1]);
+			FromString(c.friction, statement_parts[1]);
 		}
 	}
 }
@@ -861,7 +861,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
 			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
-			GetComponent<Collision>()[entity_id] = { 0.2 };
+			GetComponent<Collision>()[entity_id] = { 0.2, 25 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],

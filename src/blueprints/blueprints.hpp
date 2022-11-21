@@ -58,7 +58,7 @@ class BPLaser : public BPEntity
 class BPWall : public BPTileBasedEntity
 {
 	DrawInfo draw_info = { "content\\block.png", false, 1, 0 };
-	Collision collision = { 0.2 };
+	Collision collision = { 0.2, 25 };
 };
 
 class BPGoal : public BPTileBasedEntity

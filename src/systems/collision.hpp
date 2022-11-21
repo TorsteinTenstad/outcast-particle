@@ -28,7 +28,12 @@ public:
 				{
 					if (collision_map.count(intersecting_id) != 0 && width_and_height_map.count(intersecting_id) != 0)
 					{
-						float compound_bounce_factor = (collision.bounce_factor * collision_map[intersecting_id].bounce_factor);
+						float compound_bounce_factor = collision.bounce_factor * collision_map[intersecting_id].bounce_factor;
+						float compound_friction = collision.friction + collision_map[intersecting_id].friction;
+						if (compound_bounce_factor < 0)
+						{
+							compound_friction = 0;
+						}
 						sf::Vector2f distance = position_map[entity_id].position - position_map[intersecting_id].position;
 						sf::Vector2f& v = velocity_map[entity_id].velocity;
 						float w_radius = width_and_height_map[intersecting_id].width_and_height.x / 2;
@@ -36,14 +41,29 @@ public:
 						if (abs(distance.x) < w_radius)
 						{
 							v.y *= -compound_bounce_factor;
-							v.x *= (1 - 1.25 * dt);
+							float velovity_lost_to_friction = Sign(v.x) * compound_friction * dt;
+							if (abs(v.x) < abs(velovity_lost_to_friction))
+							{
+								v.x = 0;
+							}
+							else
+							{
+								v.x -= velovity_lost_to_friction;
+							}
 							position_map[entity_id].position.y = position_map[intersecting_id].position.y + Sign(distance.y) * (radius_map[entity_id].radius + h_radius);
 						}
 						else if (abs(distance.y) < h_radius)
 						{
-
 							v.x *= -compound_bounce_factor;
-							v.y *= (1 - 1.25 * dt);
+							float velovity_lost_to_friction = Sign(v.y) * compound_friction * dt;
+							if (abs(v.y) < abs(velovity_lost_to_friction))
+							{
+								v.y = 0;
+							}
+							else
+							{
+								v.y -= velovity_lost_to_friction;
+							}
 							position_map[entity_id].position.x = position_map[intersecting_id].position.x + Sign(distance.x) * (radius_map[entity_id].radius + w_radius);
 						}
 						else
