@@ -9,7 +9,7 @@ class BPEntity
 
 class BPTileBasedEntity : public BPEntity
 {
-	Editable editable = { false, false, 120, sf::Vector2f(0, 0), false };
+	Editable editable = { true, false, false, 120, sf::Vector2f(0, 0), false };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
@@ -18,7 +18,7 @@ class BPTileBasedEntity : public BPEntity
 class BPStaticParticle : public BPEntity
 {
 	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
-	Editable editable = { true, false, 0, sf::Vector2f(0, 0), false };
+	Editable editable = { true, true, false, 0, sf::Vector2f(0, 0), false };
 	Radius radius = { 120 };
 
 	// [Serialize]
@@ -27,7 +27,7 @@ class BPStaticParticle : public BPEntity
 
 class BPMovingParticle : public BPStaticParticle
 {
-	Editable editable = { true, true, 0, sf::Vector2f(0, 0), false };
+	Editable editable = { true, true, true, 0, sf::Vector2f(0, 0), false };
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
 	Intersection intersection = {};
@@ -48,7 +48,7 @@ class BPPlayer : public BPMovingParticle
 class BPLaser : public BPEntity
 {
 	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
-	Editable editable = { false, false, 60, sf::Vector2f(0, 0), false };
+	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
 
 	// [Serialize]
@@ -66,6 +66,9 @@ class BPGoal : public BPTileBasedEntity
 	DrawInfo draw_info = { "content\\goal.png", false, -2, 0 };
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
+
+	// [Serialize]
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
 class BPElectricField : public BPTileBasedEntity

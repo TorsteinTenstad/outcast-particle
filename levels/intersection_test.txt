@@ -1,3 +1,3 @@
-name=Untitled;size=(1080,635);editable=1
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(300,300)}Charge{charge=-1000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=500;default_charge=0}
-"BPWall":Tag{tag=BPWall}Position{position=(540,540)}WidthAndHeight{width_and_height=(120,120)}
+name=Untitled;size=(3840,2176);editable=1
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(540,1080)}Charge{charge=-1000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=500;default_charge=0}
+"BPWall":Tag{tag=BPWall}Position{position=(1140,1080)}WidthAndHeight{width_and_height=(120,120)}

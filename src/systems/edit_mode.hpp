@@ -10,8 +10,12 @@
 class EditModeSystem : public GameSystem
 {
 private:
-	float default_velocity_magnitude_change_sensitivity_ = 400;
-	float default_velocity_angle_change_sensitivity_ = PI / 2;
+	const float default_velocity_magnitude_change_sensitivity_ = 400;
+	const float default_velocity_angle_change_sensitivity_ = PI / 2;
+	const std::vector<std::string> blueprint_menu_entry_tags_ { "BPStaticParticle", "BPPlayer", "BPLaser", "BPWall", "BPGoal", "BPElectricField", "BPMagneticField" };
+
+	std::vector<int> blueprint_menu_entities_;
+	bool blueprint_menu_is_open = false;
 
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
@@ -45,7 +49,20 @@ public:
 		}
 		if (!level.edit_mode)
 		{
+			CloseBlueprintMenu(level);
 			return;
+		}
+		if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::B])
+		{
+			if (blueprint_menu_is_open)
+			{
+				CloseBlueprintMenu(level);
+			}
+			else
+			{
+				OpenBlueprintMenu(level);
+			}
+			blueprint_menu_is_open = !blueprint_menu_is_open;
 		}
 
 		// Change level size:
@@ -108,7 +125,7 @@ public:
 			}
 
 			// Move entities with the curser:
-			if (editable_entity.selected && cursor_and_keys.mouse_button_down[sf::Mouse::Left] && !cursor_and_keys.key_down[COPY_ENTITY_KEY])
+			if (editable_entity.selected && editable_entity.is_position_editable && cursor_and_keys.mouse_button_down[sf::Mouse::Left] && !cursor_and_keys.key_down[COPY_ENTITY_KEY])
 			{
 				snap_to_grid = true;
 				position_map[entity_id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
@@ -213,5 +230,26 @@ public:
 				position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, BLOCK_SIZE / 2);
 			}
 		}
+	}
+	void OpenBlueprintMenu(Level& level)
+	{
+		int entity_id;
+		int i = 0;
+		for (const auto& tag : blueprint_menu_entry_tags_)
+		{
+			entity_id = level.AddBlueprint(tag);
+			level.GetComponent<Position>()[entity_id].position = sf::Vector2f(120 + 500 * i, 120);
+			level.GetComponent<Editable>()[entity_id].is_position_editable = false;
+			blueprint_menu_entities_.push_back(entity_id);
+			i++;
+		}
+	}
+	void CloseBlueprintMenu(Level& level)
+	{
+		for (const auto& entity_id : blueprint_menu_entities_)
+		{
+			level.DeleteEntity(entity_id);
+		}
+		blueprint_menu_entities_.clear();
 	}
 };
