@@ -14,6 +14,7 @@ Changes will be overwritten.
     cpp += gen_components(data["components"])
     cpp += gen_save_to_file(data["blueprints"])
     cpp += gen_load_from_file(data["blueprints"])
+    cpp += gen_new_level(data["blueprints"])
     return cpp
 
 
@@ -137,4 +138,29 @@ void Level::LoadFromFile(std::string savefile_path)
         body += """
 		}
 		"""
+    return start + body + end
+
+
+def gen_new_level(data):
+    start = """
+int Level::AddBlueprint(std::string tag)
+{
+	int entity_id = CreateEntityId();"""
+    end = """
+	return entity_id;
+}"""
+    body = ""
+    for (tag, blueprint) in data.items():
+        body += f"""
+	if (tag == \"{tag}\")
+	{{"""
+        for (component, value) in blueprint.get(
+                "implicit", {}).items():
+            body += f"""
+			GetComponent<{component}>()[entity_id] = {value}"""
+        for (component, value) in blueprint.get("explicit", {}).items():
+            body += f"""
+			GetComponent<{component}>()[entity_id] = {value}"""
+        body += f"""
+	}}"""
     return start + body + end

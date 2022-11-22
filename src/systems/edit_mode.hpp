@@ -22,10 +22,8 @@ public:
 		std::map<int, Editable>& editable_map = level.GetComponent<Editable>();
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
 		std::map<int, ElectricField>& electric_field_map = level.GetComponent<ElectricField>();
 		std::map<int, MagneticField>& magnetic_field_map = level.GetComponent<MagneticField>();
 

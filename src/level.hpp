@@ -72,4 +72,5 @@ public:
 
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
+	int AddBlueprint(std::string tag);
 };

@@ -12,7 +12,7 @@ class BPTileBasedEntity : public BPEntity
 	Editable editable = { false, false, 120, sf::Vector2f(0, 0), false };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = {};
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
 class BPStaticParticle : public BPEntity
@@ -52,7 +52,7 @@ class BPLaser : public BPEntity
 	KillOnIntersection kill_on_intersection = {};
 
 	// [Serialize]
-	WidthAndHeight width_and_height = {};
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 60) };
 };
 
 class BPWall : public BPTileBasedEntity

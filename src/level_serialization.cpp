@@ -916,3 +916,115 @@ void Level::LoadFromFile(std::string savefile_path)
 		}
 	}
 }
+
+int Level::AddBlueprint(std::string tag)
+{
+	int entity_id = CreateEntityId();
+	if (tag == "BPEntity")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<Tag>()[entity_id] = { "BPEntity" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+	}
+	if (tag == "BPTileBasedEntity")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
+		GetComponent<Tag>()[entity_id] = { "BPTileBasedEntity" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+	}
+	if (tag == "BPStaticParticle")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+		GetComponent<Editable>()[entity_id] = { true, false, 0, sf::Vector2f(0, 0), false };
+		GetComponent<Radius>()[entity_id] = { 120 };
+		GetComponent<Tag>()[entity_id] = { "BPStaticParticle" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<Charge>()[entity_id] = { 0 };
+	}
+	if (tag == "BPMovingParticle")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+		GetComponent<Editable>()[entity_id] = { true, true, 0, sf::Vector2f(0, 0), false };
+		GetComponent<Radius>()[entity_id] = { 120 };
+		GetComponent<Acceleration>()[entity_id] = {};
+		GetComponent<ReceivedForces>()[entity_id] = {};
+		GetComponent<Intersection>()[entity_id] = {};
+		GetComponent<Collision>()[entity_id] = {};
+		GetComponent<Tag>()[entity_id] = { "BPMovingParticle" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<Charge>()[entity_id] = { 0 };
+		GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
+	}
+	if (tag == "BPPlayer")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_blue+.png", "content\\particle_blue.png", "content\\particle_blue-.png" };
+		GetComponent<Editable>()[entity_id] = { true, true, 0, sf::Vector2f(0, 0), false };
+		GetComponent<Radius>()[entity_id] = { 120 };
+		GetComponent<Acceleration>()[entity_id] = {};
+		GetComponent<ReceivedForces>()[entity_id] = {};
+		GetComponent<Intersection>()[entity_id] = {};
+		GetComponent<Collision>()[entity_id] = {};
+		GetComponent<Tag>()[entity_id] = { "BPPlayer" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<Charge>()[entity_id] = { 0 };
+		GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<Player>()[entity_id] = {};
+	}
+	if (tag == "BPLaser")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
+		GetComponent<Editable>()[entity_id] = { false, false, 60, sf::Vector2f(0, 0), false };
+		GetComponent<KillOnIntersection>()[entity_id] = {};
+		GetComponent<Tag>()[entity_id] = { "BPLaser" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 60) };
+	}
+	if (tag == "BPWall")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
+		GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
+		GetComponent<Collision>()[entity_id] = { 0.2, 25 };
+		GetComponent<Tag>()[entity_id] = { "BPWall" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+	}
+	if (tag == "BPGoal")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
+		GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png", false, -2, 0 };
+		GetComponent<Goal>()[entity_id] = {};
+		GetComponent<KillOnIntersection>()[entity_id] = {};
+		GetComponent<Tag>()[entity_id] = { "BPGoal" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+	}
+	if (tag == "BPElectricField")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
+		GetComponent<DrawInfo>()[entity_id] = { "content\\electric_field.png", false, -5, 0 };
+		GetComponent<Tag>()[entity_id] = { "BPElectricField" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+		GetComponent<ElectricField>()[entity_id] = {};
+	}
+	if (tag == "BPMagneticField")
+	{
+		GetComponent<ClickedOn>()[entity_id] = {};
+		GetComponent<Editable>()[entity_id] = { false, false, 120, sf::Vector2f(0, 0), false };
+		GetComponent<DrawInfo>()[entity_id] = { "content\\magnetic_field.png", false, -5, 0 };
+		GetComponent<Tag>()[entity_id] = { "BPMagneticField" };
+		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+		GetComponent<MagneticField>()[entity_id] = {};
+	}
+	return entity_id;
+}

@@ -21,5 +21,5 @@ for (path, content, class_type) in [
 
 print(json.dumps(data, indent=2))
 
-with open("level_serialization.cpp", "w") as file:
+with open("../src/level_serialization.cpp", "w") as file:
     file.write(gen_level_serialization(data))
