@@ -157,10 +157,11 @@ int Level::AddBlueprint(std::string tag)
         for (component, value) in blueprint.get(
                 "implicit", {}).items():
             body += f"""
-			GetComponent<{component}>()[entity_id] = {value}"""
+		GetComponent<{component}>()[entity_id] = {value}"""
         for (component, value) in blueprint.get("explicit", {}).items():
             body += f"""
-			GetComponent<{component}>()[entity_id] = {value}"""
+		GetComponent<{component}>()[entity_id] = {value}"""
         body += f"""
+		return entity_id;
 	}}"""
     return start + body + end
