@@ -5,8 +5,9 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include <math.h>
 
-#define FORCE_VISUALIZATION_RESOLUTION 64
+#define FORCE_VISUALIZATION_RESOLUTION 512
 
 class SFMLRenderSystem : public GameSystem
 {
@@ -129,19 +130,16 @@ public:
 			for (const auto& force : visualized_forces.forces)
 			{
 				float force_magnitude = Magnitude(force);
-				float force_angle = -Angle(force) + PI;
+				float force_angle = std::fmod((Angle(force) + PI) + PI, 2 * PI);
 				for (int angle_idx = 0; angle_idx < FORCE_VISUALIZATION_RESOLUTION; ++angle_idx)
 				{
 					float angle = (((float)angle_idx) / FORCE_VISUALIZATION_RESOLUTION) * 2 * PI;
-					float angular_diff = abs(angle - force_angle);
+					double angular_diff = abs(angle - force_angle);
 					if (angular_diff > PI)
 					{
 						angular_diff = 2 * PI - angular_diff;
 					}
-					if (angular_diff < 0.4)
-					{
-						visualization_magnitude[angle_idx] += force_magnitude;
-					}
+					visualization_magnitude[angle_idx] += (1 * force_magnitude) * exp(-15 * pow(angular_diff, 2));
 				}
 			}
 			std::array<sf::Vector2f, FORCE_VISUALIZATION_RESOLUTION> outer_points;
@@ -160,16 +158,17 @@ public:
 				point.y = (radius_map[entity_id].radius) * std::sin(angle);
 				inner_points[angle_idx] = point;
 			}
-			std::array<sf::ConvexShape, FORCE_VISUALIZATION_RESOLUTION> segments;
 			for (int angle_idx = 0; angle_idx < FORCE_VISUALIZATION_RESOLUTION; ++angle_idx)
 			{
-				segments[angle_idx] = sf::ConvexShape(4);
-				segments[angle_idx].setPoint(1, outer_points[angle_idx]);
-				segments[angle_idx].setPoint(2, outer_points[(angle_idx + 1) % FORCE_VISUALIZATION_RESOLUTION]);
-				segments[angle_idx].setPoint(3, inner_points[(angle_idx + 1) % FORCE_VISUALIZATION_RESOLUTION]);
-				segments[angle_idx].setPoint(4, inner_points[angle_idx]);
-				segments[angle_idx].setPosition(sf::Vector2f(position_map[entity_id].position));
-				globals.render_window.draw(segments[angle_idx]);
+				sf::ConvexShape segment = sf::ConvexShape();
+				segment.setPointCount(4);
+				segment.setPoint(0, outer_points[angle_idx]);
+				segment.setPoint(1, outer_points[(angle_idx + 1) % FORCE_VISUALIZATION_RESOLUTION]);
+				segment.setPoint(2, inner_points[(angle_idx + 1) % FORCE_VISUALIZATION_RESOLUTION]);
+				segment.setPoint(3, inner_points[angle_idx]);
+				segment.setPosition(sf::Vector2f(position_map[entity_id].position));
+				segment.setFillColor(sf::Color(200, 200, 200, 127));
+				globals.render_window.draw(segment);
 			}
 		}
 	}
