@@ -6,11 +6,6 @@
 #include "level.hpp"
 #include "utilityfunctions.hpp"
 
-static float Angle(sf::Vector2f v)
-{
-	return std::atan2(v.y, v.x);
-}
-
 class DisplayVelocitySystem : public GameSystem
 {
 public:

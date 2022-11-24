@@ -11,6 +11,7 @@
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/tag.hpp"
+#include "components/visualized_forces.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include <typeindex>
@@ -37,6 +38,7 @@ typedef std::variant<
 	std::map<int, Goal>,
 	std::map<int, ElectricField>,
 	std::map<int, MagneticField>,
+	std::map<int, VisualizedForces>,
 	std::map<int, Intersection>,
 	std::map<int, LevelButton>>
 	ComponentMap;

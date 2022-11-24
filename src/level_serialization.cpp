@@ -655,6 +655,21 @@ void DeserializeComponent(Tag& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(VisualizedForces c, std::string& str_rep)
+{
+	str_rep += "VisualizedForces{";
+	str_rep += "}";
+}
+
+void DeserializeComponent(VisualizedForces& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+	}
+}
+
 void Level::SaveToFile(std::string savefile_path)
 {
 	std::ofstream f(savefile_path);
@@ -838,6 +853,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<ReceivedForces>()[entity_id] = {};
 			GetComponent<Intersection>()[entity_id] = {};
 			GetComponent<Collision>()[entity_id] = {};
+			GetComponent<VisualizedForces>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -981,6 +997,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<ReceivedForces>()[entity_id] = {};
 		GetComponent<Intersection>()[entity_id] = {};
 		GetComponent<Collision>()[entity_id] = {};
+		GetComponent<VisualizedForces>()[entity_id] = {};
 		GetComponent<Tag>()[entity_id] = { "BPPlayer" };
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
 		GetComponent<Charge>()[entity_id] = { 0 };

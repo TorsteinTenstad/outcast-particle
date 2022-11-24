@@ -26,6 +26,7 @@ Level::Level()
 	GetComponent<MagneticField>();
 	GetComponent<Intersection>();
 	GetComponent<LevelButton>();
+	GetComponent<VisualizedForces>();
 }
 
 template <class Component>
