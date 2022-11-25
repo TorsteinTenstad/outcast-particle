@@ -19,6 +19,7 @@ Level::Level()
 	GetComponent<Radius>();
 	GetComponent<WidthAndHeight>();
 	GetComponent<Border>();
+	GetComponent<Trail>();
 	GetComponent<Tag>();
 	GetComponent<KillOnIntersection>();
 	GetComponent<Goal>();

@@ -40,6 +40,7 @@ class BPMovingParticle : public BPStaticParticle
 class BPPlayer : public BPMovingParticle
 {
 	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_blue+.png", "content\\particle_blue.png", "content\\particle_blue-.png" };
+	Trail trail = {};
 
 	// [Serialize]
 	Player player = {};

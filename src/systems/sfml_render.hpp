@@ -42,6 +42,7 @@ public:
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
+		std::map<int, Trail>& trail_map = level.GetComponent<Trail>();
 
 		draw_order_.clear();
 		globals.render_window.setView(sf::View(level.size / 2.f, level.size));
@@ -107,6 +108,35 @@ public:
 		{
 			for (auto entity_id : entity_ids)
 			{
+				if (trail_map.count(entity_id) > 0)
+				{
+					sf::ConvexShape segment;
+					sf::Vector2f global_segment_position = position_map[entity_id].position;
+					sf::Vector2f p1 = global_segment_position;
+					sf::Vector2f p2 = global_segment_position;
+					sf::Vector2f p3;
+					sf::Vector2f p4;
+					sf::Vector2f unit_normal = GetQuarterTurnRotation(Normalized(trail_map[entity_id].path[0]));
+					p1 -= trail_map[entity_id].widths[0] * unit_normal;
+					p2 += trail_map[entity_id].widths[0] * unit_normal;
+					for (unsigned i = 0; i < (trail_map[entity_id].path.size() - 1); ++i)
+					{
+						unit_normal = GetQuarterTurnRotation(Normalized(trail_map[entity_id].path[i + 1]));
+						p3 = global_segment_position + trail_map[entity_id].path[i] + trail_map[entity_id].widths[i + 1] * unit_normal;
+						p4 = global_segment_position + trail_map[entity_id].path[i] - trail_map[entity_id].widths[i + 1] * unit_normal;
+						segment = sf::ConvexShape();
+						segment.setPointCount(4);
+						segment.setPoint(0, p1);
+						segment.setPoint(1, p2);
+						segment.setPoint(2, p3);
+						segment.setPoint(3, p4);
+						segment.setFillColor(sf::Color(200, 200, 200, 127 * pow((float)(trail_map[entity_id].path.size() - i) / trail_map[entity_id].path.size(), 2)));
+						globals.render_window.draw(segment);
+						global_segment_position += trail_map[entity_id].path[i];
+						p1 = p4;
+						p2 = p3;
+					}
+				}
 				if (rectangle_shapes_.count(entity_id) != 0)
 				{
 					globals.render_window.draw(rectangle_shapes_[entity_id]);

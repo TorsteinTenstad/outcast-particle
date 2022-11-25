@@ -19,6 +19,7 @@
 #include "systems/set_draw_info.hpp"
 #include "systems/sfml_event.hpp"
 #include "systems/sfml_render.hpp"
+#include "systems/trail.hpp"
 #include "systems/velocity.hpp"
 
 class Game
@@ -37,6 +38,7 @@ private:
 	ForceSystem force_system_;
 	AccelerationSystem acceleration_system_;
 	VelocitySystem velocity_system_;
+	TrailSystem trail_system_;
 	IntersectionSystem intersection_system_;
 	SetDrawInfoSystem set_draw_info_system_;
 	SFMLRenderSystem render_system_;

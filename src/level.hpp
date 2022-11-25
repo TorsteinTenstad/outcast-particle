@@ -11,6 +11,7 @@
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/tag.hpp"
+#include "components/trail.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include <typeindex>
@@ -32,6 +33,7 @@ typedef std::variant<
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
+	std::map<int, Trail>,
 	std::map<int, Tag>,
 	std::map<int, KillOnIntersection>,
 	std::map<int, Goal>,
