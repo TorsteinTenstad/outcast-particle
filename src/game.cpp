@@ -53,6 +53,7 @@ void Game::Update(float dt)
 		UpdatePhysics(dt / physics_ticks_per_frame_);
 	}
 	trail_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	screen_shake_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	if (levels_[globals.active_level].edit_mode)
 	{

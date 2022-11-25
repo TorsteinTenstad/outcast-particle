@@ -49,6 +49,7 @@ private:
 	std::string savefile_path_;
 
 	static int next_available_entity_id_;
+	std::map<float, sf::Vector2f> screen_size_shake_;
 	std::map<std::type_index, ComponentMap> components_;
 
 	template <class Component>

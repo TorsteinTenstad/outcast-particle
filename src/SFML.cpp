@@ -21,6 +21,7 @@ void SFML::RunWindow(std::function<void(float)> update_func)
 	{
 		globals.render_window.clear();
 		float dt = timer.GetElapsedSeconds();
+		globals.time = timer.GetSecondsSinceInit();
 		seconds_since_last_fps_print += dt;
 		fps++;
 		if (seconds_since_last_fps_print > 1)

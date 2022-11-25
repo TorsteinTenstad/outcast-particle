@@ -16,6 +16,7 @@
 #include "systems/magnetic_field_force.hpp"
 #include "systems/mouse_interactions.hpp"
 #include "systems/player.hpp"
+#include "systems/screen_shake.hpp"
 #include "systems/set_draw_info.hpp"
 #include "systems/sfml_event.hpp"
 #include "systems/sfml_render.hpp"
@@ -42,6 +43,7 @@ private:
 	IntersectionSystem intersection_system_;
 	SetDrawInfoSystem set_draw_info_system_;
 	SFMLRenderSystem render_system_;
+	ScreenShakeSystem screen_shake_system_;
 	KillOnIntersectionSystem kill_on_intersection_system_;
 	GoalSystem goal_system_;
 	CursorAndKeys cursor_and_keys_;
