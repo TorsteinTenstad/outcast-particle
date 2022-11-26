@@ -11,6 +11,7 @@ Level::Level()
 	GetComponent<Velocity>();
 	GetComponent<Acceleration>();
 	GetComponent<ReceivedForces>();
+	GetComponent<BlueprintMenuItem>();
 	GetComponent<Player>();
 	GetComponent<PlayerBehaviours>();
 	GetComponent<Collision>();

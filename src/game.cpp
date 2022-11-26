@@ -67,6 +67,7 @@ void Game::UpdatePhysics(float dt)
 	{
 		if (levels_[globals.active_level].edit_mode)
 		{
+			edit_mode_system_.CloseBlueprintMenu(levels_[globals.active_level]);
 			levels_[globals.active_level].SaveToFile();
 		}
 		for (unsigned i = 1; i < levels_.size(); ++i)
@@ -101,6 +102,7 @@ Game::~Game()
 {
 	if (levels_[globals.active_level].edit_mode)
 	{
+		edit_mode_system_.CloseBlueprintMenu(levels_[globals.active_level]);
 		levels_[globals.active_level].SaveToFile();
 	}
 }

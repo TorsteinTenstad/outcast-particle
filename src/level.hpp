@@ -6,6 +6,7 @@
 #include "Components/sound_info.hpp"
 #include "PCH.hpp"
 #include "components/area.hpp"
+#include "components/blueprint_menu_item.hpp"
 #include "components/draw_info.hpp"
 #include "components/level_button.hpp"
 #include "components/mouse_interactions.hpp"
@@ -32,6 +33,7 @@ typedef std::variant<
 	std::map<int, Collision>,
 	std::map<int, Charge>,
 	std::map<int, Editable>,
+	std::map<int, BlueprintMenuItem>,
 	std::map<int, ClickedOn>,
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,
