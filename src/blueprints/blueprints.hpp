@@ -59,6 +59,7 @@ class BPLaser : public BPEntity
 class BPWall : public BPTileBasedEntity
 {
 	DrawInfo draw_info = { "content\\block.png", false, 1, 0 };
+	SoundInfo sound_info = { "content\\Sounds\\thud.wav" };
 	Collision collision = { 0.2, 75 };
 };
 

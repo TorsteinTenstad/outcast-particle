@@ -19,6 +19,7 @@ public:
 		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
+		std::map<int, SoundInfo>& sound_info_map = level.GetComponent<SoundInfo>();
 		for (auto& [entity_id, collision] : collision_map)
 		{
 			if (intersection_map.count(entity_id) != 0)
@@ -77,6 +78,7 @@ public:
 							position_map[entity_id].position += (radius_map[entity_id].radius) * distance_from_corner / Magnitude(distance_from_corner);
 							v = v - (1 + compound_bounce_factor) * normal_v_component;
 						}
+						sound_info_map[intersecting_id].play_sound = true;
 					}
 				}
 			}

@@ -948,6 +948,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
 			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
+			GetComponent<SoundInfo>()[entity_id] = { "content\\Sounds\\thud.wav" };
 			GetComponent<Collision>()[entity_id] = { 0.2, 75 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
@@ -1087,6 +1088,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<ClickedOn>()[entity_id] = {};
 		GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
 		GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
+		GetComponent<SoundInfo>()[entity_id] = { "content\\Sounds\\thud.wav" };
 		GetComponent<Collision>()[entity_id] = { 0.2, 75 };
 		GetComponent<Tag>()[entity_id] = {"BPWall"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
