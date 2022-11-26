@@ -1,3 +1,6 @@
 name=Untitled;size=(4680,2645);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(2520,1200)}WidthAndHeight{width_and_height=(1800,120)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(1080,720)}Charge{charge=100000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=500}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2160,720)}WidthAndHeight{width_and_height=(120,60)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(2820,600)}WidthAndHeight{width_and_height=(240,240)}
+"BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3360,540)}WidthAndHeight{width_and_height=(240,240)}MagneticField{field_strength=5}
