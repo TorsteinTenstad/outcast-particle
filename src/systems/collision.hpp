@@ -82,12 +82,16 @@ public:
 							position_map[entity_id].position += (radius_map[entity_id].radius) * distance_from_corner / Magnitude(distance_from_corner);
 							v = v - (1 + compound_bounce_factor) * v_corner_direction_component;
 						}
-						sound_info_map[intersecting_id].play_sound = true;
+
 						if (collision_sound_factor > 1)
 						{
 							collision_sound_factor = 1;
 						}
 						sound_info_map[intersecting_id].sound_volume = 100 * collision_sound_factor;
+						if (sound_info_map[intersecting_id].sound_volume > 5)
+						{
+							sound_info_map[intersecting_id].play_sound = true;
+						}
 					}
 				}
 			}
