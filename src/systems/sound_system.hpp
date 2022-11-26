@@ -26,6 +26,7 @@ public:
 			if (sound_info_map[entity_id].play_sound)
 			{
 				sounds_[entity_soundinfo.sound_path].setBuffer(sound_buffers_[entity_soundinfo.sound_path]);
+				sounds_[entity_soundinfo.sound_path].setVolume(sound_info_map[entity_id].sound_volume);
 				sounds_[entity_soundinfo.sound_path].play();
 				sound_info_map[entity_id].play_sound = false;
 			}

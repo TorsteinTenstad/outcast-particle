@@ -31,6 +31,7 @@ public:
 					{
 						float compound_bounce_factor = collision.bounce_factor * collision_map[intersecting_id].bounce_factor;
 						float compound_friction = collision.friction + collision_map[intersecting_id].friction;
+						float collision_sound_factor = 100;
 						if (compound_bounce_factor < 0)
 						{
 							compound_friction = 0;
@@ -41,44 +42,52 @@ public:
 						float h_radius = width_and_height_map[intersecting_id].width_and_height.y / 2;
 						if (abs(distance.x) < w_radius)
 						{
+							collision_sound_factor = abs(v.y) / 10;
 							v.y *= -compound_bounce_factor;
-							float velovity_lost_to_friction = Sign(v.x) * compound_friction * dt;
-							if (abs(v.x) < abs(velovity_lost_to_friction))
+							float velocity_lost_to_friction = Sign(v.x) * compound_friction * dt;
+							if (abs(v.x) < abs(velocity_lost_to_friction))
 							{
 								v.x = 0;
 							}
 							else
 							{
-								v.x -= velovity_lost_to_friction;
+								v.x -= velocity_lost_to_friction;
 							}
 							position_map[entity_id].position.y = position_map[intersecting_id].position.y + Sign(distance.y) * (radius_map[entity_id].radius + h_radius);
 						}
 						else if (abs(distance.y) < h_radius)
 						{
+							collision_sound_factor = abs(v.x) / 10;
 							v.x *= -compound_bounce_factor;
-							float velovity_lost_to_friction = Sign(v.y) * compound_friction * dt;
-							if (abs(v.y) < abs(velovity_lost_to_friction))
+							float velocity_lost_to_friction = Sign(v.y) * compound_friction * dt;
+							if (abs(v.y) < abs(velocity_lost_to_friction))
 							{
 								v.y = 0;
 							}
 							else
 							{
-								v.y -= velovity_lost_to_friction;
+								v.y -= velocity_lost_to_friction;
 							}
 							position_map[entity_id].position.x = position_map[intersecting_id].position.x + Sign(distance.x) * (radius_map[entity_id].radius + w_radius);
 						}
 						else
 						{
-							sf::Vector2f normalized_distance = distance / Magnitude(distance);
-							sf::Vector2f normal_v_component = normalized_distance * Dot(v, normalized_distance);
 							sf::Vector2f distance_from_corner = distance;
 							distance_from_corner.x -= Sign(distance_from_corner.x) * w_radius;
 							distance_from_corner.y -= Sign(distance_from_corner.y) * h_radius;
+							sf::Vector2f corner_direction_vector = distance_from_corner / Magnitude(distance_from_corner);
+							sf::Vector2f v_corner_direction_component = corner_direction_vector * Dot(v, corner_direction_vector);
+							collision_sound_factor = Magnitude(v_corner_direction_component) / 10;
 							position_map[entity_id].position -= distance_from_corner;
 							position_map[entity_id].position += (radius_map[entity_id].radius) * distance_from_corner / Magnitude(distance_from_corner);
-							v = v - (1 + compound_bounce_factor) * normal_v_component;
+							v = v - (1 + compound_bounce_factor) * v_corner_direction_component;
 						}
 						sound_info_map[intersecting_id].play_sound = true;
+						if (collision_sound_factor > 100)
+						{
+							collision_sound_factor = 100;
+						}
+						sound_info_map[intersecting_id].sound_volume = collision_sound_factor;
 					}
 				}
 			}
