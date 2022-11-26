@@ -10,6 +10,7 @@
 #include "components/mouse_interactions.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
+#include "components/player_behaviours.hpp"
 #include "components/tag.hpp"
 #include "components/trail.hpp"
 #include "cursor_and_keys.hpp"
@@ -26,6 +27,7 @@ typedef std::variant<
 	std::map<int, Acceleration>,
 	std::map<int, ReceivedForces>,
 	std::map<int, Player>,
+	std::map<int, PlayerBehaviours>,
 	std::map<int, Collision>,
 	std::map<int, Charge>,
 	std::map<int, Editable>,

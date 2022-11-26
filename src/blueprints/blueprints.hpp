@@ -17,7 +17,7 @@ class BPTileBasedEntity : public BPEntity
 
 class BPStaticParticle : public BPEntity
 {
-	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_red+.png", "content\\particle_blue.png", "content\\particle_green-.png" };
 	Editable editable = { true, true, false, 0, sf::Vector2f(0, 0), false };
 	Radius radius = { 120 };
 
@@ -32,6 +32,7 @@ class BPMovingParticle : public BPStaticParticle
 	ReceivedForces received_forces = {};
 	Intersection intersection = {};
 	Collision collision = {};
+	Trail trail = {};
 
 	// [Serialize]
 	Velocity velocity = { sf::Vector2f(0, 0) };
@@ -40,7 +41,6 @@ class BPMovingParticle : public BPStaticParticle
 class BPPlayer : public BPMovingParticle
 {
 	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_blue+.png", "content\\particle_blue.png", "content\\particle_blue-.png" };
-	Trail trail = {};
 
 	// [Serialize]
 	Player player = {};

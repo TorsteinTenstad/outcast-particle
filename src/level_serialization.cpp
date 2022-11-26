@@ -599,9 +599,6 @@ void SerializeComponent(Player c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "move_force=";
 	str_rep += ToString(c.move_force);
-	str_rep += ";";
-	str_rep += "default_charge=";
-	str_rep += ToString(c.default_charge);
 	str_rep += "}";
 }
 
@@ -626,10 +623,43 @@ void DeserializeComponent(Player& c, std::string str_rep)
 		{
 			FromString(c.move_force, statement_parts[1]);
 		}
+	}
+}
+
+void SerializeComponent(PlayerBehaviours c, std::string& str_rep)
+{
+	str_rep += "PlayerBehaviours{";
+	str_rep += "default_charge=";
+	str_rep += ToString(c.default_charge);
+	str_rep += ";";
+	str_rep += "default_radius=";
+	str_rep += ToString(c.default_radius);
+	str_rep += ";";
+	str_rep += "radius_modifier=";
+	str_rep += ToString(c.radius_modifier);
+	str_rep += "}";
+}
+
+void DeserializeComponent(PlayerBehaviours& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
 
 		if (statement_parts[0] == "default_charge")
 		{
 			FromString(c.default_charge, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "default_radius")
+		{
+			FromString(c.default_radius, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "radius_modifier")
+		{
+			FromString(c.radius_modifier, statement_parts[1]);
 		}
 	}
 }
@@ -814,7 +844,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		if (tag == "BPStaticParticle")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_blue.png", "content\\particle_green-.png" };
 			GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -828,13 +858,14 @@ void Level::LoadFromFile(std::string savefile_path)
 		if (tag == "BPMovingParticle")
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
-			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_blue.png", "content\\particle_green-.png" };
 			GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			GetComponent<Acceleration>()[entity_id] = {};
 			GetComponent<ReceivedForces>()[entity_id] = {};
 			GetComponent<Intersection>()[entity_id] = {};
 			GetComponent<Collision>()[entity_id] = {};
+			GetComponent<Trail>()[entity_id] = {};
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -966,7 +997,7 @@ int Level::AddBlueprint(std::string tag)
 	if (tag == "BPStaticParticle")
 	{
 		GetComponent<ClickedOn>()[entity_id] = {};
-		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_blue.png", "content\\particle_green-.png" };
 		GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
 		GetComponent<Radius>()[entity_id] = { 120 };
 		GetComponent<Tag>()[entity_id] = {"BPStaticParticle"};
@@ -977,13 +1008,14 @@ int Level::AddBlueprint(std::string tag)
 	if (tag == "BPMovingParticle")
 	{
 		GetComponent<ClickedOn>()[entity_id] = {};
-		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_red.png", "content\\particle_green-.png" };
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\particle_red+.png", "content\\particle_blue.png", "content\\particle_green-.png" };
 		GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
 		GetComponent<Radius>()[entity_id] = { 120 };
 		GetComponent<Acceleration>()[entity_id] = {};
 		GetComponent<ReceivedForces>()[entity_id] = {};
 		GetComponent<Intersection>()[entity_id] = {};
 		GetComponent<Collision>()[entity_id] = {};
+		GetComponent<Trail>()[entity_id] = {};
 		GetComponent<Tag>()[entity_id] = {"BPMovingParticle"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
 		GetComponent<Charge>()[entity_id] = { 100000 };

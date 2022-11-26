@@ -1,3 +1,4 @@
+#include "animation.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "controls_config.hpp"
@@ -13,6 +14,8 @@ public:
 		(void)dt;
 		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
 		std::map<int, Player>& player_map = level.GetComponent<Player>();
+		std::map<int, PlayerBehaviours>& player_behaviours_map = level.GetComponent<PlayerBehaviours>();
+		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
 
 		for (auto& [entity_id, player] : player_map)
@@ -40,21 +43,34 @@ public:
 
 			if (cursor_and_keys.key_pressed_this_frame[PLAYER_GO_NEUTRAL_KEY] && player.can_go_neutral)
 			{
-				player_map[entity_id].default_charge = charge_map[entity_id].charge;
+				player_behaviours_map[entity_id].default_charge = charge_map[entity_id].charge;
 				charge_map[entity_id].charge = 0;
 			}
 			if (cursor_and_keys.key_released_this_frame[PLAYER_GO_NEUTRAL_KEY] && player.can_go_neutral)
 			{
-				charge_map[entity_id].charge = player_map[entity_id].default_charge;
+				charge_map[entity_id].charge = player_behaviours_map[entity_id].default_charge;
 			}
 			if (cursor_and_keys.key_pressed_this_frame[PLAYER_SWITCH_CHARGE_KEY] && player.can_switch_charge)
 			{
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
-				player_map[entity_id].default_charge = -player_map[entity_id].default_charge;
+				player_behaviours_map[entity_id].default_charge = -player_behaviours_map[entity_id].default_charge;
 
 				level.screen_size_shake_animation[globals.time] = 1;
-				level.screen_size_shake_animation[globals.time + 0.05f] = 1.005;
+				//level.screen_size_shake_animation[globals.time + 0.05f] = 1.005;
 				level.screen_size_shake_animation[globals.time + 0.1f] = 1;
+
+				if (player_behaviours_map[entity_id].radius_animation.size() == 0)
+				{
+					player_behaviours_map[entity_id].default_radius = radius_map[entity_id].radius;
+				}
+				player_behaviours_map[entity_id].radius_animation[globals.time] = 1;
+				player_behaviours_map[entity_id].radius_animation[globals.time + 0.05f] = 0.9;
+				player_behaviours_map[entity_id].radius_animation[globals.time + 0.12f] = 1;
+			}
+			if (player_behaviours_map[entity_id].radius_animation.size() != 0)
+			{
+				Animate(globals.time, player_behaviours_map[entity_id].radius_modifier, player_behaviours_map[entity_id].radius_animation, FakeSigmoid);
+				radius_map[entity_id].radius = player_behaviours_map[entity_id].default_radius * player_behaviours_map[entity_id].radius_modifier;
 			}
 		}
 	}

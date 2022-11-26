@@ -12,6 +12,7 @@ Level::Level()
 	GetComponent<Acceleration>();
 	GetComponent<ReceivedForces>();
 	GetComponent<Player>();
+	GetComponent<PlayerBehaviours>();
 	GetComponent<Collision>();
 	GetComponent<Charge>();
 	GetComponent<Editable>();
