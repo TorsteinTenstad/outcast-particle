@@ -1,1 +1,2 @@
 #define BLOCK_SIZE 120
+#define MAX_SCREEN_SIZE_SHAKE 1.1f

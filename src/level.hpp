@@ -49,7 +49,6 @@ private:
 	std::string savefile_path_;
 
 	static int next_available_entity_id_;
-	std::map<float, sf::Vector2f> screen_size_shake_;
 	std::map<std::type_index, ComponentMap> components_;
 
 	template <class Component>
@@ -60,6 +59,8 @@ public:
 	bool edit_mode = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(1920 * 4, 1080 * 4);
+	std::map<float, float> screen_size_shake_animation;
+	sf::Vector2f post_shake_size;
 
 	Level();
 

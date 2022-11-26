@@ -95,12 +95,14 @@ public:
 				shape->setOutlineThickness(0);
 			}
 		}
-		background_.setSize(level.size);
+		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
+		background_.setSize(background_size);
+		background_.setPosition(-(background_size - level.size) / 2.f);
 		globals.render_window.draw(background_);
 		if (level.edit_mode)
 		{
-			grid_background_.setSize(level.size);
-			grid_background_.setTextureRect(sf::IntRect(0, 0, level.size.x, level.size.y));
+			grid_background_.setSize(background_size);
+			grid_background_.setTextureRect(sf::IntRect(0, 0, background_size.x, background_size.y));
 			globals.render_window.draw(grid_background_);
 		}
 		for (auto [draw_priority, entity_ids] : draw_order_)

@@ -2,6 +2,7 @@
 #include "components/player.hpp"
 #include "controls_config.hpp"
 #include "game_system.hpp"
+#include "globals.hpp"
 #include "level.hpp"
 
 class PlayerSystem : public GameSystem
@@ -50,6 +51,10 @@ public:
 			{
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_map[entity_id].default_charge = -player_map[entity_id].default_charge;
+
+				level.screen_size_shake_animation[globals.time] = 1;
+				level.screen_size_shake_animation[globals.time + 0.05f] = 1.005;
+				level.screen_size_shake_animation[globals.time + 0.1f] = 1;
 			}
 		}
 	}

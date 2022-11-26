@@ -3,6 +3,20 @@
 
 #define PI 3.141593
 
+static float FakeSigmoid(float x)
+{
+	assert(x >= 0);
+	assert(x <= 1);
+	if (x < 0.5)
+	{
+		return pow(2 * x, 3) / 2;
+	}
+	else
+	{
+		return 1 - abs(pow(2 * x - 2, 3)) / 2;
+	}
+}
+
 static float Magnitude(sf::Vector2f v)
 {
 	return std::sqrt((v.x * v.x) + (v.y * v.y));
