@@ -17,8 +17,12 @@ public:
 		(void)dt;
 		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
 		std::map<int, KillOnIntersection>& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();
-		for (auto& [entity_id, intersection] : intersection_map)
+
+		for (auto it = intersection_map.cbegin(), next_it = it; it != intersection_map.cend(); it = next_it)
 		{
+			++next_it;
+			auto entity_id = it->first;
+			auto intersection = it->second;
 			for (auto& i : intersection.intersecting_ids)
 			{
 				if (kill_on_intersection_map.count(i) != 0)

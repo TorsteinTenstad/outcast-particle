@@ -115,8 +115,12 @@ public:
 		}
 
 		// Edit entities:
-		for (auto& [entity_id, editable_entity] : editable_map)
+		for (auto it = editable_map.cbegin(), next_it = it; it != editable_map.cend(); it = next_it)
 		{
+			++next_it;
+			auto entity_id = it->first;
+			auto editable_entity = it->second;
+
 			bool snap_to_grid = false;
 			// Delete entities:
 			if (editable_entity.selected && cursor_and_keys.key_pressed_this_frame[DELETE_ENTITY_KEY])
