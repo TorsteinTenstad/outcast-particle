@@ -887,7 +887,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
 			GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
-			GetComponent<Collision>()[entity_id] = { 0.2, 25 };
+			GetComponent<Collision>()[entity_id] = { 0.2, 75 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -971,7 +971,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<Radius>()[entity_id] = { 120 };
 		GetComponent<Tag>()[entity_id] = {"BPStaticParticle"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-		GetComponent<Charge>()[entity_id] = { 0 };
+		GetComponent<Charge>()[entity_id] = { 100000 };
 		return entity_id;
 	}
 	if (tag == "BPMovingParticle")
@@ -986,7 +986,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<Collision>()[entity_id] = {};
 		GetComponent<Tag>()[entity_id] = {"BPMovingParticle"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-		GetComponent<Charge>()[entity_id] = { 0 };
+		GetComponent<Charge>()[entity_id] = { 100000 };
 		GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
 		return entity_id;
 	}
@@ -1003,7 +1003,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<Trail>()[entity_id] = {};
 		GetComponent<Tag>()[entity_id] = {"BPPlayer"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-		GetComponent<Charge>()[entity_id] = { 0 };
+		GetComponent<Charge>()[entity_id] = { 100000 };
 		GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
 		GetComponent<Player>()[entity_id] = {};
 		return entity_id;
@@ -1024,7 +1024,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<ClickedOn>()[entity_id] = {};
 		GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
 		GetComponent<DrawInfo>()[entity_id] = { "content\\block.png", false, 1, 0 };
-		GetComponent<Collision>()[entity_id] = { 0.2, 25 };
+		GetComponent<Collision>()[entity_id] = { 0.2, 75 };
 		GetComponent<Tag>()[entity_id] = {"BPWall"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
 		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };

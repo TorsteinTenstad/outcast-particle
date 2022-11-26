@@ -22,7 +22,7 @@ class BPStaticParticle : public BPEntity
 	Radius radius = { 120 };
 
 	// [Serialize]
-	Charge charge = { 0 };
+	Charge charge = { 100000 };
 };
 
 class BPMovingParticle : public BPStaticParticle
@@ -59,7 +59,7 @@ class BPLaser : public BPEntity
 class BPWall : public BPTileBasedEntity
 {
 	DrawInfo draw_info = { "content\\block.png", false, 1, 0 };
-	Collision collision = { 0.2, 25 };
+	Collision collision = { 0.2, 75 };
 };
 
 class BPGoal : public BPTileBasedEntity
