@@ -17,7 +17,7 @@ class BPTileBasedEntity : public BPEntity
 
 class BPStaticParticle : public BPEntity
 {
-	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_red+.png", "content\\particle_blue.png", "content\\particle_green-.png" };
+	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\textures\\particle_red+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_green-.png" };
 	Editable editable = { true, true, false, 0, sf::Vector2f(0, 0), false };
 	Radius radius = { 120 };
 
@@ -40,7 +40,7 @@ class BPMovingParticle : public BPStaticParticle
 
 class BPPlayer : public BPMovingParticle
 {
-	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\particle_blue+.png", "content\\particle_blue.png", "content\\particle_blue-.png" };
+	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\textures\\particle_blue+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_blue-.png" };
 
 	// [Serialize]
 	Player player = {};
@@ -48,7 +48,7 @@ class BPPlayer : public BPMovingParticle
 
 class BPLaser : public BPEntity
 {
-	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\laser_horisontal.png", "content\\laser_vertical.png" };
+	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
 	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
 
@@ -58,17 +58,17 @@ class BPLaser : public BPEntity
 
 class BPWall : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\block.png", false, 1, 0 };
-	SoundInfo sound_info = { "content\\Sounds\\thud.wav" };
+	DrawInfo draw_info = { "content\\textures\\block.png", false, 1, 0 };
+	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
 	Collision collision = { 0.2, 75 };
 };
 
 class BPGoal : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\goal.png", false, -2, 0 };
+	DrawInfo draw_info = { "content\\textures\\goal.png", false, -2, 0 };
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
-	SoundInfo sound_info = { "content\\Sounds\\Fanfare.wav" };
+	SoundInfo sound_info = { "content\\sounds\\fanfare.wav" };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
@@ -76,7 +76,7 @@ class BPGoal : public BPTileBasedEntity
 
 class BPElectricField : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\electric_field.png", false, -5, 0 };
+	DrawInfo draw_info = { "content\\textures\\electric_field.png", false, -5, 0 };
 
 	// [Serialize]
 	ElectricField electric_field = {};
@@ -84,7 +84,7 @@ class BPElectricField : public BPTileBasedEntity
 
 class BPMagneticField : public BPTileBasedEntity
 {
-	DrawInfo draw_info = { "content\\magnetic_field.png", false, -5, 0 };
+	DrawInfo draw_info = { "content\\textures\\magnetic_field.png", false, -5, 0 };
 
 	// [Serialize]
 	MagneticField magnetic_field = {};

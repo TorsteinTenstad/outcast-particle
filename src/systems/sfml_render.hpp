@@ -22,10 +22,10 @@ private:
 public:
 	SFMLRenderSystem()
 	{
-		background_texture_.loadFromFile("content/background.png");
+		background_texture_.loadFromFile("content\\textures\\background.png");
 		background_texture_.setRepeated(true);
 		background_.setTexture(&background_texture_);
-		grid_background_texture_.loadFromFile("content/grid.png");
+		grid_background_texture_.loadFromFile("content\\textures\\grid.png");
 		grid_background_texture_.setRepeated(true);
 		grid_background_.setTexture(&grid_background_texture_);
 	}

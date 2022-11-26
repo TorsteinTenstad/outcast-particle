@@ -1,4 +1,4 @@
-name=Untitled;size=(3360,1908);editable=1
+name=Untitled;size=(4680,2645);editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(480,360)}Charge{charge=-1000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=500}
 "BPWall":Tag{tag=BPWall}Position{position=(960,1020)}WidthAndHeight{width_and_height=(1800,120)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(1376.25,434.467)}WidthAndHeight{width_and_height=(240,240)}
