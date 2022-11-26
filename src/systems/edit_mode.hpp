@@ -14,7 +14,6 @@ private:
 	const float default_velocity_angle_change_sensitivity_ = PI / 2;
 	const std::vector<std::string> blueprint_menu_entry_tags_ { "BPStaticParticle", "BPPlayer", "BPLaser", "BPWall", "BPGoal", "BPElectricField", "BPMagneticField" };
 
-	std::vector<int> blueprint_menu_entities_;
 	bool blueprint_menu_is_open = false;
 
 public:
@@ -24,6 +23,7 @@ public:
 		std::map<int, Position>& position_map = level.GetComponent<Position>();
 		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
 		std::map<int, Editable>& editable_map = level.GetComponent<Editable>();
+		std::map<int, BlueprintMenuItem>& blueprint_menu_item_map = level.GetComponent<BlueprintMenuItem>();
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
@@ -62,7 +62,6 @@ public:
 			{
 				OpenBlueprintMenu(level);
 			}
-			blueprint_menu_is_open = !blueprint_menu_is_open;
 		}
 
 		// Change level size:
@@ -83,6 +82,11 @@ public:
 				int id = level.CopyEntity(entity_id);
 				position_map[id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
 				editable_map[id].selected = false;
+				if (!cursor_and_keys.key_down[SNAP_TO_GRID_KEY])
+				{
+					position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, BLOCK_SIZE / 2);
+					position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, BLOCK_SIZE / 2);
+				}
 			}
 		}
 
@@ -98,6 +102,11 @@ public:
 				if (clicked_on_map[entity_id].clicked_this_frame)
 				{
 					editable_entity.selected = true;
+					if (blueprint_menu_item_map.count(entity_id) > 0)
+					{
+						blueprint_menu_item_map.erase(entity_id);
+						CloseBlueprintMenu(level);
+					}
 				}
 				else if (!(cursor_and_keys.key_down[SELECT_MULTIPLE_ENTITIES_KEY] || cursor_and_keys.key_down[COPY_ENTITY_KEY]))
 				{
@@ -243,17 +252,19 @@ public:
 		{
 			entity_id = level.AddBlueprint(tag);
 			level.GetComponent<Position>()[entity_id].position = sf::Vector2f(120 + 500 * i, 120);
-			level.GetComponent<Editable>()[entity_id].is_position_editable = false;
-			blueprint_menu_entities_.push_back(entity_id);
+			level.GetComponent<BlueprintMenuItem>()[entity_id];
 			i++;
 		}
+		blueprint_menu_is_open = true;
 	}
 	void CloseBlueprintMenu(Level& level)
 	{
-		for (const auto& entity_id : blueprint_menu_entities_)
+		for (auto it = level.GetComponent<BlueprintMenuItem>().cbegin(), next_it = it; it != level.GetComponent<BlueprintMenuItem>().cend(); it = next_it)
 		{
+			++next_it;
+			auto entity_id = it->first;
 			level.DeleteEntity(entity_id);
 		}
-		blueprint_menu_entities_.clear();
+		blueprint_menu_is_open = false;
 	}
 };

@@ -43,7 +43,7 @@ class BPPlayer : public BPMovingParticle
 	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\textures\\particle_blue+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_blue-.png" };
 
 	// [Serialize]
-	Player player = {};
+	Player player = { true, true, 500 };
 };
 
 class BPLaser : public BPEntity
@@ -79,7 +79,10 @@ class BPElectricField : public BPTileBasedEntity
 	DrawInfo draw_info = { "content\\textures\\electric_field.png", false, -5, 0 };
 
 	// [Serialize]
-	ElectricField electric_field = {};
+	ElectricField electric_field = { sf::Vector2f(0, 30) };
+
+	// [Serialize]
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
 class BPMagneticField : public BPTileBasedEntity
@@ -87,5 +90,8 @@ class BPMagneticField : public BPTileBasedEntity
 	DrawInfo draw_info = { "content\\textures\\magnetic_field.png", false, -5, 0 };
 
 	// [Serialize]
-	MagneticField magnetic_field = {};
+	MagneticField magnetic_field = { 5 };
+
+	// [Serialize]
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };

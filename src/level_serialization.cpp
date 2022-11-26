@@ -83,6 +83,21 @@ void DeserializeComponent(Border& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(BlueprintMenuItem c, std::string& str_rep)
+{
+	str_rep += "BlueprintMenuItem{";
+	str_rep += "}";
+}
+
+void DeserializeComponent(BlueprintMenuItem& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+	}
+}
+
 void SerializeComponent(Collision c, std::string& str_rep)
 {
 	str_rep += "Collision{";
@@ -1066,7 +1081,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
 		GetComponent<Charge>()[entity_id] = { 100000 };
 		GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
-		GetComponent<Player>()[entity_id] = {};
+		GetComponent<Player>()[entity_id] = { true, true, 500 };
 		return entity_id;
 	}
 	if (tag == "BPLaser")
@@ -1112,8 +1127,8 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, -5, 0 };
 		GetComponent<Tag>()[entity_id] = { "BPElectricField" };
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
-		GetComponent<ElectricField>()[entity_id] = {};
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+		GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 30) };
 		return entity_id;
 	}
 	if (tag == "BPMagneticField")
@@ -1123,8 +1138,8 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, -5, 0 };
 		GetComponent<Tag>()[entity_id] = { "BPMagneticField" };
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
-		GetComponent<MagneticField>()[entity_id] = {};
+		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+		GetComponent<MagneticField>()[entity_id] = { 5 };
 		return entity_id;
 	}
 	return entity_id;
