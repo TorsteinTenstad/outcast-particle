@@ -91,6 +91,7 @@ void Game::UpdatePhysics(float dt)
 		goal_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		collision_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		sound_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
 	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);

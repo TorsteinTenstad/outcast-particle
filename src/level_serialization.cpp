@@ -664,6 +664,36 @@ void DeserializeComponent(PlayerBehaviours& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(SoundInfo c, std::string& str_rep)
+{
+	str_rep += "SoundInfo{";
+	str_rep += "play_sound=";
+	str_rep += ToString(c.play_sound);
+	str_rep += ";";
+	str_rep += "sound_path=";
+	str_rep += ToString(c.sound_path);
+	str_rep += "}";
+}
+
+void DeserializeComponent(SoundInfo& c, std::string str_rep)
+{
+	std::vector<std::string> variables = SplitString(str_rep, ";");
+	for (auto variable : variables)
+	{
+		std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+		if (statement_parts[0] == "play_sound")
+		{
+			FromString(c.play_sound, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "sound_path")
+		{
+			FromString(c.sound_path, statement_parts[1]);
+		}
+	}
+}
+
 void SerializeComponent(Tag c, std::string& str_rep)
 {
 	str_rep += "Tag{";
@@ -934,6 +964,7 @@ void Level::LoadFromFile(std::string savefile_path)
 			GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png", false, -2, 0 };
 			GetComponent<Goal>()[entity_id] = {};
 			GetComponent<KillOnIntersection>()[entity_id] = {};
+			GetComponent<SoundInfo>()[entity_id] = { "content\\Sounds\\Fanfare.wav" };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
 				GetSubstrBetween(line, "Tag{", "}"));
 			DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -1069,6 +1100,7 @@ int Level::AddBlueprint(std::string tag)
 		GetComponent<DrawInfo>()[entity_id] = { "content\\goal.png", false, -2, 0 };
 		GetComponent<Goal>()[entity_id] = {};
 		GetComponent<KillOnIntersection>()[entity_id] = {};
+		GetComponent<SoundInfo>()[entity_id] = { "content\\Sounds\\Fanfare.wav" };
 		GetComponent<Tag>()[entity_id] = {"BPGoal"};
 		GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
 		GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };

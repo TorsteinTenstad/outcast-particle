@@ -67,6 +67,7 @@ class BPGoal : public BPTileBasedEntity
 	DrawInfo draw_info = { "content\\goal.png", false, -2, 0 };
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
+	SoundInfo sound_info = { "content\\Sounds\\Fanfare.wav" };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };

@@ -3,6 +3,7 @@
 #include "Components/goal.hpp"
 #include "Components/intersection.hpp"
 #include "Components/kill_on_intersection.hpp"
+#include "Components/sound_info.hpp"
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/draw_info.hpp"
@@ -42,6 +43,7 @@ typedef std::variant<
 	std::map<int, ElectricField>,
 	std::map<int, MagneticField>,
 	std::map<int, Intersection>,
+	std::map<int, SoundInfo>,
 	std::map<int, LevelButton>>
 	ComponentMap;
 

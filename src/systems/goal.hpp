@@ -17,6 +17,7 @@ public:
 		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
 		std::map<int, Player>& player_map = level.GetComponent<Player>();
 		std::map<int, Goal>& goal_map = level.GetComponent<Goal>();
+		std::map<int, SoundInfo>& sound_info_map = level.GetComponent<SoundInfo>();
 		for (auto& [entity_id, _] : player_map)
 		{
 			(void)_;
@@ -26,6 +27,9 @@ public:
 				{
 					goal_map[intersection_id].is_goal = true;
 					std::cout << "goal"
+							  << "\n";
+					sound_info_map[intersection_id].play_sound = true;
+					std::cout << sound_info_map[intersection_id].sound_path
 							  << "\n";
 				}
 			}

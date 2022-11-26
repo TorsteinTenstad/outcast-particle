@@ -28,6 +28,7 @@ Level::Level()
 	GetComponent<MagneticField>();
 	GetComponent<Intersection>();
 	GetComponent<LevelButton>();
+	GetComponent<SoundInfo>();
 }
 
 template <class Component>

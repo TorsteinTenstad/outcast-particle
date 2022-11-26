@@ -20,6 +20,7 @@
 #include "systems/set_draw_info.hpp"
 #include "systems/sfml_event.hpp"
 #include "systems/sfml_render.hpp"
+#include "systems/sound_system.hpp"
 #include "systems/trail.hpp"
 #include "systems/velocity.hpp"
 
@@ -50,6 +51,7 @@ private:
 	CollisionSystem collision_system_;
 	ElectricFieldForceSystem electric_field_force_system;
 	MagneticFieldForceSystem magnetic_field_force_system;
+	SoundSystem sound_system_;
 
 public:
 	Game();
