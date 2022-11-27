@@ -4,8 +4,10 @@ Game::Game()
 {
 	cursor_and_keys_ = CursorAndKeys();
 
-	Level menu = Level();
-	levels_.push_back(menu);
+	Level level_menu = Level();
+	Level main_menu = Level();
+	levels_.push_back(main_menu);
+	levels_.push_back(level_menu);
 }
 
 void Game::Init()
@@ -34,7 +36,7 @@ void Game::Init()
 		texture.update(globals.render_window);
 		identifier = "level" + std::to_string(i);
 		render_system_.RegisterTexture(identifier, texture);
-		levels_[0].AddLevelButton(i, spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
+		levels_[1].AddLevelButton(i, spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
 
 		c++;
 		if (c == n_columns)
@@ -42,6 +44,19 @@ void Game::Init()
 			r++;
 			c = 0;
 		}
+	}
+	float menu_button_w = 1.2 * 2560;
+	float menu_button_h = 1.2 * 360;
+	float menu_spacing = 200;
+	float menu_n_columns = 1;
+	int menu_r = 0;
+	std::vector<int> menu_reference = { 1, 0, 1, 0 };
+	for (unsigned i = 0; i < 4; ++i)
+	{
+		identifier = "level" + std::to_string(menu_reference[i]);
+		render_system_.RegisterTexture(identifier, texture);
+		levels_[0].AddLevelButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png");
+		menu_r++;
 	}
 	globals.active_level = 0;
 }
@@ -70,7 +85,7 @@ void Game::UpdatePhysics(float dt)
 			edit_mode_system_.CloseBlueprintMenu(levels_[globals.active_level]);
 			levels_[globals.active_level].SaveToFile();
 		}
-		for (unsigned i = 1; i < levels_.size(); ++i)
+		for (unsigned i = 2; i < levels_.size(); ++i)
 		{
 			levels_[i].LoadFromFile();
 		}
