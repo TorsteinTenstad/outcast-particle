@@ -18,7 +18,7 @@ class BPTileBasedEntity : public BPEntity
 class BPStaticParticle : public BPEntity
 {
 	DrawInfo draw_info = { "_", true, 5, 0 };
-	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\textures\\particle_red+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_green-.png" };
+	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Editable editable = { true, true, false, 0, sf::Vector2f(0, 0), false };
 	Radius radius = { 120 };
 
@@ -43,7 +43,6 @@ class BPMovingParticle : public BPStaticParticle
 class BPPlayer : public BPMovingParticle
 {
 	DrawInfo draw_info = { "_", true, 7, 0 };
-	ChargeDependentDrawInfo charge_dependent_draw_info = { "content\\textures\\particle_blue+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_blue-.png" };
 
 	// [Serialize]
 	Player player = { true, true, 500 };

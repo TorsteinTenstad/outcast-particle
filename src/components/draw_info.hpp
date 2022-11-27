@@ -11,12 +11,7 @@ public:
 };
 
 class ChargeDependentDrawInfo
-{
-public:
-	std::string positive_charge_image_path;
-	std::string neutral_charge_image_path;
-	std::string negative_charge_image_path;
-};
+{};
 
 class OrientationDependentDrawInfo
 {
