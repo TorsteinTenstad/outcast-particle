@@ -1,8 +1,10 @@
 #pragma once
 #include "PCH.hpp"
 #include "components/draw_info.hpp"
+#include "constants.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
+#include "utilityfunctions.hpp"
 
 class SetDrawInfoSystem : public GameSystem
 {
@@ -18,20 +20,18 @@ public:
 		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		std::map<int, ElectricField>& electric_field_map = level.GetComponent<ElectricField>();
 		std::map<int, MagneticField>& magnetic_field_map = level.GetComponent<MagneticField>();
+		std::map<int, Player>& player_map = level.GetComponent<Player>();
 
 		for (auto const& [entity_id, charge_dependent_drawinfo] : charge_dependent_drawinfo_map)
 		{
-			if (charge_map[entity_id].charge > 0)
+			int charge_category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge_map[entity_id].charge);
+			if (player_map.count(entity_id))
 			{
-				draw_info_map[entity_id].image_path = charge_dependent_drawinfo.positive_charge_image_path;
-			}
-			else if (charge_map[entity_id].charge < 0)
-			{
-				draw_info_map[entity_id].image_path = charge_dependent_drawinfo.negative_charge_image_path;
+				draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[charge_category];
 			}
 			else
 			{
-				draw_info_map[entity_id].image_path = charge_dependent_drawinfo.neutral_charge_image_path;
+				draw_info_map[entity_id].image_path = PLAYER_PARTICLE_TEXTURES[charge_category];
 			}
 		}
 

@@ -181,14 +181,6 @@ void DeserializeComponent(DrawInfo& c, std::string str_rep)
 void SerializeComponent(ChargeDependentDrawInfo c, std::string& str_rep)
 {
 	str_rep += "ChargeDependentDrawInfo{";
-	str_rep += "positive_charge_image_path=";
-	str_rep += ToString(c.positive_charge_image_path);
-	str_rep += ";";
-	str_rep += "neutral_charge_image_path=";
-	str_rep += ToString(c.neutral_charge_image_path);
-	str_rep += ";";
-	str_rep += "negative_charge_image_path=";
-	str_rep += ToString(c.negative_charge_image_path);
 	str_rep += "}";
 }
 
@@ -198,21 +190,6 @@ void DeserializeComponent(ChargeDependentDrawInfo& c, std::string str_rep)
 	for (auto variable : variables)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
-
-		if (statement_parts[0] == "positive_charge_image_path")
-		{
-			FromString(c.positive_charge_image_path, statement_parts[1]);
-		}
-
-		if (statement_parts[0] == "neutral_charge_image_path")
-		{
-			FromString(c.neutral_charge_image_path, statement_parts[1]);
-		}
-
-		if (statement_parts[0] == "negative_charge_image_path")
-		{
-			FromString(c.negative_charge_image_path, statement_parts[1]);
-		}
 	}
 }
 
@@ -901,7 +878,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "_", true, 5, 0 };
-			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\textures\\particle_red+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_green-.png" };
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -916,7 +893,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "_", true, 6, 0 };
-			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\textures\\particle_red+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_green-.png" };
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			GetComponent<Acceleration>()[entity_id] = {};
@@ -938,7 +915,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		{
 			GetComponent<ClickedOn>()[entity_id] = {};
 			GetComponent<DrawInfo>()[entity_id] = { "_", true, 7, 0 };
-			GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\textures\\particle_blue+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_blue-.png" };
+			GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
 			GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
 			GetComponent<Radius>()[entity_id] = { 120 };
 			GetComponent<Acceleration>()[entity_id] = {};
@@ -1060,7 +1037,7 @@ int Level::AddBlueprint(std::string tag)
 	{
 		GetComponent<ClickedOn>()[entity_id] = {};
 		GetComponent<DrawInfo>()[entity_id] = { "_", true, 5, 0 };
-		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\textures\\particle_red+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_green-.png" };
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
 		GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
 		GetComponent<Radius>()[entity_id] = { 120 };
 		GetComponent<Tag>()[entity_id] = {"BPStaticParticle"};
@@ -1072,7 +1049,7 @@ int Level::AddBlueprint(std::string tag)
 	{
 		GetComponent<ClickedOn>()[entity_id] = {};
 		GetComponent<DrawInfo>()[entity_id] = { "_", true, 6, 0 };
-		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\textures\\particle_red+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_green-.png" };
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
 		GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
 		GetComponent<Radius>()[entity_id] = { 120 };
 		GetComponent<Acceleration>()[entity_id] = {};
@@ -1090,7 +1067,7 @@ int Level::AddBlueprint(std::string tag)
 	{
 		GetComponent<ClickedOn>()[entity_id] = {};
 		GetComponent<DrawInfo>()[entity_id] = { "_", true, 7, 0 };
-		GetComponent<ChargeDependentDrawInfo>()[entity_id] = { "content\\textures\\particle_blue+.png", "content\\textures\\particle_blue.png", "content\\textures\\particle_blue-.png" };
+		GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
 		GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
 		GetComponent<Radius>()[entity_id] = { 120 };
 		GetComponent<Acceleration>()[entity_id] = {};

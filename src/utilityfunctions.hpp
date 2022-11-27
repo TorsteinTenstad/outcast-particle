@@ -42,7 +42,7 @@ static float Dot(sf::Vector2f u, sf::Vector2f v)
 	return u.x * v.x + u.y * v.y;
 }
 
-template <typename T>
+template <class T>
 static int Sign(T x)
 {
 	if (x > 0)
@@ -54,4 +54,29 @@ static int Sign(T x)
 		return -1;
 	}
 	return 0;
+}
+
+// NOTE: The array is assumed sorted
+template <class T, std::size_t SIZE>
+static unsigned FindClosest(const std::array<T, SIZE>& sorted_arr, const T& value)
+{
+	for (unsigned i = 0; i < sorted_arr.size(); ++i)
+	{
+		if (value < sorted_arr[i])
+		{
+			if (i == 0)
+			{
+				return i;
+			}
+			if (value - sorted_arr[i - 1] < sorted_arr[i] - value)
+			{
+				return i - 1;
+			}
+			else
+			{
+				return i;
+			}
+		}
+	}
+	return sorted_arr.size() - 1;
 }
