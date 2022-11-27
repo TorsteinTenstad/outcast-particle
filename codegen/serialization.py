@@ -1,10 +1,13 @@
 
 def gen_level_serialization(data):
     cpp = """
-#pragma once
 #include "PCH.hpp"
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
 /*
 Warning!
 Code is generated.
@@ -15,6 +18,10 @@ Changes will be overwritten.
     cpp += gen_save_to_file(data["blueprints"])
     cpp += gen_load_from_file(data["blueprints"])
     cpp += gen_new_level(data["blueprints"])
+
+    cpp += """
+#pragma GCC diagnostic pop
+"""
     return cpp
 
 

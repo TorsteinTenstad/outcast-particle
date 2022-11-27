@@ -1,8 +1,11 @@
 
-#pragma once
 #include "PCH.hpp"
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
 /*
 Warning!
 Code is generated.
@@ -685,6 +688,9 @@ void SerializeComponent(SoundInfo c, std::string& str_rep)
 	str_rep += "play_sound=";
 	str_rep += ToString(c.play_sound);
 	str_rep += ";";
+	str_rep += "sound_volume=";
+	str_rep += ToString(c.sound_volume);
+	str_rep += ";";
 	str_rep += "sound_path=";
 	str_rep += ToString(c.sound_path);
 	str_rep += "}";
@@ -700,6 +706,11 @@ void DeserializeComponent(SoundInfo& c, std::string str_rep)
 		if (statement_parts[0] == "play_sound")
 		{
 			FromString(c.play_sound, statement_parts[1]);
+		}
+
+		if (statement_parts[0] == "sound_volume")
+		{
+			FromString(c.sound_volume, statement_parts[1]);
 		}
 
 		if (statement_parts[0] == "sound_path")
@@ -1155,3 +1166,4 @@ int Level::AddBlueprint(std::string tag)
 	}
 	return entity_id;
 }
+#pragma GCC diagnostic pop
