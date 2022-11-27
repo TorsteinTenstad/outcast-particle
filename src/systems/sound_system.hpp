@@ -26,7 +26,7 @@ public:
 			if (sound_info_map[entity_id].play_sound)
 			{
 				sounds_[entity_soundinfo.sound_path].setBuffer(sound_buffers_[entity_soundinfo.sound_path]);
-				sounds_[entity_soundinfo.sound_path].setVolume(sound_info_map[entity_id].sound_volume);
+				sounds_[entity_soundinfo.sound_path].setVolume(100 * sound_info_map[entity_id].sound_volume); //SFML uses 0-100 for volume, we use 0-1
 				sounds_[entity_soundinfo.sound_path].play();
 				sound_info_map[entity_id].play_sound = false;
 			}
