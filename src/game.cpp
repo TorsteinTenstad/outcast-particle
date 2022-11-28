@@ -63,20 +63,6 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-	for (int i = 0; i < physics_ticks_per_frame_; ++i)
-	{
-		UpdatePhysics(dt / physics_ticks_per_frame_);
-	}
-	trail_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	screen_shake_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	if (levels_[globals.active_level].edit_mode)
-	{
-		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	}
-}
-void Game::UpdatePhysics(float dt)
-{
 	event_system_.Update(cursor_and_keys_);
 	if (cursor_and_keys_.key_pressed_this_frame[MENU_KEY] && globals.active_level != 0)
 	{
@@ -92,11 +78,31 @@ void Game::UpdatePhysics(float dt)
 		levels_[globals.active_level].edit_mode = false;
 		globals.active_level = 0;
 	}
+	for (int i = 0; i < physics_ticks_per_frame_; ++i)
+	{
+		UpdatePhysics(dt / physics_ticks_per_frame_);
+	}
+	sound_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	mouse_interaction_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	level_button_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	if (!levels_[globals.active_level].edit_mode)
 	{
 		player_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	}
+	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	trail_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	screen_shake_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	if (levels_[globals.active_level].edit_mode)
+	{
+		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+	}
+}
+void Game::UpdatePhysics(float dt)
+{
+	if (!levels_[globals.active_level].edit_mode)
+	{
 		electric_force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		electric_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		magnetic_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
@@ -107,10 +113,7 @@ void Game::UpdatePhysics(float dt)
 		goal_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 		collision_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		sound_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 	}
-	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
 }
 
 Game::~Game()
