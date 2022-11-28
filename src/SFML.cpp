@@ -8,7 +8,7 @@ SFML::SFML()
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(globals.render_window.getSystemHandle());
 	// Use the screenScalingFactor
-	globals.render_window.create(sf::VideoMode(1920, 1080), "outcast-particle", sf::Style::Fullscreen);
+	globals.render_window.create(sf::VideoMode(), "outcast-particle", sf::Style::Fullscreen);
 	//globals.render_window.setFramerateLimit(60);
 	platform.setIcon(globals.render_window.getSystemHandle());
 }
