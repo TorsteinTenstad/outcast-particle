@@ -1,4 +1,4 @@
-name=Untitled;size=(2760,1573);editable=1
+name=Untitled;size=(5520,3114);editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(360,240)}Charge{charge=100}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,240)}Charge{charge=1000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1320,240)}Charge{charge=10000}
@@ -19,4 +19,8 @@ name=Untitled;size=(2760,1573);editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(1320,1320)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(1800,1320)}Charge{charge=-100000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(2280,1320)}Charge{charge=-1e+006}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"":
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(3120,360)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(0,5)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(3120,960)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(0,10)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(3120,1560)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(0,25)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(3120,2160)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(0,40)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(3120,2760)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(0,60)}

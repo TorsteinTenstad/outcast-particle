@@ -24,14 +24,14 @@ public:
 
 		for (auto const& [entity_id, charge_dependent_drawinfo] : charge_dependent_drawinfo_map)
 		{
-			int charge_category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge_map[entity_id].charge);
+			int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge_map[entity_id].charge);
 			if (player_map.count(entity_id))
 			{
-				draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[charge_category];
+				draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[category];
 			}
 			else
 			{
-				draw_info_map[entity_id].image_path = PLAYER_PARTICLE_TEXTURES[charge_category];
+				draw_info_map[entity_id].image_path = PLAYER_PARTICLE_TEXTURES[category];
 			}
 		}
 
@@ -56,6 +56,9 @@ public:
 
 		for (auto const& [entity_id, electric_field] : electric_field_map)
 		{
+			int category = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(electric_field_map[entity_id].field_vector));
+			std::cout << category << std::endl;
+			draw_info_map[entity_id].image_path = ELECTRIC_FIELD_TEXTURES[category];
 			if (abs(electric_field.field_vector.x) > abs(electric_field.field_vector.y))
 			{
 				if (electric_field.field_vector.x > 0)
