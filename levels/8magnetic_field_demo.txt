@@ -1,5 +1,5 @@
 name=Untitled;size=(7680,4320);editable=1
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(2160,300)}Charge{charge=-1000}Velocity{velocity=(-1863.61,1.66603)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0;default_charge=0}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(2160,300)}Charge{charge=-1000}Velocity{velocity=(-1863.61,1.66603)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPGoal":Tag{tag=BPGoal}Position{position=(6960,3120)}WidthAndHeight{width_and_height=(600,600)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,2160)}WidthAndHeight{width_and_height=(60,4092)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,60)}WidthAndHeight{width_and_height=(120,120)}

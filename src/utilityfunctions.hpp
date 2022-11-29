@@ -45,15 +45,11 @@ static float Dot(sf::Vector2f u, sf::Vector2f v)
 template <class T>
 static int Sign(T x)
 {
-	if (x > 0)
-	{
-		return 1;
-	}
 	if (x < 0)
 	{
 		return -1;
 	}
-	return 0;
+	return 1;
 }
 
 // NOTE: The array is assumed sorted

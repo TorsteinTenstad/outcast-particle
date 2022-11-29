@@ -5,6 +5,7 @@
 #define BLOCK_SIZE 120
 #define MAX_SCREEN_SIZE_SHAKE 1.1f
 
+const std::array<float, 6> CHARGE_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1, sf::Keyboard::Num0 };
 const std::array<float, 11> PARTICLE_CHARGE_CATEGORIES = { -1000000, -100000, -10000, -1000, -100, 0, 100, 1000, 10000, 100000, 1000000 };
 const std::array<std::string, 11> PLAYER_PARTICLE_TEXTURES = {
 	"content\\textures\\particle_green_-5.png",
@@ -34,6 +35,7 @@ const std::array<std::string, 11> PARTICLE_TEXTURES = {
 };
 
 const std::array<float, 5> ELECTRIC_FIELD_STRENGTH_CATEGORIES = { 5, 10, 25, 40, 60 };
+const std::array<float, 5> ELECTRIC_FIELD_CATEGORY_KEYS = { sf::Keyboard::Num1, sf::Keyboard::Num2, sf::Keyboard::Num3, sf::Keyboard::Num4, sf::Keyboard::Num5 };
 const std::array<std::string, 5> ELECTRIC_FIELD_TEXTURES = {
 	"content\\textures\\electric_field_1.png",
 	"content\\textures\\electric_field_2.png",

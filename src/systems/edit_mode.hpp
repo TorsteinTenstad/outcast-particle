@@ -80,13 +80,13 @@ public:
 		{
 			if (editable_entity.selected && cursor_and_keys.key_down[COPY_ENTITY_KEY] && cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left])
 			{
-				int id = level.CopyEntity(entity_id);
-				position_map[id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
-				editable_map[id].selected = false;
+				int new_id = level.CopyEntity(entity_id);
+				position_map[new_id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
+				editable_map[new_id].selected = false;
 				if (!cursor_and_keys.key_down[SNAP_TO_GRID_KEY])
 				{
-					position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, BLOCK_SIZE / 2);
-					position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, BLOCK_SIZE / 2);
+					position_map[new_id].position.x -= std::fmod(position_map[new_id].position.x, BLOCK_SIZE / 2);
+					position_map[new_id].position.y -= std::fmod(position_map[new_id].position.y, BLOCK_SIZE / 2);
 				}
 			}
 		}
@@ -147,9 +147,19 @@ public:
 			}
 
 			// Edit charge:
-			if (editable_entity.selected && editable_entity.is_charge_editable && cursor_and_keys.key_pressed_this_frame[EDIT_MODE_SWITCH_CHARGE_KEY])
+			if (editable_entity.selected && editable_entity.is_charge_editable)
 			{
-				charge_map[entity_id].charge = -charge_map[entity_id].charge;
+				if (cursor_and_keys.key_pressed_this_frame[EDIT_MODE_SWITCH_CHARGE_KEY])
+				{
+					charge_map[entity_id].charge = -charge_map[entity_id].charge;
+				}
+				for (unsigned i = 0; i < CHARGE_CATEGORY_KEYS.size(); ++i)
+				{
+					if (cursor_and_keys.key_pressed_this_frame[CHARGE_CATEGORY_KEYS[i]])
+					{
+						charge_map[entity_id].charge = Sign(charge_map[entity_id].charge) * abs(PARTICLE_CHARGE_CATEGORIES[i]);
+					}
+				}
 			}
 
 			// Edit velocity:
@@ -184,6 +194,18 @@ public:
 				if (cursor_and_keys.key_pressed_this_frame[EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION_KEY])
 				{
 					magnetic_field_map[entity_id].field_strength *= -1;
+				}
+			}
+
+			// Edit electric field:
+			if (editable_entity.selected && electric_field_map.count(entity_id) > 0)
+			{
+				for (unsigned i = 0; i < ELECTRIC_FIELD_CATEGORY_KEYS.size(); ++i)
+				{
+					if (cursor_and_keys.key_pressed_this_frame[ELECTRIC_FIELD_CATEGORY_KEYS[i]])
+					{
+						electric_field_map[entity_id].field_vector = Normalized(electric_field_map[entity_id].field_vector) * abs(ELECTRIC_FIELD_STRENGTH_CATEGORIES[i]);
+					}
 				}
 			}
 

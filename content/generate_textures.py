@@ -1,10 +1,10 @@
 import subprocess
 import math
-import cairosvg
+#import cairosvg
 inkscape = 'C:\\Program Files\\Inkscape\\bin\\inkscape.exe'
 
 USE_CAIRO = False
-EDIT_OUTLINE = False
+EDIT_OUTLINE = True
 
 if False:
     with open('electric_field.svg', 'r') as f:
@@ -57,7 +57,8 @@ for color_name, colors in zip(['red', 'green', 'blue'], [red_colors, green_color
                 'fill:#646464', f'fill:{outer_color}')
 
             if EDIT_OUTLINE:
-                modified_svg_str = modified_svg_str.replace('r="12"', f'r="{12-i}"')
+                modified_svg_str = modified_svg_str.replace(
+                    'r="12"', f'r="{12-i}"')
 
             if sign == '-':
                 modified_svg_str = modified_svg_str.replace(pluss_rect, '')
@@ -71,7 +72,8 @@ for color_name, colors in zip(['red', 'green', 'blue'], [red_colors, green_color
                 'transform="matrix(0.21286172,0,0,0.21286172,11.807074,11.807074)"', f'transform="matrix({scale},0,0,{scale},{15*(1-scale)},{15*(1-scale)})"')
 
             if USE_CAIRO:
-                cairosvg.svg2png(bytestring=modified_svg_str.encode(), write_to=target, output_width=240, output_height=240)
+                cairosvg.svg2png(bytestring=modified_svg_str.encode(
+                ), write_to=target, output_width=240, output_height=240)
                 continue
 
             subprocess.run([inkscape, '--export-type=png', f'--export-filename={target}',
