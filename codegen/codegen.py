@@ -16,8 +16,7 @@ for (path, content, class_type) in [
         (path_components, "components", ClassType.component)]:
     for filename in listdir(path):
         if filename.endswith("pp"):
-            get_cpp_blueprints(
-                path + filename, class_type, data[content])
+            get_cpp_blueprints(path + filename, class_type, data[content])
 
 print(json.dumps(data, indent=2))
 

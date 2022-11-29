@@ -3,5 +3,5 @@
 class LevelButton
 {
 public:
-	int level = 0;
+	std::function<void(void)> on_click;
 };

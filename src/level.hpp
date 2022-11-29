@@ -76,7 +76,7 @@ public:
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
-	int AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string image_path);
+	int AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
 	void SaveToFile();
 	void LoadFromFile();
 

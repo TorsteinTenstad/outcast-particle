@@ -20,7 +20,7 @@ public:
 		{
 			if (clicked_on_map[entity_id].clicked_this_frame)
 			{
-				globals.active_level = level_button.level;
+				level_button_map[entity_id].on_click();
 			}
 		}
 	}

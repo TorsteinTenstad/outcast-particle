@@ -15,8 +15,10 @@ void Game::Init()
 	for (const auto& entry : std::experimental::filesystem::directory_iterator("levels/"))
 	{
 		Level level = Level();
+		Level menu = Level();
 		level.LoadFromFile(entry.path().string());
 		levels_.push_back(level);
+		menus_.push_back(menu);
 	}
 	sf::Texture texture;
 	std::string identifier;
@@ -36,7 +38,7 @@ void Game::Init()
 		texture.update(globals.render_window);
 		identifier = "level" + std::to_string(i);
 		render_system_.RegisterTexture(identifier, texture);
-		levels_[1].AddLevelButton(i, spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
+		levels_[1].AddLevelButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
 
 		c++;
 		if (c == n_columns)
@@ -50,11 +52,10 @@ void Game::Init()
 	float menu_spacing = 200;
 	float menu_n_columns = 1;
 	int menu_r = 0;
-	std::vector<int> menu_reference = { 1, 0, 1, 0 };
+	std::vector<std::function<void(void)>> menu_reference = { std::bind(&Game::SetLevel, this, 1), std::bind(&Game::SetLevel, this, 0), std::bind(&Game::SetLevel, this, 0), std::bind(&Game::ExitGame, this) };
+
 	for (unsigned i = 0; i < 4; ++i)
 	{
-		identifier = "level" + std::to_string(menu_reference[i]);
-		render_system_.RegisterTexture(identifier, texture);
 		levels_[0].AddLevelButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png");
 		menu_r++;
 	}
@@ -123,4 +124,14 @@ Game::~Game()
 		edit_mode_system_.CloseBlueprintMenu(levels_[globals.active_level]);
 		levels_[globals.active_level].SaveToFile();
 	}
+}
+
+void Game::SetLevel(int level)
+{
+	globals.active_level = level;
+}
+
+void Game::ExitGame()
+{
+	globals.render_window.close();
 }

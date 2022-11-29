@@ -1,4 +1,6 @@
 #include "level.hpp"
+#include "game.hpp"
+#include <functional>
 
 int Level::next_available_entity_id_ = 0;
 
@@ -96,7 +98,7 @@ void Level::SaveToFile()
 	SaveToFile(savefile_path_);
 }
 
-int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, float height, std::string image_path)
+int Level::AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path)
 {
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id].image_path = image_path;
@@ -105,6 +107,6 @@ int Level::AddLevelButton(int level, float pos_x, float pos_y, float width, floa
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
 	GetComponent<Border>()[id] = { 20, sf::Color::White };
 	GetComponent<ClickedOn>()[id] = {};
-	GetComponent<LevelButton>()[id] = { level };
+	GetComponent<LevelButton>()[id].on_click = on_click;
 	return id;
 }

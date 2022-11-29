@@ -278,8 +278,6 @@ void DeserializeComponent(KillOnIntersection& c, std::string str_rep)
 void SerializeComponent(LevelButton c, std::string& str_rep)
 {
 	str_rep += "LevelButton{";
-	str_rep += "level=";
-	str_rep += ToString(c.level);
 	str_rep += "}";
 }
 
@@ -289,11 +287,6 @@ void DeserializeComponent(LevelButton& c, std::string str_rep)
 	for (auto variable : variables)
 	{
 		std::vector<std::string> statement_parts = SplitString(variable, "=");
-
-		if (statement_parts[0] == "level")
-		{
-			FromString(c.level, statement_parts[1]);
-		}
 	}
 }
 
