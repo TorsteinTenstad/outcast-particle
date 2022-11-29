@@ -1,6 +1,10 @@
 import subprocess
 import math
+import cairosvg
 inkscape = 'C:\\Program Files\\Inkscape\\bin\\inkscape.exe'
+
+USE_CAIRO = False
+EDIT_OUTLINE = False
 
 if False:
     with open('electric_field.svg', 'r') as f:
@@ -48,8 +52,12 @@ for color_name, colors in zip(['red', 'green', 'blue'], [red_colors, green_color
             inner_color = colors[2]
             target = f'textures\\particle_{color_name}_{sign if strength != 0 else ""}{strength}.png'
 
-            modified_svg_str = svg_str.replace('fill:#969696', f'fill:{inner_color}').replace(
+            modified_svg_str = svg_str.replace(
+                'fill:#969696', f'fill:{inner_color}').replace(
                 'fill:#646464', f'fill:{outer_color}')
+
+            if EDIT_OUTLINE:
+                modified_svg_str = modified_svg_str.replace('r="12"', f'r="{12-i}"')
 
             if sign == '-':
                 modified_svg_str = modified_svg_str.replace(pluss_rect, '')
@@ -61,6 +69,10 @@ for color_name, colors in zip(['red', 'green', 'blue'], [red_colors, green_color
             scale = [1, 0.85, 0.7, 0.65, 0.5, 0][i]
             modified_svg_str = modified_svg_str.replace(
                 'transform="matrix(0.21286172,0,0,0.21286172,11.807074,11.807074)"', f'transform="matrix({scale},0,0,{scale},{15*(1-scale)},{15*(1-scale)})"')
+
+            if USE_CAIRO:
+                cairosvg.svg2png(bytestring=modified_svg_str.encode(), write_to=target, output_width=240, output_height=240)
+                continue
 
             subprocess.run([inkscape, '--export-type=png', f'--export-filename={target}',
                             f'--export-width={240}', f'--export-height={240}', '--pipe'], input=modified_svg_str.encode())
