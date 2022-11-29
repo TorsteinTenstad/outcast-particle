@@ -1,6 +1,6 @@
 import subprocess
 import math
-#import cairosvg
+import cairosvg
 inkscape = 'C:\\Program Files\\Inkscape\\bin\\inkscape.exe'
 
 USE_CAIRO = False
@@ -37,19 +37,19 @@ pluss_rect = """      <rect
 with open('particle.svg', 'r') as f:
     svg_str = f.read()
 
-red_colors = ['#690000', '#8d0001', '#b30210', '#d22325',
-              '#ee4039', '#fe6757', '#ff907b', '#ffb59c']
-green_colors = ['#002b00', '#004600', '#006400',
-                '#038308', '#2ea12d', '#52c04b', '#73e068', '#98ff89']
-blue_colors = ['#002658', '#004177', '#035d97',
-               '#237ab7', '#4d96d6', '#6fb3f5', '#92d4ff', '#b6f6ff']
+red_colors = ['#550000', '#610000', '#6e0000', '#7b0000', '#880000', '#960000', '#a40004', '#b1000f', '#be0518', '#ca151f',
+              '#d42426', '#de2f2d', '#e83a34', '#f2443b', '#fb4e43', '#ff5e50', '#ff705f', '#ff7f6c', '#ff8e79', '#ff9c85', '#ffa991', '#ffb69d']
+green_colors = ['#002500', '#002e00', '#003700', '#004100', '#004b00', '#005500', '#005f00', '#006a00', '#007500', '#007f03',
+                '#038a14', '#1a9520', '#2b9f2b', '#39aa36', '#45b440', '#51bf4a', '#5dca54', '#68d55e', '#74e068', '#7feb72', '#8bf67d', '#a2ff93']
+blue_colors = ['#001746', '#002051', '#00295c', '#003367', '#003d73', '#00477e', '#00518a', '#005b95', '#0066a1', '#0c70ad',
+               '#257ab8', '#3585c3', '#448fce', '#5199d9', '#5da4e5', '#69aff0', '#75b9fc', '#83c5ff', '#90d2ff', '#9ddeff', '#aaebff', '#b7f7ff']
 
 for color_name, colors in zip(['red', 'green', 'blue'], [red_colors, green_colors, blue_colors]):
     for sign in ['-', '+']:
         for i in range(6):
             strength = 5-i
-            outer_color = colors[1]
-            inner_color = colors[2]
+            outer_color = colors[5+i]
+            inner_color = colors[7+i]
             target = f'textures\\particle_{color_name}_{sign if strength != 0 else ""}{strength}.png'
 
             modified_svg_str = svg_str.replace(
