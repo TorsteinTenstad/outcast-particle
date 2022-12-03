@@ -57,9 +57,6 @@ private:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
-	template <class Component>
-	void RegisterComponent();
-
 public:
 	bool editable = false;
 	bool edit_mode = false;
@@ -68,8 +65,6 @@ public:
 	std::map<float, float> screen_size_shake_animation;
 	sf::Vector2f post_shake_size;
 
-	Level();
-
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 
@@ -77,10 +72,12 @@ public:
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
 	int AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
+
 	void SaveToFile();
 	void LoadFromFile();
-
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
 	int AddBlueprint(std::string tag);
 };
+
+#include "level.tpp"

@@ -43,3 +43,17 @@ const std::array<std::string, 5> ELECTRIC_FIELD_TEXTURES = {
 	"content\\textures\\electric_field_4.png",
 	"content\\textures\\electric_field_5.png",
 };
+const std::array<float, 10> MAGNETIC_FIELD_STRENGTH_CATEGORIES = { -60, -40, -25, -10, -5, 5, 10, 25, 40, 60 };
+const std::array<float, 5> MAGNETIC_FIELD_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1 };
+const std::array<std::string, 10> MAGNETIC_FIELD_TEXTURES = {
+	"content\\textures_generated\\magnetic_field_x5.png",
+	"content\\textures_generated\\magnetic_field_x4.png",
+	"content\\textures_generated\\magnetic_field_x3.png",
+	"content\\textures_generated\\magnetic_field_x2.png",
+	"content\\textures_generated\\magnetic_field_x1.png",
+	"content\\textures_generated\\magnetic_field_o1.png",
+	"content\\textures_generated\\magnetic_field_o2.png",
+	"content\\textures_generated\\magnetic_field_o3.png",
+	"content\\textures_generated\\magnetic_field_o4.png",
+	"content\\textures_generated\\magnetic_field_o5.png",
+};
