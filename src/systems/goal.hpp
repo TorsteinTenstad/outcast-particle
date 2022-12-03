@@ -26,11 +26,8 @@ public:
 				if (goal_map.count(intersection_id) != 0)
 				{
 					goal_map[intersection_id].is_goal = true;
-					std::cout << "goal"
-							  << "\n";
+
 					sound_info_map[intersection_id].play_sound = true;
-					std::cout << sound_info_map[intersection_id].sound_path
-							  << "\n";
 				}
 			}
 		}

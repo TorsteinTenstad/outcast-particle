@@ -29,7 +29,7 @@ void Game::Init()
 	float n_columns = 4;
 	int c = 0;
 	int r = 0;
-	for (unsigned i = 1; i < levels_.size(); ++i)
+	for (unsigned i = 2; i < levels_.size(); ++i)
 	{
 		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
 		globals.render_window.clear();
