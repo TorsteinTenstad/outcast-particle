@@ -12,6 +12,7 @@ private:
 	std::map<std::string, sf::Texture> textures_;
 	std::map<int, sf::RectangleShape> rectangle_shapes_;
 	std::map<int, sf::CircleShape> circle_shapes_;
+	std::map<int, sf::Text> text_;
 	std::map<int, std::vector<int>> draw_order_;
 
 	sf::RectangleShape background_;
@@ -43,6 +44,7 @@ public:
 		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
 		std::map<int, Border>& border_map = level.GetComponent<Border>();
 		std::map<int, Trail>& trail_map = level.GetComponent<Trail>();
+		std::map<int, Text>& text_map = level.GetComponent<Text>();
 
 		draw_order_.clear();
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
@@ -95,6 +97,17 @@ public:
 				shape->setOutlineThickness(0);
 			}
 		}
+		for (auto const& [entity_id, entity_text] : text_map)
+		{
+			std::cout << "setting text" << std::endl;
+			draw_order_[1000].push_back(entity_id);
+			sf::Font font;
+			font.loadFromFile("content\\Roboto-Medium.ttf");
+			text_[entity_id].setString(entity_text.content);
+			text_[entity_id].setFont(font);
+			text_[entity_id]
+				.setCharacterSize(1000);
+		}
 		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
 		background_.setSize(background_size);
 		background_.setPosition(-(background_size - level.size) / 2.f);
@@ -145,6 +158,11 @@ public:
 				if (circle_shapes_.count(entity_id) != 0)
 				{
 					globals.render_window.draw(circle_shapes_[entity_id]);
+				}
+				if (text_.count(entity_id) != 0)
+				{
+					std::cout << "creating text" << std::endl;
+					globals.render_window.draw(text_[entity_id]);
 				}
 			}
 		}

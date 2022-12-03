@@ -34,7 +34,7 @@ void Game::Init()
 		texture.update(globals.render_window);
 		identifier = "level" + std::to_string(i);
 		render_system_.RegisterTexture(identifier, texture);
-		levels_[LEVEL_MENU].AddLevelButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
+		levels_[LEVEL_MENU].AddButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier, "");
 
 		c++;
 		if (c == n_columns)
@@ -52,7 +52,7 @@ void Game::Init()
 
 	for (unsigned i = 0; i < 4; ++i)
 	{
-		levels_[MAIN_MENU].AddLevelButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png");
+		levels_[MAIN_MENU].AddButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png", "humlesnurr");
 		menu_r++;
 	}
 	active_level = MAIN_MENU;
@@ -68,7 +68,7 @@ void Game::Update(float dt)
 	}
 	sound_system_.Update(cursor_and_keys_, levels_[active_level], dt);
 	mouse_interaction_system_.Update(cursor_and_keys_, levels_[active_level], dt);
-	level_button_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	button_system_.Update(cursor_and_keys_, levels_[active_level], dt);
 	if (!levels_[active_level].edit_mode)
 	{
 		player_system_.Update(cursor_and_keys_, levels_[active_level], dt);

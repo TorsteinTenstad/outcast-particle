@@ -7,14 +7,15 @@
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
+#include "components/button.hpp"
 #include "components/draw_info.hpp"
-#include "components/level_button.hpp"
 #include "components/mouse_interactions.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/player_behaviours.hpp"
 #include "components/tag.hpp"
 #include "components/trail.hpp"
+#include"Components/text.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include <typeindex>
@@ -46,7 +47,8 @@ typedef std::variant<
 	std::map<int, MagneticField>,
 	std::map<int, Intersection>,
 	std::map<int, SoundInfo>,
-	std::map<int, LevelButton>>
+	std::map<int, Text>,
+	std::map<int, Button>>
 	ComponentMap;
 
 class Level
@@ -71,7 +73,7 @@ public:
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
-	int AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
+	int AddButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path, std::string button_text);
 
 	void SaveToFile();
 	void LoadFromFile();

@@ -1,12 +1,12 @@
 #pragma once
 #include "PCH.hpp"
-#include "components/level_button.hpp"
+#include "components/button.hpp"
 #include "components/mouse_interactions.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
 
-class LevelButtonSystem : public GameSystem
+class ButtonSystem : public GameSystem
 {
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
@@ -14,13 +14,13 @@ public:
 		(void)cursor_and_keys;
 		(void)dt;
 		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
-		std::map<int, LevelButton>& level_button_map = level.GetComponent<LevelButton>();
+		std::map<int, Button>& button_map = level.GetComponent<Button>();
 
-		for (auto const& [entity_id, level_button] : level_button_map)
+		for (auto const& [entity_id, button] : button_map)
 		{
 			if (clicked_on_map[entity_id].clicked_this_frame)
 			{
-				level_button_map[entity_id].on_click();
+				button_map[entity_id].on_click();
 			}
 		}
 	}

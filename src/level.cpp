@@ -51,7 +51,7 @@ void Level::SaveToFile()
 	SaveToFile(savefile_path_);
 }
 
-int Level::AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path)
+int Level::AddButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path, std::string button_text)
 {
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id].image_path = image_path;
@@ -60,6 +60,7 @@ int Level::AddLevelButton(std::function<void(void)> on_click, float pos_x, float
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
 	GetComponent<Border>()[id] = { 20, sf::Color::White };
 	GetComponent<ClickedOn>()[id] = {};
-	GetComponent<LevelButton>()[id].on_click = on_click;
+	GetComponent<Button>()[id].on_click = on_click;
+	GetComponent<Text>()[id].content = button_text;
 	return id;
 }

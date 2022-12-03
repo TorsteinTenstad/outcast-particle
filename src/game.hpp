@@ -3,6 +3,7 @@
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
 #include "systems/acceleration.hpp"
+#include "systems/button.hpp"
 #include "systems/collision.hpp"
 #include "systems/display_velocity.hpp"
 #include "systems/edit_mode.hpp"
@@ -12,7 +13,6 @@
 #include "systems/goal.hpp"
 #include "systems/intersection.hpp"
 #include "systems/kill_on_intersection.hpp"
-#include "systems/level_button.hpp"
 #include "systems/magnetic_field_force.hpp"
 #include "systems/mouse_interactions.hpp"
 #include "systems/pause_menu_system.hpp"
@@ -42,7 +42,7 @@ private:
 
 	SFMLEventSystem event_system_;
 	EditModeSystem edit_mode_system_;
-	LevelButtonSystem level_button_system_;
+	ButtonSystem button_system_;
 	MouseInterationSystem mouse_interaction_system_;
 	DisplayVelocitySystem display_velocity_system_;
 	PlayerSystem player_system_;
