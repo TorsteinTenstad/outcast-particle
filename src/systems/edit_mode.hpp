@@ -195,6 +195,13 @@ public:
 				{
 					magnetic_field_map[entity_id].field_strength *= -1;
 				}
+				for (unsigned i = 0; i < MAGNETIC_FIELD_CATEGORY_KEYS.size(); ++i)
+				{
+					if (cursor_and_keys.key_pressed_this_frame[MAGNETIC_FIELD_CATEGORY_KEYS[i]])
+					{
+						magnetic_field_map[entity_id].field_strength = Sign(magnetic_field_map[entity_id].field_strength) * abs(MAGNETIC_FIELD_STRENGTH_CATEGORIES[i]);
+					}
+				}
 			}
 
 			// Edit electric field:

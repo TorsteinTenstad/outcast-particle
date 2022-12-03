@@ -49,15 +49,13 @@ public:
 
 		for (auto const& [entity_id, magnetic_field] : magnetic_field_map)
 		{
-			if (magnetic_field.field_strength > 0)
-			{
-			}
+			int category = FindClosest(MAGNETIC_FIELD_STRENGTH_CATEGORIES, magnetic_field.field_strength);
+			draw_info_map[entity_id].image_path = MAGNETIC_FIELD_TEXTURES[category];
 		}
 
 		for (auto const& [entity_id, electric_field] : electric_field_map)
 		{
-			int category = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(electric_field_map[entity_id].field_vector));
-			std::cout << category << std::endl;
+			int category = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(electric_field.field_vector));
 			draw_info_map[entity_id].image_path = ELECTRIC_FIELD_TEXTURES[category];
 			if (abs(electric_field.field_vector.x) > abs(electric_field.field_vector.y))
 			{
