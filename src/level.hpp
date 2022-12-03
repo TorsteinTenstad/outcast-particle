@@ -57,9 +57,6 @@ private:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
-	template <class Component>
-	void RegisterComponent();
-
 public:
 	bool editable = false;
 	bool edit_mode = false;
