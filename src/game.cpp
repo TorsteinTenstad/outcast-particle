@@ -3,22 +3,18 @@
 Game::Game()
 {
 	cursor_and_keys_ = CursorAndKeys();
-
-	Level level_menu = Level();
-	Level main_menu = Level();
-	levels_.push_back(main_menu);
-	levels_.push_back(level_menu);
+	levels_[MAIN_MENU];
+	levels_[LEVEL_MENU];
+	pause_menu_system_ = PauseMenuSystem(std::bind(&Game::SetLevel, this, std::placeholders::_1));
 }
 
 void Game::Init()
 {
+	int level_id = 0;
 	for (const auto& entry : std::experimental::filesystem::directory_iterator("levels/"))
 	{
-		Level level = Level();
-		Level menu = Level();
-		level.LoadFromFile(entry.path().string());
-		levels_.push_back(level);
-		menus_.push_back(menu);
+		levels_[level_id].LoadFromFile(entry.path().string());
+		level_id++;
 	}
 	sf::Texture texture;
 	std::string identifier;
@@ -29,16 +25,16 @@ void Game::Init()
 	float n_columns = 4;
 	int c = 0;
 	int r = 0;
-	for (unsigned i = 2; i < levels_.size(); ++i)
+	for (int i = 0; i < level_id; ++i)
 	{
 		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
 		globals.render_window.clear();
-		globals.active_level = i;
+		active_level = i;
 		Update(0);
 		texture.update(globals.render_window);
 		identifier = "level" + std::to_string(i);
 		render_system_.RegisterTexture(identifier, texture);
-		levels_[1].AddLevelButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
+		levels_[LEVEL_MENU].AddLevelButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier);
 
 		c++;
 		if (c == n_columns)
@@ -52,83 +48,80 @@ void Game::Init()
 	float menu_spacing = 200;
 	float menu_n_columns = 1;
 	int menu_r = 0;
-	std::vector<std::function<void(void)>> menu_reference = { std::bind(&Game::SetLevel, this, 1), std::bind(&Game::SetLevel, this, 0), std::bind(&Game::SetLevel, this, 0), std::bind(&Game::ExitGame, this) };
+	std::vector<std::function<void(void)>> menu_reference = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::ExitGame, this) };
 
 	for (unsigned i = 0; i < 4; ++i)
 	{
-		levels_[0].AddLevelButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png");
+		levels_[MAIN_MENU].AddLevelButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png");
 		menu_r++;
 	}
-	globals.active_level = 0;
+	active_level = MAIN_MENU;
 }
 
 void Game::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
-	if (cursor_and_keys_.key_pressed_this_frame[MENU_KEY] && globals.active_level != 0)
-	{
-		if (levels_[globals.active_level].edit_mode)
-		{
-			edit_mode_system_.CloseBlueprintMenu(levels_[globals.active_level]);
-			levels_[globals.active_level].SaveToFile();
-		}
-		for (unsigned i = 2; i < levels_.size(); ++i)
-		{
-			levels_[i].LoadFromFile();
-		}
-		levels_[globals.active_level].edit_mode = false;
-		globals.active_level = 0;
-	}
+	pause_menu_system_.Update(cursor_and_keys_, levels_[active_level], dt);
 	for (int i = 0; i < physics_ticks_per_frame_; ++i)
 	{
 		UpdatePhysics(dt / physics_ticks_per_frame_);
 	}
-	sound_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	mouse_interaction_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	level_button_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	if (!levels_[globals.active_level].edit_mode)
+	sound_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	mouse_interaction_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	level_button_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	if (!levels_[active_level].edit_mode)
 	{
-		player_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		player_system_.Update(cursor_and_keys_, levels_[active_level], dt);
 	}
-	edit_mode_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	set_draw_info_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	trail_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	screen_shake_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	render_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-	if (levels_[globals.active_level].edit_mode)
+	edit_mode_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	set_draw_info_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	trail_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	screen_shake_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	render_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+	if (levels_[active_level].edit_mode)
 	{
-		display_velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		display_velocity_system_.Update(cursor_and_keys_, levels_[active_level], dt);
 	}
 }
 void Game::UpdatePhysics(float dt)
 {
-	if (!levels_[globals.active_level].edit_mode)
+	if (!levels_[active_level].edit_mode)
 	{
-		electric_force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		electric_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		magnetic_field_force_system.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		force_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		acceleration_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		velocity_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		goal_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
-		collision_system_.Update(cursor_and_keys_, levels_[globals.active_level], dt);
+		electric_force_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		electric_field_force_system.Update(cursor_and_keys_, levels_[active_level], dt);
+		magnetic_field_force_system.Update(cursor_and_keys_, levels_[active_level], dt);
+		force_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		acceleration_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		velocity_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		intersection_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		goal_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[active_level], dt);
+		collision_system_.Update(cursor_and_keys_, levels_[active_level], dt);
 	}
 }
 
 Game::~Game()
 {
-	if (levels_[globals.active_level].edit_mode)
+	if (levels_[active_level].edit_mode)
 	{
-		edit_mode_system_.CloseBlueprintMenu(levels_[globals.active_level]);
-		levels_[globals.active_level].SaveToFile();
+		edit_mode_system_.CloseBlueprintMenu(levels_[active_level]);
+		levels_[active_level].SaveToFile();
 	}
 }
 
 void Game::SetLevel(int level)
 {
-	globals.active_level = level;
+	if (active_level >= 0)
+	{
+		if (levels_[active_level].edit_mode)
+		{
+			edit_mode_system_.CloseBlueprintMenu(levels_[active_level]);
+			levels_[active_level].SaveToFile();
+			levels_[active_level].edit_mode = false;
+		}
+		levels_[active_level].LoadFromFile();
+	}
+	active_level = level;
 }
 
 void Game::ExitGame()

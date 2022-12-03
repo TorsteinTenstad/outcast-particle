@@ -15,6 +15,7 @@
 #include "systems/level_button.hpp"
 #include "systems/magnetic_field_force.hpp"
 #include "systems/mouse_interactions.hpp"
+#include "systems/pause_menu_system.hpp"
 #include "systems/player.hpp"
 #include "systems/screen_shake.hpp"
 #include "systems/set_draw_info.hpp"
@@ -24,12 +25,20 @@
 #include "systems/trail.hpp"
 #include "systems/velocity.hpp"
 
+#define MAIN_MENU -1 //menus have negative key-values
+#define LEVEL_MENU -2
+
 class Game
 {
 private:
 	int physics_ticks_per_frame_ = 10;
-	std::vector<Level> levels_;
-	std::vector<Level> menus_;
+	std::map<int, Level> levels_;
+	int active_level = MAIN_MENU;
+
+	void SetLevel(int level);
+	void ExitGame();
+	void CloseLevel();
+	void UpdatePhysics(float dt);
 
 	SFMLEventSystem event_system_;
 	EditModeSystem edit_mode_system_;
@@ -53,13 +62,11 @@ private:
 	ElectricFieldForceSystem electric_field_force_system;
 	MagneticFieldForceSystem magnetic_field_force_system;
 	SoundSystem sound_system_;
+	PauseMenuSystem pause_menu_system_;
 
 public:
 	Game();
 	~Game();
 	void Init();
 	void Update(float dt);
-	void UpdatePhysics(float dt);
-	void SetLevel(int level);
-	void ExitGame();
 };
