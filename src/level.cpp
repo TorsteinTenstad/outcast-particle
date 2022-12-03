@@ -4,53 +4,6 @@
 
 int Level::next_available_entity_id_ = 0;
 
-Level::Level()
-{
-	GetComponent<DrawInfo>();
-	GetComponent<ChargeDependentDrawInfo>();
-	GetComponent<OrientationDependentDrawInfo>();
-	GetComponent<Position>();
-	GetComponent<Velocity>();
-	GetComponent<Acceleration>();
-	GetComponent<ReceivedForces>();
-	GetComponent<BlueprintMenuItem>();
-	GetComponent<Player>();
-	GetComponent<PlayerBehaviours>();
-	GetComponent<Collision>();
-	GetComponent<Charge>();
-	GetComponent<Editable>();
-	GetComponent<ClickedOn>();
-	GetComponent<Radius>();
-	GetComponent<WidthAndHeight>();
-	GetComponent<Border>();
-	GetComponent<Trail>();
-	GetComponent<Tag>();
-	GetComponent<KillOnIntersection>();
-	GetComponent<Goal>();
-	GetComponent<ElectricField>();
-	GetComponent<MagneticField>();
-	GetComponent<Intersection>();
-	GetComponent<LevelButton>();
-	GetComponent<SoundInfo>();
-}
-
-template <class Component>
-void Level::RegisterComponent()
-{
-	std::map<int, Component> t_map;
-	components_[typeid(Component)] = t_map;
-}
-
-template <class Component>
-std::map<int, Component>& Level::GetComponent()
-{
-	if (components_.count(typeid(Component)) == 0)
-	{
-		RegisterComponent<Component>();
-	}
-	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
-}
-
 int Level::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();
