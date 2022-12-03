@@ -9,6 +9,7 @@
 class SFMLRenderSystem : public GameSystem
 {
 private:
+	sf::Font font_;
 	std::map<std::string, sf::Texture> textures_;
 	std::map<int, sf::RectangleShape> rectangle_shapes_;
 	std::map<int, sf::CircleShape> circle_shapes_;
@@ -99,14 +100,11 @@ public:
 		}
 		for (auto const& [entity_id, entity_text] : text_map)
 		{
-			std::cout << "setting text" << std::endl;
 			draw_order_[1000].push_back(entity_id);
-			sf::Font font;
-			font.loadFromFile("content\\Roboto-Medium.ttf");
+			font_.loadFromFile("content\\Roboto-Medium.ttf");
 			text_[entity_id].setString(entity_text.content);
-			text_[entity_id].setFont(font);
-			text_[entity_id]
-				.setCharacterSize(1000);
+			text_[entity_id].setFont(font_);
+			text_[entity_id].setCharacterSize(1000);
 		}
 		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
 		background_.setSize(background_size);
@@ -151,17 +149,16 @@ public:
 						p2 = p3;
 					}
 				}
-				if (rectangle_shapes_.count(entity_id) != 0)
+				if (rectangle_shapes_.count(entity_id) > 0)
 				{
 					globals.render_window.draw(rectangle_shapes_[entity_id]);
 				}
-				if (circle_shapes_.count(entity_id) != 0)
+				if (circle_shapes_.count(entity_id) > 0)
 				{
 					globals.render_window.draw(circle_shapes_[entity_id]);
 				}
-				if (text_.count(entity_id) != 0)
+				if (text_.count(entity_id) > 0)
 				{
-					std::cout << "creating text" << std::endl;
 					globals.render_window.draw(text_[entity_id]);
 				}
 			}
