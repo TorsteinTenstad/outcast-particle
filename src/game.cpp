@@ -34,7 +34,7 @@ void Game::Init()
 		texture.update(globals.render_window);
 		identifier = "level" + std::to_string(i);
 		render_system_.RegisterTexture(identifier, texture);
-		levels_[LEVEL_MENU].AddButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier, "");
+		levels_[LEVEL_MENU].AddButton(std::bind(&Game::SetLevel, this, i), spacing + button_w / 2 + (button_w + spacing) * c, spacing + button_h / 2 + (button_h + spacing) * r, button_w, button_h, identifier, " ", 0);
 
 		c++;
 		if (c == n_columns)
@@ -47,12 +47,14 @@ void Game::Init()
 	float menu_button_h = 1.2 * 360;
 	float menu_spacing = 200;
 	float menu_n_columns = 1;
+	int menu_text_size = 500;
 	int menu_r = 0;
 	std::vector<std::function<void(void)>> menu_reference = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::ExitGame, this) };
+	std::vector<std::string> menu_text = { "Level Menu", "Multiplayer", "Options", "Exit Game" };
 
 	for (unsigned i = 0; i < 4; ++i)
 	{
-		levels_[MAIN_MENU].AddButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png", "humlesnurr");
+		levels_[MAIN_MENU].AddButton(menu_reference[i], 7680 / 2, 700 + menu_spacing + menu_button_h / 2 + (menu_button_h + menu_spacing) * menu_r, menu_button_w, menu_button_h, "content\\textures\\gray.png", menu_text[i], menu_text_size);
 		menu_r++;
 	}
 	active_level = MAIN_MENU;

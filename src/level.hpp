@@ -4,6 +4,7 @@
 #include "Components/intersection.hpp"
 #include "Components/kill_on_intersection.hpp"
 #include "Components/sound_info.hpp"
+#include "Components/text.hpp"
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
@@ -15,7 +16,6 @@
 #include "components/player_behaviours.hpp"
 #include "components/tag.hpp"
 #include "components/trail.hpp"
-#include"Components/text.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include <typeindex>
@@ -73,7 +73,7 @@ public:
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
-	int AddButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path, std::string button_text);
+	int AddButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path, std::string button_text, unsigned int text_size);
 
 	void SaveToFile();
 	void LoadFromFile();
