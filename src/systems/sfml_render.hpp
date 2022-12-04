@@ -98,7 +98,6 @@ public:
 				shape->setOutlineThickness(0);
 			}
 		}
-		std::vector<sf::CircleShape> dots;
 		for (auto const& [entity_id, entity_text] : text_map)
 		{
 			draw_order_[1000].push_back(entity_id);
@@ -106,14 +105,8 @@ public:
 			text_[entity_id].setString(entity_text.content);
 			text_[entity_id].setFont(font_);
 			text_[entity_id].setCharacterSize(entity_text.size);
-			float w = text_[entity_id].getLocalBounds().width;
-			float h = text_[entity_id].getLocalBounds().height;
-			text_[entity_id].setOrigin(w / 2, 3 * h / 4);
-			sf::CircleShape dot = sf::CircleShape(32);
-			dot.setFillColor(sf::Color::Red);
-			dot.setOrigin(16, 16);
-			dot.setPosition(position_map[entity_id].position);
-			dots.push_back(dot);
+			sf::FloatRect bounds = text_[entity_id].getLocalBounds();
+			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, bounds.height / 2 + bounds.top);
 			text_[entity_id].setPosition(position_map[entity_id].position);
 		}
 		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
@@ -172,10 +165,6 @@ public:
 					globals.render_window.draw(text_[entity_id]);
 				}
 			}
-		}
-		for (auto dot : dots)
-		{
-			globals.render_window.draw(dot);
 		}
 	}
 };

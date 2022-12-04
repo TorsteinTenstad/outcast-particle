@@ -47,7 +47,7 @@ void Game::Init()
 	float menu_button_h = 1.2 * 360;
 	float menu_spacing = 200;
 	float menu_n_columns = 1;
-	int menu_text_size = 500;
+	int menu_text_size = 300;
 	int menu_r = 0;
 	std::vector<std::function<void(void)>> menu_reference = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::ExitGame, this) };
 	std::vector<std::string> menu_text = { "Level Menu", "Multiplayer", "Options", "Exit Game" };
