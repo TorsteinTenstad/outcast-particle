@@ -23,7 +23,7 @@ class BPStaticParticle : public BPEntity
 	Radius radius = { 120 };
 
 	// [Serialize]
-	Charge charge = { 100000 };
+	Charge charge = { 10000 };
 };
 
 class BPMovingParticle : public BPStaticParticle
@@ -82,7 +82,7 @@ class BPElectricField : public BPTileBasedEntity
 	DrawInfo draw_info = { "content\\textures\\electric_field.png", false, 1, 0 };
 
 	// [Serialize]
-	ElectricField electric_field = { sf::Vector2f(0, 30) };
+	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
@@ -93,7 +93,7 @@ class BPMagneticField : public BPTileBasedEntity
 	DrawInfo draw_info = { "content\\textures\\magnetic_field.png", false, 1, 0 };
 
 	// [Serialize]
-	MagneticField magnetic_field = { 5 };
+	MagneticField magnetic_field = { 0.1 };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
