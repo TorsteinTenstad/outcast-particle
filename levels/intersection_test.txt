@@ -1,5 +1,7 @@
-name=Untitled;size=(1560,903);editable=1
-"BPWall":Tag{tag=BPWall}Position{position=(1140,600)}WidthAndHeight{width_and_height=(120,480)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(360,240)}Charge{charge=100000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=500}
-"BPWall":Tag{tag=BPWall}Position{position=(840,420)}WidthAndHeight{width_and_height=(480,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(360,420)}WidthAndHeight{width_and_height=(480,120)}
+name=Untitled;size=(7680,4320);editable=1
+"BPWall":Tag{tag=BPWall}Position{position=(3900,4260)}WidthAndHeight{width_and_height=(7680,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(7620,2160)}WidthAndHeight{width_and_height=(120,4080)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,2160)}WidthAndHeight{width_and_height=(120,4080)}
+"BPWall":Tag{tag=BPWall}Position{position=(3840,60)}WidthAndHeight{width_and_height=(7680,120)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(1800,1440)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=500}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(2640,1200)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(0,5)}
