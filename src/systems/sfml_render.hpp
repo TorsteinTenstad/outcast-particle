@@ -10,10 +10,12 @@ class SFMLRenderSystem : public GameSystem
 {
 private:
 	sf::Font font_;
+	sf::Text sample_text_;
 	std::map<std::string, sf::Texture> textures_;
 	std::map<int, sf::RectangleShape> rectangle_shapes_;
 	std::map<int, sf::CircleShape> circle_shapes_;
 	std::map<int, sf::Text> text_;
+	std::map<unsigned int, float> text_height_;
 	std::map<int, std::vector<int>> draw_order_;
 
 	sf::RectangleShape background_;
@@ -98,15 +100,23 @@ public:
 				shape->setOutlineThickness(0);
 			}
 		}
+		font_.loadFromFile("content\\Roboto-Medium.ttf");
+		sample_text_.setString("N");
+		sample_text_.setFont(font_);
 		for (auto const& [entity_id, entity_text] : text_map)
 		{
+			if (text_height_.count(entity_text.size) == 0)
+			{
+				sample_text_.setCharacterSize(entity_text.size);
+				text_height_[entity_text.size] = sample_text_.getLocalBounds().height / 2 + sample_text_.getLocalBounds().top;
+			};
+
 			draw_order_[1000].push_back(entity_id);
-			font_.loadFromFile("content\\Roboto-Medium.ttf");
 			text_[entity_id].setString(entity_text.content);
 			text_[entity_id].setFont(font_);
 			text_[entity_id].setCharacterSize(entity_text.size);
 			sf::FloatRect bounds = text_[entity_id].getLocalBounds();
-			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, bounds.height / 2 + bounds.top);
+			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, text_height_[entity_text.size]);
 			text_[entity_id].setPosition(position_map[entity_id].position);
 		}
 		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
