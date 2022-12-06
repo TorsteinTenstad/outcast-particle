@@ -1,30 +1,33 @@
 #pragma once
 #include "PCH.hpp"
 
-#define PLAYER_MOVE_LEFT_KEY sf::Keyboard::A
-#define PLAYER_MOVE_RIGHT_KEY sf::Keyboard::D
-#define PLAYER_MOVE_UP_KEY sf::Keyboard::W
-#define PLAYER_MOVE_DOWN_KEY sf::Keyboard::S
-#define PLAYER_SWITCH_CHARGE_KEY sf::Keyboard::Space
-#define PLAYER_GO_NEUTRAL_KEY sf::Keyboard::Enter
-
-#define MENU_KEY sf::Keyboard::Escape
-#define EDIT_MODE_KEY sf::Keyboard::Tab
-#define INCREASE_LEVEL_SIZE_KEY sf::Keyboard::Up
-#define DECREASE_LEVEL_SIZE_KEY sf::Keyboard::Down
-#define EDIT_MODE_SWITCH_CHARGE_KEY sf::Keyboard::Space
-#define EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION_KEY sf::Keyboard::Space
-#define SELECT_MULTIPLE_ENTITIES_KEY sf::Keyboard::LControl
-#define COPY_ENTITY_KEY sf::Keyboard::LAlt
-#define DELETE_ENTITY_KEY sf::Keyboard::Delete
-#define SNAP_TO_GRID_KEY sf::Keyboard::LShift
-#define ALT_SENSITIVITY_KEY sf::Keyboard::RShift
-#define ROTATE_ENTITY_KEY sf::Keyboard::R
-#define INCREMENT_HEIGHT_KEY sf::Keyboard::W
-#define DECREMENT_HEIGHT_KEY sf::Keyboard::S
-#define DECREMENT_WIDTH_KEY sf::Keyboard::A
-#define INCREMENT_WIDTH_KEY sf::Keyboard::D
-#define INCREMENT_VELOCITY_KEY sf::Keyboard::W
-#define DECREMENT_VELOCITY_KEY sf::Keyboard::S
-#define DECREMENT_VELOCITY_ANGLE_KEY sf::Keyboard::A
-#define INCREMENT_VELOCITY_ANGLE_KEY sf::Keyboard::D
+class KeyConfig
+{
+public:
+	sf::Keyboard::Key PLAYER_MOVE_LEFT = sf::Keyboard::A;
+	sf::Keyboard::Key PLAYER_MOVE_RIGHT = sf::Keyboard::D;
+	sf::Keyboard::Key PLAYER_MOVE_UP = sf::Keyboard::W;
+	sf::Keyboard::Key PLAYER_MOVE_DOWN = sf::Keyboard::S;
+	sf::Keyboard::Key PLAYER_SWITCH_CHARGE = sf::Keyboard::Space;
+	sf::Keyboard::Key PLAYER_GO_NEUTRAL = sf::Keyboard::Enter;
+	sf::Keyboard::Key MENU = sf::Keyboard::Escape;
+	sf::Keyboard::Key EDIT_MODE = sf::Keyboard::Tab;
+	sf::Keyboard::Key INCREASE_LEVEL_SIZE = sf::Keyboard::Up;
+	sf::Keyboard::Key DECREASE_LEVEL_SIZE = sf::Keyboard::Down;
+	sf::Keyboard::Key EDIT_MODE_SWITCH_CHARGE = sf::Keyboard::Space;
+	sf::Keyboard::Key EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION = sf::Keyboard::Space;
+	sf::Keyboard::Key SELECT_MULTIPLE_ENTITIES = sf::Keyboard::LControl;
+	sf::Keyboard::Key COPY_ENTITY = sf::Keyboard::LAlt;
+	sf::Keyboard::Key DELETE_ENTITY = sf::Keyboard::Delete;
+	sf::Keyboard::Key SNAP_TO_GRID = sf::Keyboard::LShift;
+	sf::Keyboard::Key ALT_SENSITIVITY = sf::Keyboard::RShift;
+	sf::Keyboard::Key ROTATE_ENTITY = sf::Keyboard::R;
+	sf::Keyboard::Key INCREMENT_HEIGHT = sf::Keyboard::W;
+	sf::Keyboard::Key DECREMENT_HEIGHT = sf::Keyboard::S;
+	sf::Keyboard::Key DECREMENT_WIDTH = sf::Keyboard::A;
+	sf::Keyboard::Key INCREMENT_WIDTH = sf::Keyboard::D;
+	sf::Keyboard::Key INCREMENT_VELOCITY = sf::Keyboard::W;
+	sf::Keyboard::Key DECREMENT_VELOCITY = sf::Keyboard::S;
+	sf::Keyboard::Key DECREMENT_VELOCITY_ANGLE = sf::Keyboard::A;
+	sf::Keyboard::Key INCREMENT_VELOCITY_ANGLE = sf::Keyboard::D;
+};

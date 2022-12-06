@@ -21,36 +21,36 @@ public:
 		for (auto& [entity_id, player] : player_map)
 		{
 			int x_direction = 0;
-			if (cursor_and_keys.key_down[PLAYER_MOVE_LEFT_KEY])
+			if (cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_LEFT])
 			{
 				x_direction -= 1;
 			}
-			if (cursor_and_keys.key_down[PLAYER_MOVE_RIGHT_KEY])
+			if (cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_RIGHT])
 			{
 				x_direction += 1;
 			}
 			int y_direction = 0;
-			if (cursor_and_keys.key_down[PLAYER_MOVE_UP_KEY])
+			if (cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_UP])
 			{
 				y_direction -= 1;
 			}
-			if (cursor_and_keys.key_down[PLAYER_MOVE_DOWN_KEY])
+			if (cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_DOWN])
 			{
 				y_direction += 1;
 			}
 			received_forces_map[entity_id].player_force.x = x_direction * player.move_force;
 			received_forces_map[entity_id].player_force.y = y_direction * player.move_force;
 
-			if (cursor_and_keys.key_pressed_this_frame[PLAYER_GO_NEUTRAL_KEY] && player.can_go_neutral)
+			if (cursor_and_keys.key_pressed_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player.can_go_neutral)
 			{
 				player_behaviours_map[entity_id].default_charge = charge_map[entity_id].charge;
 				charge_map[entity_id].charge = 0;
 			}
-			if (cursor_and_keys.key_released_this_frame[PLAYER_GO_NEUTRAL_KEY] && player.can_go_neutral)
+			if (cursor_and_keys.key_released_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player.can_go_neutral)
 			{
 				charge_map[entity_id].charge = player_behaviours_map[entity_id].default_charge;
 			}
-			if (cursor_and_keys.key_pressed_this_frame[PLAYER_SWITCH_CHARGE_KEY] && player.can_switch_charge)
+			if (cursor_and_keys.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] && player.can_switch_charge)
 			{
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_behaviours_map[entity_id].default_charge = -player_behaviours_map[entity_id].default_charge;
