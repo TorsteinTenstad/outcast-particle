@@ -513,7 +513,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Radius>()[entity_id] = { 120 };
         GetComponent<Tag>()[entity_id] = {"BPStaticParticle"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-        GetComponent<Charge>()[entity_id] = { 100000 };
+        GetComponent<Charge>()[entity_id] = { 10000 };
         return entity_id;
     }
     if (tag == "BPMovingParticle")
@@ -530,7 +530,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPMovingParticle"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-        GetComponent<Charge>()[entity_id] = { 100000 };
+        GetComponent<Charge>()[entity_id] = { 10000 };
         GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
         return entity_id;
     }
@@ -548,7 +548,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
-        GetComponent<Charge>()[entity_id] = { 100000 };
+        GetComponent<Charge>()[entity_id] = { 10000 };
         GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Player>()[entity_id] = { true, true, 500 };
         return entity_id;
@@ -598,7 +598,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Tag>()[entity_id] = {"BPElectricField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
-        GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 30) };
+        GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 0.25) };
         return entity_id;
     }
     if (tag == "BPMagneticField")
@@ -609,7 +609,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Tag>()[entity_id] = {"BPMagneticField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
-        GetComponent<MagneticField>()[entity_id] = { 5 };
+        GetComponent<MagneticField>()[entity_id] = { 0.1 };
         return entity_id;
     }
     return entity_id;
