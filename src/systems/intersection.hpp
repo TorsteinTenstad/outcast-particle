@@ -5,7 +5,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 static bool CheckIntersection(Position position_a, Position position_b, Radius radius_a, Radius radius_b)
 {
@@ -52,7 +52,7 @@ public:
 		{
 			assert(radius_map.count(entity_id) > 0);
 			assert(width_and_height_map.count(entity_id) == 0);
-			
+
 			intersection.intersecting_ids.clear();
 			for (auto const& [entity_id_b, entity_radius_b] : radius_map)
 			{

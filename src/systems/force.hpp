@@ -3,7 +3,7 @@
 #include "game_system.hpp"
 #include "level.hpp"
 #include "systems/electric_force.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_limit)
 {

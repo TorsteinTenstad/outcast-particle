@@ -5,7 +5,7 @@
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 class MouseInterationSystem : public GameSystem
 {

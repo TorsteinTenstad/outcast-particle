@@ -5,7 +5,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 static sf::Vector2f CalculateMagneticFieldForce(Charge particle_charge, Velocity particle_velocity, MagneticField magnetic_field)
 {

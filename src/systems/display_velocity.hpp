@@ -4,7 +4,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 static float Angle(sf::Vector2f v)
 {

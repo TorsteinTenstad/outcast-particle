@@ -5,7 +5,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 static sf::Vector2f CalculateElectricFieldForce(Charge particle, ElectricField electric_field)
 {

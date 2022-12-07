@@ -5,7 +5,7 @@
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 class EditModeSystem : public GameSystem
 {

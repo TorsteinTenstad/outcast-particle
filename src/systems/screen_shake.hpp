@@ -3,7 +3,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 #include "animation.hpp"
 
 class ScreenShakeSystem : public GameSystem

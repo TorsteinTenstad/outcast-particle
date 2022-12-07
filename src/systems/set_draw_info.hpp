@@ -4,7 +4,7 @@
 #include "constants.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "utilityfunctions.hpp"
+#include "utils.hpp"
 
 class SetDrawInfoSystem : public GameSystem
 {
