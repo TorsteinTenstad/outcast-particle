@@ -105,10 +105,10 @@ void Game::SetLevel(int level)
 		{
 			edit_mode_system_.CloseBlueprintMenu(levels_[active_level_]);
 			levels_[active_level_].edit_mode = false;
-			GenerateLevelTexture(active_level_);
 			levels_[active_level_].SaveToFile();
 		}
 		levels_[active_level_].LoadFromFile();
+		GenerateLevelTexture(active_level_);
 	}
 	active_level_ = level;
 }

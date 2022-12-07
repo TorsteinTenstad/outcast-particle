@@ -81,13 +81,10 @@ public:
 			if (editable_entity.selected && cursor_and_keys.key_down[globals.key_config.COPY_ENTITY] && cursor_and_keys.mouse_button_pressed_this_frame[sf::Mouse::Left])
 			{
 				int new_id = level.CopyEntity(entity_id);
-				position_map[new_id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
 				editable_map[new_id].selected = false;
-				if (!cursor_and_keys.key_down[globals.key_config.SNAP_TO_GRID])
-				{
-					position_map[new_id].position.x -= std::fmod(position_map[new_id].position.x, BLOCK_SIZE / 2);
-					position_map[new_id].position.y -= std::fmod(position_map[new_id].position.y, BLOCK_SIZE / 2);
-				}
+				position_map[new_id].position = cursor_and_keys.cursor_position - editable_entity.drag_offset;
+				position_map[new_id].position.x -= std::fmod(position_map[new_id].position.x, BLOCK_SIZE / 2);
+				position_map[new_id].position.y -= std::fmod(position_map[new_id].position.y, BLOCK_SIZE / 2);
 			}
 		}
 
@@ -100,20 +97,14 @@ public:
 				{
 					editable_entity.drag_offset = cursor_and_keys.cursor_position - position_map[entity_id].position;
 				}
-				if (clicked_on_map[entity_id].clicked_this_frame)
-				{
-					editable_entity.selected = true;
-					if (blueprint_menu_item_map.count(entity_id) > 0)
-					{
-						blueprint_menu_item_map.erase(entity_id);
-						draw_info_map[entity_id].draw_priority -= 100;
-						CloseBlueprintMenu(level);
-					}
-				}
-				else if (!(cursor_and_keys.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES] || cursor_and_keys.key_down[globals.key_config.COPY_ENTITY]))
+				if (!(cursor_and_keys.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES] || cursor_and_keys.key_down[globals.key_config.COPY_ENTITY]))
 				{
 					editable_entity.selected = false;
 				}
+			}
+			if (clicked_on_map[entity_id].clicked_this_frame)
+			{
+				editable_entity.selected = true;
 			}
 			if (editable_entity.selected)
 			{
@@ -122,6 +113,18 @@ public:
 			else
 			{
 				border_map.erase(entity_id);
+			}
+		}
+
+		// Handle selection of entity in blueprint menu:
+		for (auto& [entity_id, blueprint_menu_item] : blueprint_menu_item_map)
+		{
+			if (editable_map.count(entity_id) > 0 && editable_map[entity_id].selected)
+			{
+				blueprint_menu_item_map.erase(entity_id);
+				draw_info_map[entity_id].draw_priority -= 100;
+				CloseBlueprintMenu(level);
+				break;
 			}
 		}
 
@@ -277,7 +280,6 @@ public:
 	}
 	void OpenBlueprintMenu(Level& level)
 	{
-		int entity_id;
 		int i = 0;
 		int menu_background_id = level.CreateEntityId();
 		level.GetComponent<Position>()[menu_background_id].position = level.size / 2.f;
@@ -288,6 +290,7 @@ public:
 		level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 		level.GetComponent<Border>()[menu_background_id];
 		level.GetComponent<BlueprintMenuItem>()[menu_background_id];
+		int entity_id;
 		for (const auto& tag : blueprint_menu_entry_tags_)
 		{
 			entity_id = level.AddBlueprint(tag);
