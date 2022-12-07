@@ -119,6 +119,9 @@ public:
 			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, text_height_[entity_text.size]);
 			text_[entity_id].setPosition(position_map[entity_id].position);
 		}
+
+		// Draw:
+		globals.render_window.clear();
 		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
 		background_.setSize(background_size);
 		background_.setPosition(-(background_size - level.size) / 2.f);

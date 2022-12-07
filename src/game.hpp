@@ -33,12 +33,7 @@ class Game
 private:
 	int physics_ticks_per_frame_ = 10;
 	std::map<int, Level> levels_;
-	int active_level = MAIN_MENU;
-
-	void SetLevel(int level);
-	void ExitGame();
-	void CloseLevel();
-	void UpdatePhysics(float dt);
+	int active_level_ = MAIN_MENU;
 
 	SFMLEventSystem event_system_;
 	EditModeSystem edit_mode_system_;
@@ -63,6 +58,11 @@ private:
 	MagneticFieldForceSystem magnetic_field_force_system;
 	SoundSystem sound_system_;
 	PauseMenuSystem pause_menu_system_;
+
+	void UpdatePhysics(float dt);
+	void SetLevel(int level);
+	std::string GenerateLevelTexture(int level_id);
+	void ExitGame();
 
 public:
 	Game();
