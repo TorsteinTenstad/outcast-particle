@@ -50,7 +50,7 @@ class BPPlayer : public BPMovingParticle
 
 class BPLaser : public BPEntity
 {
-	DrawInfo draw_info = { "_", true, 3, 0 };
+	DrawInfo draw_info = { "_", false, 3, 0 };
 	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
 	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};

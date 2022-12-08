@@ -3,8 +3,8 @@ from cpp_blueprints import get_blueprints as get_cpp_blueprints, ClassType
 from serialization import gen_level_serialization
 import json
 
-path_components = "../src/components/"
-path_blueprints = "../src/blueprints/"
+path_components = "src/components/"
+path_blueprints = "src/blueprints/"
 
 data = {
     "blueprints": {},
@@ -20,5 +20,5 @@ for (path, content, class_type) in [
 
 print(json.dumps(data, indent=2))
 
-with open("../src/level_serialization.cpp", "w") as file:
+with open("src/level_serialization.cpp", "w") as file:
     file.write(gen_level_serialization(data))

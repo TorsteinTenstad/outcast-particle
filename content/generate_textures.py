@@ -1,4 +1,5 @@
 from devdraw import *
+import numpy as np
 
 
 def generate_goal_texture():
@@ -95,13 +96,40 @@ def button_texture(w, h, borders_width):
             f'content\\textures_generated\\{x}button_{w}_{h}.png', w, h)
 
 
+def laser_texture():
+    w = 10
+    t = 3
+    zag = 5
+    h = 15
+    svg_w = w+zag
+    svg = SVG(svg_w, h)
+    mid_line_xs = svg_w*np.ones(4)/2
+    mid_line_xs[1] += zag/2
+    mid_line_xs[2] -= zag/2
+    for color, offset in zip(['#fcbf4a', '#ffe547'], [w/2, w/2-t]):
+        xs = np.hstack((np.copy(mid_line_xs)+offset,
+                        np.copy(mid_line_xs[::-1])-offset))
+        mid_line_ys = [0, h/4, 3*h/4, h]
+        ys = np.hstack((np.copy(mid_line_ys), mid_line_ys[::-1]))
+        points = np.vstack((xs, ys)).T
+        svg.add(polygon(points, color=color))
+    svg.set_inkscape_path(
+        'C:\\Program Files\\Inkscape\\bin\\inkscape.exe')
+    svg.export_png(
+        f'content\\textures\\laser_vertical.png', svg_w*4, h*4)
+
+
 if __name__ == '__main__':
 
     GENERATE_MAGNETIC_FELD_TEXTURES = False
-    GENERATE_BUTTON_TEXTURES = True
+    GENERATE_BUTTON_TEXTURES = False
+    GENERATE_LASER_TEXTURE = True
 
+    if GENERATE_LASER_TEXTURE:
+        laser_texture()
     if GENERATE_BUTTON_TEXTURES:
-        button_texture(3072, 432, 24)
+        for (w, h) in [[3072, 432], [700, 432]]:
+            button_texture(w, h, 24)
     if GENERATE_MAGNETIC_FELD_TEXTURES:
         purple_colors = ['#1b0044', '#441e6c',
                          '#6c4294', '#9467bd', '#be8ee8', '#ecbaff']

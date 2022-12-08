@@ -409,7 +409,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPLaser")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 3, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 3, 0 };
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
             GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
             GetComponent<KillOnIntersection>()[entity_id] = {};
@@ -556,7 +556,7 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPLaser")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 3, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 3, 0 };
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
         GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
         GetComponent<KillOnIntersection>()[entity_id] = {};
