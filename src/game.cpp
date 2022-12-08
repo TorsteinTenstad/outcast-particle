@@ -26,11 +26,12 @@ void Game::Init()
 		float x = button_position.x;
 		float y = button_position.y;
 		std::string level_texture_identifier = GenerateLevelTexture(i);
-		levels_[LEVEL_MENU].AddButton(std::bind(&Game::SetLevel, this, i), x, y, button_w, button_h, level_texture_identifier, " ", 0);
+		int id = levels_[LEVEL_MENU].AddButton(std::bind(&Game::SetLevel, this, i), x, y, button_w, button_h, level_texture_identifier, " ", 0);
+		levels_[LEVEL_MENU].GetComponent<Border>()[id];
 	}
 
-	float menu_button_w = 1.2 * 2560;
-	float menu_button_h = 1.2 * 360;
+	float menu_button_w = 3072;
+	float menu_button_h = 432;
 	int menu_text_size = 300;
 	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::ExitGame, this) };
 	std::vector<std::string> menu_text = { "Level Menu", "Multiplayer", "Options", "Exit Game" };
@@ -40,7 +41,7 @@ void Game::Init()
 		sf::Vector2 button_position = menu_button_positions[i] + levels_[MAIN_MENU].size / 2.f;
 		float x = button_position.x;
 		float y = button_position.y;
-		levels_[MAIN_MENU].AddButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, "content\\textures\\gray.png", menu_text[i], menu_text_size);
+		levels_[MAIN_MENU].AddButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, "content\\textures_generated\\button_3072_432.png", menu_text[i], menu_text_size);
 	}
 
 	active_level_ = MAIN_MENU;

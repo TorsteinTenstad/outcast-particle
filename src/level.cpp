@@ -58,11 +58,11 @@ int Level::AddButton(std::function<void(void)> on_click, float pos_x, float pos_
 	GetComponent<DrawInfo>()[id].scale_to_fit = true;
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	GetComponent<Border>()[id] = { 20, sf::Color::White };
 	GetComponent<ClickedOn>()[id] = {};
 	GetComponent<Button>()[id].on_click = on_click;
+	GetComponent<Button>()[id].image_path = image_path;
+	GetComponent<Button>()[id].pressed_image_path = "content\\textures_generated\\pressed_button_3072_432.png";
 	GetComponent<Text>()[id].content = button_text;
 	GetComponent<Text>()[id].size = text_size;
-
 	return id;
 }

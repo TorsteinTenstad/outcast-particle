@@ -73,12 +73,42 @@ def generate_electric_field_textrue(name, color):
     svg.export_png(f'content\\textures_generated\\{name}.png', 120, 120)
 
 
+def button_texture(w, h, borders_width):
+    grays = ['#1a1a1a', '#363636', '#555555', '#767676', '#999999']
+    outer_border_color = grays[0]
+    dark_border_color = grays[1]
+    light_border_color = grays[3]
+    body_color = grays[2]
+    for x in ['', 'pressed_']:
+        if x == 'pressed_':
+            dark_border_color, light_border_color = light_border_color, dark_border_color
+        svg = SVG(w, h)
+        t = borders_width
+        svg.add(rect(w, h, color=outer_border_color))
+        svg.add(rect(w-2*t, h-2*t, t, t, color=dark_border_color))
+        svg.add(polygon(
+            [[t, t], [w-t, t], [w-2*t, 2*t], [2*t, h-2*t], [t, h-t]], color=light_border_color))
+        svg.add(rect(w-4*t, h-4*t, 2*t, 2*t, color=body_color))
+        svg.set_inkscape_path(
+            'C:\\Program Files\\Inkscape\\bin\\inkscape.exe')
+        svg.export_png(
+            f'content\\textures_generated\\{x}button_{w}_{h}.png', w, h)
+
+
 if __name__ == '__main__':
-    purple_colors = ['#1b0044', '#441e6c',
-                     '#6c4294', '#9467bd', '#be8ee8', '#ecbaff']
-    for i in range(5):
-        color = purple_colors[i]
-        strength = 5-i
-        generate_magnetic_field_x_texture(f'magnetic_field_x{strength}', color)
-        generate_magnetic_field_ring_texture(
-            f'magnetic_field_o{strength}', color)
+
+    GENERATE_MAGNETIC_FELD_TEXTURES = False
+    GENERATE_BUTTON_TEXTURES = True
+
+    if GENERATE_BUTTON_TEXTURES:
+        button_texture(3072, 432, 24)
+    if GENERATE_MAGNETIC_FELD_TEXTURES:
+        purple_colors = ['#1b0044', '#441e6c',
+                         '#6c4294', '#9467bd', '#be8ee8', '#ecbaff']
+        for i in range(5):
+            color = purple_colors[i]
+            strength = 5-i
+            generate_magnetic_field_x_texture(
+                f'magnetic_field_x{strength}', color)
+            generate_magnetic_field_ring_texture(
+                f'magnetic_field_o{strength}', color)

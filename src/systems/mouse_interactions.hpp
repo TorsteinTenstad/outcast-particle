@@ -29,7 +29,7 @@ public:
 			for (auto entity_id : it->second)
 			{
 				clicked_on_map[entity_id].clicked_this_frame = false;
-				clicked_on_map[entity_id].released_this_frame = cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
+				clicked_on_map[entity_id].released_this_frame = clicked_on_map[entity_id].clicked_on && cursor_and_keys.mouse_button_released_this_frame[sf::Mouse::Left];
 				if (radius_map.count(entity_id))
 				{
 					if (Magnitude(cursor_and_keys.cursor_position - position_map[entity_id].position) < radius_map[entity_id].radius)
