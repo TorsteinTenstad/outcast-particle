@@ -21,12 +21,18 @@ public:
 		{
 			if (clicked_on_map[entity_id].clicked_this_frame)
 			{
-				draw_info_map[entity_id].image_path = button.pressed_image_path;
+				if (!button.pressed_image_path.empty())
+				{
+					draw_info_map[entity_id].image_path = button.pressed_image_path;
+				}
 			}
 			else if (clicked_on_map[entity_id].released_this_frame)
 			{
+				if (!button.image_path.empty())
+				{
+					draw_info_map[entity_id].image_path = button.image_path;
+				}
 				button.on_click();
-				draw_info_map[entity_id].image_path = button.image_path;
 			}
 		}
 	}

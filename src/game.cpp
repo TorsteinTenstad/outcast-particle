@@ -26,8 +26,7 @@ void Game::Init()
 		float x = button_position.x;
 		float y = button_position.y;
 		std::string level_texture_identifier = GenerateLevelTexture(i);
-		int id = levels_[LEVEL_MENU].AddButton(std::bind(&Game::SetLevel, this, i), x, y, button_w, button_h, level_texture_identifier, " ", 0);
-		levels_[LEVEL_MENU].GetComponent<Border>()[id];
+		int id = levels_[LEVEL_MENU].AddLevelButton(std::bind(&Game::SetLevel, this, i), x, y, button_w, button_h, level_texture_identifier);
 	}
 
 	float menu_button_w = 3072;
@@ -41,7 +40,7 @@ void Game::Init()
 		sf::Vector2 button_position = menu_button_positions[i] + levels_[MAIN_MENU].size / 2.f;
 		float x = button_position.x;
 		float y = button_position.y;
-		levels_[MAIN_MENU].AddButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, "content\\textures_generated\\button_3072_432.png", menu_text[i], menu_text_size);
+		levels_[MAIN_MENU].AddMenuButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, menu_text[i], menu_text_size);
 	}
 
 	active_level_ = MAIN_MENU;
