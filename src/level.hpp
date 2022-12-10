@@ -14,6 +14,7 @@
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/player_behaviours.hpp"
+#include "components/shader.hpp"
 #include "components/tag.hpp"
 #include "components/trail.hpp"
 #include "cursor_and_keys.hpp"
@@ -23,6 +24,7 @@
 
 typedef std::variant<
 	std::map<int, DrawInfo>,
+	std::map<int, Shader>,
 	std::map<int, DrawPriority>,
 	std::map<int, ChargeDependentDrawInfo>,
 	std::map<int, OrientationDependentDrawInfo>,
@@ -52,6 +54,13 @@ typedef std::variant<
 	std::map<int, Button>>
 	ComponentMap;
 
+class EntityBoundDrawable
+{
+public:
+	int entity_id;
+	sf::Drawable* drawable;
+};
+
 class Level
 {
 private:
@@ -67,7 +76,7 @@ public:
 	std::map<float, float> screen_size_shake_animation;
 	sf::Vector2f post_shake_size;
 
-	std::map<int, std::vector<sf::Drawable*>> drawables; // Indexed by draw priority
+	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
 	template <class Component>
 	std::map<int, Component>& GetComponent();

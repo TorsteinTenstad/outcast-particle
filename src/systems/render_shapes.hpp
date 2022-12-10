@@ -77,7 +77,7 @@ public:
 			{
 				shape->setOutlineThickness(0);
 			}
-			level.drawables[draw_priority_map[entity_id].draw_priority].push_back(shape);
+			level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, shape });
 		}
 	}
 };

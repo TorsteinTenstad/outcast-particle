@@ -16,6 +16,7 @@ public:
 		auto& player_behaviours_map = level.GetComponent<PlayerBehaviours>();
 		auto& radius_map = level.GetComponent<Radius>();
 		auto& charge_map = level.GetComponent<Charge>();
+		auto& shader_map = level.GetComponent<Shader>();
 
 		for (auto& [entity_id, player] : player_map)
 		{
@@ -53,23 +54,8 @@ public:
 			{
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_behaviours_map[entity_id].default_charge = -player_behaviours_map[entity_id].default_charge;
-
-				level.screen_size_shake_animation[globals.time] = 1;
-				//level.screen_size_shake_animation[globals.time + 0.05f] = 1.005;
-				level.screen_size_shake_animation[globals.time + 0.1f] = 1;
-
-				if (player_behaviours_map[entity_id].radius_animation.size() == 0)
-				{
-					player_behaviours_map[entity_id].default_radius = radius_map[entity_id].radius;
-				}
-				player_behaviours_map[entity_id].radius_animation[globals.time] = 1;
-				player_behaviours_map[entity_id].radius_animation[globals.time + 0.05f] = 0.9;
-				player_behaviours_map[entity_id].radius_animation[globals.time + 0.12f] = 1;
-			}
-			if (player_behaviours_map[entity_id].radius_animation.size() != 0)
-			{
-				Animate(globals.time, player_behaviours_map[entity_id].radius_modifier, player_behaviours_map[entity_id].radius_animation, FakeSigmoid);
-				radius_map[entity_id].radius = player_behaviours_map[entity_id].default_radius * player_behaviours_map[entity_id].radius_modifier;
+				assert(shader_map.count(entity_id) > 0);
+				shader_map[entity_id].uniforms["time"] = 0;
 			}
 		}
 	}

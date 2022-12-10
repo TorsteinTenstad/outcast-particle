@@ -38,7 +38,7 @@ public:
 			sf::FloatRect bounds = text_[entity_id].getLocalBounds();
 			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, text_height_[entity_text.size]);
 			text_[entity_id].setPosition(position_map[entity_id].position);
-			level.drawables[draw_priority_map[entity_id].draw_priority].push_back(&text_[entity_id]);
+			level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, &text_[entity_id] });
 		}
 	}
 };

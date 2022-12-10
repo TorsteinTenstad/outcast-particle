@@ -43,7 +43,7 @@ public:
 				segments_[entity_id][i].setPoint(2, p3);
 				segments_[entity_id][i].setPoint(3, p4);
 				segments_[entity_id][i].setFillColor(sf::Color(200, 200, 200, 127 * pow((float)(trail_map[entity_id].path.size() - i) / trail_map[entity_id].path.size(), 2)));
-				level.drawables[draw_priority_map[entity_id].draw_priority].push_back(&segments_[entity_id][i]);
+				level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, &segments_[entity_id][i] });
 				global_segment_position += trail_map[entity_id].path[i];
 				p1 = p4;
 				p2 = p3;
