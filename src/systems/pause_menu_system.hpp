@@ -45,5 +45,16 @@ public:
 				set_mode_(PLAY_MODE);
 			}
 		}
+		if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::T])
+		{
+			if (get_mode_() == PLAY_MODE)
+			{
+				set_mode_(PAUSE_MODE);
+			}
+			else if (get_mode_() == PAUSE_MODE)
+			{
+				set_mode_(PLAY_MODE);
+			}
+		}
 	}
 };

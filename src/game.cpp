@@ -50,7 +50,7 @@ void Game::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
 	pause_menu_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	if (active_mode_ != EDIT_MODE)
+	if (active_mode_ == PLAY_MODE)
 	{
 		player_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
