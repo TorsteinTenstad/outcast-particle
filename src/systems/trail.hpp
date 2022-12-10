@@ -27,7 +27,7 @@ public:
 				trail.widths.clear();
 				for (unsigned i = 0; i < trail.path.size(); ++i)
 				{
-					trail.widths.push_back(0.9 * radius_map[entity_id].radius * pow((float)(trail.path.size() - i) / trail.path.size(), 1.5));
+					trail.widths.push_back(0.8 * radius_map[entity_id].radius * pow((float)(trail.path.size() - i) / trail.path.size(), 1.5));
 				}
 			}
 		}
