@@ -18,13 +18,11 @@ class MagneticFieldForceSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
-		std::map<int, MagneticField>& magnetic_field_strength_map = level.GetComponent<MagneticField>();
-		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
-		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
-		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
+		auto& intersection_map = level.GetComponent<Intersection>();
+		auto& magnetic_field_strength_map = level.GetComponent<MagneticField>();
+		auto& received_forces_map = level.GetComponent<ReceivedForces>();
+		auto& charge_map = level.GetComponent<Charge>();
+		auto& velocity_map = level.GetComponent<Velocity>();
 		for (auto& [entity_id, received_forces] : received_forces_map)
 		{
 			if (intersection_map.count(entity_id) != 0 && charge_map.count(entity_id) != 0)

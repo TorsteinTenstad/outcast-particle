@@ -39,20 +39,19 @@ public:
 	}
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, Border>& border_map = level.GetComponent<Border>();
-		std::map<int, Trail>& trail_map = level.GetComponent<Trail>();
-		std::map<int, Text>& text_map = level.GetComponent<Text>();
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
+		auto& draw_priority_map = level.GetComponent<DrawPriority>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		auto& radius_map = level.GetComponent<Radius>();
+		auto& border_map = level.GetComponent<Border>();
+		auto& trail_map = level.GetComponent<Trail>();
+		auto& text_map = level.GetComponent<Text>();
 
 		draw_order_.clear();
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
-			draw_order_[entity_drawinfo.draw_priority].push_back(entity_id);
+			draw_order_[draw_priority_map[entity_id].draw_priority].push_back(entity_id);
 			if (textures_.count(entity_drawinfo.image_path) == 0)
 			{
 				textures_[entity_drawinfo.image_path] = sf::Texture();

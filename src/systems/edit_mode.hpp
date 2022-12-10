@@ -19,18 +19,18 @@ private:
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)dt;
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
-		std::map<int, Editable>& editable_map = level.GetComponent<Editable>();
-		std::map<int, BlueprintMenuItem>& blueprint_menu_item_map = level.GetComponent<BlueprintMenuItem>();
-		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
-		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, Border>& border_map = level.GetComponent<Border>();
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
-		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
-		std::map<int, ElectricField>& electric_field_map = level.GetComponent<ElectricField>();
-		std::map<int, MagneticField>& magnetic_field_map = level.GetComponent<MagneticField>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& velocity_map = level.GetComponent<Velocity>();
+		auto& editable_map = level.GetComponent<Editable>();
+		auto& blueprint_menu_item_map = level.GetComponent<BlueprintMenuItem>();
+		auto& clicked_on_map = level.GetComponent<ClickedOn>();
+		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		auto& border_map = level.GetComponent<Border>();
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
+		auto& draw_priority_map = level.GetComponent<DrawPriority>();
+		auto& charge_map = level.GetComponent<Charge>();
+		auto& electric_field_map = level.GetComponent<ElectricField>();
+		auto& magnetic_field_map = level.GetComponent<MagneticField>();
 
 		if (level.editable && cursor_and_keys.key_pressed_this_frame[globals.key_config.EDIT_MODE])
 		{
@@ -122,7 +122,7 @@ public:
 			if (editable_map.count(entity_id) > 0 && editable_map[entity_id].selected)
 			{
 				blueprint_menu_item_map.erase(entity_id);
-				draw_info_map[entity_id].draw_priority -= 100;
+				draw_priority_map[entity_id].draw_priority -= 100;
 				CloseBlueprintMenu(level);
 				break;
 			}
@@ -284,7 +284,7 @@ public:
 		int menu_background_id = level.CreateEntityId();
 		level.GetComponent<Position>()[menu_background_id].position = level.size / 2.f;
 		level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
-		level.GetComponent<DrawInfo>()[menu_background_id].draw_priority = 50;
+		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = 50;
 		level.GetComponent<ClickedOn>()[menu_background_id];
 		float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
 		level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
@@ -295,7 +295,7 @@ public:
 		{
 			entity_id = level.AddBlueprint(tag);
 			level.GetComponent<Position>()[entity_id].position = sf::Vector2f(level.size.x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.size.y / 2);
-			level.GetComponent<DrawInfo>()[entity_id].draw_priority += 100;
+			level.GetComponent<DrawPriority>()[entity_id].draw_priority += 100;
 			level.GetComponent<BlueprintMenuItem>()[entity_id];
 			i++;
 		}

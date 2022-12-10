@@ -42,12 +42,10 @@ class IntersectionSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& radius_map = level.GetComponent<Radius>();
+		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		auto& intersection_map = level.GetComponent<Intersection>();
 		for (auto& [entity_id, intersection] : intersection_map)
 		{
 			assert(radius_map.count(entity_id) > 0);

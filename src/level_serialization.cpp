@@ -348,7 +348,8 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPStaticParticle")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 5, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 5 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -363,7 +364,8 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPMovingParticle")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 6, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 6 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -385,7 +387,8 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPPlayer")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 7, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 7 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -409,7 +412,8 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPLaser")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", false, 3, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
             GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
             GetComponent<KillOnIntersection>()[entity_id] = {};
@@ -425,7 +429,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 4, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 0.2, 75 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -440,7 +445,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 2, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 2 };
             GetComponent<Goal>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\fanfare.wav" };
@@ -456,7 +462,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 1, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 1 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -471,7 +478,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 1, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 1 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -507,7 +515,8 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPStaticParticle")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 5, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 5 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -519,7 +528,8 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPMovingParticle")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 6, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 6 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -537,7 +547,8 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPPlayer")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 7, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 7 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -556,7 +567,8 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPLaser")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", false, 3, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
         GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
         GetComponent<KillOnIntersection>()[entity_id] = {};
@@ -569,7 +581,8 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 4, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 0.2, 75 };
         GetComponent<Tag>()[entity_id] = {"BPWall"};
@@ -581,7 +594,8 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 2, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Goal>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\fanfare.wav" };
@@ -594,7 +608,8 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 1, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 1 };
         GetComponent<Tag>()[entity_id] = {"BPElectricField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
@@ -605,7 +620,8 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, false, false, 120, sf::Vector2f(0, 0), false };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 1, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 1 };
         GetComponent<Tag>()[entity_id] = {"BPMagneticField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };

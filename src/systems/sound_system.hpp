@@ -13,9 +13,7 @@ private:
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, SoundInfo>& sound_info_map = level.GetComponent<SoundInfo>();
+		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
 		for (auto const& [entity_id, entity_soundinfo] : sound_info_map)
 		{

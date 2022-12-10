@@ -12,14 +12,13 @@ class CollisionSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
-		std::map<int, Collision>& collision_map = level.GetComponent<Collision>();
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
-		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, SoundInfo>& sound_info_map = level.GetComponent<SoundInfo>();
+		auto& intersection_map = level.GetComponent<Intersection>();
+		auto& collision_map = level.GetComponent<Collision>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& velocity_map = level.GetComponent<Velocity>();
+		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		auto& radius_map = level.GetComponent<Radius>();
+		auto& sound_info_map = level.GetComponent<SoundInfo>();
 		for (auto& [entity_id, collision] : collision_map)
 		{
 			if (intersection_map.count(entity_id) != 0)

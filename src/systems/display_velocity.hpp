@@ -16,10 +16,8 @@ class DisplayVelocitySystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& velocity_map = level.GetComponent<Velocity>();
 
 		for (auto const& [entity_id, velocity] : velocity_map)
 		{

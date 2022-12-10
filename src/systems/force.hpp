@@ -26,10 +26,8 @@ private:
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Acceleration>& acceleration_map = level.GetComponent<Acceleration>();
-		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
+		auto& acceleration_map = level.GetComponent<Acceleration>();
+		auto& received_forces_map = level.GetComponent<ReceivedForces>();
 
 		for (auto const& [entity_id, received_forces] : received_forces_map)
 		{

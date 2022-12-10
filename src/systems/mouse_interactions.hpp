@@ -12,17 +12,17 @@ class MouseInterationSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)dt;
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& clicked_on_map = level.GetComponent<ClickedOn>();
+		auto& radius_map = level.GetComponent<Radius>();
+		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
+		auto& draw_priority_map = level.GetComponent<DrawPriority>();
 
 		std::map<int, std::vector<int>> priority;
 		for (auto& [entity_id, clicked_on] : clicked_on_map)
 		{
-			priority[draw_info_map[entity_id].draw_priority].push_back(entity_id);
+			priority[draw_priority_map[entity_id].draw_priority].push_back(entity_id);
 		}
 		for (auto it = priority.rbegin(); it != priority.rend(); it++)
 		{

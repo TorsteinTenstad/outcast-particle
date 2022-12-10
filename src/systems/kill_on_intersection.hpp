@@ -13,10 +13,8 @@ class KillOnIntersectionSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
-		std::map<int, KillOnIntersection>& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();
+		auto& intersection_map = level.GetComponent<Intersection>();
+		auto& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();
 
 		for (auto it = intersection_map.cbegin(), next_it = it; it != intersection_map.cend(); it = next_it)
 		{

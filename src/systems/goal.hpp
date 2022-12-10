@@ -12,15 +12,12 @@ class GoalSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Intersection>& intersection_map = level.GetComponent<Intersection>();
-		std::map<int, Player>& player_map = level.GetComponent<Player>();
-		std::map<int, Goal>& goal_map = level.GetComponent<Goal>();
-		std::map<int, SoundInfo>& sound_info_map = level.GetComponent<SoundInfo>();
+		auto& intersection_map = level.GetComponent<Intersection>();
+		auto& player_map = level.GetComponent<Player>();
+		auto& goal_map = level.GetComponent<Goal>();
+		auto& sound_info_map = level.GetComponent<SoundInfo>();
 		for (auto& [entity_id, _] : player_map)
 		{
-			(void)_;
 			for (auto& intersection_id : intersection_map[entity_id].intersecting_ids)
 			{
 				if (goal_map.count(intersection_id) != 0)

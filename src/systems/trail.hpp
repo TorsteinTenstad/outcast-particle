@@ -8,10 +8,9 @@ class TrailSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		std::map<int, Velocity>& velocity_map = level.GetComponent<Velocity>();
-		std::map<int, Trail>& trail_map = level.GetComponent<Trail>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
+		auto& velocity_map = level.GetComponent<Velocity>();
+		auto& trail_map = level.GetComponent<Trail>();
+		auto& radius_map = level.GetComponent<Radius>();
 
 		for (auto& [entity_id, trail] : trail_map)
 		{

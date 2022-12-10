@@ -11,12 +11,11 @@ class PlayerSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)dt;
-		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
-		std::map<int, Player>& player_map = level.GetComponent<Player>();
-		std::map<int, PlayerBehaviours>& player_behaviours_map = level.GetComponent<PlayerBehaviours>();
-		std::map<int, Radius>& radius_map = level.GetComponent<Radius>();
-		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
+		auto& received_forces_map = level.GetComponent<ReceivedForces>();
+		auto& player_map = level.GetComponent<Player>();
+		auto& player_behaviours_map = level.GetComponent<PlayerBehaviours>();
+		auto& radius_map = level.GetComponent<Radius>();
+		auto& charge_map = level.GetComponent<Charge>();
 
 		for (auto& [entity_id, player] : player_map)
 		{

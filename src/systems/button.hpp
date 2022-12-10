@@ -11,11 +11,9 @@ class ButtonSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, ClickedOn>& clicked_on_map = level.GetComponent<ClickedOn>();
-		std::map<int, Button>& button_map = level.GetComponent<Button>();
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
+		auto& clicked_on_map = level.GetComponent<ClickedOn>();
+		auto& button_map = level.GetComponent<Button>();
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
 
 		for (auto const& [entity_id, button] : button_map)
 		{

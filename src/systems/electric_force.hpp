@@ -15,11 +15,9 @@ class ElectricForceSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, Position>& position_map = level.GetComponent<Position>();
-		std::map<int, ReceivedForces>& received_forces_map = level.GetComponent<ReceivedForces>();
-		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
+		auto& position_map = level.GetComponent<Position>();
+		auto& received_forces_map = level.GetComponent<ReceivedForces>();
+		auto& charge_map = level.GetComponent<Charge>();
 
 		for (auto& [entity_id_to, entity_forces] : received_forces_map)
 		{

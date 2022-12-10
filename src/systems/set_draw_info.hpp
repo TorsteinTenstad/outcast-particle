@@ -11,16 +11,14 @@ class SetDrawInfoSystem : public GameSystem
 public:
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		(void)cursor_and_keys;
-		(void)dt;
-		std::map<int, DrawInfo>& draw_info_map = level.GetComponent<DrawInfo>();
-		std::map<int, ChargeDependentDrawInfo>& charge_dependent_drawinfo_map = level.GetComponent<ChargeDependentDrawInfo>();
-		std::map<int, OrientationDependentDrawInfo>& orientation_dependent_drawinfo_map = level.GetComponent<OrientationDependentDrawInfo>();
-		std::map<int, Charge>& charge_map = level.GetComponent<Charge>();
-		std::map<int, WidthAndHeight>& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		std::map<int, ElectricField>& electric_field_map = level.GetComponent<ElectricField>();
-		std::map<int, MagneticField>& magnetic_field_map = level.GetComponent<MagneticField>();
-		std::map<int, Player>& player_map = level.GetComponent<Player>();
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
+		auto& charge_dependent_drawinfo_map = level.GetComponent<ChargeDependentDrawInfo>();
+		auto& orientation_dependent_drawinfo_map = level.GetComponent<OrientationDependentDrawInfo>();
+		auto& charge_map = level.GetComponent<Charge>();
+		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
+		auto& electric_field_map = level.GetComponent<ElectricField>();
+		auto& magnetic_field_map = level.GetComponent<MagneticField>();
+		auto& player_map = level.GetComponent<Player>();
 
 		for (auto const& [entity_id, charge_dependent_drawinfo] : charge_dependent_drawinfo_map)
 		{

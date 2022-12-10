@@ -10,7 +10,6 @@ int Level::CopyEntity(int from_id)
 	int to_id = CreateEntityId();
 	for (auto& [_, component_map_variant] : components_)
 	{
-		(void)_;
 		std::visit([from_id, to_id](auto& component_map) {
 			if (component_map.count(from_id) != 0)
 			{
@@ -26,7 +25,6 @@ void Level::DeleteEntity(int id)
 {
 	for (auto& [_, component_map_variant] : components_)
 	{
-		(void)_;
 		std::visit([id](auto& component_map) {
 			if (component_map.count(id) != 0)
 			{

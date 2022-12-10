@@ -23,6 +23,7 @@
 
 typedef std::variant<
 	std::map<int, DrawInfo>,
+	std::map<int, DrawPriority>,
 	std::map<int, ChargeDependentDrawInfo>,
 	std::map<int, OrientationDependentDrawInfo>,
 	std::map<int, Position>,
@@ -58,6 +59,8 @@ private:
 
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
+
+	std::map<int, sf::Drawable*> drawables_;
 
 public:
 	bool editable = false;
