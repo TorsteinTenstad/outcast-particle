@@ -17,7 +17,7 @@ class BPTileBasedEntity : public BPEntity
 
 class BPStaticParticle : public BPEntity
 {
-	DrawInfo draw_info = { "_", true, 0 };
+	DrawInfo draw_info = { "_", false, 0 };
 	DrawPriority draw_priority = { 5 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Editable editable = { true, true, false, 0, sf::Vector2f(0, 0), false };
@@ -29,7 +29,6 @@ class BPStaticParticle : public BPEntity
 
 class BPMovingParticle : public BPStaticParticle
 {
-	DrawInfo draw_info = { "_", true, 0 };
 	DrawPriority draw_priority = { 6 };
 	Editable editable = { true, true, true, 0, sf::Vector2f(0, 0), false };
 	Acceleration acceleration = {};
@@ -44,8 +43,8 @@ class BPMovingParticle : public BPStaticParticle
 
 class BPPlayer : public BPMovingParticle
 {
-	DrawInfo draw_info = { "_", true, 0 };
 	DrawPriority draw_priority = { 7 };
+	Shader shader = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
 
 	// [Serialize]
 	Player player = { true, true, 500 };
