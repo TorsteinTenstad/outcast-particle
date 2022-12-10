@@ -4,11 +4,28 @@ Game::Game()
 {
 	levels_[MAIN_MENU];
 	levels_[LEVEL_MENU];
+	levels_[OPTIONS_MENU];
 	pause_menu_system_ = PauseMenuSystem(std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this));
 }
 
 void Game::Init()
 {
+	//Main menu
+	float menu_button_w = 3072;
+	float menu_button_h = 432;
+	int menu_text_size = 300;
+	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
+	std::vector<std::string> menu_text = { "Level Menu", "Multiplayer", "Options", "Exit Game" };
+	auto menu_button_positions = GridHelper(menu_text.size(), 1, menu_button_w, menu_button_h, 200);
+	for (unsigned i = 0; i < menu_text.size(); ++i)
+	{
+		sf::Vector2 button_position = menu_button_positions[i] + levels_[MAIN_MENU].size / 2.f;
+		float x = button_position.x;
+		float y = button_position.y;
+		levels_[MAIN_MENU].AddMenuButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, menu_text[i], menu_text_size);
+	}
+
+	//Level menu & level generation
 	int level_id = 0;
 	for (const auto& entry : std::experimental::filesystem::directory_iterator("levels/"))
 	{
@@ -29,19 +46,22 @@ void Game::Init()
 		int id = levels_[LEVEL_MENU].AddLevelButton(std::bind(&Game::SetLevel, this, i), x, y, button_w, button_h, level_texture_identifier);
 	}
 
-	float menu_button_w = 3072;
-	float menu_button_h = 432;
-	int menu_text_size = 300;
-	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU), std::bind(&Game::ExitGame, this) };
-	std::vector<std::string> menu_text = { "Level Menu", "Multiplayer", "Options", "Exit Game" };
-	auto menu_button_positions = GridHelper(menu_text.size(), 1, menu_button_w, menu_button_h, 200);
-	for (unsigned i = 0; i < menu_text.size(); ++i)
+	//Options menu
+	float options_button_w = 3072;
+	float options_button_h = 432;
+	int options_text_size = 200;
+	std::vector<std::function<void(void)>> options_funtions = { std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this), std::bind(&Game::ExitGame, this), std::bind(&Game::ExitGame, this) };
+	std::vector<std::string> options_text = { "Up:", "Switch charge:", "Left:", "Neutral:", "Down:", "Pause:", "Right:", "Toggle edit mode:" };
+	auto options_button_positions = GridHelper(options_text.size(), 2, menu_button_w, menu_button_h, 200);
+	for (unsigned i = 0; i < options_text.size(); ++i)
 	{
-		sf::Vector2 button_position = menu_button_positions[i] + levels_[MAIN_MENU].size / 2.f;
+		sf::Vector2 button_position = options_button_positions[i] + levels_[OPTIONS_MENU].size / 2.f;
 		float x = button_position.x;
 		float y = button_position.y;
-		levels_[MAIN_MENU].AddMenuButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, menu_text[i], menu_text_size);
+		levels_[OPTIONS_MENU].AddMenuButton(options_funtions[i], x, y, options_button_w, options_button_h, options_text[i], options_text_size);
 	}
+	std::string options_to_menu_button = "Back to Main Menu";
+	levels_[OPTIONS_MENU].AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, options_button_w * 2 + 200, options_button_h, options_to_menu_button, 300);
 
 	active_level_ = MAIN_MENU;
 }
