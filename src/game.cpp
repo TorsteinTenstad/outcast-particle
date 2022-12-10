@@ -4,7 +4,7 @@ Game::Game()
 {
 	levels_[MAIN_MENU];
 	levels_[LEVEL_MENU];
-	pause_menu_system_ = PauseMenuSystem(std::bind(&Game::SetLevel, this, std::placeholders::_1));
+	pause_menu_system_ = PauseMenuSystem(std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this));
 }
 
 void Game::Init()
@@ -50,67 +50,92 @@ void Game::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
 	pause_menu_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	for (int i = 0; i < physics_ticks_per_frame_; ++i)
+	if (active_mode_ != EDIT_MODE)
 	{
-		UpdatePhysics(dt / physics_ticks_per_frame_);
+		player_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+		for (int i = 0; i < physics_ticks_per_frame_; ++i)
+		{
+			UpdatePhysics(dt / physics_ticks_per_frame_);
+		}
 	}
 	sound_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	mouse_interaction_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	button_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	if (!levels_[active_level_].edit_mode)
-	{
-		player_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	}
-	edit_mode_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	screen_shake_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	render_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	if (levels_[active_level_].edit_mode)
+	if (active_mode_ == EDIT_MODE)
 	{
 		display_velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+		edit_mode_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	}
 }
 void Game::UpdatePhysics(float dt)
 {
-	if (!levels_[active_level_].edit_mode)
-	{
-		electric_force_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		electric_field_force_system.Update(cursor_and_keys_, levels_[active_level_], dt);
-		magnetic_field_force_system.Update(cursor_and_keys_, levels_[active_level_], dt);
-		force_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		acceleration_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		intersection_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		goal_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		kill_on_intersection_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-		collision_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	}
+	electric_force_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	electric_field_force_system.Update(cursor_and_keys_, levels_[active_level_], dt);
+	magnetic_field_force_system.Update(cursor_and_keys_, levels_[active_level_], dt);
+	force_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	acceleration_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	intersection_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	goal_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	kill_on_intersection_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	collision_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 }
 
 Game::~Game()
 {
-	if (levels_[active_level_].edit_mode)
-	{
-		edit_mode_system_.CloseBlueprintMenu(levels_[active_level_]);
-		levels_[active_level_].SaveToFile();
-	}
+	SetLevel(MAIN_MENU);
 }
 
 void Game::SetLevel(int level)
 {
 	if (active_level_ >= 0)
 	{
-		if (levels_[active_level_].edit_mode)
-		{
-			edit_mode_system_.CloseBlueprintMenu(levels_[active_level_]);
-			levels_[active_level_].edit_mode = false;
-			levels_[active_level_].SaveToFile();
-		}
+		SetMode(PLAY_MODE);
 		levels_[active_level_].LoadFromFile();
 		GenerateLevelTexture(active_level_);
 	}
 	active_level_ = level;
+}
+
+Mode Game::GetMode()
+{
+	return active_mode_;
+}
+
+void Game::SetMode(Mode next_mode)
+{
+	if (active_mode_ == next_mode)
+	{
+		return;
+	}
+	switch (active_mode_)
+	{
+		case EDIT_MODE: {
+			edit_mode_system_.CloseBlueprintMenu(levels_[active_level_]);
+			levels_[active_level_].SaveToFile();
+			break;
+		}
+		case PLAY_MODE:
+			break;
+		case PAUSE_MODE:
+			break;
+	}
+	active_mode_ = next_mode;
+	switch (next_mode)
+	{
+		case EDIT_MODE: {
+			levels_[active_level_].LoadFromFile();
+			break;
+		}
+		case PLAY_MODE:
+			break;
+		case PAUSE_MODE:
+			break;
+	}
 }
 
 std::string Game::GenerateLevelTexture(int level_id)

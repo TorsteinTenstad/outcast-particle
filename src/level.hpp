@@ -21,6 +21,8 @@
 #include <typeindex>
 #include <variant>
 
+
+
 typedef std::variant<
 	std::map<int, DrawInfo>,
 	std::map<int, DrawPriority>,
@@ -64,7 +66,6 @@ private:
 
 public:
 	bool editable = false;
-	bool edit_mode = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(1920 * 4, 1080 * 4);
 	std::map<float, float> screen_size_shake_animation;

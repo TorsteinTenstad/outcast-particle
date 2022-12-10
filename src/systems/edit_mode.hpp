@@ -32,27 +32,6 @@ public:
 		auto& electric_field_map = level.GetComponent<ElectricField>();
 		auto& magnetic_field_map = level.GetComponent<MagneticField>();
 
-		if (level.editable && cursor_and_keys.key_pressed_this_frame[globals.key_config.EDIT_MODE])
-		{
-			if (level.edit_mode)
-			{
-				level.SaveToFile();
-				for (auto& [entity_id, editable_entity] : editable_map)
-				{
-					border_map.erase(entity_id);
-				}
-			}
-			else
-			{
-				level.LoadFromFile();
-			}
-			level.edit_mode = !level.edit_mode;
-		}
-		if (!level.edit_mode)
-		{
-			CloseBlueprintMenu(level);
-			return;
-		}
 		if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::B])
 		{
 			if (blueprint_menu_is_open)
