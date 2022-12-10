@@ -348,7 +348,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPStaticParticle")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 5 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
@@ -364,7 +364,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPMovingParticle")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 6 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
@@ -387,7 +387,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPPlayer")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 7 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
@@ -397,6 +397,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Intersection>()[entity_id] = {};
             GetComponent<Collision>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -515,7 +516,7 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPStaticParticle")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 5 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
@@ -528,7 +529,7 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPMovingParticle")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 6 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
@@ -547,7 +548,7 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPPlayer")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", true, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 7 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
@@ -557,6 +558,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Intersection>()[entity_id] = {};
         GetComponent<Collision>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Charge>()[entity_id] = { 10000 };

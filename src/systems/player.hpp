@@ -57,6 +57,7 @@ public:
 				assert(shader_map.count(entity_id) > 0);
 				shader_map[entity_id].uniforms["time"] = 0;
 			}
+			shader_map[entity_id].uniforms["time"] += dt;
 		}
 	}
 };

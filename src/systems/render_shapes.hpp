@@ -35,11 +35,11 @@ public:
 			{
 				textures_[entity_drawinfo.image_path] = sf::Texture();
 				textures_[entity_drawinfo.image_path].loadFromFile(entity_drawinfo.image_path);
-				textures_[entity_drawinfo.image_path].setRepeated(true);
 				textures_[entity_drawinfo.image_path].setSmooth(true);
 			}
 			if (width_and_height_map.count(entity_id))
 			{
+				textures_[entity_drawinfo.image_path].setRepeated(true);
 				sf::Vector2f w_h = width_and_height_map[entity_id].width_and_height;
 				if (entity_drawinfo.quarter_turn_rotations % 2 == 1)
 				{
