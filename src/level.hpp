@@ -21,8 +21,6 @@
 #include <typeindex>
 #include <variant>
 
-
-
 typedef std::variant<
 	std::map<int, DrawInfo>,
 	std::map<int, DrawPriority>,
@@ -62,14 +60,14 @@ private:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
-	std::map<int, sf::Drawable*> drawables_;
-
 public:
 	bool editable = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(1920 * 4, 1080 * 4);
 	std::map<float, float> screen_size_shake_animation;
 	sf::Vector2f post_shake_size;
+
+	std::map<int, std::vector<sf::Drawable*>> drawables; // Indexed by draw priority
 
 	template <class Component>
 	std::map<int, Component>& GetComponent();

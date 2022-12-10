@@ -4,13 +4,7 @@
 #include "cursor_and_keys.hpp"
 #include "game.hpp"
 #include "level.hpp"
-
-enum Mode
-{
-	EDIT_MODE,
-	PLAY_MODE,
-	PAUSE_MODE
-};
+#include "modes.hpp"
 
 class PauseMenuSystem
 {
@@ -32,7 +26,7 @@ public:
 	{
 		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.MENU])
 		{
-			set_level_(-1);
+			set_level_(MAIN_MENU);
 		}
 		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.EDIT_MODE])
 		{

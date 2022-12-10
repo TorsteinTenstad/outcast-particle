@@ -2,10 +2,12 @@
 #include "controls_config.hpp"
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
+#include "modes.hpp"
 #include "systems/acceleration.hpp"
 #include "systems/button.hpp"
 #include "systems/collision.hpp"
 #include "systems/display_velocity.hpp"
+#include "systems/draw.hpp"
 #include "systems/edit_mode.hpp"
 #include "systems/electric_field_force.hpp"
 #include "systems/electric_force.hpp"
@@ -17,16 +19,15 @@
 #include "systems/mouse_interactions.hpp"
 #include "systems/pause_menu_system.hpp"
 #include "systems/player.hpp"
+#include "systems/render_shapes.hpp"
+#include "systems/render_text.hpp"
+#include "systems/render_trail.hpp"
 #include "systems/screen_shake.hpp"
 #include "systems/set_draw_info.hpp"
 #include "systems/sfml_event.hpp"
-#include "systems/sfml_render.hpp"
 #include "systems/sound_system.hpp"
 #include "systems/trail.hpp"
 #include "systems/velocity.hpp"
-
-#define MAIN_MENU -1 //menus have negative key-values
-#define LEVEL_MENU -2
 
 class Game
 {
@@ -49,7 +50,10 @@ private:
 	TrailSystem trail_system_;
 	IntersectionSystem intersection_system_;
 	SetDrawInfoSystem set_draw_info_system_;
-	SFMLRenderSystem render_system_;
+	RenderShapesSystem render_shapes_system_;
+	RenderTextSystem render_text_system_;
+	RenderTrailSystem render_trail_system_;
+	DrawSystem draw_system_;
 	ScreenShakeSystem screen_shake_system_;
 	KillOnIntersectionSystem kill_on_intersection_system_;
 	GoalSystem goal_system_;

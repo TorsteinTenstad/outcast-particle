@@ -64,7 +64,10 @@ void Game::Update(float dt)
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	screen_shake_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	render_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	render_trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	render_shapes_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	render_text_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	draw_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	if (active_mode_ == EDIT_MODE)
 	{
 		display_velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
@@ -87,7 +90,7 @@ void Game::UpdatePhysics(float dt)
 
 Game::~Game()
 {
-	SetLevel(MAIN_MENU);
+	SetMode(PLAY_MODE);
 }
 
 void Game::SetLevel(int level)
@@ -148,7 +151,7 @@ std::string Game::GenerateLevelTexture(int level_id)
 	active_level_ = active_level_before_capture;
 	texture.update(globals.render_window);
 	std::string identifier = "level" + std::to_string(level_id);
-	render_system_.RegisterTexture(identifier, texture);
+	render_shapes_system_.RegisterTexture(identifier, texture);
 	return identifier;
 }
 

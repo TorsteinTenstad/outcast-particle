@@ -55,6 +55,7 @@ int Level::AddLevelButton(std::function<void(void)> on_click, float pos_x, float
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id].image_path = image_path;
 	GetComponent<DrawInfo>()[id].scale_to_fit = true;
+	GetComponent<DrawPriority>()[id].draw_priority = 1;
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
 	GetComponent<ClickedOn>()[id] = {};
@@ -72,6 +73,7 @@ int Level::AddMenuButton(std::function<void(void)> on_click, float pos_x, float 
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id].image_path = image_path;
 	GetComponent<DrawInfo>()[id].scale_to_fit = true;
+	GetComponent<DrawPriority>()[id].draw_priority = 1;
 	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
 	GetComponent<ClickedOn>()[id] = {};

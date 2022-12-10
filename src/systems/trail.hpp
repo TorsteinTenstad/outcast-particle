@@ -1,3 +1,4 @@
+#pragma once
 #include "game_system.hpp"
 #include "level.hpp"
 
