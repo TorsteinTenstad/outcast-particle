@@ -60,8 +60,7 @@ void Game::Init()
 		float y = button_position.y;
 		levels_[OPTIONS_MENU].AddMenuButton(options_funtions[i], x, y, options_button_w, options_button_h, options_text[i], options_text_size);
 	}
-	std::string options_to_menu_button = "Back to Main Menu";
-	levels_[OPTIONS_MENU].AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, options_button_w * 2 + 200, options_button_h, options_to_menu_button, 300);
+	levels_[OPTIONS_MENU].AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, options_button_w, options_button_h, "Main Menu", 200);
 
 	active_level_ = MAIN_MENU;
 }
