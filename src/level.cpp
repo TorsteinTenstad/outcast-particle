@@ -84,3 +84,23 @@ int Level::AddMenuButton(std::function<void(void)> on_click, float pos_x, float 
 	GetComponent<Text>()[id].size = text_size;
 	return id;
 }
+
+int Level::AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
+{
+	std::string imape_path_suffix = ToString(width) + "_" + ToString(height) + ".png";
+	std::string image_path = "content\\textures_generated\\button_" + imape_path_suffix;
+	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + imape_path_suffix;
+	int id = CreateEntityId();
+	GetComponent<DrawInfo>()[id].image_path = image_path;
+	GetComponent<DrawInfo>()[id].scale_to_fit = true;
+	GetComponent<DrawPriority>()[id].draw_priority = 1;
+	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
+	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
+	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<KeyConfigButton>()[id].key = key;
+	GetComponent<KeyConfigButton>()[id].image_path = image_path;
+	GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;
+	GetComponent<Text>()[id].content = button_text;
+	GetComponent<Text>()[id].size = text_size;
+	return id;
+}

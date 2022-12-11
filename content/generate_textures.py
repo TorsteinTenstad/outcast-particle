@@ -122,13 +122,13 @@ def laser_texture():
 if __name__ == '__main__':
 
     GENERATE_MAGNETIC_FELD_TEXTURES = False
-    GENERATE_BUTTON_TEXTURES = False
-    GENERATE_LASER_TEXTURE = True
+    GENERATE_BUTTON_TEXTURES = True
+    GENERATE_LASER_TEXTURE = False
 
     if GENERATE_LASER_TEXTURE:
         laser_texture()
     if GENERATE_BUTTON_TEXTURES:
-        for (w, h) in [[3072, 432], [700, 432]]:
+        for (w, h) in [[3072, 432], [700, 432],[6344,432]]:
             button_texture(w, h, 24)
     if GENERATE_MAGNETIC_FELD_TEXTURES:
         purple_colors = ['#1b0044', '#441e6c',
