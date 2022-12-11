@@ -67,9 +67,10 @@ private:
 	void UpdatePhysics(float dt);
 	void SetLevel(int level);
 	std::string GenerateLevelTexture(int level_id);
-	void ExitGame();
 	void SetMode(Mode next_mode);
 	Mode GetMode();
+	void SetWindowResolution(unsigned w, unsigned h);
+	void ExitGame();
 
 public:
 	Game();
