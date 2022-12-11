@@ -1,4 +1,4 @@
-name=Untitled;size=(7680,4320);editable=1
+name=Untitled;size=(960,568);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(3840,4260)}WidthAndHeight{width_and_height=(7680,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(7620,2160)}WidthAndHeight{width_and_height=(120,4080)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,2160)}WidthAndHeight{width_and_height=(120,4080)}
@@ -14,3 +14,4 @@ name=Untitled;size=(7680,4320);editable=1
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(4080,2160)}WidthAndHeight{width_and_height=(480,480)}MagneticField{field_strength=0.2}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(4800,2160)}WidthAndHeight{width_and_height=(480,480)}MagneticField{field_strength=0.4}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(5520,2160)}WidthAndHeight{width_and_height=(480,480)}MagneticField{field_strength=0.8}
+"BPLaser":Tag{tag=BPLaser}Position{position=(360,300)}WidthAndHeight{width_and_height=(60,60)}

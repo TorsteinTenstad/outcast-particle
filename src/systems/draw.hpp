@@ -50,7 +50,14 @@ public:
 			}
 			for (const auto& [name, value] : shader.uniforms)
 			{
-				shaders_[entity_id].setUniform(name, value);
+				if (name == "_time")
+				{
+					shaders_[entity_id].setUniform("_time", globals.time);
+				}
+				else
+				{
+					shaders_[entity_id].setUniform(name, value);
+				}
 			}
 		}
 
