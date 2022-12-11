@@ -17,6 +17,8 @@ float Dot(sf::Vector2f u, sf::Vector2f v);
 
 std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float eliment_w, float eliment_h, float spacing);
 
+std::string HumanName(sf::Keyboard::Key key);
+
 template <class T>
 int Sign(T x)
 {

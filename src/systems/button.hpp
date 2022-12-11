@@ -5,6 +5,8 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "string_parsing_utils.hpp"
+#include "utils.hpp"
 
 class ButtonSystem : public GameSystem
 {
@@ -65,13 +67,21 @@ public:
 					if (pressed_this_frame)
 					{
 						*key_config_button.key = (sf::Keyboard::Key)key;
-						assert(text_map.count(entity_id) > 0);
-						text_map[entity_id].content.back() = 'A' + key;
 						key_config_button.is_pressed = false;
 						if (!key_config_button.image_path.empty())
 						{
 							draw_info_map[entity_id].image_path = key_config_button.image_path;
 						}
+
+						// Set button text:
+						assert(text_map.count(entity_id) > 0);
+						std::vector<std::string> button_description = SplitString(text_map[entity_id].content, " ");
+						text_map[entity_id].content = "";
+						for (unsigned i = 0; i < button_description.size() - 1; ++i)
+						{
+							text_map[entity_id].content += button_description[i] + " ";
+						}
+						text_map[entity_id].content += HumanName((sf::Keyboard::Key)key);
 					}
 				}
 			}

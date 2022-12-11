@@ -62,3 +62,45 @@ std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float elimen
 	}
 	return grid;
 }
+
+std::string HumanName(sf::Keyboard::Key key)
+{
+	if (sf::Keyboard::A <= key && key <= sf::Keyboard::Z)
+	{
+		return std::string(1, 'A' + key);
+	}
+	if (sf::Keyboard::Num0 <= key && key <= sf::Keyboard::Num9)
+	{
+		return std::string(1, '0' + key);
+	}
+	switch (key)
+	{
+		case sf::Keyboard::Escape:
+			return "Escape";
+		case sf::Keyboard::LControl:
+			return "LControl";
+		case sf::Keyboard::LShift:
+			return "LShift";
+		case sf::Keyboard::LAlt:
+			return "LAlt";
+		case sf::Keyboard::RControl:
+			return "RControl";
+		case sf::Keyboard::RShift:
+			return "RShift";
+		case sf::Keyboard::RAlt:
+			return "RAlt";
+		case sf::Keyboard::Space:
+			return "Space";
+		case sf::Keyboard::Enter:
+			return "Enter";
+		case sf::Keyboard::Backspace:
+			return "Backspace";
+		case sf::Keyboard::Tab:
+			return "Tab";
+		case sf::Keyboard::Delete:
+			return "Delete";
+
+		default:
+			return "Unknown key";
+	}
+}

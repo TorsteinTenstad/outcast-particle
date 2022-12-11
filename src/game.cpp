@@ -51,14 +51,15 @@ void Game::Init()
 	float options_button_h = 432;
 	int options_text_size = 200;
 	std::vector<sf::Keyboard::Key*> options_keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.MENU, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.EDIT_MODE };
-	std::vector<std::string> options_text = { "Up: W", "Switch charge:  ", "Left: A", "Neutral:  ", "Down: S", "Pause:  ", "Right: D", "Toggle edit mode:  " };
+	std::vector<std::string> options_text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
 	auto options_button_positions = GridHelper(options_text.size(), 2, menu_button_w, menu_button_h, 200);
 	for (unsigned i = 0; i < options_text.size(); ++i)
 	{
+		std::string text = options_text[i] + ": " + HumanName(*options_keys[i]);
 		sf::Vector2 button_position = options_button_positions[i] + levels_[OPTIONS_MENU].size / 2.f;
 		float x = button_position.x;
 		float y = button_position.y;
-		levels_[OPTIONS_MENU].AddOptionsButton(options_keys[i], x, y, options_button_w, options_button_h, options_text[i], options_text_size);
+		levels_[OPTIONS_MENU].AddOptionsButton(options_keys[i], x, y, options_button_w, options_button_h, text, options_text_size);
 	}
 	std::string options_to_menu_button = "Back to Main Menu";
 	levels_[OPTIONS_MENU].AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, options_button_w * 2 + 200, options_button_h, options_to_menu_button, 200);
