@@ -47,7 +47,12 @@ public:
 					w_h.y = width_and_height_map[entity_id].width_and_height.x;
 				}
 				rectangle_shapes_[entity_id].setSize(w_h);
-				if (!entity_drawinfo.scale_to_fit)
+				if (entity_drawinfo.scale_to_fit)
+				{
+					sf::Vector2u texture_size = textures_[entity_drawinfo.image_path].getSize();
+					rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, texture_size.x, texture_size.y));
+				}
+				else
 				{
 					rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, w_h.x, w_h.y));
 				}

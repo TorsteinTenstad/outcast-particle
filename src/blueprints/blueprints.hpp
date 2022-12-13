@@ -57,6 +57,7 @@ class BPLaser : public BPEntity
 	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
 	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
+	Shader shader = { "shaders\\test.vert", "", { { "_time", 1 } } };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 60) };

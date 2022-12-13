@@ -51,6 +51,7 @@ typedef std::variant<
 	std::map<int, Intersection>,
 	std::map<int, SoundInfo>,
 	std::map<int, Text>,
+	std::map<int, KeyConfigButton>,
 	std::map<int, Button>>
 	ComponentMap;
 
@@ -86,6 +87,7 @@ public:
 	void DeleteEntity(int id);
 	int AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
 	int AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
+	int AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 
 	void SaveToFile();
 	void LoadFromFile();

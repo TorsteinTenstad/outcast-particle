@@ -33,9 +33,12 @@ class Game
 {
 private:
 	int physics_ticks_per_frame_ = 10;
+
 	std::map<int, Level> levels_;
 	int active_level_ = MAIN_MENU;
 	Mode active_mode_ = PLAY_MODE;
+
+	bool fullscreen_ = false;
 
 	SFMLEventSystem event_system_;
 	EditModeSystem edit_mode_system_;
@@ -67,9 +70,10 @@ private:
 	void UpdatePhysics(float dt);
 	void SetLevel(int level);
 	std::string GenerateLevelTexture(int level_id);
-	void ExitGame();
 	void SetMode(Mode next_mode);
 	Mode GetMode();
+	void ToggleFullscreen();
+	void ExitGame();
 
 public:
 	Game();
