@@ -21,10 +21,6 @@ public:
 			{
 				globals.render_window.close();
 			}
-			else if (event.type == sf::Event::Resized)
-			{
-				globals.window_size = sf::Vector2u(event.size.width, event.size.height);
-			}
 			if (event.type == sf::Event::KeyPressed)
 			{
 				cursor_and_keys.key_pressed_this_frame[event.key.code] = !cursor_and_keys.key_down[event.key.code];

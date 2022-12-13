@@ -22,7 +22,7 @@ public:
 
 		globals.render_window.clear();
 
-		sf::Vector2f background_size = level.size * MAX_SCREEN_SIZE_SHAKE;
+		sf::Vector2f background_size = globals.render_window.getView().getSize();
 		background_.setSize(background_size);
 		background_.setPosition(-(background_size - level.size) / 2.f);
 		globals.render_window.draw(background_);

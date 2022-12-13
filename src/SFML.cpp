@@ -5,9 +5,7 @@
 SFML::SFML()
 {
 	util::Platform platform;
-	globals.window_size.x = 1280;
-	globals.window_size.y = 720;
-	globals.render_window.create(sf::VideoMode(globals.window_size.x, globals.window_size.y), "outcast-particle");
+	globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
 	//globals.render_window.setFramerateLimit(60);
 	platform.setIcon(globals.render_window.getSystemHandle());
 }

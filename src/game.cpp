@@ -1,4 +1,8 @@
 #include "game.hpp"
+#include <chrono>
+#include <thread>
+
+using namespace std::chrono_literals;
 
 Game::Game()
 {
@@ -14,8 +18,8 @@ void Game::Init()
 	float menu_button_w = 3072;
 	float menu_button_h = 432;
 	int menu_text_size = 300;
-	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetWindowResolution, this, 1280, 720), std::bind(&Game::SetWindowResolution, this, 1600, 900), std::bind(&Game::SetWindowResolution, this, 2560, 1440), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
-	std::vector<std::string> menu_text = { "Level Menu", "1280x720", "1600x900", "2560x1440", "Options", "Exit Game" };
+	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ExitGame, this) };
+	std::vector<std::string> menu_text = { "Level Menu", "Options", "Toggle fullscreen", "Exit Game" };
 	auto menu_button_positions = GridHelper(menu_text.size(), 1, menu_button_w, menu_button_h, 200);
 	for (unsigned i = 0; i < menu_text.size(); ++i)
 	{
@@ -84,7 +88,6 @@ void Game::Update(float dt)
 	button_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	screen_shake_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	render_trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	render_shapes_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	render_text_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
@@ -94,6 +97,7 @@ void Game::Update(float dt)
 		display_velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 		edit_mode_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	}
+	screen_shake_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 }
 void Game::UpdatePhysics(float dt)
 {
@@ -172,6 +176,7 @@ std::string Game::GenerateLevelTexture(int level_id)
 	texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
 	int active_level_before_capture = active_level_;
 	active_level_ = level_id;
+	globals.render_window.setView(sf::View(levels_[level_id].size / 2.f, levels_[level_id].size));
 	Update(0);
 	active_level_ = active_level_before_capture;
 	texture.update(globals.render_window);
@@ -180,9 +185,17 @@ std::string Game::GenerateLevelTexture(int level_id)
 	return identifier;
 }
 
-void Game::SetWindowResolution(unsigned w, unsigned h)
+void Game::ToggleFullscreen()
 {
-	globals.render_window.setSize(sf::Vector2u(w, h));
+	if (fullscreen_)
+	{
+		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
+	}
+	else
+	{
+		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
+	}
+	fullscreen_ = !fullscreen_;
 }
 
 void Game::ExitGame()
