@@ -84,13 +84,13 @@ public:
 						}
 
 						assert(sound_info_map.count(intersecting_id) > 0);
-						if (collision_sound_factor > 0.5)
+						if (collision_sound_factor > 0.1)
 						{
 							if (collision_sound_factor > 1)
 							{
 								collision_sound_factor = 1;
 							}
-							sound_info_map[intersecting_id].sound_volume = collision_sound_factor;
+							sound_info_map[intersecting_id].sound_volume = collision_sound_factor * collision_sound_factor;
 							sound_info_map[intersecting_id].play_sound = true;
 						}
 					}

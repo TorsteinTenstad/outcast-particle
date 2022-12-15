@@ -15,6 +15,7 @@ public:
 	{
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();
+		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
 		for (auto it = intersection_map.cbegin(), next_it = it; it != intersection_map.cend(); it = next_it)
 		{
@@ -26,6 +27,7 @@ public:
 				if (kill_on_intersection_map.count(i) != 0)
 				{
 					level.DeleteEntity(entity_id);
+					sound_info_map[i].play_sound = true;
 				}
 			}
 		}

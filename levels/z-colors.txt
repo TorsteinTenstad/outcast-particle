@@ -1,11 +1,11 @@
 name=Untitled;size=(5760,3248);editable=1
-"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(360,240)}Charge{charge=100}
+"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(360,240)}Charge{charge=625}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,240)}Charge{charge=1000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1320,240)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1800,240)}Charge{charge=100000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(2280,240)}Charge{charge=1e+006}
-"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(360,600)}Charge{charge=-100}
-"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,600)}Charge{charge=-1000}
+"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(360,600)}Charge{charge=-625}
+"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,600)}Charge{charge=-2500}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1320,600)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1800,600)}Charge{charge=-100000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(2280,600)}Charge{charge=-1e+006}

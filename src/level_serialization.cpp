@@ -419,6 +419,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
             GetComponent<KillOnIntersection>()[entity_id] = {};
             GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", { { "_time", 1 } } };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -576,6 +577,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
         GetComponent<KillOnIntersection>()[entity_id] = {};
         GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", { { "_time", 1 } } };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 60) };

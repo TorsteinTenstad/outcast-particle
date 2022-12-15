@@ -58,6 +58,7 @@ class BPLaser : public BPEntity
 	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
 	Shader shader = { "shaders\\test.vert", "", { { "_time", 1 } } };
+	SoundInfo sound_info = { "content\\sounds\\laser.wav" };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 60) };

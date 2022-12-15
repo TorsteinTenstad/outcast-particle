@@ -1,7 +1,7 @@
 name=Untitled;size=(7680,4320);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(60,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(1140,2580)}WidthAndHeight{width_and_height=(240,240)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(7200,3840)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=500}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(1380,480)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=500}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3840,60)}WidthAndHeight{width_and_height=(7440,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3840,4260)}WidthAndHeight{width_and_height=(7440,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3840,4260)}WidthAndHeight{width_and_height=(7440,60)}

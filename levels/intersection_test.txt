@@ -1,4 +1,4 @@
-name=Untitled;size=(960,568);editable=1
+name=Untitled;size=(3720,2109);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(3840,4260)}WidthAndHeight{width_and_height=(7680,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(7620,2160)}WidthAndHeight{width_and_height=(120,4080)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,2160)}WidthAndHeight{width_and_height=(120,4080)}
