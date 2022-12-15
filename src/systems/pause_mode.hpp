@@ -25,14 +25,14 @@ public:
 		int text_size = 300;
 		std::vector<std::function<void(void)>> pause_functions = { std::bind(set_mode_, PLAY_MODE), reset_active_level_, std::bind(set_level_, MAIN_MENU) };
 		std::vector<std::string> pause_text = { "Continue", "Restart", "Return to Menu" };
-		auto button_positions = GridHelper(pause_text.size(), 2, button_w, button_h, 200);
+		auto button_positions = GridHelper(pause_text.size(), 1, button_w, button_h, 200);
 		std::string image_path_suffix = ToString(button_w) + "_" + ToString(button_h) + ".png";
 		std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
 		std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
 
 		for (unsigned i = 0; i < pause_text.size(); ++i)
 		{
-			sf::Vector2f button_position = button_positions[i] + sf::Vector2f(1920 * 2, 1080 * 2);
+			sf::Vector2f button_position = button_positions[i] + level.size / 2.f;
 			float x = button_position.x;
 			float y = button_position.y;
 

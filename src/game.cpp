@@ -9,7 +9,7 @@ Game::Game()
 	levels_[MAIN_MENU];
 	levels_[LEVEL_MENU];
 	levels_[OPTIONS_MENU];
-	mode_system_ = ModeSystem(std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this));
+	mode_system_ = ModeSystem(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this));
 	pause_mode_ = PauseMode(std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 }
 
@@ -77,19 +77,12 @@ void Game::Init()
 	auto pause_button_positions = GridHelper(options_text.size(), 2, pause_button_w, pause_button_h, 200);
 
 	active_level_ = MAIN_MENU;
-	SetLevel(4);
-	SetMode(PAUSE_MODE);
-	SetLevel(MAIN_MENU);
 }
 
 void Game::Update(float dt)
 {
 	event_system_.Update(cursor_and_keys_);
-	std::cout << "a"
-			  << "\n";
 	mode_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "b"
-			  << "\n";
 	if (active_mode_ == PLAY_MODE)
 	{
 		player_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
@@ -99,40 +92,20 @@ void Game::Update(float dt)
 		}
 	}
 	sound_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "c"
-			  << "\n";
 	mouse_interaction_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "d"
-			  << "\n";
 	button_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "e"
-			  << "\n";
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "f"
-			  << "\n";
 	trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "g"
-			  << "\n";
 	render_trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "h"
-			  << "\n";
 	render_shapes_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "i"
-			  << "\n";
 	render_text_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "j"
-			  << "\n";
 	draw_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "k"
-			  << "\n";
 	if (active_mode_ == EDIT_MODE)
 	{
 		display_velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 		edit_mode_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	}
 	screen_shake_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	std::cout << "l"
-			  << "\n";
 }
 void Game::UpdatePhysics(float dt)
 {
@@ -161,11 +134,7 @@ void Game::SetLevel(int level)
 		levels_[active_level_].LoadFromFile();
 		GenerateLevelTexture(active_level_);
 	}
-	std::cout << active_level_
-			  << "\n";
 	active_level_ = level;
-	std::cout << active_level_
-			  << "\n";
 }
 
 int Game::GetLevel()
@@ -251,7 +220,5 @@ void Game::ExitGame()
 
 void Game::ResetActiveLevel()
 {
-	std::cout << "Resetting level "
-			  << "\n";
 	SetLevel(active_level_);
 }

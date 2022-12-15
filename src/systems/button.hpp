@@ -35,6 +35,7 @@ public:
 					draw_info_map[entity_id].image_path = button.image_path;
 				}
 				button.on_click();
+				break;
 			}
 		}
 		for (auto& [entity_id, key_config_button] : key_config_button_map)

@@ -9,25 +9,19 @@
 class ModeSystem
 {
 private:
-	std::function<void(int)> set_level_;
 	std::function<void(Mode)> set_mode_;
 	std::function<Mode(void)> get_mode_;
 
 public:
 	ModeSystem()
 	{}
-	ModeSystem(std::function<void(int)> set_level, std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode)
+	ModeSystem(std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode)
 	{
-		set_level_ = set_level;
 		set_mode_ = set_mode;
 		get_mode_ = get_mode;
 	}
 	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
-		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.MENU])
-		{
-			set_level_(MAIN_MENU);
-		}
 		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.EDIT_MODE])
 		{
 			if (get_mode_() == PLAY_MODE && level.editable)
@@ -39,7 +33,7 @@ public:
 				set_mode_(PLAY_MODE);
 			}
 		}
-		if (cursor_and_keys.key_pressed_this_frame[sf::Keyboard::T])
+		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.MENU])
 		{
 			if (get_mode_() == PLAY_MODE)
 			{
@@ -49,6 +43,10 @@ public:
 			{
 				set_mode_(PLAY_MODE);
 			}
+		}
+		if (!globals.render_window.hasFocus() && get_mode_() == PLAY_MODE)
+		{
+			set_mode_(PAUSE_MODE);
 		}
 	}
 };
