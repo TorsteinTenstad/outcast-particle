@@ -99,6 +99,10 @@ std::string HumanName(sf::Keyboard::Key key)
 			return "Tab";
 		case sf::Keyboard::Delete:
 			return "Delete";
+		case sf::Keyboard::Comma:
+			return "Comma";
+		case sf::Keyboard::Period:
+			return "Period";
 
 		default:
 			return "Unknown key";

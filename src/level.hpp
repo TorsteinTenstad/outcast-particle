@@ -11,6 +11,7 @@
 #include "components/button.hpp"
 #include "components/draw_info.hpp"
 #include "components/mouse_interactions.hpp"
+#include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/player_behaviours.hpp"
@@ -52,6 +53,7 @@ typedef std::variant<
 	std::map<int, SoundInfo>,
 	std::map<int, Text>,
 	std::map<int, KeyConfigButton>,
+	std::map<int, PauseMenuItems>,
 	std::map<int, Button>>
 	ComponentMap;
 

@@ -6,7 +6,7 @@
 #include "level.hpp"
 #include "modes.hpp"
 
-class PauseMenuSystem
+class ModeSystem
 {
 private:
 	std::function<void(int)> set_level_;
@@ -14,9 +14,9 @@ private:
 	std::function<Mode(void)> get_mode_;
 
 public:
-	PauseMenuSystem()
+	ModeSystem()
 	{}
-	PauseMenuSystem(std::function<void(int)> set_level, std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode)
+	ModeSystem(std::function<void(int)> set_level, std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode)
 	{
 		set_level_ = set_level;
 		set_mode_ = set_mode;

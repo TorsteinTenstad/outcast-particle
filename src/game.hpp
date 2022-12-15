@@ -16,8 +16,9 @@
 #include "systems/intersection.hpp"
 #include "systems/kill_on_intersection.hpp"
 #include "systems/magnetic_field_force.hpp"
+#include "systems/mode_system.hpp"
 #include "systems/mouse_interactions.hpp"
-#include "systems/pause_menu_system.hpp"
+#include "systems/pause_mode.hpp"
 #include "systems/player.hpp"
 #include "systems/render_shapes.hpp"
 #include "systems/render_text.hpp"
@@ -65,10 +66,13 @@ private:
 	ElectricFieldForceSystem electric_field_force_system;
 	MagneticFieldForceSystem magnetic_field_force_system;
 	SoundSystem sound_system_;
-	PauseMenuSystem pause_menu_system_;
+	ModeSystem mode_system_;
+	PauseMode pause_mode_;
 
 	void UpdatePhysics(float dt);
 	void SetLevel(int level);
+	void ResetActiveLevel();
+	int GetLevel();
 	std::string GenerateLevelTexture(int level_id);
 	void SetMode(Mode next_mode);
 	Mode GetMode();
