@@ -1,0 +1,13 @@
+name=Untitled;size=(3840,2176);editable=1
+"BPWall":Tag{tag=BPWall}Position{position=(1920,900)}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3840,120)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3240,600)}WidthAndHeight{width_and_height=(840,360)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(600,600)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=500}
+"BPWall":Tag{tag=BPWall}Position{position=(60,1080)}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,2160)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1140,660)}WidthAndHeight{width_and_height=(60,1080)}
+"BPWall":Tag{tag=BPWall}Position{position=(1140,1260)}WidthAndHeight{width_and_height=(120,120)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1920,1500)}WidthAndHeight{width_and_height=(60,1080)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2700,660)}WidthAndHeight{width_and_height=(60,1080)}
+"BPWall":Tag{tag=BPWall}Position{position=(2700,1260)}WidthAndHeight{width_and_height=(120,120)}

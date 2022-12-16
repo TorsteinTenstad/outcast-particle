@@ -25,5 +25,5 @@ name=Untitled;size=(7680,4320);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(4020,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3660,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(5760,1020)}WidthAndHeight{width_and_height=(240,60)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(3840,3300)}WidthAndHeight{width_and_height=(240,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,1020)}WidthAndHeight{width_and_height=(240,60)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(3840,3300)}WidthAndHeight{width_and_height=(240,60)}

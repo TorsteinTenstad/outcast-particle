@@ -128,9 +128,9 @@ Game::~Game()
 
 void Game::SetLevel(int level)
 {
+	SetMode(PLAY_MODE);
 	if (active_level_ >= 0)
 	{
-		SetMode(PLAY_MODE);
 		levels_[active_level_].LoadFromFile();
 		GenerateLevelTexture(active_level_);
 	}
