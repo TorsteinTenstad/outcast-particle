@@ -78,6 +78,7 @@ private:
 	Mode GetMode();
 	void ToggleFullscreen();
 	void ExitGame();
+	bool InLevel();
 
 public:
 	Game();

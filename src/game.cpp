@@ -9,8 +9,8 @@ Game::Game()
 	levels_[MAIN_MENU];
 	levels_[LEVEL_MENU];
 	levels_[OPTIONS_MENU];
-	mode_system_ = ModeSystem(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this));
-	pause_mode_ = PauseMode(std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+	mode_system_ = ModeSystem(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
+	//pause_mode_ = PauseMode(std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 }
 
 void Game::Init()
@@ -165,6 +165,12 @@ void Game::SetMode(Mode next_mode)
 		case PAUSE_MODE:
 			pause_mode_.RemovePauseButtons(levels_[active_level_]);
 			break;
+		case LEVEL_COMPLETED_MODE:
+			pause_mode_.RemovePauseButtons(levels_[active_level_]);
+			break;
+		case LEVEL_FAILED_MODE:
+			pause_mode_.RemovePauseButtons(levels_[active_level_]);
+			break;
 		default:
 			assert(false);
 	}
@@ -178,7 +184,13 @@ void Game::SetMode(Mode next_mode)
 		case PLAY_MODE:
 			break;
 		case PAUSE_MODE:
-			pause_mode_.AddPauseButtons(levels_[active_level_]);
+			pause_mode_.AddPauseButtons(levels_[active_level_], std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			break;
+		case LEVEL_COMPLETED_MODE:
+			pause_mode_.AddLevelCompletedButtons(levels_[active_level_], active_level_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			break;
+		case LEVEL_FAILED_MODE:
+			pause_mode_.AddLevelFailedButtons(levels_[active_level_], std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		default:
 			assert(false);
@@ -221,4 +233,9 @@ void Game::ExitGame()
 void Game::ResetActiveLevel()
 {
 	SetLevel(active_level_);
+}
+
+bool Game::InLevel()
+{
+	return active_level_ >= 0;
 }

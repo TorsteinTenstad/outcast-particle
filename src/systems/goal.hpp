@@ -23,7 +23,6 @@ public:
 				if (goal_map.count(intersection_id) != 0)
 				{
 					goal_map[intersection_id].is_goal = true;
-
 					sound_info_map[intersection_id].play_sound = true;
 				}
 			}
