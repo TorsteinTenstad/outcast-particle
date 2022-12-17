@@ -77,8 +77,9 @@ private:
 	ModeSystem mode_system_;
 	PauseMode pause_mode_;
 
-	Level* AddLevel();
-	Level* AddLevel(int id);
+	Level& AddLevel();
+	Level& AddLevel(int id);
+	Level& GetLevel(int id);
 	void UpdatePhysics(float dt);
 	void SetLevel(int level);
 	void ResetActiveLevel();
