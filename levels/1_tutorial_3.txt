@@ -6,7 +6,7 @@ name=Untitled;size=(3840,2176);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3840,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(840,840)}WidthAndHeight{width_and_height=(240,1440)}ElectricField{field_vector=(-0.25,0)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1560,1560)}WidthAndHeight{width_and_height=(240,960)}ElectricField{field_vector=(-0.25,0)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(60,1200)}WidthAndHeight{width_and_height=(60,2160)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(60,1080)}WidthAndHeight{width_and_height=(60,2040)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2160,1320)}WidthAndHeight{width_and_height=(960,480)}ElectricField{field_vector=(0.25,-0)}
 "BPWall":Tag{tag=BPWall}Position{position=(2700,1260)}WidthAndHeight{width_and_height=(120,600)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1200,360)}WidthAndHeight{width_and_height=(480,480)}ElectricField{field_vector=(-0.25,0)}
