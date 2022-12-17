@@ -7,11 +7,12 @@ class PauseMode
 public:
 	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts)
 	{
-		float button_w = 3072;
-		float button_h = 432;
-		int text_size = 300;
+		float button_scale = level.size.x / MENU_LEVEL_WIDTH;
+		float button_w = 3072 * button_scale;
+		float button_h = 432 * button_scale;
+		int text_size = 300 * button_scale;
 		auto button_positions = GridHelper(button_texts.size(), 1, button_w, button_h, 200);
-		std::string image_path_suffix = ToString(button_w) + "_" + ToString(button_h) + ".png";
+		std::string image_path_suffix = "menu_wide.png";
 		std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
 		std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
 		for (unsigned i = 0; i < button_texts.size(); ++i)

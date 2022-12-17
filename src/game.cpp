@@ -6,10 +6,10 @@ using namespace std::chrono_literals;
 
 Game::Game()
 {
-
-	levels_[MAIN_MENU].size = sf::Vector2f(1920 * 4, 1080 * 4);
-	levels_[LEVEL_MENU].size = sf::Vector2f(1920 * 4, 1080 * 4);
-	levels_[OPTIONS_MENU].size = sf::Vector2f(1920 * 4, 1080 * 4);
+	sf::Vector2f menu_size = sf::Vector2f(MENU_LEVEL_WIDTH, MENU_LEVEL_WIDTH / ASPECT_RATIO);
+	levels_[MAIN_MENU].size = menu_size;
+	levels_[LEVEL_MENU].size = menu_size;
+	levels_[OPTIONS_MENU].size = menu_size;
 	mode_system_ = ModeSystem(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
 }
 

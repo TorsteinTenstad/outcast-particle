@@ -67,9 +67,9 @@ int Level::AddLevelButton(std::function<void(void)> on_click, float pos_x, float
 
 int Level::AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
 {
-	std::string imape_path_suffix = ToString(width) + "_" + ToString(height) + ".png";
-	std::string image_path = "content\\textures_generated\\button_" + imape_path_suffix;
-	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + imape_path_suffix;
+	std::string image_path_suffix = "menu_wide.png";
+	std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
+	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id].image_path = image_path;
 	GetComponent<DrawInfo>()[id].scale_to_fit = true;
@@ -87,9 +87,9 @@ int Level::AddMenuButton(std::function<void(void)> on_click, float pos_x, float 
 
 int Level::AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
 {
-	std::string imape_path_suffix = ToString(width) + "_" + ToString(height) + ".png";
-	std::string image_path = "content\\textures_generated\\button_" + imape_path_suffix;
-	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + imape_path_suffix;
+	std::string image_path_suffix = "menu_wide.png";
+	std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
+	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
 	int id = CreateEntityId();
 	GetComponent<DrawInfo>()[id].image_path = image_path;
 	GetComponent<DrawInfo>()[id].scale_to_fit = true;
