@@ -5,6 +5,9 @@
 #define BLOCK_SIZE 120
 #define MAX_SCREEN_SIZE_SHAKE 1.1f
 
+#define ASPECT_RATIO (16.f / 9.f)
+const std::array<float, 5> LEVEL_WIDTHS = { BLOCK_SIZE * 16, BLOCK_SIZE * 32, BLOCK_SIZE * 48, BLOCK_SIZE * 64, BLOCK_SIZE * 80 };
+
 const std::array<float, 6> CHARGE_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1, sf::Keyboard::Num0 };
 const std::array<float, 11> PARTICLE_CHARGE_CATEGORIES = { -160'000, -40'000, -10'000, -2500, -625, 0, 625, 2500, 10'000, 40'000, 160'000 };
 const std::array<std::string, 11> PLAYER_PARTICLE_TEXTURES = {

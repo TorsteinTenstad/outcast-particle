@@ -29,6 +29,20 @@ int Sign(T x)
 	return 1;
 }
 
+template <class T>
+int Clamp(T val, T min, T max)
+{
+	if (val < min)
+	{
+		return min;
+	}
+	if (val > max)
+	{
+		return max;
+	}
+	return val;
+}
+
 // NOTE: The array is assumed sorted
 template <class T, std::size_t SIZE>
 unsigned FindClosest(const std::array<T, SIZE>& sorted_arr, const T& value)

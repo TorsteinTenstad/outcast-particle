@@ -1,23 +1,24 @@
 #pragma once
-#include "Components/collision.hpp"
-#include "Components/goal.hpp"
-#include "Components/intersection.hpp"
-#include "Components/kill_on_intersection.hpp"
-#include "Components/sound_info.hpp"
-#include "Components/text.hpp"
 #include "PCH.hpp"
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
+#include "components/collision.hpp"
 #include "components/draw_info.hpp"
+#include "components/goal.hpp"
+#include "components/intersection.hpp"
+#include "components/kill_on_intersection.hpp"
 #include "components/mouse_interactions.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/player_behaviours.hpp"
 #include "components/shader.hpp"
+#include "components/sound_info.hpp"
 #include "components/tag.hpp"
+#include "components/text.hpp"
 #include "components/trail.hpp"
+#include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include <typeindex>
@@ -75,7 +76,7 @@ private:
 public:
 	bool editable = false;
 	std::string name = "Untitled";
-	sf::Vector2f size = sf::Vector2f(1920 * 4, 1080 * 4);
+	sf::Vector2f size = sf::Vector2f(LEVEL_WIDTHS[2], LEVEL_WIDTHS[2] / ASPECT_RATIO);
 	std::map<float, float> screen_size_shake_animation;
 	sf::Vector2f post_shake_size;
 

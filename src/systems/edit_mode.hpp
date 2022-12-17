@@ -45,13 +45,22 @@ public:
 		}
 
 		// Change level size:
+		int size_increase = 0;
 		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.INCREASE_LEVEL_SIZE])
 		{
-			level.size += sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE * 9 / 16);
+			size_increase += 1;
 		}
 		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.DECREASE_LEVEL_SIZE])
 		{
-			level.size -= sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE * 9 / 16);
+			size_increase -= 1;
+		}
+		if (size_increase != 0)
+		{
+			int width_idx = FindClosest(LEVEL_WIDTHS, level.size.x) + size_increase;
+			width_idx = Clamp(width_idx, 0, (int)LEVEL_WIDTHS.size() - 1);
+			float new_level_width = LEVEL_WIDTHS[width_idx];
+			level.size.x = new_level_width;
+			level.size.y = new_level_width / ASPECT_RATIO;
 		}
 
 		// Copy entities:
