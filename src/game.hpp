@@ -16,6 +16,8 @@
 #include "systems/goal.hpp"
 #include "systems/intersection.hpp"
 #include "systems/kill_on_intersection.hpp"
+#include "systems/level_button.hpp"
+#include "systems/level_completion_time.hpp"
 #include "systems/magnetic_field_force.hpp"
 #include "systems/mode_system.hpp"
 #include "systems/mouse_interactions.hpp"
@@ -36,7 +38,9 @@ class Game
 private:
 	int physics_ticks_per_frame_ = 10;
 
+	int next_available_level_id_ = 0;
 	std::map<int, Level> levels_;
+	std::map<int, float> level_completion_time_records_;
 	int active_level_ = MAIN_MENU;
 	Mode active_mode_ = PLAY_MODE;
 
@@ -64,6 +68,8 @@ private:
 	GoalSystem goal_system_;
 	BackgroundSystem background_system_;
 	CursorAndKeys cursor_and_keys_;
+	LevelCompletionTimeSystem level_completion_time_system_;
+	LevelButtonSystem level_button_system_;
 	CollisionSystem collision_system_;
 	ElectricFieldForceSystem electric_field_force_system;
 	MagneticFieldForceSystem magnetic_field_force_system;
@@ -71,10 +77,11 @@ private:
 	ModeSystem mode_system_;
 	PauseMode pause_mode_;
 
+	Level* AddLevel();
+	Level* AddLevel(int id);
 	void UpdatePhysics(float dt);
 	void SetLevel(int level);
 	void ResetActiveLevel();
-	int GetLevel();
 	std::string GenerateLevelTexture(int level_id);
 	void SetMode(Mode next_mode);
 	Mode GetMode();

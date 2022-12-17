@@ -8,6 +8,8 @@
 #include "components/goal.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
+#include "components/level_button.hpp"
+#include "components/level_completion_timer.hpp"
 #include "components/mouse_interactions.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
@@ -52,10 +54,12 @@ typedef std::variant<
 	std::map<int, MagneticField>,
 	std::map<int, Intersection>,
 	std::map<int, SoundInfo>,
+	std::map<int, LevelCompletionTimer>,
 	std::map<int, Background>,
 	std::map<int, Text>,
 	std::map<int, KeyConfigButton>,
 	std::map<int, PauseMenuItems>,
+	std::map<int, LevelButton>,
 	std::map<int, Button>>
 	ComponentMap;
 
@@ -75,6 +79,7 @@ private:
 	std::map<std::type_index, ComponentMap> components_;
 
 public:
+	const int id;
 	bool editable = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(LEVEL_WIDTHS[2], LEVEL_WIDTHS[2] / ASPECT_RATIO);
@@ -86,10 +91,11 @@ public:
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 
+	Level(int level_id);
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
-	int AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
+	int AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
 	int AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 	int AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 

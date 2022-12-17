@@ -19,6 +19,7 @@ public:
 		auto& draw_priority_map = level.GetComponent<DrawPriority>();
 		auto& position_map = level.GetComponent<Position>();
 		auto& text_map = level.GetComponent<Text>();
+		auto& border_map = level.GetComponent<Border>();
 
 		for (auto const& [entity_id, entity_text] : text_map)
 		{
@@ -38,6 +39,7 @@ public:
 			sf::FloatRect bounds = text_[entity_id].getLocalBounds();
 			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, text_height_[entity_text.font_path][entity_text.size]);
 			text_[entity_id].setPosition(position_map[entity_id].position);
+			text_[entity_id].setFillColor(text_map[entity_id].color);
 			level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, &text_[entity_id] });
 		}
 	}

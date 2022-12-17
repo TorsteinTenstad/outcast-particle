@@ -25,20 +25,18 @@ public:
 			background_map[entity_id];
 			draw_priority_map[entity_id].draw_priority = BACKGROUND_DRAW_PRIORITY;
 		}
-		for (const auto& [entity_id, background] : background_map)
+		int entity_id = background_map.begin()->first;
+		width_and_height_map[entity_id].width_and_height = level.size;
+		position_map[entity_id].position = level.size / 2.f;
+		if (mode == EDIT_MODE)
 		{
-			width_and_height_map[entity_id].width_and_height = level.size;
-			position_map[entity_id].position = level.size / 2.f;
-			if (mode == EDIT_MODE)
-			{
-				draw_info_map[entity_id].image_path = "content\\textures\\grid.png";
-				draw_info_map[entity_id].scale_to_fit = false;
-			}
-			else
-			{
-				draw_info_map[entity_id].image_path = "content\\textures\\background.png";
-				draw_info_map[entity_id].scale_to_fit = true;
-			}
+			draw_info_map[entity_id].image_path = "content\\textures\\grid.png";
+			draw_info_map[entity_id].scale_to_fit = false;
+		}
+		else
+		{
+			draw_info_map[entity_id].image_path = "content\\textures\\background.png";
+			draw_info_map[entity_id].scale_to_fit = true;
 		}
 	}
 };

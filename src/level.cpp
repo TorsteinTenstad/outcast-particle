@@ -5,6 +5,10 @@
 
 int Level::next_available_entity_id_ = 0;
 
+Level::Level(int level_id) :
+	id(level_id)
+{}
+
 int Level::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();
@@ -50,9 +54,10 @@ void Level::SaveToFile()
 	SaveToFile(savefile_path_);
 }
 
-int Level::AddLevelButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path)
+int Level::AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path)
 {
 	int id = CreateEntityId();
+	GetComponent<LevelButton>()[id].level = level;
 	GetComponent<DrawInfo>()[id].image_path = image_path;
 	GetComponent<DrawInfo>()[id].scale_to_fit = true;
 	GetComponent<DrawPriority>()[id].draw_priority = 1;
