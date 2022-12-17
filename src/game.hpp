@@ -4,6 +4,7 @@
 #include "level.hpp"
 #include "modes.hpp"
 #include "systems/acceleration.hpp"
+#include "systems/background.hpp"
 #include "systems/button.hpp"
 #include "systems/collision.hpp"
 #include "systems/display_velocity.hpp"
@@ -61,6 +62,7 @@ private:
 	ScreenShakeSystem screen_shake_system_;
 	KillOnIntersectionSystem kill_on_intersection_system_;
 	GoalSystem goal_system_;
+	BackgroundSystem background_system_;
 	CursorAndKeys cursor_and_keys_;
 	CollisionSystem collision_system_;
 	ElectricFieldForceSystem electric_field_force_system;

@@ -1,11 +1,16 @@
 #pragma once
-
 #include "PCH.hpp"
+
+#define MAIN_MENU -1
+#define LEVEL_MENU -2
+#define OPTIONS_MENU -3
 
 #define BLOCK_SIZE 120
 #define MAX_SCREEN_SIZE_SHAKE 1.1f
-
+#define BACKGROUND_DRAW_PRIORITY -1
+#define UI_BASE_DRAW_PRIORITY 100
 #define ASPECT_RATIO (16.f / 9.f)
+
 const std::array<float, 5> LEVEL_WIDTHS = { BLOCK_SIZE * 16, BLOCK_SIZE * 32, BLOCK_SIZE * 48, BLOCK_SIZE * 64, BLOCK_SIZE * 80 };
 
 const std::array<float, 6> CHARGE_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1, sf::Keyboard::Num0 };

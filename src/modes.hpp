@@ -8,7 +8,3 @@ enum Mode
 	LEVEL_FAILED_MODE,
 	LEVEL_COMPLETED_MODE
 };
-
-#define MAIN_MENU -1
-#define LEVEL_MENU -2
-#define OPTIONS_MENU -3

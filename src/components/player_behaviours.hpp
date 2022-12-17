@@ -1,7 +1,7 @@
 #pragma once
 #include "PCH.hpp"
 
-class PlayerBehaviours
+class PlayerBehaviors
 {
 public:
 	float default_charge = 0;

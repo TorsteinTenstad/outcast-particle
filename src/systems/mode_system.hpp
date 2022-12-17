@@ -31,27 +31,27 @@ public:
 		{
 			if (get_mode_() == PLAY_MODE && level.editable)
 			{
-				request_mode(EDIT_MODE);
+				Request_mode(EDIT_MODE);
 			}
 			else if (get_mode_() == EDIT_MODE)
 			{
-				request_mode(PLAY_MODE);
+				Request_mode(PLAY_MODE);
 			}
 		}
 		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.MENU])
 		{
 			if (get_mode_() == PLAY_MODE)
 			{
-				request_mode(PAUSE_MODE);
+				Request_mode(PAUSE_MODE);
 			}
 			else if (get_mode_() == PAUSE_MODE)
 			{
-				request_mode(PLAY_MODE);
+				Request_mode(PLAY_MODE);
 			}
 		}
 		if (!globals.render_window.hasFocus() && get_mode_() == PLAY_MODE)
 		{
-			request_mode(PAUSE_MODE);
+			Request_mode(PAUSE_MODE);
 		}
 		if (player_map.size() == 0 && get_mode_() == PLAY_MODE)
 		{
@@ -65,35 +65,38 @@ public:
 			}
 			if (is_goal)
 			{
-				request_mode(LEVEL_COMPLETED_MODE);
+				Request_mode(LEVEL_COMPLETED_MODE);
 			}
 			else
 			{
-				request_mode(LEVEL_FAILED_MODE);
+				Request_mode(LEVEL_FAILED_MODE);
 			}
 		}
 	}
-	void request_mode(Mode Request_mode)
+	void Request_mode(Mode requested_mode)
 	{
-		if (Request_mode == PLAY_MODE)
+		if (requested_mode == PLAY_MODE)
 		{
 			set_mode_(PLAY_MODE);
 		}
-		if (Request_mode == EDIT_MODE)
+		if (requested_mode == EDIT_MODE)
 		{
 			set_mode_(EDIT_MODE);
 		}
-		if (Request_mode == PAUSE_MODE && in_level_())
+		if (requested_mode == PAUSE_MODE && in_level_())
 		{
 			set_mode_(PAUSE_MODE);
 		}
-		if (Request_mode == LEVEL_FAILED_MODE && in_level_())
+		if (requested_mode == LEVEL_FAILED_MODE && in_level_())
 		{
 			set_mode_(LEVEL_FAILED_MODE);
 		}
-		if (Request_mode == LEVEL_COMPLETED_MODE && in_level_())
+		if (requested_mode == LEVEL_COMPLETED_MODE && in_level_())
 		{
 			set_mode_(LEVEL_COMPLETED_MODE);
 		}
+	}
+	void SetBackground(std::string image_path, bool scale_to_fit)
+	{
 	}
 };

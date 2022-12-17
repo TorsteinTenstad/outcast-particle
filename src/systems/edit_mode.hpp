@@ -110,7 +110,7 @@ public:
 			if (editable_map.count(entity_id) > 0 && editable_map[entity_id].selected)
 			{
 				blueprint_menu_item_map.erase(entity_id);
-				draw_priority_map[entity_id].draw_priority -= 100;
+				draw_priority_map[entity_id].draw_priority -= UI_BASE_DRAW_PRIORITY;
 				CloseBlueprintMenu(level);
 				break;
 			}
@@ -272,7 +272,7 @@ public:
 		int menu_background_id = level.CreateEntityId();
 		level.GetComponent<Position>()[menu_background_id].position = level.size / 2.f;
 		level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
-		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = 50;
+		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
 		level.GetComponent<ClickedOn>()[menu_background_id];
 		float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
 		level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
@@ -283,7 +283,7 @@ public:
 		{
 			entity_id = level.AddBlueprint(tag);
 			level.GetComponent<Position>()[entity_id].position = sf::Vector2f(level.size.x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.size.y / 2);
-			level.GetComponent<DrawPriority>()[entity_id].draw_priority += 100;
+			level.GetComponent<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
 			level.GetComponent<BlueprintMenuItem>()[entity_id];
 			i++;
 		}

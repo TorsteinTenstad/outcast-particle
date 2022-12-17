@@ -3,29 +3,17 @@
 #include "game_system.hpp"
 #include "level.hpp"
 
-class DrawSystem : public GameSystem
+class DrawSystem
 {
 private:
-	sf::RectangleShape background_;
-	sf::Texture background_texture_;
 	std::map<int, sf::Shader> shaders_;
 
 public:
-	DrawSystem()
-	{
-		background_texture_.loadFromFile("content\\textures\\background.png");
-		background_.setTexture(&background_texture_);
-	}
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	void Update(Mode mode, CursorAndKeys& cursor_and_keys, Level& level, float dt)
 	{
 		auto& shader_map = level.GetComponent<Shader>();
 
 		globals.render_window.clear();
-
-		sf::Vector2f background_size = globals.render_window.getView().getSize();
-		background_.setSize(background_size);
-		background_.setPosition(-(background_size - level.size) / 2.f);
-		globals.render_window.draw(background_);
 
 		for (const auto& [entity_id, shader] : shader_map)
 		{
@@ -66,7 +54,7 @@ public:
 			for (auto entity_bound_drawable : entity_bound_drawables)
 			{
 				int entity_id = entity_bound_drawable.entity_id;
-				if (shader_map.count(entity_id) > 0)
+				if (shader_map.count(entity_id) > 0 && mode == PLAY_MODE)
 				{
 					globals.render_window.draw(*entity_bound_drawable.drawable, &shaders_[entity_id]);
 				}

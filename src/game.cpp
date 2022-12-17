@@ -96,10 +96,11 @@ void Game::Update(float dt)
 	button_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	set_draw_info_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	background_system_.Update(active_mode_, cursor_and_keys_, levels_[active_level_], dt);
 	render_trail_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	render_shapes_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
 	render_text_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
-	draw_system_.Update(cursor_and_keys_, levels_[active_level_], dt);
+	draw_system_.Update(active_mode_, cursor_and_keys_, levels_[active_level_], dt);
 	if (active_mode_ == EDIT_MODE)
 	{
 		display_velocity_system_.Update(cursor_and_keys_, levels_[active_level_], dt);

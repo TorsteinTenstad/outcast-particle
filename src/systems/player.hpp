@@ -13,7 +13,7 @@ public:
 	{
 		auto& received_forces_map = level.GetComponent<ReceivedForces>();
 		auto& player_map = level.GetComponent<Player>();
-		auto& player_behaviours_map = level.GetComponent<PlayerBehaviours>();
+		auto& player_behaviours_map = level.GetComponent<PlayerBehaviors>();
 		auto& radius_map = level.GetComponent<Radius>();
 		auto& charge_map = level.GetComponent<Charge>();
 		auto& shader_map = level.GetComponent<Shader>();

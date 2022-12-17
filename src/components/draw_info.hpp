@@ -24,3 +24,6 @@ public:
 	std::string horisontal_image_path;
 	std::string vertical_image_path;
 };
+
+class Background
+{};

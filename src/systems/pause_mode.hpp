@@ -22,7 +22,7 @@ public:
 			int id = level.CreateEntityId();
 			level.GetComponent<DrawInfo>()[id].image_path = image_path;
 			level.GetComponent<DrawInfo>()[id].scale_to_fit = true;
-			level.GetComponent<DrawPriority>()[id].draw_priority = 50;
+			level.GetComponent<DrawPriority>()[id].draw_priority = UI_BASE_DRAW_PRIORITY;
 			level.GetComponent<Position>()[id] = { sf::Vector2f(x, y) };
 			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
 			level.GetComponent<ClickedOn>()[id] = {};
