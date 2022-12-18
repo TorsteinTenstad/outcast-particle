@@ -37,15 +37,13 @@ public:
 				Request_mode(PLAY_MODE);
 			}
 		}
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.MENU])
+		if (cursor_and_keys_.key_released_this_frame[globals.key_config.MENU])
 		{
 			if (get_mode_() == PLAY_MODE)
 			{
+				cursor_and_keys_.key_released_this_frame[globals.key_config.MENU] = false; //probably a bad idea, but it works for now
+
 				Request_mode(PAUSE_MODE);
-			}
-			else if (get_mode_() == PAUSE_MODE)
-			{
-				Request_mode(PLAY_MODE);
 			}
 		}
 		if (!globals.render_window.hasFocus() && get_mode_() == PLAY_MODE)

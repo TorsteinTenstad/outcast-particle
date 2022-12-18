@@ -22,14 +22,14 @@ public:
 
 		for (auto const& [entity_id, button] : button_map)
 		{
-			if (clicked_on_map[entity_id].clicked_this_frame)
+			if (clicked_on_map[entity_id].clicked_this_frame || cursor_and_keys_.key_pressed_this_frame[button.equivalent_key])
 			{
 				if (!button.pressed_image_path.empty())
 				{
 					draw_info_map[entity_id].image_path = button.pressed_image_path;
 				}
 			}
-			else if (clicked_on_map[entity_id].released_this_frame)
+			else if (clicked_on_map[entity_id].released_this_frame || cursor_and_keys_.key_released_this_frame[button.equivalent_key])
 			{
 				if (!button.image_path.empty())
 				{
