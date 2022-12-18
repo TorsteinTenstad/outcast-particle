@@ -65,4 +65,8 @@ public:
 			shader_map[entity_id].uniforms["time"] += dt;
 		}
 	}
+	void OnEnterMode(Mode mode) {};
+	void OnExitMode(Mode mode) {};
+	void OnEnterLevel(int level_id) {};
+	void OnExitLevel(int level_id) {};
 };

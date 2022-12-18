@@ -68,4 +68,8 @@ public:
 		std::vector<std::string> level_completed_texts = { "Next level", "Restart", "Return to Menu" };
 		AddFloatingButtons(level, level_completed_functions, level_completed_texts);
 	}
+	void OnEnterMode(Mode mode) {};
+	void OnExitMode(Mode mode) {};
+	void OnEnterLevel(int level_id) {};
+	void OnExitLevel(int level_id) {};
 };

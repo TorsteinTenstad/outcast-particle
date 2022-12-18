@@ -95,7 +95,8 @@ public:
 			set_mode_(LEVEL_COMPLETED_MODE);
 		}
 	}
-	void SetBackground(std::string image_path, bool scale_to_fit)
-	{
-	}
+	void OnEnterMode(Mode mode) {};
+	void OnExitMode(Mode mode) {};
+	void OnEnterLevel(int level_id) {};
+	void OnExitLevel(int level_id) {};
 };

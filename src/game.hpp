@@ -43,8 +43,8 @@ private:
 	std::map<int, Level> levels_;
 	std::map<int, float> level_completion_time_records_;
 
-	int active_level_ = MAIN_MENU;
-	Mode active_mode_ = PLAY_MODE;
+	int active_level_ = STARTING_LEVEL;
+	Mode active_mode_ = STARTING_MODE;
 
 	int next_available_system_id_ = 0;
 

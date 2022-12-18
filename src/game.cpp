@@ -126,7 +126,7 @@ void Game::Init()
 	std::vector<std::string> pause_text = { "Continue", "Restart", "Return to Menu" };
 	auto pause_button_positions = GridHelper(options_text.size(), 2, pause_button_w, pause_button_h, 200);
 
-	active_level_ = MAIN_MENU;
+	active_level_ = STARTING_LEVEL;
 }
 
 void Game::Update(float dt)
@@ -134,7 +134,7 @@ void Game::Update(float dt)
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
 	{
-		game_systems_[system_id]->Update(GetLevel(active_level_), dt);
+		game_systems_[system_id]->UpdateGameSystem(GetLevel(active_level_), dt);
 	}
 	if (active_mode_ == PLAY_MODE)
 	{
@@ -142,7 +142,7 @@ void Game::Update(float dt)
 		{
 			for (const auto& system_id : physics_game_system_ids_)
 			{
-				game_systems_[system_id]->Update(GetLevel(active_level_), dt / physics_ticks_per_frame_);
+				game_systems_[system_id]->UpdateGameSystem(GetLevel(active_level_), dt / physics_ticks_per_frame_);
 			}
 		}
 	}

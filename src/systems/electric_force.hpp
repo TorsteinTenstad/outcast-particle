@@ -33,4 +33,8 @@ public:
 			entity_forces.electric_force = electric_force;
 		}
 	}
+	void OnEnterMode(Mode mode) {};
+	void OnExitMode(Mode mode) {};
+	void OnEnterLevel(int level_id) {};
+	void OnExitLevel(int level_id) {};
 };
