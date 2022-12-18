@@ -89,7 +89,7 @@ void Game::Init()
 	}
 	int number_of_levels = level_id;
 
-	int columns = ceil(sqrt(number_of_levels)) + 1;
+	int columns = floor(sqrt(number_of_levels)) + 1;
 	float margin = 100;
 	float button_w = (MENU_LEVEL_WIDTH - (columns + 1) * margin) / columns;
 	float button_h = button_w / ASPECT_RATIO;
