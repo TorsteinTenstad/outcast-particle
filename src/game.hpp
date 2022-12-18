@@ -47,9 +47,11 @@ private:
 	Mode active_mode_ = PLAY_MODE;
 
 	int next_available_system_id_ = 0;
-	std::map<std::type_index, int> system_ids_;
+
+	std::map<std::type_index, int> type_to_system_id_;
+	std::vector<int> game_system_ids_;
+	std::vector<int> physics_game_system_ids_;
 	std::map<int, std::unique_ptr<GameSystem>> game_systems_;
-	std::map<int, std::unique_ptr<GameSystem>> physics_game_systems_;
 
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
@@ -58,7 +60,7 @@ private:
 	System& GetGameSystem();
 
 	template <class System>
-	System& RegisterGameSystem(std::map<int, std::unique_ptr<GameSystem>>& map);
+	System& RegisterGameSystem(std::vector<int>& category);
 
 	template <class System>
 	System& RegisterGameSystem();

@@ -132,17 +132,17 @@ void Game::Init()
 void Game::Update(float dt)
 {
 	sfml_event_handler_.Update(cursor_and_keys_);
-	for (auto& [system_id, game_system] : game_systems_)
+	for (const auto& system_id : game_system_ids_)
 	{
-		game_system->Update(GetLevel(active_level_), dt);
+		game_systems_[system_id]->Update(GetLevel(active_level_), dt);
 	}
 	if (active_mode_ == PLAY_MODE)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{
-			for (auto& [type_id, physics_game_system] : physics_game_systems_)
+			for (const auto& system_id : physics_game_system_ids_)
 			{
-				physics_game_system->Update(GetLevel(active_level_), dt / physics_ticks_per_frame_);
+				game_systems_[system_id]->Update(GetLevel(active_level_), dt / physics_ticks_per_frame_);
 			}
 		}
 	}

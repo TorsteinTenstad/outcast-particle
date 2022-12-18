@@ -15,5 +15,10 @@ public:
 		cursor_and_keys_(cursor_and_keys)
 	{}
 	virtual ~GameSystem() = default;
-	virtual void Update(Level& level, float dt) = 0;
+	void UpdateGameSystem(Level& level, float dt)
+	{
+		Update(level, dt);
+	}
+
+	void Update(Level& level, float dt) {};
 };
