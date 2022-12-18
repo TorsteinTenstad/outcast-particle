@@ -17,6 +17,7 @@ public:
 			return;
 		}
 		auto& received_forces_map = level.GetComponent<ReceivedForces>();
+		auto& velocity_map = level.GetComponent<Velocity>();
 		auto& player_map = level.GetComponent<Player>();
 		auto& player_behaviours_map = level.GetComponent<PlayerBehaviors>();
 		auto& radius_map = level.GetComponent<Radius>();

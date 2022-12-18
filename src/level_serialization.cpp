@@ -565,7 +565,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Charge>()[entity_id] = { 10000 };
         GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
-        GetComponent<Player>()[entity_id] = { true, true, 500 };
+        GetComponent<Player>()[entity_id] = { true, true, 1000 };
         return entity_id;
     }
     if (tag == "BPLaser")

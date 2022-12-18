@@ -47,7 +47,7 @@ class BPPlayer : public BPMovingParticle
 	Shader shader = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
 
 	// [Serialize]
-	Player player = { true, true, 500 };
+	Player player = { true, true, 1000 };
 };
 
 class BPLaser : public BPEntity

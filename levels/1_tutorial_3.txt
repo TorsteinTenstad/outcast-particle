@@ -2,7 +2,7 @@ name=Untitled;size=(3840,2176);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,2160)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(2520,540)}WidthAndHeight{width_and_height=(360,600)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(420,360)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=500}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(420,360)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=1000}
 "BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3840,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(840,840)}WidthAndHeight{width_and_height=(240,1440)}ElectricField{field_vector=(-0.25,0)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1560,1560)}WidthAndHeight{width_and_height=(240,960)}ElectricField{field_vector=(-0.25,0)}
