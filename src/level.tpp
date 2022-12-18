@@ -1,4 +1,3 @@
-#pragma once
 #include "level.hpp"
 
 template <class Component>

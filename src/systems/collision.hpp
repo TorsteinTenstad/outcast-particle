@@ -10,7 +10,8 @@
 class CollisionSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& collision_map = level.GetComponent<Collision>();

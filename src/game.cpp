@@ -27,15 +27,40 @@ Level& Game::GetLevel(int id)
 
 Game::Game()
 {
+	RegisterGameSystem<ModeSystem>().SetGameControlFunctions(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
+	RegisterGameSystem<PlayerSystem>();
+	RegisterGameSystem<GoalSystem>();
+	RegisterGameSystem<KillOnIntersectionSystem>();
+	RegisterGameSystem<SoundSystem>();
+	RegisterGameSystem<MouseInterationSystem>();
+	RegisterGameSystem<SetDrawInfoSystem>();
+	RegisterGameSystem<TrailSystem>();
+	RegisterGameSystem<BackgroundSystem>();
+	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
+	RegisterGameSystem<LevelButtonSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
+	RegisterGameSystem<RenderTrailSystem>();
+	RegisterGameSystem<RenderShapesSystem>();
+	RegisterGameSystem<RenderTextSystem>();
+	RegisterGameSystem<DrawSystem>();
+	RegisterGameSystem<DisplayVelocitySystem>();
+	RegisterGameSystem<EditModeSystem>();
+	RegisterGameSystem<ScreenShakeSystem>();
+	RegisterGameSystem<ButtonSystem>();
+	RegisterGameSystem<PauseMode>();
+
+	RegisterPhysicsGameSystem<ElectricForceSystem>();
+	RegisterPhysicsGameSystem<ElectricFieldForceSystem>();
+	RegisterPhysicsGameSystem<MagneticFieldForceSystem>();
+	RegisterPhysicsGameSystem<ForceSystem>();
+	RegisterPhysicsGameSystem<AccelerationSystem>();
+	RegisterPhysicsGameSystem<VelocitySystem>();
+	RegisterPhysicsGameSystem<IntersectionSystem>();
+	RegisterPhysicsGameSystem<CollisionSystem>();
+
 	sf::Vector2f menu_size = sf::Vector2f(MENU_LEVEL_WIDTH, MENU_LEVEL_WIDTH / ASPECT_RATIO);
 	AddLevel(MAIN_MENU).size = menu_size;
 	AddLevel(LEVEL_MENU).size = menu_size;
 	AddLevel(OPTIONS_MENU).size = menu_size;
-
-	level_button_system_ = LevelButtonSystem(&level_completion_time_records_);
-	level_completion_time_system_ = LevelCompletionTimeSystem(&level_completion_time_records_);
-
-	mode_system_ = ModeSystem(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
 }
 
 void Game::Init()
@@ -106,47 +131,21 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-	event_system_.Update(cursor_and_keys_);
-	mode_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
+	sfml_event_handler_.Update(cursor_and_keys_);
+	for (auto& [system_id, game_system] : game_systems_)
+	{
+		game_system->Update(GetLevel(active_level_), dt);
+	}
 	if (active_mode_ == PLAY_MODE)
 	{
-		player_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{
-			UpdatePhysics(dt / physics_ticks_per_frame_);
+			for (auto& [type_id, physics_game_system] : physics_game_systems_)
+			{
+				physics_game_system->Update(GetLevel(active_level_), dt / physics_ticks_per_frame_);
+			}
 		}
 	}
-	sound_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	mouse_interaction_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	button_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	set_draw_info_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	trail_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	background_system_.Update(active_mode_, cursor_and_keys_, GetLevel(active_level_), dt);
-	level_completion_time_system_.Update(active_mode_, cursor_and_keys_, GetLevel(active_level_), dt);
-	level_button_system_.Update(active_mode_, cursor_and_keys_, GetLevel(active_level_), dt);
-	render_trail_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	render_shapes_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	render_text_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	draw_system_.Update(active_mode_, cursor_and_keys_, GetLevel(active_level_), dt);
-	if (active_mode_ == EDIT_MODE)
-	{
-		display_velocity_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-		edit_mode_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	}
-	screen_shake_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-}
-void Game::UpdatePhysics(float dt)
-{
-	electric_force_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	electric_field_force_system.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	magnetic_field_force_system.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	force_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	acceleration_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	velocity_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	intersection_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	goal_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	kill_on_intersection_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
-	collision_system_.Update(cursor_and_keys_, GetLevel(active_level_), dt);
 }
 
 Game::~Game()
@@ -179,20 +178,20 @@ void Game::SetMode(Mode next_mode)
 	switch (active_mode_)
 	{
 		case EDIT_MODE: {
-			edit_mode_system_.CloseBlueprintMenu(GetLevel(active_level_));
+			GetGameSystem<EditModeSystem>().CloseBlueprintMenu(GetLevel(active_level_));
 			GetLevel(active_level_).SaveToFile();
 			break;
 		}
 		case PLAY_MODE:
 			break;
 		case PAUSE_MODE:
-			pause_mode_.RemovePauseButtons(GetLevel(active_level_));
+			GetGameSystem<PauseMode>().RemovePauseButtons(GetLevel(active_level_));
 			break;
 		case LEVEL_COMPLETED_MODE:
-			pause_mode_.RemovePauseButtons(GetLevel(active_level_));
+			GetGameSystem<PauseMode>().RemovePauseButtons(GetLevel(active_level_));
 			break;
 		case LEVEL_FAILED_MODE:
-			pause_mode_.RemovePauseButtons(GetLevel(active_level_));
+			GetGameSystem<PauseMode>().RemovePauseButtons(GetLevel(active_level_));
 			break;
 		default:
 			assert(false);
@@ -207,13 +206,13 @@ void Game::SetMode(Mode next_mode)
 		case PLAY_MODE:
 			break;
 		case PAUSE_MODE:
-			pause_mode_.AddPauseButtons(GetLevel(active_level_), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			GetGameSystem<PauseMode>().AddPauseButtons(GetLevel(active_level_), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		case LEVEL_COMPLETED_MODE:
-			pause_mode_.AddLevelCompletedButtons(GetLevel(active_level_), active_level_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			GetGameSystem<PauseMode>().AddLevelCompletedButtons(GetLevel(active_level_), active_level_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		case LEVEL_FAILED_MODE:
-			pause_mode_.AddLevelFailedButtons(GetLevel(active_level_), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			GetGameSystem<PauseMode>().AddLevelFailedButtons(GetLevel(active_level_), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		default:
 			assert(false);
@@ -231,7 +230,7 @@ std::string Game::GenerateLevelTexture(int level_id)
 	active_level_ = active_level_before_capture;
 	texture.update(globals.render_window);
 	std::string identifier = "level" + std::to_string(level_id);
-	render_shapes_system_.RegisterTexture(identifier, texture);
+	GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier, texture);
 	return identifier;
 }
 

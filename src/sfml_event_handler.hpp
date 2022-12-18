@@ -7,7 +7,7 @@
 #include "globals.hpp"
 #include "level.hpp"
 
-class SFMLEventSystem
+class SFMLEventHandler
 {
 private:
 public:

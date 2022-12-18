@@ -6,7 +6,7 @@
 #include "level.hpp"
 #include "modes.hpp"
 
-class ModeSystem
+class ModeSystem : public GameSystem
 {
 private:
 	std::function<void(Mode)> set_mode_;
@@ -14,20 +14,19 @@ private:
 	std::function<bool(void)> in_level_;
 
 public:
-	ModeSystem()
-	{}
-	ModeSystem(std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode, std::function<bool(void)> in_level)
+	using GameSystem::GameSystem;
+	void SetGameControlFunctions(std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode, std::function<bool(void)> in_level)
 	{
 		set_mode_ = set_mode;
 		get_mode_ = get_mode;
 		in_level_ = in_level;
 	}
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	void Update(Level& level, float dt)
 	{
 		auto& goal_map = level.GetComponent<Goal>();
 		auto& player_map = level.GetComponent<Player>();
 
-		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.EDIT_MODE])
+		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE])
 		{
 			if (get_mode_() == PLAY_MODE && level.editable)
 			{
@@ -38,7 +37,7 @@ public:
 				Request_mode(PLAY_MODE);
 			}
 		}
-		if (cursor_and_keys.key_pressed_this_frame[globals.key_config.MENU])
+		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.MENU])
 		{
 			if (get_mode_() == PLAY_MODE)
 			{

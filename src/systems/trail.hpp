@@ -7,7 +7,8 @@
 class TrailSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& velocity_map = level.GetComponent<Velocity>();
 		auto& trail_map = level.GetComponent<Trail>();

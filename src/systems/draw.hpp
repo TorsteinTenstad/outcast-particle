@@ -3,13 +3,14 @@
 #include "game_system.hpp"
 #include "level.hpp"
 
-class DrawSystem
+class DrawSystem : public GameSystem
 {
 private:
 	std::map<int, sf::Shader> shaders_;
 
 public:
-	void Update(Mode mode, CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& shader_map = level.GetComponent<Shader>();
 
@@ -54,7 +55,7 @@ public:
 			for (auto entity_bound_drawable : entity_bound_drawables)
 			{
 				int entity_id = entity_bound_drawable.entity_id;
-				if (shader_map.count(entity_id) > 0 && mode == PLAY_MODE)
+				if (shader_map.count(entity_id) > 0 && mode_ == PLAY_MODE)
 				{
 					globals.render_window.draw(*entity_bound_drawable.drawable, &shaders_[entity_id]);
 				}

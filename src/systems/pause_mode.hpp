@@ -1,10 +1,12 @@
 #include "game.hpp"
 #include "utils.hpp"
 
-class PauseMode
+class PauseMode : public GameSystem
 {
-
 public:
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
+	{}
 	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts)
 	{
 		float button_scale = level.size.x / MENU_LEVEL_WIDTH;

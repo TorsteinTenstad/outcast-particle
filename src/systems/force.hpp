@@ -24,7 +24,8 @@ private:
 	float global_max_acceleration_ = 10000;
 
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& acceleration_map = level.GetComponent<Acceleration>();
 		auto& received_forces_map = level.GetComponent<ReceivedForces>();

@@ -9,7 +9,8 @@
 class SetDrawInfoSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
 		auto& charge_dependent_drawinfo_map = level.GetComponent<ChargeDependentDrawInfo>();

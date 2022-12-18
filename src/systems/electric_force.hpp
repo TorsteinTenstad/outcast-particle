@@ -13,7 +13,8 @@ static sf::Vector2f CalculateElectricForce(Position particle_to, Position partic
 class ElectricForceSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& position_map = level.GetComponent<Position>();
 		auto& received_forces_map = level.GetComponent<ReceivedForces>();

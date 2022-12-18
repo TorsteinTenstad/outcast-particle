@@ -11,7 +11,8 @@
 class KillOnIntersectionSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();

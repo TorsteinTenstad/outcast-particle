@@ -5,7 +5,8 @@
 class VelocitySystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& position_map = level.GetComponent<Position>();
 		auto& velocity_map = level.GetComponent<Velocity>();

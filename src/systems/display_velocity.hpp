@@ -14,16 +14,21 @@ static float Angle(sf::Vector2f v)
 class DisplayVelocitySystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
+		if (mode_ != EDIT_MODE)
+		{
+			return;
+		}
 		auto& position_map = level.GetComponent<Position>();
 		auto& velocity_map = level.GetComponent<Velocity>();
 
 		for (auto const& [entity_id, velocity] : velocity_map)
 		{
-			float indicator_lenght = Magnitude(velocity.velocity) / 4;
+			float indicator_length = Magnitude(velocity.velocity) / 4;
 			float indicator_width = 10;
-			sf::RectangleShape indicator = sf::RectangleShape(sf::Vector2f(indicator_lenght, indicator_width));
+			sf::RectangleShape indicator = sf::RectangleShape(sf::Vector2f(indicator_length, indicator_width));
 			indicator.setOrigin(0, indicator_width / 2);
 			indicator.setRotation(Angle(velocity.velocity) * (180 / PI));
 			indicator.setPosition(position_map[entity_id].position);

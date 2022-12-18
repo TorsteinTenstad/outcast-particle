@@ -4,19 +4,18 @@
 #include "modes.hpp"
 #include "string_parsing_utils.hpp"
 
-class LevelButtonSystem
+class LevelButtonSystem : public GameSystem
 {
 private:
 	std::map<int, float>* level_completion_time_records_;
 
 public:
-	LevelButtonSystem()
-	{}
-	LevelButtonSystem(std::map<int, float>* level_completion_time_records)
+	using GameSystem::GameSystem;
+	void SetLevelCompletionTimeRecords(std::map<int, float>* level_completion_time_records)
 	{
 		level_completion_time_records_ = level_completion_time_records;
 	}
-	void Update(Mode mode, CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	void Update(Level& level, float dt)
 	{
 		auto& level_button_map = level.GetComponent<LevelButton>();
 		auto& border_map = level.GetComponent<Border>();

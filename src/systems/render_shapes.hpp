@@ -14,11 +14,12 @@ private:
 	std::map<int, sf::CircleShape> circle_shapes_;
 
 public:
+	using GameSystem::GameSystem;
 	void RegisterTexture(std::string identifier, sf::Texture texture)
 	{
 		textures_[identifier] = texture;
 	}
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	void Update(Level& level, float dt)
 	{
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
 		auto& draw_priority_map = level.GetComponent<DrawPriority>();

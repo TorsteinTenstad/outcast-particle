@@ -9,7 +9,8 @@
 class ScreenShakeSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		float screen_size_shake = 1;
 		Animate(globals.time, screen_size_shake, level.screen_size_shake_animation, FakeSigmoid);

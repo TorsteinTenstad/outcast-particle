@@ -40,7 +40,8 @@ static bool CheckIntersection(Position circle_position, Position square_position
 class IntersectionSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& position_map = level.GetComponent<Position>();
 		auto& radius_map = level.GetComponent<Radius>();

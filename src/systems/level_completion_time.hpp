@@ -4,19 +4,18 @@
 #include "level_completion_time.hpp"
 #include "modes.hpp"
 
-class LevelCompletionTimeSystem
+class LevelCompletionTimeSystem : public GameSystem
 {
 private:
 	std::map<int, float>* level_completion_time_records_;
 
 public:
-	LevelCompletionTimeSystem()
-	{}
-	LevelCompletionTimeSystem(std::map<int, float>* level_completion_time_records)
+	using GameSystem::GameSystem;
+	void SetLevelCompletionTimeRecords(std::map<int, float>* level_completion_time_records)
 	{
 		level_completion_time_records_ = level_completion_time_records;
 	}
-	void Update(Mode mode, CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	void Update(Level& level, float dt)
 	{
 		auto& level_completion_timer_map = level.GetComponent<LevelCompletionTimer>();
 		assert(!(level_completion_timer_map.size() > 1));
@@ -28,12 +27,12 @@ public:
 		}
 
 		float& duration = level_completion_timer_map.begin()->second.duration;
-		if (mode == PLAY_MODE)
+		if (mode_ == PLAY_MODE)
 		{
 			duration += dt;
 			return;
 		}
-		if (mode == LEVEL_COMPLETED_MODE && ((*level_completion_time_records_)[level.id] <= 0 || (*level_completion_time_records_)[level.id] > duration))
+		if (mode_ == LEVEL_COMPLETED_MODE && ((*level_completion_time_records_)[level.id] <= 0 || (*level_completion_time_records_)[level.id] > duration))
 		{
 			(*level_completion_time_records_)[level.id] = duration;
 			return;

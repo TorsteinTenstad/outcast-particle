@@ -14,7 +14,8 @@ private:
 	std::map<int, std::array<sf::ConvexShape, TRAIL_N>> segments_;
 
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& draw_priority_map = level.GetComponent<DrawPriority>();
 		auto& position_map = level.GetComponent<Position>();

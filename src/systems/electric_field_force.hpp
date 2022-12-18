@@ -15,7 +15,8 @@ static sf::Vector2f CalculateElectricFieldForce(Charge particle, ElectricField e
 class ElectricFieldForceSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& electric_field_vector_map = level.GetComponent<ElectricField>();

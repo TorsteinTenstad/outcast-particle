@@ -16,7 +16,8 @@ static sf::Vector2f CalculateMagneticFieldForce(Charge particle_charge, Velocity
 class MagneticFieldForceSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& magnetic_field_strength_map = level.GetComponent<MagneticField>();

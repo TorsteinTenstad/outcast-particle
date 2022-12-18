@@ -1,11 +1,19 @@
 #pragma once
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
+#include "modes.hpp"
 
 class GameSystem
 {
-private:
+protected:
+	Mode& mode_;
+	CursorAndKeys& cursor_and_keys_;
+
 public:
-	virtual ~GameSystem() noexcept = default;
-	virtual void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt) = 0;
+	GameSystem(Mode& mode, CursorAndKeys& cursor_and_keys) :
+		mode_(mode),
+		cursor_and_keys_(cursor_and_keys)
+	{}
+	virtual ~GameSystem() = default;
+	virtual void Update(Level& level, float dt) = 0;
 };

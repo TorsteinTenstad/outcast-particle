@@ -11,7 +11,8 @@
 class ButtonSystem : public GameSystem
 {
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& clicked_on_map = level.GetComponent<ClickedOn>();
 		auto& button_map = level.GetComponent<Button>();
@@ -63,7 +64,7 @@ public:
 		{
 			if (key_config_button.is_pressed)
 			{
-				for (const auto& [key, pressed_this_frame] : cursor_and_keys.key_pressed_this_frame)
+				for (const auto& [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
 				{
 					if (pressed_this_frame)
 					{

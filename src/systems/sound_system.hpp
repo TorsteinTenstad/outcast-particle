@@ -11,7 +11,8 @@ private:
 	std::map<std::string, sf::Sound> sounds_;
 
 public:
-	void Update(CursorAndKeys& cursor_and_keys, Level& level, float dt)
+	using GameSystem::GameSystem;
+	void Update(Level& level, float dt)
 	{
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
