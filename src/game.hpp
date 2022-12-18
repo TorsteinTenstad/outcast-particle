@@ -27,11 +27,11 @@
 #include "systems/render_shapes.hpp"
 #include "systems/render_text.hpp"
 #include "systems/render_trail.hpp"
-#include "systems/screen_shake.hpp"
 #include "systems/set_draw_info.hpp"
 #include "systems/sound_system.hpp"
 #include "systems/trail.hpp"
 #include "systems/velocity.hpp"
+#include "systems/view.hpp"
 
 class Game
 {

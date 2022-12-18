@@ -83,8 +83,6 @@ public:
 	bool editable = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(LEVEL_WIDTHS[2], LEVEL_WIDTHS[2] / ASPECT_RATIO);
-	std::map<float, float> screen_size_shake_animation;
-	sf::Vector2f post_shake_size;
 
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 

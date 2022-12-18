@@ -44,7 +44,7 @@ Game::Game()
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<DisplayVelocitySystem>();
 	RegisterGameSystem<EditModeSystem>();
-	RegisterGameSystem<ScreenShakeSystem>();
+	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<PauseMode>();
 

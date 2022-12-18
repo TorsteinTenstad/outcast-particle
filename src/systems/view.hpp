@@ -6,15 +6,12 @@
 #include "level.hpp"
 #include "utils.hpp"
 
-class ScreenShakeSystem : public GameSystem
+class ViewSystem : public GameSystem
 {
 public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		float screen_size_shake = 1;
-		Animate(globals.time, screen_size_shake, level.screen_size_shake_animation, FakeSigmoid);
-
 		sf::Vector2f view_size = level.size;
 		float level_aspect_ratio = ((float)level.size.x) / level.size.y;
 		sf::Vector2u window_size = globals.render_window.getSize();
@@ -28,7 +25,7 @@ public:
 			view_size.y = view_size.y / (window_aspect_ratio / level_aspect_ratio);
 		}
 
-		globals.render_window.setView(sf::View(level.size / 2.f, view_size * screen_size_shake));
+		globals.render_window.setView(sf::View(level.size / 2.f, view_size));
 	}
 	void OnEnterMode(Mode mode) {};
 	void OnExitMode(Mode mode) {};
