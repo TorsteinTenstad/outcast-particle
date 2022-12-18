@@ -89,9 +89,11 @@ void Game::Init()
 	}
 	int number_of_levels = level_id;
 
-	float button_w = 1.2 * 1280;
-	float button_h = 1.2 * 720;
-	auto button_positions = GridHelper(number_of_levels, 4, button_w, button_h, 100);
+	int columns = ceil(sqrt(number_of_levels)) + 1;
+	float margin = 100;
+	float button_w = (MENU_LEVEL_WIDTH - (columns + 1) * margin) / columns;
+	float button_h = button_w / ASPECT_RATIO;
+	auto button_positions = GridHelper(number_of_levels, columns, button_w, button_h, margin);
 	for (int i = 0; i < number_of_levels; ++i)
 	{
 		sf::Vector2 button_position = button_positions[i] + GetLevel(LEVEL_MENU).size / 2.f;
