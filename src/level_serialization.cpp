@@ -398,6 +398,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Collision>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
             GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -452,7 +453,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawPriority>()[entity_id] = { 2 };
             GetComponent<Goal>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\fanfare.wav" };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -561,6 +562,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Collision>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Charge>()[entity_id] = { 10000 };
@@ -604,7 +606,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Goal>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\fanfare.wav" };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav" };
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };

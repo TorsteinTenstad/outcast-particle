@@ -7,6 +7,7 @@
 class SoundSystem : public GameSystem
 {
 private:
+	std::map<std::string, float> MAX_VOLUME = { { "content\\sounds\\laser.wav", 20 } };
 	std::map<std::string, sf::SoundBuffer> sound_buffers_;
 	std::map<std::string, sf::Sound> sounds_;
 
@@ -16,24 +17,31 @@ public:
 	{
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
-		for (auto const& [entity_id, entity_soundinfo] : sound_info_map)
+		for (auto const& [entity_id, entity_sound_info] : sound_info_map)
 		{
-			if (sound_buffers_.count(entity_soundinfo.sound_path) == 0)
+			if (sound_buffers_.count(entity_sound_info.sound_path) == 0)
 			{
-				sound_buffers_[entity_soundinfo.sound_path].loadFromFile(entity_soundinfo.sound_path);
+				sound_buffers_[entity_sound_info.sound_path].loadFromFile(entity_sound_info.sound_path);
 			}
 			if (sound_info_map[entity_id].play_sound)
 			{
-				sounds_[entity_soundinfo.sound_path].setBuffer(sound_buffers_[entity_soundinfo.sound_path]);
-				sounds_[entity_soundinfo.sound_path].setVolume(100 * sound_info_map[entity_id].sound_volume); //SFML uses 0-100 for volume, we use 0-1
-				sounds_[entity_soundinfo.sound_path].play();
+				float max_volume = 100; //SFML uses 0-100 for volume, we use 0-1
+
+				if (MAX_VOLUME.count(entity_sound_info.sound_path) > 0)
+				{
+					max_volume = MAX_VOLUME[entity_sound_info.sound_path];
+					std::cout << ":::" << entity_sound_info.sound_path << "\n";
+				}
+				sounds_[entity_sound_info.sound_path].setBuffer(sound_buffers_[entity_sound_info.sound_path]);
+				sounds_[entity_sound_info.sound_path].setVolume(max_volume * sound_info_map[entity_id].sound_volume);
+				sounds_[entity_sound_info.sound_path].play();
 				sound_info_map[entity_id].play_sound = false;
 			}
-			if (sounds_.count(entity_soundinfo.sound_path) != 0)
+			if (sounds_.count(entity_sound_info.sound_path) != 0)
 			{
-				if (sounds_[entity_soundinfo.sound_path].getStatus() == sf::SoundSource::Status::Stopped)
+				if (sounds_[entity_sound_info.sound_path].getStatus() == sf::SoundSource::Status::Stopped)
 				{
-					sounds_.erase(entity_soundinfo.sound_path);
+					sounds_.erase(entity_sound_info.sound_path);
 				}
 			}
 		}

@@ -45,6 +45,7 @@ class BPPlayer : public BPMovingParticle
 {
 	DrawPriority draw_priority = { 7 };
 	Shader shader = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
+	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 
 	// [Serialize]
 	Player player = { true, true, 1000 };
@@ -78,7 +79,7 @@ class BPGoal : public BPTileBasedEntity
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
-	SoundInfo sound_info = { "content\\sounds\\fanfare.wav" };
+	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav" };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };

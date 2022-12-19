@@ -23,6 +23,7 @@ public:
 		auto& radius_map = level.GetComponent<Radius>();
 		auto& charge_map = level.GetComponent<Charge>();
 		auto& shader_map = level.GetComponent<Shader>();
+		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
 		for (auto& [entity_id, player] : player_map)
 		{
@@ -58,6 +59,7 @@ public:
 			}
 			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] && player.can_switch_charge)
 			{
+				sound_info_map[entity_id].play_sound = true;
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_behaviours_map[entity_id].default_charge = -player_behaviours_map[entity_id].default_charge;
 				assert(shader_map.count(entity_id) > 0);
