@@ -91,7 +91,7 @@ void Game::Init()
 
 	int columns = floor(sqrt(number_of_levels)) + 1;
 	float margin = 100;
-	float button_w = (MENU_LEVEL_WIDTH - (columns + 1) * margin) / columns;
+	float button_w = (MENU_LEVEL_WIDTH - (columns + 1) * margin - 4 * margin) / columns;
 	float button_h = button_w / ASPECT_RATIO;
 	auto button_positions = GridHelper(number_of_levels, columns, button_w, button_h, margin);
 	for (int i = 0; i < number_of_levels; ++i)
