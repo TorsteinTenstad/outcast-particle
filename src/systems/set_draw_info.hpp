@@ -26,7 +26,10 @@ public:
 			int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge_map[entity_id].charge);
 			if (player_map.count(entity_id))
 			{
-				draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[category];
+				if (charge_map[entity_id].charge != 0)
+				{
+					draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[category];
+				}
 			}
 			else
 			{

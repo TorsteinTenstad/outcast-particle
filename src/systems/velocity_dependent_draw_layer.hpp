@@ -41,7 +41,7 @@ public:
 			sf::Vector2f target_offset = sf::Vector2f(0, 0);
 			if (Magnitude(velocity_map[entity_id].velocity) > 0)
 			{
-				target_offset = 50.f * Normalized(velocity_map[entity_id].velocity);
+				target_offset = 35.f * Normalized(velocity_map[entity_id].velocity);
 			}
 			float snap = 0.01f * dt * 600;
 			sf::Vector2f next_offset = (1 - snap) * offset + snap * target_offset;

@@ -19,6 +19,7 @@ public:
 		auto& received_forces_map = level.GetComponent<ReceivedForces>();
 		auto& velocity_map = level.GetComponent<Velocity>();
 		auto& player_map = level.GetComponent<Player>();
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
 		auto& player_behaviours_map = level.GetComponent<PlayerBehaviors>();
 		auto& radius_map = level.GetComponent<Radius>();
 		auto& charge_map = level.GetComponent<Charge>();
@@ -66,6 +67,19 @@ public:
 				shader_map[entity_id].uniforms["time"] = 0;
 			}
 			shader_map[entity_id].uniforms["time"] += dt;
+
+			assert(draw_info_map.count(entity_id) > 0);
+			if (charge_map[entity_id].charge == 0)
+			{
+				if (player_behaviours_map[entity_id].default_charge < 0)
+				{
+					draw_info_map[entity_id].image_path = "content\\textures_generated\\player_neutral-.png";
+				}
+				else
+				{
+					draw_info_map[entity_id].image_path = "content\\textures_generated\\player_neutral+.png";
+				}
+			}
 		}
 	}
 	void OnEnterMode(Mode mode) {};

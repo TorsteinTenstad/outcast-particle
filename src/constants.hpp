@@ -33,17 +33,17 @@ const std::array<std::string, 11> PLAYER_PARTICLE_TEXTURES = {
 	"content\\textures\\particle_red_+5.png"
 };
 const std::array<std::string, 11> PARTICLE_TEXTURES = {
-	"content\\textures\\particle_blue_-5.png",
-	"content\\textures\\particle_blue_-4.png",
-	"content\\textures\\particle_blue_-3.png",
-	"content\\textures\\particle_blue_-2.png",
-	"content\\textures\\particle_blue_-1.png",
-	"content\\textures\\particle_blue_0.png",
-	"content\\textures\\particle_blue_+1.png",
-	"content\\textures\\particle_blue_+2.png",
-	"content\\textures\\particle_blue_+3.png",
-	"content\\textures\\particle_blue_+4.png",
-	"content\\textures\\particle_blue_+5.png"
+	"content\\textures_generated\\particle_green_5.png",
+	"content\\textures_generated\\particle_green_4.png",
+	"content\\textures_generated\\particle_green_3.png",
+	"content\\textures_generated\\particle_green_2.png",
+	"content\\textures_generated\\particle_green_1.png",
+	"content\\textures_generated\\particle_blue_0.png",
+	"content\\textures_generated\\particle_red_1.png",
+	"content\\textures_generated\\particle_red_2.png",
+	"content\\textures_generated\\particle_red_3.png",
+	"content\\textures_generated\\particle_red_4.png",
+	"content\\textures_generated\\particle_red_5.png"
 };
 
 const std::array<float, 5> ELECTRIC_FIELD_STRENGTH_CATEGORIES = { 0.0625, 0.125, 0.25, 0.5, 1 };
