@@ -146,6 +146,7 @@ void Game::Update(float dt)
 			{
 				game_systems_[system_id]->UpdateGameSystem(GetLevel(active_level_), dt / physics_ticks_per_frame_);
 			}
+			cursor_and_keys_.ResetFrameEvents();
 		}
 	}
 }
