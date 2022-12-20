@@ -12,3 +12,4 @@ name=Untitled;size=(7680,4320);editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(3840,4260)}WidthAndHeight{width_and_height=(7440,60)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3600,2160)}WidthAndHeight{width_and_height=(6960,480)}ElectricField{field_vector=(-0.0625,0)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(7620,2160)}WidthAndHeight{width_and_height=(60,4092)}
+
