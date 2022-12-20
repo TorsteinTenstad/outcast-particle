@@ -46,6 +46,7 @@ class BPPlayer : public BPMovingParticle
 	DrawPriority draw_priority = { 7 };
 	Shader shader = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
+	VelocityDependentDrawLayer velocity_dependent_draw_layer = { "content\\textures\\particle_smile.png", -1 };
 
 	// [Serialize]
 	Player player = { true, true, 1000 };

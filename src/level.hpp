@@ -28,6 +28,7 @@
 
 typedef std::variant<
 	std::map<int, DrawInfo>,
+	std::map<int, VelocityDependentDrawLayer>,
 	std::map<int, Shader>,
 	std::map<int, DrawPriority>,
 	std::map<int, ChargeDependentDrawInfo>,

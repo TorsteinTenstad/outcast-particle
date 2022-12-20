@@ -31,6 +31,7 @@
 #include "systems/sound_system.hpp"
 #include "systems/trail.hpp"
 #include "systems/velocity.hpp"
+#include "systems/velocity_dependent_draw_layer.hpp"
 #include "systems/view.hpp"
 
 class Game

@@ -27,3 +27,10 @@ public:
 
 class Background
 {};
+
+class VelocityDependentDrawLayer
+{
+public:
+	std::string image_path;
+	int owned_entity = -1;
+};
