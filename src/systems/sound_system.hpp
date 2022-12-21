@@ -30,7 +30,6 @@ public:
 				if (MAX_VOLUME.count(entity_sound_info.sound_path) > 0)
 				{
 					max_volume = MAX_VOLUME[entity_sound_info.sound_path];
-					std::cout << ":::" << entity_sound_info.sound_path << "\n";
 				}
 				sounds_[entity_sound_info.sound_path].setBuffer(sound_buffers_[entity_sound_info.sound_path]);
 				sounds_[entity_sound_info.sound_path].setVolume(max_volume * sound_info_map[entity_id].sound_volume);

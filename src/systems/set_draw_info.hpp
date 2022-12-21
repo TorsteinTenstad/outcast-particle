@@ -43,7 +43,6 @@ public:
 				assert(velocity_dependent_draw_layer_map.count(entity_id) > 0);
 				if (velocity_dependent_draw_layer_map[entity_id].owned_entity > 0)
 				{
-					std::cout << "exists\n";
 					if (charge > 0)
 					{
 						draw_info_map[velocity_dependent_draw_layer_map[entity_id].owned_entity].image_path = "content\\textures\\face_plus.png";

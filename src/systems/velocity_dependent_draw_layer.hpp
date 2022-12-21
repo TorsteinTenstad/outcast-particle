@@ -42,10 +42,8 @@ public:
 
 		for (auto& [entity_id, velocity_dependent_draw_layer] : velocity_dependent_draw_layer_map)
 		{
-			std::cout << "for\n";
 			if (velocity_dependent_draw_layer.owned_entity == -1)
 			{
-				std::cout << "created\n";
 				int id = level.CreateEntityId();
 				draw_info_map[id] = draw_info_map[entity_id];
 				position_map[id] = position_map[entity_id];
