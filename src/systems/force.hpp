@@ -35,8 +35,8 @@ public:
 			acceleration_map[entity_id].acceleration = CalcAcceleration(received_forces, global_max_acceleration_);
 		}
 	}
-	void OnEnterMode(Level& level, Mode mode) {};
-	void OnExitMode(Level& level, Mode mode) {};
+	void OnEnterMode(Level& level) {};
+	void OnExitMode(Level& level) {};
 	void OnEnterLevel(Level& level) {};
 	void OnExitLevel(Level& level) {};
 };

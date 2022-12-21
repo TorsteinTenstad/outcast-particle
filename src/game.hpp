@@ -72,6 +72,7 @@ private:
 	Level& AddLevel();
 	Level& AddLevel(int id);
 	Level& GetLevel(int id);
+	Level& GetActiveLevel();
 	void SetLevel(int level);
 	void ResetActiveLevel();
 	std::string GenerateLevelTexture(int level_id);

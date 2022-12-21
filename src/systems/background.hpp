@@ -40,8 +40,8 @@ public:
 			draw_info_map[entity_id].scale_to_fit = true;
 		}
 	}
-	void OnEnterMode(Level& level, Mode mode) {};
-	void OnExitMode(Level& level, Mode mode) {};
+	void OnEnterMode(Level& level) {};
+	void OnExitMode(Level& level) {};
 	void OnEnterLevel(Level& level) {};
 	void OnExitLevel(Level& level) {};
 };

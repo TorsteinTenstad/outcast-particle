@@ -72,8 +72,8 @@ public:
 		std::vector<sf::Keyboard::Key> equivalent_keys = { sf::Keyboard::Tab, sf::Keyboard::Backspace, sf::Keyboard::Escape };
 		AddFloatingButtons(level, level_completed_functions, level_completed_texts, equivalent_keys);
 	}
-	void OnEnterMode(Level& level, Mode mode) {};
-	void OnExitMode(Level& level, Mode mode) {};
+	void OnEnterMode(Level& level) {};
+	void OnExitMode(Level& level) {};
 	void OnEnterLevel(Level& level) {};
 	void OnExitLevel(Level& level) {};
 };

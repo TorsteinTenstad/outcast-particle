@@ -27,8 +27,8 @@ public:
 
 		globals.render_window.setView(sf::View(level.size / 2.f, view_size));
 	}
-	void OnEnterMode(Level& level, Mode mode) {};
-	void OnExitMode(Level& level, Mode mode) {};
+	void OnEnterMode(Level& level) {};
+	void OnExitMode(Level& level) {};
 	void OnEnterLevel(Level& level) {};
 	void OnExitLevel(Level& level) {};
 };

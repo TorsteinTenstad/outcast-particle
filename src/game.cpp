@@ -25,6 +25,11 @@ Level& Game::GetLevel(int id)
 	return levels_.find(id)->second;
 }
 
+Level& Game::GetActiveLevel()
+{
+	return levels_.find(active_level_)->second;
+}
+
 Game::Game()
 {
 	RegisterGameSystem<ModeSystem>().SetGameControlFunctions(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
@@ -137,7 +142,7 @@ void Game::Update(float dt)
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
 	{
-		game_systems_[system_id]->UpdateGameSystem(GetLevel(active_level_), dt);
+		game_systems_[system_id]->Update(GetActiveLevel(), dt);
 	}
 	if (active_mode_ == PLAY_MODE)
 	{
@@ -145,7 +150,7 @@ void Game::Update(float dt)
 		{
 			for (const auto& system_id : physics_game_system_ids_)
 			{
-				game_systems_[system_id]->UpdateGameSystem(GetLevel(active_level_), dt / physics_ticks_per_frame_);
+				game_systems_[system_id]->Update(GetActiveLevel(), dt / physics_ticks_per_frame_);
 			}
 			cursor_and_keys_.ResetFrameEvents();
 		}
@@ -160,12 +165,20 @@ Game::~Game()
 void Game::SetLevel(int level)
 {
 	SetMode(PLAY_MODE);
-	if (active_level_ >= 0)
+	for (auto& [type_id, game_system] : game_systems_)
 	{
-		GetLevel(active_level_).LoadFromFile();
-		GenerateLevelTexture(active_level_);
+		game_system->OnExitLevel(GetActiveLevel());
 	}
 	active_level_ = level;
+	if (active_level_ >= 0)
+	{
+		GetActiveLevel().LoadFromFile();
+		GenerateLevelTexture(active_level_);
+	}
+	for (auto& [type_id, game_system] : game_systems_)
+	{
+		game_system->OnEnterLevel(GetActiveLevel());
+	}
 }
 
 Mode Game::GetMode()
@@ -182,41 +195,51 @@ void Game::SetMode(Mode next_mode)
 	switch (active_mode_)
 	{
 		case EDIT_MODE: {
-			GetGameSystem<EditModeSystem>().CloseBlueprintMenu(GetLevel(active_level_));
-			GetLevel(active_level_).SaveToFile();
+			GetGameSystem<EditModeSystem>().CloseBlueprintMenu(GetActiveLevel());
+			GetActiveLevel().SaveToFile();
 			break;
 		}
 		case PLAY_MODE:
 			break;
 		case PAUSE_MODE:
-			GetGameSystem<PauseMode>().RemovePauseButtons(GetLevel(active_level_));
+			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
 			break;
 		case LEVEL_COMPLETED_MODE:
-			GetGameSystem<PauseMode>().RemovePauseButtons(GetLevel(active_level_));
+			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
 			break;
 		case LEVEL_FAILED_MODE:
-			GetGameSystem<PauseMode>().RemovePauseButtons(GetLevel(active_level_));
+			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
 			break;
 		default:
 			assert(false);
 	}
+
+	for (auto& [type_id, game_system] : game_systems_)
+	{
+		game_system->OnExitMode(GetActiveLevel());
+	}
 	active_mode_ = next_mode;
+	for (auto& [type_id, game_system] : game_systems_)
+	{
+		game_system->OnEnterMode(GetActiveLevel());
+	}
+
 	switch (next_mode)
 	{
 		case EDIT_MODE: {
-			GetLevel(active_level_).LoadFromFile();
+			GetActiveLevel().LoadFromFile();
 			break;
 		}
 		case PLAY_MODE:
 			break;
 		case PAUSE_MODE:
-			GetGameSystem<PauseMode>().AddPauseButtons(GetLevel(active_level_), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			GetGameSystem<PauseMode>().AddPauseButtons(GetActiveLevel(), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		case LEVEL_COMPLETED_MODE:
-			GetGameSystem<PauseMode>().AddLevelCompletedButtons(GetLevel(active_level_), active_level_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			GetGameSystem<PauseMode>().AddLevelCompletedButtons(GetActiveLevel(), active_level_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		case LEVEL_FAILED_MODE:
-			GetGameSystem<PauseMode>().AddLevelFailedButtons(GetLevel(active_level_), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
+			GetGameSystem<PauseMode>().AddLevelFailedButtons(GetActiveLevel(), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
 			break;
 		default:
 			assert(false);
