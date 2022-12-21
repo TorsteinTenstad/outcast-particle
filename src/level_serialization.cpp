@@ -399,7 +399,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Trail>()[entity_id] = {};
             GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
-            GetComponent<VelocityDependentDrawLayer>()[entity_id] = { "content\\textures\\particle_smile.png", -1 };
+            GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -564,7 +564,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
-        GetComponent<VelocityDependentDrawLayer>()[entity_id] = { "content\\textures\\particle_smile.png", -1 };
+        GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Charge>()[entity_id] = { 10000 };

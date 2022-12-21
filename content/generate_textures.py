@@ -130,10 +130,6 @@ if __name__ == '__main__':
     GENERATE_PARTICLE_TEXTURES = False
     GENERATE_NEUTRAL_PLAYER_TEXTURES = True
 
-    if GENERATE_NEUTRAL_PLAYER_TEXTURES:
-        generate_particle_texture('player_neutral+', '#0c70ad', '#ca151f', '', 0.5)
-        generate_particle_texture('player_neutral-', '#0c70ad', '#007f03', '', 0.5)
-
     if GENERATE_PARTICLE_TEXTURES:
         red_colors = ['#550000', '#610000', '#6e0000', '#7b0000', '#880000', '#960000', '#a40004', '#b1000f', '#be0518', '#ca151f',
               '#d42426', '#de2f2d', '#e83a34', '#f2443b', '#fb4e43', '#ff5e50', '#ff705f', '#ff7f6c', '#ff8e79', '#ff9c85', '#ffa991', '#ffb69d']

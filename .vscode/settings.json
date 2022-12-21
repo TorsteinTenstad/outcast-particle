@@ -137,5 +137,6 @@
 	},
 	"[applescript]": {
 		"files.encoding": "utf8"
-	}
+	},
+	"editor.columnSelection": false
 }

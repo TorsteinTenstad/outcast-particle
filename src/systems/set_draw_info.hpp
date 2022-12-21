@@ -20,20 +20,42 @@ public:
 		auto& electric_field_map = level.GetComponent<ElectricField>();
 		auto& magnetic_field_map = level.GetComponent<MagneticField>();
 		auto& player_map = level.GetComponent<Player>();
+		auto& velocity_dependent_draw_layer_map = level.GetComponent<VelocityDependentDrawLayer>();
+		auto& player_behaviors_map = level.GetComponent<PlayerBehaviors>();
 
 		for (auto const& [entity_id, charge_dependent_drawinfo] : charge_dependent_drawinfo_map)
 		{
+			assert(charge_map.count(entity_id) > 0);
 			int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge_map[entity_id].charge);
-			if (player_map.count(entity_id))
+			if (player_map.count(entity_id) > 0)
 			{
-				if (charge_map[entity_id].charge != 0)
+				float charge = charge_map[entity_id].charge;
+				if (charge != 0)
 				{
-					draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[category];
+					draw_info_map[entity_id].image_path = PLAYER_PARTICLE_TEXTURES[category];
+				}
+				else
+				{
+					charge = player_behaviors_map[entity_id].default_charge;
+					category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge);
+					draw_info_map[entity_id].image_path = PLAYER_PARTICLE_NEUTRAL_TEXTURES[category];
+				}
+				assert(velocity_dependent_draw_layer_map.count(entity_id) > 0);
+				if (velocity_dependent_draw_layer_map[entity_id].owned_entity > 0)
+				{
+					if (charge > 0)
+					{
+						draw_info_map[velocity_dependent_draw_layer_map[entity_id].owned_entity].image_path = "content\\textures\\face_plus.png";
+					}
+					else
+					{
+						draw_info_map[velocity_dependent_draw_layer_map[entity_id].owned_entity].image_path = "content\\textures\\face_minus.png";
+					}
 				}
 			}
 			else
 			{
-				draw_info_map[entity_id].image_path = PLAYER_PARTICLE_TEXTURES[category];
+				draw_info_map[entity_id].image_path = PARTICLE_TEXTURES[category];
 			}
 		}
 

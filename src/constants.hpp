@@ -19,20 +19,20 @@ const std::array<float, 5> LEVEL_WIDTHS = { BLOCK_SIZE * 16, BLOCK_SIZE * 32, BL
 
 const std::array<float, 6> CHARGE_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1, sf::Keyboard::Num0 };
 const std::array<float, 11> PARTICLE_CHARGE_CATEGORIES = { -160'000, -40'000, -10'000, -2500, -625, 0, 625, 2500, 10'000, 40'000, 160'000 };
-const std::array<std::string, 11> PLAYER_PARTICLE_TEXTURES = {
+const std::array<std::string, 11> PARTICLE_TEXTURES = {
 	"content\\textures\\particle_green_-5.png",
 	"content\\textures\\particle_green_-4.png",
 	"content\\textures\\particle_green_-3.png",
 	"content\\textures\\particle_green_-2.png",
 	"content\\textures\\particle_green_-1.png",
-	"content\\textures\\particle_green_0.png",
+	"content\\textures\\particle_blue_0.png",
 	"content\\textures\\particle_red_+1.png",
 	"content\\textures\\particle_red_+2.png",
 	"content\\textures\\particle_red_+3.png",
 	"content\\textures\\particle_red_+4.png",
 	"content\\textures\\particle_red_+5.png"
 };
-const std::array<std::string, 11> PARTICLE_TEXTURES = {
+const std::array<std::string, 11> PLAYER_PARTICLE_TEXTURES = {
 	"content\\textures_generated\\particle_green_5.png",
 	"content\\textures_generated\\particle_green_4.png",
 	"content\\textures_generated\\particle_green_3.png",
@@ -44,6 +44,19 @@ const std::array<std::string, 11> PARTICLE_TEXTURES = {
 	"content\\textures_generated\\particle_red_3.png",
 	"content\\textures_generated\\particle_red_4.png",
 	"content\\textures_generated\\particle_red_5.png"
+};
+const std::array<std::string, 11> PLAYER_PARTICLE_NEUTRAL_TEXTURES = {
+	"content\\textures_generated\\particle_blue_5.png",
+	"content\\textures_generated\\particle_blue_4.png",
+	"content\\textures_generated\\particle_blue_3.png",
+	"content\\textures_generated\\particle_blue_2.png",
+	"content\\textures_generated\\particle_blue_1.png",
+	"content\\textures_generated\\particle_blue_0.png",
+	"content\\textures_generated\\particle_blue_1.png",
+	"content\\textures_generated\\particle_blue_2.png",
+	"content\\textures_generated\\particle_blue_3.png",
+	"content\\textures_generated\\particle_blue_4.png",
+	"content\\textures_generated\\particle_blue_5.png"
 };
 
 const std::array<float, 5> ELECTRIC_FIELD_STRENGTH_CATEGORIES = { 0.0625, 0.125, 0.25, 0.5, 1 };

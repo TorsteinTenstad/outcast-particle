@@ -67,19 +67,6 @@ public:
 				shader_map[entity_id].uniforms["time"] = 0;
 			}
 			shader_map[entity_id].uniforms["time"] += dt;
-
-			assert(draw_info_map.count(entity_id) > 0);
-			if (charge_map[entity_id].charge == 0)
-			{
-				if (player_behaviours_map[entity_id].default_charge < 0)
-				{
-					draw_info_map[entity_id].image_path = "content\\textures_generated\\player_neutral-.png";
-				}
-				else
-				{
-					draw_info_map[entity_id].image_path = "content\\textures_generated\\player_neutral+.png";
-				}
-			}
 		}
 	}
 	void OnEnterMode(Mode mode) {};
