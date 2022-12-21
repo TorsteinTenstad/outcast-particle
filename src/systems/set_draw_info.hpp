@@ -13,8 +13,8 @@ public:
 	void Update(Level& level, float dt)
 	{
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& charge_dependent_drawinfo_map = level.GetComponent<ChargeDependentDrawInfo>();
-		auto& orientation_dependent_drawinfo_map = level.GetComponent<OrientationDependentDrawInfo>();
+		auto& charge_dependent_draw_info_map = level.GetComponent<ChargeDependentDrawInfo>();
+		auto& orientation_dependent_draw_info_map = level.GetComponent<OrientationDependentDrawInfo>();
 		auto& charge_map = level.GetComponent<Charge>();
 		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		auto& electric_field_map = level.GetComponent<ElectricField>();
@@ -23,7 +23,7 @@ public:
 		auto& velocity_dependent_draw_layer_map = level.GetComponent<VelocityDependentDrawLayer>();
 		auto& player_behaviors_map = level.GetComponent<PlayerBehaviors>();
 
-		for (auto const& [entity_id, charge_dependent_drawinfo] : charge_dependent_drawinfo_map)
+		for (auto const& [entity_id, charge_dependent_draw_info] : charge_dependent_draw_info_map)
 		{
 			assert(charge_map.count(entity_id) > 0);
 			int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge_map[entity_id].charge);
@@ -59,15 +59,15 @@ public:
 			}
 		}
 
-		for (auto const& [entity_id, orientation_dependent_drawinfo] : orientation_dependent_drawinfo_map)
+		for (auto const& [entity_id, orientation_dependent_drawinfo] : orientation_dependent_draw_info_map)
 		{
 			if (width_and_height_map[entity_id].width_and_height.x > width_and_height_map[entity_id].width_and_height.y)
 			{
-				draw_info_map[entity_id].image_path = orientation_dependent_drawinfo.horisontal_image_path;
+				draw_info_map[entity_id].quarter_turn_rotations = 0;
 			}
 			else
 			{
-				draw_info_map[entity_id].image_path = orientation_dependent_drawinfo.vertical_image_path;
+				draw_info_map[entity_id].quarter_turn_rotations = 1;
 			}
 		}
 

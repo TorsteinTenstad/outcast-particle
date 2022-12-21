@@ -415,9 +415,9 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPLaser")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 3 };
-            GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
+            GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
             GetComponent<KillOnIntersection>()[entity_id] = {};
             GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", { { "_time", 1 } } };
@@ -575,9 +575,9 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPLaser")
     {
         GetComponent<ClickedOn>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 3 };
-        GetComponent<OrientationDependentDrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
+        GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
         GetComponent<KillOnIntersection>()[entity_id] = {};
         GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", { { "_time", 1 } } };

@@ -54,9 +54,9 @@ class BPPlayer : public BPMovingParticle
 
 class BPLaser : public BPEntity
 {
-	DrawInfo draw_info = { "_", false, 0 };
+	DrawInfo draw_info = { "content\\textures\\laser_horisontal.png", false, 0 };
 	DrawPriority draw_priority = { 3 };
-	OrientationDependentDrawInfo orientation_dependent_draw_info = { "content\\textures\\laser_horisontal.png", "content\\textures\\laser_vertical.png" };
+	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
 	Shader shader = { "shaders\\test.vert", "", { { "_time", 1 } } };
