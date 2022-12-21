@@ -44,8 +44,8 @@ public:
 			level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, &text_[entity_id] });
 		}
 	}
-	void OnEnterMode(Mode mode) {};
-	void OnExitMode(Mode mode) {};
-	void OnEnterLevel(int level_id) {};
-	void OnExitLevel(int level_id) {};
+	void OnEnterMode(Level& level, Mode mode) {};
+	void OnExitMode(Level& level, Mode mode) {};
+	void OnEnterLevel(Level& level) {};
+	void OnExitLevel(Level& level) {};
 };

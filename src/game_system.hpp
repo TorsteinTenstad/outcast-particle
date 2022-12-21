@@ -22,22 +22,22 @@ public:
 	{
 		if (level.id != previous_level_)
 		{
-			OnExitLevel(previous_level_);
-			OnEnterLevel(level.id);
+			OnExitLevel(level);
+			OnEnterLevel(level);
 			previous_level_ = level.id;
 		}
 		if (mode_ != previous_mode_)
 		{
-			OnEnterMode(previous_mode_);
-			OnExitMode(mode_);
+			OnEnterMode(level, previous_mode_);
+			OnExitMode(level, mode_);
 			previous_mode_ = mode_;
 		}
 		Update(level, dt);
 	}
 
 	virtual void Update(Level& level, float dt) = 0;
-	virtual void OnEnterMode(Mode mode) = 0;
-	virtual void OnExitMode(Mode mode) = 0;
-	virtual void OnEnterLevel(int level_id) = 0;
-	virtual void OnExitLevel(int level_id) = 0;
+	virtual void OnEnterMode(Level& level, Mode mode) = 0;
+	virtual void OnExitMode(Level& level, Mode mode) = 0;
+	virtual void OnEnterLevel(Level& level) = 0;
+	virtual void OnExitLevel(Level& level) = 0;
 };
