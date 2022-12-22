@@ -46,6 +46,7 @@ Game::Game()
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
+	RegisterGameSystem<ForceVisualizationSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<DisplayVelocitySystem>();
 	RegisterGameSystem<EditModeSystem>();

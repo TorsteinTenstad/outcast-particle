@@ -14,7 +14,6 @@ public:
 	{
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
 		auto& charge_dependent_draw_info_map = level.GetComponent<ChargeDependentDrawInfo>();
-		auto& orientation_dependent_draw_info_map = level.GetComponent<OrientationDependentDrawInfo>();
 		auto& charge_map = level.GetComponent<Charge>();
 		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		auto& electric_field_map = level.GetComponent<ElectricField>();
@@ -22,6 +21,7 @@ public:
 		auto& player_map = level.GetComponent<Player>();
 		auto& velocity_dependent_draw_layer_map = level.GetComponent<VelocityDependentDrawLayer>();
 		auto& player_behaviors_map = level.GetComponent<PlayerBehaviors>();
+		auto& orientation_dependent_draw_info_map = level.GetComponent<OrientationDependentDrawInfo>();
 
 		for (auto const& [entity_id, charge_dependent_draw_info] : charge_dependent_draw_info_map)
 		{

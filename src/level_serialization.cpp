@@ -349,7 +349,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 5 };
+            GetComponent<DrawPriority>()[entity_id] = { 6 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -365,7 +365,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 6 };
+            GetComponent<DrawPriority>()[entity_id] = { 7 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -388,7 +388,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ClickedOn>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 7 };
+            GetComponent<DrawPriority>()[entity_id] = { 8 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -521,7 +521,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 5 };
+        GetComponent<DrawPriority>()[entity_id] = { 6 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, false, 0, sf::Vector2f(0, 0), false };
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -534,7 +534,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 6 };
+        GetComponent<DrawPriority>()[entity_id] = { 7 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -553,7 +553,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ClickedOn>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 7 };
+        GetComponent<DrawPriority>()[entity_id] = { 8 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, true, true, 0, sf::Vector2f(0, 0), false };
         GetComponent<Radius>()[entity_id] = { 120 };

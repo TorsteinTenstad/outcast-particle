@@ -18,7 +18,7 @@ class BPTileBasedEntity : public BPEntity
 class BPStaticParticle : public BPEntity
 {
 	DrawInfo draw_info = { "_", false, 0 };
-	DrawPriority draw_priority = { 5 };
+	DrawPriority draw_priority = { 6 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Editable editable = { true, true, false, 0, sf::Vector2f(0, 0), false };
 	Radius radius = { 120 };
@@ -29,7 +29,7 @@ class BPStaticParticle : public BPEntity
 
 class BPMovingParticle : public BPStaticParticle
 {
-	DrawPriority draw_priority = { 6 };
+	DrawPriority draw_priority = { 7 };
 	Editable editable = { true, true, true, 0, sf::Vector2f(0, 0), false };
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
@@ -43,7 +43,7 @@ class BPMovingParticle : public BPStaticParticle
 
 class BPPlayer : public BPMovingParticle
 {
-	DrawPriority draw_priority = { 7 };
+	DrawPriority draw_priority = { 8 };
 	Shader shader = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};

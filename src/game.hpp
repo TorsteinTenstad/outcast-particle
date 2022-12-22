@@ -14,6 +14,7 @@
 #include "systems/electric_field_force.hpp"
 #include "systems/electric_force.hpp"
 #include "systems/force.hpp"
+#include "systems/force_visualization.hpp"
 #include "systems/goal.hpp"
 #include "systems/intersection.hpp"
 #include "systems/kill_on_intersection.hpp"

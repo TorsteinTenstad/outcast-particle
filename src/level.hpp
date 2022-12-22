@@ -5,6 +5,7 @@
 #include "components/button.hpp"
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
+#include "components/force_visualization.hpp"
 #include "components/goal.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
@@ -58,6 +59,7 @@ typedef std::variant<
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, Background>,
 	std::map<int, Text>,
+	std::map<int, ForceVisualization>,
 	std::map<int, KeyConfigButton>,
 	std::map<int, PauseMenuItems>,
 	std::map<int, LevelButton>,
