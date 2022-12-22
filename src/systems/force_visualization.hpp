@@ -4,6 +4,7 @@
 #include "game_system.hpp"
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
+#include "systems/electric_force.hpp"
 
 class ForceVisualizationSystem : public GameSystem
 {
@@ -37,9 +38,13 @@ public:
 				break;
 			}
 			level.GetComponent<Shader>()[entity_id].shader->setUniform("window_resolution", sf::Glsl::Vec2 { globals.render_window.getSize() });
+			Position player_position;
+			Charge player_charge;
 			for (const auto& [player_id, player] : level.GetComponent<Player>())
 			{
-				sf::Vector2f player_pos = (sf::Vector2f)globals.render_window.mapCoordsToPixel(level.GetComponent<Position>()[player_id].position);
+				player_position = level.GetComponent<Position>()[player_id];
+				player_charge = level.GetComponent<Charge>()[player_id];
+				sf::Vector2f player_pos = (sf::Vector2f)globals.render_window.mapCoordsToPixel(player_position.position);
 				level.GetComponent<Shader>()[entity_id].shader->setUniform("player_pos", player_pos);
 				float charge_radius = level.GetComponent<Radius>()[player_id].radius;
 				charge_radius *= std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
@@ -50,9 +55,12 @@ public:
 			{
 				if (level.GetComponent<Player>().count(charge_entity_id) == 0)
 				{
-					std::string uniform_name = "charges[" + ToString(charge_i) + "]";
-					sf::Vector2f uniform_value = (sf::Vector2f)globals.render_window.mapCoordsToPixel(level.GetComponent<Position>()[charge_entity_id].position);
-					level.GetComponent<Shader>()[entity_id].shader->setUniform(uniform_name, uniform_value);
+					Position particle_position = level.GetComponent<Position>()[charge_entity_id];
+					sf::Vector2f charge_position = (sf::Vector2f)globals.render_window.mapCoordsToPixel(particle_position.position);
+					float sign = Sign(player_charge.charge * level.GetComponent<Charge>()[charge_entity_id].charge);
+					float charge_force = sign * Magnitude(CalculateElectricForce(player_position, particle_position, player_charge, level.GetComponent<Charge>()[charge_entity_id]));
+					level.GetComponent<Shader>()[entity_id].shader->setUniform("charge_positions[" + ToString(charge_i) + "]", charge_position);
+					level.GetComponent<Shader>()[entity_id].shader->setUniform("charge_force[" + ToString(charge_i) + "]", charge_force);
 					charge_i++;
 				}
 			}
