@@ -20,6 +20,7 @@ public:
 		auto& magnetic_field_map = level.GetComponent<MagneticField>();
 		auto& player_map = level.GetComponent<Player>();
 		auto& velocity_dependent_draw_layer_map = level.GetComponent<VelocityDependentDrawLayer>();
+		auto& children_map = level.GetComponent<Children>();
 		auto& player_behaviors_map = level.GetComponent<PlayerBehaviors>();
 		auto& orientation_dependent_draw_info_map = level.GetComponent<OrientationDependentDrawInfo>();
 
@@ -41,15 +42,18 @@ public:
 					draw_info_map[entity_id].image_path = PLAYER_PARTICLE_NEUTRAL_TEXTURES[category];
 				}
 				assert(velocity_dependent_draw_layer_map.count(entity_id) > 0);
-				if (velocity_dependent_draw_layer_map[entity_id].owned_entity > 0)
+
+				std::vector<int>& children = children_map[entity_id].id_owned_by_component[typeid(VelocityDependentDrawLayer)];
+				if (children.size() > 0)
 				{
+					int face = children[0];
 					if (charge > 0)
 					{
-						draw_info_map[velocity_dependent_draw_layer_map[entity_id].owned_entity].image_path = "content\\textures\\face_plus.png";
+						draw_info_map[face].image_path = "content\\textures\\face_plus.png";
 					}
 					else
 					{
-						draw_info_map[velocity_dependent_draw_layer_map[entity_id].owned_entity].image_path = "content\\textures\\face_minus.png";
+						draw_info_map[face].image_path = "content\\textures\\face_minus.png";
 					}
 				}
 			}

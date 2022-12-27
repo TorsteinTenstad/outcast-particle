@@ -27,6 +27,17 @@ int Level::CopyEntity(int from_id)
 
 void Level::DeleteEntity(int id)
 {
+	auto& children_map = GetComponent<Children>();
+	if (children_map.count(id) > 0)
+	{
+		for (auto& [component_type_id, child_ids] : children_map[id].id_owned_by_component)
+		{
+			for (auto& child_id : child_ids)
+			{
+				DeleteEntity(child_id);
+			}
+		}
+	}
 	for (auto& [_, component_map_variant] : components_)
 	{
 		std::visit([id](auto& component_map) {

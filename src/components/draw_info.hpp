@@ -25,7 +25,4 @@ class Background
 {};
 
 class VelocityDependentDrawLayer
-{
-public:
-	int owned_entity = -1;
-};
+{};

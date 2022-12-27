@@ -3,6 +3,7 @@
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
+#include "components/children.hpp"
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/force_visualization.hpp"
@@ -58,6 +59,7 @@ typedef std::variant<
 	std::map<int, SoundInfo>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, Background>,
+	std::map<int, Children>,
 	std::map<int, Text>,
 	std::map<int, ForceVisualization>,
 	std::map<int, KeyConfigButton>,
