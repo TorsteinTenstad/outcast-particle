@@ -94,6 +94,9 @@ public:
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 
+	template <class... Component>
+	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
+
 	Level(int level_id);
 	int CreateEntityId();
 	int CopyEntity(int from_id);

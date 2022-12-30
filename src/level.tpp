@@ -10,3 +10,44 @@ std::map<int, Component>& Level::GetComponent()
 	}
 	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
 }
+
+template <class OtherComponent, class... Component>
+static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& component_map, std::vector<std::tuple<int, Component*...>>& matching_entities)
+{
+	if (component_idx == 0)
+	{
+		for (auto& [entity_id, component_value] : component_map)
+		{
+			std::tuple<int, Component*...> x = {};
+			std::get<int>(x) = entity_id;
+			std::get<OtherComponent*>(x) = &component_value;
+			matching_entities.push_back(x);
+		}
+	}
+	else
+	{
+		for (auto it = matching_entities.begin(), next_it = it; it != matching_entities.end(); it = next_it)
+		{
+			++next_it;
+			auto map_it = component_map.find(std::get<int>(*it));
+			if (map_it == component_map.end())
+			{
+				matching_entities.erase(it);
+			}
+			else
+			{
+				std::get<OtherComponent*>(*it) = &map_it->second;
+			}
+		}
+	}
+	return true;
+}
+
+template <class... Component>
+std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
+{
+	int component_idx = 0;
+	std::vector<std::tuple<int, Component*...>> matching_entities = {};
+	(IdIntersection<Component, Component...>(component_idx++, GetComponent<Component>(), matching_entities) && ...);
+	return matching_entities;
+}
