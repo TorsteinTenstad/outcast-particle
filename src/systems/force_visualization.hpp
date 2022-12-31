@@ -49,6 +49,7 @@ public:
 				float charge_radius = level.GetComponent<Radius>()[player_id].radius;
 				charge_radius *= std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
 				level.GetComponent<Shader>()[entity_id].shader->setUniform("charge_radius", charge_radius);
+				level.GetComponent<Shader>()[entity_id].shader->setUniform("_time", globals.time);
 			}
 			int charge_i = 0;
 			for (const auto [charge_entity_id, charge] : level.GetComponent<Charge>())

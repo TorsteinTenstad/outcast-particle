@@ -6,6 +6,7 @@
 #define MAX_FORCE pow(10000 / 240, 2)
 #define FORCE_THREASHOLD_NEEDED_TO_CONNECT pow(10000 / (5 * 240), 2)
 
+uniform float _time;
 uniform int n_charges;
 uniform float charge_radius;
 uniform vec2 charge_positions[MAX_CHARGES];
@@ -24,34 +25,52 @@ void main()
 	vec2 screen_coords = gl_FragCoord.xy;
 	screen_coords.y = window_resolution.y - screen_coords.y;
 
-	vec3 color = vec3(0, 0, 0);
+	vec4 color = vec4(0, 0, 0, 0);
 
 	for (int i = 0; i < n_charges; i++)
 	{
-		if (abs(charge_force[i]) > FORCE_THREASHOLD_NEEDED_TO_CONNECT)
+		//if (abs(charge_force[i]) > FORCE_THREASHOLD_NEEDED_TO_CONNECT)
 		{
 			mat2 basis;
 			basis[0] = vec2(charge_positions[i].xy - player_pos) / 2;
 			basis[1] = QUARTER_TURN * basis[0];
-			basis[1] *= charge_radius / length(basis[0]);
+			basis[1] *= 0.5 * charge_radius / length(basis[0]);
 
 			vec2 local_coords = inverse(basis) * (screen_coords - player_pos - basis[0]);
 
-			local_coords = abs(local_coords);
-			float square_mask = float(local_coords.x <= 1 && local_coords.y <= 1);
+			local_coords.y = abs(local_coords.y);
+			float square_mask = float(-1 <= local_coords.x && local_coords.x <= 1 && local_coords.y <= 1);
 
 			local_coords *= square_mask;
-			float a = (abs(charge_force[i])) / (MAX_FORCE);
-			float invert = 0.5 - 0.5 * sign(charge_force[i]);
-			//invert + sign(charge_force[i]) * pow(local_coords.x, 2)
-			vec3 color_contribution = vec3(0.5 + 0.5 * pow(local_coords.x, 2)) * float((1 - a) * pow(local_coords.x, 4) + a > abs(local_coords.y));
+			float rescaled_x = local_coords.x * length(basis[0]);
+
+			float a = abs(charge_force[i]) / MAX_FORCE;
+
+			float flow_dir = (abs(charge_force[i]) / charge_force[i]);
+
+			float wave_min = 0.5;
+			float wave_max = 1;
+			float wave_amplitude = (wave_max - wave_min);
+			float wave_screen_space_frequency = 0.05;
+			float wave_temporal_frequency = 20;
+			float wave_discard_peaks = 4;
+
+			float spatial_theta = wave_screen_space_frequency * rescaled_x;
+			float theta = spatial_theta + 5 * _time * flow_dir - 0.025 * charge_radius * local_coords.y * flow_dir;
+			theta *= float(fract(theta / wave_discard_peaks) > (wave_discard_peaks - 1) / (wave_discard_peaks));
+
+			float arrows = wave_min + wave_amplitude * (1 - pow(sin(PI * fract(theta) - PI / 2), 6));
+			vec4 color_contribution = vec4(vec3(arrows), a * min(1, abs(10 * (local_coords.y - 1))));
 			color_contribution *= square_mask;
 
-			color += color_contribution;
+			if (color.a < color_contribution.a)
+			{
+				color = color_contribution;
+			}
 		}
 	}
 
-	gl_FragColor = vec4(vec3(color), 0.25 * float(length(color) > 0));
+	gl_FragColor = color;
 	return;
 }
 /*
