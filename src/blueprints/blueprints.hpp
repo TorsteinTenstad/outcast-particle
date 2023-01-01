@@ -44,7 +44,7 @@ class BPMovingParticle : public BPStaticParticle
 class BPPlayer : public BPMovingParticle
 {
 	DrawPriority draw_priority = { 8 };
-	Shader shader = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
+	Shader shader = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
 
@@ -59,7 +59,7 @@ class BPLaser : public BPEntity
 	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
 	KillOnIntersection kill_on_intersection = {};
-	Shader shader = { "shaders\\test.vert", "", { { "_time", 1 } } };
+	Shader shader = { "shaders\\test.vert", "", {}, { { "_time", 0 } }, {} };
 	SoundInfo sound_info = { "content\\sounds\\laser.wav" };
 
 	// [Serialize]

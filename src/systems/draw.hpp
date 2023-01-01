@@ -23,16 +23,13 @@ public:
 				if (!shader.vertex_shader_path.empty() && !shader.fragment_shader_path.empty())
 				{
 					shaders_[entity_id].loadFromFile(shader.vertex_shader_path, shader.fragment_shader_path);
-					shader.shader = &shaders_[entity_id];
 				}
 				else if (!shader.vertex_shader_path.empty())
 				{
-					shader.shader = &shaders_[entity_id];
 					shaders_[entity_id].loadFromFile(shader.vertex_shader_path, sf::Shader::Vertex);
 				}
 				else if (!shader.fragment_shader_path.empty())
 				{
-					shader.shader = &shaders_[entity_id];
 					shaders_[entity_id].loadFromFile(shader.fragment_shader_path, sf::Shader::Fragment);
 				}
 				else
@@ -40,7 +37,7 @@ public:
 					assert(false);
 				}
 			}
-			for (const auto& [name, value] : shader.uniforms)
+			for (const auto& [name, value] : shader.float_uniforms)
 			{
 				if (name == "_time")
 				{
@@ -50,6 +47,14 @@ public:
 				{
 					shaders_[entity_id].setUniform(name, value);
 				}
+			}
+			for (const auto& [name, value] : shader.int_uniforms)
+			{
+				shaders_[entity_id].setUniform(name, value);
+			}
+			for (const auto& [name, value] : shader.vec_uniforms)
+			{
+				shaders_[entity_id].setUniform(name, value);
 			}
 		}
 

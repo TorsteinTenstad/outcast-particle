@@ -33,11 +33,7 @@ public:
 		{
 			level.GetComponent<WidthAndHeight>()[entity_id].width_and_height = level.size;
 			level.GetComponent<Position>()[entity_id].position = level.size / 2.f;
-			if (level.GetComponent<Shader>()[entity_id].shader == nullptr)
-			{
-				break;
-			}
-			level.GetComponent<Shader>()[entity_id].shader->setUniform("window_resolution", sf::Glsl::Vec2 { globals.render_window.getSize() });
+			level.GetComponent<Shader>()[entity_id].vec_uniforms["window_resolution"] = sf::Vector2f(globals.render_window.getSize());
 			Position player_position;
 			Charge player_charge;
 			for (const auto& [player_id, player] : level.GetComponent<Player>())
@@ -45,11 +41,10 @@ public:
 				player_position = level.GetComponent<Position>()[player_id];
 				player_charge = level.GetComponent<Charge>()[player_id];
 				sf::Vector2f player_pos = (sf::Vector2f)globals.render_window.mapCoordsToPixel(player_position.position);
-				level.GetComponent<Shader>()[entity_id].shader->setUniform("player_pos", player_pos);
+				level.GetComponent<Shader>()[entity_id].vec_uniforms["player_pos"] = player_pos;
 				float charge_radius = level.GetComponent<Radius>()[player_id].radius;
 				charge_radius *= std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
-				level.GetComponent<Shader>()[entity_id].shader->setUniform("charge_radius", charge_radius);
-				level.GetComponent<Shader>()[entity_id].shader->setUniform("_time", globals.time);
+				level.GetComponent<Shader>()[entity_id].float_uniforms["charge_radius"] = charge_radius;
 			}
 			int charge_i = 0;
 			for (const auto [charge_entity_id, charge] : level.GetComponent<Charge>())
@@ -60,12 +55,13 @@ public:
 					sf::Vector2f charge_position = (sf::Vector2f)globals.render_window.mapCoordsToPixel(particle_position.position);
 					float sign = Sign(player_charge.charge * level.GetComponent<Charge>()[charge_entity_id].charge);
 					float charge_force = sign * Magnitude(CalculateElectricForce(player_position, particle_position, player_charge, level.GetComponent<Charge>()[charge_entity_id]));
-					level.GetComponent<Shader>()[entity_id].shader->setUniform("charge_positions[" + ToString(charge_i) + "]", charge_position);
-					level.GetComponent<Shader>()[entity_id].shader->setUniform("charge_force[" + ToString(charge_i) + "]", charge_force);
+					level.GetComponent<Shader>()[entity_id].vec_uniforms["charge_positions[" + ToString(charge_i) + "]"] = charge_position;
+					level.GetComponent<Shader>()[entity_id].float_uniforms["charge_force[" + ToString(charge_i) + "]"] = charge_force;
 					charge_i++;
 				}
 			}
-			level.GetComponent<Shader>()[entity_id].shader->setUniform("n_charges", charge_i);
+			level.GetComponent<Shader>()[entity_id].int_uniforms["n_charges"] = charge_i;
+			level.GetComponent<Shader>()[entity_id].float_uniforms["_time"];
 		}
 	}
 	void OnEnterMode(Level& level) {};

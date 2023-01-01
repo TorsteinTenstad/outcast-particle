@@ -64,9 +64,8 @@ public:
 				charge_map[entity_id].charge = -charge_map[entity_id].charge;
 				player_behaviours_map[entity_id].default_charge = -player_behaviours_map[entity_id].default_charge;
 				assert(shader_map.count(entity_id) > 0);
-				shader_map[entity_id].uniforms["time"] = 0;
+				shader_map[entity_id].float_uniforms["start_animation"] = globals.time;
 			}
-			shader_map[entity_id].uniforms["time"] += dt;
 		}
 	}
 	void OnEnterMode(Level& level) {};

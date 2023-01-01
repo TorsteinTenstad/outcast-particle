@@ -397,7 +397,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Intersection>()[entity_id] = {};
             GetComponent<Collision>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
             GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -420,7 +420,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
             GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", { { "_time", 1 } } };
+            GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, { { "_time", 0 } }, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -562,7 +562,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Intersection>()[entity_id] = {};
         GetComponent<Collision>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", { { "time", 1 } } };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
         GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
@@ -580,7 +580,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
         GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", { { "_time", 1 } } };
+        GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, { { "_time", 0 } }, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
