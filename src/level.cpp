@@ -12,8 +12,12 @@ Level::Level(int level_id) :
 int Level::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();
-	for (auto& [_, component_map_variant] : components_)
+	for (auto& [component_type_id, component_map_variant] : components_)
 	{
+		if (component_type_id == typeid(Children))
+		{
+			continue;
+		}
 		std::visit([from_id, to_id](auto& component_map) {
 			if (component_map.count(from_id) != 0)
 			{

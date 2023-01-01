@@ -43,6 +43,7 @@ Game::Game()
 	RegisterGameSystem<BackgroundSystem>();
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<LevelButtonSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
+	RegisterGameSystem<VelocityDependentDrawLayerSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
@@ -60,7 +61,6 @@ Game::Game()
 	RegisterPhysicsGameSystem<ForceSystem>();
 	RegisterPhysicsGameSystem<AccelerationSystem>();
 	RegisterPhysicsGameSystem<VelocitySystem>();
-	RegisterPhysicsGameSystem<VelocityDependentDrawLayerSystem>();
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();
 
