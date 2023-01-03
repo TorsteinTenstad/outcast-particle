@@ -20,6 +20,14 @@ float atan01(float x, float y)
 	return (atan(x, y) / PI + 1) / 2;
 }
 
+float inverse_mix(float a, float b, float t){
+	float t_clamped = clamp(t, a, b);
+	return (t_clamped-a)/(b-a);
+}
+
+float soft_threshold(float t, float threshold, float softness){
+	return mix(0, 1, inverse_mix(threshold-0.5*softness, threshold+0.5*softness, t));
+}
 void main()
 {
 	vec2 screen_coords = gl_FragCoord.xy;
@@ -33,8 +41,8 @@ void main()
 		{
 			mat2 basis;
 			basis[0] = vec2(charge_positions[i].xy - player_pos) / 2;
-			basis[1] = QUARTER_TURN * basis[0];
-			basis[1] *= 0.5 * charge_radius / length(basis[0]);
+			basis[1] = QUARTER_TURN * basis[0] / length(basis[0]);
+			basis[1] *= 0.5 * charge_radius;
 
 			vec2 local_coords = inverse(basis) * (screen_coords - player_pos - basis[0]);
 
@@ -42,25 +50,27 @@ void main()
 			float square_mask = float(-1 <= local_coords.x && local_coords.x <= 1 && local_coords.y <= 1);
 
 			local_coords *= square_mask;
-			float rescaled_x = local_coords.x * length(basis[0]);
+			float rescaled_x = local_coords.x * length(basis[0])/charge_radius;
 
 			float a = abs(charge_force[i]) / MAX_FORCE;
 
 			float flow_dir = (abs(charge_force[i]) / charge_force[i]);
 
-			float wave_min = 0.5;
-			float wave_max = 1;
-			float wave_amplitude = (wave_max - wave_min);
-			float wave_screen_space_frequency = 0.05;
+			float background_color = 0.5;
+			float arrow_color = 1;
+			float arrows_per_radius_length = 0.5;
+			float arrow_width = 0.2;
 			float wave_temporal_frequency = 20;
 			float wave_discard_peaks = 4;
 
-			float spatial_theta = wave_screen_space_frequency * rescaled_x;
-			float theta = spatial_theta + 5 * _time * flow_dir - 0.025 * charge_radius * local_coords.y * flow_dir;
-			theta *= float(fract(theta / wave_discard_peaks) > (wave_discard_peaks - 1) / (wave_discard_peaks));
-
-			float arrows = wave_min + wave_amplitude * (1 - pow(sin(PI * fract(theta) - PI / 2), 6));
-			vec4 color_contribution = vec4(vec3(arrows), a * min(1, abs(10 * (local_coords.y - 1))));
+			float x_component = arrows_per_radius_length * rescaled_x;
+			float y_component = -0.2*local_coords.y*flow_dir;
+			float temporal_component = 1.5*_time*flow_dir;
+			float t = abs(fract(x_component+y_component+temporal_component) - 0.5)*2;
+			float AA_softness = 0.02;
+			t = soft_threshold(t, 1-arrow_width, AA_softness);
+			float color_rgb = mix(background_color, arrow_color, t);
+			vec4 color_contribution = vec4(vec3(color_rgb), a*soft_threshold(1-local_coords.y, AA_softness/2, AA_softness));
 			color_contribution *= square_mask;
 
 			if (color.a < color_contribution.a)
