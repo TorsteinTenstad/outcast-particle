@@ -113,3 +113,6 @@ public:
 };
 
 #include "level.tpp"
+
+template <class ResponsibleComponent>
+Shader* CreateScreenwideFragmentShaderEntity(Level& level, Children* parents_children, std::string shader_path);

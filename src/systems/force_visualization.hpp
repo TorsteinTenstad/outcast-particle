@@ -14,27 +14,12 @@ public:
 	{
 		for (const auto& [entity_id, player, force_visualization, children, radius, player_charge, player_position] : level.GetEntitiesWith<Player, ForceVisualization, Children, Radius, Charge, Position>())
 		{
-			if (children->ids_owned_by_component.count(typeid(ForceVisualization)) == 0)
-			{
-				int id = level.CreateEntityId();
-				children->ids_owned_by_component[typeid(ForceVisualization)].push_back(id);
-				level.GetComponent<Position>()[id].position = level.size / 2.f;
-				level.GetComponent<WidthAndHeight>()[id].width_and_height = level.size;
-				level.GetComponent<DrawPriority>()[id].draw_priority = 5;
-				level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
-				level.GetComponent<Shader>()[id].fragment_shader_path = "shaders\\force.frag";
-			}
-			std::vector<int> visualization_entities = children->ids_owned_by_component[typeid(ForceVisualization)];
-			assert(visualization_entities.size() == 1);
-			int visualization_entity = visualization_entities[0];
-			assert(level.GetComponent<Shader>().count(visualization_entity) > 0);
-			Shader* shader = &level.GetComponent<Shader>()[visualization_entity];
+			Shader* shader = CreateScreenwideFragmentShaderEntity<ForceVisualization>(level, children, "shaders\\force.frag");
 
 			sf::Vector2i player_screen_space_position = globals.render_window.mapCoordsToPixel(player_position->position);
 			shader->vec_uniforms["player_pos"] = (sf::Vector2f)player_screen_space_position;
 			shader->float_uniforms["charge_radius"] = radius->radius * std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
 			shader->vec_uniforms["window_resolution"] = sf::Vector2f(globals.render_window.getSize());
-			shader->float_uniforms["_time"];
 
 			int charge_i = 0;
 			for (const auto [particle_entity_id, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())
