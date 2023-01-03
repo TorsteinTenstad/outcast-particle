@@ -14,6 +14,11 @@ std::map<int, Component>& Level::GetComponent()
 template <class OtherComponent, class... Component>
 static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& component_map, std::vector<std::tuple<int, Component*...>>& matching_entities)
 {
+	if (component_map.size() == 0)
+	{
+		matching_entities.clear();
+		return false;
+	}
 	if (component_idx == 0)
 	{
 		for (auto& [entity_id, component_value] : component_map)

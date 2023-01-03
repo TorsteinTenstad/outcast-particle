@@ -12,58 +12,53 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		if (level.GetComponent<Player>().size() > 0 && level.GetComponent<ForceVisualization>().size() < 1)
+		for (const auto& [entity_id, player, force_visualization, children, radius, player_charge, player_position] : level.GetEntitiesWith<Player, ForceVisualization, Children, Radius, Charge, Position>())
 		{
-			int id = level.CreateEntityId();
-			level.GetComponent<DrawPriority>()[id].draw_priority = 5;
-			level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
-			level.GetComponent<Shader>()[id].fragment_shader_path = "shaders\\force.frag";
-			level.GetComponent<ForceVisualization>()[id];
-		}
-		if (level.GetComponent<Player>().size() == 0 && level.GetComponent<ForceVisualization>().size() > 0)
-		{
-			for (auto it = level.GetComponent<ForceVisualization>().cbegin(), next_it = it; it != level.GetComponent<ForceVisualization>().cend(); it = next_it)
+			if (children->ids_owned_by_component.count(typeid(ForceVisualization)) == 0)
 			{
-				++next_it;
-				auto entity_id = it->first;
-				level.DeleteEntity(entity_id);
+				int id = level.CreateEntityId();
+				children->ids_owned_by_component[typeid(ForceVisualization)].push_back(id);
+				level.GetComponent<Position>()[id].position = level.size / 2.f;
+				level.GetComponent<WidthAndHeight>()[id].width_and_height = level.size;
+				level.GetComponent<DrawPriority>()[id].draw_priority = 5;
+				level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
+				level.GetComponent<Shader>()[id].fragment_shader_path = "shaders\\force.frag";
 			}
-		}
-		for (const auto& [entity_id, force_visualization] : level.GetComponent<ForceVisualization>())
-		{
-			level.GetComponent<WidthAndHeight>()[entity_id].width_and_height = level.size;
-			level.GetComponent<Position>()[entity_id].position = level.size / 2.f;
-			level.GetComponent<Shader>()[entity_id].vec_uniforms["window_resolution"] = sf::Vector2f(globals.render_window.getSize());
-			Position player_position;
-			Charge player_charge;
-			for (const auto& [player_id, player] : level.GetComponent<Player>())
-			{
-				player_position = level.GetComponent<Position>()[player_id];
-				player_charge = level.GetComponent<Charge>()[player_id];
-				sf::Vector2f player_pos = (sf::Vector2f)globals.render_window.mapCoordsToPixel(player_position.position);
-				level.GetComponent<Shader>()[entity_id].vec_uniforms["player_pos"] = player_pos;
-				float charge_radius = level.GetComponent<Radius>()[player_id].radius;
-				charge_radius *= std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
-				level.GetComponent<Shader>()[entity_id].float_uniforms["charge_radius"] = charge_radius;
-			}
+			std::vector<int> visualization_entities = children->ids_owned_by_component[typeid(ForceVisualization)];
+			assert(visualization_entities.size() == 1);
+			int visualization_entity = visualization_entities[0];
+			assert(level.GetComponent<Shader>().count(visualization_entity) > 0);
+			Shader* shader = &level.GetComponent<Shader>()[visualization_entity];
+
+			sf::Vector2i player_screen_space_position = globals.render_window.mapCoordsToPixel(player_position->position);
+			shader->vec_uniforms["player_pos"] = (sf::Vector2f)player_screen_space_position;
+			shader->float_uniforms["charge_radius"] = radius->radius * std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
+			shader->vec_uniforms["window_resolution"] = sf::Vector2f(globals.render_window.getSize());
+			shader->float_uniforms["_time"];
+
 			int charge_i = 0;
-			for (const auto [charge_entity_id, charge] : level.GetComponent<Charge>())
+			for (const auto [particle_entity_id, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())
 			{
-				if (level.GetComponent<Player>().count(charge_entity_id) == 0)
+				if (particle_entity_id == entity_id)
 				{
-					Position particle_position = level.GetComponent<Position>()[charge_entity_id];
-					sf::Vector2f charge_position = (sf::Vector2f)globals.render_window.mapCoordsToPixel(particle_position.position);
-					float sign = Sign(player_charge.charge * level.GetComponent<Charge>()[charge_entity_id].charge);
-					float charge_force = sign * Magnitude(CalculateElectricForce(player_position, particle_position, player_charge, level.GetComponent<Charge>()[charge_entity_id]));
-					level.GetComponent<Shader>()[entity_id].vec_uniforms["charge_positions[" + ToString(charge_i) + "]"] = charge_position;
-					level.GetComponent<Shader>()[entity_id].float_uniforms["charge_force[" + ToString(charge_i) + "]"] = charge_force;
-					charge_i++;
+					continue;
 				}
+				sf::Vector2i particle_screen_space_position = globals.render_window.mapCoordsToPixel(particle_position->position);
+				if (particle_screen_space_position == player_screen_space_position)
+				{
+					continue;
+				}
+				float sign = Sign(player_charge->charge * particle_charge->charge);
+				float charge_force = sign * Magnitude(CalculateElectricForce(*player_position, *particle_position, *player_charge, *particle_charge));
+				shader->vec_uniforms["charge_positions[" + ToString(charge_i) + "]"] = (sf::Vector2f)particle_screen_space_position;
+				shader->float_uniforms["charge_force[" + ToString(charge_i) + "]"] = charge_force;
+				charge_i++;
 			}
-			level.GetComponent<Shader>()[entity_id].int_uniforms["n_charges"] = charge_i;
-			level.GetComponent<Shader>()[entity_id].float_uniforms["_time"];
+
+			shader->int_uniforms["n_charges"] = charge_i;
 		}
 	}
+
 	void OnEnterMode(Level& level) {};
 	void OnExitMode(Level& level) {};
 	void OnEnterLevel(Level& level) {};

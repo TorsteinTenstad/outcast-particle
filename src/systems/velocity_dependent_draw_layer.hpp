@@ -20,7 +20,7 @@ public:
 
 		for (auto& [entity_id, velocity_dependent_draw_layer, draw_info, draw_priority, radius, velocity, position] : level.GetEntitiesWith<VelocityDependentDrawLayer, DrawInfo, DrawPriority, Radius, Velocity, Position>())
 		{
-			std::vector<int>& children = children_map[entity_id].id_owned_by_component[typeid(VelocityDependentDrawLayer)];
+			std::vector<int>& children = children_map[entity_id].ids_owned_by_component[typeid(VelocityDependentDrawLayer)];
 
 			if (children.size() == 0)
 			{

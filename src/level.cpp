@@ -34,7 +34,7 @@ void Level::DeleteEntity(int id)
 	auto& children_map = GetComponent<Children>();
 	if (children_map.count(id) > 0)
 	{
-		for (auto& [component_type_id, child_ids] : children_map[id].id_owned_by_component)
+		for (auto& [component_type_id, child_ids] : children_map[id].ids_owned_by_component)
 		{
 			for (auto& child_id : child_ids)
 			{

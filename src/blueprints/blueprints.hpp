@@ -47,6 +47,7 @@ class BPPlayer : public BPMovingParticle
 	Shader shader = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
+	ForceVisualization force_visualization = {};
 
 	// [Serialize]
 	Player player = { true, true, 1000 };
