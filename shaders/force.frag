@@ -7,13 +7,14 @@
 #define FORCE_THREASHOLD_NEEDED_TO_CONNECT pow(10000 / (5 * 240), 2)
 
 uniform float _time;
+uniform vec2 _window_resolution;
+
 uniform int n_charges;
 uniform float charge_radius;
 uniform vec2 charge_positions[MAX_CHARGES];
 uniform float charge_force[MAX_CHARGES];
 
 uniform vec2 player_pos;
-uniform vec2 window_resolution;
 
 float atan01(float x, float y)
 {
@@ -31,7 +32,7 @@ float soft_threshold(float t, float threshold, float softness){
 void main()
 {
 	vec2 screen_coords = gl_FragCoord.xy;
-	screen_coords.y = window_resolution.y - screen_coords.y;
+	screen_coords.y = _window_resolution.y - screen_coords.y;
 
 	vec4 color = vec4(0, 0, 0, 0);
 
@@ -79,7 +80,7 @@ void main()
 			}
 		}
 	}
-
+	color.a = clamp(color.a, 0,0.5);
 	gl_FragColor = color;
 	return;
 }

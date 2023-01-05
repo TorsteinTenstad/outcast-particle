@@ -1,4 +1,5 @@
 #pragma once
 
-class ForceVisualization
-{};
+class ForceVisualization{};
+
+class SegmentedGlowEffect{};

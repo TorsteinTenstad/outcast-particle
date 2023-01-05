@@ -82,6 +82,7 @@ class BPGoal : public BPTileBasedEntity
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav" };
+	SegmentedGlowEffect segmented_glow_effect = {};
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };

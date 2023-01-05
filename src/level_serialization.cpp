@@ -456,6 +456,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Goal>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav" };
+            GetComponent<SegmentedGlowEffect>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -611,6 +612,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Goal>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav" };
+        GetComponent<SegmentedGlowEffect>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };

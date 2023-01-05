@@ -12,14 +12,14 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		for (const auto& [entity_id, player, force_visualization, children, radius, player_charge, player_position] : level.GetEntitiesWith<Player, ForceVisualization, Children, Radius, Charge, Position>())
+		for (const auto& [entity_id, player, force_visualization, children, radius, player_charge, draw_priority, player_position] : level.GetEntitiesWith<Player, ForceVisualization, Children, Radius, Charge, DrawPriority, Position>())
 		{
-			Shader* shader = CreateScreenwideFragmentShaderEntity<ForceVisualization>(level, children, "shaders\\force.frag");
+			Shader* shader = EnsureExistanceOfScreenwideFragmentShaderChildEntity<ForceVisualization>(level, children, "shaders\\force.frag", 5);
 
 			sf::Vector2i player_screen_space_position = globals.render_window.mapCoordsToPixel(player_position->position);
 			shader->vec_uniforms["player_pos"] = (sf::Vector2f)player_screen_space_position;
 			shader->float_uniforms["charge_radius"] = radius->radius * std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
-			shader->vec_uniforms["window_resolution"] = sf::Vector2f(globals.render_window.getSize());
+			shader->vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
 
 			int charge_i = 0;
 			for (const auto [particle_entity_id, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())

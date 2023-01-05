@@ -62,6 +62,7 @@ typedef std::variant<
 	std::map<int, Children>,
 	std::map<int, Text>,
 	std::map<int, ForceVisualization>,
+	std::map<int, SegmentedGlowEffect>,
 	std::map<int, KeyConfigButton>,
 	std::map<int, PauseMenuItems>,
 	std::map<int, LevelButton>,
@@ -112,7 +113,9 @@ public:
 	int AddBlueprint(std::string tag);
 };
 
+int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
+
 #include "level.tpp"
 
 template <class ResponsibleComponent>
-Shader* CreateScreenwideFragmentShaderEntity(Level& level, Children* parents_children, std::string shader_path);
+Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority);

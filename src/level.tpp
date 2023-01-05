@@ -58,18 +58,12 @@ std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
 }
 
 template <class ResponsibleComponent>
-Shader* CreateScreenwideFragmentShaderEntity(Level& level, Children* parents_children, std::string shader_path)
+Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
 {
 	if (parents_children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
 	{
-		int id = level.CreateEntityId();
+		int id = CreateScreenwideFragmentShaderEntity(level, shader_path, draw_priority);
 		parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(id);
-		level.GetComponent<Position>()[id].position = level.size / 2.f;
-		level.GetComponent<WidthAndHeight>()[id].width_and_height = level.size;
-		level.GetComponent<DrawPriority>()[id].draw_priority = 5;
-		level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
-		level.GetComponent<Shader>()[id].fragment_shader_path = shader_path;
-		level.GetComponent<Shader>()[id].float_uniforms["_time"];
 	}
 	std::vector<int> visualization_entities = parents_children->ids_owned_by_component[typeid(ResponsibleComponent)];
 	assert(visualization_entities.size() == 1);

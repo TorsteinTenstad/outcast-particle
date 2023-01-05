@@ -124,3 +124,16 @@ int Level::AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, fl
 	GetComponent<Text>()[id].size = text_size;
 	return id;
 }
+
+int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority)
+{
+	int id = level.CreateEntityId();
+	level.GetComponent<Position>()[id].position = level.size / 2.f;
+	level.GetComponent<WidthAndHeight>()[id].width_and_height = level.size;
+	level.GetComponent<DrawPriority>()[id].draw_priority = draw_priority;
+	level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
+	level.GetComponent<Shader>()[id].fragment_shader_path = shader_path;
+	level.GetComponent<Shader>()[id].float_uniforms["_time"];
+	level.GetComponent<Shader>()[id].vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
+	return id;
+}
