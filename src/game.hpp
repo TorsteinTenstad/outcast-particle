@@ -8,6 +8,7 @@
 #include "systems/background.hpp"
 #include "systems/button.hpp"
 #include "systems/collision.hpp"
+#include "systems/segmented_glow_effect.hpp"
 #include "systems/display_velocity.hpp"
 #include "systems/draw.hpp"
 #include "systems/edit_mode.hpp"

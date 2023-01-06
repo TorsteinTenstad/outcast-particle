@@ -47,6 +47,7 @@ class BPPlayer : public BPMovingParticle
 	Shader shader = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
+	ForceVisualization force_visualization = {};
 
 	// [Serialize]
 	Player player = { true, true, 1000 };
@@ -81,6 +82,7 @@ class BPGoal : public BPTileBasedEntity
 	Goal goal = {};
 	KillOnIntersection kill_on_intersection = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav" };
+	SegmentedGlowEffect segmented_glow_effect = {};
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };

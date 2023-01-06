@@ -50,6 +50,7 @@ Game::Game()
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
+	RegisterGameSystem<SegmentedGlowEffectSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<DisplayVelocitySystem>();
 	RegisterGameSystem<EditModeSystem>();

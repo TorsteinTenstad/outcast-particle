@@ -14,6 +14,11 @@ std::map<int, Component>& Level::GetComponent()
 template <class OtherComponent, class... Component>
 static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& component_map, std::vector<std::tuple<int, Component*...>>& matching_entities)
 {
+	if (component_map.size() == 0)
+	{
+		matching_entities.clear();
+		return false;
+	}
 	if (component_idx == 0)
 	{
 		for (auto& [entity_id, component_value] : component_map)
@@ -50,4 +55,19 @@ std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
 	std::vector<std::tuple<int, Component*...>> matching_entities = {};
 	(IdIntersection<Component, Component...>(component_idx++, GetComponent<Component>(), matching_entities) && ...);
 	return matching_entities;
+}
+
+template <class ResponsibleComponent>
+Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
+{
+	if (parents_children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
+	{
+		int id = CreateScreenwideFragmentShaderEntity(level, shader_path, draw_priority);
+		parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(id);
+	}
+	std::vector<int> visualization_entities = parents_children->ids_owned_by_component[typeid(ResponsibleComponent)];
+	assert(visualization_entities.size() == 1);
+	int visualization_entity = visualization_entities[0];
+	assert(level.GetComponent<Shader>().count(visualization_entity) > 0);
+	return &level.GetComponent<Shader>()[visualization_entity];
 }

@@ -402,6 +402,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
             GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
+            GetComponent<ForceVisualization>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -457,6 +458,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Goal>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav" };
+            GetComponent<SegmentedGlowEffect>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -567,6 +569,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
         GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
+        GetComponent<ForceVisualization>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Charge>()[entity_id] = { 10000 };
@@ -611,6 +614,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Goal>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav" };
+        GetComponent<SegmentedGlowEffect>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
