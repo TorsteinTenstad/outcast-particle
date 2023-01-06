@@ -1,5 +1,5 @@
-#include "Platform/Platform.hpp"
 #include "timer.hpp"
+#include <functional>
 
 class SFML
 {

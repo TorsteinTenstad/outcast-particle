@@ -1,5 +1,5 @@
 #pragma once
-#include "PCH.hpp"
+
 #include "controls_config.hpp"
 #include "cursor_and_keys.hpp"
 #include "game.hpp"

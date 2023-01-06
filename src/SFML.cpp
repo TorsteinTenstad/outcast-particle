@@ -1,13 +1,12 @@
-#include "SFML.h"
+#include "SFML.hpp"
 #include "game.hpp"
 #include <chrono>
 #include <thread>
+#include <iostream>
 SFML::SFML()
 {
-	util::Platform platform;
 	globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
 	//globals.render_window.setFramerateLimit(60);
-	platform.setIcon(globals.render_window.getSystemHandle());
 }
 
 void SFML::RunWindow(std::function<void(float)> update_func)

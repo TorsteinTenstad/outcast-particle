@@ -1,4 +1,4 @@
-#include "SFML.h"
+#include "SFML.hpp"
 #include "game.hpp"
 #include "globals.hpp"
 #include <functional>

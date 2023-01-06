@@ -1,4 +1,5 @@
 #pragma once
+#include "SFML/Graphics/Shader.hpp"
 #include "constants.hpp"
 #include "game_system.hpp"
 #include "level.hpp"

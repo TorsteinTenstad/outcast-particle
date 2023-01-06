@@ -1,4 +1,7 @@
 #pragma once
+#include "SFML/System/Vector2.hpp"
+#include "SFML/window/Mouse.hpp"
+#include <map>
 
 class CursorAndKeys
 {

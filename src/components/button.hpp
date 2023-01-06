@@ -1,4 +1,7 @@
 #pragma once
+#include <string>
+#include <functional>
+#include "SFML/Window/Keyboard.hpp"
 
 class Button
 {

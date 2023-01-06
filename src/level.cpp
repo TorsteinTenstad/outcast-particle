@@ -2,6 +2,8 @@
 #include "game.hpp"
 #include "string_parsing_utils.hpp"
 #include <functional>
+#include <string>
+
 
 int Level::next_available_entity_id_ = 0;
 

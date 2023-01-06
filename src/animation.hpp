@@ -1,5 +1,5 @@
 #pragma once
-#include "PCH.hpp"
+#include <map>
 
 template <class T>
 void Animate(float time, T& property, std::map<float, T>& animation, std::function<float(float)> interpolation_behaviour)

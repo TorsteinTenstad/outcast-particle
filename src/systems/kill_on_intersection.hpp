@@ -1,5 +1,5 @@
 #pragma once
-#include "PCH.hpp"
+
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/physics.hpp"

@@ -1,5 +1,5 @@
 #pragma once
-#include "PCH.hpp"
+#include "SFML/Window/Keyboard.hpp"
 
 class KeyConfig
 {

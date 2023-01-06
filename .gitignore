@@ -1,17 +1,12 @@
 # Build system
 bin
 build
-gmon.out
-*.stats
-Thumbs.db
-.DS_Store
-
+out
+.cache
+.idea
 # VS Code
-.vscode/ipch
+.vscode
 /lib
-
-# Project specific
-#
-
+.vs
 # Python
 __pycache__

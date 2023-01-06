@@ -1,5 +1,8 @@
 #pragma once
-#include "Components/sound_info.hpp"
+#include "SFML/Audio/Sound.hpp"
+#include "SFML/Audio/SoundSource.hpp"
+#include "SFML/Audio/SoundBuffer.hpp"
+#include "components/sound_info.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"

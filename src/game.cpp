@@ -1,6 +1,8 @@
 #include "game.hpp"
 #include <chrono>
 #include <thread>
+#include <string>
+#include <filesystem>
 
 using namespace std::chrono_literals;
 
@@ -89,7 +91,7 @@ void Game::Init()
 
 	//Level menu & level generation
 	int level_id = 0;
-	for (const auto& entry : std::experimental::filesystem::directory_iterator("levels/"))
+	for (const auto& entry : std::filesystem::directory_iterator::directory_iterator("levels/"))
 	{
 		AddLevel().LoadFromFile(entry.path().string());
 		level_id++;

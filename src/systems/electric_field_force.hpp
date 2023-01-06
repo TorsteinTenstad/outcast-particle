@@ -1,5 +1,5 @@
 #pragma once
-#include "PCH.hpp"
+
 #include "components/intersection.hpp"
 #include "components/physics.hpp"
 #include "game_system.hpp"

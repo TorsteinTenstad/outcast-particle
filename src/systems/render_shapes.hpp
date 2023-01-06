@@ -1,5 +1,7 @@
 #pragma once
-#include "PCH.hpp"
+#include "SFML/Graphics/CircleShape.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
+#include "SFML/Graphics/Texture.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
 #include "game_system.hpp"
@@ -31,7 +33,7 @@ public:
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
 			assert(draw_priority_map.count(entity_id) > 0);
-			sf::Shape* shape;
+			sf::Shape* shape = nullptr;
 			if (textures_.count(entity_drawinfo.image_path) == 0)
 			{
 				textures_[entity_drawinfo.image_path] = sf::Texture();

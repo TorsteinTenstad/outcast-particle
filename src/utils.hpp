@@ -1,5 +1,8 @@
 #pragma once
-#include "PCH.hpp"
+#include "SFML/System/Vector2.hpp"
+#include "SFML/Window/Keyboard.hpp"
+#include <string>
+#include <vector>
 
 #define PI 3.141593
 

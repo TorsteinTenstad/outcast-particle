@@ -1,5 +1,8 @@
 #pragma once
-#include "PCH.hpp"
+#include <typeindex>
+#include <variant>
+#include <map>
+#include <functional>
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
@@ -25,8 +28,6 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
-#include <typeindex>
-#include <variant>
 
 typedef std::variant<
 	std::map<int, DrawInfo>,

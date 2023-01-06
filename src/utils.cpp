@@ -1,5 +1,9 @@
+#pragma once
 #include "utils.hpp"
+#include "SFML/System/Vector2.hpp"
+#include "SFML/Window/Keyboard.hpp"
 #include <math.h>
+#include <assert.h>
 
 float FakeSigmoid(float x)
 {
@@ -17,7 +21,7 @@ float FakeSigmoid(float x)
 
 float Magnitude(sf::Vector2f v)
 {
-	return std::sqrt((v.x * v.x) + (v.y * v.y));
+	return sqrt((v.x * v.x) + (v.y * v.y));
 }
 
 sf::Vector2f Normalized(sf::Vector2f v)

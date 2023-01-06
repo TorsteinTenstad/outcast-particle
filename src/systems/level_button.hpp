@@ -1,4 +1,7 @@
 #pragma once
+#include <map>
+#include <sstream>
+#include <iomanip>
 #include "game_system.hpp"
 #include "level.hpp"
 #include "modes.hpp"

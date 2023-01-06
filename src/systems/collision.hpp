@@ -1,4 +1,4 @@
-#include "PCH.hpp"
+
 #include "components/collision.hpp"
 #include "components/intersection.hpp"
 #include "components/physics.hpp"

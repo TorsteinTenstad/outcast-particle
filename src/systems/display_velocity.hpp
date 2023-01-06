@@ -1,5 +1,6 @@
 #pragma once
-#include "PCH.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
+
 #include "components/physics.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"

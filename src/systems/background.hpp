@@ -1,5 +1,6 @@
 #pragma once
-#include "PCH.hpp"
+#include <assert.h>
+
 #include "components/draw_info.hpp"
 #include "constants.hpp"
 #include "game_system.hpp"
