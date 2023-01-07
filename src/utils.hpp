@@ -3,6 +3,7 @@
 #include "SFML/Window/Keyboard.hpp"
 #include <string>
 #include <vector>
+#include <array>
 
 #define PI 3.141593
 

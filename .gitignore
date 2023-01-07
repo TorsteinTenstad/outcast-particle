@@ -5,7 +5,6 @@ out
 .cache
 .idea
 # VS Code
-.vscode
 /lib
 .vs
 # Python

@@ -1,5 +1,6 @@
 #pragma once
-#include "PCH.hpp"
+#include "SFML/System/Vector2.hpp"
+#include "SFML/Graphics/Shader.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 

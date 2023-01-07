@@ -1,4 +1,5 @@
 #include "level.hpp"
+#include <cassert>
 
 template <class Component>
 std::map<int, Component>& Level::GetComponent()

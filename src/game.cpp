@@ -92,7 +92,8 @@ void Game::Init()
 
 	//Level menu & level generation
 	int level_id = 0;
-	for (const auto& entry : std::filesystem::directory_iterator::directory_iterator("levels/"))
+	const std::filesystem::path level_path{"levels/"};
+	for (const auto& entry : std::filesystem::directory_iterator{level_path})
 	{
 		AddLevel().LoadFromFile(entry.path().string());
 		level_id++;

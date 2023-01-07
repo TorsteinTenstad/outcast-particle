@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML/Graphics/RectangleShape.hpp"
-
+#include <math.h>
 #include "components/physics.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
@@ -9,7 +9,7 @@
 
 static float Angle(sf::Vector2f v)
 {
-	return std::atan2(v.y, v.x);
+	return atan2(v.y, v.x);
 }
 
 class DisplayVelocitySystem : public GameSystem
