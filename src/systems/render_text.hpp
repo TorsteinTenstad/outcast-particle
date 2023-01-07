@@ -1,6 +1,6 @@
 #pragma once
-#include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Text.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
 #include "game_system.hpp"

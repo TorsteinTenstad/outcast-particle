@@ -1,5 +1,8 @@
 {
     "cmake.configureOnOpen": false,
+    "editor.formatOnSave": true,
+    "configurationProvider": "ms-vscode.cmake-tools",
+    "cmake.generator": "Visual Studio 17 2022",
     "files.associations": {
         "xtree": "cpp",
         "thread": "cpp",
@@ -60,7 +63,5 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp"
-    },
-    "configurationProvider": "ms-vscode.cmake-tools",
-    "cmake.generator": "Visual Studio 17 2022"
+    }
 }
