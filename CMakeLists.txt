@@ -19,5 +19,9 @@ if (WIN32 AND BUILD_SHARED_LIBS)
     add_custom_command(TARGET outcast-particle-app POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:outcast-particle-app> $<TARGET_FILE_DIR:outcast-particle-app> COMMAND_EXPAND_LISTS)
 endif()
+add_custom_command(TARGET outcast-particle-app POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "${PROJECT_SOURCE_DIR}/build/_deps/sfml-src/extlibs/bin/x64/openal32.dll"
+        $<TARGET_FILE_DIR:outcast-particle-app>)
 
 install(TARGETS outcast-particle-app)
