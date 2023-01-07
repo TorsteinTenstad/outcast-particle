@@ -2,6 +2,8 @@
     "recommendations": [
         "slevesque.shader",
         "ms-vscode.cpptools-extension-pack",
-        "usernamehw.errorlens"
+        "usernamehw.errorlens",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake"
     ]
 }
