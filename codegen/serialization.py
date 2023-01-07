@@ -1,13 +1,13 @@
 
 def gen_level_serialization(data):
     cpp = """
-#include "PCH.hpp"
+#include <string>
+#include <vector>
+#include <fstream>
+
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Wmissing-declarations"
 /*
 Warning!
 Code is generated.

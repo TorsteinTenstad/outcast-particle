@@ -31,7 +31,7 @@ print(json.dumps(controls_config_data, indent=2))
 
 cpp = """
 #pragma once
-#include "PCH.hpp"
+#include <string>
 #include "controls_config.hpp"
 #include "string_parsing_utils.hpp"
 """

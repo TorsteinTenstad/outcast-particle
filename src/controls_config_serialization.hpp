@@ -1,8 +1,6 @@
 
 #pragma once
-
 #include <string>
-
 #include "controls_config.hpp"
 #include "string_parsing_utils.hpp"
 
