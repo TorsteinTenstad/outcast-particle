@@ -55,7 +55,6 @@ public:
 				player_behaviours->default_charge = -player_behaviours->default_charge;
 				shader->float_uniforms["start_animation"] = globals.time;
 			}
-			shader->vec_uniforms["_position"] = position->position;
 		}
 	}
 	void OnEnterMode(Level& level) {};
