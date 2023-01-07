@@ -399,10 +399,11 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Intersection>()[entity_id] = {};
             GetComponent<Collision>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
+            GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0 } }, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
             GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
             GetComponent<ForceVisualization>()[entity_id] = {};
+            GetComponent<PlayerBehaviors>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -566,10 +567,11 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Intersection>()[entity_id] = {};
         GetComponent<Collision>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
+        GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0 } }, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
         GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
         GetComponent<ForceVisualization>()[entity_id] = {};
+        GetComponent<PlayerBehaviors>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<Charge>()[entity_id] = { 10000 };

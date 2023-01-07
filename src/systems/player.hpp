@@ -16,17 +16,7 @@ public:
 		{
 			return;
 		}
-		auto& received_forces_map = level.GetComponent<ReceivedForces>();
-		auto& velocity_map = level.GetComponent<Velocity>();
-		auto& player_map = level.GetComponent<Player>();
-		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& player_behaviours_map = level.GetComponent<PlayerBehaviors>();
-		auto& radius_map = level.GetComponent<Radius>();
-		auto& charge_map = level.GetComponent<Charge>();
-		auto& shader_map = level.GetComponent<Shader>();
-		auto& sound_info_map = level.GetComponent<SoundInfo>();
-
-		for (auto& [entity_id, player] : player_map)
+		for (const auto& [entity_id, player, player_behaviours, received_forces, charge, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Shader, SoundInfo, Position>())
 		{
 			int x_direction = 0;
 			if (cursor_and_keys_.key_down[globals.key_config.PLAYER_MOVE_LEFT])
@@ -46,26 +36,26 @@ public:
 			{
 				y_direction += 1;
 			}
-			received_forces_map[entity_id].player_force.x = x_direction * player.move_force;
-			received_forces_map[entity_id].player_force.y = y_direction * player.move_force;
+			received_forces->player_force.x = x_direction * player->move_force;
+			received_forces->player_force.y = y_direction * player->move_force;
 
-			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player.can_go_neutral)
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player->can_go_neutral)
 			{
-				player_behaviours_map[entity_id].default_charge = charge_map[entity_id].charge;
-				charge_map[entity_id].charge = 0;
+				player_behaviours->default_charge = charge->charge;
+				charge->charge = 0;
 			}
-			if (cursor_and_keys_.key_released_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player.can_go_neutral)
+			if (cursor_and_keys_.key_released_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player->can_go_neutral)
 			{
-				charge_map[entity_id].charge = player_behaviours_map[entity_id].default_charge;
+				charge->charge = player_behaviours->default_charge;
 			}
-			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] && player.can_switch_charge)
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] && player->can_switch_charge)
 			{
-				sound_info_map[entity_id].play_sound = true;
-				charge_map[entity_id].charge = -charge_map[entity_id].charge;
-				player_behaviours_map[entity_id].default_charge = -player_behaviours_map[entity_id].default_charge;
-				assert(shader_map.count(entity_id) > 0);
-				shader_map[entity_id].float_uniforms["start_animation"] = globals.time;
+				sound_info->play_sound = true;
+				charge->charge = -charge->charge;
+				player_behaviours->default_charge = -player_behaviours->default_charge;
+				shader->float_uniforms["start_animation"] = globals.time;
 			}
+			shader->vec_uniforms["_position"] = position->position;
 		}
 	}
 	void OnEnterMode(Level& level) {};

@@ -44,10 +44,11 @@ class BPMovingParticle : public BPStaticParticle
 class BPPlayer : public BPMovingParticle
 {
 	DrawPriority draw_priority = { 8 };
-	Shader shader = { "", "shaders\\scale_animation.frag", {}, { { "_time", 0 } }, {} };
+	Shader shader = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0 } }, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
 	ForceVisualization force_visualization = {};
+	PlayerBehaviors player_behaviours = {};
 
 	// [Serialize]
 	Player player = { true, true, 1000 };
