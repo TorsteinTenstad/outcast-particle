@@ -15,6 +15,7 @@
 #include "systems/electric_field_force.hpp"
 #include "systems/electric_force.hpp"
 #include "systems/force.hpp"
+#include "systems/scheduled_delete.hpp"
 #include "systems/force_visualization.hpp"
 #include "systems/goal.hpp"
 #include "systems/intersection.hpp"
@@ -60,21 +61,21 @@ private:
 	CursorAndKeys cursor_and_keys_;
 
 	template <class System>
-	System& GetGameSystem();
+	System &GetGameSystem();
 
 	template <class System>
-	System& RegisterGameSystem(std::vector<int>& category);
+	System &RegisterGameSystem(std::vector<int> &category);
 
 	template <class System>
-	System& RegisterGameSystem();
+	System &RegisterGameSystem();
 
 	template <class System>
-	System& RegisterPhysicsGameSystem();
+	System &RegisterPhysicsGameSystem();
 
-	Level& AddLevel();
-	Level& AddLevel(int id);
-	Level& GetLevel(int id);
-	Level& GetActiveLevel();
+	Level &AddLevel();
+	Level &AddLevel(int id);
+	Level &GetLevel(int id);
+	Level &GetActiveLevel();
 	void SetLevel(int level);
 	void ResetActiveLevel();
 	std::string GenerateLevelTexture(int level_id);

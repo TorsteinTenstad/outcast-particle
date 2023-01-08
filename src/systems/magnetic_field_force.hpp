@@ -19,25 +19,18 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& magnetic_field_strength_map = level.GetComponent<MagneticField>();
-		auto& received_forces_map = level.GetComponent<ReceivedForces>();
-		auto& charge_map = level.GetComponent<Charge>();
-		auto& velocity_map = level.GetComponent<Velocity>();
-		for (auto& [entity_id, received_forces] : received_forces_map)
+		for (auto& [entity_id, received_forces, intersection, charge, velocity] : level.GetEntitiesWith<ReceivedForces, Intersection, Charge, Velocity>())
 		{
-			if (intersection_map.count(entity_id) != 0 && charge_map.count(entity_id) != 0)
+			sf::Vector2f magnetic_field_force;
+			for (const auto& intersection_id : intersection->intersecting_ids)
 			{
-				sf::Vector2f magnetic_field_force;
-				for (auto& intersection_id : intersection_map[entity_id].intersecting_ids)
+				if (magnetic_field_strength_map.count(intersection_id) != 0)
 				{
-					if (magnetic_field_strength_map.count(intersection_id) != 0)
-					{
-						magnetic_field_force += CalculateMagneticFieldForce(charge_map[entity_id], velocity_map[entity_id], magnetic_field_strength_map[intersection_id]);
-					}
+					magnetic_field_force += CalculateMagneticFieldForce(*charge, *velocity, magnetic_field_strength_map[intersection_id]);
 				}
-				received_forces.magnetic_field_force = magnetic_field_force;
 			}
+			received_forces->magnetic_field_force = magnetic_field_force;
 		}
 	}
 	void OnEnterMode(Level& level) {};

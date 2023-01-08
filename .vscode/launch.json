@@ -12,6 +12,7 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
+            "console": "newExternalWindow"
         }
     ]
 }

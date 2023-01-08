@@ -7,13 +7,9 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& velocity_map = level.GetComponent<Velocity>();
-		auto& acceleration_map = level.GetComponent<Acceleration>();
+		for (auto const& [entity_id, acceleration, velocity] : level.GetEntitiesWith<Acceleration, Velocity>())
 		{
-			for (auto const& [entity_id, entity_acceleration] : acceleration_map)
-			{
-				velocity_map[entity_id].velocity = velocity_map[entity_id].velocity + entity_acceleration.acceleration * dt;
-			}
+			velocity->velocity += acceleration->acceleration * dt;
 		}
 	}
 	void OnEnterMode(Level& level) {};

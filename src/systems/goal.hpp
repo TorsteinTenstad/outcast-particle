@@ -13,13 +13,11 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& intersection_map = level.GetComponent<Intersection>();
-		auto& player_map = level.GetComponent<Player>();
 		auto& goal_map = level.GetComponent<Goal>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
-		for (auto& [entity_id, _] : player_map)
+		for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 		{
-			for (auto& intersection_id : intersection_map[entity_id].intersecting_ids)
+			for (auto& intersection_id : intersection->intersecting_ids)
 			{
 				if (goal_map.count(intersection_id) != 0)
 				{

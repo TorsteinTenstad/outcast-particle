@@ -38,6 +38,7 @@ Game::Game()
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<GoalSystem>();
 	RegisterGameSystem<KillOnIntersectionSystem>();
+	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<MouseInterationSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();

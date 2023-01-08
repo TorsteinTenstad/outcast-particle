@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Audio/Sound.hpp"
-#include "SFML/Audio/SoundSource.hpp"
 #include "SFML/Audio/SoundBuffer.hpp"
+#include "SFML/Audio/SoundSource.hpp"
 #include "components/sound_info.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
@@ -10,7 +10,7 @@
 class SoundSystem : public GameSystem
 {
 private:
-	std::map<std::string, float> MAX_VOLUME = { { "content\\sounds\\laser.wav", 20 } };
+	std::map<std::string, float> MAX_VOLUME = { { "content\\sounds\\laser.wav", 20.f } };
 	std::map<std::string, sf::SoundBuffer> sound_buffers_;
 	std::map<std::string, sf::Sound> sounds_;
 

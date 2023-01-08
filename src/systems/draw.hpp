@@ -64,7 +64,7 @@ public:
 			for (auto entity_bound_drawable : entity_bound_drawables)
 			{
 				int entity_id = entity_bound_drawable.entity_id;
-				if (shader_map.count(entity_id) > 0 && mode_ == PLAY_MODE)
+				if (shader_map.count(entity_id) > 0) // && mode_ == PLAY_MODE)
 				{
 					globals.render_window.draw(*entity_bound_drawable.drawable, &shaders_[entity_id]);
 				}

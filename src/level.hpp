@@ -24,6 +24,7 @@
 #include "components/sound_info.hpp"
 #include "components/tag.hpp"
 #include "components/text.hpp"
+#include "components/scheduled_delete.hpp"
 #include "components/trail.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
@@ -52,6 +53,7 @@ typedef std::variant<
 	std::map<int, Border>,
 	std::map<int, Trail>,
 	std::map<int, Tag>,
+	std::map<int, ScheduledDelete>,
 	std::map<int, KillOnIntersection>,
 	std::map<int, Goal>,
 	std::map<int, ElectricField>,
@@ -74,7 +76,7 @@ class EntityBoundDrawable
 {
 public:
 	int entity_id;
-	sf::Drawable* drawable;
+	sf::Drawable *drawable;
 };
 
 class Level
@@ -94,10 +96,10 @@ public:
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
 	template <class Component>
-	std::map<int, Component>& GetComponent();
+	std::map<int, Component> &GetComponent();
 
 	template <class... Component>
-	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
+	std::vector<std::tuple<int, Component *...>> GetEntitiesWith();
 
 	Level(int level_id);
 	int CreateEntityId();
@@ -105,7 +107,7 @@ public:
 	void DeleteEntity(int id);
 	int AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
 	int AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
-	int AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
+	int AddOptionsButton(sf::Keyboard::Key *key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 
 	void SaveToFile();
 	void LoadFromFile();
@@ -114,9 +116,9 @@ public:
 	int AddBlueprint(std::string tag);
 };
 
-int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
+int CreateScreenwideFragmentShaderEntity(Level &level, std::string shader_path, int draw_priority);
 
 #include "level.tpp"
 
 template <class ResponsibleComponent>
-Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority);
+Shader *EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level &level, Children *parents_children, std::string shader_path, int draw_priority);
