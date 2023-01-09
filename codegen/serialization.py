@@ -24,10 +24,6 @@ Changes will be overwritten.
     cpp += gen_save_to_file(data["blueprints"])
     cpp += gen_load_from_file(data["blueprints"])
     cpp += gen_new_level(data["blueprints"])
-
-    cpp += """
-#pragma GCC diagnostic pop
-"""
     return cpp
 
 

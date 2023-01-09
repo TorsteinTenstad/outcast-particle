@@ -54,7 +54,7 @@ class BPPlayer : public BPEntity
 	Children children = {};
 	Trail trail = {};
 	DrawPriority draw_priority = {8};
-	Shader shader = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0}, {"start_death_animation"}, -1}, {}};
+	Shader shader = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}, {"start_death_animation", -1.f}}, {}};
 	SoundInfo sound_info = {"content\\sounds\\wav.wav"};
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
 	ForceVisualization force_visualization = {};
