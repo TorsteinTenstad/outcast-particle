@@ -29,10 +29,11 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
+#include "level_state.hpp"
 
 typedef std::variant<
 	std::map<int, DrawInfo>,
-	std::map<int, VelocityDependentDrawLayer>,
+	std::map<int, Face>,
 	std::map<int, Shader>,
 	std::map<int, DrawPriority>,
 	std::map<int, ChargeDependentDrawInfo>,
@@ -115,6 +116,8 @@ public:
 	void LoadFromFile(std::string savefile_path);
 	int AddBlueprint(std::string tag);
 };
+
+LevelState ComputeState(Level &level);
 
 int CreateScreenwideFragmentShaderEntity(Level &level, std::string shader_path, int draw_priority);
 

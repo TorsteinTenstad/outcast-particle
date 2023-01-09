@@ -56,7 +56,7 @@ class BPPlayer : public BPEntity
 	DrawPriority draw_priority = {8};
 	Shader shader = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
 	SoundInfo sound_info = {"content\\sounds\\wav.wav"};
-	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
+	Face face = {};
 	ForceVisualization force_visualization = {};
 	PlayerBehaviors player_behaviours = {};
 
@@ -95,8 +95,7 @@ class BPGoal : public BPTileBasedEntity
 	DrawInfo draw_info = {"content\\textures\\goal.png", false, 0};
 	DrawPriority draw_priority = {2};
 	Goal goal = {};
-	KillOnIntersection kill_on_intersection = {};
-	SoundInfo sound_info = {"content\\sounds\\happy_transition.wav"};
+	SoundInfo sound_info = {"content\\sounds\\happy_transition.wav", false, 1};
 	SegmentedGlowEffect segmented_glow_effect = {};
 
 	// [Serialize]

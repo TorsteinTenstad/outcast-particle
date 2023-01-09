@@ -399,7 +399,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawPriority>()[entity_id] = {8};
             GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
             GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\wav.wav"};
-            GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
+            GetComponent<Face>()[entity_id] = {};
             GetComponent<ForceVisualization>()[entity_id] = {};
             GetComponent<PlayerBehaviors>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -422,7 +422,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {true, false, false, 60, sf::Vector2f(0, 0), false};
             GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = {"shaders\\test.vert", "", {}, {{"_time", 0}}, {}};
+            GetComponent<Shader>()[entity_id] = {"shaders\\test.vert", "", {}, {{"_time", 0.f}}, {}};
             GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\laser.wav"};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -455,8 +455,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\goal.png", false, 0};
             GetComponent<DrawPriority>()[entity_id] = {2};
             GetComponent<Goal>()[entity_id] = {};
-            GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\happy_transition.wav"};
+            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\happy_transition.wav", false, 1};
             GetComponent<SegmentedGlowEffect>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -567,7 +566,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawPriority>()[entity_id] = {8};
         GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
         GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\wav.wav"};
-        GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
+        GetComponent<Face>()[entity_id] = {};
         GetComponent<ForceVisualization>()[entity_id] = {};
         GetComponent<PlayerBehaviors>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
@@ -585,7 +584,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {true, false, false, 60, sf::Vector2f(0, 0), false};
         GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = {"shaders\\test.vert", "", {}, {{"_time", 0}}, {}};
+        GetComponent<Shader>()[entity_id] = {"shaders\\test.vert", "", {}, {{"_time", 0.f}}, {}};
         GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\laser.wav"};
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
         GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
@@ -612,8 +611,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\goal.png", false, 0};
         GetComponent<DrawPriority>()[entity_id] = {2};
         GetComponent<Goal>()[entity_id] = {};
-        GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\happy_transition.wav"};
+        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\happy_transition.wav", false, 1};
         GetComponent<SegmentedGlowEffect>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
         GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};

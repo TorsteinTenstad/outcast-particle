@@ -18,18 +18,32 @@ public:
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
+		auto& face_map = level.GetComponent<Face>();
 
-		for (auto it = intersection_map.cbegin(), next_it = it; it != intersection_map.cend(); it = next_it)
+		for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 		{
-			++next_it;
-			auto entity_id = it->first;
-			auto intersection = it->second;
-			for (auto& i : intersection.intersecting_ids)
+			for (auto& i : intersection->intersecting_ids)
 			{
 				if (kill_on_intersection_map.count(i) != 0)
 				{
+					if (sound_info_map.count(i))
+					{
+						sound_info_map[i].play_sound = true;
+					}
+					if (face_map.count(entity_id))
+					{
+						face_map[entity_id].image_path = "content\\textures\\face_dead.png";
+					}
+					level.GetComponent<Intersection>().erase(entity_id);
+					level.GetComponent<Shader>().erase(entity_id);
+					level.GetComponent<Velocity>().erase(entity_id);
+					level.GetComponent<Player>().erase(entity_id);
+
 					level.GetComponent<ScheduledDelete>()[entity_id].delete_at = globals.time + 2;
-					sound_info_map[i].play_sound = true;
+					level.GetComponent<Shader>()[entity_id].vertex_shader_path = "shaders\\zapped.vert";
+					level.GetComponent<Shader>()[entity_id].fragment_shader_path = "shaders\\zapped.frag";
+					level.GetComponent<Shader>()[entity_id].float_uniforms["start_animation"] = globals.time;
+					level.GetComponent<Shader>()[entity_id].float_uniforms["_time"];
 				}
 			}
 		}

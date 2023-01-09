@@ -4,6 +4,7 @@
 #include "cursor_and_keys.hpp"
 #include "game.hpp"
 #include "level.hpp"
+#include "level_state.hpp"
 #include "modes.hpp"
 
 class ModeSystem : public GameSystem
@@ -23,9 +24,6 @@ public:
 	}
 	void Update(Level& level, float dt)
 	{
-		auto& goal_map = level.GetComponent<Goal>();
-		auto& player_map = level.GetComponent<Player>();
-
 		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE])
 		{
 			if (get_mode_() == PLAY_MODE && level.editable)
@@ -50,24 +48,13 @@ public:
 		{
 			Request_mode(PAUSE_MODE);
 		}
-		if (player_map.size() == 0 && get_mode_() == PLAY_MODE)
+		if (ComputeState(level) == WON)
 		{
-			bool is_goal = false;
-			for (auto& [entity_id, goal] : goal_map)
-			{
-				if (goal.is_goal)
-				{
-					is_goal = true;
-				}
-			}
-			if (is_goal)
-			{
-				Request_mode(LEVEL_COMPLETED_MODE);
-			}
-			else
-			{
-				Request_mode(LEVEL_FAILED_MODE);
-			}
+			Request_mode(LEVEL_COMPLETED_MODE);
+		}
+		else if (ComputeState(level) == FAILED)
+		{
+			Request_mode(LEVEL_FAILED_MODE);
 		}
 	}
 	void Request_mode(Mode requested_mode)

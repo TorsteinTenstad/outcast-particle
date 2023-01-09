@@ -16,13 +16,19 @@ public:
 };
 
 class ChargeDependentDrawInfo
-{};
+{
+};
 
 class OrientationDependentDrawInfo
-{};
+{
+};
 
 class Background
-{};
+{
+};
 
-class VelocityDependentDrawLayer
-{};
+class Face
+{
+public:
+	std::string image_path;
+};
