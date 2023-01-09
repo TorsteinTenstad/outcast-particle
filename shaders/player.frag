@@ -1,6 +1,8 @@
+#version 120
+
 uniform sampler2D texture;
-uniform float _time;
-uniform float start_death_animation;
+uniform float _time = 0.;
+uniform float start_death_animation = -1.;
 #define PI 3.1415926535897932384626433832795
 
 void main()
@@ -10,9 +12,9 @@ void main()
 	float t = (_time - start_death_animation);
 	if (0 < start_death_animation)
 	{
-		float animation_step = fract(2*t);
+		float animation_step = fract(2.5*t);
 		if (animation_step < 0.7){
-			pixel.rgb = vec3(1, 1, 0);
+			pixel.rgb = vec3(0, 0, 0);
 		}
 	}
 	// multiply it by the color

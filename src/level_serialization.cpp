@@ -397,7 +397,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Children>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = {8};
-            GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}, {"start_death_animation", -1.f}}, {}};
+            GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
             GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\wav.wav"};
             GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
             GetComponent<ForceVisualization>()[entity_id] = {};
@@ -565,7 +565,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Children>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = {8};
-        GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}, {"start_death_animation", -1.f}}, {}};
+        GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
         GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\wav.wav"};
         GetComponent<VelocityDependentDrawLayer>()[entity_id] = {};
         GetComponent<ForceVisualization>()[entity_id] = {};

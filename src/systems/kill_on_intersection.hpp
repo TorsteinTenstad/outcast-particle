@@ -28,10 +28,6 @@ public:
 			{
 				if (kill_on_intersection_map.count(i) != 0)
 				{
-					level.GetComponent<Shader>()[entity_id].float_uniforms["start_death_animation"] = globals.time;
-					level.GetComponent<Intersection>().erase(entity_id);
-					level.GetComponent<Velocity>().erase(entity_id);
-					level.GetComponent<Player>().erase(entity_id);
 					level.GetComponent<ScheduledDelete>()[entity_id].delete_at = globals.time + 2;
 					sound_info_map[i].play_sound = true;
 				}

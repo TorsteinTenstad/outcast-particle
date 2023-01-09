@@ -54,7 +54,7 @@ class BPPlayer : public BPEntity
 	Children children = {};
 	Trail trail = {};
 	DrawPriority draw_priority = {8};
-	Shader shader = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}, {"start_death_animation", -1.f}}, {}};
+	Shader shader = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
 	SoundInfo sound_info = {"content\\sounds\\wav.wav"};
 	VelocityDependentDrawLayer velocity_dependent_draw_layer = {};
 	ForceVisualization force_visualization = {};
@@ -75,7 +75,7 @@ class BPLaser : public BPEntity
 	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = {true, false, false, 60, sf::Vector2f(0, 0), false};
 	KillOnIntersection kill_on_intersection = {};
-	Shader shader = {"shaders\\test.vert", "", {}, {{"_time", 0}}, {}};
+	Shader shader = {"shaders\\test.vert", "", {}, {{"_time", 0.f}}, {}};
 	SoundInfo sound_info = {"content\\sounds\\laser.wav"};
 
 	// [Serialize]
