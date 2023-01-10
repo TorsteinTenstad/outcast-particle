@@ -3,6 +3,7 @@
 #include <variant>
 #include <map>
 #include <functional>
+#include "components/text_popup.hpp"
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
@@ -57,6 +58,8 @@ typedef std::variant<
 	std::map<int, ScheduledDelete>,
 	std::map<int, KillOnIntersection>,
 	std::map<int, Goal>,
+	std::map<int, TextPopup>,
+	std::map<int, TextPopupSpawner>,
 	std::map<int, ElectricField>,
 	std::map<int, MagneticField>,
 	std::map<int, Intersection>,

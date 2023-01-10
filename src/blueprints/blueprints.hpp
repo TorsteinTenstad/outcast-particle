@@ -125,3 +125,12 @@ class BPMagneticField : public BPTileBasedEntity
 	// [Serialize]
 	WidthAndHeight width_and_height = {sf::Vector2f(240, 240)};
 };
+
+class BPTextPopupSpawner : public BPTileBasedEntity
+{
+	DrawInfo draw_info = {"_", false, 0};
+	DrawPriority draw_priority = {2};
+
+	// [Serialize]
+	TextPopupSpawner text_popup_spawner = {"ipsum lorem"};
+};

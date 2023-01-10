@@ -205,6 +205,28 @@ void DeserializeComponent(MagneticField& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(TextPopupSpawner c, std::string& str_rep)
+{
+	str_rep += "TextPopupSpawner{";
+	str_rep += "content=";
+	str_rep += ToString(c.content);
+	str_rep += "}";
+}
+
+void DeserializeComponent(TextPopupSpawner& c, std::string str_rep)
+{
+    std::vector<std::string> variables = SplitString(str_rep, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "content")
+        {
+            FromString(c.content, statement_parts[1]);
+        }
+	}
+}
+
 
 void Level::SaveToFile(std::string savefile_path)
 {
@@ -290,6 +312,14 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
             SerializeComponent(GetComponent<MagneticField>()[entity_id], entity_string);
+        }
+        
+        if (tag == "BPTextPopupSpawner")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<TextPopupSpawner>()[entity_id], entity_string);
         }
         
         f << entity_string << "\n";
@@ -497,6 +527,22 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "MagneticField{", "}"));
         }
         
+        if (tag == "BPTextPopupSpawner")
+        {
+            GetComponent<ClickedOn>()[entity_id] = {};
+            GetComponent<Editable>()[entity_id] = {true, false, false, 120, sf::Vector2f(0, 0), false};
+            GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
+            GetComponent<DrawPriority>()[entity_id] = {2};
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<Position>()[entity_id],
+                GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
+                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(GetComponent<TextPopupSpawner>()[entity_id],
+                GetSubstrBetween(line, "TextPopupSpawner{", "}"));
+        }
+        
     }
 }
 
@@ -640,6 +686,18 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
         GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(240, 240)};
         GetComponent<MagneticField>()[entity_id] = {0.1};
+        return entity_id;
+    }
+    if (tag == "BPTextPopupSpawner")
+    {
+        GetComponent<ClickedOn>()[entity_id] = {};
+        GetComponent<Editable>()[entity_id] = {true, false, false, 120, sf::Vector2f(0, 0), false};
+        GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
+        GetComponent<DrawPriority>()[entity_id] = {2};
+        GetComponent<Tag>()[entity_id] = {"BPTextPopupSpawner"};
+        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
+        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(120, 120)};
+        GetComponent<TextPopupSpawner>()[entity_id] = {"ipsum lorem"};
         return entity_id;
     }
     return entity_id;
