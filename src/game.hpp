@@ -7,6 +7,7 @@
 #include "systems/acceleration.hpp"
 #include "systems/background.hpp"
 #include "systems/button.hpp"
+#include "systems/coin.hpp"
 #include "systems/collision.hpp"
 #include "systems/segmented_glow_effect.hpp"
 #include "systems/display_velocity.hpp"
@@ -46,6 +47,7 @@ private:
 	int next_available_level_id_ = 0;
 	std::map<int, Level> levels_;
 	std::map<int, float> level_completion_time_records_;
+	std::map<int, int> coin_records_;
 
 	int active_level_ = STARTING_LEVEL;
 	Mode active_mode_ = STARTING_MODE;

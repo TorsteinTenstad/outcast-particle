@@ -47,19 +47,26 @@ public:
 		auto& radius_map = level.GetComponent<Radius>();
 		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		auto& intersection_map = level.GetComponent<Intersection>();
-		for (auto& [entity_id, intersection] : intersection_map)
+		for (auto [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 		{
 			assert(radius_map.count(entity_id) > 0);
 			assert(width_and_height_map.count(entity_id) == 0);
 
-			intersection.intersecting_ids.clear();
+			intersection->entered_this_frame_ids.clear();
+			std::vector<int> previous_intersecting_ids = intersection->intersecting_ids;
+			intersection->intersecting_ids.clear();
+
 			for (auto const& [entity_id_b, entity_radius_b] : radius_map)
 			{
 				if (entity_id != entity_id_b)
 				{
 					if (CheckIntersection(position_map[entity_id], position_map[entity_id_b], radius_map[entity_id], entity_radius_b))
 					{
-						intersection.intersecting_ids.push_back(entity_id_b);
+						intersection->intersecting_ids.push_back(entity_id_b);
+						if (std::count(previous_intersecting_ids.begin(), previous_intersecting_ids.end(), entity_id_b) == 0)
+						{
+							intersection->entered_this_frame_ids.push_back(entity_id_b);
+						}
 					}
 				}
 			}
@@ -67,10 +74,18 @@ public:
 			{
 				if (CheckIntersection(position_map[entity_id], position_map[entity_id_b], radius_map[entity_id], entity_width_and_height))
 				{
-					intersection.intersecting_ids.push_back(entity_id_b);
+					intersection->intersecting_ids.push_back(entity_id_b);
+					if (std::count(previous_intersecting_ids.begin(), previous_intersecting_ids.end(), entity_id_b) == 0)
+					{
+						intersection->entered_this_frame_ids.push_back(entity_id_b);
+					}
 				}
 			}
-		}
+			for (auto x : intersection->entered_this_frame_ids)
+			{
+				std::cout << x << "\n";
+			}
+				}
 	}
 	void OnEnterMode(Level& level) {};
 	void OnExitMode(Level& level) {};

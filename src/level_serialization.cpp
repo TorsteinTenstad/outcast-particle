@@ -262,6 +262,12 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
         }
         
+        if (tag == "BPCoin")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPWall")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -432,6 +438,21 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "WidthAndHeight{", "}"));
         }
         
+        if (tag == "BPCoin")
+        {
+            GetComponent<ClickedOn>()[entity_id] = {};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
+            GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
+            GetComponent<Coin>()[entity_id] = {};
+            GetComponent<Radius>()[entity_id] = { 120 };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<Position>()[entity_id],
+                GetSubstrBetween(line, "Position{", "}"));
+        }
+        
         if (tag == "BPWall")
         {
             GetComponent<ClickedOn>()[entity_id] = {};
@@ -589,6 +610,19 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
         GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
         GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(120, 60)};
+        return entity_id;
+    }
+    if (tag == "BPCoin")
+    {
+        GetComponent<ClickedOn>()[entity_id] = {};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
+        GetComponent<Editable>()[entity_id] = { true, false, false, 60, sf::Vector2f(0, 0), false };
+        GetComponent<Coin>()[entity_id] = {};
+        GetComponent<Radius>()[entity_id] = { 120 };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
+        GetComponent<Tag>()[entity_id] = {"BPCoin"};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         return entity_id;
     }
     if (tag == "BPWall")

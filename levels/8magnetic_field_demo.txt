@@ -19,3 +19,4 @@ name=Untitled;size=(7680,4320);editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(5940,4260)}WidthAndHeight{width_and_height=(3252,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(5940,60)}WidthAndHeight{width_and_height=(3252,60)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(5940,1680)}WidthAndHeight{width_and_height=(2280,480)}ElectricField{field_vector=(0,1)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(420,2220)}
