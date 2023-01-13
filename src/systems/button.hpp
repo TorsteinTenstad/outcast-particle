@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/button.hpp"
-#include "components/mouse_interactions.hpp"
+#include "components/pressed.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
@@ -14,31 +14,29 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& clicked_on_map = level.GetComponent<ClickedOn>();
-		auto& button_map = level.GetComponent<Button>();
-		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& text_map = level.GetComponent<Text>();
 
-		for (auto const& [entity_id, button] : button_map)
+		for (auto [entity_id, pressed_this_frame, button] : level.GetEntitiesWith<PressedThisFrame, Button>())
 		{
-			if (clicked_on_map[entity_id].clicked_this_frame || cursor_and_keys_.key_pressed_this_frame[button.equivalent_key])
+			if (!button->pressed_image_path.empty())
 			{
-				if (!button.pressed_image_path.empty())
-				{
-					draw_info_map[entity_id].image_path = button.pressed_image_path;
-				}
-			}
-			else if (clicked_on_map[entity_id].released_this_frame || cursor_and_keys_.key_released_this_frame[button.equivalent_key])
-			{
-				if (!button.image_path.empty())
-				{
-					draw_info_map[entity_id].image_path = button.image_path;
-				}
-				button.on_click();
-				break;
+				draw_info_map[entity_id].image_path = button->pressed_image_path;
 			}
 		}
+		for (auto [entity_id, released_this_frame, button] : level.GetEntitiesWith<ReleasedThisFrame, Button>())
+		{
+			if (!button->image_path.empty())
+			{
+				draw_info_map[entity_id].image_path = button->image_path;
+			}
+			button->on_click();
+			break;
+		}
+
+		/*
+		auto& button_map = level.GetComponent<Button>();
+		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
+		auto& text_map = level.GetComponent<Text>();
 		for (auto& [entity_id, key_config_button] : key_config_button_map)
 		{
 			if (clicked_on_map[entity_id].clicked_this_frame)
@@ -88,6 +86,7 @@ public:
 				}
 			}
 		}
+		*/
 	}
 	void OnEnterMode(Level& level) {};
 	void OnExitMode(Level& level) {};

@@ -1,11 +1,12 @@
 #pragma once
 #include "components/area.hpp"
-#include "components/mouse_interactions.hpp"
 #include "components/physics.hpp"
+#include "components/pressed.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 #include "utils.hpp"
+#include <algorithm>
 
 class MouseInterationSystem : public GameSystem
 {
@@ -13,51 +14,43 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& position_map = level.GetComponent<Position>();
-		auto& clicked_on_map = level.GetComponent<ClickedOn>();
-		auto& radius_map = level.GetComponent<Radius>();
-		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& draw_priority_map = level.GetComponent<DrawPriority>();
-
-		std::map<int, std::vector<int>> priority;
-		for (auto& [entity_id, clicked_on] : clicked_on_map)
+		level.GetComponent<ReleasedThisFrame>().clear();
+		level.GetComponent<PressedThisFrame>().clear();
+		if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
 		{
-			priority[draw_priority_map[entity_id].draw_priority].push_back(entity_id);
-		}
-		for (auto it = priority.rbegin(); it != priority.rend(); it++)
-		{
-			for (auto entity_id : it->second)
+			for (auto& [entity_id, pressed] : level.GetEntitiesWith<Pressed>())
 			{
-				clicked_on_map[entity_id].clicked_this_frame = false;
-				clicked_on_map[entity_id].released_this_frame = clicked_on_map[entity_id].clicked_on && cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left];
-				if (radius_map.count(entity_id))
+				level.GetComponent<ReleasedThisFrame>()[entity_id];
+			}
+			level.GetEntitiesWith<Pressed>().clear();
+		}
+
+		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+		{
+			std::vector<std::tuple<int, int>> entities_intersecting_mouse; // contains (draw_priority, entity_id)
+
+			for (auto [entity_id, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, CanReceivePress, DrawPriority, Position>())
+			{
+				if (Magnitude(cursor_and_keys_.cursor_position - position->position) < radius->radius)
 				{
-					if (Magnitude(cursor_and_keys_.cursor_position - position_map[entity_id].position) < radius_map[entity_id].radius)
-					{
-						clicked_on_map[entity_id].clicked_this_frame = cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left];
-					}
+					entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 				}
-				if (width_and_height_map.count(entity_id))
+			}
+			for (auto [entity_id, width_and_height, can_receive_press, draw_priority, position] : level.GetEntitiesWith<WidthAndHeight, CanReceivePress, DrawPriority, Position>())
+			{
+				float w = width_and_height->width_and_height.x;
+				float h = width_and_height->width_and_height.y;
+				sf::Vector2f offset = Abs(position->position - cursor_and_keys_.cursor_position);
+				if (offset.x < w / 2 && offset.y < h / 2)
 				{
-					float w = width_and_height_map[entity_id].width_and_height.x;
-					float h = width_and_height_map[entity_id].width_and_height.y;
-					sf::Vector2f offset = Abs(position_map[entity_id].position - cursor_and_keys_.cursor_position);
-					if (offset.x < w / 2 && offset.y < h / 2)
-					{
-						clicked_on_map[entity_id].clicked_this_frame = cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left];
-					}
+					entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 				}
-				if (clicked_on_map[entity_id].clicked_this_frame)
-				{
-					clicked_on_map[entity_id].clicked_on = true;
-					return;
-				}
-				if (clicked_on_map[entity_id].released_this_frame)
-				{
-					clicked_on_map[entity_id].clicked_on = false;
-					return;
-				}
+			}
+			if (entities_intersecting_mouse.size() > 0)
+			{
+				int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
+				level.GetComponent<PressedThisFrame>()[top_intersecting_id];
+				level.GetComponent<Pressed>()[top_intersecting_id];
 			}
 		}
 	}

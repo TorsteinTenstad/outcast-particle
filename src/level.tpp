@@ -2,7 +2,7 @@
 #include <cassert>
 
 template <class Component>
-std::map<int, Component>& Level::GetComponent()
+std::map<int, Component> &Level::GetComponent()
 {
 	if (components_.count(typeid(Component)) == 0)
 	{
@@ -13,7 +13,7 @@ std::map<int, Component>& Level::GetComponent()
 }
 
 template <class OtherComponent, class... Component>
-static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& component_map, std::vector<std::tuple<int, Component*...>>& matching_entities)
+static bool IdIntersection(int component_idx, std::map<int, OtherComponent> &component_map, std::vector<std::tuple<int, Component *...>> &matching_entities)
 {
 	if (component_map.size() == 0)
 	{
@@ -22,27 +22,27 @@ static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& com
 	}
 	if (component_idx == 0)
 	{
-		for (auto& [entity_id, component_value] : component_map)
+		for (auto &[entity_id, component_value] : component_map)
 		{
-			std::tuple<int, Component*...> x = {};
+			std::tuple<int, Component *...> x = {};
 			std::get<int>(x) = entity_id;
-			std::get<OtherComponent*>(x) = &component_value;
+			std::get<OtherComponent *>(x) = &component_value;
 			matching_entities.push_back(x);
 		}
 	}
 	else
 	{
-		for (auto it = matching_entities.begin(), next_it = it; it != matching_entities.end(); it = next_it)
+		for (auto it = matching_entities.begin(); it != matching_entities.end();)
 		{
-			++next_it;
 			auto map_it = component_map.find(std::get<int>(*it));
 			if (map_it == component_map.end())
 			{
-				matching_entities.erase(it);
+				it = matching_entities.erase(it);
 			}
 			else
 			{
-				std::get<OtherComponent*>(*it) = &map_it->second;
+				std::get<OtherComponent *>(*it) = &map_it->second;
+				it++;
 			}
 		}
 	}
@@ -50,16 +50,27 @@ static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& com
 }
 
 template <class... Component>
-std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
+std::vector<std::tuple<int, Component *...>> Level::GetEntitiesWith()
 {
 	int component_idx = 0;
-	std::vector<std::tuple<int, Component*...>> matching_entities = {};
+	std::vector<std::tuple<int, Component *...>> matching_entities = {};
 	(IdIntersection<Component, Component...>(component_idx++, GetComponent<Component>(), matching_entities) && ...);
 	return matching_entities;
 }
 
+template <class... Component>
+void Level::DeleteEntitiesWith()
+{
+	auto entities = GetEntitiesWith<Component...>();
+	for (auto tup : entities)
+	{
+		int entiy_id = std::get<0>(tup);
+		DeleteEntity(entiy_id);
+	}
+}
+
 template <class ResponsibleComponent>
-Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
+Shader *EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level &level, Children *parents_children, std::string shader_path, int draw_priority)
 {
 	if (parents_children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
 	{

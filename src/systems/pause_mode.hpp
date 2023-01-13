@@ -28,7 +28,7 @@ public:
 			level.GetComponent<DrawPriority>()[id].draw_priority = UI_BASE_DRAW_PRIORITY;
 			level.GetComponent<Position>()[id] = { sf::Vector2f(x, y) };
 			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
-			level.GetComponent<ClickedOn>()[id] = {};
+			level.GetComponent<CanReceivePress>()[id] = {};
 			level.GetComponent<Button>()[id].on_click = button_functions[i];
 			level.GetComponent<Button>()[id].image_path = image_path;
 			level.GetComponent<Button>()[id].equivalent_key = equivalent_keys[i];

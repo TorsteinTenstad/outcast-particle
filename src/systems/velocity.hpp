@@ -8,12 +8,9 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& position_map = level.GetComponent<Position>();
-		auto& velocity_map = level.GetComponent<Velocity>();
-
-		for (auto const& [entity_id, entity_velocity] : velocity_map)
+		for (auto const& [entity_id, velocity, position] : level.GetEntitiesWith<Velocity, Position>())
 		{
-			position_map[entity_id].position = position_map[entity_id].position + entity_velocity.velocity * dt;
+			position->position += velocity->velocity * dt;
 		}
 	}
 	void OnEnterMode(Level& level) {};

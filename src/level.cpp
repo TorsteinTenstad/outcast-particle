@@ -79,7 +79,7 @@ int Level::AddLevelButton(int level, std::function<void(void)> on_click, float p
 	GetComponent<DrawPriority>()[id].draw_priority = 1;
 	GetComponent<Position>()[id] = {sf::Vector2f(pos_x, pos_y)};
 	GetComponent<WidthAndHeight>()[id] = {sf::Vector2f(width, height)};
-	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<CanReceivePress>()[id] = {};
 	GetComponent<Border>()[id];
 	GetComponent<Button>()[id].on_click = on_click;
 	GetComponent<Button>()[id].image_path = image_path;
@@ -97,7 +97,7 @@ int Level::AddMenuButton(std::function<void(void)> on_click, float pos_x, float 
 	GetComponent<DrawPriority>()[id].draw_priority = 1;
 	GetComponent<Position>()[id] = {sf::Vector2f(pos_x, pos_y)};
 	GetComponent<WidthAndHeight>()[id] = {sf::Vector2f(width, height)};
-	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<CanReceivePress>()[id] = {};
 	GetComponent<Button>()[id].on_click = on_click;
 	GetComponent<Button>()[id].image_path = image_path;
 	GetComponent<Button>()[id].pressed_image_path = pressed_image_path;
@@ -117,7 +117,7 @@ int Level::AddOptionsButton(sf::Keyboard::Key *key, float pos_x, float pos_y, fl
 	GetComponent<DrawPriority>()[id].draw_priority = 1;
 	GetComponent<Position>()[id] = {sf::Vector2f(pos_x, pos_y)};
 	GetComponent<WidthAndHeight>()[id] = {sf::Vector2f(width, height)};
-	GetComponent<ClickedOn>()[id] = {};
+	GetComponent<CanReceivePress>()[id] = {};
 	GetComponent<KeyConfigButton>()[id].key = key;
 	GetComponent<KeyConfigButton>()[id].image_path = image_path;
 	GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;

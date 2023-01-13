@@ -17,7 +17,8 @@
 #include "components/kill_on_intersection.hpp"
 #include "components/level_button.hpp"
 #include "components/level_completion_timer.hpp"
-#include "components/mouse_interactions.hpp"
+#include "components/pressed.hpp"
+#include "components/editable.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
@@ -49,8 +50,12 @@ typedef std::variant<
 	std::map<int, Collision>,
 	std::map<int, Charge>,
 	std::map<int, Editable>,
+	std::map<int, Selected>,
 	std::map<int, BlueprintMenuItem>,
-	std::map<int, ClickedOn>,
+	std::map<int, CanReceivePress>,
+	std::map<int, Pressed>,
+	std::map<int, PressedThisFrame>,
+	std::map<int, ReleasedThisFrame>,
 	std::map<int, Radius>,
 	std::map<int, WidthAndHeight>,
 	std::map<int, Border>,
@@ -107,6 +112,9 @@ public:
 
 	template <class... Component>
 	std::vector<std::tuple<int, Component *...>> GetEntitiesWith();
+
+	template <class... Component>
+	void DeleteEntitiesWith();
 
 	Level(int level_id);
 	int CreateEntityId();

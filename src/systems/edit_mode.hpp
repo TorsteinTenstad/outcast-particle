@@ -1,11 +1,18 @@
 #pragma once
-#include "components/mouse_interactions.hpp"
+#include "components/editable.hpp"
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "utils.hpp"
+
+static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
+{
+	v.x -= std::fmod(v.x, grid_size);
+	v.y -= std::fmod(v.y, grid_size);
+	return v;
+}
 
 class EditModeSystem : public GameSystem
 {
@@ -28,7 +35,6 @@ public:
 		auto& velocity_map = level.GetComponent<Velocity>();
 		auto& editable_map = level.GetComponent<Editable>();
 		auto& blueprint_menu_item_map = level.GetComponent<BlueprintMenuItem>();
-		auto& clicked_on_map = level.GetComponent<ClickedOn>();
 		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		auto& border_map = level.GetComponent<Border>();
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
@@ -69,205 +75,199 @@ public:
 		}
 
 		// Copy entities:
-		for (auto& [entity_id, editable_entity] : editable_map)
+		for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
 		{
-			if (editable_entity.selected && cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+			if (cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 			{
 				int new_id = level.CopyEntity(entity_id);
-				editable_map[new_id].selected = false;
-				position_map[new_id].position = cursor_and_keys_.cursor_position - editable_entity.drag_offset;
-				position_map[new_id].position.x -= std::fmod(position_map[new_id].position.x, BLOCK_SIZE / 2);
-				position_map[new_id].position.y -= std::fmod(position_map[new_id].position.y, BLOCK_SIZE / 2);
+				level.GetComponent<Selected>().erase(new_id);
+				level.GetComponent<Position>()[new_id].position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
 			}
 		}
 
-		// Select/Deselect entities:
-		for (auto& [entity_id, editable_entity] : editable_map)
+		// Conditional deselect all:
+		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
+			&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 		{
-			if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+			level.GetComponent<Selected>().clear();
+		}
+
+		// Select entities:
+		for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<Editable, PressedThisFrame>())
+		{
+			level.GetComponent<Selected>()[entity_id];
+			for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 			{
-				if (!cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY])
-				{
-					editable_entity.drag_offset = cursor_and_keys_.cursor_position - position_map[entity_id].position;
-				}
-				if (!(cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES] || cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY]))
-				{
-					editable_entity.selected = false;
-				}
+				selected->mouse_offset = cursor_and_keys_.cursor_position - position->position;
 			}
-			if (clicked_on_map[entity_id].clicked_this_frame)
+		}
+
+		// Mark selected entities with border:
+		level.GetComponent<Border>().clear();
+		for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
+		{
+			level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
+		}
+
+		// Move entities with the curser:
+		if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
+		{
+			for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 			{
-				editable_entity.selected = true;
-			}
-			if (editable_entity.selected)
-			{
-				border_map[entity_id];
-			}
-			else
-			{
-				border_map.erase(entity_id);
+				position->position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
 			}
 		}
 
 		// Handle selection of entity in blueprint menu:
-		for (auto& [entity_id, blueprint_menu_item] : blueprint_menu_item_map)
+		for (auto& [entity_id, blueprint_menu_item, selected, draw_priority] : level.GetEntitiesWith<BlueprintMenuItem, Selected, DrawPriority>())
 		{
-			if (editable_map.count(entity_id) > 0 && editable_map[entity_id].selected)
+			level.GetComponent<BlueprintMenuItem>().erase(entity_id);
+			draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
+			CloseBlueprintMenu(level);
+		}
+
+		// Delete entities:
+		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
+		{
+			level.DeleteEntitiesWith<Selected>();
+		}
+
+		// Edit charge:
+		for (auto [entity_id, selected, charge] : level.GetEntitiesWith<Selected, Charge>())
+		{
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_SWITCH_CHARGE])
 			{
-				blueprint_menu_item_map.erase(entity_id);
-				draw_priority_map[entity_id].draw_priority -= UI_BASE_DRAW_PRIORITY;
-				CloseBlueprintMenu(level);
-				break;
+				charge->charge *= -1;
+			}
+
+			for (unsigned i = 0; i < CHARGE_CATEGORY_KEYS.size(); ++i)
+			{
+				if (cursor_and_keys_.key_pressed_this_frame[CHARGE_CATEGORY_KEYS[i]])
+				{
+					charge->charge = Sign(charge->charge) * abs(PARTICLE_CHARGE_CATEGORIES[i]);
+				}
 			}
 		}
 
-		// Edit entities:
-		for (auto it = editable_map.cbegin(), next_it = it; it != editable_map.cend(); it = next_it)
+		// Edit velocity:
+		for (auto [entity_id, selected, velocity] : level.GetEntitiesWith<Selected, Velocity>())
 		{
-			++next_it;
-			auto entity_id = it->first;
-			auto editable_entity = it->second;
+			float velocity_magnitude = Magnitude(velocity->velocity);
+			float velocity_angle = Angle(velocity->velocity);
 
-			bool snap_to_grid = false;
-			// Delete entities:
-			if (editable_entity.selected && cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
+			float sensitivity_modifier = cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1;
+			if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY])
 			{
-				level.DeleteEntity(entity_id);
+				velocity_magnitude += default_velocity_magnitude_change_sensitivity_ * dt / sensitivity_modifier;
 			}
-
-			// Move entities with the curser:
-			if (editable_entity.selected && editable_entity.is_position_editable && cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY])
+			if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY])
 			{
-				snap_to_grid = true;
-				position_map[entity_id].position = cursor_and_keys_.cursor_position - editable_entity.drag_offset;
+				velocity_magnitude -= default_velocity_magnitude_change_sensitivity_ * dt / sensitivity_modifier;
 			}
-
-			// Edit charge:
-			if (editable_entity.selected && editable_entity.is_charge_editable)
+			if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY_ANGLE])
 			{
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_SWITCH_CHARGE])
-				{
-					charge_map[entity_id].charge = -charge_map[entity_id].charge;
-				}
-				for (unsigned i = 0; i < CHARGE_CATEGORY_KEYS.size(); ++i)
-				{
-					if (cursor_and_keys_.key_pressed_this_frame[CHARGE_CATEGORY_KEYS[i]])
-					{
-						charge_map[entity_id].charge = Sign(charge_map[entity_id].charge) * abs(PARTICLE_CHARGE_CATEGORIES[i]);
-					}
-				}
+				velocity_angle += default_velocity_angle_change_sensitivity_ * dt / sensitivity_modifier;
 			}
-
-			// Edit velocity:
-			if (editable_entity.selected && editable_entity.is_velocity_editable)
+			if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY_ANGLE])
 			{
-				float velocity_magnitude = Magnitude(velocity_map[entity_id].velocity);
-				float velocity_angle = Angle(velocity_map[entity_id].velocity);
-
-				if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY])
-				{
-					velocity_magnitude += default_velocity_magnitude_change_sensitivity_ * dt / (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-				}
-				if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY])
-				{
-					velocity_magnitude -= default_velocity_magnitude_change_sensitivity_ * dt / (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-				}
-				if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY_ANGLE])
-				{
-					velocity_angle += default_velocity_angle_change_sensitivity_ * dt / (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-				}
-				if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY_ANGLE])
-				{
-					velocity_angle -= default_velocity_angle_change_sensitivity_ * dt / (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-				}
-				velocity_map[entity_id].velocity.x = velocity_magnitude * std::cos(velocity_angle);
-				velocity_map[entity_id].velocity.y = velocity_magnitude * std::sin(velocity_angle);
+				velocity_angle -= default_velocity_angle_change_sensitivity_ * dt / sensitivity_modifier;
 			}
-
-			// Edit magnetic field:
-			if (editable_entity.selected && magnetic_field_map.count(entity_id) > 0)
+			velocity->velocity.x = velocity_magnitude * std::cos(velocity_angle);
+			velocity->velocity.y = velocity_magnitude * std::sin(velocity_angle);
+		}
+		// Edit magnetic field:
+		for (auto [entity_id, selected, magnetic_field] : level.GetEntitiesWith<Selected, MagneticField>())
+		{
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION])
 			{
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION])
+				magnetic_field->field_strength *= -1;
+			}
+			for (unsigned i = 0; i < MAGNETIC_FIELD_CATEGORY_KEYS.size(); ++i)
+			{
+				if (cursor_and_keys_.key_pressed_this_frame[MAGNETIC_FIELD_CATEGORY_KEYS[i]])
 				{
-					magnetic_field_map[entity_id].field_strength *= -1;
-				}
-				for (unsigned i = 0; i < MAGNETIC_FIELD_CATEGORY_KEYS.size(); ++i)
-				{
-					if (cursor_and_keys_.key_pressed_this_frame[MAGNETIC_FIELD_CATEGORY_KEYS[i]])
-					{
-						magnetic_field_map[entity_id].field_strength = Sign(magnetic_field_map[entity_id].field_strength) * abs(MAGNETIC_FIELD_STRENGTH_CATEGORIES[i]);
-					}
+					magnetic_field->field_strength = Sign(magnetic_field->field_strength) * abs(MAGNETIC_FIELD_STRENGTH_CATEGORIES[i]);
 				}
 			}
+		}
 
-			// Edit electric field:
-			if (editable_entity.selected && electric_field_map.count(entity_id) > 0)
+		// Edit electric field:
+		for (auto [entity_id, selected, electric_field] : level.GetEntitiesWith<Selected, ElectricField>())
+		{
+			for (unsigned i = 0; i < ELECTRIC_FIELD_CATEGORY_KEYS.size(); ++i)
 			{
-				for (unsigned i = 0; i < ELECTRIC_FIELD_CATEGORY_KEYS.size(); ++i)
+				if (cursor_and_keys_.key_pressed_this_frame[ELECTRIC_FIELD_CATEGORY_KEYS[i]])
 				{
-					if (cursor_and_keys_.key_pressed_this_frame[ELECTRIC_FIELD_CATEGORY_KEYS[i]])
-					{
-						electric_field_map[entity_id].field_vector = Normalized(electric_field_map[entity_id].field_vector) * abs(ELECTRIC_FIELD_STRENGTH_CATEGORIES[i]);
-					}
+					electric_field->field_vector = Normalized(electric_field->field_vector) * abs(ELECTRIC_FIELD_STRENGTH_CATEGORIES[i]);
 				}
 			}
+		}
 
-			// Edit width, height and rotation of all selected entites with editable width and height:
-			if (editable_entity.selected && editable_entity.width_and_height_edit > 0 && width_and_height_map.count(entity_id) > 0)
+		// Edit rotation:
+		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
+		{
+			for (auto [entity_id, selected, width_and_height] : level.GetEntitiesWith<Selected, WidthAndHeight>())
 			{
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
+				width_and_height->width_and_height = sf::Vector2f(width_and_height->width_and_height.y, width_and_height->width_and_height.x);
+				if (electric_field_map.count(entity_id) > 0)
 				{
-					width_and_height_map[entity_id].width_and_height = sf::Vector2f(width_and_height_map[entity_id].width_and_height.y, width_and_height_map[entity_id].width_and_height.x);
-					if (electric_field_map.count(entity_id))
-					{
-						electric_field_map[entity_id].field_vector = GetQuarterTurnRotation(electric_field_map[entity_id].field_vector);
-					}
-				}
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_HEIGHT])
-				{
-					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.y += editable_entity.width_and_height_edit * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-				}
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREMENT_HEIGHT])
-				{
-					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.y -= editable_entity.width_and_height_edit * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-					if (width_and_height_map[entity_id].width_and_height.y < editable_entity.width_and_height_edit)
-					{
-						width_and_height_map[entity_id].width_and_height.y = editable_entity.width_and_height_edit;
-					}
-				}
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_WIDTH])
-				{
-					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.x += editable_entity.width_and_height_edit * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-				}
-				if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREMENT_WIDTH])
-				{
-					snap_to_grid = true;
-					width_and_height_map[entity_id].width_and_height.x -= editable_entity.width_and_height_edit * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-					if (width_and_height_map[entity_id].width_and_height.x < editable_entity.width_and_height_edit)
-					{
-						width_and_height_map[entity_id].width_and_height.x = editable_entity.width_and_height_edit;
-					}
+					electric_field_map[entity_id].field_vector = GetQuarterTurnRotation(electric_field_map[entity_id].field_vector);
 				}
 			}
+		}
 
-			//Limit position:
-			if (position_map[entity_id].position.x < 0)
+		// Edit rectangular size:
+		for (auto [entity_id, selected, width_and_height, editable] : level.GetEntitiesWith<Selected, WidthAndHeight, Editable>())
+		{
+			float increment = BLOCK_SIZE * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_HEIGHT])
 			{
-				position_map[entity_id].position.x = 0;
+				width_and_height->width_and_height.y += increment;
+				width_and_height->width_and_height.y -= std::fmod(width_and_height->width_and_height.y, increment);
 			}
-			if (position_map[entity_id].position.y < 0)
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREMENT_HEIGHT])
 			{
-				position_map[entity_id].position.y = 0;
+				width_and_height->width_and_height.y -= increment;
+				width_and_height->width_and_height.y -= std::fmod(width_and_height->width_and_height.y, increment);
+				if (width_and_height->width_and_height.y < editable->smallest_allowed_size)
+				{
+					width_and_height->width_and_height.y = editable->smallest_allowed_size;
+				}
 			}
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_WIDTH])
+			{
+				width_and_height->width_and_height.x += increment;
+				width_and_height->width_and_height.x -= std::fmod(width_and_height->width_and_height.x, increment);
+			}
+			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREMENT_WIDTH])
+			{
+				width_and_height->width_and_height.x -= increment;
+				width_and_height->width_and_height.x -= std::fmod(width_and_height->width_and_height.x, increment);
+				if (width_and_height->width_and_height.x < editable->smallest_allowed_size)
+				{
+					width_and_height->width_and_height.x = editable->smallest_allowed_size;
+				}
+			}
+		}
 
-			//Snap to grid:
-			if (snap_to_grid && !cursor_and_keys_.key_down[globals.key_config.SNAP_TO_GRID])
+		//Limit position:
+		for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
+		{
+			if (position->position.x < 0)
 			{
-				position_map[entity_id].position.x -= std::fmod(position_map[entity_id].position.x, BLOCK_SIZE / 2);
-				position_map[entity_id].position.y -= std::fmod(position_map[entity_id].position.y, BLOCK_SIZE / 2);
+				position->position.x = 0;
+			}
+			else if (position->position.x > level.size.x)
+			{
+				position->position.x = level.size.x;
+			}
+			if (position->position.y < 0)
+			{
+				position->position.y = 0;
+			}
+			else if (position->position.y > level.size.y)
+			{
+				position->position.y = level.size.y;
 			}
 		}
 	}
@@ -278,7 +278,7 @@ public:
 		level.GetComponent<Position>()[menu_background_id].position = level.size / 2.f;
 		level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
 		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
-		level.GetComponent<ClickedOn>()[menu_background_id];
+		level.GetComponent<CanReceivePress>()[menu_background_id];
 		float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
 		level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 		level.GetComponent<Border>()[menu_background_id];
@@ -296,12 +296,7 @@ public:
 	}
 	void CloseBlueprintMenu(Level& level)
 	{
-		for (auto it = level.GetComponent<BlueprintMenuItem>().cbegin(), next_it = it; it != level.GetComponent<BlueprintMenuItem>().cend(); it = next_it)
-		{
-			++next_it;
-			auto entity_id = it->first;
-			level.DeleteEntity(entity_id);
-		}
+		level.DeleteEntitiesWith<BlueprintMenuItem>();
 		blueprint_menu_is_open = false;
 	}
 	void OnEnterMode(Level& level) {};
