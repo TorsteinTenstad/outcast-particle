@@ -36,9 +36,7 @@ Game::Game()
 {
 	RegisterGameSystem<ModeSystem>().SetGameControlFunctions(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
 	RegisterGameSystem<PlayerSystem>();
-	RegisterGameSystem<GoalSystem>();
-	RegisterGameSystem<KillOnIntersectionSystem>();
-	RegisterGameSystem<ScheduledDeleteSystem>();
+
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<MouseInterationSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
@@ -58,6 +56,7 @@ Game::Game()
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<PauseMode>();
+	RegisterGameSystem<ScheduledDeleteSystem>();
 
 	RegisterPhysicsGameSystem<ElectricForceSystem>();
 	RegisterPhysicsGameSystem<ElectricFieldForceSystem>();
@@ -67,6 +66,9 @@ Game::Game()
 	RegisterPhysicsGameSystem<VelocitySystem>();
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();
+	RegisterPhysicsGameSystem<GoalSystem>();
+	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
+	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&coin_records_);
 
 	sf::Vector2f menu_size = sf::Vector2f(MENU_LEVEL_WIDTH, MENU_LEVEL_WIDTH / ASPECT_RATIO);
 	AddLevel(MAIN_MENU).size = menu_size;
@@ -131,14 +133,6 @@ void Game::Init()
 		GetLevel(OPTIONS_MENU).AddOptionsButton(options_keys[i], x, y, options_button_w, options_button_h, text, options_text_size);
 	}
 	GetLevel(OPTIONS_MENU).AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, options_button_w, options_button_h, "Main Menu", 200);
-
-	// Pause overlay
-	float pause_button_w = 3072;
-	float pause_button_h = 432;
-	int pause_text_size = 300;
-	std::vector<std::function<void(void)>> pause_funtions = {std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ToggleFullscreen, this)};
-	std::vector<std::string> pause_text = {"Continue", "Restart", "Return to Menu"};
-	auto pause_button_positions = GridHelper(options_text.size(), 2, pause_button_w, pause_button_h, 200);
 
 	active_level_ = STARTING_LEVEL;
 }

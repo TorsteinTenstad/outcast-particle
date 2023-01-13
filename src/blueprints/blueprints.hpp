@@ -82,6 +82,16 @@ class BPLaser : public BPEntity
 	WidthAndHeight width_and_height = {sf::Vector2f(120, 60)};
 };
 
+class BPCoin : public BPEntity
+{
+	DrawInfo draw_info = { "content\\textures\\coin.png", true, 0 };
+	DrawPriority draw_priority = { 3 };
+	Editable editable = { true, false, false, 60, sf::Vector2f(0, 0), false };
+	Coin coin = {};
+	Radius radius = { 120 };
+	SoundInfo sound_info = { "content\\sounds\\coin.wav" };
+};
+
 class BPWall : public BPTileBasedEntity
 {
 	DrawInfo draw_info = {"content\\textures\\block.png", false, 0};

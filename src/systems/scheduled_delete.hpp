@@ -16,7 +16,7 @@ public:
 			++next_it;
 			auto entity_id = it->first;
 			auto scheduled_delete = it->second;
-			if (scheduled_delete.delete_at > 0 && globals.time > scheduled_delete.delete_at)
+			if (scheduled_delete.delete_at > 0 && globals.time >= scheduled_delete.delete_at)
 			{
 				level.DeleteEntity(entity_id);
 			}

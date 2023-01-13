@@ -8,6 +8,7 @@
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
 #include "components/children.hpp"
+#include "components/coin.hpp"
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/force_visualization.hpp"
@@ -57,6 +58,7 @@ typedef std::variant<
 	std::map<int, Tag>,
 	std::map<int, ScheduledDelete>,
 	std::map<int, KillOnIntersection>,
+	std::map<int, Coin>,
 	std::map<int, Goal>,
 	std::map<int, TextPopup>,
 	std::map<int, TextPopupSpawner>,
@@ -73,6 +75,7 @@ typedef std::variant<
 	std::map<int, KeyConfigButton>,
 	std::map<int, PauseMenuItems>,
 	std::map<int, LevelButton>,
+	std::map<int, CoinCounter>,
 	std::map<int, Button>>
 	ComponentMap;
 
