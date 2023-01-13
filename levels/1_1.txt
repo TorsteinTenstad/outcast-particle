@@ -12,4 +12,4 @@ name=Untitled;size=(3840,2176);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(3540,1080)}WidthAndHeight{width_and_height=(120,1680)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3720,1680)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3360,120)}Charge{charge=-10000}
-"BPTextPopupSpawner":Tag{tag=BPTextPopupSpawner}Position{position=(1920,600)}WidthAndHeight{width_and_height=(360,360)}
+"BPTextPopupSpawner":Tag{tag=BPTextPopupSpawner}Position{position=(2040,600)}WidthAndHeight{width_and_height=(360,360)}TextPopupSpawner{content=Press Space to switch charge}

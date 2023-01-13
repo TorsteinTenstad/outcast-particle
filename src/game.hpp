@@ -24,6 +24,8 @@
 #include "systems/level_button.hpp"
 #include "systems/level_completion_time.hpp"
 #include "systems/magnetic_field_force.hpp"
+#include "systems/animated_position.hpp"
+#include "systems/text_popup.hpp"
 #include "systems/mode_system.hpp"
 #include "systems/mouse_interactions.hpp"
 #include "systems/pause_mode.hpp"

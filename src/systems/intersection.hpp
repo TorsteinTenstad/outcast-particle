@@ -81,11 +81,7 @@ public:
 					}
 				}
 			}
-			for (auto x : intersection->entered_this_frame_ids)
-			{
-				std::cout << x << "\n";
-			}
-				}
+		}
 	}
 	void OnEnterMode(Level& level) {};
 	void OnExitMode(Level& level) {};

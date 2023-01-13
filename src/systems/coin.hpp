@@ -26,7 +26,6 @@ public:
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
 		int& coin_counter = EnsureExistanceOfCoinCounter(level);
-		std::cout << coin_counter << std::endl;
 
 		for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 		{

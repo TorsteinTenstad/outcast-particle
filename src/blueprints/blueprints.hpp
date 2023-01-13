@@ -10,7 +10,6 @@ class BPEntity
 
 class BPTileBasedEntity : public BPEntity
 {
-
 	// [Serialize]
 	WidthAndHeight width_and_height = {sf::Vector2f(120, 120)};
 };

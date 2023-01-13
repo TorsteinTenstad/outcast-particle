@@ -22,6 +22,7 @@
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
+#include "components/animated_position.hpp"
 #include "components/player_behaviours.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
@@ -41,6 +42,7 @@ typedef std::variant<
 	std::map<int, DrawPriority>,
 	std::map<int, ChargeDependentDrawInfo>,
 	std::map<int, OrientationDependentDrawInfo>,
+	std::map<int, AnimatedPosition>,
 	std::map<int, Position>,
 	std::map<int, Velocity>,
 	std::map<int, Acceleration>,

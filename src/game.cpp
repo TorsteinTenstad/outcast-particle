@@ -64,6 +64,8 @@ Game::Game()
 	RegisterPhysicsGameSystem<ForceSystem>();
 	RegisterPhysicsGameSystem<AccelerationSystem>();
 	RegisterPhysicsGameSystem<VelocitySystem>();
+	RegisterPhysicsGameSystem<TextPopupSystem>();
+	RegisterPhysicsGameSystem<AnimatedPositionSystem>();
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();
 	RegisterPhysicsGameSystem<GoalSystem>();
