@@ -482,7 +482,8 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<Coin>()[entity_id] = {};
-            GetComponent<Radius>()[entity_id] = { 120 };
+            GetComponent<SegmentedGlowEffect>()[entity_id] = {};
+            GetComponent<Radius>()[entity_id] = { 60 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -529,7 +530,6 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawPriority>()[entity_id] = { 2 };
             GetComponent<Goal>()[entity_id] = {};
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav", false, 1 };
-            GetComponent<SegmentedGlowEffect>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -688,7 +688,8 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Coin>()[entity_id] = {};
-        GetComponent<Radius>()[entity_id] = { 120 };
+        GetComponent<SegmentedGlowEffect>()[entity_id] = {};
+        GetComponent<Radius>()[entity_id] = { 60 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
         GetComponent<Tag>()[entity_id] = {"BPCoin"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
@@ -728,7 +729,6 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Goal>()[entity_id] = {};
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav", false, 1 };
-        GetComponent<SegmentedGlowEffect>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };

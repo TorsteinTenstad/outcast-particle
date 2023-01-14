@@ -86,7 +86,8 @@ class BPCoin : public BPEntity
 	DrawPriority draw_priority = { 3 };
 	Editable editable = { 120 };
 	Coin coin = {};
-	Radius radius = { 120 };
+	SegmentedGlowEffect segmented_glow_effect = {};
+	Radius radius = { 60 };
 	SoundInfo sound_info = { "content\\sounds\\coin.wav" };
 };
 
@@ -113,7 +114,6 @@ class BPGoal : public BPTileBasedEntity
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };
-	SegmentedGlowEffect segmented_glow_effect = {};
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
