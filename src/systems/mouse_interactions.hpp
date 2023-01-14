@@ -22,7 +22,7 @@ public:
 			{
 				level.GetComponent<ReleasedThisFrame>()[entity_id];
 			}
-			level.GetEntitiesWith<Pressed>().clear();
+			level.GetComponent<Pressed>().clear();
 		}
 
 		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
