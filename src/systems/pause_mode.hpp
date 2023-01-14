@@ -22,13 +22,9 @@ public:
 			sf::Vector2f button_position = button_positions[i] + level.size / 2.f;
 			float x = button_position.x;
 			float y = button_position.y;
-			int id = level.CreateEntityId();
-			level.GetComponent<DrawInfo>()[id].image_path = image_path;
-			level.GetComponent<DrawInfo>()[id].scale_to_fit = true;
-			level.GetComponent<DrawPriority>()[id].draw_priority = UI_BASE_DRAW_PRIORITY;
+			int id = level.AddBlueprint("BPButton");
 			level.GetComponent<Position>()[id] = { sf::Vector2f(x, y) };
 			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
-			level.GetComponent<CanReceivePress>()[id] = {};
 			level.GetComponent<Button>()[id].on_click = button_functions[i];
 			level.GetComponent<Button>()[id].image_path = image_path;
 			level.GetComponent<Button>()[id].equivalent_key = equivalent_keys[i];

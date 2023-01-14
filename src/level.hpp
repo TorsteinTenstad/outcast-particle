@@ -123,7 +123,7 @@ public:
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
 	int AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
-	int AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
+	int AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text);
 	int AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 
 	void SaveToFile();

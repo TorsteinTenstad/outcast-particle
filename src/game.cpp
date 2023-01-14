@@ -81,18 +81,16 @@ Game::Game()
 void Game::Init()
 {
 	// Main menu
-	float menu_button_w = 3072;
-	float menu_button_h = 432;
 	int menu_text_size = 300;
 	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ExitGame, this) };
 	std::vector<std::string> menu_text = { "Level Menu", "Options", "Toggle fullscreen", "Exit Game" };
-	auto menu_button_positions = GridHelper(menu_text.size(), 1, menu_button_w, menu_button_h, 200);
+	auto menu_button_positions = GridHelper(menu_text.size(), 1, 0, 432, 200);
 	for (unsigned i = 0; i < menu_text.size(); ++i)
 	{
 		sf::Vector2 button_position = menu_button_positions[i] + GetLevel(MAIN_MENU).size / 2.f;
 		float x = button_position.x;
 		float y = button_position.y;
-		GetLevel(MAIN_MENU).AddMenuButton(menu_funtions[i], x, y, menu_button_w, menu_button_h, menu_text[i], menu_text_size);
+		GetLevel(MAIN_MENU).AddMenuButton(menu_funtions[i], x, y, menu_text[i]);
 	}
 
 	// Level menu & level generation
@@ -125,7 +123,7 @@ void Game::Init()
 	int options_text_size = 200;
 	std::vector<sf::Keyboard::Key*> options_keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.MENU, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.EDIT_MODE };
 	std::vector<std::string> options_text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
-	auto options_button_positions = GridHelper(options_text.size(), 2, menu_button_w, menu_button_h, 200);
+	auto options_button_positions = GridHelper(options_text.size(), 2, options_button_w, options_button_h, 200);
 	for (unsigned i = 0; i < options_text.size(); ++i)
 	{
 		std::string text = options_text[i] + ": " + HumanName(*options_keys[i]);
@@ -134,7 +132,7 @@ void Game::Init()
 		float y = button_position.y;
 		GetLevel(OPTIONS_MENU).AddOptionsButton(options_keys[i], x, y, options_button_w, options_button_h, text, options_text_size);
 	}
-	GetLevel(OPTIONS_MENU).AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, options_button_w, options_button_h, "Main Menu", 200);
+	GetLevel(OPTIONS_MENU).AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, "Main Menu");
 
 	active_level_ = STARTING_LEVEL;
 }

@@ -290,6 +290,12 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
         }
         
+        if (tag == "BPButton")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPWall")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -386,10 +392,10 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {6};
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 6 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
-            GetComponent<Radius>()[entity_id] = {120};
+            GetComponent<Radius>()[entity_id] = { 120 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -402,10 +408,10 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {7};
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 7 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
-            GetComponent<Radius>()[entity_id] = {120};
+            GetComponent<Radius>()[entity_id] = { 120 };
             GetComponent<Acceleration>()[entity_id] = {};
             GetComponent<ReceivedForces>()[entity_id] = {};
             GetComponent<Intersection>()[entity_id] = {};
@@ -425,17 +431,17 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-            GetComponent<Radius>()[entity_id] = {120};
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<Radius>()[entity_id] = { 120 };
             GetComponent<Acceleration>()[entity_id] = {};
             GetComponent<ReceivedForces>()[entity_id] = {};
             GetComponent<Intersection>()[entity_id] = {};
             GetComponent<Collision>()[entity_id] = {};
             GetComponent<Children>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
-            GetComponent<DrawPriority>()[entity_id] = {8};
-            GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
-            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\wav.wav"};
+            GetComponent<DrawPriority>()[entity_id] = { 8 };
+            GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0.f } }, {} };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
             GetComponent<Face>()[entity_id] = {};
             GetComponent<ForceVisualization>()[entity_id] = {};
             GetComponent<PlayerBehaviors>()[entity_id] = {};
@@ -454,13 +460,13 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPLaser")
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
-            GetComponent<Editable>()[entity_id] = {60};
-            GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\laser_horisontal.png", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {3};
+            GetComponent<Editable>()[entity_id] = { 60 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = {"shaders\\test.vert", "", {}, {{"_time", 0.f}}, {}};
-            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\laser.wav"};
+            GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, { { "_time", 0.f } }, {} };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -472,12 +478,27 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPCoin")
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
-            GetComponent<Editable>()[entity_id] = {120};
-            GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\coin.png", true, 0};
-            GetComponent<DrawPriority>()[entity_id] = {3};
+            GetComponent<Editable>()[entity_id] = { 120 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<Coin>()[entity_id] = {};
-            GetComponent<Radius>()[entity_id] = {120};
-            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\coin.wav"};
+            GetComponent<Radius>()[entity_id] = { 120 };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<Position>()[entity_id],
+                GetSubstrBetween(line, "Position{", "}"));
+        }
+        
+        if (tag == "BPButton")
+        {
+            GetComponent<CanReceivePress>()[entity_id] = {};
+            GetComponent<Editable>()[entity_id] = {};
+            GetComponent<DrawPriority>()[entity_id] = { 100 };
+            GetComponent<Button>()[entity_id] = {};
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3072, 432) };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures_generated\\button_menu_wide.png", true, 0 };
+            GetComponent<Text>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -488,10 +509,10 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\block.png", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {4};
-            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\thud.wav"};
-            GetComponent<Collision>()[entity_id] = {0.2, 75};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 4 };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
+            GetComponent<Collision>()[entity_id] = { 0.2, 75 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -504,10 +525,10 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\goal.png", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {2};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 2 };
             GetComponent<Goal>()[entity_id] = {};
-            GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\happy_transition.wav", false, 1};
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav", false, 1 };
             GetComponent<SegmentedGlowEffect>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -521,8 +542,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\electric_field.png", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {1};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 1 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -537,8 +558,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\magnetic_field.png", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {1};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 1 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -553,8 +574,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<CanReceivePress>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-            GetComponent<DrawPriority>()[entity_id] = {2};
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 2 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -576,7 +597,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPEntity"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         return entity_id;
     }
     if (tag == "BPTileBasedEntity")
@@ -584,156 +605,169 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPTileBasedEntity"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(120, 120)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
     if (tag == "BPStaticParticle")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {6};
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 6 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
-        GetComponent<Radius>()[entity_id] = {120};
+        GetComponent<Radius>()[entity_id] = { 120 };
         GetComponent<Tag>()[entity_id] = {"BPStaticParticle"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<Charge>()[entity_id] = {10000};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<Charge>()[entity_id] = { 10000 };
         return entity_id;
     }
     if (tag == "BPMovingParticle")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {7};
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 7 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
-        GetComponent<Radius>()[entity_id] = {120};
+        GetComponent<Radius>()[entity_id] = { 120 };
         GetComponent<Acceleration>()[entity_id] = {};
         GetComponent<ReceivedForces>()[entity_id] = {};
         GetComponent<Intersection>()[entity_id] = {};
         GetComponent<Collision>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPMovingParticle"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<Charge>()[entity_id] = {10000};
-        GetComponent<Velocity>()[entity_id] = {sf::Vector2f(0, 0)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<Charge>()[entity_id] = { 10000 };
+        GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
         return entity_id;
     }
     if (tag == "BPPlayer")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-        GetComponent<Radius>()[entity_id] = {120};
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<Radius>()[entity_id] = { 120 };
         GetComponent<Acceleration>()[entity_id] = {};
         GetComponent<ReceivedForces>()[entity_id] = {};
         GetComponent<Intersection>()[entity_id] = {};
         GetComponent<Collision>()[entity_id] = {};
         GetComponent<Children>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
-        GetComponent<DrawPriority>()[entity_id] = {8};
-        GetComponent<Shader>()[entity_id] = {"shaders\\player.vert", "shaders\\player.frag", {}, {{"_time", 0.f}}, {}};
-        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\wav.wav"};
+        GetComponent<DrawPriority>()[entity_id] = { 8 };
+        GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0.f } }, {} };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
         GetComponent<Face>()[entity_id] = {};
         GetComponent<ForceVisualization>()[entity_id] = {};
         GetComponent<PlayerBehaviors>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPPlayer"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<Charge>()[entity_id] = {10000};
-        GetComponent<Velocity>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<Player>()[entity_id] = {true, true, 1000};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<Charge>()[entity_id] = { 10000 };
+        GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<Player>()[entity_id] = { true, true, 1000 };
         return entity_id;
     }
     if (tag == "BPLaser")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
-        GetComponent<Editable>()[entity_id] = {60};
-        GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\laser_horisontal.png", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {3};
+        GetComponent<Editable>()[entity_id] = { 60 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = {"shaders\\test.vert", "", {}, {{"_time", 0.f}}, {}};
-        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\laser.wav"};
+        GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, { { "_time", 0.f } }, {} };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(120, 60)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 60) };
         return entity_id;
     }
     if (tag == "BPCoin")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
-        GetComponent<Editable>()[entity_id] = {120};
-        GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\coin.png", true, 0};
-        GetComponent<DrawPriority>()[entity_id] = {3};
+        GetComponent<Editable>()[entity_id] = { 120 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Coin>()[entity_id] = {};
-        GetComponent<Radius>()[entity_id] = {120};
-        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\coin.wav"};
+        GetComponent<Radius>()[entity_id] = { 120 };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
         GetComponent<Tag>()[entity_id] = {"BPCoin"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        return entity_id;
+    }
+    if (tag == "BPButton")
+    {
+        GetComponent<CanReceivePress>()[entity_id] = {};
+        GetComponent<Editable>()[entity_id] = {};
+        GetComponent<DrawPriority>()[entity_id] = { 100 };
+        GetComponent<Button>()[entity_id] = {};
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3072, 432) };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures_generated\\button_menu_wide.png", true, 0 };
+        GetComponent<Text>()[entity_id] = {};
+        GetComponent<Tag>()[entity_id] = {"BPButton"};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         return entity_id;
     }
     if (tag == "BPWall")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\block.png", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {4};
-        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\thud.wav"};
-        GetComponent<Collision>()[entity_id] = {0.2, 75};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 4 };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
+        GetComponent<Collision>()[entity_id] = { 0.2, 75 };
         GetComponent<Tag>()[entity_id] = {"BPWall"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(120, 120)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
     if (tag == "BPGoal")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\goal.png", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {2};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Goal>()[entity_id] = {};
-        GetComponent<SoundInfo>()[entity_id] = {"content\\sounds\\happy_transition.wav", false, 1};
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav", false, 1 };
         GetComponent<SegmentedGlowEffect>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(240, 240)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
         return entity_id;
     }
     if (tag == "BPElectricField")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\electric_field.png", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {1};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 1 };
         GetComponent<Tag>()[entity_id] = {"BPElectricField"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(240, 240)};
-        GetComponent<ElectricField>()[entity_id] = {sf::Vector2f(0, 0.25)};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 0.25) };
         return entity_id;
     }
     if (tag == "BPMagneticField")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"content\\textures\\magnetic_field.png", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {1};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 1 };
         GetComponent<Tag>()[entity_id] = {"BPMagneticField"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(240, 240)};
-        GetComponent<MagneticField>()[entity_id] = {0.1};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        GetComponent<MagneticField>()[entity_id] = { 0.1 };
         return entity_id;
     }
     if (tag == "BPTextPopupSpawner")
     {
         GetComponent<CanReceivePress>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {"_", false, 0};
-        GetComponent<DrawPriority>()[entity_id] = {2};
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Tag>()[entity_id] = {"BPTextPopupSpawner"};
-        GetComponent<Position>()[entity_id] = {sf::Vector2f(0, 0)};
-        GetComponent<WidthAndHeight>()[entity_id] = {sf::Vector2f(120, 120)};
-        GetComponent<TextPopupSpawner>()[entity_id] = {"ipsum lorem"};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+        GetComponent<TextPopupSpawner>()[entity_id] = { "ipsum lorem" };
         return entity_id;
     }
     return entity_id;
