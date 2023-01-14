@@ -1,7 +1,7 @@
 name=Untitled;size=(3840,2176);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1860,300)}WidthAndHeight{width_and_height=(3240,120)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(720,1560)}WidthAndHeight{width_and_height=(600,360)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(1560,600)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(1980,600)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPWall":Tag{tag=BPWall}Position{position=(300,1080)}WidthAndHeight{width_and_height=(120,1680)}
 "BPWall":Tag{tag=BPWall}Position{position=(1860,1860)}WidthAndHeight{width_and_height=(3240,120)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(720,600)}Charge{charge=10000}
@@ -12,4 +12,4 @@ name=Untitled;size=(3840,2176);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(3540,1080)}WidthAndHeight{width_and_height=(120,1680)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3720,1680)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3360,120)}Charge{charge=-10000}
-"BPTextPopupSpawner":Tag{tag=BPTextPopupSpawner}Position{position=(2040,600)}WidthAndHeight{width_and_height=(360,360)}TextPopupSpawner{content=Press Space to switch charge}
+"BPTextPopupSpawner":Tag{tag=BPTextPopupSpawner}Position{position=(1440,600)}WidthAndHeight{width_and_height=(480,480)}TextPopupSpawner{content=Press Space to switch charge}

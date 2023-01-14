@@ -1,6 +1,9 @@
 #pragma once
 
+#include <map>
 #include <typeindex>
+#include <vector>
+
 class Children
 {
 public:

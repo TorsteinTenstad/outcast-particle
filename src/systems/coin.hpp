@@ -25,7 +25,8 @@ public:
 		auto& coin_map = level.GetComponent<Coin>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
-		int& coin_counter = EnsureExistanceOfCoinCounter(level);
+		CoinCounter* coin_counter = GetSingleton<CoinCounter>(level);
+		int counter = coin_counter->coin_counter;
 
 		for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 		{
@@ -35,14 +36,14 @@ public:
 				{
 					sound_info_map[i].play_sound = true;
 					level.GetComponent<ScheduledDelete>()[i].delete_at = globals.time;
-					coin_counter += 1;
+					counter += 1;
 				}
 			}
 		}
 
-		if (mode_ == LEVEL_COMPLETED_MODE && ((*coin_records_)[level.id] <= 0 || (*coin_records_)[level.id] > coin_counter))
+		if (mode_ == LEVEL_COMPLETED_MODE && ((*coin_records_)[level.id] <= 0 || (*coin_records_)[level.id] > counter))
 		{
-			(*coin_records_)[level.id] = coin_counter;
+			(*coin_records_)[level.id] = counter;
 			return;
 		}
 	}
@@ -50,16 +51,4 @@ public:
 	void OnExitMode(Level& level) {};
 	void OnEnterLevel(Level& level) {};
 	void OnExitLevel(Level& level) {};
-	int& EnsureExistanceOfCoinCounter(Level& level)
-	{
-		auto& coin_counter_map = level.GetComponent<CoinCounter>();
-		assert(!(coin_counter_map.size() > 1));
-
-		if (coin_counter_map.size() == 0)
-		{
-			int entity_id = level.CreateEntityId();
-			coin_counter_map[entity_id].coin_counter = 0;
-		}
-		return coin_counter_map.begin()->second.coin_counter;
-	}
 };

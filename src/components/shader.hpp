@@ -1,5 +1,7 @@
 #pragma once
-
+#include "SFML/System/Vector2.hpp"
+#include <map>
+#include <string>
 
 class Shader
 {
