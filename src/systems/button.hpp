@@ -33,31 +33,28 @@ public:
 			break;
 		}
 
-		/*
 		auto& button_map = level.GetComponent<Button>();
 		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
 		auto& text_map = level.GetComponent<Text>();
-		for (auto& [entity_id, key_config_button] : key_config_button_map)
+		for (auto [entity_id, pressed_this_frame, key_config_button] : level.GetEntitiesWith<PressedThisFrame, KeyConfigButton>())
 		{
-			if (clicked_on_map[entity_id].clicked_this_frame)
+			for (auto& [id, release_button] : key_config_button_map)
 			{
-				for (auto& [id, release_button] : key_config_button_map)
+				release_button.is_pressed = false;
+				if (!release_button.image_path.empty())
 				{
-					release_button.is_pressed = false;
-					if (!release_button.image_path.empty())
-					{
-						draw_info_map[id].image_path = release_button.image_path;
-					}
+					draw_info_map[id].image_path = release_button.image_path;
 				}
-
-				if (!key_config_button.pressed_image_path.empty())
-				{
-					draw_info_map[entity_id].image_path = key_config_button.pressed_image_path;
-					key_config_button.is_pressed = true;
-				}
-				break;
 			}
+
+			if (!key_config_button->pressed_image_path.empty())
+			{
+				draw_info_map[entity_id].image_path = key_config_button->pressed_image_path;
+				key_config_button->is_pressed = true;
+			}
+			break;
 		}
+
 		for (auto& [entity_id, key_config_button] : key_config_button_map)
 		{
 			if (key_config_button.is_pressed)
@@ -86,7 +83,6 @@ public:
 				}
 			}
 		}
-		*/
 	}
 	void OnEnterMode(Level& level) {};
 	void OnExitMode(Level& level) {};
