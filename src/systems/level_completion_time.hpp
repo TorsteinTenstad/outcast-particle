@@ -32,9 +32,9 @@ public:
 			duration += dt;
 			return;
 		}
-		if (mode_ == LEVEL_COMPLETED_MODE && ((*level_completion_time_records_)[level.id] <= 0 || (*level_completion_time_records_)[level.id] > duration))
+		if (mode_ == LEVEL_COMPLETED_MODE && ((*level_completion_time_records_)[level_id_] <= 0 || (*level_completion_time_records_)[level_id_] > duration))
 		{
-			(*level_completion_time_records_)[level.id] = duration;
+			(*level_completion_time_records_)[level_id_] = duration;
 			return;
 		}
 	}

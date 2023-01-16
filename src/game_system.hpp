@@ -6,11 +6,13 @@
 class GameSystem
 {
 protected:
+	const int& level_id_;
 	Mode& mode_;
 	CursorAndKeys& cursor_and_keys_;
 
 public:
-	GameSystem(Mode& mode, CursorAndKeys& cursor_and_keys) :
+	GameSystem(int& level_id, Mode& mode, CursorAndKeys& cursor_and_keys) :
+		level_id_(level_id),
 		mode_(mode),
 		cursor_and_keys_(cursor_and_keys)
 	{}

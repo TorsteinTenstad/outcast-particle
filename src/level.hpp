@@ -102,7 +102,6 @@ private:
 	std::map<std::type_index, ComponentMap> components_;
 
 public:
-	const int id;
 	bool editable = false;
 	std::string name = "Untitled";
 	sf::Vector2f size = sf::Vector2f(LEVEL_WIDTHS[2], LEVEL_WIDTHS[2] / ASPECT_RATIO);
@@ -118,7 +117,7 @@ public:
 	template <class... Component>
 	void DeleteEntitiesWith();
 
-	Level(int level_id);
+	Level();
 	int CreateEntityId();
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);

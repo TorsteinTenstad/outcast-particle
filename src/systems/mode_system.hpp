@@ -9,42 +9,32 @@
 
 class ModeSystem : public GameSystem
 {
-private:
-	std::function<void(Mode)> set_mode_;
-	std::function<Mode(void)> get_mode_;
-	std::function<bool(void)> in_level_;
 
 public:
 	using GameSystem::GameSystem;
-	void SetGameControlFunctions(std::function<void(Mode)> set_mode, std::function<Mode(void)> get_mode, std::function<bool(void)> in_level)
-	{
-		set_mode_ = set_mode;
-		get_mode_ = get_mode;
-		in_level_ = in_level;
-	}
 	void Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE])
 		{
-			if (get_mode_() == PLAY_MODE && level.editable)
+			if (mode_ == PLAY_MODE && level.editable)
 			{
 				Request_mode(EDIT_MODE);
 			}
-			else if (get_mode_() == EDIT_MODE)
+			else if (mode_ == EDIT_MODE)
 			{
 				Request_mode(PLAY_MODE);
 			}
 		}
 		if (cursor_and_keys_.key_released_this_frame[globals.key_config.MENU])
 		{
-			if (get_mode_() == PLAY_MODE)
+			if (mode_ == PLAY_MODE)
 			{
 				cursor_and_keys_.key_released_this_frame[globals.key_config.MENU] = false; //probably a bad idea, but it works for now
 
 				Request_mode(PAUSE_MODE);
 			}
 		}
-		if (!globals.render_window.hasFocus() && get_mode_() == PLAY_MODE)
+		if (!globals.render_window.hasFocus() && mode_ == PLAY_MODE)
 		{
 			Request_mode(PAUSE_MODE);
 		}
@@ -61,23 +51,23 @@ public:
 	{
 		if (requested_mode == PLAY_MODE)
 		{
-			set_mode_(PLAY_MODE);
+			mode_ = (PLAY_MODE);
 		}
 		if (requested_mode == EDIT_MODE)
 		{
-			set_mode_(EDIT_MODE);
+			mode_ = (EDIT_MODE);
 		}
-		if (requested_mode == PAUSE_MODE && in_level_())
+		if (requested_mode == PAUSE_MODE && level_id_ >= 0)
 		{
-			set_mode_(PAUSE_MODE);
+			mode_ = (PAUSE_MODE);
 		}
-		if (requested_mode == LEVEL_FAILED_MODE && in_level_())
+		if (requested_mode == LEVEL_FAILED_MODE && level_id_ >= 0)
 		{
-			set_mode_(LEVEL_FAILED_MODE);
+			mode_ = (LEVEL_FAILED_MODE);
 		}
-		if (requested_mode == LEVEL_COMPLETED_MODE && in_level_())
+		if (requested_mode == LEVEL_COMPLETED_MODE && level_id_ >= 0)
 		{
-			set_mode_(LEVEL_COMPLETED_MODE);
+			mode_ = (LEVEL_COMPLETED_MODE);
 		}
 	}
 	void OnEnterMode(Level& level) {};

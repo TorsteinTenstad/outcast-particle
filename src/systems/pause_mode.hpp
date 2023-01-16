@@ -7,7 +7,7 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{}
-	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> equivalent_keys)
+	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts)
 	{
 		float button_scale = level.size.x / MENU_LEVEL_WIDTH;
 		float button_w = 3072 * button_scale;
@@ -27,7 +27,6 @@ public:
 			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
 			level.GetComponent<Button>()[id].on_click = button_functions[i];
 			level.GetComponent<Button>()[id].image_path = image_path;
-			level.GetComponent<Button>()[id].equivalent_key = equivalent_keys[i];
 			level.GetComponent<Button>()[id].pressed_image_path = pressed_image_path;
 			level.GetComponent<Text>()[id].content = button_texts[i];
 			level.GetComponent<Text>()[id].size = text_size;
@@ -45,28 +44,25 @@ public:
 			level.DeleteEntity(entity_id);
 		}
 	}
-	void AddPauseButtons(Level& level, std::function<void(int)> set_level, std::function<void(Mode)> set_mode, std::function<void(void)> reset_active_level)
+	void AddPauseButtons(Level& level)
 	{
-		std::vector<std::function<void(void)>> pause_functions = { std::bind(set_mode, PLAY_MODE), reset_active_level, std::bind(set_level, MAIN_MENU) };
-		std::vector<std::string> pause_texts = { "[Enter] Continue", "[Backspace] Restart", "[ESC] Return to Menu" };
-		std::vector<sf::Keyboard::Key> equivalent_keys = { sf::Keyboard::Enter, sf::Keyboard::Backspace, sf::Keyboard::Escape };
-		AddFloatingButtons(level, pause_functions, pause_texts, equivalent_keys);
+		std::vector<std::function<void(void)>> functions = { [this]() { mode_ = PLAY_MODE }, reset_active_level, std::bind(set_level, MAIN_MENU) };
+		std::vector<std::string> text = { "Continue", "Restart", "Return to Menu" };
+		AddFloatingButtons(level, functions, text);
 	}
 
-	void AddLevelFailedButtons(Level& level, std::function<void(int)> set_level, std::function<void(void)> reset_active_level)
+	void AddLevelFailedButtons(Level& level)
 	{
-		std::vector<std::function<void(void)>> level_failed_functions = { reset_active_level, std::bind(set_level, MAIN_MENU) };
-		std::vector<std::string> level_failed_texts = { "[Backspace] Restart", "[ESC] Return to Menu" };
-		std::vector<sf::Keyboard::Key> equivalent_keys = { sf::Keyboard::Backspace, sf::Keyboard::Escape };
-		AddFloatingButtons(level, level_failed_functions, level_failed_texts, equivalent_keys);
+		std::vector<std::function<void(void)>> functions = { reset_active_level, std::bind(set_level, MAIN_MENU) };
+		std::vector<std::string> text = { "Restart", "Return to Menu" };
+		AddFloatingButtons(level, functions, text);
 	}
 
-	void AddLevelCompletedButtons(Level& level, int active_level, std::function<void(int)> set_level, std::function<void(Mode)> set_mode, std::function<void(void)> reset_active_level)
+	void AddLevelCompletedButtons(Level& level)
 	{
-		std::vector<std::function<void(void)>> level_completed_functions = { std::bind(set_level, active_level + 1), reset_active_level, std::bind(set_level, MAIN_MENU) };
-		std::vector<std::string> level_completed_texts = { "[Tab] Next level", "[Backspace] Restart", "[ESC] Return to Menu" };
-		std::vector<sf::Keyboard::Key> equivalent_keys = { sf::Keyboard::Tab, sf::Keyboard::Backspace, sf::Keyboard::Escape };
-		AddFloatingButtons(level, level_completed_functions, level_completed_texts, equivalent_keys);
+		std::vector<std::function<void(void)>> level_completed_functions = { std::bind(set_level, level_id_ + 1), reset_active_level, std::bind(set_level, MAIN_MENU) };
+		std::vector<std::string> text = { "[Tab] Next level", "[Backspace] Restart", "[ESC] Return to Menu" };
+		AddFloatingButtons(level, functions, text);
 	}
 	void OnEnterMode(Level& level) {};
 	void OnExitMode(Level& level) {};

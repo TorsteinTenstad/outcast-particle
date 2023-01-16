@@ -6,8 +6,7 @@
 
 int Level::next_available_entity_id_ = 0;
 
-Level::Level(int level_id) :
-	id(level_id)
+Level::Level()
 {
 }
 
