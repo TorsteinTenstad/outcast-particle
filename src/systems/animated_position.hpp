@@ -15,8 +15,5 @@ public:
 			position->position = animated_position->position_at_time_func(globals.time - animated_position->start_time);
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

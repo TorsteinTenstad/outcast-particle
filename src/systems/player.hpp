@@ -13,7 +13,7 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		if (mode_ == PLAY_MODE)
+		if (level.GetMode() == PLAY_MODE)
 		{
 			ProcessPlayerControls(level);
 		}
@@ -70,8 +70,5 @@ public:
 			face->image_path = "content\\textures\\face_" + std::string((nonzero_charge > 0) ? "plus.png" : "minus.png");
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

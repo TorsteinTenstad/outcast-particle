@@ -1,12 +1,12 @@
 #include "game.hpp"
 #include <chrono>
 #include <filesystem>
+#include <functional>
 #include <string>
 #include <thread>
 
 Game::Game()
 {
-	RegisterGameSystem<ModeSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<ButtonSystem>();
@@ -26,7 +26,7 @@ Game::Game()
 	RegisterGameSystem<DisplayVelocitySystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ViewSystem>();
-	RegisterGameSystem<PauseMode>();
+	RegisterGameSystem<PauseMode>().GiveFunctions(std::bind(&Game::SetLevel, this, std::placeholders::_1));
 	RegisterGameSystem<ScheduledDeleteSystem>();
 
 	RegisterPhysicsGameSystem<ElectricForceSystem>();
@@ -60,10 +60,28 @@ Game::Game()
 
 void Game::SetLevel(int level_id)
 {
-	assert(level_id >= 0);
-	assert(level_id < next_available_level_id_);
-	active_level_.LoadFromFile(level_paths_[level_id]);
+	assert(active_level_.GetMode() == PAUSE_MODE || active_level_id_ < 0);
+	active_level_ = Level();
+	switch (level_id)
+	{
+		case MAIN_MENU:
+			GoToMainMenu();
+			break;
+		case LEVEL_MENU:
+			GoToLevelMenu();
+			break;
+		case OPTIONS_MENU:
+			GoToOptionsMenu();
+			break;
+
+		default:
+			assert(level_id >= 0);
+			assert(level_id < next_available_level_id_);
+			active_level_.LoadFromFile(level_paths_[level_id]);
+			break;
+	}
 	active_level_id_ = level_id;
+	restart_update_loop_ = true;
 }
 
 void Game::Update(float dt)
@@ -72,14 +90,24 @@ void Game::Update(float dt)
 	for (const auto& system_id : game_system_ids_)
 	{
 		game_systems_[system_id]->Update(active_level_, dt);
+		if (restart_update_loop_)
+		{
+			restart_update_loop_ = false;
+			return;
+		}
 	}
-	if (active_mode_ == PLAY_MODE)
+	if (active_level_.GetMode() == PLAY_MODE)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{
 			for (const auto& system_id : physics_game_system_ids_)
 			{
 				game_systems_[system_id]->Update(active_level_, dt / physics_ticks_per_frame_);
+				if (restart_update_loop_)
+				{
+					restart_update_loop_ = false;
+					return;
+				}
 			}
 			cursor_and_keys_.ResetFrameEvents();
 		}
@@ -117,8 +145,4 @@ void Game::ToggleFullscreen()
 void Game::ExitGame()
 {
 	globals.render_window.close();
-}
-
-void Game::ResetActiveLevel()
-{
 }

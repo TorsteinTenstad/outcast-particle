@@ -88,8 +88,5 @@ public:
 		}
 		*/
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

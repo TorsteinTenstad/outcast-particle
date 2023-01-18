@@ -39,8 +39,5 @@ public:
 			level.drawables[draw_priority->draw_priority].push_back({ entity_id, &text_[entity_id] });
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

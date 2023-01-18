@@ -33,8 +33,5 @@ public:
 			received_forces->magnetic_field_force = magnetic_field_force;
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

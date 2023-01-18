@@ -4,7 +4,7 @@
 #include <iomanip>
 #include "game_system.hpp"
 #include "level.hpp"
-#include "modes.hpp"
+
 #include "string_parsing_utils.hpp"
 
 class LevelButtonSystem : public GameSystem
@@ -37,8 +37,5 @@ public:
 			}
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

@@ -29,6 +29,7 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
+#include "level_mode.hpp"
 #include "level_state.hpp"
 #include <functional>
 #include <map>
@@ -97,6 +98,7 @@ class Level
 {
 private:
 	std::string savefile_path_;
+	LevelMode mode_ = PLAY_MODE;
 
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
@@ -119,21 +121,23 @@ public:
 
 	Level();
 	int CreateEntityId();
+	int AddBlueprint(std::string tag);
+
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
-	int AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path);
-	int AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text);
-	int AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
+
+	LevelState ComputeState();
+	LevelMode GetMode();
+	void SetMode(LevelMode level_mode);
 
 	void SaveToFile();
 	void LoadFromFile();
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
-	int AddBlueprint(std::string tag);
 };
 
-LevelState ComputeState(Level& level);
-
+int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text);
+int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 
 #include "level.tpp"

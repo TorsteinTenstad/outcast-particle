@@ -41,14 +41,10 @@ public:
 			}
 		}
 
-		if (mode_ == LEVEL_COMPLETED_MODE && ((*level_coin_records_)[level_id_] <= 0 || (*level_coin_records_)[level_id_] > counter))
+		if (level.ComputeState() == COMPLETED && ((*level_coin_records_)[active_level_id_] <= 0 || (*level_coin_records_)[active_level_id_] > counter))
 		{
-			(*level_coin_records_)[level_id_] = counter;
+			(*level_coin_records_)[active_level_id_] = counter;
 			return;
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

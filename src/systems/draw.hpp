@@ -22,7 +22,7 @@ public:
 			for (auto entity_bound_drawable : entity_bound_drawables)
 			{
 				int entity_id = entity_bound_drawable.entity_id;
-				if (shader_map.count(entity_id) > 0) // && mode_ == PLAY_MODE)
+				if (shader_map.count(entity_id) > 0) // && level.mode == PLAY_MODE)
 				{
 					globals.render_window.draw(*entity_bound_drawable.drawable, SetupSFMLShader(entity_id, &shader_map[entity_id]));
 				}
@@ -78,8 +78,5 @@ public:
 		}
 		return &shaders_[shader_id];
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

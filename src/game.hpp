@@ -2,7 +2,7 @@
 #include "controls_config.hpp"
 #include "cursor_and_keys.hpp"
 #include "level.hpp"
-#include "modes.hpp"
+
 #include "sfml_event_handler.hpp"
 #include "systems/acceleration.hpp"
 #include "systems/animated_position.hpp"
@@ -24,7 +24,6 @@
 #include "systems/level_button.hpp"
 #include "systems/level_completion_time.hpp"
 #include "systems/magnetic_field_force.hpp"
-#include "systems/mode_system.hpp"
 #include "systems/mouse_interactions.hpp"
 #include "systems/pause_mode.hpp"
 #include "systems/player.hpp"
@@ -46,6 +45,9 @@ private:
 	int physics_ticks_per_frame_ = 10;
 	bool fullscreen_ = false;
 
+	bool restart_update_loop_ = false;
+	bool is_in_level_editing_ = false;
+
 	int next_available_level_id_ = 0;
 	int active_level_id_ = MAIN_MENU;
 	Level active_level_;
@@ -53,8 +55,6 @@ private:
 	std::map<int, std::string> level_paths_;
 	std::map<int, float> level_completion_time_records_;
 	std::map<int, int> level_coin_records_;
-
-	Mode active_mode_ = STARTING_MODE;
 
 	int next_available_system_id_ = 0;
 	std::map<std::type_index, int> type_to_system_id_;
@@ -78,7 +78,7 @@ private:
 	System& RegisterPhysicsGameSystem();
 
 	void SetLevel(int level_id);
-	void ResetActiveLevel();
+	void ButtunFuncEditLevel();
 	std::string GenerateLevelTexture(int level_id);
 	void ToggleFullscreen();
 	void ExitGame();

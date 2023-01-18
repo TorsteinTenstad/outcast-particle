@@ -5,7 +5,6 @@
 #define LEVEL_MENU -2
 #define OPTIONS_MENU -3
 
-#define STARTING_MODE PLAY_MODE
 #define STARTING_LEVEL MAIN_MENU
 
 #define BLOCK_SIZE 120

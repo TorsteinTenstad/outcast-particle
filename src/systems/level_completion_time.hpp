@@ -2,7 +2,7 @@
 #include "game_system.hpp"
 #include "level.hpp"
 #include "level_completion_time.hpp"
-#include "modes.hpp"
+#include "level_mode.hpp"
 
 class LevelCompletionTimeSystem : public GameSystem
 {
@@ -27,19 +27,15 @@ public:
 		}
 
 		float& duration = level_completion_timer_map.begin()->second.duration;
-		if (mode_ == PLAY_MODE)
+		if (level.GetMode() == PLAY_MODE)
 		{
 			duration += dt;
 			return;
 		}
-		if (mode_ == LEVEL_COMPLETED_MODE && ((*level_completion_time_records_)[level_id_] <= 0 || (*level_completion_time_records_)[level_id_] > duration))
+		if (level.ComputeState() == COMPLETED && ((*level_completion_time_records_)[active_level_id_] <= 0 || (*level_completion_time_records_)[active_level_id_] > duration))
 		{
-			(*level_completion_time_records_)[level_id_] = duration;
+			(*level_completion_time_records_)[active_level_id_] = duration;
 			return;
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

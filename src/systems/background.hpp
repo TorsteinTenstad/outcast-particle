@@ -6,7 +6,6 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "modes.hpp"
 
 class BackgroundSystem : public GameSystem
 {
@@ -30,7 +29,7 @@ public:
 		int entity_id = background_map.begin()->first;
 		width_and_height_map[entity_id].width_and_height = level.size;
 		position_map[entity_id].position = level.size / 2.f;
-		if (mode_ == EDIT_MODE)
+		if (level.GetMode() == EDIT_MODE)
 		{
 			draw_info_map[entity_id].image_path = "content\\textures\\grid.png";
 			draw_info_map[entity_id].scale_to_fit = false;
@@ -41,8 +40,4 @@ public:
 			draw_info_map[entity_id].scale_to_fit = true;
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };
