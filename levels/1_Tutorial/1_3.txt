@@ -13,7 +13,7 @@ name=Untitled;size=(3840,2160);editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3120,780)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3480,780)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(360,1380)}Charge{charge=10000}
-"BPElectricField":Tag{tag=BPElectricField}Position{position=(1800,1080)}WidthAndHeight{width_and_height=(240,1920)}ElectricField{field_vector=(-0.5,0)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(1800,1080)}ElectricField{field_vector=(-0.5,0)}WidthAndHeight{width_and_height=(240,1920)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(720,1380)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(240,600)}Charge{charge=10000}
 "BPWall":Tag{tag=BPWall}Position{position=(420,420)}WidthAndHeight{width_and_height=(120,600)}

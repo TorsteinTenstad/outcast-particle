@@ -10,5 +10,4 @@ public:
 	void Update(Level& level, float dt)
 	{
 	}
-	
 };

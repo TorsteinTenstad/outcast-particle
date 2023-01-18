@@ -104,14 +104,9 @@ void Level::SaveToFile()
 
 int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
 {
-	std::string image_path_suffix = "menu_wide.png";
-	std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
-	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
 	int id = level.AddBlueprint("BPButton");
 	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	level.GetComponent<Button>()[id].on_click = on_click;
-	level.GetComponent<Button>()[id].image_path = image_path;
-	level.GetComponent<Button>()[id].pressed_image_path = pressed_image_path;
+	level.GetComponent<OnReleasedThisFrame>()[id].func = on_click;
 	level.GetComponent<Text>()[id].content = button_text;
 	return id;
 }
@@ -127,7 +122,7 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 	level.GetComponent<DrawPriority>()[id].draw_priority = 1;
 	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	level.GetComponent<CanReceivePress>()[id] = {};
+	level.GetComponent<ReceivesMouseEvents>()[id] = {};
 	level.GetComponent<KeyConfigButton>()[id].key = key;
 	level.GetComponent<KeyConfigButton>()[id].image_path = image_path;
 	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;

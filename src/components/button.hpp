@@ -1,15 +1,18 @@
 #pragma once
-#include <string>
-#include <functional>
 #include "SFML/Window/Keyboard.hpp"
+#include <functional>
+#include <string>
 
-class Button
+class OnReleasedThisFrame
 {
 public:
-	sf::Keyboard::Key equivalent_key = sf::Keyboard::Unknown;
-	std::function<void(void)> on_click;
-	std::string image_path;
-	std::string pressed_image_path;
+	std::function<void(void)> func;
+};
+
+class OnMouseEnteredThisFrame
+{
+public:
+	std::function<void(void)> func;
 };
 
 class KeyConfigButton

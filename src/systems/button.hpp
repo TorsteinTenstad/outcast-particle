@@ -16,20 +16,19 @@ public:
 	{
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
 
-		for (auto [entity_id, pressed_this_frame, button] : level.GetEntitiesWith<PressedThisFrame, Button>())
+		for (auto [entity_id, pressed_this_frame, pressed_image_path] : level.GetEntitiesWith<PressedThisFrame, PressedImagePath>())
 		{
-			if (!button->pressed_image_path.empty())
-			{
-				draw_info_map[entity_id].image_path = button->pressed_image_path;
-			}
+			draw_info_map[entity_id].image_path = pressed_image_path->pressed_image_path;
 		}
-		for (auto [entity_id, released_this_frame, button] : level.GetEntitiesWith<ReleasedThisFrame, Button>())
+		for (auto [entity_id, released_this_frame, on_released_this_frame, pressed_image_path] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame, PressedImagePath>())
 		{
-			if (!button->image_path.empty())
-			{
-				draw_info_map[entity_id].image_path = button->image_path;
-			}
-			button->on_click();
+			draw_info_map[entity_id].image_path = pressed_image_path->image_path;
+			on_released_this_frame->func();
+			break;
+		}
+		for (auto [entity_id, mouse_entered_this_frame, on_mouse_entered_this_frame] : level.GetEntitiesWith<MouseEnteredThisFrame, OnMouseEnteredThisFrame>())
+		{
+			on_mouse_entered_this_frame->func();
 			break;
 		}
 
@@ -88,5 +87,4 @@ public:
 		}
 		*/
 	}
-	
 };

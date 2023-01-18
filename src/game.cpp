@@ -9,7 +9,8 @@ Game::Game()
 {
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
-	RegisterGameSystem<ButtonSystem>();
+	RegisterGameSystem<MenuNavigatonSystem>();
+	RegisterGameSystem<ButtonSystem>(); // Must be between MenuNavigatonSystem and MouseInterationSystem
 	RegisterGameSystem<MouseInterationSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();

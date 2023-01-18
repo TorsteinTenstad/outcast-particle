@@ -22,6 +22,7 @@ void Game::GoToMainMenu()
 		float y = button_position.y;
 		AddMenuButton(active_level_, menu_funtions[i], x, y, menu_text[i]);
 	}
+	active_level_.AddBlueprint("BPMenuNavigator");
 }
 
 void Game::GoToLevelMenu()
@@ -31,11 +32,12 @@ void Game::GoToLevelMenu()
 	int i = 0;
 	for (auto& level_ids : level_groups_["Tutorial"])
 	{
-		float x = 1000;
+		float x = 3000;
 		float y = 400 + 500 * i;
 		int id = AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, i), x, y, ToString(i));
 		i++;
 	}
+	active_level_.AddBlueprint("BPMenuNavigator");
 }
 
 void Game::GoToOptionsMenu()

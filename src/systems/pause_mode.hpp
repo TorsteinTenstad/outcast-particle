@@ -86,9 +86,6 @@ public:
 		float button_h = 432 * button_scale;
 		int text_size = 300 * button_scale;
 		auto button_positions = GridHelper(button_texts.size(), 1, button_w, button_h, 200 * button_scale);
-		std::string image_path_suffix = "menu_wide.png";
-		std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
-		std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
 		for (unsigned i = 0; i < button_texts.size(); ++i)
 		{
 			sf::Vector2f button_position = button_positions[i] + level.size / 2.f;
@@ -97,13 +94,15 @@ public:
 			int id = level.AddBlueprint("BPButton");
 			level.GetComponent<Position>()[id] = { sf::Vector2f(x, y) };
 			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
-			level.GetComponent<Button>()[id].on_click = button_functions[i];
-			level.GetComponent<Button>()[id].image_path = image_path;
-			level.GetComponent<Button>()[id].pressed_image_path = pressed_image_path;
+			level.GetComponent<OnReleasedThisFrame>()[id].func = button_functions[i];
 			level.GetComponent<Text>()[id].content = button_texts[i];
 			level.GetComponent<Text>()[id].size = text_size;
 			level.GetComponent<PauseMenuItems>()[id] = {};
 		}
+		int navigator_id = level.AddBlueprint("BPMenuNavigator");
+
+		level.GetComponent<WidthAndHeight>()[navigator_id].width_and_height *= button_scale;
+		level.GetComponent<PauseMenuItems>()[navigator_id];
 	}
 	void RemovePauseButtons(Level& level)
 	{
