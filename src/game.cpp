@@ -9,6 +9,7 @@ Game::Game()
 {
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1));
 	RegisterGameSystem<MenuNavigatonSystem>();
 	RegisterGameSystem<ButtonSystem>(); // Must be between MenuNavigatonSystem and MouseInterationSystem
 	RegisterGameSystem<MouseInterationSystem>();
@@ -16,7 +17,6 @@ Game::Game()
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>();
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
-	RegisterGameSystem<LevelButtonSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<FaceSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();

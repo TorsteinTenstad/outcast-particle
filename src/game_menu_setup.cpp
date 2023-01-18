@@ -29,15 +29,7 @@ void Game::GoToLevelMenu()
 {
 	active_level_id_ = LEVEL_MENU;
 	active_level_.size = MENU_SIZE;
-	int i = 0;
-	for (auto& level_ids : level_groups_["Tutorial"])
-	{
-		float x = 3000;
-		float y = 400 + 500 * i;
-		int id = AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, i), x, y, ToString(i));
-		i++;
-	}
-	active_level_.AddBlueprint("BPMenuNavigator");
+	active_level_.GetComponent<LevelMenuUI>()[active_level_.CreateEntityId()];
 }
 
 void Game::GoToOptionsMenu()

@@ -12,8 +12,8 @@
 #include "components/goal.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
-#include "components/level_button.hpp"
 #include "components/level_completion_timer.hpp"
+#include "components/level_menu.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
@@ -61,6 +61,7 @@ typedef std::variant<
 	std::map<int, KillOnIntersection>,
 	std::map<int, LevelButton>,
 	std::map<int, LevelCompletionTimer>,
+	std::map<int, LevelMenuUI>,
 	std::map<int, MagneticField>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,
