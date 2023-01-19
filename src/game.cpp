@@ -56,6 +56,7 @@ Game::Game()
 		}
 	}
 
+	GenerateLevelTexture(4, 800, 450);
 	GoToMainMenu();
 }
 
@@ -115,18 +116,20 @@ void Game::Update(float dt)
 	}
 }
 
-std::string Game::GenerateLevelTexture(int level_id)
+std::string Game::GenerateLevelTexture(int level_id, unsigned width, unsigned height)
 {
-	sf::Texture texture;
-	texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
-	int active_level_before_capture = active_level_id_;
-	SetLevel(level_id);
-	globals.render_window.setView(sf::View(active_level_.size / 2.f, active_level_.size));
-	Update(0);
-	SetLevel(active_level_before_capture);
-	texture.update(globals.render_window);
-	std::string identifier = "level" + std::to_string(level_id);
-	GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier, texture);
+	std::string identifier = "_level" + std::to_string(level_id);
+	sf::Texture* texture = GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier);
+	Level level = Level();
+	level.LoadFromFile(level_paths_[level_id]);
+	GetGameSystem<BackgroundSystem>().Update(level, 0);
+	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);
+	GetGameSystem<PlayerSystem>().Update(level, 0);
+	GetGameSystem<FaceSystem>().Update(level, 0);
+	GetGameSystem<RenderShapesSystem>().Update(level, 0);
+	GetGameSystem<RenderTextSystem>().Update(level, 0);
+	GetGameSystem<DrawSystem>().CaptureLevel(level, texture, width, height);
+	texture->copyToImage().saveToFile(identifier + ".png");
 	return identifier;
 }
 

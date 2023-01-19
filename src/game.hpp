@@ -80,7 +80,7 @@ private:
 
 	void SetLevel(int level_id);
 	void ButtunFuncEditLevel();
-	std::string GenerateLevelTexture(int level_id);
+	std::string GenerateLevelTexture(int level_id, unsigned width, unsigned height);
 	void ToggleFullscreen();
 	void ExitGame();
 

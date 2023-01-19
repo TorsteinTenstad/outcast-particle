@@ -17,9 +17,11 @@ private:
 
 public:
 	using GameSystem::GameSystem;
-	void RegisterTexture(std::string identifier, sf::Texture texture)
+	sf::Texture* RegisterTexture(std::string identifier)
 	{
-		textures_[identifier] = texture;
+		//textures_.emplace(identifier);
+		//return &textures_.at(identifier);
+		return &textures_[identifier];
 	}
 	void Update(Level& level, float dt)
 	{
@@ -88,5 +90,4 @@ public:
 			level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, shape });
 		}
 	}
-	
 };

@@ -1,4 +1,6 @@
 #pragma once
+#include "SFML/Graphics/RenderTarget.hpp"
+#include "SFML/Graphics/RenderTexture.hpp"
 #include "SFML/Graphics/Shader.hpp"
 #include "constants.hpp"
 #include "game_system.hpp"
@@ -13,28 +15,44 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
+		Draw(level, &globals.render_window, level.drawables);
+	}
+
+	void CaptureLevel(Level& level, sf::Texture* texture, unsigned width, unsigned height)
+	{
+		sf::RenderTexture render_texture;
+		render_texture.create(width, height);
+		render_texture.setView(sf::View(level.size / 2.f, level.size));
+		Draw(level, &render_texture, level.drawables);
+		render_texture.display();
+		*texture = render_texture.getTexture();
+	}
+
+	void Draw(Level& level, sf::RenderTarget* render_target, std::map<int, std::vector<EntityBoundDrawable>> drawables)
+	{
 		auto& shader_map = level.GetComponent<Shader>();
 
 		globals.render_window.clear();
 
-		for (auto [draw_priority, entity_bound_drawables] : level.drawables)
+		for (auto [draw_priority, entity_bound_drawables] : drawables)
 		{
 			for (auto entity_bound_drawable : entity_bound_drawables)
 			{
 				int entity_id = entity_bound_drawable.entity_id;
 				if (shader_map.count(entity_id) > 0) // && level.mode == PLAY_MODE)
 				{
-					globals.render_window.draw(*entity_bound_drawable.drawable, SetupSFMLShader(entity_id, &shader_map[entity_id]));
+					render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(entity_id, &shader_map[entity_id]));
 				}
 				else
 				{
-					globals.render_window.draw(*entity_bound_drawable.drawable);
+					render_target->draw(*entity_bound_drawable.drawable);
 				}
 			}
 		}
 		level.drawables.clear();
 	}
 
+private:
 	sf::Shader* SetupSFMLShader(int entity_id, const Shader* shader)
 	{
 		std::tuple<int, std::string, std::string> shader_id = { entity_id, shader->vertex_shader_path, shader->fragment_shader_path };
@@ -78,5 +96,4 @@ public:
 		}
 		return &shaders_[shader_id];
 	}
-	
 };
