@@ -9,3 +9,5 @@ out
 .vs
 # Python
 __pycache__
+# Gamedata
+user
