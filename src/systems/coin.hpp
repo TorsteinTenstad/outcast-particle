@@ -24,9 +24,9 @@ public:
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& coin_map = level.GetComponent<Coin>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
+		auto& goal_map = level.GetComponent<Goal>();
 
 		CoinCounter* coin_counter = GetSingleton<CoinCounter>(level);
-		int counter = coin_counter->coin_counter;
 
 		for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 		{
@@ -36,14 +36,15 @@ public:
 				{
 					sound_info_map[i].play_sound = true;
 					level.GetComponent<ScheduledDelete>()[i].delete_at = globals.time;
-					counter += 1;
+					coin_counter->coin_counter += 1;
 				}
 			}
 		}
 
-		if (mode_ == LEVEL_COMPLETED_MODE && ((*coin_records_)[level.id] <= 0 || (*coin_records_)[level.id] > counter))
+		if ((*coin_records_)[level.id] < coin_counter->coin_counter)
 		{
-			(*coin_records_)[level.id] = counter;
+			(*coin_records_)[level.id] = coin_counter->coin_counter;
+			std::cout << coin_counter->coin_counter << std::endl;
 			return;
 		}
 	}
