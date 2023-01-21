@@ -24,17 +24,17 @@ public:
 		{
 			draw_info_map[entity_id].image_path = pressed_image_path->image_path;
 			on_released_this_frame->func();
-			break;
+			return;
 		}
 		for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
 		{
 			on_hovered->func();
-			break;
+			return;
 		}
 		for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
 		{
 			on_hovered_started_this_frame->func();
-			break;
+			return;
 		}
 
 		/*

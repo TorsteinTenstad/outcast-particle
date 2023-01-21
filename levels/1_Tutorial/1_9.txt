@@ -1,4 +1,4 @@
-name=Untitled;size=(3840,2176);editable=1
+name=Untitled;size=(3840,2160);editable=1
 "BPGoal":Tag{tag=BPGoal}Position{position=(3360,1800)}WidthAndHeight{width_and_height=(600,360)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(840,720)}Charge{charge=-2500}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPWall":Tag{tag=BPWall}Position{position=(60,1020)}WidthAndHeight{width_and_height=(120,2040)}
@@ -7,14 +7,14 @@ name=Untitled;size=(3840,2176);editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(600,960)}Charge{charge=40000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1920,480)}Charge{charge=40000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1920,960)}Charge{charge=40000}
-"BPElectricField":Tag{tag=BPElectricField}Position{position=(2580,900)}WidthAndHeight{width_and_height=(120,1320)}ElectricField{field_vector=(0,0.0625)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(2580,900)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(120,1320)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(60,1920)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3240,480)}Charge{charge=40000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3240,960)}Charge{charge=40000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3300,1500)}WidthAndHeight{width_and_height=(840,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,1500)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(2880,1500)}WidthAndHeight{width_and_height=(120,120)}
-"BPElectricField":Tag{tag=BPElectricField}Position{position=(2580,1800)}WidthAndHeight{width_and_height=(240,240)}ElectricField{field_vector=(1,-0)}
+"BPElectricField":Tag{tag=BPElectricField}Position{position=(2580,1800)}ElectricField{field_vector=(1,-0)}WidthAndHeight{width_and_height=(240,240)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1200,1500)}WidthAndHeight{width_and_height=(2220,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(2280,1500)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3660,60)}

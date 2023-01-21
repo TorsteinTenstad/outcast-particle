@@ -56,7 +56,7 @@ public:
 			}
 			else
 			{
-				bool hovered_last_frame = !level.HasComponents<Hovered>(top_intersecting_id);
+				bool hovered_last_frame = level.HasComponents<Hovered>(top_intersecting_id);
 				level.GetComponent<Hovered>().clear();
 				level.AddComponents<Hovered>(top_intersecting_id);
 				if (!hovered_last_frame)

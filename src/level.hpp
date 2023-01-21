@@ -59,7 +59,6 @@ typedef std::variant<
 	std::map<int, Intersection>,
 	std::map<int, KeyConfigButton>,
 	std::map<int, KillOnIntersection>,
-	std::map<int, LevelButton>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
 	std::map<int, MagneticField>,

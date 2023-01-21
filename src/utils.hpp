@@ -2,6 +2,7 @@
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Keyboard.hpp"
 #include <array>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -26,6 +27,31 @@ float Dot(sf::Vector2f u, sf::Vector2f v);
 std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float eliment_w, float eliment_h, float spacing);
 
 std::string HumanName(sf::Keyboard::Key key);
+
+template <class K, class V>
+K NextKey(const std::map<K, V>& m, K key)
+{
+	assert(m.count(key) == 1);
+	auto it = m.find(key);
+	++it;
+	if (it == m.end())
+	{
+		return key;
+	}
+	return it->first;
+}
+template <class K, class V>
+K PrevKey(const std::map<K, V>& m, K key)
+{
+	assert(m.count(key) == 1);
+	auto it = m.find(key);
+	if (it == m.begin())
+	{
+		return key;
+	}
+	--it;
+	return it->first;
+}
 
 template <class T>
 int Sign(T x)

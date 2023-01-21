@@ -16,6 +16,7 @@ public:
 	void Update(Level& level, float dt)
 	{
 		Draw(level, &globals.render_window, level.drawables);
+		globals.render_window.display();
 	}
 
 	void CaptureLevel(Level& level, sf::Texture* texture, unsigned width, unsigned height)
