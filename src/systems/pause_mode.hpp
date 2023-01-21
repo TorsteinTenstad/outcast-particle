@@ -49,7 +49,7 @@ public:
 				functions.push_back([&]() { level.SetMode(PLAY_MODE); });
 			}
 
-			if (level_state == COMPLETED)
+			if (level_state == COMPLETED && !is_in_level_editing_)
 			{
 				text.push_back("Next level");
 				functions.push_back(std::bind(set_level_, active_level_id_ + 1));
