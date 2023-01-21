@@ -9,10 +9,10 @@ Game::Game()
 {
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
-	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1));
-	RegisterGameSystem<MenuNavigatonSystem>();
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>(); // Must be between MenuNavigatonSystem and MouseInterationSystem
 	RegisterGameSystem<MouseInterationSystem>();
+	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly below MouseInterationSystem for Hovered component to work correctly
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>();
@@ -47,7 +47,7 @@ Game::Game()
 	const std::filesystem::path levels_path { "levels/" };
 	for (const auto& folder : std::filesystem::directory_iterator { levels_path })
 	{
-		std::string group = SplitString(folder.path().stem().string(), "_").back();
+		std::string group = folder.path().stem().string();
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
 			level_groups_[group].push_back(level_file_path.path().string());
@@ -124,7 +124,6 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 	GetGameSystem<RenderShapesSystem>().Update(level, 0);
 	GetGameSystem<RenderTextSystem>().Update(level, 0);
 	GetGameSystem<DrawSystem>().CaptureLevel(level, texture, width, height);
-	texture->copyToImage().saveToFile(identifier + ".png");
 	return identifier;
 }
 

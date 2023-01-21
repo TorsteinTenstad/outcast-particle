@@ -5,8 +5,11 @@ class LevelMenuUI
 public:
 	bool initialized = false;
 
-	std::string level_image_identifier;
-	int image_entity_iid = -1;
+	std::string level_group;
+
+	std::vector<int> button_entity_ids = {};
+
+	std::string* level_image_identifier;
 
 	int collected_coins = -1;
 	int all_coins = -1;

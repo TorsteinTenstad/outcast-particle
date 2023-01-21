@@ -7,6 +7,8 @@
 
 #define PI 3.141593
 
+std::string GetLevelNameFromId(const std::string& level_id);
+
 bool IsMenu(const std::string& level_id);
 
 float FakeSigmoid(float x);

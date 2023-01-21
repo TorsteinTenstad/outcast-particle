@@ -5,7 +5,10 @@ class ReceivesMouseEvents
 class Pressed
 {
 };
-class MouseEnteredThisFrame
+class Hovered
+{
+};
+class HoveredStartedThisFrame
 {
 };
 class PressedImagePath

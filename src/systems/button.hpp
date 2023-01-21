@@ -26,9 +26,14 @@ public:
 			on_released_this_frame->func();
 			break;
 		}
-		for (auto [entity_id, mouse_entered_this_frame, on_mouse_entered_this_frame] : level.GetEntitiesWith<MouseEnteredThisFrame, OnMouseEnteredThisFrame>())
+		for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
 		{
-			on_mouse_entered_this_frame->func();
+			on_hovered->func();
+			break;
+		}
+		for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
+		{
+			on_hovered_started_this_frame->func();
 			break;
 		}
 

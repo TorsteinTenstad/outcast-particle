@@ -9,7 +9,13 @@ public:
 	std::function<void(void)> func;
 };
 
-class OnMouseEnteredThisFrame
+class OnHoveredStartedThisFrame
+{
+public:
+	std::function<void(void)> func;
+};
+
+class OnHovered
 {
 public:
 	std::function<void(void)> func;

@@ -65,8 +65,10 @@ typedef std::variant<
 	std::map<int, MagneticField>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,
-	std::map<int, MouseEnteredThisFrame>,
-	std::map<int, OnMouseEnteredThisFrame>,
+	std::map<int, Hovered>,
+	std::map<int, OnHovered>,
+	std::map<int, HoveredStartedThisFrame>,
+	std::map<int, OnHoveredStartedThisFrame>,
 	std::map<int, OnReleasedThisFrame>,
 	std::map<int, OrientationDependentDrawInfo>,
 	std::map<int, PauseMenuItems>,
@@ -120,8 +122,28 @@ public:
 	template <class Component>
 	std::map<int, Component>& GetComponent();
 
+	template <class Component>
+	std::map<int, Component>* GetComponentMap();
+
+private:
+	template <class Component>
+	bool HasComponent(int entity_id);
+
+public:
+	template <class... Component>
+	bool HasComponents(int entity_id);
+
+	template <class Component>
+	Component* AddComponent(int entity_id);
+
+	template <class... Component>
+	std::tuple<Component*...> AddComponents(int entity_id);
+
 	template <class... Component>
 	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
+
+	template <class... Component>
+	std::tuple<int, Component*...> CreateEntitiyWith();
 
 	template <class... Component>
 	void DeleteEntitiesWith();
