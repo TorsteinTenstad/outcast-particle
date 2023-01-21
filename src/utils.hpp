@@ -1,11 +1,13 @@
 #pragma once
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Keyboard.hpp"
+#include <array>
 #include <string>
 #include <vector>
-#include <array>
 
 #define PI 3.141593
+
+bool IsMenu(const std::string& level_id);
 
 float FakeSigmoid(float x);
 

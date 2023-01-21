@@ -11,11 +11,11 @@
 class CoinSystem : public GameSystem
 {
 private:
-	std::map<int, int>* level_coin_records_;
+	std::map<std::string, int>* level_coin_records_;
 
 public:
 	using GameSystem::GameSystem;
-	void SetCoinRecords(std::map<int, int>* coin_records)
+	void SetCoinRecords(std::map<std::string, int>* coin_records)
 	{
 		level_coin_records_ = coin_records;
 	}

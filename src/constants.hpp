@@ -1,9 +1,9 @@
 #pragma once
 #include <array>
 
-#define MAIN_MENU -1
-#define LEVEL_MENU -2
-#define OPTIONS_MENU -3
+#define MAIN_MENU "_MAIN_MENU"
+#define LEVEL_MENU "_LEVEL_MENU"
+#define OPTIONS_MENU "_OPTIONS_MENU"
 
 #define STARTING_LEVEL MAIN_MENU
 

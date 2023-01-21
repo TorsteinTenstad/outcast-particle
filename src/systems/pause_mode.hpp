@@ -4,17 +4,17 @@
 class PauseMode : public GameSystem
 {
 private:
-	std::function<void(int)> set_level_;
+	std::function<void(std::string)> set_level_;
 
 public:
 	using GameSystem::GameSystem;
-	void GiveFunctions(std::function<void(int)> set_level)
+	void GiveFunctions(std::function<void(std::string)> set_level)
 	{
 		set_level_ = set_level;
 	}
 	void Update(Level& level, float dt)
 	{
-		if (active_level_id_ < 0)
+		if (IsMenu(active_level_id_))
 		{
 			return;
 		}
@@ -51,8 +51,8 @@ public:
 
 			if (level_state == COMPLETED && !is_in_level_editing_)
 			{
-				text.push_back("Next level");
-				functions.push_back(std::bind(set_level_, active_level_id_ + 1));
+				//text.push_back("Next level");
+				//functions.push_back(std::bind(set_level_, active_level_id_ + 1));
 			}
 
 			text.push_back("Restart level");

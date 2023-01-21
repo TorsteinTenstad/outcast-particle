@@ -1,8 +1,14 @@
 #include "utils.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Keyboard.hpp"
-#include <math.h>
+#include "constants.hpp"
 #include <assert.h>
+#include <math.h>
+
+bool IsMenu(const std::string& level_id)
+{
+	return level_id == MAIN_MENU || level_id == LEVEL_MENU || level_id == OPTIONS_MENU;
+}
 
 float FakeSigmoid(float x)
 {

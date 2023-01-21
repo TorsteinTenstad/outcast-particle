@@ -50,37 +50,32 @@ Game::Game()
 		std::string group = SplitString(folder.path().stem().string(), "_").back();
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
-			int level_id = next_available_level_id_++;
-			level_groups_[group].push_back(level_id);
-			level_paths_[level_id] = level_file_path.path().string();
+			level_groups_[group].push_back(level_file_path.path().string());
 		}
 	}
 
-	GenerateLevelTexture(4, 800, 450);
 	GoToMainMenu();
 }
 
-void Game::SetLevel(int level_id)
+void Game::SetLevel(std::string level_id)
 {
-	assert(active_level_.GetMode() == PAUSE_MODE || active_level_id_ < 0);
+	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
 	active_level_ = Level();
-	switch (level_id)
+	if (level_id == MAIN_MENU)
 	{
-		case MAIN_MENU:
-			GoToMainMenu();
-			break;
-		case LEVEL_MENU:
-			GoToLevelMenu();
-			break;
-		case OPTIONS_MENU:
-			GoToOptionsMenu();
-			break;
-
-		default:
-			assert(level_id >= 0);
-			assert(level_id < next_available_level_id_);
-			active_level_.LoadFromFile(level_paths_[level_id]);
-			break;
+		GoToMainMenu();
+	}
+	else if (level_id == LEVEL_MENU)
+	{
+		GoToLevelMenu();
+	}
+	else if (level_id == OPTIONS_MENU)
+	{
+		GoToOptionsMenu();
+	}
+	else
+	{
+		active_level_.LoadFromFile(level_id);
 	}
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;
@@ -116,12 +111,12 @@ void Game::Update(float dt)
 	}
 }
 
-std::string Game::GenerateLevelTexture(int level_id, unsigned width, unsigned height)
+std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, unsigned height)
 {
-	std::string identifier = "_level" + std::to_string(level_id);
+	std::string identifier = "_level_" + level_id;
 	sf::Texture* texture = GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier);
 	Level level = Level();
-	level.LoadFromFile(level_paths_[level_id]);
+	level.LoadFromFile(level_id);
 	GetGameSystem<BackgroundSystem>().Update(level, 0);
 	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);
 	GetGameSystem<PlayerSystem>().Update(level, 0);

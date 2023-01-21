@@ -7,11 +7,11 @@
 class LevelCompletionTimeSystem : public GameSystem
 {
 private:
-	std::map<int, float>* level_completion_time_records_;
+	std::map<std::string, float>* level_completion_time_records_;
 
 public:
 	using GameSystem::GameSystem;
-	void SetLevelCompletionTimeRecords(std::map<int, float>* level_completion_time_records)
+	void SetLevelCompletionTimeRecords(std::map<std::string, float>* level_completion_time_records)
 	{
 		level_completion_time_records_ = level_completion_time_records;
 	}

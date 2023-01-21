@@ -49,13 +49,11 @@ private:
 	bool restart_update_loop_ = false;
 	bool is_in_level_editing_ = false;
 
-	int next_available_level_id_ = 0;
-	int active_level_id_ = MAIN_MENU;
+	std::string active_level_id_ = MAIN_MENU;
 	Level active_level_;
-	std::map<std::string, std::vector<int>> level_groups_;
-	std::map<int, std::string> level_paths_;
-	std::map<int, float> level_completion_time_records_;
-	std::map<int, int> level_coin_records_;
+	std::map<std::string, std::vector<std::string>> level_groups_;
+	std::map<std::string, float> level_completion_time_records_;
+	std::map<std::string, int> level_coin_records_;
 
 	int next_available_system_id_ = 0;
 	std::map<std::type_index, int> type_to_system_id_;
@@ -78,9 +76,9 @@ private:
 	template <class System>
 	System& RegisterPhysicsGameSystem();
 
-	void SetLevel(int level_id);
+	void SetLevel(std::string level_id);
 	void ButtunFuncEditLevel();
-	std::string GenerateLevelTexture(int level_id, unsigned width, unsigned height);
+	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
 	void ToggleFullscreen();
 	void ExitGame();
 
