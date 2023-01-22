@@ -37,7 +37,6 @@ public:
 			return;
 		}
 
-		auto& button_map = level.GetComponent<Button>();
 		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
 		auto& text_map = level.GetComponent<Text>();
 		for (auto [entity_id, pressed_this_frame, key_config_button] : level.GetEntitiesWith<PressedThisFrame, KeyConfigButton>())
