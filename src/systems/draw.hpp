@@ -15,7 +15,7 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		Draw(level, &globals.render_window, level.drawables);
+		Draw(level, &globals.render_window, level.drawables, true);
 		globals.render_window.display();
 	}
 
@@ -24,12 +24,12 @@ public:
 		sf::RenderTexture render_texture;
 		render_texture.create(width, height);
 		render_texture.setView(sf::View(level.size / 2.f, level.size));
-		Draw(level, &render_texture, level.drawables);
+		Draw(level, &render_texture, level.drawables, false);
 		render_texture.display();
 		*texture = render_texture.getTexture();
 	}
 
-	void Draw(Level& level, sf::RenderTarget* render_target, std::map<int, std::vector<EntityBoundDrawable>> drawables)
+	void Draw(Level& level, sf::RenderTarget* render_target, std::map<int, std::vector<EntityBoundDrawable>> drawables, bool use_shaders)
 	{
 		auto& shader_map = level.GetComponent<Shader>();
 
@@ -40,7 +40,7 @@ public:
 			for (auto entity_bound_drawable : entity_bound_drawables)
 			{
 				int entity_id = entity_bound_drawable.entity_id;
-				if (shader_map.count(entity_id) > 0) // && level.mode == PLAY_MODE)
+				if (use_shaders && shader_map.count(entity_id) > 0)
 				{
 					render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(entity_id, &shader_map[entity_id]));
 				}
