@@ -16,21 +16,25 @@ public:
 	{
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
 
-		for (auto [entity_id, pressed_this_frame, button] : level.GetEntitiesWith<PressedThisFrame, Button>())
+		for (auto [entity_id, pressed_this_frame, pressed_image_path] : level.GetEntitiesWith<PressedThisFrame, PressedImagePath>())
 		{
-			if (!button->pressed_image_path.empty())
-			{
-				draw_info_map[entity_id].image_path = button->pressed_image_path;
-			}
+			draw_info_map[entity_id].image_path = pressed_image_path->pressed_image_path;
 		}
-		for (auto [entity_id, released_this_frame, button] : level.GetEntitiesWith<ReleasedThisFrame, Button>())
+		for (auto [entity_id, released_this_frame, on_released_this_frame, pressed_image_path] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame, PressedImagePath>())
 		{
-			if (!button->image_path.empty())
-			{
-				draw_info_map[entity_id].image_path = button->image_path;
-			}
-			button->on_click();
-			break;
+			draw_info_map[entity_id].image_path = pressed_image_path->image_path;
+			on_released_this_frame->func();
+			return;
+		}
+		for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
+		{
+			on_hovered->func();
+			return;
+		}
+		for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
+		{
+			on_hovered_started_this_frame->func();
+			return;
 		}
 
 		auto& button_map = level.GetComponent<Button>();
@@ -84,8 +88,4 @@ public:
 			}
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

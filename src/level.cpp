@@ -6,8 +6,7 @@
 
 int Level::next_available_entity_id_ = 0;
 
-Level::Level(int level_id) :
-	id(level_id)
+Level::Level()
 {
 }
 
@@ -59,6 +58,40 @@ int Level::CreateEntityId()
 	return next_available_entity_id_++;
 }
 
+LevelState Level::ComputeState()
+{
+	for (auto& [entity_id, goal] : GetEntitiesWith<Goal>())
+	{
+		if (goal->is_goal)
+		{
+			return COMPLETED;
+		}
+	}
+	if (GetEntitiesWith<Player>().size() == 0)
+	{
+		return FAILED;
+	}
+	return PLAYING;
+}
+
+LevelMode Level::GetMode()
+{
+	return mode_;
+}
+
+void Level::SetMode(LevelMode level_mode)
+{
+	if (mode_ == EDIT_MODE)
+	{
+		SaveToFile();
+	}
+	if (level_mode == EDIT_MODE)
+	{
+		LoadFromFile();
+	}
+	mode_ = level_mode;
+}
+
 void Level::LoadFromFile()
 {
 	LoadFromFile(savefile_path_);
@@ -69,53 +102,32 @@ void Level::SaveToFile()
 	SaveToFile(savefile_path_);
 }
 
-int Level::AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path)
+int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
 {
-	int id = CreateEntityId();
-	GetComponent<LevelButton>()[id].level = level;
-	GetComponent<DrawInfo>()[id].image_path = image_path;
-	GetComponent<DrawInfo>()[id].scale_to_fit = true;
-	GetComponent<DrawPriority>()[id].draw_priority = 1;
-	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	GetComponent<CanReceivePress>()[id] = {};
-	GetComponent<Border>()[id];
-	GetComponent<Button>()[id].on_click = on_click;
-	GetComponent<Button>()[id].image_path = image_path;
+	int id = level.AddBlueprint("BPButton");
+	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
+	level.GetComponent<OnReleasedThisFrame>()[id].func = on_click;
+	level.GetComponent<Text>()[id].content = button_text;
 	return id;
 }
 
-int Level::AddMenuButton(std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
+int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
 {
 	std::string image_path_suffix = "menu_wide.png";
 	std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
 	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
-	int id = AddBlueprint("BPButton");
-	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	GetComponent<Button>()[id].on_click = on_click;
-	GetComponent<Button>()[id].image_path = image_path;
-	GetComponent<Button>()[id].pressed_image_path = pressed_image_path;
-	GetComponent<Text>()[id].content = button_text;
-	return id;
-}
-
-int Level::AddOptionsButton(sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
-{
-	std::string image_path_suffix = "menu_wide.png";
-	std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
-	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
-	int id = CreateEntityId();
-	GetComponent<DrawInfo>()[id].image_path = image_path;
-	GetComponent<DrawInfo>()[id].scale_to_fit = true;
-	GetComponent<DrawPriority>()[id].draw_priority = 1;
-	GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	GetComponent<CanReceivePress>()[id] = {};
-	GetComponent<KeyConfigButton>()[id].key = key;
-	GetComponent<KeyConfigButton>()[id].image_path = image_path;
-	GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;
-	GetComponent<Text>()[id].content = button_text;
-	GetComponent<Text>()[id].size = text_size;
+	int id = level.CreateEntityId();
+	level.GetComponent<DrawInfo>()[id].image_path = image_path;
+	level.GetComponent<DrawInfo>()[id].scale_to_fit = true;
+	level.GetComponent<DrawPriority>()[id].draw_priority = 1;
+	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
+	level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
+	level.GetComponent<ReceivesMouseEvents>()[id] = {};
+	level.GetComponent<KeyConfigButton>()[id].key = key;
+	level.GetComponent<KeyConfigButton>()[id].image_path = image_path;
+	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;
+	level.GetComponent<Text>()[id].content = button_text;
+	level.GetComponent<Text>()[id].size = text_size;
 	return id;
 }
 
@@ -130,20 +142,4 @@ int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, 
 	level.GetComponent<Shader>()[id].float_uniforms["_time"];
 	level.GetComponent<Shader>()[id].vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
 	return id;
-}
-
-LevelState ComputeState(Level& level)
-{
-	for (auto& [entity_id, goal] : level.GetEntitiesWith<Goal>())
-	{
-		if (goal->is_goal)
-		{
-			return WON;
-		}
-	}
-	if (level.GetEntitiesWith<Player>().size() == 0)
-	{
-		return FAILED;
-	}
-	return PLAYING;
 }

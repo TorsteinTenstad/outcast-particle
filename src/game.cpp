@@ -1,50 +1,22 @@
 #include "game.hpp"
 #include <chrono>
 #include <filesystem>
+#include <functional>
 #include <string>
 #include <thread>
 
-using namespace std::chrono_literals;
-
-Level& Game::AddLevel()
-{
-	return AddLevel(next_available_level_id_++);
-}
-
-Level& Game::AddLevel(int id)
-{
-	assert(levels_.find(id) == levels_.end());
-	if (id == next_available_level_id_)
-	{
-		next_available_level_id_++;
-	}
-	levels_.emplace(id, Level(id));
-	return GetLevel(id);
-}
-
-Level& Game::GetLevel(int id)
-{
-	return levels_.find(id)->second;
-}
-
-Level& Game::GetActiveLevel()
-{
-	return levels_.find(active_level_)->second;
-}
-
 Game::Game()
 {
-	RegisterGameSystem<ModeSystem>().SetGameControlFunctions(std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::GetMode, this), std::bind(&Game::InLevel, this));
 	RegisterGameSystem<PlayerSystem>();
-
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<ButtonSystem>();
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<MouseInterationSystem>();
+	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly below MouseInterationSystem for Hovered component to work correctly
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>();
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
-	RegisterGameSystem<LevelButtonSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<FaceSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
@@ -55,7 +27,7 @@ Game::Game()
 	RegisterGameSystem<DisplayVelocitySystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ViewSystem>();
-	RegisterGameSystem<PauseMode>();
+	RegisterGameSystem<PauseMode>().GiveFunctions(std::bind(&Game::SetLevel, this, std::placeholders::_1));
 	RegisterGameSystem<ScheduledDeleteSystem>();
 
 	RegisterPhysicsGameSystem<ElectricForceSystem>();
@@ -70,71 +42,43 @@ Game::Game()
 	RegisterPhysicsGameSystem<CollisionSystem>();
 	RegisterPhysicsGameSystem<GoalSystem>();
 	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
-	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&coin_records_);
+	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
-	sf::Vector2f menu_size = sf::Vector2f(MENU_LEVEL_WIDTH, MENU_LEVEL_WIDTH / ASPECT_RATIO);
-	AddLevel(MAIN_MENU).size = menu_size;
-	AddLevel(LEVEL_MENU).size = menu_size;
-	AddLevel(OPTIONS_MENU).size = menu_size;
+	const std::filesystem::path levels_path { "levels/" };
+	for (const auto& folder : std::filesystem::directory_iterator { levels_path })
+	{
+		std::string group = folder.path().stem().string();
+		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
+		{
+			level_groups_[group].push_back(level_file_path.path().string());
+		}
+	}
+
+	GoToMainMenu();
 }
 
-void Game::Init()
+void Game::SetLevel(std::string level_id)
 {
-	// Main menu
-	int menu_text_size = 300;
-	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ExitGame, this) };
-	std::vector<std::string> menu_text = { "Level Menu", "Options", "Toggle fullscreen", "Exit Game" };
-	auto menu_button_positions = GridHelper(menu_text.size(), 1, 0, 432, 200);
-	for (unsigned i = 0; i < menu_text.size(); ++i)
+	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
+	active_level_ = Level();
+	if (level_id == MAIN_MENU)
 	{
-		sf::Vector2 button_position = menu_button_positions[i] + GetLevel(MAIN_MENU).size / 2.f;
-		float x = button_position.x;
-		float y = button_position.y;
-		GetLevel(MAIN_MENU).AddMenuButton(menu_funtions[i], x, y, menu_text[i]);
+		GoToMainMenu();
 	}
-
-	// Level menu & level generation
-	int level_id = 0;
-	const std::filesystem::path level_path { "levels/" };
-	for (const auto& entry : std::filesystem::directory_iterator { level_path })
+	else if (level_id == LEVEL_MENU)
 	{
-		AddLevel().LoadFromFile(entry.path().string());
-		level_id++;
+		GoToLevelMenu();
 	}
-	int number_of_levels = level_id;
-
-	int columns = floor(sqrt(number_of_levels)) + 1;
-	float margin = 100;
-	float button_w = (MENU_LEVEL_WIDTH - (columns + 1) * margin - 4 * margin) / columns;
-	float button_h = button_w / ASPECT_RATIO;
-	auto button_positions = GridHelper(number_of_levels, columns, button_w, button_h, margin);
-	for (int i = 0; i < number_of_levels; ++i)
+	else if (level_id == OPTIONS_MENU)
 	{
-		sf::Vector2 button_position = button_positions[i] + GetLevel(LEVEL_MENU).size / 2.f;
-		float x = button_position.x;
-		float y = button_position.y;
-		std::string level_texture_identifier = GenerateLevelTexture(i);
-		int id = GetLevel(LEVEL_MENU).AddLevelButton(i, std::bind(&Game::SetLevel, this, i), x, y, button_w, button_h, level_texture_identifier);
+		GoToOptionsMenu();
 	}
-
-	// Options menu
-	float options_button_w = 3072;
-	float options_button_h = 432;
-	int options_text_size = 200;
-	std::vector<sf::Keyboard::Key*> options_keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.MENU, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.EDIT_MODE };
-	std::vector<std::string> options_text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
-	auto options_button_positions = GridHelper(options_text.size(), 2, options_button_w, options_button_h, 200);
-	for (unsigned i = 0; i < options_text.size(); ++i)
+	else
 	{
-		std::string text = options_text[i] + ": " + HumanName(*options_keys[i]);
-		sf::Vector2 button_position = options_button_positions[i] + GetLevel(OPTIONS_MENU).size / 2.f;
-		float x = button_position.x;
-		float y = button_position.y;
-		GetLevel(OPTIONS_MENU).AddOptionsButton(options_keys[i], x, y, options_button_w, options_button_h, text, options_text_size);
+		active_level_.LoadFromFile(level_id);
 	}
-	GetLevel(OPTIONS_MENU).AddMenuButton(std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, "Main Menu");
-
-	active_level_ = STARTING_LEVEL;
+	active_level_id_ = level_id;
+	restart_update_loop_ = true;
 }
 
 void Game::Update(float dt)
@@ -142,122 +86,44 @@ void Game::Update(float dt)
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
 	{
-		game_systems_[system_id]->Update(GetActiveLevel(), dt);
+		game_systems_[system_id]->Update(active_level_, dt);
+		if (restart_update_loop_)
+		{
+			restart_update_loop_ = false;
+			return;
+		}
 	}
-	if (active_mode_ == PLAY_MODE)
+	if (active_level_.GetMode() == PLAY_MODE)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{
 			for (const auto& system_id : physics_game_system_ids_)
 			{
-				game_systems_[system_id]->Update(GetActiveLevel(), dt / physics_ticks_per_frame_);
+				game_systems_[system_id]->Update(active_level_, dt / physics_ticks_per_frame_);
+				if (restart_update_loop_)
+				{
+					restart_update_loop_ = false;
+					return;
+				}
 			}
 			cursor_and_keys_.ResetFrameEvents();
 		}
 	}
 }
 
-Game::~Game()
+std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, unsigned height)
 {
-	SetMode(PLAY_MODE);
-}
-
-void Game::SetLevel(int level)
-{
-	SetMode(PLAY_MODE);
-	for (auto& [type_id, game_system] : game_systems_)
-	{
-		game_system->OnExitLevel(GetActiveLevel());
-	}
-	active_level_ = level;
-	if (active_level_ >= 0)
-	{
-		GetActiveLevel().LoadFromFile();
-		GenerateLevelTexture(active_level_);
-	}
-	for (auto& [type_id, game_system] : game_systems_)
-	{
-		game_system->OnEnterLevel(GetActiveLevel());
-	}
-}
-
-Mode Game::GetMode()
-{
-	return active_mode_;
-}
-
-void Game::SetMode(Mode next_mode)
-{
-	if (active_mode_ == next_mode)
-	{
-		return;
-	}
-	switch (active_mode_)
-	{
-		case EDIT_MODE: {
-			GetGameSystem<EditModeSystem>().CloseBlueprintMenu(GetActiveLevel());
-			GetActiveLevel().SaveToFile();
-			break;
-		}
-		case PLAY_MODE:
-			break;
-		case PAUSE_MODE:
-			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
-			break;
-		case LEVEL_COMPLETED_MODE:
-			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
-			break;
-		case LEVEL_FAILED_MODE:
-			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
-			break;
-		default:
-			assert(false);
-	}
-
-	for (auto& [type_id, game_system] : game_systems_)
-	{
-		game_system->OnExitMode(GetActiveLevel());
-	}
-	active_mode_ = next_mode;
-	for (auto& [type_id, game_system] : game_systems_)
-	{
-		game_system->OnEnterMode(GetActiveLevel());
-	}
-
-	switch (next_mode)
-	{
-		case EDIT_MODE: {
-			GetActiveLevel().LoadFromFile();
-			break;
-		}
-		case PLAY_MODE:
-			break;
-		case PAUSE_MODE:
-			GetGameSystem<PauseMode>().AddPauseButtons(GetActiveLevel(), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
-			break;
-		case LEVEL_COMPLETED_MODE:
-			GetGameSystem<PauseMode>().AddLevelCompletedButtons(GetActiveLevel(), active_level_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetMode, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
-			break;
-		case LEVEL_FAILED_MODE:
-			GetGameSystem<PauseMode>().AddLevelFailedButtons(GetActiveLevel(), std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::ResetActiveLevel, this));
-			break;
-		default:
-			assert(false);
-	}
-}
-
-std::string Game::GenerateLevelTexture(int level_id)
-{
-	sf::Texture texture;
-	texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
-	int active_level_before_capture = active_level_;
-	active_level_ = level_id;
-	globals.render_window.setView(sf::View(GetLevel(level_id).size / 2.f, GetLevel(level_id).size));
-	Update(0);
-	active_level_ = active_level_before_capture;
-	texture.update(globals.render_window);
-	std::string identifier = "level" + std::to_string(level_id);
-	GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier, texture);
+	std::string identifier = "_level_" + level_id;
+	sf::Texture* texture = GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier);
+	Level level = Level();
+	level.LoadFromFile(level_id);
+	GetGameSystem<BackgroundSystem>().Update(level, 0);
+	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);
+	GetGameSystem<PlayerSystem>().Update(level, 0);
+	GetGameSystem<FaceSystem>().Update(level, 0);
+	GetGameSystem<RenderShapesSystem>().Update(level, 0);
+	GetGameSystem<RenderTextSystem>().Update(level, 0);
+	GetGameSystem<DrawSystem>().CaptureLevel(level, texture, width, height);
 	return identifier;
 }
 
@@ -277,14 +143,4 @@ void Game::ToggleFullscreen()
 void Game::ExitGame()
 {
 	globals.render_window.close();
-}
-
-void Game::ResetActiveLevel()
-{
-	SetLevel(active_level_);
-}
-
-bool Game::InLevel()
-{
-	return active_level_ >= 0;
 }

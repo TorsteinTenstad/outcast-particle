@@ -1,6 +1,6 @@
 #pragma once
-#include <functional>
 #include <SFML/System/Vector2.hpp>
+#include <functional>
 
 class AnimatedPosition
 {

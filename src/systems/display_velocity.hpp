@@ -1,11 +1,11 @@
 #pragma once
 #include "SFML/Graphics/RectangleShape.hpp"
-#include <math.h>
 #include "components/physics.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
 #include "utils.hpp"
+#include <math.h>
 
 static float Angle(sf::Vector2f v)
 {
@@ -18,7 +18,7 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		if (mode_ != EDIT_MODE)
+		if (level.GetMode() != EDIT_MODE)
 		{
 			return;
 		}
@@ -36,8 +36,4 @@ public:
 			globals.render_window.draw(indicator);
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

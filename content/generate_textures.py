@@ -11,7 +11,7 @@ def generate_goal_texture():
     goal.export_png('content\\textures_generated\\goal.png', 120, 120)
 
 
-def generate_particle_texture(name, outer_color, inner_color, sign='', scale = 1):
+def generate_particle_texture(name, outer_color, inner_color, sign='', scale=1):
     inner_r = 12*scale
     particle = SVG(30, 30)
     particle.add(circle(15, 15, 15, outer_color))
@@ -19,10 +19,13 @@ def generate_particle_texture(name, outer_color, inner_color, sign='', scale = 1
     sign_size = 18*scale
     sight_thickness = 3*scale
     if sign == '-':
-        particle.add(rect(sign_size, sight_thickness, 15-sign_size/2, 15-sight_thickness/2, sight_thickness/2))
+        particle.add(rect(sign_size, sight_thickness, 15 -
+                     sign_size/2, 15-sight_thickness/2, sight_thickness/2))
     if sign == '+':
-        particle.add(rect(sign_size, sight_thickness, 15-sign_size/2, 15-sight_thickness/2, sight_thickness/2))
-        particle.add(rect(sight_thickness, sign_size, 15-sight_thickness/2, 15-sign_size/2, sight_thickness/2))
+        particle.add(rect(sign_size, sight_thickness, 15 -
+                     sign_size/2, 15-sight_thickness/2, sight_thickness/2))
+        particle.add(rect(sight_thickness, sign_size, 15 -
+                     sight_thickness/2, 15-sign_size/2, sight_thickness/2))
     particle.set_inkscape_path(
         'C:\\Program Files\\Inkscape\\bin\\inkscape.exe')
     particle.export_png(f'content\\textures_generated\\{name}.png', 240, 240)
@@ -125,18 +128,18 @@ def laser_texture():
 if __name__ == '__main__':
 
     GENERATE_MAGNETIC_FELD_TEXTURES = False
-    GENERATE_BUTTON_TEXTURES = False
+    GENERATE_BUTTON_TEXTURES = True
     GENERATE_LASER_TEXTURE = False
     GENERATE_PARTICLE_TEXTURES = False
-    GENERATE_NEUTRAL_PLAYER_TEXTURES = True
+    GENERATE_NEUTRAL_PLAYER_TEXTURES = False
 
     if GENERATE_PARTICLE_TEXTURES:
         red_colors = ['#550000', '#610000', '#6e0000', '#7b0000', '#880000', '#960000', '#a40004', '#b1000f', '#be0518', '#ca151f',
-              '#d42426', '#de2f2d', '#e83a34', '#f2443b', '#fb4e43', '#ff5e50', '#ff705f', '#ff7f6c', '#ff8e79', '#ff9c85', '#ffa991', '#ffb69d']
+                      '#d42426', '#de2f2d', '#e83a34', '#f2443b', '#fb4e43', '#ff5e50', '#ff705f', '#ff7f6c', '#ff8e79', '#ff9c85', '#ffa991', '#ffb69d']
         green_colors = ['#002500', '#002e00', '#003700', '#004100', '#004b00', '#005500', '#005f00', '#006a00', '#007500', '#007f03',
-                '#038a14', '#1a9520', '#2b9f2b', '#39aa36', '#45b440', '#51bf4a', '#5dca54', '#68d55e', '#74e068', '#7feb72', '#8bf67d', '#a2ff93']
+                        '#038a14', '#1a9520', '#2b9f2b', '#39aa36', '#45b440', '#51bf4a', '#5dca54', '#68d55e', '#74e068', '#7feb72', '#8bf67d', '#a2ff93']
         blue_colors = ['#001746', '#002051', '#00295c', '#003367', '#003d73', '#00477e', '#00518a', '#005b95', '#0066a1', '#0c70ad',
-               '#257ab8', '#3585c3', '#448fce', '#5199d9', '#5da4e5', '#69aff0', '#75b9fc', '#83c5ff', '#90d2ff', '#9ddeff', '#aaebff', '#b7f7ff']
+                       '#257ab8', '#3585c3', '#448fce', '#5199d9', '#5da4e5', '#69aff0', '#75b9fc', '#83c5ff', '#90d2ff', '#9ddeff', '#aaebff', '#b7f7ff']
 
         for color_name, colors in zip(['red', 'green', 'blue'], [red_colors, green_colors, blue_colors]):
             for sign in ['', '-', '+']:
@@ -146,11 +149,12 @@ if __name__ == '__main__':
                     outer_color = colors[5+i]
                     inner_color = colors[7+i]
                     name = f'particle_{color_name}_{sign}{strength}'
-                    generate_particle_texture(name, outer_color, inner_color, sign, scale)
+                    generate_particle_texture(
+                        name, outer_color, inner_color, sign, scale)
     if GENERATE_LASER_TEXTURE:
         laser_texture()
     if GENERATE_BUTTON_TEXTURES:
-        for (w, h) in [[3072, 432], [700, 432],[6344,432]]:
+        for (w, h) in [[3072, 432], [700, 432], [500, 500], [3000, 500], [6344, 432]]:
             button_texture(w, h, 24)
     if GENERATE_MAGNETIC_FELD_TEXTURES:
         purple_colors = ['#1b0044', '#441e6c',

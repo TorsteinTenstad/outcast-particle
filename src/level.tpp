@@ -1,6 +1,7 @@
 #include "level.hpp"
 #include <cassert>
 
+// NOTE: This function is being faced out and should not be used
 template <class Component>
 std::map<int, Component>& Level::GetComponent()
 {
@@ -10,6 +11,50 @@ std::map<int, Component>& Level::GetComponent()
 		components_[typeid(Component)] = t_map;
 	}
 	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
+}
+
+template <class Component>
+std::map<int, Component>* Level::GetComponentMap()
+{
+	if (components_.count(typeid(Component)) == 0)
+	{
+		std::map<int, Component> t_map;
+		components_[typeid(Component)] = t_map;
+	}
+	return &std::get<std::map<int, Component>>(components_[typeid(Component)]);
+}
+
+template <class Component>
+bool Level::HasComponent(int entity_id)
+{
+	auto m = GetComponentMap<Component>();
+	return m->find(entity_id) != m->end();
+}
+
+template <class... Component>
+bool Level::HasComponents(int entity_id)
+{
+	return (HasComponent<Component>(entity_id) && ...);
+}
+
+template <class Component>
+Component* Level::AddComponent(int entity_id)
+{
+	auto m = GetComponentMap<Component>();
+	return &(*m)[entity_id];
+}
+
+template <class... Component>
+std::tuple<Component*...> Level::AddComponents(int entity_id)
+{
+	return std::make_tuple(AddComponent<Component>(entity_id)...);
+}
+
+template <class... Component>
+std::tuple<int, Component*...> Level::CreateEntitiyWith()
+{
+	int entity_id = CreateEntityId();
+	return std::tuple_cat(std::make_tuple(entity_id), AddComponents<Component...>(entity_id));
 }
 
 template <class OtherComponent, class... Component>

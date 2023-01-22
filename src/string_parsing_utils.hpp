@@ -1,4 +1,5 @@
 #pragma once
+#include "SFML/Graphics/Color.hpp"
 #include <sstream>
 #include <string>
 #include <vector>

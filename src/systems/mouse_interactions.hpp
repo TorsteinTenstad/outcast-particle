@@ -16,6 +16,7 @@ public:
 	{
 		level.GetComponent<ReleasedThisFrame>().clear();
 		level.GetComponent<PressedThisFrame>().clear();
+		level.GetComponent<HoveredStartedThisFrame>().clear();
 		if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
 		{
 			for (auto& [entity_id, pressed] : level.GetEntitiesWith<Pressed>())
@@ -25,37 +26,44 @@ public:
 			level.GetComponent<Pressed>().clear();
 		}
 
-		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
-		{
-			std::vector<std::tuple<int, int>> entities_intersecting_mouse; // contains (draw_priority, entity_id)
+		std::vector<std::tuple<int, int>> entities_intersecting_mouse; // contains (draw_priority, entity_id)
 
-			for (auto [entity_id, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, CanReceivePress, DrawPriority, Position>())
+		for (auto [entity_id, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, ReceivesMouseEvents, DrawPriority, Position>())
+		{
+			if (Magnitude(cursor_and_keys_.cursor_position - position->position) < radius->radius)
 			{
-				if (Magnitude(cursor_and_keys_.cursor_position - position->position) < radius->radius)
-				{
-					entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
-				}
+				entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 			}
-			for (auto [entity_id, width_and_height, can_receive_press, draw_priority, position] : level.GetEntitiesWith<WidthAndHeight, CanReceivePress, DrawPriority, Position>())
+		}
+		for (auto [entity_id, width_and_height, can_receive_press, draw_priority, position] : level.GetEntitiesWith<WidthAndHeight, ReceivesMouseEvents, DrawPriority, Position>())
+		{
+			float w = width_and_height->width_and_height.x;
+			float h = width_and_height->width_and_height.y;
+			sf::Vector2f offset = Abs(position->position - cursor_and_keys_.cursor_position);
+			if (offset.x < w / 2 && offset.y < h / 2)
 			{
-				float w = width_and_height->width_and_height.x;
-				float h = width_and_height->width_and_height.y;
-				sf::Vector2f offset = Abs(position->position - cursor_and_keys_.cursor_position);
-				if (offset.x < w / 2 && offset.y < h / 2)
-				{
-					entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
-				}
+				entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 			}
-			if (entities_intersecting_mouse.size() > 0)
+		}
+		if (entities_intersecting_mouse.size() > 0)
+		{
+			int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
+
+			if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 			{
-				int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
 				level.GetComponent<PressedThisFrame>()[top_intersecting_id];
 				level.GetComponent<Pressed>()[top_intersecting_id];
 			}
+			else
+			{
+				bool hovered_last_frame = level.HasComponents<Hovered>(top_intersecting_id);
+				level.GetComponent<Hovered>().clear();
+				level.AddComponents<Hovered>(top_intersecting_id);
+				if (!hovered_last_frame)
+				{
+					level.AddComponents<HoveredStartedThisFrame>(top_intersecting_id);
+				}
+			}
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

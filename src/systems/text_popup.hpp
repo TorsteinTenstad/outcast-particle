@@ -21,13 +21,9 @@ public:
 					level.GetComponent<DrawPriority>()[popup_id].draw_priority = UI_BASE_DRAW_PRIORITY;
 					level.GetComponent<Position>()[popup_id];
 					level.GetComponent<AnimatedPosition>()[popup_id].start_time = globals.time;
-					level.GetComponent<AnimatedPosition>()[popup_id].position_at_time_func = [=](float t) { return sf::Vector2f(level.size.x / 2, level.size.y / 2 + 200 * t); };
+					level.GetComponent<AnimatedPosition>()[popup_id].position_at_time_func = [&](float t) { return sf::Vector2f(level.size.x / 2, level.size.y / 2 + 200 * t); };
 				}
 			}
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

@@ -17,8 +17,5 @@ public:
 			shader->vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
+	
 };

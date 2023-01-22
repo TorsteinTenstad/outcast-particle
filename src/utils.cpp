@@ -1,8 +1,22 @@
 #include "utils.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Keyboard.hpp"
-#include <math.h>
+#include "constants.hpp"
+#include "string_parsing_utils.hpp"
 #include <assert.h>
+#include <filesystem>
+#include <math.h>
+
+std::string GetLevelNameFromId(const std::string& level_id)
+{
+	const std::filesystem::path path { level_id };
+	return SplitString(path.filename().stem().string(), "_").back();
+}
+
+bool IsMenu(const std::string& level_id)
+{
+	return level_id == MAIN_MENU || level_id == LEVEL_MENU || level_id == OPTIONS_MENU;
+}
 
 float FakeSigmoid(float x)
 {

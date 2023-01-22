@@ -11,13 +11,13 @@
 class CoinSystem : public GameSystem
 {
 private:
-	std::map<int, int>* coin_records_;
+	std::map<std::string, int>* level_coin_records_;
 
 public:
 	using GameSystem::GameSystem;
-	void SetCoinRecords(std::map<int, int>* coin_records)
+	void SetCoinRecords(std::map<std::string, int>* coin_records)
 	{
-		coin_records_ = coin_records;
+		level_coin_records_ = coin_records;
 	}
 	void Update(Level& level, float dt)
 	{
@@ -41,14 +41,10 @@ public:
 			}
 		}
 
-		if (mode_ == LEVEL_COMPLETED_MODE && ((*coin_records_)[level.id] <= 0 || (*coin_records_)[level.id] > counter))
+		if (level.ComputeState() == COMPLETED && ((*level_coin_records_)[active_level_id_] <= 0 || (*level_coin_records_)[active_level_id_] > counter))
 		{
-			(*coin_records_)[level.id] = counter;
+			(*level_coin_records_)[active_level_id_] = counter;
 			return;
 		}
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };

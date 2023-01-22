@@ -27,6 +27,5 @@ void SFML::RunWindow(std::function<void(float)> update_func)
 			seconds_since_last_fps_print = 0;
 		}
 		update_func(dt);
-		globals.render_window.display();
 	}
 }

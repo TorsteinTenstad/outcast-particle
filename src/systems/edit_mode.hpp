@@ -27,21 +27,11 @@ private:
 public:
 	void Update(Level& level, float dt)
 	{
-		if (mode_ != EDIT_MODE)
+		if (level.GetMode() != EDIT_MODE)
 		{
+			level.GetComponent<Border>().clear();
 			return;
 		}
-		auto& position_map = level.GetComponent<Position>();
-		auto& velocity_map = level.GetComponent<Velocity>();
-		auto& editable_map = level.GetComponent<Editable>();
-		auto& blueprint_menu_item_map = level.GetComponent<BlueprintMenuItem>();
-		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
-		auto& border_map = level.GetComponent<Border>();
-		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& draw_priority_map = level.GetComponent<DrawPriority>();
-		auto& charge_map = level.GetComponent<Charge>();
-		auto& electric_field_map = level.GetComponent<ElectricField>();
-		auto& magnetic_field_map = level.GetComponent<MagneticField>();
 
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
 		{
@@ -204,6 +194,7 @@ public:
 		}
 
 		// Edit rotation:
+		auto& electric_field_map = level.GetComponent<ElectricField>();
 		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
 		{
 			for (auto [entity_id, selected, width_and_height] : level.GetEntitiesWith<Selected, WidthAndHeight>())
@@ -278,7 +269,7 @@ public:
 		level.GetComponent<Position>()[menu_background_id].position = level.size / 2.f;
 		level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
 		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
-		level.GetComponent<CanReceivePress>()[menu_background_id];
+		level.GetComponent<ReceivesMouseEvents>()[menu_background_id];
 		float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
 		level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 		level.GetComponent<Border>()[menu_background_id];
@@ -299,8 +290,4 @@ public:
 		level.DeleteEntitiesWith<BlueprintMenuItem>();
 		blueprint_menu_is_open = false;
 	}
-	void OnEnterMode(Level& level) {};
-	void OnExitMode(Level& level) {};
-	void OnEnterLevel(Level& level) {};
-	void OnExitLevel(Level& level) {};
 };
