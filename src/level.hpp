@@ -6,6 +6,7 @@
 #include "components/children.hpp"
 #include "components/coin.hpp"
 #include "components/collision.hpp"
+#include "components/detect_input.hpp"
 #include "components/draw_info.hpp"
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
@@ -19,7 +20,6 @@
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/player_behaviours.hpp"
-#include "components/pressed.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
@@ -82,6 +82,7 @@ typedef std::variant<
 	std::map<int, ReceivesMouseEvents>,
 	std::map<int, ReleasedThisFrame>,
 	std::map<int, ScheduledDelete>,
+	std::map<int, ShortcutKey>,
 	std::map<int, SegmentedGlowEffect>,
 	std::map<int, Selected>,
 	std::map<int, Shader>,

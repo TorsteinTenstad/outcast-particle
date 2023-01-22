@@ -1,6 +1,14 @@
 #pragma once
+#include "SFML/Window/Keyboard.hpp"
+#include <string>
+
 class ReceivesMouseEvents
 {
+};
+class ShortcutKey
+{
+public:
+	sf::Keyboard::Key key;
 };
 class Pressed
 {

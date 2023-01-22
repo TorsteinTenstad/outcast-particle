@@ -1,7 +1,7 @@
 #pragma once
 #include "components/area.hpp"
+#include "components/detect_input.hpp"
 #include "components/physics.hpp"
-#include "components/pressed.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
@@ -24,6 +24,22 @@ public:
 				level.GetComponent<ReleasedThisFrame>()[entity_id];
 			}
 			level.GetComponent<Pressed>().clear();
+		}
+
+		for (auto [entity_id, shortcut_key] : level.GetEntitiesWith<ShortcutKey>())
+		{
+			if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key])
+			{
+				level.AddComponent<PressedThisFrame>(entity_id);
+			}
+		}
+
+		for (auto [entity_id, shortcut_key] : level.GetEntitiesWith<ShortcutKey>())
+		{
+			if (cursor_and_keys_.key_released_this_frame[shortcut_key->key])
+			{
+				level.AddComponent<ReleasedThisFrame>(entity_id);
+			}
 		}
 
 		std::vector<std::tuple<int, int>> entities_intersecting_mouse; // contains (draw_priority, entity_id)

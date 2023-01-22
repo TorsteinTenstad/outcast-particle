@@ -1,7 +1,7 @@
 #pragma once
 
 #include "components/button.hpp"
-#include "components/pressed.hpp"
+#include "components/detect_input.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"

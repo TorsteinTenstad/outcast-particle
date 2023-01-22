@@ -100,15 +100,17 @@ public:
 
 		for (int p : { -1, 1 })
 		{
-			auto [nav_btn_entity_id, nav_btn_draw_info, nav_btn_text, nav_btn_draw_priority, nav_btn_w_h, nav_btn_position, nav_btn_receives_mouse_events] = level.CreateEntitiyWith<DrawInfo, Text, DrawPriority, WidthAndHeight, Position, ReceivesMouseEvents>();
+			auto [nav_btn_entity_id, nav_btn_draw_info, nav_btn_text, nav_btn_draw_priority, nav_btn_w_h, nav_btn_position, nav_btn_receives_mouse_events, nav_btn_shortcut_key] = level.CreateEntitiyWith<DrawInfo, Text, DrawPriority, WidthAndHeight, Position, ReceivesMouseEvents, ShortcutKey>();
 			ui->entity_ids.push_back(nav_btn_entity_id);
 			if (p == -1)
 			{
 				ui->prev_group_button_id = nav_btn_entity_id;
+				nav_btn_shortcut_key->key = sf::Keyboard::Key::Left;
 			}
 			if (p == 1)
 			{
 				ui->next_group_button_id = nav_btn_entity_id;
+				nav_btn_shortcut_key->key = sf::Keyboard::Key::Right;
 			}
 			nav_btn_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 			nav_btn_draw_info->image_path = "content\\textures_generated\\button_500_500.png";
