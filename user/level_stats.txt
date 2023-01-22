@@ -1,0 +1,5 @@
+"levels/1_8.txt" Coin Record; 2 Completion Time Record; 12.6353
+"levels/1_3.txt" Coin Record; 0 Completion Time Record; 9.88797
+"levels/1_4.txt" Coin Record; 0 Completion Time Record; 31.0725
+"levels/2_1.txt" Coin Record; 0 Completion Time Record; 12.428
+"levels/1_1.txt" Coin Record; 3 Completion Time Record; 12.0913
