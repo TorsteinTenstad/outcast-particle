@@ -12,8 +12,35 @@ public:
 	{
 		for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigator, WidthAndHeight, Position>())
 		{
-			MoveNavigator(level, menu_navigator, position, width_and_height);
+			int prev_at_id = menu_navigator->currently_at_entity_id;
+
+			std::map<int, sf::Vector2f> possible_positions = GetPossiblePossiblePositions(level);
+
+			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Down]
+				|| menu_navigator->currently_at_entity_id < 0)
+			{
+				menu_navigator->currently_at_entity_id = SnapToNextBelow(level, menu_navigator, possible_positions);
+			}
+			else if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Up])
+			{
+				menu_navigator->currently_at_entity_id = SnapToNextAbove(level, menu_navigator, possible_positions);
+			}
+			else
+			{
+				for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigatable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigatable, WidthAndHeight, Position>())
+				{
+					menu_navigator->currently_at_entity_id = hovered_started_this_frame_id;
+					break;
+				}
+			}
 			assert(menu_navigator->currently_at_entity_id >= 0);
+
+			if (menu_navigator->currently_at_entity_id != prev_at_id)
+			{
+				position->position = possible_positions[menu_navigator->currently_at_entity_id];
+				position->position.x -= width_and_height->width_and_height.x;
+				level.AddComponents<HoveredStartedThisFrame>(menu_navigator->currently_at_entity_id);
+			}
 
 			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Enter])
 			{
@@ -27,45 +54,28 @@ public:
 		}
 	}
 
-	void MoveNavigator(Level& level, MenuNavigator* menu_navigator, Position* position, WidthAndHeight* width_and_height)
+	int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possble_positions)
 	{
-		if (menu_navigator->currently_at_entity_id < 0
-			|| cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Down]
-			|| cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Up])
+		for (auto it = possble_positions.rbegin(); it != possble_positions.rend(); ++it)
 		{
-			int attatch_to_id = -1;
-			std::map<int, sf::Vector2f> possble_positions = GetPossiblePossiblePositions(level);
-
-			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Up])
+			if (it->first < menu_navigator->currently_at_entity_id)
 			{
-				attatch_to_id = possble_positions.rbegin()->first;
-				for (auto it = possble_positions.rbegin(); it != possble_positions.rend(); ++it)
-				{
-					if (it->first < menu_navigator->currently_at_entity_id)
-					{
-						attatch_to_id = it->first;
-						break;
-					}
-				}
+				return it->first;
 			}
-			else
-			{
-				attatch_to_id = possble_positions.begin()->first;
-				for (auto it = possble_positions.begin(); it != possble_positions.end(); ++it)
-				{
-					if (it->first > menu_navigator->currently_at_entity_id)
-					{
-						attatch_to_id = it->first;
-						break;
-					}
-				}
-			}
-			assert(attatch_to_id >= 0);
-			menu_navigator->currently_at_entity_id = attatch_to_id;
-			position->position = possble_positions[attatch_to_id];
-			position->position.x -= width_and_height->width_and_height.x;
-			level.AddComponents<HoveredStartedThisFrame>(menu_navigator->currently_at_entity_id);
 		}
+		return possble_positions.rbegin()->first;
+	}
+
+	int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possble_positions)
+	{
+		for (auto it = possble_positions.begin(); it != possble_positions.end(); ++it)
+		{
+			if (it->first > menu_navigator->currently_at_entity_id)
+			{
+				return it->first;
+			}
+		}
+		return possble_positions.begin()->first;
 	}
 
 	std::map<int, sf::Vector2f> GetPossiblePossiblePositions(Level& level)
