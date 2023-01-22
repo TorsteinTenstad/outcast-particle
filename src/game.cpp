@@ -44,13 +44,14 @@ Game::Game()
 	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
 	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
-	const std::filesystem::path levels_path { "levels/" };
+	const std::filesystem::path levels_path { "levels" };
 	for (const auto& folder : std::filesystem::directory_iterator { levels_path })
 	{
-		std::string group = folder.path().stem().string();
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
-			level_groups_[group].push_back(level_file_path.path().string());
+			std::string level_id = level_file_path.path().string();
+			std::string group = GetGroupNameFromId(level_id);
+			level_groups_[group].push_back(level_id);
 		}
 	}
 

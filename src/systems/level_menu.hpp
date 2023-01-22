@@ -95,7 +95,7 @@ public:
 		auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
 		ui->entity_ids.push_back(title_entity_id);
 		title_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-		title_text->content = ui->level_group;
+		title_text->content = GetGroupDisplayNameFromGroupName(ui->level_group);
 		title_position->position = sf::Vector2f(button_panel_center, title_h / 2);
 
 		for (int p : { -1, 1 })
@@ -124,7 +124,7 @@ public:
 			float h = w / BUTTON_ASPECT_RATIO;
 			float x = button_panel_center;
 			float y = title_h + h / 2 + level.size.x * BUTTON_VERTICAL_MARGIN + i * (h + level.size.x * BUTTON_VERTICAL_MARGIN);
-			int id = AddMenuButton(level, std::bind(set_level_, level_id), x, y, GetLevelNameFromId(level_id));
+			int id = AddMenuButton(level, std::bind(set_level_, level_id), x, y, GetLevelDisplayNameFromId(level_id));
 			ui->entity_ids.push_back(id);
 			ui->button_entity_ids.push_back(id);
 			level.GetComponent<WidthAndHeight>()[id].width_and_height = sf::Vector2f(w, h);

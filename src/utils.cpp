@@ -7,7 +7,24 @@
 #include <filesystem>
 #include <math.h>
 
-std::string GetLevelNameFromId(const std::string& level_id)
+std::string GetGroupNameFromId(const std::string& level_id)
+{
+	std::filesystem::path path { level_id };
+	return (++path.remove_filename().begin())->string();
+}
+
+std::string GetGroupDisplayNameFromGroupName(const std::string& group_name)
+{
+	return SplitString(group_name, "_").back();
+}
+
+std::string GetGroupDisplayNameFromId(const std::string& level_id)
+{
+	return GetGroupDisplayNameFromGroupName(GetGroupNameFromId(level_id));
+}
+
+
+std::string GetLevelDisplayNameFromId(const std::string& level_id)
 {
 	const std::filesystem::path path { level_id };
 	return SplitString(path.filename().stem().string(), "_").back();
