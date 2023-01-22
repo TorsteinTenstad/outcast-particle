@@ -7,7 +7,6 @@
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 #include "utils.hpp"
-#include <fstream>
 
 class ButtonSystem : public GameSystem
 {

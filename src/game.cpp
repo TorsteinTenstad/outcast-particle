@@ -206,7 +206,6 @@ void Game::SetMode(Mode next_mode)
 			break;
 		case LEVEL_COMPLETED_MODE:
 			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());
-			GetActiveLevel().SaveRecordToFile(coin_records_[active_level_], level_completion_time_records_[active_level_]);
 			break;
 		case LEVEL_FAILED_MODE:
 			GetGameSystem<PauseMode>().RemovePauseButtons(GetActiveLevel());

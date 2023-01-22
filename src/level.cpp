@@ -69,11 +69,6 @@ void Level::SaveToFile()
 	SaveToFile(savefile_path_);
 }
 
-void Level::SaveRecordToFile(int coin_record, float completion_time_record)
-{
-	SaveRecordToFile(savefile_path_, coin_record, completion_time_record);
-}
-
 int Level::AddLevelButton(int level, std::function<void(void)> on_click, float pos_x, float pos_y, float width, float height, std::string image_path)
 {
 	int id = CreateEntityId();

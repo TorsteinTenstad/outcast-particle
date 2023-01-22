@@ -128,10 +128,8 @@ public:
 
 	void SaveToFile();
 	void LoadFromFile();
-	void SaveRecordToFile(int coin_record, float completion_time_record);
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
-	void SaveRecordToFile(std::string savefile_path, int coin_record, float completion_time_record);
 	int AddBlueprint(std::string tag);
 };
 
