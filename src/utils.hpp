@@ -8,12 +8,13 @@
 
 #define PI 3.141593
 
+float Clamp(float x, float a, float b);
+float Smoothstep(float a, float b, float x);
+float Ease(float x, float undershoot, float overshoot);
+
 std::string GetGroupNameFromId(const std::string& level_id);
-
 std::string GetGroupDisplayNameFromGroupName(const std::string& group_name);
-
 std::string GetGroupDisplayNameFromId(const std::string& level_id);
-
 std::string GetLevelDisplayNameFromId(const std::string& level_id);
 
 bool IsMenu(const std::string& level_id);
@@ -21,13 +22,9 @@ bool IsMenu(const std::string& level_id);
 float FakeSigmoid(float x);
 
 float Magnitude(sf::Vector2f v);
-
 sf::Vector2f Normalized(sf::Vector2f v);
-
 sf::Vector2f Abs(sf::Vector2f v);
-
 sf::Vector2f GetQuarterTurnRotation(sf::Vector2f v);
-
 float Dot(sf::Vector2f u, sf::Vector2f v);
 
 std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float eliment_w, float eliment_h, float spacing);

@@ -29,6 +29,13 @@ Game::Game()
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<PauseMode>().GiveFunctions(std::bind(&Game::SetLevel, this, std::placeholders::_1));
 	RegisterGameSystem<ScheduledDeleteSystem>();
+	RegisterGameSystem<TextPopupSystem>();
+	RegisterGameSystem<AnimatedPositionSystem>();
+	RegisterGameSystem<IntersectionSystem>();
+	RegisterGameSystem<CollisionSystem>();
+	RegisterGameSystem<GoalSystem>();
+	RegisterGameSystem<KillOnIntersectionSystem>();
+	RegisterGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
 	RegisterPhysicsGameSystem<ElectricForceSystem>();
 	RegisterPhysicsGameSystem<ElectricFieldForceSystem>();
@@ -36,13 +43,6 @@ Game::Game()
 	RegisterPhysicsGameSystem<ForceSystem>();
 	RegisterPhysicsGameSystem<AccelerationSystem>();
 	RegisterPhysicsGameSystem<VelocitySystem>();
-	RegisterPhysicsGameSystem<TextPopupSystem>();
-	RegisterPhysicsGameSystem<AnimatedPositionSystem>();
-	RegisterPhysicsGameSystem<IntersectionSystem>();
-	RegisterPhysicsGameSystem<CollisionSystem>();
-	RegisterPhysicsGameSystem<GoalSystem>();
-	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
-	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
 	const std::filesystem::path levels_path { "levels" };
 	for (const auto& folder : std::filesystem::directory_iterator { levels_path })
