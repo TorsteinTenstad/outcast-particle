@@ -31,10 +31,11 @@ public:
 			if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key])
 			{
 				level.AddComponent<PressedThisFrame>(entity_id);
+				level.AddComponent<Pressed>(entity_id);
 			}
 		}
 
-		for (auto [entity_id, shortcut_key] : level.GetEntitiesWith<ShortcutKey>())
+		for (auto [entity_id, shortcut_key, pressed] : level.GetEntitiesWith<ShortcutKey, Pressed>())
 		{
 			if (cursor_and_keys_.key_released_this_frame[shortcut_key->key])
 			{

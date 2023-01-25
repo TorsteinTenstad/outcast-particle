@@ -13,19 +13,18 @@
 #include "components/goal.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
-#include "components/level_completion_timer.hpp"
 #include "components/level_menu.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
-#include "components/player_behaviours.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
 #include "components/tag.hpp"
 #include "components/text.hpp"
 #include "components/text_popup.hpp"
+#include "components/timers.hpp"
 #include "components/trail.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
@@ -86,6 +85,7 @@ typedef std::variant<
 	std::map<int, SegmentedGlowEffect>,
 	std::map<int, Selected>,
 	std::map<int, Shader>,
+	std::map<int, MenuDelayTimer>,
 	std::map<int, SoundInfo>,
 	std::map<int, Tag>,
 	std::map<int, Text>,

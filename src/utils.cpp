@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <filesystem>
+#include <iostream>
 #include <math.h>
 
 float Clamp(float x, float a, float b)
@@ -25,7 +26,9 @@ float Ease(float x, float undershoot, float overshoot)
 	float a = overshoot * x * x;
 	float b = 1 - undershoot * (x - 1) * (x - 1);
 	float s = Smoothstep(0, 1, x);
-	return a * (1 - s) + b * s;
+	float result = a * (1 - s) + b * s;
+	assert(0 <= result);
+	return result;
 }
 
 std::string GetGroupNameFromId(const std::string& level_id)

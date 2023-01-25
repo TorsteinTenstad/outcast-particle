@@ -1,6 +1,8 @@
 #include "game.hpp"
 #include "utils.hpp"
 
+#define PAUSE_MENU_DELAY 2 //seconds
+
 class PauseMode : public GameSystem
 {
 private:
@@ -27,10 +29,26 @@ public:
 				|| level_state == FAILED))
 		{
 			level.SetMode(PAUSE_MODE);
-			AddAppropriateButtons(level, level_mode);
+			MenuDelayTimer* menu_delay_timer = GetSingleton<MenuDelayTimer>(level);
+			menu_delay_timer->pevious_mode = level_mode;
+			menu_delay_timer->duration = cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] ? -1 : PAUSE_MENU_DELAY;
+			menu_delay_timer->buttons_initialized = false;
 		}
 
-		if (level.GetMode() != PAUSE_MODE)
+		if (level_mode == PAUSE_MODE)
+		{
+			MenuDelayTimer* menu_delay_timer = GetSingleton<MenuDelayTimer>(level);
+			if (!menu_delay_timer->buttons_initialized && (menu_delay_timer->duration < 0 || cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]))
+			{
+				AddAppropriateButtons(level, menu_delay_timer->pevious_mode);
+				menu_delay_timer->buttons_initialized = true;
+			}
+			else
+			{
+				menu_delay_timer->duration -= dt;
+			}
+		}
+		else
 		{
 			RemovePauseButtons(level);
 		}
@@ -39,6 +57,7 @@ public:
 	{
 		LevelState level_state = level.ComputeState();
 		std::vector<std::function<void(void)>> functions;
+		std::vector<sf::Keyboard::Key> shortcut_keys;
 		std::vector<std::string> text;
 
 		if (previous_mode == PLAY_MODE)
@@ -47,6 +66,7 @@ public:
 			{
 				text.push_back("Continue");
 				functions.push_back([&]() { level.SetMode(PLAY_MODE); });
+				shortcut_keys.push_back(sf::Keyboard::Escape);
 			}
 
 			if (level_state == COMPLETED && !is_in_level_editing_)
@@ -57,11 +77,13 @@ public:
 
 			text.push_back("Restart level");
 			functions.push_back(std::bind(set_level_, active_level_id_));
+			shortcut_keys.push_back(sf::Keyboard::R);
 
 			if (is_in_level_editing_)
 			{
 				text.push_back("Edit level");
 				functions.push_back([&]() { level.SetMode(EDIT_MODE); });
+				shortcut_keys.push_back(sf::Keyboard::Unknown);
 			}
 		}
 
@@ -69,17 +91,20 @@ public:
 		{
 			text.push_back("Continue editing");
 			functions.push_back([&]() { level.SetMode(EDIT_MODE); });
+			shortcut_keys.push_back(sf::Keyboard::Escape);
 
 			text.push_back("Play level");
 			functions.push_back([&]() { level.SetMode(PLAY_MODE); });
+			shortcut_keys.push_back(sf::Keyboard::Unknown);
 		}
 
 		text.push_back("Main menu");
 		functions.push_back(std::bind(set_level_, MAIN_MENU));
+		shortcut_keys.push_back(sf::Keyboard::Unknown);
 
-		AddFloatingButtons(level, functions, text);
+		AddFloatingButtons(level, functions, text, shortcut_keys);
 	}
-	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts)
+	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys)
 	{
 		float button_scale = level.size.x / MENU_LEVEL_WIDTH;
 		float button_w = 3072 * button_scale;
@@ -95,6 +120,7 @@ public:
 			level.GetComponent<Position>()[id] = { sf::Vector2f(x, y) };
 			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
 			level.GetComponent<OnReleasedThisFrame>()[id].func = button_functions[i];
+			level.GetComponent<ShortcutKey>()[id].key = shortcut_keys[i];
 			level.GetComponent<Text>()[id].content = button_texts[i];
 			level.GetComponent<Text>()[id].size = text_size;
 			level.GetComponent<PauseMenuItems>()[id] = {};

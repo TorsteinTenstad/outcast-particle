@@ -35,11 +35,13 @@ public:
 			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player->can_go_neutral)
 			{
 				player_behaviours->default_charge = charge->charge;
+				player_behaviours->is_neutral = true;
 				charge->charge = 0;
 			}
-			if (cursor_and_keys_.key_released_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player->can_go_neutral)
+			if (player_behaviours->is_neutral = 0 && !cursor_and_keys_.key_down[globals.key_config.PLAYER_GO_NEUTRAL])
 			{
 				charge->charge = player_behaviours->default_charge;
+				player_behaviours->is_neutral = false;
 			}
 			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] && player->can_switch_charge)
 			{
@@ -70,5 +72,4 @@ public:
 			face->image_path = "content\\textures\\face_" + std::string((nonzero_charge > 0) ? "plus.png" : "minus.png");
 		}
 	}
-	
 };
