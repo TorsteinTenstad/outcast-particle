@@ -1,4 +1,4 @@
-#version 140
+#version 120
 
 #define PI 3.1415926535897932384626433832795
 
@@ -6,6 +6,7 @@
 uniform float _time;
 uniform vec2 _origin;
 uniform vec2 _window_resolution;
+uniform vec2 _wh;
 
 float atan01(float x, float y)
 {

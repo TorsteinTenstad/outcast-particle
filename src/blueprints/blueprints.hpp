@@ -32,7 +32,7 @@ class BPEditableEntity
 
 class BPStaticParticle : public BPEditableEntity
 {
-	DrawInfo draw_info = { "_", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 6 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Radius radius = { 120 };
@@ -55,9 +55,19 @@ class BPMovingParticle : public BPStaticParticle
 	Velocity velocity = { sf::Vector2f(0, 0) };
 };
 
+class BPBlackHole : public BPEditableEntity
+{
+	DrawInfo draw_info = {};
+	DrawPriority draw_priority = { 1 };
+	Shader shader = { "", "shaders\\black_hole.frag", {}, {}, {} };
+
+	// [Serialize]
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+};
+
 class BPPlayer : public BPEditableEntity
 {
-	DrawInfo draw_info = { "_", false, 0 };
+	DrawInfo draw_info = {};
 	Radius radius = { 120 };
 
 	Acceleration acceleration = {};
@@ -67,7 +77,7 @@ class BPPlayer : public BPEditableEntity
 	Children children = {};
 	Trail trail = {};
 	DrawPriority draw_priority = { 8 };
-	Shader shader = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0.f } }, {} };
+	Shader shader = { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	Face face = {};
 	ForceVisualization force_visualization = {};
@@ -90,7 +100,7 @@ class BPLaser : public BPEditableEntity
 	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { 60 };
 	KillOnIntersection kill_on_intersection = {};
-	Shader shader = { "shaders\\test.vert", "", {}, { { "_time", 0.f } }, {} };
+	Shader shader = { "shaders\\test.vert", "", {}, {}, {} };
 	SoundInfo sound_info = { "content\\sounds\\laser.wav" };
 
 	// [Serialize]
@@ -156,7 +166,7 @@ class BPMagneticField : public BPEditableEntity
 
 class BPTextPopupSpawner : public BPEditableEntity
 {
-	DrawInfo draw_info = { "_", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 2 };
 
 	// [Serialize]

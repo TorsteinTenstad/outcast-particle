@@ -101,6 +101,28 @@ void DeserializeComponent(Velocity& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(WidthAndHeight c, std::string& str_rep)
+{
+	str_rep += "WidthAndHeight{";
+	str_rep += "width_and_height=";
+	str_rep += ToString(c.width_and_height);
+	str_rep += "}";
+}
+
+void DeserializeComponent(WidthAndHeight& c, std::string str_rep)
+{
+    std::vector<std::string> variables = SplitString(str_rep, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "width_and_height")
+        {
+            FromString(c.width_and_height, statement_parts[1]);
+        }
+	}
+}
+
 void SerializeComponent(Player c, std::string& str_rep)
 {
 	str_rep += "Player{";
@@ -135,28 +157,6 @@ void DeserializeComponent(Player& c, std::string str_rep)
         if (statement_parts[0] == "move_force")
         {
             FromString(c.move_force, statement_parts[1]);
-        }
-	}
-}
-
-void SerializeComponent(WidthAndHeight c, std::string& str_rep)
-{
-	str_rep += "WidthAndHeight{";
-	str_rep += "width_and_height=";
-	str_rep += ToString(c.width_and_height);
-	str_rep += "}";
-}
-
-void DeserializeComponent(WidthAndHeight& c, std::string str_rep)
-{
-    std::vector<std::string> variables = SplitString(str_rep, ";");
-    for (auto variable : variables)
-    {
-        std::vector<std::string> statement_parts = SplitString(variable, "=");
-
-        if (statement_parts[0] == "width_and_height")
-        {
-            FromString(c.width_and_height, statement_parts[1]);
         }
 	}
 }
@@ -269,6 +269,13 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
             SerializeComponent(GetComponent<Charge>()[entity_id], entity_string);
             SerializeComponent(GetComponent<Velocity>()[entity_id], entity_string);
+        }
+        
+        if (tag == "BPBlackHole")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
         }
         
         if (tag == "BPPlayer")
@@ -402,7 +409,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 6 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -418,7 +425,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 7 };
             GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -437,11 +444,26 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "Velocity{", "}"));
         }
         
+        if (tag == "BPBlackHole")
+        {
+            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<Editable>()[entity_id] = {};
+            GetComponent<DrawInfo>()[entity_id] = {};
+            GetComponent<DrawPriority>()[entity_id] = { 1 };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\black_hole.frag", {}, {}, {} };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<Position>()[entity_id],
+                GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
+                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+        }
+        
         if (tag == "BPPlayer")
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<Radius>()[entity_id] = { 120 };
             GetComponent<Acceleration>()[entity_id] = {};
             GetComponent<ReceivedForces>()[entity_id] = {};
@@ -450,7 +472,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Children>()[entity_id] = {};
             GetComponent<Trail>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 8 };
-            GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0.f } }, {} };
+            GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
             GetComponent<Face>()[entity_id] = {};
             GetComponent<ForceVisualization>()[entity_id] = {};
@@ -475,7 +497,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, { { "_time", 0.f } }, {} };
+            GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, {}, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -569,7 +591,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 2 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -622,7 +644,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 6 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -635,7 +657,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 7 };
         GetComponent<ChargeDependentDrawInfo>()[entity_id] = {};
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -650,11 +672,23 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Velocity>()[entity_id] = { sf::Vector2f(0, 0) };
         return entity_id;
     }
+    if (tag == "BPBlackHole")
+    {
+        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<Editable>()[entity_id] = {};
+        GetComponent<DrawInfo>()[entity_id] = {};
+        GetComponent<DrawPriority>()[entity_id] = { 1 };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\black_hole.frag", {}, {}, {} };
+        GetComponent<Tag>()[entity_id] = {"BPBlackHole"};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        return entity_id;
+    }
     if (tag == "BPPlayer")
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<Radius>()[entity_id] = { 120 };
         GetComponent<Acceleration>()[entity_id] = {};
         GetComponent<ReceivedForces>()[entity_id] = {};
@@ -663,7 +697,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Children>()[entity_id] = {};
         GetComponent<Trail>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 8 };
-        GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, { { "_time", 0.f } }, {} };
+        GetComponent<Shader>()[entity_id] = { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\wav.wav" };
         GetComponent<Face>()[entity_id] = {};
         GetComponent<ForceVisualization>()[entity_id] = {};
@@ -683,7 +717,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, { { "_time", 0.f } }, {} };
+        GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, {}, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
@@ -758,7 +792,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Tag>()[entity_id] = {"BPTextPopupSpawner"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
