@@ -591,7 +591,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = {};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\transparent.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 2 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -792,7 +792,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = {};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\transparent.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<Tag>()[entity_id] = {"BPTextPopupSpawner"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };

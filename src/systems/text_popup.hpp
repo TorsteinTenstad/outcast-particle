@@ -9,6 +9,10 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
+		for (auto [entity_id, text_popup_spawner, draw_info] : level.GetEntitiesWith<TextPopupSpawner, DrawInfo>())
+		{
+			draw_info->image_path = level.GetMode() == EDIT_MODE ? "_" : "content\\textures\\transparent.png";
+		}
 		for (auto [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 		{
 			for (auto& i : intersection->entered_this_frame_ids)

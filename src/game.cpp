@@ -77,6 +77,10 @@ void Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_.LoadFromFile(level_id);
+		if (is_in_level_editing_)
+		{
+			active_level_.SetMode(EDIT_MODE);
+		}
 	}
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;

@@ -166,7 +166,7 @@ class BPMagneticField : public BPEditableEntity
 
 class BPTextPopupSpawner : public BPEditableEntity
 {
-	DrawInfo draw_info = {};
+	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
 	DrawPriority draw_priority = { 2 };
 
 	// [Serialize]
