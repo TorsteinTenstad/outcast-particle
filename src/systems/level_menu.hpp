@@ -114,6 +114,7 @@ public:
 			}
 			nav_btn_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 			nav_btn_draw_info->image_path = "content\\textures_generated\\button_500_500.png";
+			nav_btn_draw_info->scale_to_fit = true;
 			nav_btn_w_h->width_and_height = sf::Vector2f(1, 1) * float(title_h - 2 * level.size.x * BUTTON_VERTICAL_MARGIN);
 			nav_btn_text->content = p < 0 ? "<" : ">";
 			nav_btn_position->position = sf::Vector2f(button_panel_center + p * 0.7 * button_panel_center, title_h / 2);

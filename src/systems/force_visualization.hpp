@@ -16,10 +16,8 @@ public:
 		{
 			Shader* shader = EnsureExistanceOfScreenwideFragmentShaderChildEntity<ForceVisualization>(level, children, "shaders\\force.frag", 5);
 
-			sf::Vector2i player_screen_space_position = globals.render_window.mapCoordsToPixel(player_position->position);
-			shader->vec_uniforms["player_pos"] = (sf::Vector2f)player_screen_space_position;
-			shader->float_uniforms["charge_radius"] = radius->radius * std::min(globals.render_window.getSize().x / level.size.x, globals.render_window.getSize().y / level.size.y);
-			shader->vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
+			shader->vec_uniforms["player_pos"] = player_position->position;
+			shader->float_uniforms["charge_radius"] = radius->radius;
 
 			int charge_i = 0;
 			for (const auto [particle_entity_id, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())
@@ -29,13 +27,13 @@ public:
 					continue;
 				}
 				sf::Vector2i particle_screen_space_position = globals.render_window.mapCoordsToPixel(particle_position->position);
-				if (particle_screen_space_position == player_screen_space_position)
+				if (Magnitude(player_position->position - particle_position->position) < radius->radius / 4)
 				{
 					continue;
 				}
 				float sign = Sign(player_charge->charge * particle_charge->charge);
 				float charge_force = sign * Magnitude(CalculateElectricForce(*player_position, *particle_position, *player_charge, *particle_charge));
-				shader->vec_uniforms["charge_positions[" + ToString(charge_i) + "]"] = (sf::Vector2f)particle_screen_space_position;
+				shader->vec_uniforms["charge_positions[" + ToString(charge_i) + "]"] = particle_position->position;
 				shader->float_uniforms["charge_force[" + ToString(charge_i) + "]"] = charge_force;
 				charge_i++;
 			}
@@ -43,6 +41,4 @@ public:
 			shader->int_uniforms["n_charges"] = charge_i;
 		}
 	}
-
-	
 };

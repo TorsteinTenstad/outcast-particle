@@ -1,4 +1,4 @@
-#version 140
+#version 120
 
 #define PI 3.1415926535897932384626433832795
 #define MAX_CHARGES 64
@@ -9,12 +9,17 @@
 uniform float _time;
 uniform vec2 _window_resolution;
 
+uniform vec2 player_pos;
+
 uniform int n_charges;
 uniform float charge_radius;
 uniform vec2 charge_positions[MAX_CHARGES];
 uniform float charge_force[MAX_CHARGES];
 
-uniform vec2 player_pos;
+mat2 inverse(mat2 m) {
+  return mat2(m[1][1],-m[0][1],
+             -m[1][0], m[0][0]) / (m[0][0]*m[1][1] - m[0][1]*m[1][0]);
+}
 
 float atan01(float x, float y)
 {
@@ -31,53 +36,49 @@ float soft_threshold(float t, float threshold, float softness){
 }
 void main()
 {
-	vec2 screen_coords = gl_FragCoord.xy;
-	screen_coords.y = _window_resolution.y - screen_coords.y;
+	vec2 screen_coords = gl_TexCoord[0].xy;
 
 	vec4 color = vec4(0, 0, 0, 0);
 
 	for (int i = 0; i < n_charges; i++)
 	{
-		//if (abs(charge_force[i]) > FORCE_THREASHOLD_NEEDED_TO_CONNECT)
+		mat2 basis;
+		basis[0] = vec2(charge_positions[i].xy - player_pos) / 2;
+		basis[1] = QUARTER_TURN * basis[0] / length(basis[0]);
+		basis[1] *= 0.5 * charge_radius;
+
+		vec2 local_coords = inverse(basis) * (screen_coords - player_pos - basis[0]);
+
+		local_coords.y = abs(local_coords.y);
+		float square_mask = float(-1 <= local_coords.x && local_coords.x <= 1 && local_coords.y <= 1);
+
+		local_coords *= square_mask;
+		float rescaled_x = local_coords.x * length(basis[0])/charge_radius;
+
+		float a = abs(charge_force[i]) / MAX_FORCE;
+
+		float flow_dir = (abs(charge_force[i]) / charge_force[i]);
+
+		float background_color = 0.5;
+		float arrow_color = 1;
+		float arrows_per_radius_length = 0.5;
+		float arrow_width = 0.2;
+		float wave_temporal_frequency = 20;
+		float wave_discard_peaks = 4;
+
+		float x_component = arrows_per_radius_length * rescaled_x;
+		float y_component = -0.2*local_coords.y*flow_dir;
+		float temporal_component = 1.5*_time*flow_dir;
+		float t = abs(fract(x_component+y_component+temporal_component) - 0.5)*2;
+		float AA_softness = 0.02;
+		t = soft_threshold(t, 1-arrow_width, AA_softness);
+		float color_rgb = mix(background_color, arrow_color, t);
+		vec4 color_contribution = vec4(vec3(color_rgb), a*soft_threshold(1-local_coords.y, AA_softness/2, AA_softness));
+		color_contribution *= square_mask;
+
+		if (color.a < color_contribution.a)
 		{
-			mat2 basis;
-			basis[0] = vec2(charge_positions[i].xy - player_pos) / 2;
-			basis[1] = QUARTER_TURN * basis[0] / length(basis[0]);
-			basis[1] *= 0.5 * charge_radius;
-
-			vec2 local_coords = inverse(basis) * (screen_coords - player_pos - basis[0]);
-
-			local_coords.y = abs(local_coords.y);
-			float square_mask = float(-1 <= local_coords.x && local_coords.x <= 1 && local_coords.y <= 1);
-
-			local_coords *= square_mask;
-			float rescaled_x = local_coords.x * length(basis[0])/charge_radius;
-
-			float a = abs(charge_force[i]) / MAX_FORCE;
-
-			float flow_dir = (abs(charge_force[i]) / charge_force[i]);
-
-			float background_color = 0.5;
-			float arrow_color = 1;
-			float arrows_per_radius_length = 0.5;
-			float arrow_width = 0.2;
-			float wave_temporal_frequency = 20;
-			float wave_discard_peaks = 4;
-
-			float x_component = arrows_per_radius_length * rescaled_x;
-			float y_component = -0.2*local_coords.y*flow_dir;
-			float temporal_component = 1.5*_time*flow_dir;
-			float t = abs(fract(x_component+y_component+temporal_component) - 0.5)*2;
-			float AA_softness = 0.02;
-			t = soft_threshold(t, 1-arrow_width, AA_softness);
-			float color_rgb = mix(background_color, arrow_color, t);
-			vec4 color_contribution = vec4(vec3(color_rgb), a*soft_threshold(1-local_coords.y, AA_softness/2, AA_softness));
-			color_contribution *= square_mask;
-
-			if (color.a < color_contribution.a)
-			{
-				color = color_contribution;
-			}
+			color = color_contribution;
 		}
 	}
 	color.a = clamp(color.a, 0,0.5);

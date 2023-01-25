@@ -1,6 +1,6 @@
 #pragma once
-#include "SFML/System/Vector2.hpp"
 #include "SFML/Graphics/Shader.hpp"
+#include "SFML/System/Vector2.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 
@@ -13,9 +13,7 @@ public:
 		for (const auto& [entity_id, segmented_glow_effect, draw_priority, position] : level.GetEntitiesWith<SegmentedGlowEffect, DrawPriority, Position>())
 		{
 			Shader* shader = EnsureExistanceOfScreenwideFragmentShaderChildEntity<SegmentedGlowEffect>(level, &level.GetComponent<Children>()[entity_id], "shaders\\segmented_glow_effect.frag", draw_priority->draw_priority - 1);
-			shader->vec_uniforms["_origin"] = (sf::Vector2f)globals.render_window.mapCoordsToPixel(position->position);
-			shader->vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
+			shader->vec_uniforms["origin"] = position->position;
 		}
 	}
-	
 };
