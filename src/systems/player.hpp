@@ -38,7 +38,7 @@ public:
 				player_behaviours->is_neutral = true;
 				charge->charge = 0;
 			}
-			if (player_behaviours->is_neutral = 0 && !cursor_and_keys_.key_down[globals.key_config.PLAYER_GO_NEUTRAL])
+			if (player_behaviours->is_neutral && !cursor_and_keys_.key_down[globals.key_config.PLAYER_GO_NEUTRAL])
 			{
 				charge->charge = player_behaviours->default_charge;
 				player_behaviours->is_neutral = false;
