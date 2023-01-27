@@ -88,6 +88,7 @@ private:
 
 public:
 	Game();
+	~Game();
 	void Update(float dt);
 };
 

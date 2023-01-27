@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "userdata_storage.hpp"
 #include <chrono>
 #include <filesystem>
 #include <functional>
@@ -55,7 +56,16 @@ Game::Game()
 		}
 	}
 
+	LoadMapFromFile("user\\coin_record", level_coin_records_);
+	LoadMapFromFile("user\\completion_time_record", level_completion_time_records_);
+
 	GoToMainMenu();
+}
+
+Game::~Game()
+{
+	SaveMapToFile("user\\coin_record", level_coin_records_);
+	SaveMapToFile("user\\completion_time_record", level_completion_time_records_);
 }
 
 void Game::SetLevel(std::string level_id)

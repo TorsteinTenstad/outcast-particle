@@ -23,3 +23,5 @@ name=Untitled;size=(3840,2160);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(2280,1200)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,1320)}WidthAndHeight{width_and_height=(60,240)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2280,1320)}WidthAndHeight{width_and_height=(60,240)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(360,1800)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(2580,180)}
