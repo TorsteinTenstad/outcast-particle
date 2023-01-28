@@ -6,7 +6,6 @@ name=Untitled;size=(3840,2160);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(900,360)}WidthAndHeight{width_and_height=(120,720)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2280,1080)}ElectricField{field_vector=(0.5,-0)}WidthAndHeight{width_and_height=(480,480)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1200,60)}WidthAndHeight{width_and_height=(2160,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(3780,780)}WidthAndHeight{width_and_height=(120,1560)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(480,300)}Charge{charge=-10000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,660)}WidthAndHeight{width_and_height=(720,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(2520,60)}WidthAndHeight{width_and_height=(1440,120)}
@@ -16,7 +15,6 @@ name=Untitled;size=(3840,2160);editable=1
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2280,1800)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(480,480)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3480,360)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(480,480)}
 "BPWall":Tag{tag=BPWall}Position{position=(1380,660)}WidthAndHeight{width_and_height=(840,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(2340,2100)}WidthAndHeight{width_and_height=(3000,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1200,2100)}WidthAndHeight{width_and_height=(2280,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3480,60)}WidthAndHeight{width_and_height=(480,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1680,660)}WidthAndHeight{width_and_height=(720,60)}
@@ -28,3 +26,7 @@ name=Untitled;size=(3840,2160);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(60,1860)}WidthAndHeight{width_and_height=(120,600)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,1200)}WidthAndHeight{width_and_height=(60,840)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2880,540)}
+"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(3780,60)}WidthAndHeight{width_and_height=(120,120)}
+"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(2340,2100)}WidthAndHeight{width_and_height=(3000,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,360)}WidthAndHeight{width_and_height=(120,480)}
+"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,960)}

@@ -129,6 +129,18 @@ class BPWall : public BPEditableEntity
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
+class BPBounceWall : public BPWall
+{
+	DrawInfo draw_info = { "content\\textures\\block_green.png", false, 0 };
+	Collision collision = { 1, 75 };
+};
+
+class BPNoBounceWall : public BPWall
+{
+	DrawInfo draw_info = { "content\\textures\\block_dark.png", false, 0 };
+	Collision collision = { 0.05, 75 };
+};
+
 class BPGoal : public BPEditableEntity
 {
 	DrawInfo draw_info = { "content\\textures\\goal.png", false, 0 };

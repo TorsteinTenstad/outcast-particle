@@ -20,7 +20,7 @@ private:
 	using GameSystem::GameSystem;
 	const float default_velocity_magnitude_change_sensitivity_ = 400;
 	const float default_velocity_angle_change_sensitivity_ = PI / 2;
-	const std::vector<std::string> blueprint_menu_entry_tags_ { "BPStaticParticle", "BPPlayer", "BPLaser", "BPWall", "BPGoal", "BPElectricField", "BPMagneticField", "BPCoin", "BPBlackHole", "BPTextPopupSpawner" };
+	const std::vector<std::string> blueprint_menu_entry_tags_ { "BPStaticParticle", "BPPlayer", "BPLaser", "BPWall", "BPBounceWall", "BPNoBounceWall", "BPGoal", "BPElectricField", "BPMagneticField", "BPCoin", "BPBlackHole" };
 
 	bool blueprint_menu_is_open = false;
 

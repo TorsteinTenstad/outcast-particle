@@ -307,6 +307,20 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
         }
         
+        if (tag == "BPBounceWall")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+        }
+        
+        if (tag == "BPNoBounceWall")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPGoal")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -539,6 +553,38 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "WidthAndHeight{", "}"));
         }
         
+        if (tag == "BPBounceWall")
+        {
+            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<Editable>()[entity_id] = {};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_green.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 4 };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
+            GetComponent<Collision>()[entity_id] = { 1, 75 };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<Position>()[entity_id],
+                GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
+                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+        }
+        
+        if (tag == "BPNoBounceWall")
+        {
+            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<Editable>()[entity_id] = {};
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_dark.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 4 };
+            GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
+            GetComponent<Collision>()[entity_id] = { 0.05, 75 };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<Position>()[entity_id],
+                GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
+                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+        }
+        
         if (tag == "BPGoal")
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
@@ -747,6 +793,32 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 0.2, 75 };
         GetComponent<Tag>()[entity_id] = {"BPWall"};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+        return entity_id;
+    }
+    if (tag == "BPBounceWall")
+    {
+        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<Editable>()[entity_id] = {};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_green.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 4 };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
+        GetComponent<Collision>()[entity_id] = { 1, 75 };
+        GetComponent<Tag>()[entity_id] = {"BPBounceWall"};
+        GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+        return entity_id;
+    }
+    if (tag == "BPNoBounceWall")
+    {
+        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<Editable>()[entity_id] = {};
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_dark.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 4 };
+        GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
+        GetComponent<Collision>()[entity_id] = { 0.05, 75 };
+        GetComponent<Tag>()[entity_id] = {"BPNoBounceWall"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
