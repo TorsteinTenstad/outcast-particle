@@ -15,6 +15,10 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
+		if (level.GetMode() != PLAY_MODE)
+		{
+			return;
+		}
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& kill_on_intersection_map = level.GetComponent<KillOnIntersection>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
@@ -48,5 +52,4 @@ public:
 			}
 		}
 	}
-	
 };

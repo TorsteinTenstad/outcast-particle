@@ -13,6 +13,10 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
+		if (level.GetMode() != PLAY_MODE)
+		{
+			return;
+		}
 		auto& goal_map = level.GetComponent<Goal>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
 		for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
@@ -30,5 +34,4 @@ public:
 			}
 		}
 	}
-	
 };

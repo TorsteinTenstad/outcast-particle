@@ -13,6 +13,10 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
+		if (level.GetMode() != PLAY_MODE)
+		{
+			return;
+		}
 		auto& collision_map = level.GetComponent<Collision>();
 		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
@@ -95,5 +99,4 @@ public:
 			}
 		}
 	}
-	
 };

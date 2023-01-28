@@ -21,6 +21,10 @@ public:
 	}
 	void Update(Level& level, float dt)
 	{
+		if (level.GetMode() != PLAY_MODE)
+		{
+			return;
+		}
 		auto& intersection_map = level.GetComponent<Intersection>();
 		auto& coin_map = level.GetComponent<Coin>();
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
