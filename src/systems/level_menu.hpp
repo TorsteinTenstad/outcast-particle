@@ -17,7 +17,7 @@ private:
 	const std::map<std::string, float>* level_completion_time_records_;
 	const std::map<std::string, int>* level_coin_records_;
 
-	std::function<void(std::string)> set_level_;
+	std::function<Level&(std::string)> set_level_;
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture_;
 
 public:
@@ -26,7 +26,7 @@ public:
 		const std::map<std::string, std::vector<std::string>>* level_groups,
 		const std::map<std::string, float>* level_completion_time_records,
 		const std::map<std::string, int>* level_coin_records,
-		std::function<void(std::string)> set_level,
+		std::function<Level&(std::string)> set_level,
 		std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 	{
 		level_groups_ = level_groups;
@@ -127,7 +127,7 @@ public:
 			float h = w / BUTTON_ASPECT_RATIO;
 			float x = button_panel_center;
 			float y = title_h + h / 2 + level.size.x * BUTTON_VERTICAL_MARGIN + i * (h + level.size.x * BUTTON_VERTICAL_MARGIN);
-			int id = AddMenuButton(level, std::bind(set_level_, level_id), x, y, GetLevelDisplayNameFromId(level_id));
+			int id = AddMenuButton(level, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), x, y, GetLevelDisplayNameFromId(level_id));
 			ui->entity_ids.push_back(id);
 			ui->button_entity_ids.push_back(id);
 			level.GetComponent<WidthAndHeight>()[id].width_and_height = sf::Vector2f(w, h);
@@ -142,5 +142,14 @@ public:
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		draw_info->scale_to_fit = true;
 		ui->level_image_identifier = &draw_info->image_path;
+	}
+
+	void EnterLevel(std::string level_id)
+	{
+		Level& entered_level = set_level_(level_id);
+		if (is_in_level_editing_)
+		{
+			entered_level.SetMode(EDIT_MODE);
+		}
 	}
 };

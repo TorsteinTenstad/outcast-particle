@@ -76,7 +76,7 @@ private:
 	template <class System>
 	System& RegisterPhysicsGameSystem();
 
-	void SetLevel(std::string level_id);
+	Level& SetLevel(std::string level_id);
 	void ButtunFuncEditLevel();
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
 	void ToggleFullscreen();

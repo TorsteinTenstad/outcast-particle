@@ -68,7 +68,7 @@ Game::~Game()
 	SaveMapToFile("user\\completion_time_record", level_completion_time_records_);
 }
 
-void Game::SetLevel(std::string level_id)
+Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
 	active_level_ = Level();
@@ -87,13 +87,10 @@ void Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_.LoadFromFile(level_id);
-		if (is_in_level_editing_)
-		{
-			active_level_.SetMode(EDIT_MODE);
-		}
 	}
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;
+	return active_level_;
 }
 
 void Game::Update(float dt)
