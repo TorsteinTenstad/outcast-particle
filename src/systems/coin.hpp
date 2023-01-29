@@ -21,7 +21,7 @@ public:
 	}
 	void Update(Level& level, float dt)
 	{
-		if (level.GetMode() != PLAY_MODE)
+		if (level.GetMode() == EDIT_MODE)
 		{
 			return;
 		}
@@ -30,7 +30,7 @@ public:
 		auto& sound_info_map = level.GetComponent<SoundInfo>();
 
 		CoinCounter* coin_counter = GetSingleton<CoinCounter>(level);
-		int counter = coin_counter->coin_counter;
+		int& counter = coin_counter->coin_counter;
 
 		for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 		{
@@ -45,7 +45,7 @@ public:
 			}
 		}
 
-		if (level.ComputeState() == COMPLETED && ((*level_coin_records_)[active_level_id_] <= 0 || (*level_coin_records_)[active_level_id_] > counter))
+		if (level.ComputeState() == COMPLETED && counter > (*level_coin_records_)[active_level_id_])
 		{
 			(*level_coin_records_)[active_level_id_] = counter;
 			return;
