@@ -13,3 +13,6 @@ name=Untitled;size=(3840,2160);editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3720,1680)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3360,120)}Charge{charge=-10000}
 "BPTextPopupSpawner":Tag{tag=BPTextPopupSpawner}Position{position=(1740,600)}WidthAndHeight{width_and_height=(1080,480)}TextPopupSpawner{content=Press Space to switch charge}
+"BPCoin":Tag{tag=BPCoin}Position{position=(3240,600)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(1320,600)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(3240,1560)}
