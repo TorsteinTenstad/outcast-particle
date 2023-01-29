@@ -14,3 +14,6 @@ name=Untitled;size=(3840,2160);editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1380,2100)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(1380,1440)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(2700,1440)}WidthAndHeight{width_and_height=(120,120)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(2040,1440)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(480,480)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(3360,480)}
