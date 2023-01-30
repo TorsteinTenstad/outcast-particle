@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "controls_config_serialization.hpp"
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 
@@ -34,4 +35,20 @@ void LoadMapFromFile(std::string savefile_path, std::map<K, V>& map)
 		FromString(value, pair[1]);
 		map[key] = value;
 	}
+}
+
+void SaveOptionsToFile(std::string savefile_path)
+{
+	std::string key_string;
+	std::ofstream f(savefile_path);
+	SerializeComponent(globals.key_config, key_string);
+	f << key_string;
+}
+
+void LoadOptionsFromFile(std::string savefile_path)
+{
+	std::ifstream f(savefile_path);
+	std::string key_string;
+	f >> key_string;
+	DeserializeComponent(globals.key_config, key_string);
 }

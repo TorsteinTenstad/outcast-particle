@@ -56,16 +56,18 @@ Game::Game()
 		}
 	}
 
-	LoadMapFromFile("user\\coin_record", level_coin_records_);
-	LoadMapFromFile("user\\completion_time_record", level_completion_time_records_);
+	LoadMapFromFile("user\\coin_record.txt", level_coin_records_);
+	LoadMapFromFile("user\\completion_time_record.txt", level_completion_time_records_);
+	LoadOptionsFromFile("user\\controls_config.txt");
 
 	GoToMainMenu();
 }
 
 Game::~Game()
 {
-	SaveMapToFile("user\\coin_record", level_coin_records_);
-	SaveMapToFile("user\\completion_time_record", level_completion_time_records_);
+	SaveMapToFile("user\\coin_record.txt", level_coin_records_);
+	SaveMapToFile("user\\completion_time_record.txt", level_completion_time_records_);
+	SaveOptionsToFile("user\\controls_config.txt");
 }
 
 Level& Game::SetLevel(std::string level_id)

@@ -63,6 +63,7 @@ private:
 
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
+	
 
 	template <class System>
 	System& GetGameSystem();
