@@ -52,8 +52,9 @@ private:
 	std::string active_level_id_ = MAIN_MENU;
 	Level active_level_;
 	std::map<std::string, std::vector<std::string>> level_groups_;
-	std::map<std::string, float> level_completion_time_records_;
+	std::map<int, std::map<std::string, float>> level_completion_time_records_;
 	std::map<std::string, int> level_coin_records_;
+	std::vector<std::string> user_savefile_paths = { "user\\Completion_Time_0_Coins.txt", "user\\Completion_Time_1_Coins.txt", "user\\Completion_Time_2_Coins.txt", "user\\Completion_Time_3_Coins.txt" };
 
 	int next_available_system_id_ = 0;
 	std::map<std::type_index, int> type_to_system_id_;
@@ -63,7 +64,6 @@ private:
 
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
-	
 
 	template <class System>
 	System& GetGameSystem();

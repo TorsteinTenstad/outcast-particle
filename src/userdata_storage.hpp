@@ -37,6 +37,25 @@ void LoadMapFromFile(std::string savefile_path, std::map<K, V>& map)
 	}
 }
 
+//The MapOfMap-functions should only be called for maps with maps as values
+template <typename K, typename V>
+void SaveMapOfMapToFile(std::vector<std::string> savefile_paths, std::map<K, V> map)
+{
+	for (int i = 0; i < size(savefile_paths); ++i)
+	{
+		SaveMapToFile(savefile_paths[i], map[i]);
+	}
+}
+
+template <typename K, typename V>
+void LoadMapOfMapFromFile(std::vector<std::string> savefile_paths, std::map<K, V>& map)
+{
+	for (int i = 0; i < size(savefile_paths); ++i)
+	{
+		LoadMapFromFile(savefile_paths[i], map[i]);
+	}
+}
+
 void SaveOptionsToFile(std::string savefile_path)
 {
 	std::string key_string;
