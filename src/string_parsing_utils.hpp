@@ -67,6 +67,10 @@ inline void FromString(int& x, std::string s)
 {
 	x = stod(s);
 }
+inline void FromString(sf::Keyboard::Key& x, std::string s)
+{
+	FromString((int&)x, s);
+}
 inline void FromString(float& x, std::string s)
 {
 	x = stod(s);
