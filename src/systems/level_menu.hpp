@@ -14,7 +14,7 @@ class LevelMenuSystem : public GameSystem
 {
 private:
 	const std::map<std::string, std::vector<std::string>>* level_groups_;
-	const std::map<std::string, float>* level_completion_time_records_;
+	const std::map<int, std::map<std::string, float>>* level_completion_time_records_;
 	const std::map<std::string, int>* level_coin_records_;
 
 	std::function<Level&(std::string)> set_level_;
@@ -24,7 +24,7 @@ public:
 	using GameSystem::GameSystem;
 	void Give(
 		const std::map<std::string, std::vector<std::string>>* level_groups,
-		const std::map<std::string, float>* level_completion_time_records,
+		const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 		const std::map<std::string, int>* level_coin_records,
 		std::function<Level&(std::string)> set_level,
 		std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
