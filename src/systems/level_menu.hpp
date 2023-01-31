@@ -8,7 +8,7 @@
 #define LEVEL_PREVIEW_HEIGHT (0.6 / ASPECT_RATIO)
 #define BUTTON_HORISONTAL_MARGIN 0.06
 #define BUTTON_VERTICAL_MARGIN 0.01
-#define BUTTON_ASPECT_RATIO 6
+#define BUTTON_ASPECT_RATIO 8
 
 class LevelMenuSystem : public GameSystem
 {
@@ -128,6 +128,7 @@ public:
 			float x = button_panel_center;
 			float y = title_h + h / 2 + level.size.x * BUTTON_VERTICAL_MARGIN + i * (h + level.size.x * BUTTON_VERTICAL_MARGIN);
 			int id = AddMenuButton(level, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), x, y, GetLevelDisplayNameFromId(level_id));
+			level.GetComponent<Text>()[id].size = 150;
 			ui->entity_ids.push_back(id);
 			ui->button_entity_ids.push_back(id);
 			level.GetComponent<WidthAndHeight>()[id].width_and_height = sf::Vector2f(w, h);
