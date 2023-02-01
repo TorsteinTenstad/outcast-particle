@@ -36,8 +36,7 @@ public:
 			text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, text_height_[text->font_path][text->size]);
 			text_[entity_id].setPosition(position->position);
 			text_[entity_id].setFillColor(text->color);
-			level.drawables[draw_priority->draw_priority].push_back({ entity_id, &text_[entity_id] });
+			level.drawables[draw_priority->draw_priority].push_back({ -1, &text_[entity_id] });
 		}
 	}
-	
 };

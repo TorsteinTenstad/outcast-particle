@@ -40,6 +40,8 @@ public:
 				position->position = possible_positions[menu_navigator->currently_at_entity_id];
 				position->position.x -= width_and_height->width_and_height.x;
 				level.AddComponents<HoveredStartedThisFrame>(menu_navigator->currently_at_entity_id);
+				level.GetComponent<Hovered>().clear();
+				level.AddComponent<Hovered>(menu_navigator->currently_at_entity_id);
 			}
 
 			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Enter])
@@ -50,7 +52,6 @@ public:
 			{
 				level.GetComponent<ReleasedThisFrame>()[menu_navigator->currently_at_entity_id];
 			}
-			level.AddComponent<Hovered>(menu_navigator->currently_at_entity_id);
 		}
 	}
 

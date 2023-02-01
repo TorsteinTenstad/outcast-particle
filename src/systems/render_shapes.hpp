@@ -31,6 +31,7 @@ public:
 		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
 		auto& radius_map = level.GetComponent<Radius>();
 		auto& border_map = level.GetComponent<Border>();
+		auto& fill_color_map = level.GetComponent<FillColor>();
 
 		for (auto const& [entity_id, entity_drawinfo] : draw_info_map)
 		{
@@ -86,6 +87,14 @@ public:
 			else
 			{
 				shape->setOutlineThickness(0);
+			}
+			if (fill_color_map.count(entity_id))
+			{
+				shape->setFillColor(fill_color_map[entity_id].color);
+			}
+			else
+			{
+				shape->setFillColor(sf::Color::White);
 			}
 			level.drawables[draw_priority_map[entity_id].draw_priority].push_back({ entity_id, shape });
 		}

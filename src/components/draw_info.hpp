@@ -15,6 +15,20 @@ public:
 	int draw_priority = 0;
 };
 
+class FillColor
+{
+public:
+	sf::Color color = sf::Color::White;
+};
+
+class MouseInteractionDependentFillColor
+{
+public:
+	sf::Color hovered_color = sf::Color::White;
+	sf::Color pressed_color = sf::Color::White;
+	sf::Color default_color = sf::Color::White;
+};
+
 class ChargeDependentDrawInfo
 {
 };

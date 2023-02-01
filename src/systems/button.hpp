@@ -14,16 +14,25 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& draw_info_map = level.GetComponent<DrawInfo>();
-
-		for (auto [entity_id, pressed_this_frame, pressed_image_path] : level.GetEntitiesWith<PressedThisFrame, PressedImagePath>())
+		for (auto [entity_id, mouse_interaction_dependent_fill_color, fill_color] : level.GetEntitiesWith<MouseInteractionDependentFillColor, FillColor>())
 		{
-			draw_info_map[entity_id].image_path = pressed_image_path->pressed_image_path;
+			if (level.HasComponents<Pressed>(entity_id))
+			{
+				fill_color->color = mouse_interaction_dependent_fill_color->pressed_color;
+			}
+			else if (level.HasComponents<Hovered>(entity_id))
+			{
+				fill_color->color = mouse_interaction_dependent_fill_color->hovered_color;
+			}
+			else
+			{
+				fill_color->color = mouse_interaction_dependent_fill_color->default_color;
+			}
 		}
-		for (auto [entity_id, released_this_frame, on_released_this_frame, pressed_image_path] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame, PressedImagePath>())
+
+		for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
 		{
-			draw_info_map[entity_id].image_path = pressed_image_path->image_path;
-			on_released_this_frame->func();
+			on_hovered_started_this_frame->func();
 			return;
 		}
 		for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
@@ -31,12 +40,13 @@ public:
 			on_hovered->func();
 			return;
 		}
-		for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
+		for (auto [entity_id, released_this_frame, on_released_this_frame] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame>())
 		{
-			on_hovered_started_this_frame->func();
+			on_released_this_frame->func();
 			return;
 		}
 
+		auto& draw_info_map = level.GetComponent<DrawInfo>();
 		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
 		auto& text_map = level.GetComponent<Text>();
 		for (auto [entity_id, pressed_this_frame, key_config_button] : level.GetEntitiesWith<PressedThisFrame, KeyConfigButton>())

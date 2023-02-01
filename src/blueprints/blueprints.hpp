@@ -4,8 +4,10 @@ class BPButton
 {
 	ReceivesMouseEvents can_receive_press = {};
 	DrawPriority draw_priority = { 100 };
-	DrawInfo draw_info = { "content\\textures_generated\\button_menu_wide.png", true, 0 };
-	PressedImagePath pressed_image_path = { "content\\textures_generated\\button_menu_wide.png", "content\\textures_generated\\pressed_button_menu_wide.png" };
+	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };
+	FillColor fill_color = {};
+	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
 	OnReleasedThisFrame on_released_this_frame = {};
 	Text text = {};
 	WidthAndHeight width_and_height = { sf::Vector2f(3072, 432) };

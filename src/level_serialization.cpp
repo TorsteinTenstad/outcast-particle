@@ -388,8 +388,10 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 100 };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures_generated\\button_menu_wide.png", true, 0 };
-            GetComponent<PressedImagePath>()[entity_id] = { "content\\textures_generated\\button_menu_wide.png", "content\\textures_generated\\pressed_button_menu_wide.png" };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+            GetComponent<FillColor>()[entity_id] = {};
+            GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<OnReleasedThisFrame>()[entity_id] = {};
             GetComponent<Text>()[entity_id] = {};
             GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3072, 432) };
@@ -659,8 +661,10 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 100 };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures_generated\\button_menu_wide.png", true, 0 };
-        GetComponent<PressedImagePath>()[entity_id] = { "content\\textures_generated\\button_menu_wide.png", "content\\textures_generated\\pressed_button_menu_wide.png" };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+        GetComponent<FillColor>()[entity_id] = {};
+        GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<OnReleasedThisFrame>()[entity_id] = {};
         GetComponent<Text>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3072, 432) };
