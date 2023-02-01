@@ -12,7 +12,7 @@ public:
 class DrawPriority
 {
 public:
-	int draw_priority = 0;
+	int draw_priority = 1;
 };
 
 class FillColor

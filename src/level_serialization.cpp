@@ -394,7 +394,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<OnReleasedThisFrame>()[entity_id] = {};
             GetComponent<Text>()[entity_id] = {};
-            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3072, 432) };
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
             GetComponent<MenuNavigatable>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -667,7 +667,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<OnReleasedThisFrame>()[entity_id] = {};
         GetComponent<Text>()[entity_id] = {};
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3072, 432) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
         GetComponent<MenuNavigatable>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPButton"};
         return entity_id;

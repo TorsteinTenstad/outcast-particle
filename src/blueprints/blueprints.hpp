@@ -10,7 +10,7 @@ class BPButton
 	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
 	OnReleasedThisFrame on_released_this_frame = {};
 	Text text = {};
-	WidthAndHeight width_and_height = { sf::Vector2f(3072, 432) };
+	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
 	MenuNavigatable menu_navigatable = {};
 };
 

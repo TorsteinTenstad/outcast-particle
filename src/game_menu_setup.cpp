@@ -10,19 +10,39 @@ void Game::GoToMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
 	is_in_level_editing_ = false;
-	active_level_.size = MENU_SIZE;
-	int menu_text_size = 300;
-	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::ButtunFuncEditLevel, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ExitGame, this) };
-	std::vector<std::string> menu_text = { "Play", "Edit levels", "Options", "Toggle fullscreen", "Exit Game" };
-	auto menu_button_positions = GridHelper(menu_text.size(), 1, 0, 432, 200);
+	active_level_.size = sf::Vector2f(LEVEL_WIDTHS[1], LEVEL_WIDTHS[1] / ASPECT_RATIO);
+
+	float x_center_offset = 8 * BLOCK_SIZE;
+	float y_offset = active_level_.size.y - 6.5 * BLOCK_SIZE;
+
+	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::ButtunFuncEditLevel, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
+	std::vector<std::string> menu_text = { "Play", "Level Creator", "Options", "Exit Game" };
+	auto menu_button_positions = GridHelper(menu_text.size(), 1, 0, 2 * BLOCK_SIZE, BLOCK_SIZE);
 	for (unsigned i = 0; i < menu_text.size(); ++i)
 	{
-		sf::Vector2 button_position = menu_button_positions[i] + active_level_.size / 2.f;
+		sf::Vector2 button_position = menu_button_positions[i];
+		button_position.x += active_level_.size.x / 2.f - x_center_offset;
+		button_position.y += y_offset;
 		float x = button_position.x;
 		float y = button_position.y;
 		AddMenuButton(active_level_, menu_funtions[i], x, y, menu_text[i]);
 	}
 	active_level_.AddBlueprint("BPMenuNavigator");
+
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
+	title_text->size = 250;
+	title_text->content = "Outcast\n   Particle";
+	title_position->position = active_level_.size / 2.f;
+	title_position->position.x = active_level_.size.x / 2.f - x_center_offset;
+	title_position->position.y = 2 * BLOCK_SIZE;
+
+	int static_particle_id = active_level_.AddBlueprint("BPStaticParticle");
+	active_level_.GetComponent<Position>()[static_particle_id].position = sf::Vector2f(active_level_.size.x / 2.f + x_center_offset, y_offset);
+
+	int player_id = active_level_.AddBlueprint("BPPlayer");
+	active_level_.GetComponent<Position>()[player_id].position = sf::Vector2f(active_level_.size.x / 2.f + x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
+	active_level_.GetComponent<Velocity>()[player_id].velocity = sf::Vector2f(460, 0);
+	active_level_.GetComponent<Charge>()[player_id].charge *= -1;
 }
 
 void Game::GoToLevelMenu()
