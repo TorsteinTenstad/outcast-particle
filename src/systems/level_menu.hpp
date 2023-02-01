@@ -136,6 +136,7 @@ public:
 		for (int i = 1; i < button_list_ids.size(); i++)
 		{
 			ui->button_entity_ids.push_back(button_list_ids[i]);
+			ui->entity_ids.push_back(button_list_ids[i]);
 		}
 
 		auto [level_preview_entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
@@ -147,6 +148,7 @@ public:
 		ui->level_image_identifier = &draw_info->image_path;
 
 		auto [stats_entity_id, stats_text, stats_draw_priority, stats_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+		ui->entity_ids.push_back(stats_entity_id);
 		stats_text->size = 140;
 		ui->stats_string = &stats_text->content;
 		stats_position->position = sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH / 2), level.size.x * (LEVEL_PREVIEW_HEIGHT));
