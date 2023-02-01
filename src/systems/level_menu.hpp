@@ -3,6 +3,8 @@
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 #include "utils.hpp"
+#include <iomanip>
+#include <sstream>
 
 #define LEVEL_PREVIEW_WIDTH 0.6
 #define LEVEL_PREVIEW_HEIGHT (0.6 / ASPECT_RATIO)
@@ -65,7 +67,8 @@ public:
 		{
 			if (level.HasComponents<HoveredStartedThisFrame>(button_entity_id))
 			{
-				*ui->level_image_identifier = generate_level_texture_(level_groups_->at(ui->level_group)[button_i], unsigned(level.size.x * LEVEL_PREVIEW_WIDTH), unsigned(level.size.x * LEVEL_PREVIEW_HEIGHT));
+				ui->at_level_id = level_groups_->at(ui->level_group)[button_i];
+				*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.size.x * LEVEL_PREVIEW_WIDTH), unsigned(level.size.x * LEVEL_PREVIEW_HEIGHT));
 			}
 			button_i++;
 		}
@@ -77,6 +80,7 @@ public:
 		{
 			ui->requested_level_group = PrevKey(*level_groups_, ui->level_group);
 		}
+		GenerateStatsString(ui);
 	}
 
 	void SetupUI(Level& level, LevelMenuUI* ui)
@@ -91,7 +95,7 @@ public:
 		ui->button_entity_ids.clear();
 
 		float button_panel_center = level.size.x * (1 - LEVEL_PREVIEW_WIDTH) / 2;
-		float title_h = 400;
+		float title_h = 350;
 		auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
 		ui->entity_ids.push_back(title_entity_id);
 		title_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
@@ -141,6 +145,11 @@ public:
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		draw_info->scale_to_fit = true;
 		ui->level_image_identifier = &draw_info->image_path;
+
+		auto [stats_entity_id, stats_text, stats_draw_priority, stats_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+		stats_text->size = 140;
+		ui->stats_string = &stats_text->content;
+		stats_position->position = sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH / 2), level.size.x * (LEVEL_PREVIEW_HEIGHT));
 	}
 
 	void EnterLevel(std::string level_id)
@@ -150,5 +159,26 @@ public:
 		{
 			entered_level.SetMode(EDIT_MODE);
 		}
+	}
+
+	void GenerateStatsString(LevelMenuUI* ui)
+	{
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision(2);
+		ss << "\nBest completion times:\n";
+		for (const auto& [coin_n, records] : *level_completion_time_records_)
+		{
+			ss << "   " << std::to_string(coin_n) << " coins: ";
+			if (records.count(ui->at_level_id) > 0)
+			{
+				ss << records.at(ui->at_level_id);
+			}
+			else
+			{
+				ss << "-";
+			}
+			ss << "\n";
+		}
+		*ui->stats_string = ss.str();
 	}
 };
