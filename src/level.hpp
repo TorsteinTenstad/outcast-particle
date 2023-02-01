@@ -31,6 +31,7 @@
 #include "globals.hpp"
 #include "level_mode.hpp"
 #include "level_state.hpp"
+#include "ui_origin.hpp"
 #include <functional>
 #include <map>
 #include <typeindex>
@@ -166,8 +167,8 @@ public:
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
 };
-
 int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text);
+std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys = {}, float x_scale = 1, float y_scale = 1, UiOrigin ui_origin = CenterCenter);
 int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size);
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 

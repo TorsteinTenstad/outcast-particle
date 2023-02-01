@@ -110,6 +110,55 @@ int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x,
 	level.GetComponent<Text>()[id].content = button_text;
 	return id;
 }
+std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys, float x_scale, float y_scale, UiOrigin ui_origin)
+{
+	int n = button_functions.size();
+	assert(button_texts.size() == n);
+
+	std::vector<int> ids = {};
+
+	int navigator_id = level.AddBlueprint("BPMenuNavigator");
+	ids.push_back(navigator_id);
+
+	for (unsigned i = 0; i < n; ++i)
+	{
+		int id = level.AddBlueprint("BPButton");
+		ids.push_back(id);
+		level.GetComponent<WidthAndHeight>()[id].width_and_height.x *= x_scale;
+		float& h = level.GetComponent<WidthAndHeight>()[id].width_and_height.y;
+		h *= y_scale;
+		level.GetComponent<OnReleasedThisFrame>()[id].func = button_functions[i];
+		level.GetComponent<Text>()[id].content = button_texts[i];
+		if (shortcut_keys.size() != 0)
+		{
+			assert(shortcut_keys.size() == n);
+			level.GetComponent<ShortcutKey>()[id].key = shortcut_keys[i];
+		}
+		level.GetComponent<Text>()[id].size *= y_scale;
+
+		float x = 0;
+		float spacing = h * 0.5;
+		float y = (h + spacing) * i + h / 2;
+		float total_list_h = n * h + (n - 1) * spacing;
+		switch (ui_origin)
+		{
+			case TopCenter:
+				break;
+			case CenterCenter:
+				y -= total_list_h / 2;
+				break;
+			case BottomCenter:
+				y -= total_list_h;
+				break;
+			default:
+				assert(false);
+		}
+		level.GetComponent<Position>()[id].position = position + sf::Vector2f(x, y);
+	}
+
+	level.GetComponent<WidthAndHeight>()[navigator_id].width_and_height *= y_scale;
+	return ids;
+}
 
 int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
 {

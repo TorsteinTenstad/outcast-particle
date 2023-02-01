@@ -17,7 +17,8 @@ class BPButton
 class BPMenuNavigator
 {
 	DrawInfo draw_info = { "content\\textures\\menu_navigator.png", true, 0 };
-	WidthAndHeight width_and_height = { sf::Vector2f(185, 300) };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 180) };
+	FillColor fill_color = { sf::Color(120, 120, 120) };
 	DrawPriority draw_priority = { 101 };
 	MenuNavigator menu_navigator = {};
 	Position position = { sf::Vector2f(0, 0) };

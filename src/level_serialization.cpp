@@ -403,7 +403,8 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPMenuNavigator")
         {
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\menu_navigator.png", true, 0 };
-            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(185, 300) };
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 180) };
+            GetComponent<FillColor>()[entity_id] = { sf::Color(120, 120, 120) };
             GetComponent<DrawPriority>()[entity_id] = { 101 };
             GetComponent<MenuNavigator>()[entity_id] = {};
             GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
@@ -675,7 +676,8 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPMenuNavigator")
     {
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\menu_navigator.png", true, 0 };
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(185, 300) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 180) };
+        GetComponent<FillColor>()[entity_id] = { sf::Color(120, 120, 120) };
         GetComponent<DrawPriority>()[entity_id] = { 101 };
         GetComponent<MenuNavigator>()[entity_id] = {};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };

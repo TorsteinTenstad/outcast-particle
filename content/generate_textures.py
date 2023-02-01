@@ -125,14 +125,26 @@ def laser_texture():
         f'content\\textures\\laser_vertical.png', svg_w*4, h*4)
 
 
+def generate_menu_navigator_texture():
+    svg = SVG(120, 180)
+    svg.add(polygon(
+        [[15, 15], [105, 90], [15, 165]], color="#ffffff"))
+    svg.set_inkscape_path('C:\\Program Files\\Inkscape\\bin\\inkscape.exe')
+    svg.export_png(
+        'content\\textures_generated\\menu_navigator.png', 120, 180)
+
+
 if __name__ == '__main__':
 
     GENERATE_MAGNETIC_FELD_TEXTURES = False
-    GENERATE_BUTTON_TEXTURES = True
+    GENERATE_BUTTON_TEXTURES = False
     GENERATE_LASER_TEXTURE = False
     GENERATE_PARTICLE_TEXTURES = False
     GENERATE_NEUTRAL_PLAYER_TEXTURES = False
+    GENERATE_MENU_NAVIGATOR_TEXTURE = True
 
+    if GENERATE_MENU_NAVIGATOR_TEXTURE:
+        generate_menu_navigator_texture()
     if GENERATE_PARTICLE_TEXTURES:
         red_colors = ['#550000', '#610000', '#6e0000', '#7b0000', '#880000', '#960000', '#a40004', '#b1000f', '#be0518', '#ca151f',
                       '#d42426', '#de2f2d', '#e83a34', '#f2443b', '#fb4e43', '#ff5e50', '#ff705f', '#ff7f6c', '#ff8e79', '#ff9c85', '#ffa991', '#ffb69d']

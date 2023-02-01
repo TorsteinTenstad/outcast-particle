@@ -106,29 +106,12 @@ public:
 	}
 	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys)
 	{
-		float button_scale = level.size.x / MENU_LEVEL_WIDTH;
-		float button_w = 3072 * button_scale;
-		float button_h = 432 * button_scale;
-		int text_size = 300 * button_scale;
-		auto button_positions = GridHelper(button_texts.size(), 1, button_w, button_h, 200 * button_scale);
-		for (unsigned i = 0; i < button_texts.size(); ++i)
+		float button_scale = level.size.x / LEVEL_WIDTHS[1];
+		std::vector<int> pause_menu_ids = AddButtonList(level, level.size / 2.f, button_functions, button_texts, shortcut_keys, button_scale, button_scale);
+		for (auto id : pause_menu_ids)
 		{
-			sf::Vector2f button_position = button_positions[i] + level.size / 2.f;
-			float x = button_position.x;
-			float y = button_position.y;
-			int id = level.AddBlueprint("BPButton");
-			level.GetComponent<Position>()[id] = { sf::Vector2f(x, y) };
-			level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(button_w, button_h) };
-			level.GetComponent<OnReleasedThisFrame>()[id].func = button_functions[i];
-			level.GetComponent<ShortcutKey>()[id].key = shortcut_keys[i];
-			level.GetComponent<Text>()[id].content = button_texts[i];
-			level.GetComponent<Text>()[id].size = text_size;
-			level.GetComponent<PauseMenuItems>()[id] = {};
+			level.GetComponent<PauseMenuItems>()[id];
 		}
-		int navigator_id = level.AddBlueprint("BPMenuNavigator");
-
-		level.GetComponent<WidthAndHeight>()[navigator_id].width_and_height *= button_scale;
-		level.GetComponent<PauseMenuItems>()[navigator_id];
 	}
 	void RemovePauseButtons(Level& level)
 	{

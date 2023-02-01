@@ -10,24 +10,14 @@ void Game::GoToMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
 	is_in_level_editing_ = false;
-	active_level_.size = sf::Vector2f(LEVEL_WIDTHS[1], LEVEL_WIDTHS[1] / ASPECT_RATIO);
+	active_level_.size = MENU_SIZE;
 
 	float x_center_offset = 8 * BLOCK_SIZE;
 	float y_offset = active_level_.size.y - 6.5 * BLOCK_SIZE;
 
-	std::vector<std::function<void(void)>> menu_funtions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::ButtunFuncEditLevel, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
-	std::vector<std::string> menu_text = { "Play", "Level Creator", "Options", "Exit Game" };
-	auto menu_button_positions = GridHelper(menu_text.size(), 1, 0, 2 * BLOCK_SIZE, BLOCK_SIZE);
-	for (unsigned i = 0; i < menu_text.size(); ++i)
-	{
-		sf::Vector2 button_position = menu_button_positions[i];
-		button_position.x += active_level_.size.x / 2.f - x_center_offset;
-		button_position.y += y_offset;
-		float x = button_position.x;
-		float y = button_position.y;
-		AddMenuButton(active_level_, menu_funtions[i], x, y, menu_text[i]);
-	}
-	active_level_.AddBlueprint("BPMenuNavigator");
+	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::ButtunFuncEditLevel, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
+	std::vector<std::string> text = { "Play", "Level Creator", "Options", "Exit Game" };
+	AddButtonList(active_level_, sf::Vector2f(active_level_.size.x / 2 - x_center_offset, y_offset), functions, text);
 
 	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
@@ -55,7 +45,7 @@ void Game::GoToLevelMenu()
 void Game::GoToOptionsMenu()
 {
 	active_level_id_ = OPTIONS_MENU;
-	active_level_.size = MENU_SIZE;
+	active_level_.size = MENU_SIZE * 2.f;
 	float options_button_w = 3072;
 	float options_button_h = 432;
 	int options_text_size = 200;

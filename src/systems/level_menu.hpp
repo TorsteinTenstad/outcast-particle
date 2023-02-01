@@ -120,22 +120,20 @@ public:
 			nav_btn_position->position = sf::Vector2f(button_panel_center + p * 0.7 * button_panel_center, title_h / 2);
 		}
 
-		int i = 0;
+		std::vector<std::function<void(void)>> button_functions = {};
+		std::vector<std::string> button_texts = {};
 		for (auto& level_id : (*level_groups_).at(ui->level_group))
 		{
-			float w = level.size.x * (1 - LEVEL_PREVIEW_WIDTH - 2 * BUTTON_HORISONTAL_MARGIN);
-			float h = w / BUTTON_ASPECT_RATIO;
-			float x = button_panel_center;
-			float y = title_h + h / 2 + level.size.x * BUTTON_VERTICAL_MARGIN + i * (h + level.size.x * BUTTON_VERTICAL_MARGIN);
-			int id = AddMenuButton(level, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), x, y, GetLevelDisplayNameFromId(level_id));
-			level.GetComponent<Text>()[id].size = 150;
-			ui->entity_ids.push_back(id);
-			ui->button_entity_ids.push_back(id);
-			level.GetComponent<WidthAndHeight>()[id].width_and_height = sf::Vector2f(w, h);
-			i++;
+			button_functions.push_back(std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
+			button_texts.push_back(GetLevelDisplayNameFromId(level_id));
 		}
-		int menu_button_navigator_id = level.AddBlueprint("BPMenuNavigator");
-		ui->entity_ids.push_back(menu_button_navigator_id);
+		std::vector<int> button_list_ids = AddButtonList(level, sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH) / 2, title_h), button_functions, button_texts, {}, 1, 0.5, TopCenter);
+		ui->entity_ids.push_back(button_list_ids[0]);
+		for (int i = 1; i < button_list_ids.size(); i++)
+		{
+			ui->button_entity_ids.push_back(button_list_ids[i]);
+		}
+
 		auto [level_preview_entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
 		ui->entity_ids.push_back(level_preview_entity_id);
 		position->position = sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH / 2), level.size.x * (LEVEL_PREVIEW_HEIGHT / 2));
