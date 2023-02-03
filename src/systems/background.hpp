@@ -27,8 +27,8 @@ public:
 			draw_priority_map[entity_id].draw_priority = BACKGROUND_DRAW_PRIORITY;
 		}
 		int entity_id = background_map.begin()->first;
-		width_and_height_map[entity_id].width_and_height = level.size;
-		position_map[entity_id].position = level.size / 2.f;
+		width_and_height_map[entity_id].width_and_height = level.GetSize();
+		position_map[entity_id].position = level.GetSize() / 2.f;
 		if (level.GetMode() == EDIT_MODE)
 		{
 			draw_info_map[entity_id].image_path = "content\\textures\\grid.png";

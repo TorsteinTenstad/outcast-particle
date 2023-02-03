@@ -1,4 +1,4 @@
-name=Untitled;size=(5760,3240);editable=1
+name=Untitled;grid_size_id=2;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(5700,1620)}WidthAndHeight{width_and_height=(120,3240)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(2160,2280)}WidthAndHeight{width_and_height=(240,240)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,840)}Charge{charge=40000}

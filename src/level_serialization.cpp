@@ -231,7 +231,7 @@ void DeserializeComponent(TextPopupSpawner& c, std::string str_rep)
 void Level::SaveToFile(std::string savefile_path)
 {
     std::ofstream f(savefile_path);
-    f << "name=" << name << ";size=" << ToString(size) << ";editable=" << ToString(editable) << "\n";
+    f << "name=" << name << ";grid_size_id=" << ToString(grid_size_id) << ";editable=" << ToString(editable) << "\n";
 
     std::map<int, Tag>& tags = GetComponent<Tag>();
     std::string entity_string;
@@ -375,7 +375,7 @@ void Level::LoadFromFile(std::string savefile_path)
         property_str = SplitString(property_str, "=")[1];
     }
     FromString(name, level_properties[0]);
-    FromString(size, level_properties[1]);
+    FromString(grid_size_id, level_properties[1]);
     FromString(editable, level_properties[2]);
 
     while (getline(f, line))

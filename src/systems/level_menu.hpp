@@ -6,8 +6,7 @@
 #include <iomanip>
 #include <sstream>
 
-#define LEVEL_PREVIEW_WIDTH 0.6
-#define LEVEL_PREVIEW_HEIGHT (0.6 / ASPECT_RATIO)
+#define LEVEL_PREVIEW_SCALE 0.6
 #define BUTTON_HORISONTAL_MARGIN 0.06
 #define BUTTON_VERTICAL_MARGIN 0.01
 #define BUTTON_ASPECT_RATIO 8
@@ -68,7 +67,7 @@ public:
 			if (level.HasComponents<HoveredStartedThisFrame>(button_entity_id))
 			{
 				ui->at_level_id = level_groups_->at(ui->level_group)[button_i];
-				*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.size.x * LEVEL_PREVIEW_WIDTH), unsigned(level.size.x * LEVEL_PREVIEW_HEIGHT));
+				*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE), unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE));
 			}
 			button_i++;
 		}
@@ -94,7 +93,7 @@ public:
 		ui->entity_ids.clear();
 		ui->button_entity_ids.clear();
 
-		float button_panel_center = level.size.x * (1 - LEVEL_PREVIEW_WIDTH) / 2;
+		float button_panel_center = level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2;
 		float title_h = 350;
 		auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
 		ui->entity_ids.push_back(title_entity_id);
@@ -119,7 +118,7 @@ public:
 			nav_btn_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 			nav_btn_draw_info->image_path = "content\\textures_generated\\button_500_500.png";
 			nav_btn_draw_info->scale_to_fit = true;
-			nav_btn_w_h->width_and_height = sf::Vector2f(1, 1) * float(title_h - 2 * level.size.x * BUTTON_VERTICAL_MARGIN);
+			nav_btn_w_h->width_and_height = sf::Vector2f(1, 1) * float(title_h - 2 * level.GetSize().x * BUTTON_VERTICAL_MARGIN);
 			nav_btn_text->content = p < 0 ? "<" : ">";
 			nav_btn_position->position = sf::Vector2f(button_panel_center + p * 0.7 * button_panel_center, title_h / 2);
 		}
@@ -131,7 +130,7 @@ public:
 			button_functions.push_back(std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
 			button_texts.push_back(GetLevelDisplayNameFromId(level_id));
 		}
-		std::vector<int> button_list_ids = AddButtonList(level, sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH) / 2, title_h), button_functions, button_texts, {}, 1, 0.5, TopCenter);
+		std::vector<int> button_list_ids = AddButtonList(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), button_functions, button_texts, {}, 1, 0.5, TopCenter);
 		ui->entity_ids.push_back(button_list_ids[0]);
 		for (int i = 1; i < button_list_ids.size(); i++)
 		{
@@ -141,8 +140,8 @@ public:
 
 		auto [level_preview_entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
 		ui->entity_ids.push_back(level_preview_entity_id);
-		position->position = sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH / 2), level.size.x * (LEVEL_PREVIEW_HEIGHT / 2));
-		width_and_height->width_and_height = sf::Vector2f(level.size.x * LEVEL_PREVIEW_WIDTH, level.size.x * LEVEL_PREVIEW_HEIGHT);
+		position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE / 2));
+		width_and_height->width_and_height = sf::Vector2f(level.GetSize().x * LEVEL_PREVIEW_SCALE, level.GetSize().y * LEVEL_PREVIEW_SCALE);
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		draw_info->scale_to_fit = true;
 		ui->level_image_identifier = &draw_info->image_path;
@@ -151,7 +150,7 @@ public:
 		ui->entity_ids.push_back(stats_entity_id);
 		stats_text->size = 140;
 		ui->stats_string = &stats_text->content;
-		stats_position->position = sf::Vector2f(level.size.x * (1 - LEVEL_PREVIEW_WIDTH / 2), level.size.x * (LEVEL_PREVIEW_HEIGHT));
+		stats_position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE));
 	}
 
 	void EnterLevel(std::string level_id)

@@ -46,24 +46,14 @@ public:
 		}
 
 		// Change level size:
-		int size_increase = 0;
 		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREASE_LEVEL_SIZE])
 		{
-			size_increase += 1;
+			level.IncreaseSize();
 		}
 		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREASE_LEVEL_SIZE])
 		{
-			size_increase -= 1;
+			level.DecreaseSize();
 		}
-		if (size_increase != 0)
-		{
-			int width_idx = FindClosest(LEVEL_WIDTHS, level.size.x) + size_increase;
-			width_idx = Clamp(width_idx, 0, (int)LEVEL_WIDTHS.size() - 1);
-			float new_level_width = LEVEL_WIDTHS[width_idx];
-			level.size.x = new_level_width;
-			level.size.y = new_level_width / ASPECT_RATIO;
-		}
-
 		// Copy entities:
 		for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
 		{
@@ -248,17 +238,17 @@ public:
 			{
 				position->position.x = 0;
 			}
-			else if (position->position.x > level.size.x)
+			else if (position->position.x > level.GetSize().x)
 			{
-				position->position.x = level.size.x;
+				position->position.x = level.GetSize().x;
 			}
 			if (position->position.y < 0)
 			{
 				position->position.y = 0;
 			}
-			else if (position->position.y > level.size.y)
+			else if (position->position.y > level.GetSize().y)
 			{
-				position->position.y = level.size.y;
+				position->position.y = level.GetSize().y;
 			}
 		}
 	}
@@ -266,7 +256,7 @@ public:
 	{
 		int i = 0;
 		int menu_background_id = level.CreateEntityId();
-		level.GetComponent<Position>()[menu_background_id].position = level.size / 2.f;
+		level.GetComponent<Position>()[menu_background_id].position = level.GetSize() / 2.f;
 		level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
 		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
 		level.GetComponent<ReceivesMouseEvents>()[menu_background_id];
@@ -278,7 +268,7 @@ public:
 		for (const auto& tag : blueprint_menu_entry_tags_)
 		{
 			entity_id = level.AddBlueprint(tag);
-			level.GetComponent<Position>()[entity_id].position = sf::Vector2f(level.size.x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.size.y / 2);
+			level.GetComponent<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
 			level.GetComponent<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
 			level.GetComponent<BlueprintMenuItem>()[entity_id];
 			i++;

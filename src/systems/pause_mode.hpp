@@ -106,8 +106,8 @@ public:
 	}
 	void AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys)
 	{
-		float button_scale = level.size.x / LEVEL_WIDTHS[1];
-		std::vector<int> pause_menu_ids = AddButtonList(level, level.size / 2.f, button_functions, button_texts, shortcut_keys, button_scale, button_scale);
+		float button_scale = level.GetScale();
+		std::vector<int> pause_menu_ids = AddButtonList(level, level.GetSize() / 2.f, button_functions, button_texts, shortcut_keys, button_scale, button_scale);
 		for (auto id : pause_menu_ids)
 		{
 			level.GetComponent<PauseMenuItems>()[id];

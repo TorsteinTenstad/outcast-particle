@@ -1,4 +1,4 @@
-name=Untitled;size=(3840,2160);editable=1
+name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3840,120)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(780,360)}Charge{charge=10000}Velocity{velocity=(286.39,-1.11417)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPWall":Tag{tag=BPWall}Position{position=(60,1080)}WidthAndHeight{width_and_height=(120,1920)}

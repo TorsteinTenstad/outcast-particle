@@ -5,6 +5,7 @@
 #include <string>
 
 int Level::next_available_entity_id_ = 0;
+const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vector2u(32, 18), sf::Vector2u(48, 27), sf::Vector2u(64, 36), sf::Vector2u(80, 45) } };
 
 Level::Level()
 {
@@ -90,6 +91,37 @@ void Level::SetMode(LevelMode level_mode)
 		LoadFromFile();
 	}
 	mode_ = level_mode;
+}
+
+sf::Vector2f Level::GetSize()
+{
+	return sf::Vector2f(LEVEL_SIZES[grid_size_id]) * float(BLOCK_SIZE);
+}
+
+float Level::GetScale()
+{
+	return (float)LEVEL_SIZES[grid_size_id].x / (float)LEVEL_SIZES[DEFAULT_LEVEL_GRID_SIZE_ID].x;
+}
+
+void Level::ResetSize()
+{
+	grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
+}
+
+void Level::IncreaseSize()
+{
+	if (grid_size_id < LEVEL_SIZES.size() - 1)
+	{
+		grid_size_id++;
+	}
+}
+
+void Level::DecreaseSize()
+{
+	if (grid_size_id > 0)
+	{
+		grid_size_id--;
+	}
 }
 
 void Level::LoadFromFile()
@@ -183,8 +215,8 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority)
 {
 	int id = level.CreateEntityId();
-	level.GetComponent<Position>()[id].position = level.size / 2.f;
-	level.GetComponent<WidthAndHeight>()[id].width_and_height = level.size;
+	level.GetComponent<Position>()[id].position = level.GetSize() / 2.f;
+	level.GetComponent<WidthAndHeight>()[id].width_and_height = level.GetSize();
 	level.GetComponent<DrawPriority>()[id].draw_priority = draw_priority;
 	level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
 	level.GetComponent<Shader>()[id].fragment_shader_path = shader_path;

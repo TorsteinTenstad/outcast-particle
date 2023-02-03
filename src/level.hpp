@@ -11,6 +11,7 @@
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
+#include "components/grid.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/level_menu.hpp"
@@ -62,6 +63,7 @@ typedef std::variant<
 	std::map<int, KillOnIntersection>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
+	std::map<int, Grid>,
 	std::map<int, MagneticField>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,
@@ -118,7 +120,7 @@ private:
 public:
 	bool editable = false;
 	std::string name = "Untitled";
-	sf::Vector2f size = sf::Vector2f(LEVEL_WIDTHS[2], LEVEL_WIDTHS[2] / ASPECT_RATIO);
+	int grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
 
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
@@ -162,7 +164,14 @@ public:
 	LevelMode GetMode();
 	void SetMode(LevelMode level_mode);
 
-	void SaveToFile();
+	sf::Vector2f GetSize();
+	float GetScale();
+	void ResetSize();
+	void IncreaseSize();
+	void DecreaseSize();
+
+	void
+	SaveToFile();
 	void LoadFromFile();
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);

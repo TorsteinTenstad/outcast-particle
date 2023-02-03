@@ -1,4 +1,4 @@
-name=Untitled;size=(5760,3240);editable=1
+name=Untitled;grid_size_id=2;editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(300,480)}Charge{charge=10000}Velocity{velocity=(-12.3514,-349.701)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(480,480)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(720,720)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,3180)}WidthAndHeight{width_and_height=(5640,60)}
