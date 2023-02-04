@@ -7,10 +7,10 @@
 #define MAX_COLS 32
 #define MAX_ROWS 18
 
-static std::array<int, 2> WorldPosToGridPos(sf::Vector2f world_pos, float grid_size)
+static sf::Vector2i WorldPosToGridPos(sf::Vector2f world_pos, float grid_size)
 {
 	sf::Vector2f unrounded_grid_pos = world_pos / grid_size;
-	return { (int)std::floor(unrounded_grid_pos.x), (int)std::floor(unrounded_grid_pos.y) };
+	return sf::Vector2i((int)std::floor(unrounded_grid_pos.x), (int)std::floor(unrounded_grid_pos.y));
 }
 
 class GridEntitiesManagerSystem : public GameSystem
@@ -44,16 +44,16 @@ public:
 			width_and_height->width_and_height = level_size;
 			position->position = level_size / 2.f;
 
-			std::array<int, 2> mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, grid_entities_manager->grid_size);
+			sf::Vector2i mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, grid_entities_manager->grid_size);
 			if (cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Left])
 			{
-				grid_entities_manager->grid[mouse_grid_pos[0]][mouse_grid_pos[1]] = WALL;
-				shader->int_uniforms["grid_entity[" + ToString(mouse_grid_pos[1] * MAX_COLS + mouse_grid_pos[0]) + "]"] = WALL;
+				grid_entities_manager->grid[mouse_grid_pos.x][mouse_grid_pos.y] = WALL;
+				shader->int_uniforms["grid_entity[" + ToString(mouse_grid_pos.y * MAX_COLS + mouse_grid_pos.x) + "]"] = WALL;
 			}
 			if (cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Right])
 			{
-				grid_entities_manager->grid[mouse_grid_pos[0]][mouse_grid_pos[1]] = EMPTY;
-				shader->int_uniforms["grid_entity[" + ToString(mouse_grid_pos[1] * MAX_COLS + mouse_grid_pos[0]) + "]"] = EMPTY;
+				grid_entities_manager->grid[mouse_grid_pos.x][mouse_grid_pos.y] = EMPTY;
+				shader->int_uniforms["grid_entity[" + ToString(mouse_grid_pos.y * MAX_COLS + mouse_grid_pos.x) + "]"] = EMPTY;
 			}
 		}
 	}

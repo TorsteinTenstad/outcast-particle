@@ -165,6 +165,7 @@ public:
 	void SetMode(LevelMode level_mode);
 
 	sf::Vector2f GetSize();
+	sf::Vector2u GetGridSize();
 	float GetScale();
 	void ResetSize();
 	void IncreaseSize();
