@@ -245,6 +245,11 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
         }
         
+        if (tag == "BPGridEntitiesManager")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPMenuNavigator")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -396,6 +401,18 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Text>()[entity_id] = {};
             GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
             GetComponent<MenuNavigatable>()[entity_id] = {};
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
+        if (tag == "BPGridEntitiesManager")
+        {
+            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<DrawPriority>()[entity_id] = { 4 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
+            GetComponent<WidthAndHeight>()[entity_id] = {};
+            GetComponent<GridEntitiesManager>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
         }
@@ -671,6 +688,17 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
         GetComponent<MenuNavigatable>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPButton"};
+        return entity_id;
+    }
+    if (tag == "BPGridEntitiesManager")
+    {
+        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<DrawPriority>()[entity_id] = { 4 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
+        GetComponent<WidthAndHeight>()[entity_id] = {};
+        GetComponent<GridEntitiesManager>()[entity_id] = {};
+        GetComponent<Tag>()[entity_id] = {"BPGridEntitiesManager"};
         return entity_id;
     }
     if (tag == "BPMenuNavigator")

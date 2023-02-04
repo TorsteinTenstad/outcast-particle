@@ -19,6 +19,7 @@
 #include "systems/force.hpp"
 #include "systems/force_visualization.hpp"
 #include "systems/goal.hpp"
+#include "systems/grid_entities_manager_system.hpp"
 #include "systems/intersection.hpp"
 #include "systems/kill_on_intersection.hpp"
 #include "systems/level_completion_time.hpp"

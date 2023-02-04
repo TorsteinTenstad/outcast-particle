@@ -11,7 +11,7 @@
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
-#include "components/grid.hpp"
+#include "components/grid_entities_manager.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/level_menu.hpp"
@@ -63,7 +63,7 @@ typedef std::variant<
 	std::map<int, KillOnIntersection>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
-	std::map<int, Grid>,
+	std::map<int, GridEntitiesManager>,
 	std::map<int, MagneticField>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,

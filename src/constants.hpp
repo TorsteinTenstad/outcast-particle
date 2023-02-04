@@ -7,7 +7,9 @@
 
 #define STARTING_LEVEL MAIN_MENU
 
+// NOTE: Must be in sync with grid_entities_manager.frag
 #define BLOCK_SIZE 120
+
 #define MAX_SCREEN_SIZE_SHAKE 1.1f
 #define BACKGROUND_DRAW_PRIORITY -1
 #define UI_BASE_DRAW_PRIORITY 100
