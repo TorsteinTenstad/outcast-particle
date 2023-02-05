@@ -7,10 +7,10 @@
 #define MAX_COLS 32
 #define MAX_ROWS 18
 
-static std::array<int, 2> WorldPosToGridPos(sf::Vector2f world_pos, float grid_size)
+static sf::Vector2i WorldPosToGridPos(sf::Vector2f world_pos, float grid_size)
 {
 	sf::Vector2f unrounded_grid_pos = world_pos / grid_size;
-	return { (int)std::floor(unrounded_grid_pos.x), (int)std::floor(unrounded_grid_pos.y) };
+	return sf::Vector2i((int)std::floor(unrounded_grid_pos.x), (int)std::floor(unrounded_grid_pos.y));
 }
 
 class GridEntitiesManagerSystem : public GameSystem
