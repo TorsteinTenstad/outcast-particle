@@ -2,24 +2,20 @@
 
 #define PI 3.1415926535897932384626433832795
 
-#define MAX_COLS 32
-#define MAX_ROWS 18
-
 // NOTE: Must be in sync with constants.hpp
-#define BLOCK_SIZE 120
 
-#define MAX_BLOCKS (MAX_COLS*MAX_ROWS)
-
+uniform sampler2D data_texture;
+uniform int BLOCK_SIZE;
+uniform int WIDTH;
+uniform int HEIGHT;
 uniform float _time;
-uniform int grid_entity[MAX_BLOCKS];
 
 
 int GridEntityAtId(int x, int y){
-    if (x < 0 || y < 0 || x>=32 || y>=18){
-        return -1;
+    if (x < 0 || y < 0 || x>=WIDTH || y>=HEIGHT){
+        return 0;
     }
-    int grid_pos = y * MAX_COLS + x;
-    return grid_entity[grid_pos];
+    return int(floor(texture2D(data_texture, vec2(x, y)/vec2(WIDTH-1, HEIGHT-1)).r*256.0));
 }
 
 #define SQRT2 1.41421356
@@ -28,6 +24,7 @@ int GridEntityAtId(int x, int y){
 void main()
 {
     vec2 grid_coords= gl_TexCoord[0].xy/BLOCK_SIZE;
+
 	vec2 grid_id = floor(grid_coords);
     int grid_x = int(grid_id[0]);
     int grid_y = int(grid_id[1]);
@@ -67,4 +64,5 @@ void main()
 
     int entity_type = GridEntityAtId(grid_x, grid_y);
 	gl_FragColor = vec4(col, float(entity_type));
+	//gl_FragColor = vec4(gl_TexCoord[0].xy/120, 0, 1);
 }

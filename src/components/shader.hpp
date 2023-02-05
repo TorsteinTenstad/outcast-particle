@@ -1,4 +1,5 @@
 #pragma once
+#include "SFML/Graphics/Texture.hpp"
 #include "SFML/System/Vector2.hpp"
 #include <map>
 #include <string>
@@ -11,4 +12,5 @@ public:
 	std::map<std::string, int> int_uniforms;
 	std::map<std::string, float> float_uniforms;
 	std::map<std::string, sf::Vector2f> vec_uniforms;
+	std::map<std::string, const sf::Texture*> tex_uniforms;
 };

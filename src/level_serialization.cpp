@@ -35,6 +35,28 @@ void DeserializeComponent(Tag& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(GridEntitiesManager c, std::string& str_rep)
+{
+	str_rep += "GridEntitiesManager{";
+	str_rep += "grid_entities_data=";
+	str_rep += ToString(c.grid_entities_data);
+	str_rep += "}";
+}
+
+void DeserializeComponent(GridEntitiesManager& c, std::string str_rep)
+{
+    std::vector<std::string> variables = SplitString(str_rep, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "grid_entities_data")
+        {
+            FromString(c.grid_entities_data, statement_parts[1]);
+        }
+	}
+}
+
 void SerializeComponent(Position c, std::string& str_rep)
 {
 	str_rep += "Position{";
@@ -248,6 +270,7 @@ void Level::SaveToFile(std::string savefile_path)
         if (tag == "BPGridEntitiesManager")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<GridEntitiesManager>()[entity_id], entity_string);
         }
         
         if (tag == "BPMenuNavigator")
@@ -409,12 +432,13 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 4 };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
             GetComponent<WidthAndHeight>()[entity_id] = {};
-            GetComponent<GridEntitiesManager>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(GetComponent<GridEntitiesManager>()[entity_id],
+                GetSubstrBetween(line, "GridEntitiesManager{", "}"));
         }
         
         if (tag == "BPMenuNavigator")
@@ -694,11 +718,11 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 4 };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
         GetComponent<WidthAndHeight>()[entity_id] = {};
-        GetComponent<GridEntitiesManager>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGridEntitiesManager"};
+        GetComponent<GridEntitiesManager>()[entity_id] = {};
         return entity_id;
     }
     if (tag == "BPMenuNavigator")

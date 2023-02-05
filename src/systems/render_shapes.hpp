@@ -55,6 +55,7 @@ public:
 				rectangle_shapes_[entity_id].setSize(w_h);
 				if (entity_drawinfo.scale_to_fit)
 				{
+					assert(entity_drawinfo.image_path != std::string("_grid_entities_data_texture"));
 					sf::Vector2u texture_size = textures_[entity_drawinfo.image_path].getSize();
 					rectangle_shapes_[entity_id].setTextureRect(sf::IntRect(0, 0, texture_size.x, texture_size.y));
 				}

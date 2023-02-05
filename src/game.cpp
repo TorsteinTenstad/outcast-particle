@@ -138,6 +138,7 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);
 	GetGameSystem<PlayerSystem>().Update(level, 0);
 	GetGameSystem<FaceSystem>().Update(level, 0);
+	GetGameSystem<GridEntitiesManagerSystem>().Update(level, 0);
 	GetGameSystem<RenderShapesSystem>().Update(level, 0);
 	GetGameSystem<RenderTextSystem>().Update(level, 0);
 	GetGameSystem<DrawSystem>().CaptureLevel(level, texture, width, height);

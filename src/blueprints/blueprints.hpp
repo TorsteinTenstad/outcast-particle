@@ -18,9 +18,11 @@ class BPGridEntitiesManager
 {
 	ReceivesMouseEvents can_receive_press = {};
 	DrawPriority draw_priority = { 4 };
-	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };
+	DrawInfo draw_info = { "_", false, 0 };
 	Shader shader = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
 	WidthAndHeight width_and_height = {};
+
+	// [Serialize]
 	GridEntitiesManager grid_entities_manager = {};
 };
 

@@ -1,5 +1,7 @@
 #pragma once
+#include "SFML/Window/Keyboard.hpp"
 #include <array>
+#include <string>
 
 #define MAIN_MENU "_MAIN_MENU"
 #define LEVEL_MENU "_LEVEL_MENU"
@@ -7,7 +9,6 @@
 
 #define STARTING_LEVEL MAIN_MENU
 
-// NOTE: Must be in sync with grid_entities_manager.frag
 #define BLOCK_SIZE 120
 
 #define MAX_SCREEN_SIZE_SHAKE 1.1f

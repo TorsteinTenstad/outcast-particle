@@ -53,7 +53,8 @@ def add_assignment(class_, left, right, class_type, decorators=[]):
         else:
             class_["implicit"][type_name] = right
     else:
-        class_["explicit"][var_name] = right
+        if "noserialize" not in decorators:
+            class_["explicit"][var_name] = right
 
 
 def striplist(l):

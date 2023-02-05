@@ -88,6 +88,10 @@ private:
 		{
 			shaders_[shader_id].setUniform(name, value);
 		}
+		for (const auto& [name, value] : shader->tex_uniforms)
+		{
+			shaders_[shader_id].setUniform(name, *value);
+		}
 		shaders_[shader_id].setUniform("_time", globals.time);
 		if (level.HasComponents<WidthAndHeight>(entity_id))
 		{

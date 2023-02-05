@@ -64,6 +64,7 @@ typedef std::variant<
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
 	std::map<int, GridEntitiesManager>,
+	std::map<int, GridEntitiesManagerRuntimeData>,
 	std::map<int, MagneticField>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,

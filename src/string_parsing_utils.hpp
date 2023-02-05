@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics/Color.hpp"
+#include "grid_entities_manager.hpp"
 #include <sstream>
 #include <string>
 #include <vector>
@@ -30,6 +31,42 @@ inline std::vector<std::string> SplitString(std::string s, std::string delimiter
 	}
 	substrings.push_back(s.substr(last_delimiter_idx, s.size()));
 	return substrings;
+}
+
+template <std::size_t N>
+inline std::string ToString(const std::array<uint8_t, N>& arr)
+{
+	return std::string(arr.begin(), arr.end());
+}
+
+template <std::size_t N>
+inline void FromString(std::array<uint8_t, N>, std::string& str)
+{
+	std::array<uint8_t, N> arr;
+	std::copy(str.begin(), str.end(), arr.begin());
+}
+
+inline std::string ToString(const GridEntitiesData& x)
+{
+	x.data_texture_.copyToImage().saveToFile("level_data\\" + x.savefile_identifier_ + ".png");
+	return "level_data\\\\" + x.savefile_identifier_ + ".png";
+}
+
+inline void FromString(GridEntitiesData& x, std::string& str)
+{
+	sf::Image image;
+	image.loadFromFile(str);
+	for (size_t i = 0; i < x.WIDTH; i++)
+	{
+		for (size_t j = 0; j < x.HEIGHT; j++)
+		{
+			sf::Color color = image.getPixel(i, j);
+			x.SetValue(i, j, 0, color.r);
+			x.SetValue(i, j, 1, color.g);
+			x.SetValue(i, j, 2, color.b);
+			x.SetValue(i, j, 3, color.a);
+		}
+	}
 }
 
 inline std::string ToString(std::string x)

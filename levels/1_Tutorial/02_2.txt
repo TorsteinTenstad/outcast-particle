@@ -16,3 +16,4 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(1920,1080)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1920,1740)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3240,420)}
+"BPGridEntitiesManager":Tag{tag=BPGridEntitiesManager}GridEntitiesManager{grid_entities_data=level_data\\2.png}

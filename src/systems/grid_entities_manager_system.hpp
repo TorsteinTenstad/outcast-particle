@@ -15,45 +15,48 @@ static std::array<int, 2> WorldPosToGridPos(sf::Vector2f world_pos, float grid_s
 
 class GridEntitiesManagerSystem : public GameSystem
 {
+private:
+	std::function<sf::Texture*(std::string)> register_data_texture_;
+
 public:
 	using GameSystem::GameSystem;
+	void Give(std::function<sf::Texture*(std::string)> register_data_texture)
+	{
+		register_data_texture_ = register_data_texture;
+	}
 	void Update(Level& level, float dt)
 	{
-		if (level.GetEntitiesWith<GridEntitiesManager>().size() == 0)
+		if (IsMenu(active_level_id_))
+		{
+			return;
+		}
+		if (level.GetMode() == EDIT_MODE && level.GetEntitiesWith<GridEntitiesManager>().size() == 0)
 		{
 			int id = level.AddBlueprint("BPGridEntitiesManager");
-			Shader* shader = &level.GetComponent<Shader>()[id];
-			for (int i = 0; i < MAX_COLS * MAX_ROWS; i++)
+		}
+		for (auto [entity_id, grid_entities_manager, draw_info, shader, width_and_height, position] : level.GetEntitiesWith<GridEntitiesManager, DrawInfo, Shader, WidthAndHeight, Position>())
+		{
+			if (!grid_entities_manager->initialized)
 			{
-				shader->int_uniforms["grid_entity[" + ToString(i) + "]"] = EMPTY;
-			}
-		}
-		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::G])
-		{
-			auto [prev_id, prev_grid, prev_shader] = level.GetEntitiesWith<GridEntitiesManager, Shader>()[0];
-			GridEntitiesManager grid = *prev_grid;
-			Shader shader = *prev_shader;
-			level.DeleteEntitiesWith<GridEntitiesManager>();
-			int id = level.AddBlueprint("BPGridEntitiesManager");
-			level.GetComponent<GridEntitiesManager>()[id] = grid;
-			level.GetComponent<Shader>()[id] = shader;
-		}
-		for (auto [entity_id, grid_entities_manager, shader, width_and_height, position] : level.GetEntitiesWith<GridEntitiesManager, Shader, WidthAndHeight, Position>())
-		{
-			sf::Vector2f level_size = level.GetSize();
-			width_and_height->width_and_height = level_size;
-			position->position = level_size / 2.f;
+				grid_entities_manager->initialized = true;
+				sf::Vector2f size = sf::Vector2f(GridEntitiesData::WIDTH, GridEntitiesData::HEIGHT) * (float)BLOCK_SIZE;
+				width_and_height->width_and_height = size;
+				position->position = size / 2.f;
 
-			std::array<int, 2> mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, grid_entities_manager->grid_size);
-			if (cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Left])
-			{
-				grid_entities_manager->grid[mouse_grid_pos[0]][mouse_grid_pos[1]] = WALL;
-				shader->int_uniforms["grid_entity[" + ToString(mouse_grid_pos[1] * MAX_COLS + mouse_grid_pos[0]) + "]"] = WALL;
+				grid_entities_manager->grid_entities_data.Initialize(GetLevelDisplayNameFromId(active_level_id_));
+
+				shader->tex_uniforms["data_texture"] = grid_entities_manager->grid_entities_data.GetDataTexture();
+				shader->int_uniforms["WIDTH"] = grid_entities_manager->grid_entities_data.WIDTH;
+				shader->int_uniforms["HEIGHT"] = grid_entities_manager->grid_entities_data.HEIGHT;
+				shader->int_uniforms["BLOCK_SIZE"] = BLOCK_SIZE;
 			}
-			if (cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Right])
+
+			std::array<int, 2> mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, BLOCK_SIZE);
+			if (level.GetMode() == EDIT_MODE && cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Left])
 			{
-				grid_entities_manager->grid[mouse_grid_pos[0]][mouse_grid_pos[1]] = EMPTY;
-				shader->int_uniforms["grid_entity[" + ToString(mouse_grid_pos[1] * MAX_COLS + mouse_grid_pos[0]) + "]"] = EMPTY;
+				std::cout << mouse_grid_pos[0] << "," << mouse_grid_pos[1] << "\n";
+
+				grid_entities_manager->grid_entities_data.SetValue(mouse_grid_pos[0], mouse_grid_pos[1], 0, WALL);
 			}
 		}
 	}
