@@ -51,12 +51,10 @@ public:
 				shader->int_uniforms["BLOCK_SIZE"] = BLOCK_SIZE;
 			}
 
-			std::array<int, 2> mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, BLOCK_SIZE);
+			sf::Vector2i mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, BLOCK_SIZE);
 			if (level.GetMode() == EDIT_MODE && cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Left])
 			{
-				std::cout << mouse_grid_pos[0] << "," << mouse_grid_pos[1] << "\n";
-
-				grid_entities_manager->grid_entities_data.SetValue(mouse_grid_pos[0], mouse_grid_pos[1], 0, WALL);
+				grid_entities_manager->grid_entities_data.SetValue(mouse_grid_pos.x, mouse_grid_pos.y, 0, WALL);
 			}
 		}
 	}
