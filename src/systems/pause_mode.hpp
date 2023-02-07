@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "utils.hpp"
+#include <algorithm>
 
 #define PAUSE_MENU_DELAY 2 //seconds
 
@@ -7,12 +8,14 @@ class PauseMode : public GameSystem
 {
 private:
 	std::function<void(std::string)> set_level_;
+	const std::map<std::string, std::vector<std::string>>* level_groups_;
 
 public:
 	using GameSystem::GameSystem;
-	void GiveFunctions(std::function<void(std::string)> set_level)
+	void Give(std::function<void(std::string)> set_level, const std::map<std::string, std::vector<std::string>>* level_groups)
 	{
 		set_level_ = set_level;
+		level_groups_ = level_groups;
 	}
 	void Update(Level& level, float dt)
 	{
@@ -71,8 +74,15 @@ public:
 
 			if (level_state == COMPLETED && !is_in_level_editing_)
 			{
-				//text.push_back("Next level");
-				//functions.push_back(std::bind(set_level_, active_level_id_ + 1));
+				auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
+				auto active_level_index = std::find(level_group.begin(), level_group.end(), active_level_id_);
+				auto next_level_index = ++active_level_index;
+				if (next_level_index != level_group.end())
+				{
+					text.push_back("Next level");
+					functions.push_back(std::bind(set_level_, *next_level_index));
+					shortcut_keys.push_back(sf::Keyboard::Unknown);
+				}
 			}
 
 			text.push_back("Restart level");
@@ -97,6 +107,10 @@ public:
 			functions.push_back([&]() { level.SetMode(PLAY_MODE); });
 			shortcut_keys.push_back(sf::Keyboard::Unknown);
 		}
+
+		text.push_back("Level menu");
+		functions.push_back(std::bind(set_level_, LEVEL_MENU));
+		shortcut_keys.push_back(sf::Keyboard::Unknown);
 
 		text.push_back("Main menu");
 		functions.push_back(std::bind(set_level_, MAIN_MENU));
