@@ -7,30 +7,28 @@
 #include "string_parsing_utils.hpp"
 
 template <typename Map>
-void SaveMapToFile(std::string savefile_path, const Map& map)
+inline std::string ToString(const Map& map)
 {
-	std::ofstream f(savefile_path);
+	std::string str_rep;
 	for (const auto& i : map)
 	{
-		std::string line;
-		line += ToString(i.first);
-		line += "; ";
-		line += ToString(i.second);
-		line += "\n";
-		f << line;
+		str_rep += ToString(i.first);
+		str_rep += "; ";
+		str_rep += ToString(i.second);
+		str_rep += "\n";
 	}
+	return str_rep;
 }
 
 template <typename K, typename V>
-void LoadMapFromFile(std::string savefile_path, std::map<K, V>& map)
+inline void FromString(std::map<K, V>& map, std::string s)
 {
-	std::ifstream f(savefile_path);
-	std::string line;
+	std::vector<std::string> keys_and_values = SplitString(s, "\n");
 	K key;
 	V value;
-	while (getline(f, line))
+	for (auto& i : keys_and_values)
 	{
-		std::vector<std::string> pair = SplitString(line, "; ");
+		std::vector<std::string> pair = SplitString(i, "; ");
 		FromString(key, pair[0]);
 		FromString(value, pair[1]);
 		map[key] = value;
@@ -39,20 +37,36 @@ void LoadMapFromFile(std::string savefile_path, std::map<K, V>& map)
 
 //The MapOfMap-functions should only be called for maps with maps as values
 template <typename K, typename V>
-void SaveMapOfMapToFile(std::vector<std::string> savefile_paths, std::map<K, V> map)
+void SaveMapOfMapToFile(std::string savefile_path, std::map<K, V> map_of_map)
 {
-	for (int i = 0; i < size(savefile_paths); ++i)
+	std::string map_of_map_string;
+	for (auto& [key, value] : map_of_map)
 	{
-		SaveMapToFile(savefile_paths[i], map[i]);
+		map_of_map_string += "Key: " + ToString(key) + " \n";
+		map_of_map_string += ToString(value);
 	}
+	std::ofstream f(savefile_path);
+	f << map_of_map_string;
 }
 
 template <typename K, typename V>
-void LoadMapOfMapFromFile(std::vector<std::string> savefile_paths, std::map<K, V>& map)
+void LoadMapOfMapFromFile(std::string savefile_path, std::map<K, V>& map_of_map)
 {
-	for (int i = 0; i < size(savefile_paths); ++i)
+	std::ifstream f(savefile_path);
+	std::string line;
+	K key;
+	V value;
+	while (std::getline(f, line))
 	{
-		LoadMapFromFile(savefile_paths[i], map[i]);
+		if (line.find("Key: ") == 0)
+		{
+			FromString(key, line.substr(5));
+		}
+		else
+		{
+			FromString(value, line);
+			map_of_map[key] = value;
+		}
 	}
 }
 
