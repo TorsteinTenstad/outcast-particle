@@ -25,6 +25,17 @@ int GridEntityAtId(int x, int y, int outside){
     return int(floor(texture2D(data_texture, vec2(x, y)/vec2(TEXTURE_WIDTH-1, TEXTURE_HEIGHT-1)).r*256.0));
 }
 
+float GridVariantAtId(int x, int y, int outside){
+    if (x < 0 || y < 0 || x>=level_width || y>=level_height){
+        return outside;
+    }
+    return floor(texture2D(data_texture, vec2(x, y)/vec2(TEXTURE_WIDTH-1, TEXTURE_HEIGHT-1)).g*256.0);
+}
+
+vec3 ComputeWallColor(float variant){
+    return mix(vec3(0.8), vec3(0, 0.8, 0), variant);
+}
+
 #define SQRT2 1.41421356
 #define FAR_AWAY 1
 
@@ -42,13 +53,14 @@ void main()
         
 
     int entity_type = GridEntityAtId(grid_x, grid_y, 0);
+    float entity_variant = GridVariantAtId(grid_x, grid_y, 0);
     if (entity_type == 0){
         gl_FragColor = vec4(0);
         return;
     }
     if (entity_type == 1){
         float r = 0.15;
-        vec3 edge_color = vec3(0.8);
+        vec3 edge_color = ComputeWallColor(entity_variant);
         vec2 rounding_vector = folded_local_coords-(0.5-r);
         if(length(rounding_vector) > r
             && rounding_vector.x > 0

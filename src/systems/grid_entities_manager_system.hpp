@@ -18,7 +18,6 @@ static sf::Vector2i WorldPosToGridPos(sf::Vector2f world_pos, float grid_size)
 
 static void RefreshPhysicsEntities(Level& level, GridEntitiesManager* grid_entities_manager)
 {
-	std::cout << "Refresh\n";
 	for (auto entity_id : grid_entities_manager->physics_entities)
 	{
 		level.DeleteEntity(entity_id);
@@ -35,7 +34,19 @@ static void RefreshPhysicsEntities(Level& level, GridEntitiesManager* grid_entit
 				case WALL: {
 					auto [entity_id, collision, width_and_height, position, sound_info] = level.CreateEntitiyWith<Collision, WidthAndHeight, Position, SoundInfo>();
 					grid_entities_manager->physics_entities.push_back(entity_id);
-					collision->bounce_factor = 0.2;
+					switch (grid_entities_manager->grid_entities_data.GetValue(i, j, 1))
+					{
+						case 0:
+							collision->bounce_factor = 0.2;
+							break;
+						case 1:
+							collision->bounce_factor = 1;
+							break;
+
+						default:
+							assert(false);
+							break;
+					}
 					collision->friction = 75;
 					width_and_height->width_and_height = sf::Vector2f(1, 1) * float(BLOCK_SIZE);
 					position->position = sf::Vector2f(i + 0.5, j + 0.5) * float(BLOCK_SIZE);
@@ -109,21 +120,28 @@ public:
 					return;
 				}
 				sf::Vector2i mouse_grid_pos = WorldPosToGridPos(cursor_and_keys_.cursor_position, BLOCK_SIZE);
-				std::vector<std::tuple<sf::Mouse::Button, GridEntity>> a;
+				std::vector<std::tuple<sf::Mouse::Button, GridEntity, int>> a;
 				if (cursor_and_keys_.key_down[sf::Keyboard::Num1])
 				{
-					a.push_back(std::make_tuple(sf::Mouse::Button::Left, WALL));
+					a.push_back(std::make_tuple(sf::Mouse::Button::Left, WALL, 0));
 				}
 				if (cursor_and_keys_.key_down[sf::Keyboard::Num2])
 				{
-					a.push_back(std::make_tuple(sf::Mouse::Button::Left, LASER));
+					a.push_back(std::make_tuple(sf::Mouse::Button::Left, LASER, 0));
 				}
-				a.push_back(std::make_tuple(sf::Mouse::Button::Right, EMPTY));
-				for (auto& [button, grid_entity] : a)
+				if (cursor_and_keys_.key_down[sf::Keyboard::Num3])
 				{
-					if (cursor_and_keys_.mouse_button_down[button] && grid_entities_manager->grid_entities_data.GetValue(mouse_grid_pos.x, mouse_grid_pos.y, 0) != grid_entity)
+					a.push_back(std::make_tuple(sf::Mouse::Button::Left, WALL, 1));
+				}
+				a.push_back(std::make_tuple(sf::Mouse::Button::Right, EMPTY, 0));
+				for (auto& [button, grid_entity, variant] : a)
+				{
+					if (cursor_and_keys_.mouse_button_down[button]
+						&& (grid_entities_manager->grid_entities_data.GetValue(mouse_grid_pos.x, mouse_grid_pos.y, 0) != grid_entity
+							|| grid_entities_manager->grid_entities_data.GetValue(mouse_grid_pos.x, mouse_grid_pos.y, 1) != variant))
 					{
 						grid_entities_manager->grid_entities_data.SetValue(mouse_grid_pos.x, mouse_grid_pos.y, 0, grid_entity);
+						grid_entities_manager->grid_entities_data.SetValue(mouse_grid_pos.x, mouse_grid_pos.y, 1, variant);
 						RefreshPhysicsEntities(level, grid_entities_manager);
 					}
 				}

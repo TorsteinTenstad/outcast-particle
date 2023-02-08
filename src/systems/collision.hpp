@@ -5,6 +5,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "systems/intersection_functions.hpp"
 #include "utils.hpp"
 
 class CollisionSystem : public GameSystem
@@ -30,6 +31,14 @@ public:
 				{
 					continue;
 				}
+
+				auto square_position = position_map[intersecting_id];
+				auto square_width_and_height = width_and_height_map[intersecting_id];
+				if (!CheckIntersection(*position, square_position, *radius, square_width_and_height))
+				{
+					continue;
+				}
+
 				float compound_bounce_factor = collision->bounce_factor * collision_map[intersecting_id].bounce_factor;
 				float compound_friction = collision->friction + collision_map[intersecting_id].friction;
 				float collision_sound_factor = 0;
