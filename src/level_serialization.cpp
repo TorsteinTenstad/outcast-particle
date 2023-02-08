@@ -431,7 +431,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPGridEntitiesManager")
         {
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
-            GetComponent<DrawPriority>()[entity_id] = { 4 };
+            GetComponent<DrawPriority>()[entity_id] = { 2 };
             GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
             GetComponent<WidthAndHeight>()[entity_id] = {};
@@ -508,7 +508,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = {};
-            GetComponent<DrawPriority>()[entity_id] = { 1 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\black_hole.frag", {}, {}, {} };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -635,7 +635,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 2 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<Goal>()[entity_id] = {};
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav", false, 1 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -651,7 +651,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 1 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -667,7 +667,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 1 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -683,7 +683,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<ReceivesMouseEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\transparent.png", false, 0 };
-            GetComponent<DrawPriority>()[entity_id] = { 2 };
+            GetComponent<DrawPriority>()[entity_id] = { 3 };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
@@ -718,7 +718,7 @@ int Level::AddBlueprint(std::string tag)
     if (tag == "BPGridEntitiesManager")
     {
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
-        GetComponent<DrawPriority>()[entity_id] = { 4 };
+        GetComponent<DrawPriority>()[entity_id] = { 2 };
         GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
         GetComponent<WidthAndHeight>()[entity_id] = {};
@@ -783,7 +783,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = {};
-        GetComponent<DrawPriority>()[entity_id] = { 1 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\black_hole.frag", {}, {}, {} };
         GetComponent<Tag>()[entity_id] = {"BPBlackHole"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
@@ -888,7 +888,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 2 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Goal>()[entity_id] = {};
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\happy_transition.wav", false, 1 };
         GetComponent<Tag>()[entity_id] = {"BPGoal"};
@@ -901,7 +901,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 1 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Tag>()[entity_id] = {"BPElectricField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 0.25) };
@@ -913,7 +913,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 1 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Tag>()[entity_id] = {"BPMagneticField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<MagneticField>()[entity_id] = { 0.1 };
@@ -925,7 +925,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<ReceivesMouseEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\transparent.png", false, 0 };
-        GetComponent<DrawPriority>()[entity_id] = { 2 };
+        GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Tag>()[entity_id] = {"BPTextPopupSpawner"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };

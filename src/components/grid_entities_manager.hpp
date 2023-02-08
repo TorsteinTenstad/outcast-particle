@@ -18,6 +18,7 @@ private:
 public:
 	GridEntitiesData();
 	void Initialize(std::string savefile_identifier);
+	sf::Uint8 GetValue(std::size_t x, std::size_t y, std::size_t channel);
 	void SetValue(std::size_t x, std::size_t y, std::size_t channel, sf::Uint8 value);
 	const sf::Texture* GetDataTexture();
 
@@ -36,9 +37,11 @@ enum GridEntity
 class GridEntitiesManager
 {
 public:
+	GridEntitiesData grid_entities_data;
 	// [NoSerialize]
 	bool initialized = false;
-	GridEntitiesData grid_entities_data;
+	// [NoSerialize]
+	std::vector<int> physics_entities;
 };
 
 class GridEntitiesManagerRuntimeData

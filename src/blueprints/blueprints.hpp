@@ -17,7 +17,7 @@ class BPButton
 class BPGridEntitiesManager
 {
 	ReceivesMouseEvents can_receive_press = {};
-	DrawPriority draw_priority = { 4 };
+	DrawPriority draw_priority = { 2 };
 	DrawInfo draw_info = { "_", false, 0 };
 	Shader shader = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
 	WidthAndHeight width_and_height = {};
@@ -74,7 +74,7 @@ class BPMovingParticle : public BPStaticParticle
 class BPBlackHole : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
-	DrawPriority draw_priority = { 1 };
+	DrawPriority draw_priority = { 3 };
 	Shader shader = { "", "shaders\\black_hole.frag", {}, {}, {} };
 
 	// [Serialize]
@@ -160,7 +160,7 @@ class BPNoBounceWall : public BPWall
 class BPGoal : public BPEditableEntity
 {
 	DrawInfo draw_info = { "content\\textures\\goal.png", false, 0 };
-	DrawPriority draw_priority = { 2 };
+	DrawPriority draw_priority = { 3 };
 	Goal goal = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };
 
@@ -171,7 +171,7 @@ class BPGoal : public BPEditableEntity
 class BPElectricField : public BPEditableEntity
 {
 	DrawInfo draw_info = { "content\\textures\\electric_field.png", false, 0 };
-	DrawPriority draw_priority = { 1 };
+	DrawPriority draw_priority = { 3 };
 
 	// [Serialize]
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
@@ -183,7 +183,7 @@ class BPElectricField : public BPEditableEntity
 class BPMagneticField : public BPEditableEntity
 {
 	DrawInfo draw_info = { "content\\textures\\magnetic_field.png", false, 0 };
-	DrawPriority draw_priority = { 1 };
+	DrawPriority draw_priority = { 3 };
 
 	// [Serialize]
 	MagneticField magnetic_field = { 0.1 };
@@ -195,7 +195,7 @@ class BPMagneticField : public BPEditableEntity
 class BPTextPopupSpawner : public BPEditableEntity
 {
 	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
-	DrawPriority draw_priority = { 2 };
+	DrawPriority draw_priority = { 3 };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
