@@ -6,7 +6,7 @@ void Game::ButtunFuncEditLevel()
 	SetLevel(LEVEL_MENU);
 }
 
-void Game::GoToMainMenu()
+void Game::FillActiveLevelWithMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
 	is_in_level_editing_ = false;
@@ -36,14 +36,14 @@ void Game::GoToMainMenu()
 	active_level_.GetComponent<Charge>()[player_id].charge *= -1;
 }
 
-void Game::GoToLevelMenu()
+void Game::FillActiveLevelWithLevelMenu()
 {
 	active_level_id_ = LEVEL_MENU;
 	active_level_.ResetSize();
 	active_level_.GetComponent<LevelMenuUI>()[active_level_.CreateEntityId()];
 }
 
-void Game::GoToOptionsMenu()
+void Game::FillActiveLevelWithOptionsMenu()
 {
 	active_level_id_ = OPTIONS_MENU;
 	active_level_.ResetSize();

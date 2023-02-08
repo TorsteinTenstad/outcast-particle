@@ -21,6 +21,7 @@ class BPGridEntitiesManager
 	DrawInfo draw_info = { "_", false, 0 };
 	Shader shader = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
 	WidthAndHeight width_and_height = {};
+	Position position = {};
 
 	// [Serialize]
 	GridEntitiesManager grid_entities_manager = {};

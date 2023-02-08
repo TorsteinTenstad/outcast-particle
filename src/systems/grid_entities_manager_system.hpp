@@ -26,7 +26,7 @@ public:
 	}
 	void Update(Level& level, float dt)
 	{
-		if (IsMenu(active_level_id_))
+		if (IsMenu(level.GetId()))
 		{
 			return;
 		}

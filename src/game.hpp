@@ -84,9 +84,9 @@ private:
 	void ToggleFullscreen();
 	void ExitGame();
 
-	void GoToMainMenu();
-	void GoToLevelMenu();
-	void GoToOptionsMenu();
+	void FillActiveLevelWithMainMenu();
+	void FillActiveLevelWithLevelMenu();
+	void FillActiveLevelWithOptionsMenu();
 
 public:
 	Game();

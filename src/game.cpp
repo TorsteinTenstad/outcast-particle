@@ -6,7 +6,8 @@
 #include <string>
 #include <thread>
 
-Game::Game()
+Game::Game() :
+	active_level_(Level(MAIN_MENU))
 {
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
@@ -62,7 +63,7 @@ Game::Game()
 	LoadMapOfMapFromFile(user_savefile_paths, level_completion_time_records_);
 	LoadOptionsFromFile("user\\controls_config.txt");
 
-	GoToMainMenu();
+	FillActiveLevelWithMainMenu();
 }
 
 Game::~Game()
@@ -76,18 +77,18 @@ Game::~Game()
 Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
-	active_level_ = Level();
+	active_level_ = Level(level_id);
 	if (level_id == MAIN_MENU)
 	{
-		GoToMainMenu();
+		FillActiveLevelWithMainMenu();
 	}
 	else if (level_id == LEVEL_MENU)
 	{
-		GoToLevelMenu();
+		FillActiveLevelWithLevelMenu();
 	}
 	else if (level_id == OPTIONS_MENU)
 	{
-		GoToOptionsMenu();
+		FillActiveLevelWithOptionsMenu();
 	}
 	else
 	{
@@ -132,7 +133,7 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 {
 	std::string identifier = "_level_" + level_id;
 	sf::Texture* texture = GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier);
-	Level level = Level();
+	Level level = Level(level_id);
 	level.LoadFromFile(level_id);
 	GetGameSystem<BackgroundSystem>().Update(level, 0);
 	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);

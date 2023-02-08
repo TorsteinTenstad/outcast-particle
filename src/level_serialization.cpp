@@ -435,6 +435,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
             GetComponent<WidthAndHeight>()[entity_id] = {};
+            GetComponent<Position>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<GridEntitiesManager>()[entity_id],
@@ -721,6 +722,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\grid_entities_manager.frag", {}, {}, {} };
         GetComponent<WidthAndHeight>()[entity_id] = {};
+        GetComponent<Position>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPGridEntitiesManager"};
         GetComponent<GridEntitiesManager>()[entity_id] = {};
         return entity_id;

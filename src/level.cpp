@@ -7,7 +7,8 @@
 int Level::next_available_entity_id_ = 0;
 const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vector2u(32, 18), sf::Vector2u(48, 27), sf::Vector2u(64, 36), sf::Vector2u(80, 45) } };
 
-Level::Level()
+Level::Level(std::string id) :
+	id_(id)
 {
 }
 
@@ -78,6 +79,11 @@ LevelState Level::ComputeState()
 LevelMode Level::GetMode()
 {
 	return mode_;
+}
+
+std::string Level::GetId()
+{
+	return id_;
 }
 
 void Level::SetMode(LevelMode level_mode)

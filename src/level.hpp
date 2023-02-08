@@ -114,6 +114,7 @@ class Level
 private:
 	std::string savefile_path_;
 	LevelMode mode_ = PLAY_MODE;
+	std::string id_;
 
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
@@ -154,7 +155,7 @@ public:
 	template <class... Component>
 	void DeleteEntitiesWith();
 
-	Level();
+	Level(std::string id);
 	int CreateEntityId();
 	int AddBlueprint(std::string tag);
 
@@ -163,6 +164,7 @@ public:
 
 	LevelState ComputeState();
 	LevelMode GetMode();
+	std::string GetId();
 	void SetMode(LevelMode level_mode);
 
 	sf::Vector2f GetSize();

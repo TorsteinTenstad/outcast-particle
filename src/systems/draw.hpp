@@ -24,7 +24,7 @@ public:
 		sf::RenderTexture render_texture;
 		render_texture.create(width, height);
 		render_texture.setView(sf::View(level.GetSize() / 2.f, level.GetSize()));
-		Draw(level, &render_texture, level.drawables, false);
+		Draw(level, &render_texture, level.drawables, true);
 		render_texture.display();
 		*texture = render_texture.getTexture();
 	}
