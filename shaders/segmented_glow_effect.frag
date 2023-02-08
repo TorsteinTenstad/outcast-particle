@@ -8,8 +8,9 @@ uniform vec2 origin;
 uniform vec2 _window_resolution;
 uniform vec2 _wh;
 
-float radial_falloff(float r, float unity_r, float half_intensity_r){
-	return 1/(max((r-unity_r), 0)/half_intensity_r+1);
+float radial_falloff(float r, float r1, float r0){
+	float f = 1/(max((r-r1), 0)/r0+1);
+	return smoothstep(0.5, 1, f);
 }
 
 
@@ -28,7 +29,6 @@ void main()
     float a = 0.5*theta/PI+0.5;
 
 	float intensity = radial_falloff(r, 0, half_intensity_r+15*sin(2*PI*radial_frequency*_time));
-	intensity = smoothstep(0.5, 1, intensity);
 	float radial_mask = float(fract(n*a+rotational_frequency*_time) > 0.5);
 	float alpha = intensity*radial_mask;
 

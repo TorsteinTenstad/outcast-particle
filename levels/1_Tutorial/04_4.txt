@@ -2,12 +2,9 @@ name=Untitled;grid_size_id=1;editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(360,1440)}Charge{charge=-10000}Velocity{velocity=(2.48071,-431.046)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1380,780)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(720,1440)}Charge{charge=10000}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3660,60)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(2700,780)}Charge{charge=10000}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2700,1740)}WidthAndHeight{width_and_height=(60,600)}
 "BPGoal":Tag{tag=BPGoal}Position{position=(3240,1800)}WidthAndHeight{width_and_height=(840,360)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2040,1440)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(480,480)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3360,480)}
 "BPGridEntitiesManager":Tag{tag=BPGridEntitiesManager}GridEntitiesManager{grid_entities_data=level_data\\4.png}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1380,1800)}WidthAndHeight{width_and_height=(60,480)}

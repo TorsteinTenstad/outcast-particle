@@ -95,6 +95,10 @@ public:
 				{
 					a.push_back(std::make_tuple(sf::Mouse::Button::Left, WALL));
 				}
+				if (cursor_and_keys_.key_down[sf::Keyboard::Num2])
+				{
+					a.push_back(std::make_tuple(sf::Mouse::Button::Left, LASER));
+				}
 				a.push_back(std::make_tuple(sf::Mouse::Button::Right, EMPTY));
 				for (auto& [button, grid_entity] : a)
 				{

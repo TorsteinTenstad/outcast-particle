@@ -11,6 +11,11 @@ uniform int HEIGHT;
 uniform float _time;
 
 
+float radial_falloff(float r, float r1, float r0){
+	float f = 1/(max((r-r1), 0)/r0+1);
+	return smoothstep(0.5, 1, f);
+}
+
 int GridEntityAtId(int x, int y){
     if (x < 0 || y < 0 || x>=WIDTH || y>=HEIGHT){
         return 0;
@@ -30,39 +35,65 @@ void main()
     int grid_y = int(grid_id[1]);
 	vec2 local_coords = fract(grid_coords);
 
-    float dist_from_edge = FAR_AWAY;
-
-    if (GridEntityAtId(grid_x-1, grid_y) == 0){
-        dist_from_edge = min(dist_from_edge, local_coords.x);
-    }
-    if (GridEntityAtId(grid_x+1, grid_y) == 0){
-        dist_from_edge = min(dist_from_edge, 1-local_coords.x);
-    }
-    if (GridEntityAtId(grid_x, grid_y-1) == 0){
-        dist_from_edge = min(dist_from_edge, local_coords.y);
-    }
-    if (GridEntityAtId(grid_x, grid_y+1) == 0){
-        dist_from_edge = min(dist_from_edge, 1-local_coords.y);
-    }
-
-    if (GridEntityAtId(grid_x-1, grid_y-1) == 0){
-        dist_from_edge = min(dist_from_edge, length(local_coords));
-    }
-    if (GridEntityAtId(grid_x+1, grid_y+1) == 0){
-        dist_from_edge = min(dist_from_edge, length(1-local_coords));
-    }
-    if (GridEntityAtId(grid_x-1, grid_y+1) == 0){
-        dist_from_edge = min(dist_from_edge, length(vec2(local_coords.x, 1-local_coords.y)));
-    }
-    if (GridEntityAtId(grid_x+1, grid_y-1) == 0){
-        dist_from_edge = min(dist_from_edge, length(vec2(1-local_coords.x, local_coords.y)));
-    }
-
-    float val = smoothstep(0, 0.3, dist_from_edge/FAR_AWAY);
-    vec3 col = mix(vec3(0.9), vec3(0.1), val);
-
+    vec4 color = vec4(1, 0, 1, 1);
 
     int entity_type = GridEntityAtId(grid_x, grid_y);
-	gl_FragColor = vec4(col, float(entity_type));
-	//gl_FragColor = vec4(gl_TexCoord[0].xy/120, 0, 1);
+    switch (entity_type){
+    case 0:
+        color.a = 0;
+    case 1:
+        float dist_from_edge = FAR_AWAY;
+        if (GridEntityAtId(grid_x-1, grid_y) != 1){
+            dist_from_edge = min(dist_from_edge, local_coords.x);
+        }
+        if (GridEntityAtId(grid_x+1, grid_y) != 1){
+            dist_from_edge = min(dist_from_edge, 1-local_coords.x);
+        }
+        if (GridEntityAtId(grid_x, grid_y-1) != 1){
+            dist_from_edge = min(dist_from_edge, local_coords.y);
+        }
+        if (GridEntityAtId(grid_x, grid_y+1) != 1){
+            dist_from_edge = min(dist_from_edge, 1-local_coords.y);
+        }
+
+        if (GridEntityAtId(grid_x-1, grid_y-1) != 1){
+            dist_from_edge = min(dist_from_edge, length(local_coords));
+        }
+        if (GridEntityAtId(grid_x+1, grid_y+1) != 1){
+            dist_from_edge = min(dist_from_edge, length(1-local_coords));
+        }
+        if (GridEntityAtId(grid_x-1, grid_y+1) != 1){
+            dist_from_edge = min(dist_from_edge, length(vec2(local_coords.x, 1-local_coords.y)));
+        }
+        if (GridEntityAtId(grid_x+1, grid_y-1) != 1){
+            dist_from_edge = min(dist_from_edge, length(vec2(1-local_coords.x, local_coords.y)));
+        }
+
+        float val = smoothstep(0, 0.3, dist_from_edge/FAR_AWAY);
+        color.rgb = mix(vec3(0.9), vec3(0.1), val);
+        break;
+    case 2:
+        vec2 centered_local_coords = local_coords - 0.5;
+        vec2 quadrant = 2*ceil(centered_local_coords)-1;
+        vec2 fold4 = abs(centered_local_coords);
+       
+        int closest_other_entity_x = GridEntityAtId(grid_x + int(quadrant.x), grid_y);
+        int closest_other_entity_y = GridEntityAtId(grid_x, grid_y + int(quadrant.y));
+        
+        float x_limit = float(closest_other_entity_x!=0)*0.5;
+        vec2 closest_laser_x = vec2(clamp(fold4.x, 0, x_limit), 0);
+
+        float y_limit = float(closest_other_entity_y!=0)*0.5;
+        vec2 closest_laser_y = vec2(0, clamp(fold4.y, 0, y_limit));
+
+        vec2 dist_x = fold4-closest_laser_x;
+        vec2 dist_y = fold4-closest_laser_y;
+        float dist = min(length(dist_x), length(dist_y));
+
+        float intensity = radial_falloff(dist, 0, 0.5+ 0.05*sin(0.5*2*PI*_time));
+
+        color.rgb = vec3(1,0,0) + vec3(1)*0.5*radial_falloff(dist, 0, 0.1);
+        color.a = intensity;
+    }
+    gl_FragColor = color;
 }

@@ -30,8 +30,7 @@ enum GridEntity
 {
 	EMPTY = 0,
 	WALL,
-	BOUNCE_WALL,
-	NO_BOUNCE_WALL
+	LASER
 };
 
 class GridEntitiesManager
