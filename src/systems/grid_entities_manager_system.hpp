@@ -28,17 +28,33 @@ static void RefreshPhysicsEntities(Level& level, GridEntitiesManager* grid_entit
 	{
 		for (int j = 0; j < grid_entities_manager->grid_entities_data.HEIGHT; j++)
 		{
-			if (grid_entities_manager->grid_entities_data.GetValue(i, j, 0) == EMPTY)
+			switch (grid_entities_manager->grid_entities_data.GetValue(i, j, 0))
 			{
-				continue;
+				case EMPTY:
+					break;
+				case WALL: {
+					auto [entity_id, collision, width_and_height, position, sound_info] = level.CreateEntitiyWith<Collision, WidthAndHeight, Position, SoundInfo>();
+					grid_entities_manager->physics_entities.push_back(entity_id);
+					collision->bounce_factor = 0.2;
+					collision->friction = 75;
+					width_and_height->width_and_height = sf::Vector2f(1, 1) * float(BLOCK_SIZE);
+					position->position = sf::Vector2f(i + 0.5, j + 0.5) * float(BLOCK_SIZE);
+					sound_info->sound_path = "content\\sounds\\thud.wav";
+				}
+				break;
+				case LASER: {
+					auto [entity_id, kill_on_intersection, width_and_height, position, sound_info] = level.CreateEntitiyWith<KillOnIntersection, WidthAndHeight, Position, SoundInfo>();
+					grid_entities_manager->physics_entities.push_back(entity_id);
+					width_and_height->width_and_height = sf::Vector2f(0.5, 0.5) * float(BLOCK_SIZE);
+					position->position = sf::Vector2f(i + 0.5, j + 0.5) * float(BLOCK_SIZE);
+					sound_info->sound_path = "content\\sounds\\laser.wav";
+				}
+				break;
+
+				default:
+					assert(false);
+					break;
 			}
-			auto [entity_id, collision, width_and_height, position, sound_info] = level.CreateEntitiyWith<Collision, WidthAndHeight, Position, SoundInfo>();
-			grid_entities_manager->physics_entities.push_back(entity_id);
-			collision->bounce_factor = 0.2;
-			collision->friction = 75;
-			width_and_height->width_and_height = sf::Vector2f(1, 1) * float(BLOCK_SIZE);
-			position->position = sf::Vector2f(i + 0.5, j + 0.5) * float(BLOCK_SIZE);
-			sound_info->sound_path = "content\\sounds\\thud.wav";
 		}
 	}
 }
