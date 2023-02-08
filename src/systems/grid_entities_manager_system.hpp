@@ -43,9 +43,9 @@ static void RefreshPhysicsEntities(Level& level, GridEntitiesManager* grid_entit
 				}
 				break;
 				case LASER: {
-					auto [entity_id, kill_on_intersection, width_and_height, position, sound_info] = level.CreateEntitiyWith<KillOnIntersection, WidthAndHeight, Position, SoundInfo>();
+					auto [entity_id, kill_on_intersection, radius, position, sound_info] = level.CreateEntitiyWith<KillOnIntersection, Radius, Position, SoundInfo>();
 					grid_entities_manager->physics_entities.push_back(entity_id);
-					width_and_height->width_and_height = sf::Vector2f(0.5, 0.5) * float(BLOCK_SIZE);
+					radius->radius = 0.25 * float(BLOCK_SIZE);
 					position->position = sf::Vector2f(i + 0.5, j + 0.5) * float(BLOCK_SIZE);
 					sound_info->sound_path = "content\\sounds\\laser.wav";
 				}
@@ -82,6 +82,9 @@ public:
 		}
 		for (auto [entity_id, grid_entities_manager, draw_info, shader, width_and_height, position] : level.GetEntitiesWith<GridEntitiesManager, DrawInfo, Shader, WidthAndHeight, Position>())
 		{
+			sf::Vector2u level_size = level.GetGridSize();
+			shader->int_uniforms["level_width"] = level_size.x;
+			shader->int_uniforms["level_height"] = level_size.y;
 			if (!grid_entities_manager->initialized)
 			{
 				grid_entities_manager->initialized = true;
@@ -92,8 +95,8 @@ public:
 				grid_entities_manager->grid_entities_data.Initialize(GetLevelDisplayNameFromId(active_level_id_));
 
 				shader->tex_uniforms["data_texture"] = grid_entities_manager->grid_entities_data.GetDataTexture();
-				shader->int_uniforms["WIDTH"] = grid_entities_manager->grid_entities_data.WIDTH;
-				shader->int_uniforms["HEIGHT"] = grid_entities_manager->grid_entities_data.HEIGHT;
+				shader->int_uniforms["TEXTURE_WIDTH"] = grid_entities_manager->grid_entities_data.WIDTH;
+				shader->int_uniforms["TEXTURE_HEIGHT"] = grid_entities_manager->grid_entities_data.HEIGHT;
 				shader->int_uniforms["BLOCK_SIZE"] = BLOCK_SIZE;
 
 				RefreshPhysicsEntities(level, grid_entities_manager);
