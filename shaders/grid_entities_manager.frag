@@ -33,7 +33,10 @@ float GridVariantAtId(int x, int y, int outside){
 }
 
 vec3 ComputeWallColor(float variant){
-    return mix(vec3(0.8), vec3(0, 0.8, 0), variant);
+
+    return smoothstep(1, 0, abs(variant - 0)) * vec3(0.8) +
+           smoothstep(1, 0, abs(variant - 1)) * vec3(0, 0.6, 0) +
+           smoothstep(1, 0, abs(variant - 2)) * vec3(0.4);
 }
 
 #define SQRT2 1.41421356

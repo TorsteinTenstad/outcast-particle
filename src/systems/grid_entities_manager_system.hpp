@@ -42,6 +42,9 @@ static void RefreshPhysicsEntities(Level& level, GridEntitiesManager* grid_entit
 						case 1:
 							collision->bounce_factor = 1;
 							break;
+						case 2:
+							collision->bounce_factor = 0.05;
+							break;
 
 						default:
 							assert(false);
@@ -132,6 +135,10 @@ public:
 				if (cursor_and_keys_.key_down[sf::Keyboard::Num3])
 				{
 					a.push_back(std::make_tuple(sf::Mouse::Button::Left, WALL, 1));
+				}
+				if (cursor_and_keys_.key_down[sf::Keyboard::Num4])
+				{
+					a.push_back(std::make_tuple(sf::Mouse::Button::Left, WALL, 2));
 				}
 				a.push_back(std::make_tuple(sf::Mouse::Button::Right, EMPTY, 0));
 				for (auto& [button, grid_entity, variant] : a)
