@@ -40,14 +40,13 @@ void main()
     vec2 quadrant = 2*ceil(centered_local_coords)-1;
     vec2 folded_local_coords = abs(centered_local_coords);
         
-    vec4 color = vec4(1, 0, 1, 1);
 
     int entity_type = GridEntityAtId(grid_x, grid_y, 0);
-    switch (entity_type){
-    case 0:
-        color.a = 0;
-        break;
-    case 1:
+    if (entity_type == 0){
+        gl_FragColor = vec4(0);
+        return;
+    }
+    if (entity_type == 1){
         float r = 0.15;
         vec3 edge_color = vec3(0.8);
         vec2 rounding_vector = folded_local_coords-(0.5-r);
@@ -87,9 +86,11 @@ void main()
         }
 
         float val = smoothstep(0, 0.3, dist_from_edge/FAR_AWAY);
-        color.rgb = mix(edge_color, vec3(0.1), val);
-        break;
-    case 2:
+        gl_FragColor.rgb = mix(edge_color, vec3(0.1), val);
+        gl_FragColor.a = 1;
+        return;
+    }
+    if (entity_type == 2){
         int closest_other_entity_x = GridEntityAtId(grid_x + int(quadrant.x), grid_y, 0);
         int closest_other_entity_y = GridEntityAtId(grid_x, grid_y + int(quadrant.y), 0);
         
@@ -105,8 +106,8 @@ void main()
 
         float intensity = radial_falloff(dist, 0, 0.5+ 0.05*sin(0.5*2*PI*_time));
 
-        color.rgb = vec3(1,0,0) + vec3(1)*0.5*radial_falloff(dist, 0, 0.1);
-        color.a = intensity;
+        gl_FragColor.rgb = vec3(1,0,0) + vec3(1)*0.5*radial_falloff(dist, 0, 0.1);
+        gl_FragColor.a = intensity;
+        return;
     }
-    gl_FragColor = color;
 }
