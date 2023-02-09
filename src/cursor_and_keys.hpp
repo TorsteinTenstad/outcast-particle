@@ -47,4 +47,17 @@ public:
 			mouse_button_released_this_frame[button] = false;
 		}
 	}
+
+	void ResetAllKeysAndButtons()
+	{
+		ResetFrameEvents();
+		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
+		{
+			key_down[key] = false;
+		}
+		for (int button = 0; button < sf::Mouse::ButtonCount; button++)
+		{
+			mouse_button_down[button] = false;
+		}
+	}
 };

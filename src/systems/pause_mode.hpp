@@ -28,13 +28,14 @@ public:
 		LevelMode level_mode = level.GetMode();
 		if (level_mode != PAUSE_MODE
 			&& (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]
+				|| (!globals.render_window.hasFocus() && level_mode != EDIT_MODE)
 				|| level_state == COMPLETED
 				|| level_state == FAILED))
 		{
 			level.SetMode(PAUSE_MODE);
 			MenuDelayTimer* menu_delay_timer = GetSingleton<MenuDelayTimer>(level);
 			menu_delay_timer->pevious_mode = level_mode;
-			menu_delay_timer->duration = cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] ? -1 : PAUSE_MENU_DELAY;
+			menu_delay_timer->duration = (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] || !globals.render_window.hasFocus()) ? -1 : PAUSE_MENU_DELAY;
 			menu_delay_timer->buttons_initialized = false;
 		}
 
