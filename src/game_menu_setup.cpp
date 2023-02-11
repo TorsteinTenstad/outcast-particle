@@ -62,5 +62,5 @@ void Game::GoToOptionsMenu()
 		float y = button_position.y;
 		AddOptionsButton(active_level_, options_keys[i], x, y, options_button_w, options_button_h, text, options_text_size);
 	}
-	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, MAIN_MENU), 3840, 3840, "Main Menu");
+	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, MAIN_MENU), 3100, 3100, "Main Menu");
 }
