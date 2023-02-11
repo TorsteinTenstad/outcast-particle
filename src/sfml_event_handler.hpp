@@ -15,6 +15,10 @@ public:
 	{
 		cursor_and_keys.ResetFrameEvents();
 		sf::Event event;
+		if (!globals.render_window.hasFocus())
+		{
+			cursor_and_keys.ResetAllKeysAndButtons();
+		}
 		while (globals.render_window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
