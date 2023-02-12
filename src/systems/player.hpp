@@ -21,6 +21,7 @@ public:
 	}
 	void ProcessPlayerControls(Level& level)
 	{
+		int player_i = 0;
 		for (const auto& [entity_id, player, player_behaviours, received_forces, charge, children, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Children, Shader, SoundInfo, Position>())
 		{
 			int x_direction = 0;
@@ -32,24 +33,28 @@ public:
 			received_forces->player_force.x = x_direction * player->move_force;
 			received_forces->player_force.y = y_direction * player->move_force;
 
-			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_GO_NEUTRAL] && player->can_go_neutral)
+			auto switch_key = player_i == 1 ? sf::Keyboard::C : globals.key_config.PLAYER_SWITCH_CHARGE;
+			auto neutral_key = player_i == 1 ? sf::Keyboard::V : globals.key_config.PLAYER_GO_NEUTRAL;
+
+			if (cursor_and_keys_.key_pressed_this_frame[neutral_key] && player->can_go_neutral)
 			{
 				player_behaviours->default_charge = charge->charge;
 				player_behaviours->is_neutral = true;
 				charge->charge = 0;
 			}
-			if (player_behaviours->is_neutral && !cursor_and_keys_.key_down[globals.key_config.PLAYER_GO_NEUTRAL])
+			if (player_behaviours->is_neutral && !cursor_and_keys_.key_down[neutral_key])
 			{
 				charge->charge = player_behaviours->default_charge;
 				player_behaviours->is_neutral = false;
 			}
-			if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] && player->can_switch_charge)
+			if (cursor_and_keys_.key_pressed_this_frame[switch_key] && player->can_switch_charge)
 			{
 				sound_info->play_sound = true;
 				charge->charge = -charge->charge;
 				player_behaviours->default_charge = -player_behaviours->default_charge;
 				shader->float_uniforms["start_switch_charge_animation"] = globals.time;
 			}
+			player_i++;
 		}
 	}
 	void SetTextures(Level& level)
