@@ -15,6 +15,10 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
+		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Numpad0])
+		{
+			shaders_.clear();
+		}
 		Draw(level, &globals.render_window, level.drawables, true);
 		globals.render_window.display();
 	}

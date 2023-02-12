@@ -101,6 +101,20 @@ public:
 		title_text->content = GetGroupDisplayNameFromGroupName(ui->level_group);
 		title_position->position = sf::Vector2f(button_panel_center, title_h / 2);
 
+		{ // Dot indicator
+			float h = 120;
+			auto [entity_id, shader, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<Shader, DrawInfo, DrawPriority, WidthAndHeight, Position>();
+			ui->entity_ids.push_back(entity_id);
+			shader->fragment_shader_path = "shaders\\dots_indicator.frag";
+			shader->int_uniforms["n_dots"] = level_groups_->size();
+			shader->int_uniforms["active_dot"] = std::distance(level_groups_->cbegin(), level_groups_->find(ui->level_group));
+			position->position.x = button_panel_center;
+			position->position.y = title_h - h / 2;
+			width_and_height->width_and_height.x = 800;
+			width_and_height->width_and_height.y = h;
+			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+		}
+
 		for (int p : { -1, 1 })
 		{
 			auto [nav_btn_entity_id, nav_btn_draw_info, nav_btn_text, nav_btn_draw_priority, nav_btn_w_h, nav_btn_position, nav_btn_receives_mouse_events, nav_btn_shortcut_key] = level.CreateEntitiyWith<DrawInfo, Text, DrawPriority, WidthAndHeight, Position, ReceivesMouseEvents, ShortcutKey>();
