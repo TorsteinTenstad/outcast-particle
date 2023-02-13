@@ -31,6 +31,7 @@ Game::Game()
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_);
+	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1));
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<AnimatedPositionSystem>();
