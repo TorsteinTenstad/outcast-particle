@@ -27,12 +27,9 @@ private:
 public:
 	void Update(Level& level, float dt)
 	{
+		return;
 		if (level.GetMode() != EDIT_MODE)
 		{
-			if (!IsMenu(active_level_id_))
-			{
-				level.GetComponent<FillColor>().clear();
-			}
 			return;
 		}
 
@@ -60,7 +57,6 @@ public:
 			level.GetComponent<Selected>().clear();
 		}
 
-		return;
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
 		{
 			if (blueprint_menu_is_open)

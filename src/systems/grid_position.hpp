@@ -10,6 +10,28 @@ static sf::Vector2i WorldPosToGridPos(sf::Vector2f world_pos, float grid_size)
 	return sf::Vector2i((int)std::floor(unrounded_grid_pos.x), (int)std::floor(unrounded_grid_pos.y));
 }
 
+static void TemporarilySelectEntity(Level& level, int entity_id)
+{
+	level.AddComponent<TemporarilySelected>(entity_id);
+	level.AddComponent<FillColor>(entity_id)->color = sf::Color(150, 150, 255);
+}
+
+static void SelectEntity(Level& level, int entity_id)
+{
+	level.AddComponent<Selected>(entity_id);
+	level.AddComponent<FillColor>(entity_id)->color = sf::Color(150, 150, 255);
+}
+
+template <class SelectedComponentVariant>
+static void DeselectAll(Level& level)
+{
+	for (auto [entity_id, selected] : level.GetEntitiesWith<SelectedComponentVariant>())
+	{
+		level.GetComponent<FillColor>().erase(entity_id);
+	}
+	level.GetComponent<SelectedComponentVariant>().clear();
+}
+
 class GridPositionSystem : public GameSystem
 {
 public:
@@ -24,7 +46,7 @@ public:
 		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Button::Left] || (cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Left] && last_frame_cursor_grid_position != cursor_grid_position))
 		{
 			level.DeleteEntitiesWith<EditModeTemporary>();
-			level.GetComponent<TemporarilySelected>().clear();
+			DeselectAll<TemporarilySelected>(level);
 			int i_incr = Sign(cursor_grid_position.x - mouse_button_last_pressed_grid_position.x);
 			for (int i = mouse_button_last_pressed_grid_position.x; i != cursor_grid_position.x + i_incr; i += i_incr)
 			{
@@ -51,7 +73,7 @@ public:
 					{
 						if (grid_position_manager->entity_id_at_position.count({ i, j }))
 						{
-							level.AddComponent<TemporarilySelected>(grid_position_manager->entity_id_at_position.at({ i, j }));
+							TemporarilySelectEntity(level, grid_position_manager->entity_id_at_position.at({ i, j }));
 						}
 					}
 				}
@@ -61,7 +83,7 @@ public:
 		{
 			for (auto [entity_id, temporarity_selected] : level.GetEntitiesWith<TemporarilySelected>())
 			{
-				level.AddComponent<Selected>(entity_id);
+				SelectEntity(level, entity_id);
 			}
 			level.GetComponent<TemporarilySelected>().clear();
 			level.GetComponent<EditModeTemporary>().clear();
@@ -74,6 +96,20 @@ public:
 				}
 			}
 		}
+
+		// Delete entities:
+		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
+		{
+			level.DeleteEntitiesWith<Selected>();
+			level.DeleteEntitiesWith<TemporarilySelected>();
+		}
+
+		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
+			&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
+		{
+			DeselectAll<Selected>(level);
+		}
+
 		/*
 		if (level.GetMode() == EDIT_MODE && cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Button::Right])
 		{
