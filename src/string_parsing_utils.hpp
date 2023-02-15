@@ -50,7 +50,9 @@ inline std::string ToString(bool x)
 {
 	return std::to_string(x);
 }
-inline std::string ToString(sf::Vector2f x)
+
+template <class T>
+inline std::string ToString(sf::Vector2<T> x)
 {
 	return "(" + ToString(x.x) + "," + ToString(x.y) + ")";
 }
@@ -79,7 +81,9 @@ inline void FromString(bool& x, std::string s)
 {
 	x = (s == "1");
 }
-inline void FromString(sf::Vector2f& x, std::string s)
+
+template <class T>
+inline void FromString(sf::Vector2<T>& x, std::string s)
 {
 	std::vector<std::string> x_y = SplitString(s.substr(1, s.length() - 1), ",");
 	FromString(x.x, x_y[0]);

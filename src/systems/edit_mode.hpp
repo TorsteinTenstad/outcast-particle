@@ -33,6 +33,31 @@ public:
 			return;
 		}
 
+		// Mark selected entities with border:
+		level.GetComponent<Border>().clear();
+		for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
+		{
+			level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
+		}
+		for (auto [entity_id, selected] : level.GetEntitiesWith<TemporarilySelected>())
+		{
+			level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
+		}
+
+		// Delete entities:
+		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
+		{
+			level.DeleteEntitiesWith<Selected>();
+		}
+
+		// Conditional deselect all:
+		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
+			&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
+		{
+			level.GetComponent<Selected>().clear();
+		}
+
+		return;
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
 		{
 			if (blueprint_menu_is_open)
@@ -65,13 +90,6 @@ public:
 			}
 		}
 
-		// Conditional deselect all:
-		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
-			&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
-		{
-			level.GetComponent<Selected>().clear();
-		}
-
 		// Select entities:
 		for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<Editable, PressedThisFrame>())
 		{
@@ -80,13 +98,6 @@ public:
 			{
 				selected->mouse_offset = cursor_and_keys_.cursor_position - position->position;
 			}
-		}
-
-		// Mark selected entities with border:
-		level.GetComponent<Border>().clear();
-		for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
-		{
-			level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
 		}
 
 		// Move entities with the curser:
@@ -104,12 +115,6 @@ public:
 			level.GetComponent<BlueprintMenuItem>().erase(entity_id);
 			draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
 			CloseBlueprintMenu(level);
-		}
-
-		// Delete entities:
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
-		{
-			level.DeleteEntitiesWith<Selected>();
 		}
 
 		// Edit charge:

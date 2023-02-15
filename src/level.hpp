@@ -6,12 +6,13 @@
 #include "components/children.hpp"
 #include "components/coin.hpp"
 #include "components/collision.hpp"
-#include "components/detect_input.hpp"
 #include "components/draw_info.hpp"
+#include "components/edit_mode_temporary.hpp"
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
 #include "components/grid_position.hpp"
+#include "components/input_events.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/level_menu.hpp"
@@ -55,6 +56,8 @@ typedef std::variant<
 	std::map<int, DrawPriority>,
 	std::map<int, Editable>,
 	std::map<int, ElectricField>,
+	std::map<int, EditModeTemporary>,
+	std::map<int, TemporarilySelected>,
 	std::map<int, Face>,
 	std::map<int, ForceVisualization>,
 	std::map<int, Goal>,

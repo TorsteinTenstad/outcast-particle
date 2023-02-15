@@ -1,6 +1,6 @@
 #pragma once
 #include "components/area.hpp"
-#include "components/detect_input.hpp"
+#include "components/input_events.hpp"
 #include "components/physics.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"

@@ -129,6 +129,9 @@ class BPWall : public BPEditableEntity
 	Collision collision = { 0.2, 75 };
 
 	// [Serialize]
+	GridPosition grid_position = {};
+
+	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 

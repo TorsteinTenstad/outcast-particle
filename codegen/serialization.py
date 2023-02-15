@@ -156,7 +156,8 @@ int Level::AddBlueprint(std::string tag)
 {
     int entity_id = CreateEntityId();"""
     end = """
-    return entity_id;
+    assert(false);
+    return -1;
 }"""
     body = ""
     for (tag, blueprint) in data.items():

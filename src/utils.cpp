@@ -72,6 +72,11 @@ float FakeSigmoid(float x)
 	}
 }
 
+std::array<int, 2> Vector2iToArray(sf::Vector2i v)
+{
+	return { v.x, v.y };
+};
+
 float Magnitude(sf::Vector2f v)
 {
 	return sqrt((v.x * v.x) + (v.y * v.y));

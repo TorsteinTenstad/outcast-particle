@@ -12,5 +12,5 @@ class GridPositionManager
 {
 public:
 	bool dirty = true;
-	std::map<sf::Vector2i, int> entity_id_at_position;
+	std::map<std::array<int, 2>, int> entity_id_at_position;
 };

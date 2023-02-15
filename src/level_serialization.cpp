@@ -161,6 +161,28 @@ void DeserializeComponent(Player& c, std::string str_rep)
 	}
 }
 
+void SerializeComponent(GridPosition c, std::string& str_rep)
+{
+	str_rep += "GridPosition{";
+	str_rep += "grid_position=";
+	str_rep += ToString(c.grid_position);
+	str_rep += "}";
+}
+
+void DeserializeComponent(GridPosition& c, std::string str_rep)
+{
+    std::vector<std::string> variables = SplitString(str_rep, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "grid_position")
+        {
+            FromString(c.grid_position, statement_parts[1]);
+        }
+	}
+}
+
 void SerializeComponent(ElectricField c, std::string& str_rep)
 {
 	str_rep += "ElectricField{";
@@ -304,6 +326,7 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<GridPosition>()[entity_id], entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
         }
         
@@ -311,6 +334,7 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<GridPosition>()[entity_id], entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
         }
         
@@ -318,6 +342,7 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
+            SerializeComponent(GetComponent<GridPosition>()[entity_id], entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
         }
         
@@ -552,6 +577,8 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
                 GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<GridPosition>()[entity_id],
+                GetSubstrBetween(line, "GridPosition{", "}"));
             DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
                 GetSubstrBetween(line, "WidthAndHeight{", "}"));
         }
@@ -568,6 +595,8 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
                 GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<GridPosition>()[entity_id],
+                GetSubstrBetween(line, "GridPosition{", "}"));
             DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
                 GetSubstrBetween(line, "WidthAndHeight{", "}"));
         }
@@ -584,6 +613,8 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "Tag{", "}"));
             DeserializeComponent(GetComponent<Position>()[entity_id],
                 GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(GetComponent<GridPosition>()[entity_id],
+                GetSubstrBetween(line, "GridPosition{", "}"));
             DeserializeComponent(GetComponent<WidthAndHeight>()[entity_id],
                 GetSubstrBetween(line, "WidthAndHeight{", "}"));
         }
@@ -800,6 +831,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Collision>()[entity_id] = { 0.2, 75 };
         GetComponent<Tag>()[entity_id] = {"BPWall"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<GridPosition>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
@@ -813,6 +845,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Collision>()[entity_id] = { 1, 75 };
         GetComponent<Tag>()[entity_id] = {"BPBounceWall"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<GridPosition>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
@@ -826,6 +859,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Collision>()[entity_id] = { 0.05, 75 };
         GetComponent<Tag>()[entity_id] = {"BPNoBounceWall"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
+        GetComponent<GridPosition>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
@@ -878,5 +912,6 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<TextPopupSpawner>()[entity_id] = { "ipsum lorem" };
         return entity_id;
     }
-    return entity_id;
+    assert(false);
+    return -1;
 }

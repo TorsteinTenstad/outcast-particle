@@ -9,6 +9,7 @@ public:
 	float mouse_wheel_delta = 0;
 
 	sf::Vector2f cursor_position;
+	sf::Vector2f last_frame_cursor_position;
 	std::map<int, sf::Vector2f> mouse_button_last_pressed_position;
 	std::map<int, sf::Vector2f> mouse_button_last_released_position;
 	std::map<int, bool> mouse_button_down;

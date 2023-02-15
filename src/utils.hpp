@@ -21,6 +21,8 @@ bool IsMenu(const std::string& level_id);
 
 float FakeSigmoid(float x);
 
+std::array<int, 2> Vector2iToArray(sf::Vector2i v);
+
 float Magnitude(sf::Vector2f v);
 sf::Vector2f Normalized(sf::Vector2f v);
 sf::Vector2f Abs(sf::Vector2f v);
