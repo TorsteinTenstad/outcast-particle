@@ -50,11 +50,44 @@ std::tuple<Component*...> Level::AddComponents(int entity_id)
 	return std::make_tuple(AddComponent<Component>(entity_id)...);
 }
 
+template <class Component>
+Component* Level::GetComponent(int entity_id)
+{
+	auto m = GetComponentMap<Component>();
+	return &(*m).at(entity_id);
+}
+
+template <class... Component>
+std::tuple<Component*...> Level::GetComponents(int entity_id)
+{
+	return std::make_tuple(AddComponent<Component>(entity_id)...);
+}
+
+template <class Component>
+bool Level::RemoveComponent(int entity_id)
+{
+	auto m = GetComponentMap<Component>();
+	return (*m).erase(entity_id) > 0;
+}
+
+template <class... Component>
+bool Level::RemoveComponents(int entity_id)
+{
+	return (RemoveComponent<Component>(entity_id) || ...);
+}
+
 template <class... Component>
 std::tuple<int, Component*...> Level::CreateEntitiyWith()
 {
 	int entity_id = CreateEntityId();
 	return std::tuple_cat(std::make_tuple(entity_id), AddComponents<Component...>(entity_id));
+}
+
+template <class... Component>
+std::tuple<int, Component*...> Level::AddBlueprint(std::string tag)
+{
+	int entity_id = AddBlueprint(tag);
+	return std::tuple_cat(std::make_tuple(entity_id), GetComponents<Component...>(entity_id));
 }
 
 template <class OtherComponent, class... Component>

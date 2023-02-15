@@ -267,6 +267,11 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
         }
         
+        if (tag == "BPMenuNavigationButton")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPMenuNavigator")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -417,9 +422,23 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<FillColor>()[entity_id] = {};
             GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
-            GetComponent<OnReleasedThisFrame>()[entity_id] = {};
+            GetComponent<Text>()[entity_id] = {};
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 2) * 120.f };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
+        if (tag == "BPMenuNavigationButton")
+        {
+            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<DrawPriority>()[entity_id] = { 100 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+            GetComponent<FillColor>()[entity_id] = {};
+            GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<Text>()[entity_id] = {};
             GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
+            GetComponent<OnReleasedThisFrame>()[entity_id] = {};
             GetComponent<MenuNavigatable>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -697,11 +716,24 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<FillColor>()[entity_id] = {};
         GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
-        GetComponent<OnReleasedThisFrame>()[entity_id] = {};
+        GetComponent<Text>()[entity_id] = {};
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 2) * 120.f };
+        GetComponent<Tag>()[entity_id] = {"BPButton"};
+        return entity_id;
+    }
+    if (tag == "BPMenuNavigationButton")
+    {
+        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<DrawPriority>()[entity_id] = { 100 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+        GetComponent<FillColor>()[entity_id] = {};
+        GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<Text>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
+        GetComponent<OnReleasedThisFrame>()[entity_id] = {};
         GetComponent<MenuNavigatable>()[entity_id] = {};
-        GetComponent<Tag>()[entity_id] = {"BPButton"};
+        GetComponent<Tag>()[entity_id] = {"BPMenuNavigationButton"};
         return entity_id;
     }
     if (tag == "BPMenuNavigator")

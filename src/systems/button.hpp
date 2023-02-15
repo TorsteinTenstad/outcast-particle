@@ -16,7 +16,11 @@ public:
 	{
 		for (auto [entity_id, mouse_interaction_dependent_fill_color, fill_color] : level.GetEntitiesWith<MouseInteractionDependentFillColor, FillColor>())
 		{
-			if (level.HasComponents<Pressed>(entity_id))
+			if (level.HasComponents<StickyButtonDown>(entity_id))
+			{
+				fill_color->color = mouse_interaction_dependent_fill_color->pressed_color;
+			}
+			else if (level.HasComponents<Pressed>(entity_id))
 			{
 				fill_color->color = mouse_interaction_dependent_fill_color->pressed_color;
 			}

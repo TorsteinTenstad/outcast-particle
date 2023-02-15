@@ -8,7 +8,6 @@
 
 #define PI 3.141593
 
-float Clamp(float x, float a, float b);
 float Smoothstep(float a, float b, float x);
 float Ease(float x, float undershoot, float overshoot);
 

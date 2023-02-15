@@ -8,6 +8,7 @@
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/edit_mode_temporary.hpp"
+#include "components/edit_mode_ui.hpp"
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
@@ -15,7 +16,7 @@
 #include "components/input_events.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
-#include "components/level_menu.hpp"
+#include "components/level_menu_ui.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
@@ -23,6 +24,7 @@
 #include "components/scheduled_delete.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
+#include "components/sticky_button.hpp"
 #include "components/tag.hpp"
 #include "components/text.hpp"
 #include "components/text_popup.hpp"
@@ -57,6 +59,7 @@ typedef std::variant<
 	std::map<int, Editable>,
 	std::map<int, ElectricField>,
 	std::map<int, EditModeTemporary>,
+	std::map<int, EditModeUI>,
 	std::map<int, TemporarilySelected>,
 	std::map<int, Face>,
 	std::map<int, ForceVisualization>,
@@ -94,6 +97,8 @@ typedef std::variant<
 	std::map<int, SegmentedGlowEffect>,
 	std::map<int, Selected>,
 	std::map<int, Shader>,
+	std::map<int, StickyButton>,
+	std::map<int, StickyButtonDown>,
 	std::map<int, MenuDelayTimer>,
 	std::map<int, SoundInfo>,
 	std::map<int, Tag>,
@@ -134,6 +139,8 @@ public:
 	template <class Component>
 	std::map<int, Component>* GetComponentMap();
 
+	int CreateEntityId();
+
 private:
 	template <class Component>
 	bool HasComponent(int entity_id);
@@ -148,6 +155,20 @@ public:
 	template <class... Component>
 	std::tuple<Component*...> AddComponents(int entity_id);
 
+	template <class Component>
+	Component* GetComponent(int entity_id);
+
+	template <class... Component>
+	std::tuple<Component*...> GetComponents(int entity_id);
+
+private:
+	template <class Component>
+	bool RemoveComponent(int entity_id);
+
+public:
+	template <class... Component>
+	bool RemoveComponents(int entity_id);
+
 	template <class... Component>
 	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
 
@@ -157,9 +178,10 @@ public:
 	template <class... Component>
 	void DeleteEntitiesWith();
 
-	Level();
-	int CreateEntityId();
 	int AddBlueprint(std::string tag);
+
+	template <class... Component>
+	std::tuple<int, Component*...> AddBlueprint(std::string tag);
 
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
@@ -169,6 +191,7 @@ public:
 	void SetMode(LevelMode level_mode);
 
 	sf::Vector2f GetSize();
+	sf::Vector2u GetGridSize();
 	float GetScale();
 	void ResetSize();
 	void IncreaseSize();

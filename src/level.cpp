@@ -7,10 +7,6 @@
 int Level::next_available_entity_id_ = 0;
 const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vector2u(32, 18), sf::Vector2u(48, 27), sf::Vector2u(64, 36), sf::Vector2u(80, 45) } };
 
-Level::Level()
-{
-}
-
 int Level::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();
@@ -98,6 +94,11 @@ sf::Vector2f Level::GetSize()
 	return sf::Vector2f(LEVEL_SIZES[grid_size_id]) * float(BLOCK_SIZE);
 }
 
+sf::Vector2u Level::GetGridSize()
+{
+	return LEVEL_SIZES[grid_size_id];
+}
+
 float Level::GetScale()
 {
 	return (float)LEVEL_SIZES[grid_size_id].x / (float)LEVEL_SIZES[DEFAULT_LEVEL_GRID_SIZE_ID].x;
@@ -136,7 +137,7 @@ void Level::SaveToFile()
 
 int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
 {
-	int id = level.AddBlueprint("BPButton");
+	int id = level.AddBlueprint("BPMenuNavigationButton");
 	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	level.GetComponent<OnReleasedThisFrame>()[id].func = on_click;
 	level.GetComponent<Text>()[id].content = button_text;
@@ -154,7 +155,7 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 
 	for (unsigned i = 0; i < n; ++i)
 	{
-		int id = level.AddBlueprint("BPButton");
+		int id = level.AddBlueprint("BPMenuNavigationButton");
 		ids.push_back(id);
 		level.GetComponent<WidthAndHeight>()[id].width_and_height.x *= x_scale;
 		float& h = level.GetComponent<WidthAndHeight>()[id].width_and_height.y;
