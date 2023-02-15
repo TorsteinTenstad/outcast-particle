@@ -204,7 +204,7 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 	level.GetComponent<DrawPriority>()[id].draw_priority = 1;
 	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
 	level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	level.GetComponent<ReceivesMouseEvents>()[id] = {};
+	level.GetComponent<ReceivesButtonEvents>()[id] = {};
 	level.GetComponent<KeyConfigButton>()[id].key = key;
 	level.GetComponent<KeyConfigButton>()[id].image_path = image_path;
 	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;

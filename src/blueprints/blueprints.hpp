@@ -2,7 +2,7 @@
 
 class BPButton
 {
-	ReceivesMouseEvents can_receive_press = {};
+	ReceivesButtonEvents can_receive_press = {};
 	DrawPriority draw_priority = { 100 };
 	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };
 	FillColor fill_color = {};
@@ -31,7 +31,7 @@ class BPMenuNavigator
 
 class BPEditableEntity
 {
-	ReceivesMouseEvents can_receive_press = {};
+	ReceivesButtonEvents can_receive_press = {};
 	Editable editable = {};
 
 	// [Serialize]

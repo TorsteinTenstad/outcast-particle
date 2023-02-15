@@ -3,6 +3,7 @@
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
+#include "components/button_events.hpp"
 #include "components/children.hpp"
 #include "components/coin.hpp"
 #include "components/collision.hpp"
@@ -13,7 +14,6 @@
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
 #include "components/grid_position.hpp"
-#include "components/input_events.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/level_menu_ui.hpp"
@@ -85,11 +85,10 @@ typedef std::variant<
 	std::map<int, PlayerBehaviors>,
 	std::map<int, Position>,
 	std::map<int, Pressed>,
-	std::map<int, PressedImagePath>,
 	std::map<int, PressedThisFrame>,
 	std::map<int, Radius>,
 	std::map<int, ReceivedForces>,
-	std::map<int, ReceivesMouseEvents>,
+	std::map<int, ReceivesButtonEvents>,
 	std::map<int, MouseInteractionDependentFillColor>,
 	std::map<int, ReleasedThisFrame>,
 	std::map<int, ScheduledDelete>,

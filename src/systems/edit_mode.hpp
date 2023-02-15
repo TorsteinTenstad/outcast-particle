@@ -263,7 +263,7 @@ public:
 		level.GetComponent<Position>()[menu_background_id].position = level.GetSize() / 2.f;
 		level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
 		level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
-		level.GetComponent<ReceivesMouseEvents>()[menu_background_id];
+		level.GetComponent<ReceivesButtonEvents>()[menu_background_id];
 		float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
 		level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 		level.GetComponent<Border>()[menu_background_id];

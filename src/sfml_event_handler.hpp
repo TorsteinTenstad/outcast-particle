@@ -14,10 +14,15 @@ public:
 	void Update(CursorAndKeys& cursor_and_keys)
 	{
 		cursor_and_keys.ResetFrameEvents();
-		auto mouse_pos = globals.render_window.mapPixelToCoords(sf::Mouse::getPosition(globals.render_window));
+
+		cursor_and_keys.last_frame_screen_space_cursor_position = cursor_and_keys.screen_space_cursor_position;
+		cursor_and_keys.screen_space_cursor_position = sf::Mouse::getPosition(globals.render_window);
+
+		cursor_and_keys.cursor_moved_this_frame = cursor_and_keys.last_frame_screen_space_cursor_position != cursor_and_keys.screen_space_cursor_position;
+
 		cursor_and_keys.last_frame_cursor_position = cursor_and_keys.cursor_position;
-		cursor_and_keys.cursor_position.x = mouse_pos.x;
-		cursor_and_keys.cursor_position.y = mouse_pos.y;
+		cursor_and_keys.cursor_position = globals.render_window.mapPixelToCoords(cursor_and_keys.screen_space_cursor_position);
+
 		sf::Event event;
 		while (globals.render_window.pollEvent(event))
 		{
@@ -43,13 +48,13 @@ public:
 			{
 				cursor_and_keys.mouse_button_pressed_this_frame[event.mouseButton.button] = true;
 				cursor_and_keys.mouse_button_down[event.mouseButton.button] = true;
-				cursor_and_keys.mouse_button_last_pressed_position[event.mouseButton.button] = sf::Vector2f(mouse_pos.x, mouse_pos.y);
+				cursor_and_keys.mouse_button_last_pressed_position[event.mouseButton.button] = cursor_and_keys.cursor_position;
 			}
 			if (event.type == sf::Event::MouseButtonReleased)
 			{
 				cursor_and_keys.mouse_button_released_this_frame[event.mouseButton.button] = true;
 				cursor_and_keys.mouse_button_down[event.mouseButton.button] = false;
-				cursor_and_keys.mouse_button_last_released_position[event.mouseButton.button] = sf::Vector2f(mouse_pos.x, mouse_pos.y);
+				cursor_and_keys.mouse_button_last_released_position[event.mouseButton.button] = cursor_and_keys.cursor_position;
 			}
 		}
 	}
