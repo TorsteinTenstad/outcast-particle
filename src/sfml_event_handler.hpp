@@ -14,6 +14,10 @@ public:
 	void Update(CursorAndKeys& cursor_and_keys)
 	{
 		cursor_and_keys.ResetFrameEvents();
+		auto mouse_pos = globals.render_window.mapPixelToCoords(sf::Mouse::getPosition(globals.render_window));
+		cursor_and_keys.last_frame_cursor_position = cursor_and_keys.cursor_position;
+		cursor_and_keys.cursor_position.x = mouse_pos.x;
+		cursor_and_keys.cursor_position.y = mouse_pos.y;
 		sf::Event event;
 		while (globals.render_window.pollEvent(event))
 		{
@@ -31,10 +35,6 @@ public:
 				cursor_and_keys.key_released_this_frame[event.key.code] = true;
 				cursor_and_keys.key_down[event.key.code] = false;
 			}
-			auto mouse_pos = globals.render_window.mapPixelToCoords(sf::Mouse::getPosition(globals.render_window));
-			cursor_and_keys.last_frame_cursor_position = cursor_and_keys.cursor_position;
-			cursor_and_keys.cursor_position.x = mouse_pos.x;
-			cursor_and_keys.cursor_position.y = mouse_pos.y;
 			if (event.type == sf::Event::MouseWheelScrolled)
 			{
 				cursor_and_keys.mouse_wheel_delta = event.mouseWheelScroll.delta;

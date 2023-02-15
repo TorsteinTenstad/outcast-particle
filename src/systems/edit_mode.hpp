@@ -29,19 +29,22 @@ public:
 	{
 		if (level.GetMode() != EDIT_MODE)
 		{
-			level.GetComponent<Border>().clear();
+			if (!IsMenu(active_level_id_))
+			{
+				level.GetComponent<FillColor>().clear();
+			}
 			return;
 		}
 
 		// Mark selected entities with border:
-		level.GetComponent<Border>().clear();
+		level.GetComponent<FillColor>().clear();
 		for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
 		{
-			level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
+			level.GetComponent<FillColor>()[entity_id].color = sf::Color(150, 150, 255);
 		}
 		for (auto [entity_id, selected] : level.GetEntitiesWith<TemporarilySelected>())
 		{
-			level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
+			level.GetComponent<FillColor>()[entity_id].color = sf::Color(150, 150, 255);
 		}
 
 		// Delete entities:
