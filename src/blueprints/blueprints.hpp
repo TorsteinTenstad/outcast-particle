@@ -1,5 +1,11 @@
 #include "level.hpp"
-
+class BPTexturedRectangle
+{
+	DrawPriority draw_priority = { 0 };
+	DrawInfo draw_info = { "_", false, 0 };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+	Position position = {};
+};
 class BPButton
 {
 	ReceivesButtonEvents can_receive_press = {};
@@ -9,7 +15,8 @@ class BPButton
 	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
 	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
 	Text text = {};
-	WidthAndHeight width_and_height = { sf::Vector2f(3, 2) * 120.f };
+	WidthAndHeight width_and_height = { sf::Vector2f(3, 1.5) * 120.f };
+	Position position = {};
 };
 
 class BPMenuNavigationButton : public BPButton
@@ -140,6 +147,16 @@ class BPWall : public BPEditableEntity
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
+class BPDeleteIndicator
+{
+	DrawInfo draw_info = { "content\\textures\\delete_indicator.png", false, 0 };
+	DrawPriority draw_priority = { 6 };
+	GridPosition grid_position = {};
+	Position position = {};
+	DeleteIndicator delete_indicator = {};
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+};
+
 class BPBounceWall : public BPWall
 {
 	DrawInfo draw_info = { "content\\textures\\block_green.png", false, 0 };
@@ -172,7 +189,7 @@ class BPElectricField : public BPEditableEntity
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
 class BPMagneticField : public BPEditableEntity
@@ -184,7 +201,7 @@ class BPMagneticField : public BPEditableEntity
 	MagneticField magnetic_field = { 0.1 };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
 class BPTextPopupSpawner : public BPEditableEntity

@@ -262,6 +262,11 @@ void Level::SaveToFile(std::string savefile_path)
         std::string tag = tag_component.tag;
         f << "\"" << tag << "\":";
 
+        if (tag == "BPTexturedRectangle")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPButton")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
@@ -333,6 +338,11 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Position>()[entity_id], entity_string);
             SerializeComponent(GetComponent<GridPosition>()[entity_id], entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>()[entity_id], entity_string);
+        }
+        
+        if (tag == "BPDeleteIndicator")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
         }
         
         if (tag == "BPBounceWall")
@@ -414,6 +424,16 @@ void Level::LoadFromFile(std::string savefile_path)
         std::string tag = GetSubstrBetween(line, "\"", "\"");
         GetComponent<Tag>()[entity_id].tag = tag;
 
+        if (tag == "BPTexturedRectangle")
+        {
+            GetComponent<DrawPriority>()[entity_id] = { 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+            GetComponent<Position>()[entity_id] = {};
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
         if (tag == "BPButton")
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
@@ -423,7 +443,8 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<Text>()[entity_id] = {};
-            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 2) * 120.f };
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 1.5) * 120.f };
+            GetComponent<Position>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
         }
@@ -438,6 +459,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<Text>()[entity_id] = {};
             GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
+            GetComponent<Position>()[entity_id] = {};
             GetComponent<OnReleasedThisFrame>()[entity_id] = {};
             GetComponent<MenuNavigatable>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -602,6 +624,18 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "WidthAndHeight{", "}"));
         }
         
+        if (tag == "BPDeleteIndicator")
+        {
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\delete_indicator.png", false, 0 };
+            GetComponent<DrawPriority>()[entity_id] = { 6 };
+            GetComponent<GridPosition>()[entity_id] = {};
+            GetComponent<Position>()[entity_id] = {};
+            GetComponent<DeleteIndicator>()[entity_id] = {};
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
         if (tag == "BPBounceWall")
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
@@ -708,6 +742,15 @@ void Level::LoadFromFile(std::string savefile_path)
 int Level::AddBlueprint(std::string tag)
 {
     int entity_id = CreateEntityId();
+    if (tag == "BPTexturedRectangle")
+    {
+        GetComponent<DrawPriority>()[entity_id] = { 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+        GetComponent<Position>()[entity_id] = {};
+        GetComponent<Tag>()[entity_id] = {"BPTexturedRectangle"};
+        return entity_id;
+    }
     if (tag == "BPButton")
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
@@ -717,7 +760,8 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<Text>()[entity_id] = {};
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 2) * 120.f };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 1.5) * 120.f };
+        GetComponent<Position>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPButton"};
         return entity_id;
     }
@@ -731,6 +775,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<Text>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
+        GetComponent<Position>()[entity_id] = {};
         GetComponent<OnReleasedThisFrame>()[entity_id] = {};
         GetComponent<MenuNavigatable>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPMenuNavigationButton"};
@@ -867,6 +912,17 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
+    if (tag == "BPDeleteIndicator")
+    {
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\delete_indicator.png", false, 0 };
+        GetComponent<DrawPriority>()[entity_id] = { 6 };
+        GetComponent<GridPosition>()[entity_id] = {};
+        GetComponent<Position>()[entity_id] = {};
+        GetComponent<DeleteIndicator>()[entity_id] = {};
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+        GetComponent<Tag>()[entity_id] = {"BPDeleteIndicator"};
+        return entity_id;
+    }
     if (tag == "BPBounceWall")
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
@@ -917,7 +973,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Tag>()[entity_id] = {"BPElectricField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 0.25) };
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
     if (tag == "BPMagneticField")
@@ -929,7 +985,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Tag>()[entity_id] = {"BPMagneticField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<MagneticField>()[entity_id] = { 0.1 };
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
     if (tag == "BPTextPopupSpawner")

@@ -21,3 +21,7 @@ class TemporarilySelected
 class EditModeTemporary
 {
 };
+
+class DeleteIndicator
+{
+};

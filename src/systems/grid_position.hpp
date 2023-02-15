@@ -46,55 +46,57 @@ public:
 		auto level_size = level.GetSize();
 		sf::Vector2i last_frame_cursor_grid_position = WorldPosToGridPos(cursor_and_keys_.last_frame_cursor_position, BLOCK_SIZE, level_grid_size);
 		sf::Vector2i cursor_grid_position = WorldPosToGridPos(cursor_and_keys_.cursor_position, BLOCK_SIZE, level_grid_size);
-		sf::Vector2i mouse_button_last_pressed_grid_position = WorldPosToGridPos(cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Button::Left], BLOCK_SIZE, level_grid_size);
 
-		if (0 <= cursor_and_keys_.cursor_position.x && cursor_and_keys_.cursor_position.x < level_size.x
-			&& 0 <= cursor_and_keys_.cursor_position.y && cursor_and_keys_.cursor_position.y < level_size.y
-			&& (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Button::Left]
-				|| (cursor_and_keys_.mouse_button_down[sf::Mouse::Button::Left]
-					&& last_frame_cursor_grid_position != cursor_grid_position)))
+		for (auto const& [entity_id, button_bound_edit_tool] : level.GetEntitiesWith<ButtonBoundEditTool>())
 		{
-			level.DeleteEntitiesWith<EditModeTemporary>();
-			DeselectAll<TemporarilySelected>(level);
-			int i_incr = Sign(cursor_grid_position.x - mouse_button_last_pressed_grid_position.x);
-			for (int i = mouse_button_last_pressed_grid_position.x; i != cursor_grid_position.x + i_incr; i += i_incr)
+			sf::Vector2i mouse_button_last_pressed_grid_position = WorldPosToGridPos(cursor_and_keys_.mouse_button_last_pressed_position[button_bound_edit_tool->button], BLOCK_SIZE, level_grid_size);
+			if (0 <= cursor_and_keys_.cursor_position.x && cursor_and_keys_.cursor_position.x < level_size.x
+				&& 0 <= cursor_and_keys_.cursor_position.y && cursor_and_keys_.cursor_position.y < level_size.y
+				&& (cursor_and_keys_.mouse_button_pressed_this_frame[button_bound_edit_tool->button]
+					|| (cursor_and_keys_.mouse_button_down[button_bound_edit_tool->button]
+						&& last_frame_cursor_grid_position != cursor_grid_position)))
 			{
-				int j_incr = Sign(cursor_grid_position.y - mouse_button_last_pressed_grid_position.y);
-				for (int j = mouse_button_last_pressed_grid_position.y; j != cursor_grid_position.y + j_incr; j += j_incr)
+				level.DeleteEntitiesWith<EditModeTemporary>();
+				DeselectAll<TemporarilySelected>(level);
+				int i_incr = Sign(cursor_grid_position.x - mouse_button_last_pressed_grid_position.x);
+				for (int i = mouse_button_last_pressed_grid_position.x; i != cursor_grid_position.x + i_incr; i += i_incr)
 				{
-					std::string active_blueprint = GetSingleton<EditModeUI>(level)->active_blueprint;
-					if (!active_blueprint.empty())
+					int j_incr = Sign(cursor_grid_position.y - mouse_button_last_pressed_grid_position.y);
+					for (int j = mouse_button_last_pressed_grid_position.y; j != cursor_grid_position.y + j_incr; j += j_incr)
 					{
-						auto [entity_id, grid_position, with_and_height] = level.AddBlueprint<GridPosition, WidthAndHeight>(active_blueprint);
-						grid_position->grid_position = sf::Vector2i(i, j);
-						with_and_height->width_and_height = sf::Vector2f(1, 1) * float(BLOCK_SIZE);
-						level.AddComponents<EditModeTemporary>(entity_id);
-						grid_position_manager->dirty = true;
-					}
-					else
-					{
-						if (grid_position_manager->entity_id_at_position.count({ i, j }))
+						std::string tool = button_bound_edit_tool->tool;
+						if (tool == "_select")
 						{
-							TemporarilySelectEntity(level, grid_position_manager->entity_id_at_position.at({ i, j }));
+							if (grid_position_manager->entity_id_at_position.count({ i, j }))
+							{
+								TemporarilySelectEntity(level, grid_position_manager->entity_id_at_position.at({ i, j }));
+							}
+						}
+						else
+						{
+							auto [entity_id, grid_position] = level.AddBlueprintAddComponents<GridPosition>(tool);
+							grid_position->grid_position = sf::Vector2i(i, j);
+							level.AddComponents<EditModeTemporary>(entity_id);
+							grid_position_manager->dirty = true;
 						}
 					}
 				}
 			}
-		}
-		if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Button::Left])
-		{
-			for (auto [entity_id, temporarity_selected] : level.GetEntitiesWith<TemporarilySelected>())
+			if (cursor_and_keys_.mouse_button_released_this_frame[button_bound_edit_tool->button])
 			{
-				SelectEntity(level, entity_id);
-			}
-			level.GetComponent<TemporarilySelected>().clear();
-			level.GetComponent<EditModeTemporary>().clear();
-			for (auto [entity_id, grid_position] : level.GetEntitiesWith<GridPosition>())
-			{
-				auto grid_index = Vector2iToArray(grid_position->grid_position);
-				if (grid_position_manager->entity_id_at_position.at(grid_index) != entity_id)
+				for (auto [entity_id, temporarity_selected] : level.GetEntitiesWith<TemporarilySelected>())
 				{
-					level.DeleteEntity(entity_id);
+					SelectEntity(level, entity_id);
+				}
+				level.GetComponent<TemporarilySelected>().clear();
+				level.GetComponent<EditModeTemporary>().clear();
+				for (auto [entity_id, grid_position] : level.GetEntitiesWith<GridPosition>())
+				{
+					auto grid_index = Vector2iToArray(grid_position->grid_position);
+					if (grid_position_manager->entity_id_at_position.at(grid_index) != entity_id)
+					{
+						level.DeleteEntity(entity_id);
+					}
 				}
 			}
 		}
@@ -120,6 +122,14 @@ public:
 			level.DeleteEntity(grid_position_manager->entity_id_at_position[grid_index]);
 			grid_position_manager->dirty = true;
 		}*/
+
+		for (auto [entity_id, delete_indicator] : level.GetEntitiesWith<DeleteIndicator>())
+		{
+			if (!level.HasComponents<EditModeTemporary>(entity_id))
+			{
+				level.DeleteEntity(entity_id);
+			}
+		}
 
 		if (!grid_position_manager->dirty)
 		{

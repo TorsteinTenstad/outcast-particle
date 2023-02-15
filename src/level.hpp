@@ -10,6 +10,7 @@
 #include "components/draw_info.hpp"
 #include "components/edit_mode_temporary.hpp"
 #include "components/edit_mode_ui.hpp"
+#include "components/edit_tool.hpp"
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
@@ -46,21 +47,23 @@ typedef std::variant<
 	std::map<int, AnimatedPosition>,
 	std::map<int, Background>,
 	std::map<int, BlueprintMenuItem>,
+	std::map<int, ButtonBoundEditTool>,
 	std::map<int, Border>,
 	std::map<int, Charge>,
 	std::map<int, ChargeDependentDrawInfo>,
 	std::map<int, Children>,
 	std::map<int, Coin>,
-	std::map<int, FillColor>,
 	std::map<int, CoinCounter>,
 	std::map<int, Collision>,
+	std::map<int, DeleteIndicator>,
 	std::map<int, DrawInfo>,
 	std::map<int, DrawPriority>,
 	std::map<int, Editable>,
 	std::map<int, ElectricField>,
 	std::map<int, EditModeTemporary>,
 	std::map<int, EditModeUI>,
-	std::map<int, TemporarilySelected>,
+	std::map<int, EditToolButton>,
+	std::map<int, FillColor>,
 	std::map<int, Face>,
 	std::map<int, ForceVisualization>,
 	std::map<int, Goal>,
@@ -101,6 +104,7 @@ typedef std::variant<
 	std::map<int, MenuDelayTimer>,
 	std::map<int, SoundInfo>,
 	std::map<int, Tag>,
+	std::map<int, TemporarilySelected>,
 	std::map<int, Text>,
 	std::map<int, TextPopup>,
 	std::map<int, TextPopupSpawner>,
@@ -180,7 +184,10 @@ public:
 	int AddBlueprint(std::string tag);
 
 	template <class... Component>
-	std::tuple<int, Component*...> AddBlueprint(std::string tag);
+	std::tuple<int, Component*...> AddBlueprintGetComponents(std::string tag);
+
+	template <class... Component>
+	std::tuple<int, Component*...> AddBlueprintAddComponents(std::string tag);
 
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
