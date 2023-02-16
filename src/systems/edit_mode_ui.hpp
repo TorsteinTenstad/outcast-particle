@@ -51,9 +51,11 @@ public:
 			{
 				auto [entity_id, position] = level.AddBlueprintGetComponents<Position>("BPButton");
 				ui->blueprint_buttons.push_back(entity_id);
+				level.AddComponent<NotSerialized>(entity_id);
 				level.AddComponent<EditToolButton>(entity_id)->tool = EDIT_TOOLS[i];
 				position->position = sf::Vector2f(-float(EDIT_MODE_PANEL_WIDTH) / 2, BLOCK_SIZE * (2 + 2 * i));
 				auto [icon_id, draw_info, draw_priority, icon_position] = level.AddBlueprintGetComponents<DrawInfo, DrawPriority, Position>("BPTexturedRectangle");
+				level.AddComponent<NotSerialized>(icon_id);
 				draw_info->image_path = EDIT_TOOLS_ICONS[i];
 				draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
 				icon_position->position = sf::Vector2f(-float(EDIT_MODE_PANEL_WIDTH - BLOCK_SIZE) / 2, BLOCK_SIZE * (2 + 2 * i));

@@ -259,6 +259,9 @@ void Level::SaveToFile(std::string savefile_path)
     std::string entity_string;
     for (auto& [entity_id, tag_component] : tags)
     {
+        if (HasComponent<NotSerialized>(entity_id)){
+            continue;
+        }
         std::string tag = tag_component.tag;
         f << "\"" << tag << "\":";
 
