@@ -63,24 +63,30 @@ public:
 				entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 			}
 		}
-		if (entities_intersecting_mouse.size() > 0)
+		if (entities_intersecting_mouse.size() == 0)
 		{
-			int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
-
-			if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+			for (auto _ : level.GetEntitiesWith<MenuNavigator>())
 			{
-				level.GetComponent<PressedThisFrame>()[top_intersecting_id];
-				level.GetComponent<Pressed>()[top_intersecting_id];
+				return;
 			}
-			if (cursor_and_keys_.cursor_moved_this_frame)
+			level.GetComponent<Hovered>().clear();
+			return;
+		}
+		int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
+
+		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+		{
+			level.GetComponent<PressedThisFrame>()[top_intersecting_id];
+			level.GetComponent<Pressed>()[top_intersecting_id];
+		}
+		if (cursor_and_keys_.cursor_moved_this_frame)
+		{
+			bool hovered_last_frame = level.HasComponents<Hovered>(top_intersecting_id);
+			if (!hovered_last_frame)
 			{
-				bool hovered_last_frame = level.HasComponents<Hovered>(top_intersecting_id);
-				if (!hovered_last_frame)
-				{
-					level.AddComponents<HoveredStartedThisFrame>(top_intersecting_id);
-					level.GetComponent<Hovered>().clear();
-					level.AddComponents<Hovered>(top_intersecting_id);
-				}
+				level.AddComponents<HoveredStartedThisFrame>(top_intersecting_id);
+				level.GetComponent<Hovered>().clear();
+				level.AddComponents<Hovered>(top_intersecting_id);
 			}
 		}
 	}
