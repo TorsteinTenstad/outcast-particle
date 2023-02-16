@@ -193,6 +193,7 @@ public:
 
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
+	void DeleteEntity(std::optional<int> id);
 
 	LevelState ComputeState();
 	LevelMode GetMode();

@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "string_parsing_utils.hpp"
 #include <functional>
+#include <optional>
 #include <string>
 
 int Level::next_available_entity_id_ = 0;
@@ -24,6 +25,14 @@ int Level::CopyEntity(int from_id)
 			component_map_variant);
 	}
 	return to_id;
+}
+
+void Level::DeleteEntity(std::optional<int> id)
+{
+	if (id.has_value())
+	{
+		DeleteEntity(id.value());
+	}
 }
 
 void Level::DeleteEntity(int id)
@@ -81,6 +90,7 @@ void Level::SetMode(LevelMode level_mode)
 	if (mode_ == EDIT_MODE)
 	{
 		SaveToFile();
+		LoadFromFile();
 	}
 	if (level_mode == EDIT_MODE)
 	{

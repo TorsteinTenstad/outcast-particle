@@ -61,12 +61,8 @@ public:
 				icon_position->position = sf::Vector2f(-float(EDIT_MODE_PANEL_WIDTH - BLOCK_SIZE) / 2, BLOCK_SIZE * (2 + 2 * i));
 			}
 		}
-		for (auto const& [entity_id, edit_tool_button, position] : level.GetEntitiesWith<EditToolButton, Position>())
+		for (auto const& [entity_id, edit_tool_button, hovered, position] : level.GetEntitiesWith<EditToolButton, Hovered, Position>())
 		{
-			if (!level.HasComponents<Hovered>(entity_id))
-			{
-				continue;
-			}
 			for (int button = 0; button < sf::Mouse::Button::ButtonCount; ++button)
 			{
 				if (!cursor_and_keys_.mouse_button_pressed_this_frame[button])
@@ -79,10 +75,11 @@ public:
 					{
 						continue;
 					}
-					level.DeleteEntity(button_bound_edit_tool->icon_entity.value());
+					level.DeleteEntity(button_bound_edit_tool->icon_entity);
 					level.RemoveComponents<ButtonBoundEditTool>(entity_id);
 				}
 				ButtonBoundEditTool* button_bound_edit_tool = level.AddComponent<ButtonBoundEditTool>(entity_id);
+				level.DeleteEntity(button_bound_edit_tool->icon_entity);
 				button_bound_edit_tool->button = (sf::Mouse::Button)button;
 				button_bound_edit_tool->tool = edit_tool_button->tool;
 				if (BUTTON_ICONS.count(button_bound_edit_tool->button) > 0)
