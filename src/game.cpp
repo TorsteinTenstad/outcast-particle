@@ -79,7 +79,7 @@ Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
 	active_level_ = Level();
-	bool level_id_is_top = (!menu_stack.empty() || level_id == menu_stack.top());
+	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
 	if (IsMenu(active_level_id_) && !level_id_is_top)
 	{
 		menu_stack.push(active_level_id_);
