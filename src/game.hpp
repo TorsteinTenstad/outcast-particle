@@ -40,6 +40,7 @@
 #include "systems/trail.hpp"
 #include "systems/velocity.hpp"
 #include "systems/view.hpp"
+#include <stack>
 
 class Game
 {
@@ -49,6 +50,8 @@ private:
 
 	bool restart_update_loop_ = false;
 	bool is_in_level_editing_ = false;
+
+	std::stack<std::string> menu_stack;
 
 	std::string active_level_id_ = MAIN_MENU;
 	Level active_level_;
@@ -86,6 +89,7 @@ private:
 	void GoToMainMenu();
 	void GoToLevelMenu();
 	void GoToOptionsMenu();
+	void GoToLastMenu();
 
 public:
 	Game();

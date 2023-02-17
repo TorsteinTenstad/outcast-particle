@@ -31,7 +31,7 @@ Game::Game()
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_);
-	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1));
+	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this));
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<AnimatedPositionSystem>();
@@ -79,10 +79,21 @@ Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
 	active_level_ = Level();
+	bool level_id_is_top = (!menu_stack.empty() || level_id == menu_stack.top());
+	if (IsMenu(active_level_id_) && !level_id_is_top)
+	{
+		menu_stack.push(active_level_id_);
+	}
+	if (level_id_is_top)
+	{
+		menu_stack.pop();
+	}
+
 	if (level_id == MAIN_MENU)
 	{
 		GoToMainMenu();
 		SaveMapOfMapToFile("user\\records.txt", level_completion_time_records_);
+		menu_stack = {};
 	}
 	else if (level_id == LEVEL_MENU)
 	{
@@ -158,6 +169,17 @@ void Game::ToggleFullscreen()
 		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
 	}
 	fullscreen_ = !fullscreen_;
+}
+
+void Game::GoToLastMenu()
+{
+
+	if (menu_stack.empty())
+	{
+		assert(active_level_id_ == MAIN_MENU);
+		return;
+	}
+	SetLevel(menu_stack.top());
 }
 
 void Game::ExitGame()

@@ -91,6 +91,7 @@
         "queue": "cpp",
         "ranges": "cpp",
         "span": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "stack": "cpp"
     }
 }
