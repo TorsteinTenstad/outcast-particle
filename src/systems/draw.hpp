@@ -2,6 +2,7 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 #include "SFML/Graphics/RenderTexture.hpp"
 #include "SFML/Graphics/Shader.hpp"
+#include "SFML/System/Err.hpp"
 #include "constants.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
@@ -92,11 +93,15 @@ private:
 		{
 			shaders_[shader_id].setUniform(name, value);
 		}
+		// Redirect to nothing
+		std::streambuf* previous = sf::err().rdbuf(NULL);
 		shaders_[shader_id].setUniform("_time", globals.time);
 		if (level.HasComponents<WidthAndHeight>(entity_id))
 		{
 			shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>()[entity_id].width_and_height);
 		}
+		// Restore the original output
+		sf::err().rdbuf(previous);
 		return &shaders_[shader_id];
 	}
 };
