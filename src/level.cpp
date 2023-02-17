@@ -220,7 +220,5 @@ int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, 
 	level.GetComponent<DrawPriority>()[id].draw_priority = draw_priority;
 	level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
 	level.GetComponent<Shader>()[id].fragment_shader_path = shader_path;
-	level.GetComponent<Shader>()[id].float_uniforms["_time"];
-	level.GetComponent<Shader>()[id].vec_uniforms["_window_resolution"] = sf::Vector2f(globals.render_window.getSize());
 	return id;
 }
