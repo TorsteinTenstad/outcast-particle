@@ -156,13 +156,14 @@ public:
 			button_texts.push_back(GetLevelDisplayNameFromId(level_id));
 		}
 		std::vector<int> button_list_ids = AddButtonList(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), button_functions, button_texts, {}, 1, 0.5, TopCenter);
+
 		for (int id : button_list_ids)
 		{
 			scroll_window->positions.push_back(level.GetComponent<Position>(id));
-			scroll_window->shaders.push_back(level.GetComponent<Shader>(id));
 			ui->entity_ids.push_back(id);
-			if (id != 0) // Excluding id 0 because this is the menu navigator
+			if (id != button_list_ids[0]) // Excluding id 0 because this is the menu navigator
 			{
+				scroll_window->shaders.push_back(level.GetComponent<Shader>(id));
 				ui->button_entity_ids.push_back(id);
 			}
 		}

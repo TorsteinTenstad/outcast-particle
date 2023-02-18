@@ -54,6 +54,7 @@ template <class Component>
 Component* Level::GetComponent(int entity_id)
 {
 	auto m = GetComponentMap<Component>();
+	assert(m->count(entity_id) > 0);
 	return &(*m).at(entity_id);
 }
 
