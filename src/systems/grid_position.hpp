@@ -34,6 +34,45 @@ static void DeselectAll(Level& level)
 	level.GetComponent<SelectedComponentVariant>().clear();
 }
 
+static void ApplyToolToGridCellTemporarily(Level& level, GridPositionManager* grid_position_manager, EditToolButton* edit_tool_button, int i, int j, bool transparent)
+{
+	std::string tool = edit_tool_button->tool;
+	if (tool == "_select")
+	{
+		if (grid_position_manager->entity_id_at_position.count({ i, j }))
+		{
+			TemporarilySelectEntity(level, grid_position_manager->entity_id_at_position.at({ i, j }));
+		}
+	}
+	else
+	{
+		auto [entity_id, grid_position] = level.AddBlueprintAddComponents<GridPosition>(tool);
+		grid_position->grid_position = sf::Vector2i(i, j);
+		level.AddComponent<EditModeTemporary>(entity_id);
+		level.AddComponent<NotSerialized>(entity_id);
+		if (transparent)
+		{
+			level.AddComponent<FillColor>(entity_id)->color = sf::Color(255, 255, 255, 50);
+		}
+		grid_position_manager->dirty = true;
+	}
+}
+
+static void ApplyToolToAreaTemporarily(Level& level, GridPositionManager* grid_position_manager, EditToolButton* edit_tool_button, sf::Vector2i area_start_corner, sf::Vector2i area_end_corner, bool transparent)
+{
+	level.DeleteEntitiesWith<EditModeTemporary>();
+	DeselectAll<TemporarilySelected>(level);
+	int i_incr = Sign(area_end_corner.x - area_start_corner.x);
+	for (int i = area_start_corner.x; i != area_end_corner.x + i_incr; i += i_incr)
+	{
+		int j_incr = Sign(area_end_corner.y - area_start_corner.y);
+		for (int j = area_start_corner.y; j != area_end_corner.y + j_incr; j += j_incr)
+		{
+			ApplyToolToGridCellTemporarily(level, grid_position_manager, edit_tool_button, i, j, transparent);
+		}
+	}
+}
+
 class GridPositionSystem : public GameSystem
 {
 public:
@@ -47,41 +86,43 @@ public:
 		sf::Vector2i last_frame_cursor_grid_position = WorldPosToGridPos(cursor_and_keys_.last_frame_cursor_position, BLOCK_SIZE, level_grid_size);
 		sf::Vector2i cursor_grid_position = WorldPosToGridPos(cursor_and_keys_.cursor_position, BLOCK_SIZE, level_grid_size);
 
-		for (auto const& [entity_id, button_bound_edit_tool] : level.GetEntitiesWith<ButtonBoundEditTool>())
+		bool cursor_in_bounds =
+			0 <= cursor_and_keys_.cursor_position.x && cursor_and_keys_.cursor_position.x < level_size.x
+			&& 0 <= cursor_and_keys_.cursor_position.y && cursor_and_keys_.cursor_position.y < level_size.y;
+
+		bool using_tool = false;
+		EditToolButton* default_edit_tool_button = nullptr;
+		for (auto const& [entity_id, button_bound_edit_tool, edit_tool_button] : level.GetEntitiesWith<ButtonBoundEditTool, EditToolButton>())
 		{
-			sf::Vector2i mouse_button_last_pressed_grid_position = WorldPosToGridPos(cursor_and_keys_.mouse_button_last_pressed_position[button_bound_edit_tool->button], BLOCK_SIZE, level_grid_size);
-			if (0 <= cursor_and_keys_.cursor_position.x && cursor_and_keys_.cursor_position.x < level_size.x
-				&& 0 <= cursor_and_keys_.cursor_position.y && cursor_and_keys_.cursor_position.y < level_size.y
-				&& (cursor_and_keys_.mouse_button_pressed_this_frame[button_bound_edit_tool->button]
-					|| (cursor_and_keys_.mouse_button_down[button_bound_edit_tool->button]
-						&& last_frame_cursor_grid_position != cursor_grid_position)))
+			if (button_bound_edit_tool->button == sf::Mouse::Left)
 			{
-				level.DeleteEntitiesWith<EditModeTemporary>();
-				DeselectAll<TemporarilySelected>(level);
-				int i_incr = Sign(cursor_grid_position.x - mouse_button_last_pressed_grid_position.x);
-				for (int i = mouse_button_last_pressed_grid_position.x; i != cursor_grid_position.x + i_incr; i += i_incr)
-				{
-					int j_incr = Sign(cursor_grid_position.y - mouse_button_last_pressed_grid_position.y);
-					for (int j = mouse_button_last_pressed_grid_position.y; j != cursor_grid_position.y + j_incr; j += j_incr)
-					{
-						std::string tool = button_bound_edit_tool->tool;
-						if (tool == "_select")
-						{
-							if (grid_position_manager->entity_id_at_position.count({ i, j }))
-							{
-								TemporarilySelectEntity(level, grid_position_manager->entity_id_at_position.at({ i, j }));
-							}
-						}
-						else
-						{
-							auto [entity_id, grid_position] = level.AddBlueprintAddComponents<GridPosition>(tool);
-							grid_position->grid_position = sf::Vector2i(i, j);
-							level.AddComponents<EditModeTemporary>(entity_id);
-							grid_position_manager->dirty = true;
-						}
-					}
-				}
+				default_edit_tool_button = edit_tool_button;
 			}
+			sf::Vector2i mouse_button_last_pressed_grid_position = WorldPosToGridPos(cursor_and_keys_.mouse_button_last_pressed_position[button_bound_edit_tool->button], BLOCK_SIZE, level_grid_size);
+
+			bool button_down = cursor_and_keys_.mouse_button_down[button_bound_edit_tool->button];
+			bool moved_grid_cell = last_frame_cursor_grid_position != cursor_grid_position;
+
+			using_tool = using_tool || button_down || cursor_and_keys_.mouse_button_released_this_frame[button_bound_edit_tool->button];
+			if (cursor_in_bounds
+				&& (cursor_and_keys_.mouse_button_pressed_this_frame[button_bound_edit_tool->button]
+					|| (button_down && moved_grid_cell)))
+			{
+				auto area_start_corner = edit_tool_button->is_drag_tool ? mouse_button_last_pressed_grid_position : cursor_grid_position;
+				ApplyToolToAreaTemporarily(level, grid_position_manager, edit_tool_button, area_start_corner, cursor_grid_position, false);
+			}
+		}
+		if (!using_tool && cursor_in_bounds && default_edit_tool_button != nullptr)
+		{
+			ApplyToolToAreaTemporarily(level, grid_position_manager, default_edit_tool_button, cursor_grid_position, cursor_grid_position, true);
+		}
+		if (level.GetMode() != EDIT_MODE || (!using_tool && !cursor_in_bounds))
+		{
+			level.DeleteEntitiesWith<EditModeTemporary>();
+		}
+
+		for (auto const& [entity_id, button_bound_edit_tool, edit_tool_button] : level.GetEntitiesWith<ButtonBoundEditTool, EditToolButton>())
+		{
 			if (cursor_and_keys_.mouse_button_released_this_frame[button_bound_edit_tool->button])
 			{
 				for (auto [entity_id, temporarity_selected] : level.GetEntitiesWith<TemporarilySelected>())
@@ -89,6 +130,10 @@ public:
 					SelectEntity(level, entity_id);
 				}
 				level.GetComponent<TemporarilySelected>().clear();
+				for (auto [entity_id, edit_mode_temporary] : level.GetEntitiesWith<EditModeTemporary>())
+				{
+					level.GetComponent<NotSerialized>().erase(entity_id);
+				}
 				level.GetComponent<EditModeTemporary>().clear();
 				for (auto [entity_id, grid_position] : level.GetEntitiesWith<GridPosition>())
 				{
