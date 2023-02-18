@@ -103,6 +103,10 @@ Level& Game::SetLevel(std::string level_id)
 	{
 		GoToOptionsMenu();
 	}
+	else if (level_id == KEY_CONFIG_MENU)
+	{
+		GoToKeyConfigMenu();
+	}
 	else
 	{
 		active_level_.LoadFromFile(level_id);

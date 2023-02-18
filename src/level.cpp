@@ -192,6 +192,7 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 	return ids;
 }
 
+/*
 int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
 {
 	std::string image_path_suffix = "menu_wide.png";
@@ -209,6 +210,17 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;
 	level.GetComponent<Text>()[id].content = button_text;
 	level.GetComponent<Text>()[id].size = text_size;
+	return id;
+}*/
+int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, std::string button_text)
+{
+
+	int id = level.AddBlueprint("BPButton");
+	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
+	level.GetComponent<KeyConfigButton>()[id].key = key;
+	level.GetComponent<KeyConfigButton>()[id].image_path = "content\\textures\\white.png";
+	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = "content\\textures\\white.png";
+	level.GetComponent<Text>()[id].content = button_text;
 	return id;
 }
 

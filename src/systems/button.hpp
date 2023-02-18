@@ -16,6 +16,10 @@ public:
 	{
 		for (auto [entity_id, mouse_interaction_dependent_fill_color, fill_color] : level.GetEntitiesWith<MouseInteractionDependentFillColor, FillColor>())
 		{
+			if (level.HasComponents<KeyConfigButton>(entity_id))
+			{
+				continue;
+			}
 			if (level.HasComponents<Pressed>(entity_id))
 			{
 				fill_color->color = mouse_interaction_dependent_fill_color->pressed_color;
@@ -84,7 +88,7 @@ public:
 						}
 
 						// Set button text:
-						assert(text_map.count(entity_id) > 0);
+						//assert(text_map.count(entity_id) > 0);
 						std::vector<std::string> button_description = SplitString(text_map[entity_id].content, " ");
 						text_map[entity_id].content = "";
 						for (unsigned i = 0; i < button_description.size() - 1; ++i)
