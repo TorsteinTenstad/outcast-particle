@@ -12,6 +12,7 @@ Game::Game()
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	RegisterGameSystem<ScrollSystem>(); // LevelMenuSystem can not be between ScrollSystem and ButtonEventsSystem
 	RegisterGameSystem<ButtonEventsSystem>();
 	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly below ButtonEventsSystem for Hovered component to work correctly
 	RegisterGameSystem<SetDrawInfoSystem>();

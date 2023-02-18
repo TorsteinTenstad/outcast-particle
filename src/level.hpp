@@ -20,6 +20,7 @@
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/scheduled_delete.hpp"
+#include "components/scroll.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
 #include "components/sticky_button.hpp"
@@ -91,6 +92,7 @@ typedef std::variant<
 	std::map<int, SegmentedGlowEffect>,
 	std::map<int, Selected>,
 	std::map<int, Shader>,
+	std::map<int, ScrollWindow>,
 	std::map<int, StickyButton>,
 	std::map<int, StickyButtonDown>,
 	std::map<int, MenuDelayTimer>,
