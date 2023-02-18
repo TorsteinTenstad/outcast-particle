@@ -5,23 +5,19 @@
 class MenuEscapeSystem : public GameSystem
 {
 private:
-	std::function<void(std::string)> set_level_;
+	std::function<void()> go_to_last_menu_;
 
 public:
 	using GameSystem::GameSystem;
-	void Give(std::function<void(std::string)> set_level)
+	void Give(std::function<void()> go_to_last_menu)
 	{
-		set_level_ = set_level;
+		go_to_last_menu_ = go_to_last_menu;
 	}
 	void Update(Level& level, float dt)
 	{
-		if (!IsMenu(active_level_id_))
+		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] && IsMenu(active_level_id_))
 		{
-			return;
-		}
-		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] && (active_level_id_ == LEVEL_MENU || active_level_id_ == OPTIONS_MENU))
-		{
-			set_level_(MAIN_MENU);
+			go_to_last_menu_();
 		}
 	}
 };
