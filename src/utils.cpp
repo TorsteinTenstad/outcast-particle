@@ -50,7 +50,7 @@ std::string GetLevelDisplayNameFromId(const std::string& level_id)
 
 bool IsMenu(const std::string& level_id)
 {
-	return level_id == MAIN_MENU || level_id == LEVEL_MENU || level_id == OPTIONS_MENU;
+	return level_id == MAIN_MENU || level_id == LEVEL_MENU || level_id == OPTIONS_MENU || level_id == KEY_CONFIG_MENU;
 }
 
 float FakeSigmoid(float x)
@@ -97,18 +97,21 @@ float Dot(sf::Vector2f u, sf::Vector2f v)
 	return u.x * v.x + u.y * v.y;
 }
 
-std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float eliment_w, float eliment_h, float spacing)
+std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacing)
 {
+	sf::Vector2f standard_button_size = sf::Vector2f(10, 2) * 120.f;
+	float w = standard_button_size.x;
+	float h = standard_button_size.y;
 	std::vector<sf::Vector2f> grid;
 	int n_rows = ceil(((float)n_elements) / n_columns);
 	int c = 0;
 	int r = 0;
-	float total_w = (n_columns - 1) * (eliment_w + spacing);
-	float total_h = (n_rows - 1) * (eliment_h + spacing);
+	float total_w = (n_columns - 1) * (w + spacing);
+	float total_h = (n_rows - 1) * (h + spacing);
 	for (int i = 0; i < n_elements; ++i)
 	{
-		float x = (eliment_w + spacing) * c - total_w / 2;
-		float y = (eliment_h + spacing) * r - total_h / 2;
+		float x = (w + spacing) * c - total_w / 2;
+		float y = (h + spacing) * r - total_h / 2;
 		grid.push_back(sf::Vector2f(x, y));
 		c++;
 		if (c == n_columns)
