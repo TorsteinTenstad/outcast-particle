@@ -9,20 +9,15 @@
 #include <iostream>
 #include <math.h>
 
-float Clamp(float x, float a, float b)
-{
-	return std::min(std::max(x, 0.f), 1.f);
-}
-
 float Smoothstep(float a, float b, float x)
 {
-	float t = Clamp((x - a) / (b - a), 0, 1);
+	float t = Clamp((x - a) / (b - a), 0.f, 1.f);
 	return t * t * (3.0 - 2.0 * t);
 }
 
 float Ease(float x, float undershoot, float overshoot)
 {
-	x = Clamp(x, 0, 1);
+	x = Clamp(x, 0.f, 1.f);
 	float a = overshoot * x * x;
 	float b = 1 - undershoot * (x - 1) * (x - 1);
 	float s = Smoothstep(0, 1, x);
@@ -71,6 +66,11 @@ float FakeSigmoid(float x)
 		return 1 - abs(pow(2 * x - 2, 3)) / 2;
 	}
 }
+
+std::array<int, 2> Vector2iToArray(sf::Vector2i v)
+{
+	return { v.x, v.y };
+};
 
 float Magnitude(sf::Vector2f v)
 {

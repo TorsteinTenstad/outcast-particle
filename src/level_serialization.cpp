@@ -237,10 +237,23 @@ void Level::SaveToFile(std::string savefile_path)
     std::string entity_string;
     for (auto& [entity_id, tag_component] : tags)
     {
+        if (HasComponent<NotSerialized>(entity_id)){
+            continue;
+        }
         std::string tag = tag_component.tag;
         f << "\"" << tag << "\":";
 
+        if (tag == "BPTexturedRectangle")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+        }
+        
         if (tag == "BPButton")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+        }
+        
+        if (tag == "BPMenuNavigationButton")
         {
             SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
         }
@@ -384,17 +397,43 @@ void Level::LoadFromFile(std::string savefile_path)
         std::string tag = GetSubstrBetween(line, "\"", "\"");
         GetComponent<Tag>()[entity_id].tag = tag;
 
+        if (tag == "BPTexturedRectangle")
+        {
+            GetComponent<DrawPriority>()[entity_id] = { 0 };
+            GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+            GetComponent<Position>()[entity_id] = {};
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
         if (tag == "BPButton")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 100 };
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
             GetComponent<FillColor>()[entity_id] = {};
             GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
-            GetComponent<OnReleasedThisFrame>()[entity_id] = {};
+            GetComponent<Text>()[entity_id] = {};
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 1.5) * 120.f };
+            GetComponent<Position>()[entity_id] = {};
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
+        if (tag == "BPMenuNavigationButton")
+        {
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
+            GetComponent<DrawPriority>()[entity_id] = { 100 };
+            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+            GetComponent<FillColor>()[entity_id] = {};
+            GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<Text>()[entity_id] = {};
             GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
+            GetComponent<Position>()[entity_id] = {};
+            GetComponent<OnReleasedThisFrame>()[entity_id] = {};
             GetComponent<MenuNavigatable>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -414,7 +453,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPEditableEntity")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -424,7 +463,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPStaticParticle")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 6 };
@@ -440,7 +479,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPMovingParticle")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 7 };
@@ -463,7 +502,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPBlackHole")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 1 };
@@ -478,7 +517,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPPlayer")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = {};
             GetComponent<Radius>()[entity_id] = { 120 };
@@ -508,7 +547,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPLaser")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { 60 };
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 3 };
@@ -526,7 +565,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPCoin")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { 120 };
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 3 };
@@ -542,7 +581,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPWall")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 4 };
@@ -558,7 +597,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPBounceWall")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_green.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 4 };
@@ -574,7 +613,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPNoBounceWall")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_dark.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 4 };
@@ -590,7 +629,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPGoal")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 2 };
@@ -606,7 +645,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPElectricField")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 1 };
@@ -622,7 +661,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPMagneticField")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 1 };
@@ -638,7 +677,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPTextPopupSpawner")
         {
-            GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+            GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
             GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\transparent.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 2 };
@@ -658,19 +697,43 @@ void Level::LoadFromFile(std::string savefile_path)
 int Level::AddBlueprint(std::string tag)
 {
     int entity_id = CreateEntityId();
+    if (tag == "BPTexturedRectangle")
+    {
+        GetComponent<DrawPriority>()[entity_id] = { 0 };
+        GetComponent<DrawInfo>()[entity_id] = { "_", false, 0 };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
+        GetComponent<Position>()[entity_id] = {};
+        GetComponent<Tag>()[entity_id] = {"BPTexturedRectangle"};
+        return entity_id;
+    }
     if (tag == "BPButton")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 100 };
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
         GetComponent<FillColor>()[entity_id] = {};
         GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
-        GetComponent<OnReleasedThisFrame>()[entity_id] = {};
+        GetComponent<Text>()[entity_id] = {};
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 1.5) * 120.f };
+        GetComponent<Position>()[entity_id] = {};
+        GetComponent<Tag>()[entity_id] = {"BPButton"};
+        return entity_id;
+    }
+    if (tag == "BPMenuNavigationButton")
+    {
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
+        GetComponent<DrawPriority>()[entity_id] = { 100 };
+        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\white.png", false, 0 };
+        GetComponent<FillColor>()[entity_id] = {};
+        GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<Text>()[entity_id] = {};
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
+        GetComponent<Position>()[entity_id] = {};
+        GetComponent<OnReleasedThisFrame>()[entity_id] = {};
         GetComponent<MenuNavigatable>()[entity_id] = {};
-        GetComponent<Tag>()[entity_id] = {"BPButton"};
+        GetComponent<Tag>()[entity_id] = {"BPMenuNavigationButton"};
         return entity_id;
     }
     if (tag == "BPMenuNavigator")
@@ -686,7 +749,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPEditableEntity")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPEditableEntity"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
@@ -694,7 +757,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPStaticParticle")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 6 };
@@ -707,7 +770,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPMovingParticle")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 7 };
@@ -726,7 +789,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPBlackHole")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 1 };
@@ -738,7 +801,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPPlayer")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = {};
         GetComponent<Radius>()[entity_id] = { 120 };
@@ -763,7 +826,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPLaser")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { 60 };
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 3 };
@@ -778,7 +841,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPCoin")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { 120 };
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\coin.png", true, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 3 };
@@ -792,7 +855,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPWall")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 4 };
@@ -805,7 +868,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPBounceWall")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_green.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 4 };
@@ -818,7 +881,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPNoBounceWall")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_dark.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 4 };
@@ -831,7 +894,7 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPGoal")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\goal.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 2 };
@@ -844,31 +907,31 @@ int Level::AddBlueprint(std::string tag)
     }
     if (tag == "BPElectricField")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\electric_field.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 1 };
         GetComponent<Tag>()[entity_id] = {"BPElectricField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<ElectricField>()[entity_id] = { sf::Vector2f(0, 0.25) };
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
     if (tag == "BPMagneticField")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\magnetic_field.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 1 };
         GetComponent<Tag>()[entity_id] = {"BPMagneticField"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<MagneticField>()[entity_id] = { 0.1 };
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(240, 240) };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         return entity_id;
     }
     if (tag == "BPTextPopupSpawner")
     {
-        GetComponent<ReceivesMouseEvents>()[entity_id] = {};
+        GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
         GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\transparent.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 2 };
@@ -878,5 +941,6 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<TextPopupSpawner>()[entity_id] = { "ipsum lorem" };
         return entity_id;
     }
-    return entity_id;
+    assert(false);
+    return -1;
 }

@@ -3,25 +3,26 @@
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
+#include "components/button_events.hpp"
 #include "components/children.hpp"
 #include "components/coin.hpp"
 #include "components/collision.hpp"
-#include "components/detect_input.hpp"
 #include "components/draw_info.hpp"
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
-#include "components/grid.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/level_menu.hpp"
 #include "components/menu_navigator.hpp"
+#include "components/not_serialized.hpp"
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
+#include "components/sticky_button.hpp"
 #include "components/tag.hpp"
 #include "components/text.hpp"
 #include "components/text_popup.hpp"
@@ -35,6 +36,7 @@
 #include "ui_origin.hpp"
 #include <functional>
 #include <map>
+#include <optional>
 #include <typeindex>
 #include <variant>
 
@@ -63,10 +65,10 @@ typedef std::variant<
 	std::map<int, KillOnIntersection>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
-	std::map<int, Grid>,
 	std::map<int, MagneticField>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,
+	std::map<int, NotSerialized>,
 	std::map<int, Hovered>,
 	std::map<int, OnHovered>,
 	std::map<int, HoveredStartedThisFrame>,
@@ -78,11 +80,10 @@ typedef std::variant<
 	std::map<int, PlayerBehaviors>,
 	std::map<int, Position>,
 	std::map<int, Pressed>,
-	std::map<int, PressedImagePath>,
 	std::map<int, PressedThisFrame>,
 	std::map<int, Radius>,
 	std::map<int, ReceivedForces>,
-	std::map<int, ReceivesMouseEvents>,
+	std::map<int, ReceivesButtonEvents>,
 	std::map<int, MouseInteractionDependentFillColor>,
 	std::map<int, ReleasedThisFrame>,
 	std::map<int, ScheduledDelete>,
@@ -90,6 +91,8 @@ typedef std::variant<
 	std::map<int, SegmentedGlowEffect>,
 	std::map<int, Selected>,
 	std::map<int, Shader>,
+	std::map<int, StickyButton>,
+	std::map<int, StickyButtonDown>,
 	std::map<int, MenuDelayTimer>,
 	std::map<int, SoundInfo>,
 	std::map<int, Tag>,
@@ -130,6 +133,8 @@ public:
 	template <class Component>
 	std::map<int, Component>* GetComponentMap();
 
+	int CreateEntityId();
+
 private:
 	template <class Component>
 	bool HasComponent(int entity_id);
@@ -144,6 +149,20 @@ public:
 	template <class... Component>
 	std::tuple<Component*...> AddComponents(int entity_id);
 
+	template <class Component>
+	Component* GetComponent(int entity_id);
+
+	template <class... Component>
+	std::tuple<Component*...> GetComponents(int entity_id);
+
+private:
+	template <class Component>
+	bool RemoveComponent(int entity_id);
+
+public:
+	template <class... Component>
+	bool RemoveComponents(int entity_id);
+
 	template <class... Component>
 	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
 
@@ -153,18 +172,24 @@ public:
 	template <class... Component>
 	void DeleteEntitiesWith();
 
-	Level();
-	int CreateEntityId();
 	int AddBlueprint(std::string tag);
+
+	template <class... Component>
+	std::tuple<int, Component*...> AddBlueprintGetComponents(std::string tag);
+
+	template <class... Component>
+	std::tuple<int, Component*...> AddBlueprintAddComponents(std::string tag);
 
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);
+	void DeleteEntity(std::optional<int> id);
 
 	LevelState ComputeState();
 	LevelMode GetMode();
 	void SetMode(LevelMode level_mode);
 
 	sf::Vector2f GetSize();
+	sf::Vector2u GetGridSize();
 	float GetScale();
 	void ResetSize();
 	void IncreaseSize();

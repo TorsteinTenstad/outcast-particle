@@ -8,7 +8,6 @@
 
 #define PI 3.141593
 
-float Clamp(float x, float a, float b);
 float Smoothstep(float a, float b, float x);
 float Ease(float x, float undershoot, float overshoot);
 
@@ -20,6 +19,8 @@ std::string GetLevelDisplayNameFromId(const std::string& level_id);
 bool IsMenu(const std::string& level_id);
 
 float FakeSigmoid(float x);
+
+std::array<int, 2> Vector2iToArray(sf::Vector2i v);
 
 float Magnitude(sf::Vector2f v);
 sf::Vector2f Normalized(sf::Vector2f v);

@@ -1,17 +1,29 @@
 #include "level.hpp"
-
+class BPTexturedRectangle
+{
+	DrawPriority draw_priority = { 0 };
+	DrawInfo draw_info = { "_", false, 0 };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+	Position position = {};
+};
 class BPButton
 {
-	ReceivesMouseEvents can_receive_press = {};
+	ReceivesButtonEvents can_receive_press = {};
 	DrawPriority draw_priority = { 100 };
 	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };
 	FillColor fill_color = {};
 	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
 	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
-	OnReleasedThisFrame on_released_this_frame = {};
 	Text text = {};
-	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
+	WidthAndHeight width_and_height = { sf::Vector2f(3, 1.5) * 120.f };
+	Position position = {};
+};
+
+class BPMenuNavigationButton : public BPButton
+{
+	OnReleasedThisFrame on_released_this_frame = {};
 	MenuNavigatable menu_navigatable = {};
+	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
 };
 
 class BPMenuNavigator
@@ -26,7 +38,7 @@ class BPMenuNavigator
 
 class BPEditableEntity
 {
-	ReceivesMouseEvents can_receive_press = {};
+	ReceivesButtonEvents can_receive_press = {};
 	Editable editable = {};
 
 	// [Serialize]
@@ -164,7 +176,7 @@ class BPElectricField : public BPEditableEntity
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
 class BPMagneticField : public BPEditableEntity
@@ -176,7 +188,7 @@ class BPMagneticField : public BPEditableEntity
 	MagneticField magnetic_field = { 0.1 };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
 class BPTextPopupSpawner : public BPEditableEntity

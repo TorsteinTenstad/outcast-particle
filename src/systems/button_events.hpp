@@ -1,6 +1,6 @@
 #pragma once
 #include "components/area.hpp"
-#include "components/detect_input.hpp"
+#include "components/button_events.hpp"
 #include "components/physics.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
@@ -8,7 +8,7 @@
 #include "utils.hpp"
 #include <algorithm>
 
-class MouseInterationSystem : public GameSystem
+class ButtonEventsSystem : public GameSystem
 {
 public:
 	using GameSystem::GameSystem;
@@ -40,19 +40,20 @@ public:
 			if (cursor_and_keys_.key_released_this_frame[shortcut_key->key])
 			{
 				level.AddComponent<ReleasedThisFrame>(entity_id);
+				level.RemoveComponents<Pressed>(entity_id);
 			}
 		}
 
 		std::vector<std::tuple<int, int>> entities_intersecting_mouse; // contains (draw_priority, entity_id)
 
-		for (auto [entity_id, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, ReceivesMouseEvents, DrawPriority, Position>())
+		for (auto [entity_id, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, ReceivesButtonEvents, DrawPriority, Position>())
 		{
 			if (Magnitude(cursor_and_keys_.cursor_position - position->position) < radius->radius)
 			{
 				entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 			}
 		}
-		for (auto [entity_id, width_and_height, can_receive_press, draw_priority, position] : level.GetEntitiesWith<WidthAndHeight, ReceivesMouseEvents, DrawPriority, Position>())
+		for (auto [entity_id, width_and_height, can_receive_press, draw_priority, position] : level.GetEntitiesWith<WidthAndHeight, ReceivesButtonEvents, DrawPriority, Position>())
 		{
 			float w = width_and_height->width_and_height.x;
 			float h = width_and_height->width_and_height.y;
@@ -62,24 +63,30 @@ public:
 				entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity_id });
 			}
 		}
-		if (entities_intersecting_mouse.size() > 0)
+		if (entities_intersecting_mouse.size() == 0)
 		{
-			int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
-
-			if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+			for (auto _ : level.GetEntitiesWith<MenuNavigator>())
 			{
-				level.GetComponent<PressedThisFrame>()[top_intersecting_id];
-				level.GetComponent<Pressed>()[top_intersecting_id];
+				return;
 			}
-			else
+			level.GetComponent<Hovered>().clear();
+			return;
+		}
+		int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
+
+		if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+		{
+			level.GetComponent<PressedThisFrame>()[top_intersecting_id];
+			level.GetComponent<Pressed>()[top_intersecting_id];
+		}
+		if (cursor_and_keys_.cursor_moved_this_frame)
+		{
+			bool hovered_last_frame = level.HasComponents<Hovered>(top_intersecting_id);
+			if (!hovered_last_frame)
 			{
-				bool hovered_last_frame = level.HasComponents<Hovered>(top_intersecting_id);
-				if (!hovered_last_frame)
-				{
-					level.AddComponents<HoveredStartedThisFrame>(top_intersecting_id);
-					level.GetComponent<Hovered>().clear();
-					level.AddComponents<Hovered>(top_intersecting_id);
-				}
+				level.AddComponents<HoveredStartedThisFrame>(top_intersecting_id);
+				level.GetComponent<Hovered>().clear();
+				level.AddComponents<Hovered>(top_intersecting_id);
 			}
 		}
 	}
