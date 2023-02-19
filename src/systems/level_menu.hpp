@@ -110,7 +110,7 @@ public:
 			shader->int_uniforms["active_dot"] = std::distance(level_groups_->cbegin(), level_groups_->find(ui->level_group));
 			position->position.x = button_panel_center;
 			position->position.y = title_h - h / 2;
-			width_and_height->width_and_height.x = 800;
+			width_and_height->width_and_height.x = 400;
 			width_and_height->width_and_height.y = h;
 			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		}
@@ -148,23 +148,34 @@ public:
 		// Level buttons
 		std::vector<std::function<void(void)>> button_functions = {};
 		std::vector<std::string> button_texts = {};
+		int i = 0;
 		for (auto& level_id : (*level_groups_).at(ui->level_group))
 		{
-			button_functions.push_back(std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
-			button_texts.push_back(GetLevelDisplayNameFromId(level_id));
-		}
-		std::vector<int> button_list_ids = AddButtonList(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), button_functions, button_texts, {}, 1, 0.5, TopCenter);
-		ui->entity_ids.push_back(button_list_ids[0]);
-		for (int id : button_list_ids)
-		{
-			scroll_window->positions.push_back(level.GetComponent<Position>(id));
-			ui->entity_ids.push_back(id);
-			if (id != button_list_ids[0]) // Excluding id 0 because this is the menu navigator
-			{
-				scroll_window->shaders.push_back(level.GetComponent<Shader>(id));
-				ui->button_entity_ids.push_back(id);
-				level.GetComponent<Text>(id)->apply_shader = true;
+			sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
+			{ // Button
+				auto [entity_id, on_released_this_frame, shader, width_and_height, position] = level.AddBlueprintAddComponents<OnReleasedThisFrame, Shader, WidthAndHeight, Position>("BPMenuNavigationButton");
+				ui->entity_ids.push_back(entity_id);
+				ui->button_entity_ids.push_back(entity_id);
+				scroll_window->positions.push_back(position);
+				scroll_window->shaders.push_back(shader);
+
+				on_released_this_frame->func = std::bind(&LevelMenuSystem::EnterLevel, this, level_id);
+				width_and_height->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
+				position->position = button_position;
 			}
+			{ // Text
+				auto [entity_id, text, draw_priority, shader, position] = level.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();
+				ui->entity_ids.push_back(entity_id);
+				scroll_window->positions.push_back(position);
+				scroll_window->shaders.push_back(shader);
+				position->position = button_position;
+				shader->fragment_shader_path = "shaders\\scroll.frag";
+				text->content = GetLevelDisplayNameFromId(level_id);
+				text->size = 75;
+				text->apply_shader = true;
+				draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
+			}
+			i++;
 		}
 
 		{ // Level preview
