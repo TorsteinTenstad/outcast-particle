@@ -51,28 +51,34 @@ void Game::GoToOptionsMenu()
 
 	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU) };
 	std::vector<std::string> text = { "Key Config", "Display", "Music & Sound", "Graphics" };
-	auto button_positions = GridHelper(text.size(), 2, 200);
+	auto button_positions = GridHelper(text.size(), 2, 200, 200);
 	for (unsigned i = 0; i < text.size(); ++i)
 	{
-		sf::Vector2 button_position = button_positions[i] + active_level_.GetSize() / 2.f;
+		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
 		AddMenuButton(active_level_, functions[i], button_position.x, button_position.y, text[i]);
 	}
-	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, MAIN_MENU), 3100, 3100, "Main Menu");
+	int menu_button_position_x = level_size.x / 2.f;
+	int menu_button_position_y = level_size.y * 0.9;
+	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, MAIN_MENU), menu_button_position_x, menu_button_position_y, "Main Menu");
 }
 
 void Game::GoToKeyConfigMenu()
 {
 	active_level_id_ = KEY_CONFIG_MENU;
 	active_level_.ResetSize();
-	active_level_.IncreaseSize();
+	//active_level_.IncreaseSize();
+	sf::Vector2f level_size = active_level_.GetSize();
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.MENU, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.EDIT_MODE };
 	std::vector<std::string> text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
-	auto button_positions = GridHelper(text.size(), 2, 200);
+	auto button_positions = GridHelper(text.size(), 2, 300, 175);
 	for (unsigned i = 0; i < text.size(); ++i)
 	{
 		std::string button_text = text[i] + ": " + HumanName(*keys[i]);
-		sf::Vector2 button_position = button_positions[i] + active_level_.GetSize() / 2.f;
+		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
+		button_position.y *= 0.9;
 		AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, button_text);
 	}
-	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, OPTIONS_MENU), 3100, 3100, "Options Menu");
+	int menu_button_position_x = level_size.x / 2.f;
+	int menu_button_position_y = level_size.y * 0.9;
+	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, OPTIONS_MENU), menu_button_position_x, menu_button_position_y, "Options Menu");
 }

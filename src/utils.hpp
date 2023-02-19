@@ -28,7 +28,7 @@ sf::Vector2f Abs(sf::Vector2f v);
 sf::Vector2f GetQuarterTurnRotation(sf::Vector2f v);
 float Dot(sf::Vector2f u, sf::Vector2f v);
 
-std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacing);
+std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacing_w, float spacing_h);
 
 std::string HumanName(sf::Keyboard::Key key);
 
