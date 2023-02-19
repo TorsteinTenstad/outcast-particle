@@ -172,6 +172,9 @@ public:
 	template <class... Component>
 	void DeleteEntitiesWith();
 
+	template <class Component>
+	void ClearComponent();
+
 	int AddBlueprint(std::string tag);
 
 	template <class... Component>
