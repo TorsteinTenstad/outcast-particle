@@ -154,6 +154,12 @@ void Level::DeleteEntitiesWith()
 	}
 }
 
+template <class Component>
+void Level::ClearComponent()
+{
+	GetComponentMap<Component>()->clear();
+}
+
 template <class ResponsibleComponent>
 Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
 {
