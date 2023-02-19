@@ -136,14 +136,19 @@ public:
 			nav_btn_text->content = p < 0 ? "<" : ">";
 			nav_btn_position->position = sf::Vector2f(button_panel_center + p * 0.7 * button_panel_center, title_h / 2);
 		}
+		const float BUTTON_HEIGHT = float(BLOCK_SIZE);
 		// Scroll window
-		//auto [scroll_window_entity_id, scroll_window] = level.CreateEntitiyWith<ScrollWindow>();
-		auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
-		ui->entity_ids.push_back(scroll_window_entity_id);
-		width_and_height->width_and_height = level_size;
-		width_and_height->width_and_height.y -= title_h;
-		position->position = level_size / 2.f;
-		position->position.y += title_h / 2;
+		ScrollWindow* scroll_window;
+		{
+			auto [entity_id, scroll_window_local, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+			ui->entity_ids.push_back(entity_id);
+			scroll_window = scroll_window_local;
+			scroll_window->entity_height = BUTTON_HEIGHT;
+			width_and_height->width_and_height = level_size;
+			width_and_height->width_and_height.y -= title_h;
+			position->position = level_size / 2.f;
+			position->position.y += title_h / 2;
+		}
 
 		// Level buttons
 		std::vector<std::function<void(void)>> button_functions = {};
@@ -156,8 +161,7 @@ public:
 				auto [entity_id, on_released_this_frame, shader, width_and_height, position] = level.AddBlueprintAddComponents<OnReleasedThisFrame, Shader, WidthAndHeight, Position>("BPMenuNavigationButton");
 				ui->entity_ids.push_back(entity_id);
 				ui->button_entity_ids.push_back(entity_id);
-				scroll_window->positions.push_back(position);
-				scroll_window->shaders.push_back(shader);
+				scroll_window->entities.push_back(entity_id);
 
 				on_released_this_frame->func = std::bind(&LevelMenuSystem::EnterLevel, this, level_id);
 				width_and_height->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
@@ -166,8 +170,7 @@ public:
 			{ // Text
 				auto [entity_id, text, draw_priority, shader, position] = level.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();
 				ui->entity_ids.push_back(entity_id);
-				scroll_window->positions.push_back(position);
-				scroll_window->shaders.push_back(shader);
+				scroll_window->entities.push_back(entity_id);
 				position->position = button_position;
 				shader->fragment_shader_path = "shaders\\scroll.frag";
 				text->content = GetLevelDisplayNameFromId(level_id);

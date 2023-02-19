@@ -6,6 +6,8 @@
 class ScrollWindow
 {
 public:
-	std::vector<Shader*> shaders;
-	std::vector<Position*> positions;
+	std::vector<int> entities;
+	float scolled_distance = 0;
+	float entity_height = 0;
+	float bottom_margin = float(BLOCK_SIZE) / 2;
 };
