@@ -203,35 +203,14 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 	return ids;
 }
 
-/*
-int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, float width, float height, std::string button_text, unsigned int text_size)
-{
-	std::string image_path_suffix = "menu_wide.png";
-	std::string image_path = "content\\textures_generated\\button_" + image_path_suffix;
-	std::string pressed_image_path = "content\\textures_generated\\pressed_button_" + image_path_suffix;
-	int id = level.CreateEntityId();
-	level.GetComponent<DrawInfo>()[id].image_path = image_path;
-	level.GetComponent<DrawInfo>()[id].scale_to_fit = true;
-	level.GetComponent<DrawPriority>()[id].draw_priority = 1;
-	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	level.GetComponent<WidthAndHeight>()[id] = { sf::Vector2f(width, height) };
-	level.GetComponent<ReceivesButtonEvents>()[id] = {};
-	level.GetComponent<KeyConfigButton>()[id].key = key;
-	level.GetComponent<KeyConfigButton>()[id].image_path = image_path;
-	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = pressed_image_path;
-	level.GetComponent<Text>()[id].content = button_text;
-	level.GetComponent<Text>()[id].size = text_size;
-	return id;
-}*/
 int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, std::string button_text)
 {
 
 	int id = level.AddBlueprint("BPButton");
-	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	level.GetComponent<KeyConfigButton>()[id].key = key;
-	level.GetComponent<KeyConfigButton>()[id].image_path = "content\\textures\\white.png";
-	level.GetComponent<KeyConfigButton>()[id].pressed_image_path = "content\\textures\\white.png";
-	level.GetComponent<Text>()[id].content = button_text;
+	level.AddComponent<Position>(id)->position = { sf::Vector2f(pos_x, pos_y) };
+	level.AddComponent<KeyConfigButton>(id)->key = key;
+	level.AddComponent<Text>(id)->content = button_text;
+	level.AddComponent<StickyButton>(id);
 	return id;
 }
 
