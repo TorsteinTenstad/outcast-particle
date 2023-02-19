@@ -168,3 +168,19 @@ std::string HumanName(sf::Keyboard::Key key)
 			return "Unknown key";
 	}
 }
+
+std::string OptionsButtonTextCreator(std::string options_name, std::string current_option)
+{
+	std::string button_string = options_name;
+	float button_text_width = 0.5 * current_option.size();
+	if (current_option.size() % 2 != 0)
+	{
+		button_text_width += 0.5;
+	}
+	int space_number = 30;
+	assert(options_name.size() + button_text_width < space_number);
+	button_string.append(space_number - options_name.size() - button_text_width, ' ');
+	button_string += current_option;
+	button_string.append(space_number, ' ');
+	return (button_string);
+}

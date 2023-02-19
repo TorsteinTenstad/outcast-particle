@@ -66,16 +66,17 @@ void Game::GoToKeyConfigMenu()
 {
 	active_level_id_ = KEY_CONFIG_MENU;
 	active_level_.ResetSize();
-	//active_level_.IncreaseSize();
 	sf::Vector2f level_size = active_level_.GetSize();
+
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.MENU, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.EDIT_MODE };
 	std::vector<std::string> text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
-	auto button_positions = GridHelper(text.size(), 2, 300, 175);
+	auto button_positions = GridHelper(text.size(), 1, 300, 175);
 	for (unsigned i = 0; i < text.size(); ++i)
 	{
-		std::string button_text = text[i] + ": " + HumanName(*keys[i]);
+		std::string button_text = OptionsButtonTextCreator(text[i], HumanName(*keys[i]));
 		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
 		button_position.y *= 0.9;
+		button_position.x *= 1.4;
 		AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, button_text);
 	}
 	int menu_button_position_x = level_size.x / 2.f;
