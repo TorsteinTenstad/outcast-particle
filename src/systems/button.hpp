@@ -16,10 +16,6 @@ public:
 	{
 		for (auto [entity_id, mouse_interaction_dependent_fill_color, fill_color] : level.GetEntitiesWith<MouseInteractionDependentFillColor, FillColor>())
 		{
-			if (level.HasComponents<KeyConfigButton>(entity_id))
-			{
-				continue;
-			}
 			if (level.HasComponents<StickyButtonDown>(entity_id))
 			{
 				fill_color->color = mouse_interaction_dependent_fill_color->pressed_color;
@@ -57,50 +53,24 @@ public:
 		auto& draw_info_map = level.GetComponent<DrawInfo>();
 		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
 		auto& text_map = level.GetComponent<Text>();
-		for (auto [entity_id, pressed_this_frame, key_config_button] : level.GetEntitiesWith<PressedThisFrame, KeyConfigButton>())
-		{
-			for (auto& [id, release_button] : key_config_button_map)
-			{
-				release_button.is_pressed = false;
-				if (!release_button.image_path.empty())
-				{
-					draw_info_map[id].image_path = release_button.image_path;
-				}
-			}
 
-			if (!key_config_button->pressed_image_path.empty())
-			{
-				draw_info_map[entity_id].image_path = key_config_button->pressed_image_path;
-				key_config_button->is_pressed = true;
-			}
-			break;
-		}
-
-		for (auto& [entity_id, key_config_button] : key_config_button_map)
+		for (auto [entity_id, key_config_button, sticky_button_down] : level.GetEntitiesWith<KeyConfigButton, StickyButtonDown>())
 		{
-			if (key_config_button.is_pressed)
+			for (const auto& [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
 			{
-				for (const auto& [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
+				if (pressed_this_frame)
 				{
-					if (pressed_this_frame)
+					*key_config_button->key = (sf::Keyboard::Key)key;
+					level.RemoveComponents<StickyButtonDown>(entity_id);
+					// Set button text:
+					//assert(text_map.count(entity_id) > 0);
+					std::vector<std::string> button_description = SplitString(text_map[entity_id].content, " ");
+					text_map[entity_id].content = "";
+					for (unsigned i = 0; i < button_description.size() - 1; ++i)
 					{
-						*key_config_button.key = (sf::Keyboard::Key)key;
-						key_config_button.is_pressed = false;
-						if (!key_config_button.image_path.empty())
-						{
-							draw_info_map[entity_id].image_path = key_config_button.image_path;
-						}
-
-						// Set button text:
-						//assert(text_map.count(entity_id) > 0);
-						std::vector<std::string> button_description = SplitString(text_map[entity_id].content, " ");
-						text_map[entity_id].content = "";
-						for (unsigned i = 0; i < button_description.size() - 1; ++i)
-						{
-							text_map[entity_id].content += button_description[i] + " ";
-						}
-						text_map[entity_id].content += HumanName((sf::Keyboard::Key)key);
+						text_map[entity_id].content += button_description[i] + " ";
 					}
+					text_map[entity_id].content += HumanName((sf::Keyboard::Key)key);
 				}
 			}
 		}

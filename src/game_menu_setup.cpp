@@ -72,9 +72,7 @@ void Game::GoToKeyConfigMenu()
 	{
 		std::string button_text = text[i] + ": " + HumanName(*keys[i]);
 		sf::Vector2 button_position = button_positions[i] + active_level_.GetSize() / 2.f;
-		float x = button_position.x;
-		float y = button_position.y;
-		AddOptionsButton(active_level_, keys[i], x, y, button_text);
+		AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, button_text);
 	}
 	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, OPTIONS_MENU), 3100, 3100, "Options Menu");
 }

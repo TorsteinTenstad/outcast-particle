@@ -416,7 +416,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
             GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
             GetComponent<Text>()[entity_id] = {};
-            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 1.5) * 120.f };
+            GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
             GetComponent<Position>()[entity_id] = {};
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -715,7 +715,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<MouseInteractionDependentFillColor>()[entity_id] = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
         GetComponent<Shader>()[entity_id] = { "", "shaders\\round_corners.frag", {}, {}, {} };
         GetComponent<Text>()[entity_id] = {};
-        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(3, 1.5) * 120.f };
+        GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(10, 2) * 120.f };
         GetComponent<Position>()[entity_id] = {};
         GetComponent<Tag>()[entity_id] = {"BPButton"};
         return entity_id;

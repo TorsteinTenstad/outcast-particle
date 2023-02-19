@@ -15,7 +15,7 @@ class BPButton
 	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
 	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
 	Text text = {};
-	WidthAndHeight width_and_height = { sf::Vector2f(3, 1.5) * 120.f };
+	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
 	Position position = {};
 };
 
@@ -23,7 +23,6 @@ class BPMenuNavigationButton : public BPButton
 {
 	OnReleasedThisFrame on_released_this_frame = {};
 	MenuNavigatable menu_navigatable = {};
-	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
 };
 
 class BPMenuNavigator
