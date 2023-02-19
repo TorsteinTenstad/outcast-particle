@@ -97,7 +97,7 @@ float Dot(sf::Vector2f u, sf::Vector2f v)
 	return u.x * v.x + u.y * v.y;
 }
 
-std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacing)
+std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacing_w, float spacing_h)
 {
 	sf::Vector2f standard_button_size = sf::Vector2f(10, 2) * 120.f;
 	float w = standard_button_size.x;
@@ -106,12 +106,12 @@ std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacin
 	int n_rows = ceil(((float)n_elements) / n_columns);
 	int c = 0;
 	int r = 0;
-	float total_w = (n_columns - 1) * (w + spacing);
-	float total_h = (n_rows - 1) * (h + spacing);
+	float total_w = (n_columns - 1) * (w + spacing_w);
+	float total_h = (n_rows - 1) * (h + spacing_h);
 	for (int i = 0; i < n_elements; ++i)
 	{
-		float x = (w + spacing) * c - total_w / 2;
-		float y = (h + spacing) * r - total_h / 2;
+		float x = (w + spacing_w) * c - total_w / 2;
+		float y = (h + spacing_h) * r - total_h / 2;
 		grid.push_back(sf::Vector2f(x, y));
 		c++;
 		if (c == n_columns)
@@ -160,7 +160,7 @@ std::string HumanName(sf::Keyboard::Key key)
 		case sf::Keyboard::Delete:
 			return "Delete";
 		case sf::Keyboard::Comma:
-			return "Comma";
+			return ",";
 		case sf::Keyboard::Period:
 			return "Period";
 
