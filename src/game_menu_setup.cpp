@@ -82,16 +82,14 @@ void Game::GoToKeyConfigMenu()
 	{
 		//Creating button
 		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
-		button_position.y *= 0.9;
+		button_position.y += 0.3 * level_size.y;
 		button_position.x *= 1.33;
 		int button_entity_id = AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, "");
-		scroll_window->positions.push_back(active_level_.GetComponent<Position>(button_entity_id));
-		scroll_window->shaders.push_back(active_level_.GetComponent<Shader>(button_entity_id));
+		scroll_window->entities.push_back(button_entity_id);
 
 		//Creating text
-		auto [entity_id, text, draw_priority, shader, position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();
-		scroll_window->positions.push_back(position);
-		scroll_window->shaders.push_back(shader);
+		auto [text_entity_id, text, draw_priority, shader, position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();
+		scroll_window->entities.push_back(text_entity_id);
 		position->position = button_position;
 		shader->fragment_shader_path = "shaders\\scroll.frag";
 		std::string button_text = OptionsButtonTextCreator(config_text[i], HumanName(*keys[i]));
