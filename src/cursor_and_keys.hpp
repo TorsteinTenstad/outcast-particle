@@ -40,6 +40,7 @@ public:
 	}
 	void ResetFrameEvents()
 	{
+		mouse_wheel_delta = 0;
 		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
 		{
 			key_pressed_this_frame[key] = false;

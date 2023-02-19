@@ -20,6 +20,7 @@
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/scheduled_delete.hpp"
+#include "components/scroll.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
 #include "components/sticky_button.hpp"
@@ -87,6 +88,7 @@ typedef std::variant<
 	std::map<int, MouseInteractionDependentFillColor>,
 	std::map<int, ReleasedThisFrame>,
 	std::map<int, ScheduledDelete>,
+	std::map<int, ScrollWindow>,
 	std::map<int, ShortcutKey>,
 	std::map<int, SegmentedGlowEffect>,
 	std::map<int, Selected>,

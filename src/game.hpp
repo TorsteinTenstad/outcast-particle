@@ -33,6 +33,7 @@
 #include "systems/render_text.hpp"
 #include "systems/render_trail.hpp"
 #include "systems/scheduled_delete.hpp"
+#include "systems/scroll.hpp"
 #include "systems/segmented_glow_effect.hpp"
 #include "systems/set_draw_info.hpp"
 #include "systems/sound_system.hpp"

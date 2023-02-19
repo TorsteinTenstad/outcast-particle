@@ -85,7 +85,7 @@ public:
 	void SetupUI(Level& level, LevelMenuUI* ui)
 	{
 		ui->level_group = ui->requested_level_group;
-
+		auto level_size = level.GetSize();
 		for (auto entity_id : ui->entity_ids)
 		{
 			level.DeleteEntity(entity_id);
@@ -136,7 +136,16 @@ public:
 			nav_btn_text->content = p < 0 ? "<" : ">";
 			nav_btn_position->position = sf::Vector2f(button_panel_center + p * 0.7 * button_panel_center, title_h / 2);
 		}
+		// Scroll window
+		//auto [scroll_window_entity_id, scroll_window] = level.CreateEntitiyWith<ScrollWindow>();
+		auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+		ui->entity_ids.push_back(scroll_window_entity_id);
+		width_and_height->width_and_height = level_size;
+		width_and_height->width_and_height.y -= title_h;
+		position->position = level_size / 2.f;
+		position->position.y += title_h / 2;
 
+		// Level buttons
 		std::vector<std::function<void(void)>> button_functions = {};
 		std::vector<std::string> button_texts = {};
 		for (auto& level_id : (*level_groups_).at(ui->level_group))
@@ -146,25 +155,35 @@ public:
 		}
 		std::vector<int> button_list_ids = AddButtonList(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), button_functions, button_texts, {}, 1, 0.5, TopCenter);
 		ui->entity_ids.push_back(button_list_ids[0]);
-		for (int i = 1; i < button_list_ids.size(); i++)
+		for (int id : button_list_ids)
 		{
-			ui->button_entity_ids.push_back(button_list_ids[i]);
-			ui->entity_ids.push_back(button_list_ids[i]);
+			scroll_window->positions.push_back(level.GetComponent<Position>(id));
+			ui->entity_ids.push_back(id);
+			if (id != button_list_ids[0]) // Excluding id 0 because this is the menu navigator
+			{
+				scroll_window->shaders.push_back(level.GetComponent<Shader>(id));
+				ui->button_entity_ids.push_back(id);
+				level.GetComponent<Text>(id)->apply_shader = true;
+			}
 		}
 
-		auto [level_preview_entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
-		ui->entity_ids.push_back(level_preview_entity_id);
-		position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE / 2));
-		width_and_height->width_and_height = sf::Vector2f(level.GetSize().x * LEVEL_PREVIEW_SCALE, level.GetSize().y * LEVEL_PREVIEW_SCALE);
-		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-		draw_info->scale_to_fit = true;
-		ui->level_image_identifier = &draw_info->image_path;
+		{ // Level preview
+			auto [entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
+			ui->entity_ids.push_back(entity_id);
+			position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE / 2));
+			width_and_height->width_and_height = sf::Vector2f(level.GetSize().x * LEVEL_PREVIEW_SCALE, level.GetSize().y * LEVEL_PREVIEW_SCALE);
+			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+			draw_info->scale_to_fit = true;
+			ui->level_image_identifier = &draw_info->image_path;
+		}
 
-		auto [stats_entity_id, stats_text, stats_draw_priority, stats_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
-		ui->entity_ids.push_back(stats_entity_id);
-		stats_text->size = 140;
-		ui->stats_string = &stats_text->content;
-		stats_position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE));
+		{ // Stats display
+			auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+			ui->entity_ids.push_back(entity_id);
+			text->size = 140;
+			ui->stats_string = &text->content;
+			position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE));
+		}
 	}
 
 	void EnterLevel(std::string level_id)

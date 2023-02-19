@@ -96,6 +96,10 @@ private:
 		// Redirect to nothing
 		std::streambuf* previous = sf::err().rdbuf(NULL);
 		shaders_[shader_id].setUniform("_time", globals.time);
+		shaders_[shader_id].setUniform("_window_resolution", sf::Vector2f(globals.render_window.getSize()));
+		shaders_[shader_id].setUniform("_level_size", level.GetSize());
+		shaders_[shader_id].setUniform("_view_size", globals.render_window.getView().getSize());
+		shaders_[shader_id].setUniform("_view_center", globals.render_window.getView().getCenter());
 		if (level.HasComponents<WidthAndHeight>(entity_id))
 		{
 			shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>()[entity_id].width_and_height);
