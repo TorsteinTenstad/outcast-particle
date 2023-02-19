@@ -55,6 +55,7 @@ void Game::GoToOptionsMenu()
 	for (unsigned i = 0; i < text.size(); ++i)
 	{
 		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
+		button_position.y *= 0.85;
 		AddMenuButton(active_level_, functions[i], button_position.x, button_position.y, text[i]);
 	}
 	int menu_button_position_x = level_size.x / 2.f;
@@ -68,16 +69,35 @@ void Game::GoToKeyConfigMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
+	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = active_level_.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+	width_and_height->width_and_height = level_size;
+	width_and_height->width_and_height.y *= 0.75;
+	position->position = level_size / 2.f;
+	position->position.y *= 0.85;
+
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.MENU, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.EDIT_MODE };
-	std::vector<std::string> text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
-	auto button_positions = GridHelper(text.size(), 1, 300, 175);
-	for (unsigned i = 0; i < text.size(); ++i)
+	std::vector<std::string> config_text = { "Up", "Switch charge", "Left", "Neutral", "Down", "Pause", "Right", "Toggle edit mode" };
+	auto button_positions = GridHelper(config_text.size(), 1, 300, 175);
+	for (unsigned i = 0; i < config_text.size(); ++i)
 	{
-		std::string button_text = OptionsButtonTextCreator(text[i], HumanName(*keys[i]));
+		//Creating button
 		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
 		button_position.y *= 0.9;
-		button_position.x *= 1.4;
-		AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, button_text);
+		button_position.x *= 1.33;
+		int button_entity_id = AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, "");
+		scroll_window->positions.push_back(active_level_.GetComponent<Position>(button_entity_id));
+		scroll_window->shaders.push_back(active_level_.GetComponent<Shader>(button_entity_id));
+
+		//Creating text
+		auto [entity_id, text, draw_priority, shader, position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();
+		scroll_window->positions.push_back(position);
+		scroll_window->shaders.push_back(shader);
+		position->position = button_position;
+		shader->fragment_shader_path = "shaders\\scroll.frag";
+		std::string button_text = OptionsButtonTextCreator(config_text[i], HumanName(*keys[i]));
+		text->content = button_text;
+		text->apply_shader = true;
+		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
 	}
 	int menu_button_position_x = level_size.x / 2.f;
 	int menu_button_position_y = level_size.y * 0.9;
