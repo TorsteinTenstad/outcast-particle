@@ -1,0 +1,17 @@
+name=Untitled;grid_size_id=1;editable=1
+"BPGoal":Tag{tag=BPGoal}Position{position=(480,1440)}WidthAndHeight{width_and_height=(600,360)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3720,60)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(600,1080)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+"BPWall":Tag{tag=BPWall}Position{position=(60,2100)}WidthAndHeight{width_and_height=(120,120)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3720,60)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(1920,1080)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(3480,720)}
+"BPCoin":Tag{tag=BPCoin}Position{position=(240,1080)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(60,2040)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,60)}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,2100)}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,60)}WidthAndHeight{width_and_height=(120,120)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(60,1140)}WidthAndHeight{width_and_height=(60,2040)}
+"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1080,780)}Charge{charge=-10000}
+"BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1080,1380)}Charge{charge=-10000}
+"BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3480,1080)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(360,360)}
