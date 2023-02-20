@@ -2,13 +2,16 @@
 #include "components/physics.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "systems/electric_force.hpp"
 #include "utils.hpp"
 
-static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_limit)
+static sf::Vector2f CalcAcceleration(ReceivedForces* received_forces, float acceleration_limit)
 {
-	sf::Vector2f total_force = entity.electric_force + entity.player_force + entity.electric_field_force + entity.magnetic_field_force;
-	sf::Vector2f acceleration = total_force / entity.mass;
+	sf::Vector2f total_force =
+		received_forces->electric_force
+		+ received_forces->player_force
+		+ received_forces->electric_field_force
+		+ received_forces->magnetic_field_force;
+	sf::Vector2f acceleration = total_force / received_forces->mass;
 
 	float magnitude = Magnitude(acceleration);
 	if (magnitude > acceleration_limit)
@@ -20,20 +23,13 @@ static sf::Vector2f CalcAcceleration(ReceivedForces entity, float acceleration_l
 
 class ForceSystem : public GameSystem
 {
-private:
-	float global_max_acceleration_ = 10000;
-
 public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& acceleration_map = level.GetComponent<Acceleration>();
-		auto& received_forces_map = level.GetComponent<ReceivedForces>();
-
-		for (auto const& [entity_id, received_forces] : received_forces_map)
+		for (auto const& [entity_id, received_forces, acceleration] : level.GetEntitiesWith<ReceivedForces, Acceleration>())
 		{
-			acceleration_map[entity_id].acceleration = CalcAcceleration(received_forces, global_max_acceleration_);
+			acceleration->acceleration = CalcAcceleration(received_forces, GLOBAL_MAX_ACCELERATION);
 		}
 	}
-	
 };

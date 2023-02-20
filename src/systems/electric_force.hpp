@@ -4,10 +4,10 @@
 #include "level.hpp"
 #include "utils.hpp"
 
-static sf::Vector2f CalculateElectricForce(Position particle_to, Position particle_from, Charge charge_to, Charge charge_from)
+static sf::Vector2f CalculateElectricForce(Position* particle_to, Position* particle_from, Charge* charge_to, Charge* charge_from)
 {
-	float distance = Magnitude(particle_to.position - particle_from.position);
-	return ((charge_to.charge * charge_from.charge * (particle_to.position - particle_from.position)) / (distance * distance * distance));
+	float distance = Magnitude(particle_to->position - particle_from->position);
+	return ((charge_to->charge * charge_from->charge * (particle_to->position - particle_from->position)) / (distance * distance * distance));
 }
 
 class ElectricForceSystem : public GameSystem
@@ -16,22 +16,16 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& position_map = level.GetComponent<Position>();
-		auto& received_forces_map = level.GetComponent<ReceivedForces>();
-		auto& charge_map = level.GetComponent<Charge>();
-
-		for (auto& [entity_id_to, entity_forces] : received_forces_map)
+		for (auto [entity_id_to, received_forces, charge_to, position_to] : level.GetEntitiesWith<ReceivedForces, Charge, Position>())
 		{
-			sf::Vector2f electric_force;
-			for (auto const& [entity_id_from, entity_charge] : charge_map)
+			received_forces->electric_force = sf::Vector2f(0, 0);
+			for (auto [entity_id_from, charge_from, position_from] : level.GetEntitiesWith<Charge, Position>())
 			{
 				if (entity_id_to != entity_id_from)
 				{
-					electric_force = electric_force + CalculateElectricForce(position_map[entity_id_to], position_map[entity_id_from], charge_map[entity_id_to], entity_charge);
+					received_forces->electric_force += CalculateElectricForce(position_to, position_from, charge_to, charge_from);
 				}
 			}
-			entity_forces.electric_force = electric_force;
 		}
 	}
-	
 };

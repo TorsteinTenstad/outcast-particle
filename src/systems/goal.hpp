@@ -6,7 +6,7 @@
 #include "globals.hpp"
 #include "level.hpp"
 #include "utils.hpp"
-#include <iostream>
+
 class GoalSystem : public GameSystem
 {
 public:
@@ -17,20 +17,20 @@ public:
 		{
 			return;
 		}
-		auto& goal_map = level.GetComponent<Goal>();
-		auto& sound_info_map = level.GetComponent<SoundInfo>();
 		for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 		{
-			for (auto intersection_id : intersection->intersecting_ids)
+			for (auto intersecting_id : intersection->intersecting_ids)
 			{
-				if (goal_map.count(intersection_id) > 0)
+				if (!level.HasComponents<Goal, SoundInfo>(intersecting_id))
 				{
-					level.GetComponent<Intersection>().erase(entity_id);
-					level.GetComponent<Velocity>().erase(entity_id);
-					level.GetComponent<Player>().erase(entity_id);
-					goal_map[intersection_id].is_goal = true;
-					sound_info_map[intersection_id].play_sound = true;
+					continue;
 				}
+				level.RemoveComponents<Intersection>(entity_id);
+				level.RemoveComponents<Velocity>(entity_id);
+				level.RemoveComponents<Player>(entity_id);
+				level.GetComponent<Goal>(intersecting_id)->is_goal = true;
+				level.GetComponent<SoundInfo>(intersecting_id)->play_sound = true;
+				break;
 			}
 		}
 	}
