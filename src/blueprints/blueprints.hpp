@@ -201,3 +201,11 @@ class BPTextPopupSpawner : public BPEditableEntity
 	// [Serialize]
 	TextPopupSpawner text_popup_spawner = { "ipsum lorem" };
 };
+
+class BPText
+{
+	Text text = {};
+	DrawPriority draw_priority = { 101 };
+	Shader shader = { "", "shaders\\scroll.frag", {}, {}, {} };
+	Position position = {};
+};

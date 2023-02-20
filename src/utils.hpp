@@ -32,7 +32,7 @@ std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacin
 
 std::string HumanName(sf::Keyboard::Key key);
 
-std::string OptionsButtonTextCreator(std::string options_name, std::string current_option);
+std::string OptionsDescriptionTextSetter(std::string options_description);
 
 template <class K, class V>
 K NextKey(const std::map<K, V>& m, K key)

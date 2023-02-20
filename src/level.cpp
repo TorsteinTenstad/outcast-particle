@@ -214,6 +214,15 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 	return id;
 }
 
+int AddScrollingText(Level& level, float pos_x, float pos_y, std::string text)
+{
+	int id = level.AddBlueprint("BPText");
+	level.AddComponent<Position>(id)->position = { sf::Vector2f(pos_x, pos_y) };
+	level.AddComponent<Text>(id)->content = text;
+	level.AddComponent<Text>(id)->apply_shader = true;
+	return id;
+}
+
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority)
 {
 	int id = level.CreateEntityId();

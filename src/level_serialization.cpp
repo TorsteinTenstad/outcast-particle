@@ -365,6 +365,11 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<TextPopupSpawner>()[entity_id], entity_string);
         }
         
+        if (tag == "BPText")
+        {
+            SerializeComponent(GetComponent<Tag>()[entity_id], entity_string);
+        }
+        
         f << entity_string << "\n";
         entity_string.clear();
     }
@@ -691,6 +696,16 @@ void Level::LoadFromFile(std::string savefile_path)
                 GetSubstrBetween(line, "TextPopupSpawner{", "}"));
         }
         
+        if (tag == "BPText")
+        {
+            GetComponent<Text>()[entity_id] = {};
+            GetComponent<DrawPriority>()[entity_id] = { 101 };
+            GetComponent<Shader>()[entity_id] = { "", "shaders\\scroll.frag", {}, {}, {} };
+            GetComponent<Position>()[entity_id] = {};
+            DeserializeComponent(GetComponent<Tag>()[entity_id],
+                GetSubstrBetween(line, "Tag{", "}"));
+        }
+        
     }
 }
 
@@ -939,6 +954,15 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
         GetComponent<WidthAndHeight>()[entity_id] = { sf::Vector2f(120, 120) };
         GetComponent<TextPopupSpawner>()[entity_id] = { "ipsum lorem" };
+        return entity_id;
+    }
+    if (tag == "BPText")
+    {
+        GetComponent<Text>()[entity_id] = {};
+        GetComponent<DrawPriority>()[entity_id] = { 101 };
+        GetComponent<Shader>()[entity_id] = { "", "shaders\\scroll.frag", {}, {}, {} };
+        GetComponent<Position>()[entity_id] = {};
+        GetComponent<Tag>()[entity_id] = {"BPText"};
         return entity_id;
     }
     assert(false);

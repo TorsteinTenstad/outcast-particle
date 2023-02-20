@@ -50,11 +50,7 @@ public:
 			return;
 		}
 
-		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& key_config_button_map = level.GetComponent<KeyConfigButton>();
-		auto& text_map = level.GetComponent<Text>();
-
-		for (auto [entity_id, key_config_button, sticky_button_down] : level.GetEntitiesWith<KeyConfigButton, StickyButtonDown>())
+		for (auto [entity_id, key_config_button, sticky_button_down, entity_link] : level.GetEntitiesWith<KeyConfigButton, StickyButtonDown, EntityLink>())
 		{
 			for (const auto& [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
 			{
@@ -62,15 +58,7 @@ public:
 				{
 					*key_config_button->key = (sf::Keyboard::Key)key;
 					level.RemoveComponents<StickyButtonDown>(entity_id);
-					// Set button text:
-					//assert(text_map.count(entity_id) > 0);
-					std::vector<std::string> button_description = SplitString(text_map[entity_id].content, " ");
-					text_map[entity_id].content = "";
-					for (unsigned i = 0; i < button_description.size() - 1; ++i)
-					{
-						text_map[entity_id].content += button_description[i] + " ";
-					}
-					text_map[entity_id].content += HumanName((sf::Keyboard::Key)key);
+					level.AddComponent<Text>(entity_link->entity_link)->content = HumanName(*key_config_button->key);
 				}
 			}
 		}

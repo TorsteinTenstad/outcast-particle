@@ -169,18 +169,9 @@ std::string HumanName(sf::Keyboard::Key key)
 	}
 }
 
-std::string OptionsButtonTextCreator(std::string options_name, std::string current_option)
+std::string OptionsDescriptionTextSetter(std::string options_text)
 {
-	std::string button_string = options_name;
-	int button_text_width = 0.5 * current_option.size();
-	/*if (current_option.size() % 2 != 0)
-	{
-		button_text_width -= 0.5;
-	}*/
-	int space_number = 25;
-	assert(options_name.size() + button_text_width < space_number);
-	button_string.append(space_number - options_name.size() - button_text_width, ' ');
-	button_string += current_option;
-	button_string.append(space_number - button_text_width, ' ');
-	return (button_string);
+	assert(options_text.size() <= 17);
+	options_text.append(17 - options_text.size(), ' ');
+	return options_text;
 }
