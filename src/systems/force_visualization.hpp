@@ -32,7 +32,7 @@ public:
 					continue;
 				}
 				float sign = Sign(player_charge->charge * particle_charge->charge);
-				float charge_force = sign * Magnitude(CalculateElectricForce(*player_position, *particle_position, *player_charge, *particle_charge));
+				float charge_force = sign * Magnitude(CalculateElectricForce(player_position, particle_position, player_charge, particle_charge));
 				shader->vec_uniforms["charge_positions[" + ToString(charge_i) + "]"] = particle_position->position;
 				shader->float_uniforms["charge_force[" + ToString(charge_i) + "]"] = charge_force;
 				charge_i++;

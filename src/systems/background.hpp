@@ -6,6 +6,7 @@
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include <tuple>
 
 class BackgroundSystem : public GameSystem
 {
@@ -13,31 +14,21 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& background_map = level.GetComponent<Background>();
-		auto& draw_priority_map = level.GetComponent<DrawPriority>();
-		auto& draw_info_map = level.GetComponent<DrawInfo>();
-		auto& position_map = level.GetComponent<Position>();
-		auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
-
-		assert(!(background_map.size() > 1));
-		if (background_map.size() == 0)
+		auto entities = level.GetEntitiesWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
+		assert(!(entities.size() > 1));
+		if (entities.size() == 0)
 		{
-			int entity_id = level.CreateEntityId();
-			background_map[entity_id];
-			draw_priority_map[entity_id].draw_priority = BACKGROUND_DRAW_PRIORITY;
+			auto entity = level.CreateEntitiyWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
+			level.GetComponent<DrawPriority>(std::get<int>(entity))->draw_priority = BACKGROUND_DRAW_PRIORITY;
 		}
-		int entity_id = background_map.begin()->first;
-		width_and_height_map[entity_id].width_and_height = level.GetSize();
-		position_map[entity_id].position = level.GetSize() / 2.f;
-		if (level.GetMode() == EDIT_MODE)
+		for (auto [entity_id, background, draw_info, draw_priority, width_and_height, position] : entities)
 		{
-			draw_info_map[entity_id].image_path = "content\\textures\\grid.png";
-			draw_info_map[entity_id].scale_to_fit = false;
-		}
-		else
-		{
-			draw_info_map[entity_id].image_path = "content\\textures\\background.png";
-			draw_info_map[entity_id].scale_to_fit = true;
+			auto level_size = level.GetSize();
+			width_and_height->width_and_height = level_size;
+			position->position = level_size / 2.f;
+			bool in_edit_mode = level.GetMode() == EDIT_MODE;
+			draw_info->image_path = in_edit_mode ? "content\\textures\\grid.png" : "content\\textures\\background.png";
+			draw_info->scale_to_fit = !in_edit_mode;
 		}
 	}
 };

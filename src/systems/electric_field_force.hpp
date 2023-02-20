@@ -7,9 +7,9 @@
 #include "level.hpp"
 #include "utils.hpp"
 
-static sf::Vector2f CalculateElectricFieldForce(Charge particle, ElectricField electric_field)
+static sf::Vector2f CalculateElectricFieldForce(Charge* particle, ElectricField* electric_field)
 {
-	return (electric_field.field_vector * particle.charge);
+	return (electric_field->field_vector * particle->charge);
 }
 
 class ElectricFieldForceSystem : public GameSystem
@@ -18,25 +18,17 @@ public:
 	using GameSystem::GameSystem;
 	void Update(Level& level, float dt)
 	{
-		auto& intersection_map = level.GetComponent<Intersection>();
-		auto& electric_field_vector_map = level.GetComponent<ElectricField>();
-		auto& received_forces_map = level.GetComponent<ReceivedForces>();
-		auto& charge_map = level.GetComponent<Charge>();
-		for (auto& [entity_id, received_forces] : received_forces_map)
+		for (auto [entity_id, received_forces, intersection, charge] : level.GetEntitiesWith<ReceivedForces, Intersection, Charge>())
 		{
-			if (intersection_map.count(entity_id) != 0 && charge_map.count(entity_id) != 0)
+			received_forces->electric_field_force = sf::Vector2f(0, 0);
+			for (auto& intersecting_id : intersection->intersecting_ids)
 			{
-				sf::Vector2f electric_field_force;
-				for (auto& intersection_id : intersection_map[entity_id].intersecting_ids)
+				if (level.HasComponents<ElectricField>(intersecting_id))
 				{
-					if (electric_field_vector_map.count(intersection_id) != 0)
-					{
-						electric_field_force += CalculateElectricFieldForce(charge_map[entity_id], electric_field_vector_map[intersection_id]);
-					}
+					ElectricField* electric_field = level.GetComponent<ElectricField>(intersecting_id);
+					received_forces->electric_field_force += CalculateElectricFieldForce(charge, electric_field);
 				}
-				received_forces.electric_field_force = electric_field_force;
 			}
 		}
 	}
-	
 };
