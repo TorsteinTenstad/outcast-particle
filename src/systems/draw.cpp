@@ -27,8 +27,6 @@ void DrawSystem::CaptureLevel(Level& level, sf::Texture* texture, unsigned width
 
 void DrawSystem::Draw(Level& level, sf::RenderTarget* render_target, std::map<int, std::vector<EntityBoundDrawable>> drawables, bool use_shaders)
 {
-	auto& shader_map = level.GetComponent<Shader>();
-
 	globals.render_window.clear();
 
 	for (auto [draw_priority, entity_bound_drawables] : drawables)
@@ -36,9 +34,9 @@ void DrawSystem::Draw(Level& level, sf::RenderTarget* render_target, std::map<in
 		for (auto entity_bound_drawable : entity_bound_drawables)
 		{
 			int entity_id = entity_bound_drawable.entity_id;
-			if (use_shaders && shader_map.count(entity_id) > 0)
+			if (use_shaders && level.HasComponents<Shader>(entity_id))
 			{
-				render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(level, entity_id, &shader_map[entity_id]));
+				render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(level, entity_id, level.GetComponent<Shader>(entity_id)));
 			}
 			else
 			{
@@ -92,7 +90,7 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 	shaders_[shader_id].setUniform("_view_center", globals.render_window.getView().getCenter());
 	if (level.HasComponents<WidthAndHeight>(entity_id))
 	{
-		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>()[entity_id].width_and_height);
+		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>(entity_id)->width_and_height);
 	}
 	// Restore the original output
 	sf::err().rdbuf(previous);
