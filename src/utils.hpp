@@ -23,6 +23,7 @@ float FakeSigmoid(float x);
 std::array<int, 2> Vector2iToArray(sf::Vector2i v);
 
 float Magnitude(sf::Vector2f v);
+float Angle(sf::Vector2f v);
 sf::Vector2f Normalized(sf::Vector2f v);
 sf::Vector2f Abs(sf::Vector2f v);
 sf::Vector2f GetQuarterTurnRotation(sf::Vector2f v);

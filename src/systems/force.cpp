@@ -1,7 +1,6 @@
 
+#include "_pure_DO_systems.hpp"
 #include "components/physics.hpp"
-#include "game_system.hpp"
-#include "level.hpp"
 #include "utils.hpp"
 
 static sf::Vector2f CalcAcceleration(ReceivedForces* received_forces, float acceleration_limit)
@@ -21,15 +20,10 @@ static sf::Vector2f CalcAcceleration(ReceivedForces* received_forces, float acce
 	return acceleration;
 }
 
-class ForceSystem : public GameSystem
+void ForceSystem::Update(Level& level, float dt)
 {
-public:
-	using GameSystem::GameSystem;
-	void Update(Level& level, float dt)
+	for (auto const& [entity_id, received_forces, acceleration] : level.GetEntitiesWith<ReceivedForces, Acceleration>())
 	{
-		for (auto const& [entity_id, received_forces, acceleration] : level.GetEntitiesWith<ReceivedForces, Acceleration>())
-		{
-			acceleration->acceleration = CalcAcceleration(received_forces, GLOBAL_MAX_ACCELERATION);
-		}
+		acceleration->acceleration = CalcAcceleration(received_forces, GLOBAL_MAX_ACCELERATION);
 	}
-};
+}

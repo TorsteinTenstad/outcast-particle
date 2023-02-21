@@ -1,4 +1,6 @@
+#pragma once
 
+#define TRAIL_N 64
 
 class Trail
 {

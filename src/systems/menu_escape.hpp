@@ -1,6 +1,4 @@
-#include "game.hpp"
-#include "utils.hpp"
-#include <algorithm>
+#include <functional>
 
 class MenuEscapeSystem : public GameSystem
 {
