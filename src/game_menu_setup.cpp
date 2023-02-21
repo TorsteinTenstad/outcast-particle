@@ -83,13 +83,12 @@ void Game::GoToKeyConfigMenu()
 	auto button_positions = GridHelper(button_description.size(), 1, 0, 175);
 	for (unsigned i = 0; i < button_description.size(); ++i)
 	{
-		//Creating button
 		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
 		button_position.y += 0.2 * level_size.y;
 		button_position.x *= 1.33;
 		int button_id = AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, "");
 		int button_text_id = AddScrollingText(active_level_, button_position.x, button_position.y, HumanName(*keys[i]));
-		active_level_.AddComponent<EntityLink>(button_id)->entity_link = button_text_id;
+		active_level_.AddComponent<KeyConfigButton>(button_id)->button_text = &active_level_.AddComponent<Text>(button_text_id)->content;
 		float description_position = level_size.x - button_position.x;
 		int description_id = AddScrollingText(active_level_, description_position, button_position.y, OptionsDescriptionTextSetter(button_description[i]));
 		scroll_window->entities.insert(scroll_window->entities.end(), { button_id, button_text_id, description_id });

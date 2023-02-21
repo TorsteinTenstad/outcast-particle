@@ -25,4 +25,5 @@ class KeyConfigButton
 {
 public:
 	sf::Keyboard::Key* key;
+	std::string* button_text;
 };

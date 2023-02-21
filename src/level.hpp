@@ -9,7 +9,6 @@
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/editable.hpp"
-#include "components/entity_link.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
 #include "components/intersection.hpp"
@@ -58,7 +57,6 @@ typedef std::variant<
 	std::map<int, DrawPriority>,
 	std::map<int, Editable>,
 	std::map<int, ElectricField>,
-	std::map<int, EntityLink>,
 	std::map<int, Face>,
 	std::map<int, ForceVisualization>,
 	std::map<int, Goal>,
