@@ -57,9 +57,6 @@ Game::Game()
 			level_groups_[group].push_back(level_id);
 		}
 	}
-
-	//LoadMapFromFile("user\\coin_record.txt", level_coin_records_);
-	//LoadMapFromFile("user\\completion_time_record.txt", level_completion_time_records_);
 	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
 	LoadOptionsFromFile("user\\controls_config.txt");
 
@@ -68,8 +65,6 @@ Game::Game()
 
 Game::~Game()
 {
-	//SaveMapToFile("user\\coin_record.txt", level_coin_records_);
-	//SaveMapToFile("user\\completion_time_record.txt", level_completion_time_records_);
 	SaveMapOfMapToFile("user\\records.txt", level_completion_time_records_);
 	SaveOptionsToFile("user\\controls_config.txt");
 }

@@ -6,8 +6,8 @@
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 
-template <typename Map>
-inline std::string ToString(const Map& map)
+template <typename K, typename V>
+inline std::string ToString(const std::map<K, V>& map)
 {
 	std::string str_rep;
 	for (const auto& i : map)

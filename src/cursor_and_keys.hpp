@@ -24,46 +24,7 @@ public:
 	std::map<int, bool> key_pressed_this_frame;
 	std::map<int, bool> key_released_this_frame;
 
-	CursorAndKeys()
-	{
-		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
-		{
-			key_down[key] = false;
-			key_pressed_this_frame[key] = false;
-			key_released_this_frame[key] = false;
-		}
-		for (int button = 0; button < sf::Mouse::ButtonCount; button++)
-		{
-			mouse_button_down[button] = false;
-			mouse_button_pressed_this_frame[button] = false;
-			mouse_button_released_this_frame[button] = false;
-		}
-	}
-	void ResetFrameEvents()
-	{
-		mouse_wheel_delta = 0;
-		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
-		{
-			key_pressed_this_frame[key] = false;
-			key_released_this_frame[key] = false;
-		}
-		for (int button = 0; button < sf::Mouse::ButtonCount; button++)
-		{
-			mouse_button_pressed_this_frame[button] = false;
-			mouse_button_released_this_frame[button] = false;
-		}
-	}
-
-	void ResetAllKeysAndButtons()
-	{
-		ResetFrameEvents();
-		for (int key = 0; key < sf::Keyboard::KeyCount; key++)
-		{
-			key_down[key] = false;
-		}
-		for (int button = 0; button < sf::Mouse::ButtonCount; button++)
-		{
-			mouse_button_down[button] = false;
-		}
-	}
+	CursorAndKeys();
+	void ResetFrameEvents();
+	void ResetAllKeysAndButtons();
 };
