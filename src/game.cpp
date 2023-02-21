@@ -12,7 +12,7 @@ Game::Game()
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-	RegisterGameSystem<ScrollSystem>(); // Has timing interactions with LevelMenuSystem 
+	RegisterGameSystem<ScrollSystem>(); // Has timing interactions with LevelMenuSystem
 	RegisterGameSystem<ButtonEventsSystem>();
 	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly below ButtonEventsSystem for Hovered component to work correctly
 	RegisterGameSystem<StickyButtonSystem>();
@@ -27,7 +27,6 @@ Game::Game()
 	RegisterGameSystem<ForceVisualizationSystem>();
 	RegisterGameSystem<SegmentedGlowEffectSystem>();
 	RegisterGameSystem<DrawSystem>();
-	RegisterGameSystem<DisplayVelocitySystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_);
@@ -58,9 +57,6 @@ Game::Game()
 			level_groups_[group].push_back(level_id);
 		}
 	}
-
-	//LoadMapFromFile("user\\coin_record.txt", level_coin_records_);
-	//LoadMapFromFile("user\\completion_time_record.txt", level_completion_time_records_);
 	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
 	LoadOptionsFromFile("user\\controls_config.txt");
 
@@ -69,8 +65,6 @@ Game::Game()
 
 Game::~Game()
 {
-	//SaveMapToFile("user\\coin_record.txt", level_coin_records_);
-	//SaveMapToFile("user\\completion_time_record.txt", level_completion_time_records_);
 	SaveMapOfMapToFile("user\\records.txt", level_completion_time_records_);
 	SaveOptionsToFile("user\\controls_config.txt");
 }

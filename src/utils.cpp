@@ -77,6 +77,11 @@ float Magnitude(sf::Vector2f v)
 	return sqrt((v.x * v.x) + (v.y * v.y));
 }
 
+float Angle(sf::Vector2f v)
+{
+	return atan2(v.y, v.x);
+}
+
 sf::Vector2f Normalized(sf::Vector2f v)
 {
 	return v / Magnitude(v);

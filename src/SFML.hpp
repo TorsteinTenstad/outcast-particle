@@ -1,4 +1,3 @@
-#include "timer.hpp"
 #include <functional>
 
 class SFML

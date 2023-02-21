@@ -34,7 +34,6 @@
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
 #include "level_mode.hpp"
-#include "level_state.hpp"
 #include "ui_origin.hpp"
 #include <functional>
 #include <map>
