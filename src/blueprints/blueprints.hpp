@@ -165,8 +165,9 @@ class BPGoal : public BPEditableEntity
 
 class BPElectricField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\electric_field.png", false, 0 };
+	DrawInfo draw_info = { "", false, 0 };
 	DrawPriority draw_priority = { 1 };
+	Shader shader = { "", "shaders\\electric_field.frag", {}, {}, {} };
 
 	// [Serialize]
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
@@ -177,8 +178,9 @@ class BPElectricField : public BPEditableEntity
 
 class BPMagneticField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\magnetic_field.png", false, 0 };
+	DrawInfo draw_info = { "", false, 0 };
 	DrawPriority draw_priority = { 1 };
+	Shader shader = { "", "shaders\\magnetic_field.frag", {}, {}, {} };
 
 	// [Serialize]
 	MagneticField magnetic_field = { 0.1 };

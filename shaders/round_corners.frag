@@ -30,6 +30,6 @@ void main()
 	alpha*=lower_fade_out;
     // multiply it by the color
 	gl_FragColor = gl_Color * pixel*vec4(vec3(1), alpha);
-    //gl_FragColor = vec4(fract(gs_c/120), 0, 1);
+    //gl_FragColor = vec4(gl_TexCoord[0].xy, 0, 1);
     //gl_FragColor = vec4(gs_c.y-top,0, 0, 1);
 }

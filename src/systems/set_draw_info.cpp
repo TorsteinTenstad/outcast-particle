@@ -35,27 +35,5 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 	{
 		int category = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(electric_field->field_vector));
 		draw_info->image_path = ELECTRIC_FIELD_TEXTURES[category];
-		if (abs(electric_field->field_vector.x) > abs(electric_field->field_vector.y))
-		{
-			if (electric_field->field_vector.x > 0)
-			{
-				draw_info->quarter_turn_rotations = 3;
-			}
-			else
-			{
-				draw_info->quarter_turn_rotations = 1;
-			}
-		}
-		else
-		{
-			if (electric_field->field_vector.y > 0)
-			{
-				draw_info->quarter_turn_rotations = 0;
-			}
-			else
-			{
-				draw_info->quarter_turn_rotations = 2;
-			}
-		}
 	}
 }
