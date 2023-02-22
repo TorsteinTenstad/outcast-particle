@@ -82,7 +82,7 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 		shaders_[shader_id].setUniform(name, value);
 	}
 	// Redirect to nothing
-	//std::streambuf* previous = sf::err().rdbuf(NULL);
+	std::streambuf* previous = sf::err().rdbuf(NULL);
 	shaders_[shader_id].setUniform("_time", globals.time);
 	shaders_[shader_id].setUniform("_window_resolution", sf::Vector2f(globals.render_window.getSize()));
 	shaders_[shader_id].setUniform("_level_size", level.GetSize());
@@ -94,6 +94,6 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>(entity_id)->width_and_height);
 	}
 	// Restore the original output
-	//sf::err().rdbuf(previous);
+	sf::err().rdbuf(previous);
 	return &shaders_[shader_id];
 }
