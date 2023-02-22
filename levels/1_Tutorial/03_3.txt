@@ -19,4 +19,4 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(540,1740)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1800,1080)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3300,480)}ElectricField{field_vector=(0,0.125)}WidthAndHeight{width_and_height=(840,720)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(540,60)}WidthAndHeight{width_and_height=(840,60)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(540,60)}WidthAndHeight{width_and_height=(900,60)}

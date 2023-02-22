@@ -2,10 +2,10 @@ name=Untitled;grid_size_id=1;editable=1
 "BPGoal":Tag{tag=BPGoal}Position{position=(3360,1800)}WidthAndHeight{width_and_height=(600,360)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(540,1800)}Charge{charge=10000}Velocity{velocity=(-4.18677e-05,-957.82)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(960,420)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(1680,600)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(960,1440)}WidthAndHeight{width_and_height=(60,1200)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1920,720)}WidthAndHeight{width_and_height=(60,1200)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(960,1440)}WidthAndHeight{width_and_height=(60,1260)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1920,720)}WidthAndHeight{width_and_height=(60,1260)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(1920,1740)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(1680,600)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2880,1440)}WidthAndHeight{width_and_height=(60,1200)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2880,1440)}WidthAndHeight{width_and_height=(60,1260)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(2880,420)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(1680,600)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3840,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,60)}

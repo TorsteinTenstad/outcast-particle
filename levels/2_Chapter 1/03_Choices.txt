@@ -8,14 +8,14 @@ name=Untitled;grid_size_id=1;editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(720,300)}Charge{charge=-10000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,660)}WidthAndHeight{width_and_height=(720,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(2520,60)}WidthAndHeight{width_and_height=(1440,120)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(3780,1800)}WidthAndHeight{width_and_height=(60,480)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(3780,1800)}WidthAndHeight{width_and_height=(60,540)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,1500)}WidthAndHeight{width_and_height=(720,60)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3480,1800)}ElectricField{field_vector=(0.0625,-0)}WidthAndHeight{width_and_height=(480,480)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2280,1800)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(480,480)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3480,360)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(480,480)}
 "BPWall":Tag{tag=BPWall}Position{position=(900,660)}WidthAndHeight{width_and_height=(1800,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1200,2100)}WidthAndHeight{width_and_height=(2280,60)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(3480,60)}WidthAndHeight{width_and_height=(480,60)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(3480,60)}WidthAndHeight{width_and_height=(540,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1680,660)}WidthAndHeight{width_and_height=(720,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1680,1500)}WidthAndHeight{width_and_height=(720,60)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2280,360)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(480,480)}

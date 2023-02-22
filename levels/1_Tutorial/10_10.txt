@@ -11,10 +11,10 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(2100,1260)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3720,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,2100)}WidthAndHeight{width_and_height=(120,120)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(60,1140)}WidthAndHeight{width_and_height=(60,2040)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(60,1080)}WidthAndHeight{width_and_height=(60,2040)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2100,480)}WidthAndHeight{width_and_height=(60,960)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2700,540)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3300,1260)}
 "BPWall":Tag{tag=BPWall}Position{position=(2100,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(2100,2100)}WidthAndHeight{width_and_height=(120,120)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2100,1800)}WidthAndHeight{width_and_height=(60,480)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2100,1860)}WidthAndHeight{width_and_height=(60,540)}

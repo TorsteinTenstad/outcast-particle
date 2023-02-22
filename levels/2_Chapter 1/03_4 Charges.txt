@@ -9,13 +9,13 @@ name=Untitled;grid_size_id=1;editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,1980)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3660,1980)}Charge{charge=10000}
 "BPGoal":Tag{tag=BPGoal}Position{position=(1800,720)}WidthAndHeight{width_and_height=(360,600)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1500,960)}WidthAndHeight{width_and_height=(60,240)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1500,960)}WidthAndHeight{width_and_height=(60,300)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(540,1620)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3300,540)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3300,1620)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2160,1140)}WidthAndHeight{width_and_height=(1200,60)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2100,300)}WidthAndHeight{width_and_height=(1320,60)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2160,1140)}WidthAndHeight{width_and_height=(1260,60)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2160,300)}WidthAndHeight{width_and_height=(1380,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(3120,180)}WidthAndHeight{width_and_height=(720,360)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(1500,1140)}WidthAndHeight{width_and_height=(120,120)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1500,480)}WidthAndHeight{width_and_height=(60,240)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1500,480)}WidthAndHeight{width_and_height=(60,300)}
 "BPWall":Tag{tag=BPWall}Position{position=(2160,120)}WidthAndHeight{width_and_height=(1200,240)}

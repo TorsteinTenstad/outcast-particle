@@ -12,9 +12,9 @@ name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(3780,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(60,2040)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,2100)}WidthAndHeight{width_and_height=(120,120)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(960,1440)}WidthAndHeight{width_and_height=(60,1200)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1920,660)}WidthAndHeight{width_and_height=(60,1200)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2880,1500)}WidthAndHeight{width_and_height=(60,1200)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(960,1500)}WidthAndHeight{width_and_height=(60,1140)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(1920,660)}WidthAndHeight{width_and_height=(60,1140)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2880,1500)}WidthAndHeight{width_and_height=(60,1140)}
 "BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(480,840)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3120,1440)}

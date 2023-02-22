@@ -83,5 +83,5 @@ void main()
 
     gl_FragColor.rgb = vec3(1,0,0) + vec3(1)*0.5*radial_falloff(dist, 0, 0.3);
     gl_FragColor.a = intensity;
-
+    gl_FragColor = vec4(gc, 0, b4?1:0);
 }
