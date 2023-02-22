@@ -7,7 +7,6 @@ name=Untitled;grid_size_id=1;editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(120,120)}Charge{charge=-10000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3480,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,1080)}WidthAndHeight{width_and_height=(60,1800)}
-"BPWall":Tag{tag=BPWall}Position{position=(1200,60)}WidthAndHeight{width_and_height=(960,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(480,60)}WidthAndHeight{width_and_height=(600,60)}
 "BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(2400,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(60,1800)}
@@ -17,13 +16,11 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(540,1080)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1920,1080)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1920,300)}Charge{charge=-10000}
-"BPWall":Tag{tag=BPWall}Position{position=(2100,420)}WidthAndHeight{width_and_height=(120,960)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,420)}WidthAndHeight{width_and_height=(360,960)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1920,660)}Charge{charge=-10000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,840)}WidthAndHeight{width_and_height=(1920,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(1740,420)}WidthAndHeight{width_and_height=(120,960)}
-"BPWall":Tag{tag=BPWall}Position{position=(2640,60)}WidthAndHeight{width_and_height=(960,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(2400,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3360,60)}WidthAndHeight{width_and_height=(600,60)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(360,60)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3360,1080)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3360,120)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3720,480)}Charge{charge=10000}

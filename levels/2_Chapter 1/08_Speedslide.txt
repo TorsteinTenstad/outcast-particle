@@ -9,7 +9,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(3780,60)}WidthAndHeight{width_and_height=(120,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1200,720)}ElectricField{field_vector=(0,0.5)}WidthAndHeight{width_and_height=(240,240)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1260,900)}WidthAndHeight{width_and_height=(2400,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(2460,900)}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(1260,1080)}WidthAndHeight{width_and_height=(2280,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2100,240)}ElectricField{field_vector=(0,0.5)}WidthAndHeight{width_and_height=(240,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1380,360)}ElectricField{field_vector=(-0,-0.0625)}WidthAndHeight{width_and_height=(240,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1560,660)}ElectricField{field_vector=(-0,-0.25)}WidthAndHeight{width_and_height=(240,240)}
@@ -20,8 +20,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1680,240)}ElectricField{field_vector=(-0.25,0)}WidthAndHeight{width_and_height=(240,240)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3120,1080)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(1200,1920)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1260,1260)}WidthAndHeight{width_and_height=(2400,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(2460,1260)}WidthAndHeight{width_and_height=(120,120)}
-"BPLaser":Tag{tag=BPLaser}Position{position=(2460,1080)}WidthAndHeight{width_and_height=(60,240)}
+"BPLaser":Tag{tag=BPLaser}Position{position=(2460,1080)}WidthAndHeight{width_and_height=(60,360)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3660,60)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(960,1500)}ElectricField{field_vector=(0,0.5)}WidthAndHeight{width_and_height=(240,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2220,1500)}ElectricField{field_vector=(0,0.5)}WidthAndHeight{width_and_height=(240,240)}
