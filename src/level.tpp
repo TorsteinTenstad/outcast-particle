@@ -176,7 +176,7 @@ Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Child
 }
 
 template <class Component>
-Component* GetSingleton(Level& level)
+std::tuple<int, Component*> GetSingletonIncludeID(Level& level)
 {
 	auto& component_map = level.GetComponent<Component>();
 	assert(!(component_map.size() > 1));
@@ -186,5 +186,12 @@ Component* GetSingleton(Level& level)
 		int entity_id = level.CreateEntityId();
 		component_map[entity_id];
 	}
-	return &component_map.begin()->second;
+	return { component_map.begin()->first, &component_map.begin()->second };
+}
+
+template <class Component>
+Component* GetSingleton(Level& level)
+{
+	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>(level);
+	return std::get<Component*>(tup);
 }

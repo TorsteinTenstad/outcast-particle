@@ -20,7 +20,7 @@ void DrawSystem::CaptureLevel(Level& level, sf::Texture* texture, unsigned width
 	sf::RenderTexture render_texture;
 	render_texture.create(width, height);
 	render_texture.setView(sf::View(level.GetSize() / 2.f, level.GetSize()));
-	Draw(level, &render_texture, level.drawables, false);
+	Draw(level, &render_texture, level.drawables, true);
 	render_texture.display();
 	*texture = render_texture.getTexture();
 }
@@ -82,17 +82,18 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 		shaders_[shader_id].setUniform(name, value);
 	}
 	// Redirect to nothing
-	std::streambuf* previous = sf::err().rdbuf(NULL);
+	//std::streambuf* previous = sf::err().rdbuf(NULL);
 	shaders_[shader_id].setUniform("_time", globals.time);
 	shaders_[shader_id].setUniform("_window_resolution", sf::Vector2f(globals.render_window.getSize()));
 	shaders_[shader_id].setUniform("_level_size", level.GetSize());
 	shaders_[shader_id].setUniform("_view_size", globals.render_window.getView().getSize());
 	shaders_[shader_id].setUniform("_view_center", globals.render_window.getView().getCenter());
+	shaders_[shader_id].setUniform("_texture", sf::Shader::CurrentTexture);
 	if (level.HasComponents<WidthAndHeight>(entity_id))
 	{
 		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>(entity_id)->width_and_height);
 	}
 	// Restore the original output
-	sf::err().rdbuf(previous);
+	//sf::err().rdbuf(previous);
 	return &shaders_[shader_id];
 }

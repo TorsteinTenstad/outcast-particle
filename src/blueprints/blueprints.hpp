@@ -134,7 +134,6 @@ class BPCoin : public BPEditableEntity
 
 class BPWall : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\block.png", false, 0 };
 	DrawPriority draw_priority = { 4 };
 	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
 	Collision collision = { 0.2, 75 };
@@ -145,13 +144,11 @@ class BPWall : public BPEditableEntity
 
 class BPBounceWall : public BPWall
 {
-	DrawInfo draw_info = { "content\\textures\\block_green.png", false, 0 };
 	Collision collision = { 1, 75 };
 };
 
 class BPNoBounceWall : public BPWall
 {
-	DrawInfo draw_info = { "content\\textures\\block_dark.png", false, 0 };
 	Collision collision = { 0.05, 75 };
 };
 

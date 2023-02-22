@@ -588,7 +588,6 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 0.2, 75 };
@@ -604,7 +603,6 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_green.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 1, 75 };
@@ -620,7 +618,6 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_dark.png", false, 0 };
             GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 0.05, 75 };
@@ -872,7 +869,6 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 0.2, 75 };
@@ -885,7 +881,6 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_green.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 1, 75 };
@@ -898,7 +893,6 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\block_dark.png", false, 0 };
         GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 0.05, 75 };

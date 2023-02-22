@@ -11,6 +11,7 @@
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
+#include "components/grid_adaptive_textures.hpp"
 #include "components/intersection.hpp"
 #include "components/kill_on_intersection.hpp"
 #include "components/level_menu.hpp"
@@ -102,6 +103,7 @@ typedef std::variant<
 	std::map<int, TextPopupSpawner>,
 	std::map<int, Trail>,
 	std::map<int, Velocity>,
+	std::map<int, WallTexture>,
 	std::map<int, WidthAndHeight>>
 	ComponentMap;
 
@@ -212,6 +214,9 @@ int AddScrollingText(Level& level, float pos_x, float pos_y, std::string text);
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 
 #include "level.tpp"
+
+template <class Component>
+std::tuple<int, Component*> GetSingletonIncludeID(Level& level);
 
 template <class Component>
 Component* GetSingleton(Level& level);
