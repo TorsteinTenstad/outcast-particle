@@ -60,8 +60,7 @@ void main()
         dist_from_edge = min(dist_from_edge, length(vec2(1-gc.x, gc.y)));
     }
 
-    //float val = smoothstep(0, 0.5, dist_from_edge/FAR_AWAY);
-    float val = smoothstep(0.4, 0.5, dist_from_edge/FAR_AWAY);
+    float val = smoothstep(0.1, 0.5, dist_from_edge/FAR_AWAY);
     gl_FragColor.rgb = mix(ColorOf(GAt(g_id)), vec3(0.1), val);
     gl_FragColor.a = IsWallAt(g_id) ? 1 : 0;
 }

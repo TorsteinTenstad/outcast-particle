@@ -26,7 +26,7 @@ void SFML::RunWindow(std::function<void(float)> update_func)
 		fps++;
 		if (seconds_since_last_fps_print > 1)
 		{
-			std::cout << "FPS: " << fps << "\n";
+			//std::cout << "FPS: " << fps << "\n";
 			fps = 0;
 			seconds_since_last_fps_print = 0;
 		}

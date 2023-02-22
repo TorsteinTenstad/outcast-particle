@@ -10,6 +10,8 @@ class RenderGridAdaptiveTexturesSystem : public GameSystem
 private:
 	sf::RenderTexture wall_render_texture_;
 	sf::RectangleShape wall_shape_;
+	sf::RenderTexture laser_render_texture_;
+	sf::RectangleShape laser_shape_;
 
 public:
 	using GameSystem::GameSystem;

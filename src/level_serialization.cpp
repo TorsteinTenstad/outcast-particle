@@ -554,11 +554,10 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = { 60 };
-            GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
+            GetComponent<Laser>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
             GetComponent<KillOnIntersection>()[entity_id] = {};
-            GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, {}, {} };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
                 GetSubstrBetween(line, "Tag{", "}"));
@@ -588,6 +587,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
+            GetComponent<Wall>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 0.2, 75 };
@@ -603,6 +603,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
+            GetComponent<Wall>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 1, 75 };
@@ -618,6 +619,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             GetComponent<ReceivesButtonEvents>()[entity_id] = {};
             GetComponent<Editable>()[entity_id] = {};
+            GetComponent<Wall>()[entity_id] = {};
             GetComponent<DrawPriority>()[entity_id] = { 4 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
             GetComponent<Collision>()[entity_id] = { 0.05, 75 };
@@ -840,11 +842,10 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = { 60 };
-        GetComponent<DrawInfo>()[entity_id] = { "content\\textures\\laser_horisontal.png", false, 0 };
+        GetComponent<Laser>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<OrientationDependentDrawInfo>()[entity_id] = {};
         GetComponent<KillOnIntersection>()[entity_id] = {};
-        GetComponent<Shader>()[entity_id] = { "shaders\\test.vert", "", {}, {}, {} };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\laser.wav" };
         GetComponent<Tag>()[entity_id] = {"BPLaser"};
         GetComponent<Position>()[entity_id] = { sf::Vector2f(0, 0) };
@@ -869,6 +870,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
+        GetComponent<Wall>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 0.2, 75 };
@@ -881,6 +883,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
+        GetComponent<Wall>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 1, 75 };
@@ -893,6 +896,7 @@ int Level::AddBlueprint(std::string tag)
     {
         GetComponent<ReceivesButtonEvents>()[entity_id] = {};
         GetComponent<Editable>()[entity_id] = {};
+        GetComponent<Wall>()[entity_id] = {};
         GetComponent<DrawPriority>()[entity_id] = { 4 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\thud.wav" };
         GetComponent<Collision>()[entity_id] = { 0.05, 75 };

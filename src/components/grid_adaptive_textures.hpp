@@ -5,3 +5,12 @@
 class WallTexture
 {
 };
+class LaserTexture
+{
+};
+class Wall
+{
+};
+class Laser
+{
+};

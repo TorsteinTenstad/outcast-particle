@@ -190,7 +190,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Edit rectangular size:
 	for (auto [entity_id, selected, width_and_height, editable] : level.GetEntitiesWith<Selected, WidthAndHeight, Editable>())
 	{
-		float increment = BLOCK_SIZE * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
+		float increment = editable->smallest_allowed_size * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
 		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_HEIGHT])
 		{
 			width_and_height->width_and_height.y += increment;

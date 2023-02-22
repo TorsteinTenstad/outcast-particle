@@ -64,6 +64,8 @@ typedef std::variant<
 	std::map<int, Intersection>,
 	std::map<int, KeyConfigButton>,
 	std::map<int, KillOnIntersection>,
+	std::map<int, Laser>,
+	std::map<int, LaserTexture>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
 	std::map<int, MagneticField>,
@@ -103,6 +105,7 @@ typedef std::variant<
 	std::map<int, TextPopupSpawner>,
 	std::map<int, Trail>,
 	std::map<int, Velocity>,
+	std::map<int, Wall>,
 	std::map<int, WallTexture>,
 	std::map<int, WidthAndHeight>>
 	ComponentMap;

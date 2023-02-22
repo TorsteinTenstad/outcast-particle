@@ -109,12 +109,11 @@ class BPPlayer : public BPEditableEntity
 
 class BPLaser : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\laser_horisontal.png", false, 0 };
+	Laser laser = {};
 	DrawPriority draw_priority = { 3 };
 	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { 60 };
 	KillOnIntersection kill_on_intersection = {};
-	Shader shader = { "shaders\\test.vert", "", {}, {}, {} };
 	SoundInfo sound_info = { "content\\sounds\\laser.wav" };
 
 	// [Serialize]
@@ -134,6 +133,7 @@ class BPCoin : public BPEditableEntity
 
 class BPWall : public BPEditableEntity
 {
+	Wall wall = {};
 	DrawPriority draw_priority = { 4 };
 	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
 	Collision collision = { 0.2, 75 };
