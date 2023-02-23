@@ -25,15 +25,11 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 		}
 	}
 
-	for (auto const& [entity_id, magnetic_field, draw_info] : level.GetEntitiesWith<MagneticField, DrawInfo>())
+	for (auto const& [entity_id, player, charge] : level.GetEntitiesWith<Player, Charge>())
 	{
-		int category = FindClosest(MAGNETIC_FIELD_STRENGTH_CATEGORIES, magnetic_field->field_strength);
-		draw_info->image_path = MAGNETIC_FIELD_TEXTURES[category];
-	}
-
-	for (auto const& [entity_id, electric_field, draw_info] : level.GetEntitiesWith<ElectricField, DrawInfo>())
-	{
-		int category = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(electric_field->field_vector));
-		draw_info->image_path = ELECTRIC_FIELD_TEXTURES[category];
+		for (auto const& [entity_id, electric_field, shader] : level.GetEntitiesWith<ElectricField, Shader>())
+		{
+			shader->float_uniforms["charge_sign"] = Sign(charge->charge);
+		}
 	}
 }
