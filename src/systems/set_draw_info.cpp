@@ -29,7 +29,14 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 	{
 		for (auto const& [entity_id, electric_field, shader] : level.GetEntitiesWith<ElectricField, Shader>())
 		{
-			shader->float_uniforms["charge_sign"] = Sign(charge->charge);
+			if (!shader->float_uniforms.count("movement_animation_time"))
+			{
+				shader->float_uniforms["movement_animation_time"] = 0;
+			}
+			float charge_sign = Sign(charge->charge);
+			shader->float_uniforms["charge_sign"] = charge_sign;
+			shader->float_uniforms["movement_animation_time"] += charge_sign * dt;
+			shader->vec_uniforms["field_vector"] = electric_field->field_vector;
 		}
 	}
 }

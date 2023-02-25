@@ -3,58 +3,74 @@
 uniform float _time;
 uniform vec2 _wh;
 uniform float charge_sign;
-float rand(float seed){ 
-    return fract(sin(dot(vec2(seed, fract(seed*55.341)), vec2(12.9898, 78.233))) * 43758.5453);
+uniform float movement_animation_time;
+uniform vec2 field_vector;
+
+float rand01(vec2 seed){
+    return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-#define COL_W 120
-#define PARTICKLE_RING_THICKNESS 0.1
+float rand(float a, float b, vec2 seed){
+	return a + rand01(seed)*(b-a);
+}
 
-vec4 particles(vec2 uv, float base_speed, float rand_seed){
-   	vec2 c = uv/vec2(COL_W);
-	vec2 gc = vec2(fract(c.x), c.y);
-    float gc_id = floor(c.x);
+mat2 rot(float a) {
+	float s = sin(a);
+	float c = cos(a);
+	mat2 m = mat2(c, -s, s, c);
+    return m;
+}
 
-	float particle_r = 0.3;
-	float particle_pluss_size = 0.1;
+#define CELL_SIZE 90
 
-	float frequency_rand = 0.8+0.2*rand(104.43*sin(gc_id));
-    float y = 0.5*base_speed*charge_sign*_time/_wh.y*frequency_rand;
-	
-	float center_x_rand = rand(gc_id*rand_seed+rand(floor(y)));
-	float center_x = particle_r + (1-2*particle_r)*center_x_rand;
-
-    y = fract(y);
-    y = smoothstep(0, 1, y);
-    y = y*(_wh.y/COL_W+2*particle_r)-particle_r;
-
-    vec2 p = gc - vec2(center_x, y);
-	float r = length(p);
-	vec2 p_4fold = abs(p);
-	vec2 p_8fold = vec2(max(p_4fold.x, p_4fold.y), min(p_4fold.x, p_4fold.y));
-	p_8fold = charge_sign<0? p_4fold : p_8fold;
+float particle(vec2 uv, float charge_sign){
 	float AA = 0.01;
-	float pluss_base = smoothstep(0, AA, PARTICKLE_RING_THICKNESS/2.f-p_8fold.y)
-				* smoothstep(0, AA, particle_pluss_size-p_8fold.x);
-	vec2 rounding_vector = p_8fold-vec2(particle_pluss_size, 0);
-    float pluss_tip = smoothstep(0, AA, PARTICKLE_RING_THICKNESS/2.f-length(rounding_vector));
+	float LINES_WIDTH = 0.1;
+	float SIGN_SIZE = 0.2;
+
+	float r = length(uv);
+	vec2 uv_4 = abs(uv);
+	vec2 uv_8 = vec2(max(uv_4.x, uv_4.y), min(uv_4.x, uv_4.y));
+	vec2 uv_sign = charge_sign < 0 ? uv_4 : uv_8;
+	float pluss_base = smoothstep(0, AA, LINES_WIDTH/2.f-uv_sign.y)
+					 * smoothstep(0, AA, SIGN_SIZE-uv_sign.x);
+	vec2 rounding_vector = uv_sign-vec2(SIGN_SIZE, 0);
+    float pluss_tip = smoothstep(0, AA, LINES_WIDTH/2.f-length(rounding_vector));
 	float pluss = max(pluss_base,pluss_tip);
-    float ring_inner_mask = smoothstep(0, AA, r-particle_r+PARTICKLE_RING_THICKNESS);
-    float ring_outer_mask = smoothstep(0, AA, particle_r-r);
+    float ring_inner_mask = smoothstep(0, AA, r-0.5+LINES_WIDTH);
+    float ring_outer_mask = smoothstep(0, AA, 0.5-r);
 	float ring = ring_inner_mask*ring_outer_mask;
-	return vec4(charge_sign>0? vec3(0.5, 0.2, 0.2):vec3(0.2, 0.7, 0.2), 1)*(pluss+ring);
+	return ring+pluss;
+}
+
+float particles(vec2 uv, float speed, float rand_seed){
+   	vec2 c = uv/vec2(CELL_SIZE);
+	c.y -= 0.7*speed*movement_animation_time;
+	vec2 gc = fract(c)-0.5;
+    vec2 id = floor(c);
+
+	float particle_d = 0.6;
+	float particle_r = particle_d/2;
+
+
+	vec2 offset = vec2(0);
+	offset.x += rand(-(1-particle_d)/2, (1-particle_d)/2, id*1.234*rand_seed);
+	offset.y += rand(-(1-particle_d)/2, (1-particle_d)/2, id*1.312*rand_seed);
+	float existance = float(rand01(id*1.623*rand_seed) < 0.1 && fract((id.x+id.y)/2) > 0.4);
+	return particle((gc-offset)/particle_d, charge_sign)*existance;
 }
 
 void main()
 {
+	mat2 m_rot = rot(atan(field_vector.x, field_vector.y));
+
    	vec2 c = gl_TexCoord[0].xy/vec2(120);
+	c = c*m_rot;
     vec2 gc = vec2(fract(c.x), c.y);
     float gc_id = floor(c.x);
 
-	float frequency_rand = 0.8+0.2*rand(fract(rand(gc_id)*sin(gc_id*123.123)));
-    float time_component = 0*1*_time*frequency_rand;
 	float arrow_head_length = 0.1;
-	float arrow_c = fract((gc.y-0.5-time_component+0.8*abs(gc.x-0.5)));
+	float arrow_c = fract((gc.y-0.5+0.8*abs(gc.x-0.5)));
 	float arrows = 1-smoothstep(0, 0.02, arrow_c-arrow_head_length);
 	arrows *= 1-smoothstep(0, 0.02, abs(gc.x-0.5)-0.3);
 
@@ -63,10 +79,10 @@ void main()
 	
 	color += vec4(1)*0.2*arrows;
 	vec4 particle_contribution = vec4(0);
-	particle_contribution = max(particle_contribution, particles(gl_TexCoord[0].xy,200, 2343.12)*0.4);
-	particle_contribution = max(particle_contribution, particles(gl_TexCoord[0].xy+vec2(30, 0),600, 8942.71)*0.2);
-	particle_contribution = max(particle_contribution, particles(gl_TexCoord[0].xy+vec2(60, 0),800, 6542.11)*0.1);
-	particle_contribution = max(particle_contribution, particles(gl_TexCoord[0].xy+vec2(90, 0),400, 1244.51)*0.3);
-	color += particle_contribution*vec4(vec3(1), 2);
+	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.142)*0.1);
+	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.721)*0.2);
+	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.161)*0.3);
+	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.511)*0.4);
+	color += vec4(charge_sign < 0 ? vec3(0.2, 0.8, 0.2) : vec3(0.8, 0.2, 0.2), 1)*particle_contribution;
 	gl_FragColor = color;
 }
