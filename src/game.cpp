@@ -3,6 +3,7 @@
 #include <chrono>
 #include <filesystem>
 #include <functional>
+#include <iostream>
 #include <string>
 #include <thread>
 
@@ -113,6 +114,11 @@ Level& Game::SetLevel(std::string level_id)
 
 void Game::Update(float dt)
 {
+	if (dt > 1.f / 30)
+	{
+		std::cout << "Lag spike detected, overriding dt\n";
+		dt = 1.f / 30;
+	}
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
 	{
