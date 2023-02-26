@@ -66,10 +66,10 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 
 		level.GetComponent<Hovered>().clear();
 		level.AddComponent<Hovered>(menu_navigator->currently_at_entity_id);
+		position->position = possible_positions[menu_navigator->currently_at_entity_id];
+		position->position.x -= width_and_height->width_and_height.x;
 		if (menu_navigator->currently_at_entity_id != prev_at_id)
 		{
-			position->position = possible_positions[menu_navigator->currently_at_entity_id];
-			position->position.x -= width_and_height->width_and_height.x;
 			level.AddComponents<HoveredStartedThisFrame>(menu_navigator->currently_at_entity_id);
 		}
 
