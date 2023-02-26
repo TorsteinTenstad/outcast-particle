@@ -21,11 +21,11 @@ mat2 rot(float a) {
     return m;
 }
 
-#define CELL_SIZE 90
+#define CELL_SIZE 60
 
 float particle(vec2 uv, float charge_sign){
 	float AA = 0.01;
-	float LINES_WIDTH = 0.1;
+	float LINES_WIDTH = 0.15;
 	float SIGN_SIZE = 0.2;
 
 	float r = length(uv);
@@ -60,29 +60,65 @@ float particles(vec2 uv, float speed, float rand_seed){
 	return particle((gc-offset)/particle_d, charge_sign)*existance;
 }
 
-void main()
-{
-	mat2 m_rot = rot(atan(field_vector.x, field_vector.y));
-
-   	vec2 c = gl_TexCoord[0].xy/vec2(120);
-	c = c*m_rot;
+float arrow(vec2 uv, vec2 wh_rotated){
+	uv = wh_rotated*fract(uv/wh_rotated);
+   	vec2 c = uv/vec2(120);
     vec2 gc = vec2(fract(c.x), c.y);
     float gc_id = floor(c.x);
 
-	float arrow_head_length = 0.1;
-	float arrow_c = fract((gc.y-0.5+0.8*abs(gc.x-0.5)));
-	float arrows = 1-smoothstep(0, 0.02, arrow_c-arrow_head_length);
-	arrows *= 1-smoothstep(0, 0.02, abs(gc.x-0.5)-0.3);
+	float arrow_head_length = 0.15;
+	float arrow_head_width = 0.6;
+	float margin = 0.15;
+	float center_dist = abs(gc.x-0.5);
+	float arrow_c = gc.y-(wh_rotated.y/120)+1*center_dist;
 
-	vec4 color = vec4(0);
-	color += vec4(vec3(1-0.15*float(fract(gc_id/2) > 0.1)), 1)*0.4;
+	float AA = 0.02;
+
+	float arrow_back_mask = 1-smoothstep(0, AA, arrow_c+margin);
+	float arrow_front_mask = smoothstep(0, AA, arrow_c+arrow_head_length+margin);
+	float arrow_width_mask = 1-smoothstep(0, AA, center_dist-arrow_head_width/2);
+
+	float lines_mask = 1-smoothstep(0, AA, center_dist-0.05);
+	lines_mask *= arrow_back_mask;
+	lines_mask *= smoothstep(0, AA, c.y - margin);
+
+	float arrow = max(arrow_front_mask*arrow_back_mask*arrow_width_mask, lines_mask);
+	return arrow;
+}
+
+vec4 blend(vec4 base, vec4 top){
+	float a = top.a + base.a * (1-top.a);
+	if (abs(a) < 0.0001){
+		return vec4(0);
+	}
+	vec3 rgb = (top.a*top.rgb+base.a*base.rgb*(1-top.a))/a;
+	return vec4(rgb, a);
+}
+
+void main()
+{
+	float theta = atan(field_vector.x, field_vector.y);
+	mat2 m_rot = rot(theta);
+
+	vec4 background_color = vec4(vec3(1), 0.1);
+	vec4 color = background_color;
+
+	vec3 particle_rgb = charge_sign < 0 ? vec3(0.3, 0.8, 0.3) : vec3(0.95, 0.3, 0.3);
+	vec4 particles_color = vec4(0);
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.142)*0.2));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.721)*0.3));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.161)*0.4));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.511)*0.5));
 	
-	color += vec4(1)*0.2*arrows;
-	vec4 particle_contribution = vec4(0);
-	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.142)*0.1);
-	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.721)*0.2);
-	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.161)*0.3);
-	particle_contribution = max(particle_contribution, particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.511)*0.4);
-	color += vec4(charge_sign < 0 ? vec3(0.2, 0.8, 0.2) : vec3(0.8, 0.2, 0.2), 1)*particle_contribution;
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.8142)*0.2));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.7451)*0.3));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.7345)*0.4));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.0611)*0.5));
+	
+	color = blend(color, particles_color);
+
+	vec4 arrow_color = vec4(vec3(0.8), 1)*arrow((gl_TexCoord[0].xy)*m_rot, abs(_wh*m_rot));
+	color = blend(color, arrow_color);
+
 	gl_FragColor = color;
 }
