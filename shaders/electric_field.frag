@@ -68,6 +68,7 @@ float arrow(vec2 uv, vec2 wh_rotated){
 
 	float arrow_head_length = 0.15;
 	float arrow_head_width = 0.6;
+    float arrow_line_width = 0.1;
 	float margin = 0.15;
 	float center_dist = abs(gc.x-0.5);
 	float arrow_c = gc.y-(wh_rotated.y/120)+1*center_dist;
@@ -78,7 +79,7 @@ float arrow(vec2 uv, vec2 wh_rotated){
 	float arrow_front_mask = smoothstep(0, AA, arrow_c+arrow_head_length+margin);
 	float arrow_width_mask = 1-smoothstep(0, AA, center_dist-arrow_head_width/2);
 
-	float lines_mask = 1-smoothstep(0, AA, center_dist-0.05);
+	float lines_mask = 1-smoothstep(0, AA, center_dist-arrow_line_width/2);
 	lines_mask *= arrow_back_mask;
 	lines_mask *= smoothstep(0, AA, c.y - margin);
 
@@ -105,15 +106,10 @@ void main()
 
 	vec3 particle_rgb = charge_sign < 0 ? vec3(0.3, 0.8, 0.3) : vec3(0.95, 0.3, 0.3);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.142)*0.2));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.721)*0.3));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.161)*0.4));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.511)*0.5));
-	
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.8142)*0.2));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.7451)*0.3));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.7345)*0.4));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.0611)*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.142)*0.1));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.721)*0.2));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.161)*0.3));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.511)*0.4));
 	
 	color = blend(color, particles_color);
 

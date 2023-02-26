@@ -38,5 +38,16 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 			shader->float_uniforms["movement_animation_time"] += charge_sign * dt;
 			shader->vec_uniforms["field_vector"] = electric_field->field_vector;
 		}
+		for (auto const& [entity_id, magnetic_field, shader] : level.GetEntitiesWith<MagneticField, Shader>())
+		{
+			if (!shader->float_uniforms.count("movement_animation_time"))
+			{
+				shader->float_uniforms["movement_animation_time"] = 0;
+			}
+			float charge_sign = Sign(charge->charge);
+			shader->float_uniforms["charge_sign"] = charge_sign;
+			shader->float_uniforms["movement_animation_time"] += charge_sign * dt;
+			shader->float_uniforms["field_strength"] = magnetic_field->field_strength;
+		}
 	}
 }
