@@ -19,7 +19,6 @@ void RenderGridAdaptiveTexturesSystem::Update(Level& level, float dt)
 		shader->fragment_shader_path = "shaders\\adaptive_lasers.frag";
 		shader->float_uniforms["grid_width"] = rt_res.x;
 		shader->float_uniforms["grid_height"] = rt_res.y;
-		shader->float_uniforms["grid_size"] = float(BLOCK_SIZE) / 2.f;
 		for (auto const& [entity_id, laser, width_and_height, position] : level.GetEntitiesWith<Laser, WidthAndHeight, Position>())
 		{
 			sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
@@ -46,7 +45,6 @@ void RenderGridAdaptiveTexturesSystem::Update(Level& level, float dt)
 		shader->fragment_shader_path = "shaders\\adaptive_walls.frag";
 		shader->float_uniforms["grid_width"] = rt_res.x;
 		shader->float_uniforms["grid_height"] = rt_res.y;
-		shader->float_uniforms["grid_size"] = float(BLOCK_SIZE) / 2.f;
 		for (auto const& [entity_id, wall, collision, width_and_height, position] : level.GetEntitiesWith<Wall, Collision, WidthAndHeight, Position>())
 		{
 			sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);

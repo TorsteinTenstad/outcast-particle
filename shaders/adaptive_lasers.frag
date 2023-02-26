@@ -7,7 +7,6 @@ uniform vec2 _wh;
 uniform float _time;
 uniform float grid_width;
 uniform float grid_height;
-uniform float grid_size;
 
 float radial_falloff(float r, float a, float b){
 	float f = 1/(max((r-a), 0)/(b-a)+1);

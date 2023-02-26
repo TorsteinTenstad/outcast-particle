@@ -4,7 +4,6 @@ uniform sampler2D _texture;
 uniform vec2 _wh;
 uniform float grid_width;
 uniform float grid_height;
-uniform float grid_size;
 
 bool IsWallAt(vec2 gc_id){
     if (gc_id.x < 0 || gc_id.y < 0 || gc_id.x>=grid_width || gc_id.y>=grid_height){

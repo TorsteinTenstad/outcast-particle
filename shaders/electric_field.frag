@@ -21,8 +21,6 @@ mat2 rot(float a) {
     return m;
 }
 
-#define CELL_SIZE 60
-
 float particle(vec2 uv, float charge_sign){
 	float AA = 0.01;
 	float LINES_WIDTH = 0.15;
@@ -43,13 +41,14 @@ float particle(vec2 uv, float charge_sign){
 	return ring+pluss;
 }
 
-float particles(vec2 uv, float speed, float rand_seed){
+#define CELL_SIZE 60
+
+float particle_grid(vec2 uv, vec2 cell_size, float relative_particle_size, float rand_seed){
    	vec2 c = uv/vec2(CELL_SIZE);
-	c.y -= 0.7*speed*movement_animation_time;
 	vec2 gc = fract(c)-0.5;
     vec2 id = floor(c);
 
-	float particle_d = 0.6;
+	float particle_d = relative_particle_size;
 	float particle_r = particle_d/2;
 
 
@@ -106,10 +105,10 @@ void main()
 
 	vec3 particle_rgb = charge_sign < 0 ? vec3(0.3, 0.8, 0.3) : vec3(0.95, 0.3, 0.3);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(90, 0))*m_rot, 2, 1.142)*0.1));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(60, 0))*m_rot, 4, 1.721)*0.2));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(30, 0))*m_rot, 6, 1.161)*0.3));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((gl_TexCoord[0].xy+vec2(00, 0))*m_rot, 8, 1.511)*0.4));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(90, -100*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142)*0.1));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(60, -200*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721)*0.2));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(30, -200*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161)*0.3));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(00, -400*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511)*0.4));
 	
 	color = blend(color, particles_color);
 
