@@ -75,7 +75,7 @@ float particles(vec2 uv, float particles_per_cell_side, float speed, float rand_
 	vec2 gc = fract(c);
     vec2 id = floor(c);
     float n = floor(particles_per_cell_side/sqrt(2));
-    float theta = movement_animation_time*speed/(particles_per_cell_side*particles_per_cell_side);
+    float theta = sign(field_strength)*movement_animation_time*speed/(particles_per_cell_side*particles_per_cell_side);
     gc = rot(theta)*(gc-0.5)+0.5;
     gc = gc-0.5+(n/(2*particles_per_cell_side));
     return particle_grid(gc, rot(-theta), vec2(1/particles_per_cell_side), n, 0.6, rand_seed+id);
