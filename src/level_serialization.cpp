@@ -575,6 +575,7 @@ void Level::LoadFromFile(std::string savefile_path)
             GetComponent<DrawPriority>()[entity_id] = { 3 };
             GetComponent<Coin>()[entity_id] = {};
             GetComponent<SegmentedGlowEffect>()[entity_id] = {};
+            GetComponent<Children>()[entity_id] = {};
             GetComponent<Radius>()[entity_id] = { 60 };
             GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
             DeserializeComponent(GetComponent<Tag>()[entity_id],
@@ -862,6 +863,7 @@ int Level::AddBlueprint(std::string tag)
         GetComponent<DrawPriority>()[entity_id] = { 3 };
         GetComponent<Coin>()[entity_id] = {};
         GetComponent<SegmentedGlowEffect>()[entity_id] = {};
+        GetComponent<Children>()[entity_id] = {};
         GetComponent<Radius>()[entity_id] = { 60 };
         GetComponent<SoundInfo>()[entity_id] = { "content\\sounds\\coin.wav" };
         GetComponent<Tag>()[entity_id] = {"BPCoin"};

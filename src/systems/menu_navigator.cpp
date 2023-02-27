@@ -64,7 +64,7 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 		}
 		assert(menu_navigator->currently_at_entity_id >= 0);
 
-		level.GetComponent<Hovered>().clear();
+		level.ClearComponent<Hovered>();
 		level.AddComponent<Hovered>(menu_navigator->currently_at_entity_id);
 		position->position = possible_positions[menu_navigator->currently_at_entity_id];
 		position->position.x -= width_and_height->width_and_height.x;
@@ -75,11 +75,11 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Enter])
 		{
-			level.GetComponent<PressedThisFrame>()[menu_navigator->currently_at_entity_id];
+			level.AddComponent<PressedThisFrame>(menu_navigator->currently_at_entity_id);
 		}
 		if (cursor_and_keys_.key_released_this_frame[sf::Keyboard::Enter])
 		{
-			level.GetComponent<ReleasedThisFrame>()[menu_navigator->currently_at_entity_id];
+			level.AddComponent<ReleasedThisFrame>(menu_navigator->currently_at_entity_id);
 		}
 	}
 }

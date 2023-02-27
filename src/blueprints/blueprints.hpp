@@ -127,6 +127,7 @@ class BPCoin : public BPEditableEntity
 	Editable editable = { 120 };
 	Coin coin = {};
 	SegmentedGlowEffect segmented_glow_effect = {};
+	Children children = {};
 	Radius radius = { 60 };
 	SoundInfo sound_info = { "content\\sounds\\coin.wav" };
 };

@@ -18,7 +18,7 @@ void TextPopupSystem::Update(Level& level, float dt)
 				popup_draw_info->scale_to_fit = true;
 				popup_draw_info->image_path = "content\\textures\\gray.png";
 				popup_width_and_height->width_and_height = sf::Vector2f(2400, 240);
-				popup_text->content = level.GetComponent<TextPopupSpawner>()[i].content;
+				popup_text->content = level.GetComponent<TextPopupSpawner>(i)->content;
 				popup_text->size = 100;
 				popup_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 				popup_animated_position->start_time = globals.time;

@@ -11,7 +11,7 @@ void FaceSystem::Update(Level& level, float dt)
 	auto& position_map = level.GetComponent<Position>();
 	auto& radius_map = level.GetComponent<Radius>();
 
-	for (auto& [entity_id, face, draw_info, draw_priority, radius, velocity, position] : level.GetEntitiesWith<Face, DrawInfo, DrawPriority, Radius, Velocity, Position>())
+	for (auto& [entity_id, face, draw_info, draw_priority, radius, position] : level.GetEntitiesWith<Face, DrawInfo, DrawPriority, Radius, Position>())
 	{
 		std::vector<int>& children = children_map[entity_id].ids_owned_by_component[typeid(Face)];
 
@@ -27,9 +27,14 @@ void FaceSystem::Update(Level& level, float dt)
 
 			children.push_back(id);
 		}
-
 		int child_id = children[0];
+		draw_info_map[child_id].image_path = face->image_path;
 
+		if (!level.HasComponents<Velocity>(entity_id))
+		{
+			continue;
+		}
+		Velocity* velocity = level.GetComponent<Velocity>(entity_id);
 		position_map[child_id].position += velocity->velocity * dt;
 		sf::Vector2f offset = position_map[child_id].position - position->position;
 		sf::Vector2f target_offset = sf::Vector2f(0, 0);
@@ -40,6 +45,5 @@ void FaceSystem::Update(Level& level, float dt)
 		float snap = 0.01f * dt * 600;
 		sf::Vector2f next_offset = (1 - snap) * offset + snap * target_offset;
 		position_map[child_id].position = position->position + next_offset;
-		draw_info_map[child_id].image_path = face->image_path;
 	}
 }

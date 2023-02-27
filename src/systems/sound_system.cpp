@@ -10,32 +10,31 @@
 
 void SoundSystem::Update(Level& level, float dt)
 {
-	auto& sound_info_map = level.GetComponent<SoundInfo>();
-
-	for (auto const& [entity_id, entity_sound_info] : sound_info_map)
+	for (auto const& [entity_id, sound_info] : level.GetEntitiesWith<SoundInfo>())
 	{
-		if (sound_buffers_.count(entity_sound_info.sound_path) == 0)
+		std::string sound_path = sound_info->sound_path;
+		if (sound_buffers_.count(sound_path) == 0)
 		{
-			sound_buffers_[entity_sound_info.sound_path].loadFromFile(entity_sound_info.sound_path);
+			sound_buffers_[sound_path].loadFromFile(sound_path);
 		}
-		if (sound_info_map[entity_id].play_sound)
+		if (sound_info->play_sound)
 		{
 			float max_volume = 100; //SFML uses 0-100 for volume, we use 0-1
 
-			if (MAX_VOLUME.count(entity_sound_info.sound_path) > 0)
+			if (MAX_VOLUME.count(sound_path) > 0)
 			{
-				max_volume = MAX_VOLUME[entity_sound_info.sound_path];
+				max_volume = MAX_VOLUME[sound_path];
 			}
-			sounds_[entity_sound_info.sound_path].setBuffer(sound_buffers_[entity_sound_info.sound_path]);
-			sounds_[entity_sound_info.sound_path].setVolume(max_volume * sound_info_map[entity_id].sound_volume);
-			sounds_[entity_sound_info.sound_path].play();
-			sound_info_map[entity_id].play_sound = false;
+			sounds_[sound_path].setBuffer(sound_buffers_[sound_path]);
+			sounds_[sound_path].setVolume(max_volume * sound_info->sound_volume);
+			sounds_[sound_path].play();
+			sound_info->play_sound = false;
 		}
-		if (sounds_.count(entity_sound_info.sound_path) != 0)
+		if (sounds_.count(sound_path) != 0)
 		{
-			if (sounds_[entity_sound_info.sound_path].getStatus() == sf::SoundSource::Status::Stopped)
+			if (sounds_[sound_path].getStatus() == sf::SoundSource::Status::Stopped)
 			{
-				sounds_.erase(entity_sound_info.sound_path);
+				sounds_.erase(sound_path);
 			}
 		}
 	}
