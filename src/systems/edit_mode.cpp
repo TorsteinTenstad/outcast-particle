@@ -50,8 +50,8 @@ void EditModeSystem::Update(Level& level, float dt)
 		if (cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 		{
 			int new_id = level.CopyEntity(entity_id);
-			level.GetComponent<Selected>().erase(new_id);
-			level.GetComponent<Position>()[new_id].position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
+			level.GetComponentMap<Selected>().erase(new_id);
+			level.GetComponentMap<Position>()[new_id].position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
 		}
 	}
 
@@ -76,7 +76,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	level.ClearComponent<Border>();
 	for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
 	{
-		level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
+		level.GetComponentMap<Border>()[entity_id].color = sf::Color::Blue;
 	}
 
 	// Move entities with the curser:
@@ -91,7 +91,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Handle selection of entity in blueprint menu:
 	for (auto& [entity_id, blueprint_menu_item, selected, draw_priority] : level.GetEntitiesWith<BlueprintMenuItem, Selected, DrawPriority>())
 	{
-		level.GetComponent<BlueprintMenuItem>().erase(entity_id);
+		level.GetComponentMap<BlueprintMenuItem>().erase(entity_id);
 		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
 		CloseBlueprintMenu(level);
 	}
@@ -174,7 +174,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Edit rotation:
-	auto& electric_field_map = level.GetComponent<ElectricField>();
+	auto& electric_field_map = level.GetComponentMap<ElectricField>();
 	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
 	{
 		for (auto [entity_id, selected, width_and_height] : level.GetEntitiesWith<Selected, WidthAndHeight>())
@@ -246,20 +246,20 @@ void EditModeSystem::OpenBlueprintMenu(Level& level)
 {
 	int i = 0;
 	int menu_background_id = level.CreateEntityId();
-	level.GetComponent<Position>()[menu_background_id].position = level.GetSize() / 2.f;
-	level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
-	level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
+	level.GetComponentMap<Position>()[menu_background_id].position = level.GetSize() / 2.f;
+	level.GetComponentMap<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
+	level.GetComponentMap<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
 	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
 	float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
-	level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
+	level.GetComponentMap<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 	level.AddComponent<Border>(menu_background_id);
 	level.AddComponent<BlueprintMenuItem>(menu_background_id);
 	int entity_id;
 	for (const auto& tag : blueprint_menu_entry_tags_)
 	{
 		entity_id = level.AddBlueprint(tag);
-		level.GetComponent<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
-		level.GetComponent<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
+		level.GetComponentMap<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
+		level.GetComponentMap<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
 		level.AddComponent<BlueprintMenuItem>(entity_id);
 		i++;
 	}

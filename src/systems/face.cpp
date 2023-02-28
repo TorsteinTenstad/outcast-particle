@@ -5,11 +5,11 @@
 
 void FaceSystem::Update(Level& level, float dt)
 {
-	auto& children_map = level.GetComponent<Children>();
-	auto& draw_info_map = level.GetComponent<DrawInfo>();
-	auto& draw_priority_map = level.GetComponent<DrawPriority>();
-	auto& position_map = level.GetComponent<Position>();
-	auto& radius_map = level.GetComponent<Radius>();
+	auto& children_map = level.GetComponentMap<Children>();
+	auto& draw_info_map = level.GetComponentMap<DrawInfo>();
+	auto& draw_priority_map = level.GetComponentMap<DrawPriority>();
+	auto& position_map = level.GetComponentMap<Position>();
+	auto& radius_map = level.GetComponentMap<Radius>();
 
 	for (auto& [entity_id, face, draw_info, draw_priority, radius, position] : level.GetEntitiesWith<Face, DrawInfo, DrawPriority, Radius, Position>())
 	{

@@ -134,10 +134,11 @@ public:
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
 	template <class Component>
-	std::map<int, Component>& GetComponent();
-
-	template <class Component>
 	std::map<int, Component>& GetComponentMap();
+
+	friend class CollisionSystem;
+	friend class EditModeSystem;
+	friend class FaceSystem;
 
 	int CreateEntityId();
 
