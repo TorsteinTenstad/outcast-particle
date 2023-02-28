@@ -28,19 +28,19 @@ void Game::GoToMainMenu()
 	title_position->position.y = 2 * BLOCK_SIZE;
 
 	int static_particle_id = active_level_.AddBlueprint("BPStaticParticle");
-	active_level_.GetComponent<Position>()[static_particle_id].position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset);
+	active_level_.GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset);
 
 	int player_id = active_level_.AddBlueprint("BPPlayer");
-	active_level_.GetComponent<Position>()[player_id].position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
-	active_level_.GetComponent<Velocity>()[player_id].velocity = sf::Vector2f(460, 0);
-	active_level_.GetComponent<Charge>()[player_id].charge *= -1;
+	active_level_.GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
+	active_level_.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
+	active_level_.GetComponent<Charge>(player_id)->charge *= -1;
 }
 
 void Game::GoToLevelMenu()
 {
 	active_level_id_ = LEVEL_MENU;
 	active_level_.ResetSize();
-	active_level_.GetComponent<LevelMenuUI>()[active_level_.CreateEntityId()];
+	active_level_.CreateEntitiyWith<LevelMenuUI>();
 }
 
 void Game::GoToOptionsMenu()

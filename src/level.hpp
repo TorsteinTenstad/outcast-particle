@@ -137,7 +137,7 @@ public:
 	std::map<int, Component>& GetComponent();
 
 	template <class Component>
-	std::map<int, Component>* GetComponentMap();
+	std::map<int, Component>& GetComponentMap();
 
 	int CreateEntityId();
 
@@ -151,6 +151,9 @@ public:
 
 	template <class Component>
 	Component* AddComponent(int entity_id);
+
+	template <class Component>
+	Component* AddComponent(int entity_id, Component&& value);
 
 	template <class... Component>
 	std::tuple<Component*...> AddComponents(int entity_id);

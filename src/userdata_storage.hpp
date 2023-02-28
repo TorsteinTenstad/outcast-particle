@@ -74,7 +74,7 @@ void SaveOptionsToFile(std::string savefile_path)
 {
 	std::string key_string;
 	std::ofstream f(savefile_path);
-	SerializeComponent(globals.key_config, key_string);
+	SerializeComponent(&globals.key_config, key_string);
 	f << key_string;
 }
 
@@ -83,5 +83,5 @@ void LoadOptionsFromFile(std::string savefile_path)
 	std::ifstream f(savefile_path);
 	std::string key_string;
 	f >> key_string;
-	DeserializeComponent(globals.key_config, key_string);
+	DeserializeComponent(&globals.key_config, key_string);
 }

@@ -19,7 +19,7 @@ void EditModeSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
-		level.GetComponent<Border>().clear();
+		level.ClearComponent<Border>();
 		return;
 	}
 
@@ -59,13 +59,13 @@ void EditModeSystem::Update(Level& level, float dt)
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
 		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{
-		level.GetComponent<Selected>().clear();
+		level.ClearComponent<Selected>();
 	}
 
 	// Select entities:
 	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<Editable, PressedThisFrame>())
 	{
-		level.GetComponent<Selected>()[entity_id];
+		level.AddComponent<Selected>(entity_id);
 		for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 		{
 			selected->mouse_offset = cursor_and_keys_.cursor_position - position->position;
@@ -73,7 +73,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Mark selected entities with border:
-	level.GetComponent<Border>().clear();
+	level.ClearComponent<Border>();
 	for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
 	{
 		level.GetComponent<Border>()[entity_id].color = sf::Color::Blue;
@@ -249,18 +249,18 @@ void EditModeSystem::OpenBlueprintMenu(Level& level)
 	level.GetComponent<Position>()[menu_background_id].position = level.GetSize() / 2.f;
 	level.GetComponent<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
 	level.GetComponent<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
-	level.GetComponent<ReceivesButtonEvents>()[menu_background_id];
+	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
 	float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
 	level.GetComponent<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
-	level.GetComponent<Border>()[menu_background_id];
-	level.GetComponent<BlueprintMenuItem>()[menu_background_id];
+	level.AddComponent<Border>(menu_background_id);
+	level.AddComponent<BlueprintMenuItem>(menu_background_id);
 	int entity_id;
 	for (const auto& tag : blueprint_menu_entry_tags_)
 	{
 		entity_id = level.AddBlueprint(tag);
 		level.GetComponent<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
 		level.GetComponent<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
-		level.GetComponent<BlueprintMenuItem>()[entity_id];
+		level.AddComponent<BlueprintMenuItem>(entity_id);
 		i++;
 	}
 	blueprint_menu_is_open_ = true;

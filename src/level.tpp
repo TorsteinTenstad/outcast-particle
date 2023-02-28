@@ -14,21 +14,21 @@ std::map<int, Component>& Level::GetComponent()
 }
 
 template <class Component>
-std::map<int, Component>* Level::GetComponentMap()
+std::map<int, Component>& Level::GetComponentMap()
 {
 	if (components_.count(typeid(Component)) == 0)
 	{
 		std::map<int, Component> t_map;
 		components_[typeid(Component)] = t_map;
 	}
-	return &std::get<std::map<int, Component>>(components_[typeid(Component)]);
+	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
 }
 
 template <class Component>
 bool Level::HasComponent(int entity_id)
 {
-	auto m = GetComponentMap<Component>();
-	return m->find(entity_id) != m->end();
+	auto& m = GetComponentMap<Component>();
+	return m.find(entity_id) != m.end();
 }
 
 template <class... Component>
@@ -40,8 +40,17 @@ bool Level::HasComponents(int entity_id)
 template <class Component>
 Component* Level::AddComponent(int entity_id)
 {
-	auto m = GetComponentMap<Component>();
-	return &(*m)[entity_id];
+	auto& m = GetComponentMap<Component>();
+	return &m[entity_id];
+}
+
+template <class Component>
+Component* Level::AddComponent(int entity_id, Component&& value)
+{
+	auto& m = GetComponentMap<Component>();
+	assert(m.count(entity_id) == 0);
+	m.emplace(entity_id, value);
+	return &m.at(entity_id);
 }
 
 template <class... Component>
@@ -53,8 +62,8 @@ std::tuple<Component*...> Level::AddComponents(int entity_id)
 template <class Component>
 Component* Level::GetComponent(int entity_id)
 {
-	auto m = GetComponentMap<Component>();
-	return &(*m).at(entity_id);
+	auto& m = GetComponentMap<Component>();
+	return &m.at(entity_id);
 }
 
 template <class... Component>
@@ -66,8 +75,8 @@ std::tuple<Component*...> Level::GetComponents(int entity_id)
 template <class Component>
 bool Level::RemoveComponent(int entity_id)
 {
-	auto m = GetComponentMap<Component>();
-	return (*m).erase(entity_id) > 0;
+	auto& m = GetComponentMap<Component>();
+	return m.erase(entity_id) > 0;
 }
 
 template <class... Component>
@@ -119,7 +128,7 @@ static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& com
 	{
 		for (auto it = matching_entities.begin(); it != matching_entities.end();)
 		{
-			auto map_it = component_map.find(std::get<int>(*it));
+			auto& map_it = component_map.find(std::get<int>(*it));
 			if (map_it == component_map.end())
 			{
 				it = matching_entities.erase(it);
@@ -139,7 +148,7 @@ std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
 {
 	int component_idx = 0;
 	std::vector<std::tuple<int, Component*...>> matching_entities = {};
-	(IdIntersection<Component, Component...>(component_idx++, GetComponent<Component>(), matching_entities) && ...);
+	(IdIntersection<Component, Component...>(component_idx++, GetComponentMap<Component>(), matching_entities) && ...);
 	return matching_entities;
 }
 
@@ -157,7 +166,7 @@ void Level::DeleteEntitiesWith()
 template <class Component>
 void Level::ClearComponent()
 {
-	GetComponentMap<Component>()->clear();
+	GetComponentMap<Component>().clear();
 }
 
 template <class ResponsibleComponent>
@@ -171,14 +180,13 @@ Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Child
 	std::vector<int> visualization_entities = parents_children->ids_owned_by_component[typeid(ResponsibleComponent)];
 	assert(visualization_entities.size() == 1);
 	int visualization_entity = visualization_entities[0];
-	assert(level.GetComponent<Shader>().count(visualization_entity) > 0);
-	return &level.GetComponent<Shader>()[visualization_entity];
+	return level.GetComponent<Shader>(visualization_entity);
 }
 
 template <class Component>
 std::tuple<int, Component*> GetSingletonIncludeID(Level& level)
 {
-	auto& component_map = level.GetComponent<Component>();
+	auto& component_map = level.GetComponentMap<Component>();
 	assert(!(component_map.size() > 1));
 
 	if (component_map.size() == 0)
