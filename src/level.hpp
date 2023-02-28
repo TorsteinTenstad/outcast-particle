@@ -136,9 +136,8 @@ public:
 	template <class Component>
 	std::map<int, Component>& GetComponentMap();
 
-	friend class CollisionSystem;
-	friend class EditModeSystem;
-	friend class FaceSystem;
+	friend class CollisionSystem; // System is written using the old GetComponent. Gets access to the new, private version until the system is rewritten.
+	friend class EditModeSystem;  // System is written using the old GetComponent. Gets access to the new, private version until the system is rewritten.
 
 	int CreateEntityId();
 
@@ -227,6 +226,9 @@ std::tuple<int, Component*> GetSingletonIncludeID(Level& level);
 
 template <class Component>
 Component* GetSingleton(Level& level);
+
+template <class ResponsibleComponent>
+int EnsureExistanceOfChildEntity(Children* parents_children, std::function<int(void)> child_creation_func);
 
 template <class ResponsibleComponent>
 Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority);

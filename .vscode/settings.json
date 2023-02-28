@@ -92,6 +92,7 @@
         "ranges": "cpp",
         "span": "cpp",
         "any": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "cassert": "cpp"
     }
 }

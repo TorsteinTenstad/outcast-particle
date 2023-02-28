@@ -152,26 +152,6 @@ void Level::DeleteEntitiesWith()
 }
 
 template <class Component>
-void Level::ClearComponent()
-{
-	GetComponentMap<Component>().clear();
-}
-
-template <class ResponsibleComponent>
-Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
-{
-	if (parents_children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
-	{
-		int id = CreateScreenwideFragmentShaderEntity(level, shader_path, draw_priority);
-		parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(id);
-	}
-	std::vector<int> visualization_entities = parents_children->ids_owned_by_component[typeid(ResponsibleComponent)];
-	assert(visualization_entities.size() == 1);
-	int visualization_entity = visualization_entities[0];
-	return level.GetComponent<Shader>(visualization_entity);
-}
-
-template <class Component>
 std::tuple<int, Component*> GetSingletonIncludeID(Level& level)
 {
 	auto& component_map = level.GetComponentMap<Component>();
@@ -190,4 +170,29 @@ Component* GetSingleton(Level& level)
 {
 	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>(level);
 	return std::get<Component*>(tup);
+}
+
+template <class Component>
+void Level::ClearComponent()
+{
+	GetComponentMap<Component>().clear();
+}
+
+template <class ResponsibleComponent>
+int EnsureExistanceOfChildEntity(Children* parents_children, std::function<int(void)> child_creation_func)
+{
+	if (parents_children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
+	{
+		int child_id = child_creation_func();
+		parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(child_id);
+	}
+	return parents_children->ids_owned_by_component[typeid(ResponsibleComponent)][0];
+}
+
+template <class ResponsibleComponent>
+Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
+{
+	std::function<int(void)> child_creation_func = [&]() { return CreateScreenwideFragmentShaderEntity(level, shader_path, draw_priority); };
+	int child_id = EnsureExistanceOfChildEntity<ResponsibleComponent>(parents_children, child_creation_func);
+	return level.GetComponent<Shader>(child_id);
 }
