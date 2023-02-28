@@ -27,7 +27,11 @@ void FaceSystem::Update(Level& level, float dt)
 		sf::Vector2f& vel = level.GetComponent<Velocity>(entity_id)->velocity;
 		sf::Vector2f& child_pos = level.GetComponent<Position>(child_id)->position;
 
-		child_pos += vel * dt;
+		if (level.GetMode() == PLAY_MODE)
+		{
+			child_pos += vel * dt;
+		}
+
 		sf::Vector2f offset = child_pos - pos;
 		sf::Vector2f target_offset = sf::Vector2f(0, 0);
 		if (Magnitude(vel) > MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT)
