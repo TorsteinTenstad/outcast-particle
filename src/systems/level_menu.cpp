@@ -8,9 +8,6 @@
 #include <sstream>
 
 #define LEVEL_PREVIEW_SCALE 0.6
-#define BUTTON_HORISONTAL_MARGIN 0.06
-#define BUTTON_VERTICAL_MARGIN 0.01
-#define BUTTON_ASPECT_RATIO 8
 
 void LevelMenuSystem::Give(
 	const std::map<std::string, std::vector<std::string>>* level_groups,
@@ -118,50 +115,50 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	assert(ui->button_entity_ids.size() == 0);
 
 	float button_panel_center = level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2;
-	float title_h = 350;
+	float title_h = 3 * float(BLOCK_SIZE);
 
-	{ // Title
-		auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
-		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-		text->content = GetGroupDisplayNameFromGroupName(level_group);
-		position->position = sf::Vector2f(button_panel_center, title_h / 2);
-	}
-
+	float dot_indicator_h = 0.5 * float(BLOCK_SIZE);
 	{ // Dot indicator
-		float h = 120;
 		auto [entity_id, shader, receives_button_events, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<Shader, ReceivesButtonEvents, DrawInfo, DrawPriority, WidthAndHeight, Position>();
 		ui->dot_indicator_id = entity_id;
 		shader->fragment_shader_path = "shaders\\dots_indicator.frag";
 		shader->int_uniforms["n_dots"] = level_groups_->size();
 		shader->int_uniforms["active_dot"] = std::distance(level_groups_->cbegin(), level_groups_->find(level_group));
 		position->position.x = button_panel_center;
-		position->position.y = title_h - h / 2;
+		position->position.y = title_h - dot_indicator_h / 2 - 0.5 * float(BLOCK_SIZE);
 		width_and_height->width_and_height.x = 400;
-		width_and_height->width_and_height.y = h;
+		width_and_height->width_and_height.y = dot_indicator_h;
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+	}
+	{ // Title
+		auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+		text->content = GetGroupDisplayNameFromGroupName(level_group);
+		position->position = sf::Vector2f(button_panel_center, title_h / 2 - 0.5 * dot_indicator_h);
 	}
 
 	// Group navigation buttons
 	for (int p : { -1, 1 })
 	{
-		auto [nav_btn_entity_id, nav_btn_draw_info, nav_btn_text, nav_btn_draw_priority, nav_btn_w_h, nav_btn_position, nav_btn_receives_mouse_events, nav_btn_shortcut_key] = level.CreateEntitiyWith<DrawInfo, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey>();
+		auto [entity_id, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key] =
+			level.CreateEntitiyWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey>();
 
 		if (p == -1)
 		{
-			ui->prev_group_button_id = nav_btn_entity_id;
-			nav_btn_shortcut_key->key = sf::Keyboard::Key::Left;
+			ui->prev_group_button_id = entity_id;
+			shortcut_key->key = sf::Keyboard::Key::Left;
 		}
 		if (p == 1)
 		{
-			ui->next_group_button_id = nav_btn_entity_id;
-			nav_btn_shortcut_key->key = sf::Keyboard::Key::Right;
+			ui->next_group_button_id = entity_id;
+			shortcut_key->key = sf::Keyboard::Key::Right;
 		}
-		nav_btn_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-		nav_btn_draw_info->image_path = "content\\textures_generated\\button_500_500.png";
-		nav_btn_draw_info->scale_to_fit = true;
-		nav_btn_w_h->width_and_height = sf::Vector2f(1, 1) * float(title_h - 2 * level.GetSize().x * BUTTON_VERTICAL_MARGIN);
-		nav_btn_text->content = p < 0 ? "<" : ">";
-		nav_btn_position->position = sf::Vector2f(button_panel_center + p * 0.7 * button_panel_center, title_h / 2);
+		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+		draw_info->image_path = "content\\textures\\white.png";
+		width_and_height->width_and_height = sf::Vector2f(2, 2) * float(BLOCK_SIZE);
+		text->content = p < 0 ? "<" : ">";
+		shader->fragment_shader_path = "shaders\\round_corners.frag";
+		position->position = sf::Vector2f(button_panel_center + p * (4) * float(BLOCK_SIZE), title_h / 2);
 	}
 	const float BUTTON_HEIGHT = float(BLOCK_SIZE);
 	// Scroll window
@@ -198,6 +195,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			ui->button_entity_ids.push_back(entity_id);
 			scroll_window->entities.push_back(entity_id);
 
+			shader->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 			on_released_this_frame->func = std::bind(&LevelMenuSystem::EnterLevel, this, level_id);
 			width_and_height->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
 			position->position = button_position;
@@ -230,7 +228,6 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	{ // Stats display
 		auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
 
-		text->size = 140;
 		ui->stats_string = &text->content;
 		position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE));
 	}

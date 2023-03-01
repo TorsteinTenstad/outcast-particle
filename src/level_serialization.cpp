@@ -416,7 +416,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 100 });
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
             AddComponent<FillColor>(entity_id, {});
-            AddComponent<MouseInteractionDependentFillColor>(entity_id, { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) });
+            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
             AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
             AddComponent<Text>(entity_id, {});
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
@@ -431,7 +431,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 100 });
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
             AddComponent<FillColor>(entity_id, {});
-            AddComponent<MouseInteractionDependentFillColor>(entity_id, { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) });
+            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
             AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
             AddComponent<Text>(entity_id, {});
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
@@ -727,7 +727,7 @@ int Level::AddBlueprint(std::string tag)
         AddComponent<DrawPriority>(entity_id, { 100 });
         AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
         AddComponent<FillColor>(entity_id, {});
-        AddComponent<MouseInteractionDependentFillColor>(entity_id, { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) });
+        AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
         AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
         AddComponent<Text>(entity_id, {});
         AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
@@ -741,7 +741,7 @@ int Level::AddBlueprint(std::string tag)
         AddComponent<DrawPriority>(entity_id, { 100 });
         AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
         AddComponent<FillColor>(entity_id, {});
-        AddComponent<MouseInteractionDependentFillColor>(entity_id, { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) });
+        AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
         AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
         AddComponent<Text>(entity_id, {});
         AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });

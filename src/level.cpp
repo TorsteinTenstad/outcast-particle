@@ -206,6 +206,7 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 {
 
 	int id = level.AddBlueprint("BPButton");
+	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	level.AddComponent<Position>(id)->position = { sf::Vector2f(pos_x, pos_y) };
 	level.AddComponent<KeyConfigButton>(id)->key = key;
 	level.AddComponent<Text>(id)->content = button_text;
