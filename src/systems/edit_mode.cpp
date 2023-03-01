@@ -19,7 +19,6 @@ void EditModeSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
-		level.ClearComponent<Border>();
 		return;
 	}
 

@@ -63,14 +63,14 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 		}
 		assert(at_id >= 0);
 
-		level.ClearComponent<Hovered>();
-		level.AddComponent<Hovered>(at_id);
 		position->position = possible_positions[at_id];
 		position->position.x -= width_and_height->width_and_height.x;
 		if (level.HasComponents<ReceivesButtonEvents>(at_id) && !level.HasComponents<Hovered>(at_id))
 		{
 			level.AddComponents<HoveredStartedThisFrame>(at_id);
 		}
+		level.ClearComponent<Hovered>();
+		level.AddComponent<Hovered>(at_id);
 
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Enter])
 		{

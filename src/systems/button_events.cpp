@@ -67,7 +67,14 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 	{
 		level.AddComponent<PressedThisFrame>(top_intersecting_id);
-		level.AddComponent<Pressed>(top_intersecting_id);
+		if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
+		{
+			level.AddComponent<ReleasedThisFrame>(top_intersecting_id);
+		}
+		else
+		{
+			level.AddComponent<Pressed>(top_intersecting_id);
+		}
 	}
 	if (cursor_and_keys_.cursor_moved_this_frame)
 	{
