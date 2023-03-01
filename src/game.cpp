@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "components/level_menu.hpp"
 #include "userdata_storage.hpp"
 #include <chrono>
 #include <filesystem>
@@ -74,6 +75,10 @@ Game::~Game()
 Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
+	if (!IsMenu(level_id))
+	{
+		LevelMenuUI::last_at_level_id = level_id;
+	}
 	active_level_ = Level();
 	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
 	if (IsMenu(active_level_id_) && !level_id_is_top)

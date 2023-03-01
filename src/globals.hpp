@@ -1,7 +1,7 @@
 #pragma once
 
-#include "controls_config.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
+#include "controls_config.hpp"
 
 struct Globals
 {

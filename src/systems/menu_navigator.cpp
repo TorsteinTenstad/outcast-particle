@@ -41,45 +41,44 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 {
 	for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigator, WidthAndHeight, Position>())
 	{
-		int prev_at_id = menu_navigator->currently_at_entity_id;
-
+		int& at_id = menu_navigator->currently_at_entity_id;
 		std::map<int, sf::Vector2f> possible_positions = GetPossiblePossiblePositions(level);
 
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Down]
-			|| menu_navigator->currently_at_entity_id < 0)
+			|| at_id < 0)
 		{
-			menu_navigator->currently_at_entity_id = SnapToNextBelow(level, menu_navigator, possible_positions);
+			at_id = SnapToNextBelow(level, menu_navigator, possible_positions);
 		}
 		else if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Up])
 		{
-			menu_navigator->currently_at_entity_id = SnapToNextAbove(level, menu_navigator, possible_positions);
+			at_id = SnapToNextAbove(level, menu_navigator, possible_positions);
 		}
 		else
 		{
 			for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigatable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigatable, WidthAndHeight, Position>())
 			{
-				menu_navigator->currently_at_entity_id = hovered_started_this_frame_id;
+				at_id = hovered_started_this_frame_id;
 				break;
 			}
 		}
-		assert(menu_navigator->currently_at_entity_id >= 0);
+		assert(at_id >= 0);
 
 		level.ClearComponent<Hovered>();
-		level.AddComponent<Hovered>(menu_navigator->currently_at_entity_id);
-		position->position = possible_positions[menu_navigator->currently_at_entity_id];
+		level.AddComponent<Hovered>(at_id);
+		position->position = possible_positions[at_id];
 		position->position.x -= width_and_height->width_and_height.x;
-		if (menu_navigator->currently_at_entity_id != prev_at_id)
+		if (level.HasComponents<ReceivesButtonEvents>(at_id) && !level.HasComponents<Hovered>(at_id))
 		{
-			level.AddComponents<HoveredStartedThisFrame>(menu_navigator->currently_at_entity_id);
+			level.AddComponents<HoveredStartedThisFrame>(at_id);
 		}
 
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Enter])
 		{
-			level.AddComponent<PressedThisFrame>(menu_navigator->currently_at_entity_id);
+			level.AddComponent<PressedThisFrame>(at_id);
 		}
 		if (cursor_and_keys_.key_released_this_frame[sf::Keyboard::Enter])
 		{
-			level.AddComponent<ReleasedThisFrame>(menu_navigator->currently_at_entity_id);
+			level.AddComponent<ReleasedThisFrame>(at_id);
 		}
 	}
 }
