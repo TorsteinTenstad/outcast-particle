@@ -4,16 +4,16 @@
 
 void ButtonEventsSystem::Update(Level& level, float dt)
 {
-	level.GetComponent<ReleasedThisFrame>().clear();
-	level.GetComponent<PressedThisFrame>().clear();
-	level.GetComponent<HoveredStartedThisFrame>().clear();
+	level.ClearComponent<ReleasedThisFrame>();
+	level.ClearComponent<PressedThisFrame>();
+	level.ClearComponent<HoveredStartedThisFrame>();
 	if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
 	{
 		for (auto& [entity_id, pressed] : level.GetEntitiesWith<Pressed>())
 		{
-			level.GetComponent<ReleasedThisFrame>()[entity_id];
+			level.AddComponent<ReleasedThisFrame>(entity_id);
 		}
-		level.GetComponent<Pressed>().clear();
+		level.ClearComponent<Pressed>();
 	}
 
 	for (auto [entity_id, shortcut_key] : level.GetEntitiesWith<ShortcutKey>())
@@ -59,15 +59,22 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 		{
 			return;
 		}
-		level.GetComponent<Hovered>().clear();
+		level.ClearComponent<Hovered>();
 		return;
 	}
 	int top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
 
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 	{
-		level.GetComponent<PressedThisFrame>()[top_intersecting_id];
-		level.GetComponent<Pressed>()[top_intersecting_id];
+		level.AddComponent<PressedThisFrame>(top_intersecting_id);
+		if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
+		{
+			level.AddComponent<ReleasedThisFrame>(top_intersecting_id);
+		}
+		else
+		{
+			level.AddComponent<Pressed>(top_intersecting_id);
+		}
 	}
 	if (cursor_and_keys_.cursor_moved_this_frame)
 	{
@@ -75,7 +82,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 		if (!hovered_last_frame)
 		{
 			level.AddComponents<HoveredStartedThisFrame>(top_intersecting_id);
-			level.GetComponent<Hovered>().clear();
+			level.ClearComponent<Hovered>();
 			level.AddComponents<Hovered>(top_intersecting_id);
 		}
 	}

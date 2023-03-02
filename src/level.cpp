@@ -37,10 +37,9 @@ void Level::DeleteEntity(std::optional<int> id)
 
 void Level::DeleteEntity(int id)
 {
-	auto& children_map = GetComponent<Children>();
-	if (children_map.count(id) > 0)
+	if (HasComponents<Children>(id))
 	{
-		for (auto& [component_type_id, child_ids] : children_map[id].ids_owned_by_component)
+		for (auto& [component_type_id, child_ids] : GetComponent<Children>(id)->ids_owned_by_component)
 		{
 			for (auto& child_id : child_ids)
 			{
@@ -148,9 +147,9 @@ void Level::SaveToFile()
 int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
 {
 	int id = level.AddBlueprint("BPMenuNavigationButton");
-	level.GetComponent<Position>()[id] = { sf::Vector2f(pos_x, pos_y) };
-	level.GetComponent<OnReleasedThisFrame>()[id].func = on_click;
-	level.GetComponent<Text>()[id].content = button_text;
+	level.GetComponent<Position>(id)->position = sf::Vector2f(pos_x, pos_y);
+	level.GetComponent<OnReleasedThisFrame>(id)->func = on_click;
+	level.GetComponent<Text>(id)->content = button_text;
 	return id;
 }
 std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys, float x_scale, float y_scale, UiOrigin ui_origin)
@@ -167,17 +166,17 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 	{
 		int id = level.AddBlueprint("BPMenuNavigationButton");
 		ids.push_back(id);
-		level.GetComponent<WidthAndHeight>()[id].width_and_height.x *= x_scale;
-		float& h = level.GetComponent<WidthAndHeight>()[id].width_and_height.y;
+		level.GetComponent<WidthAndHeight>(id)->width_and_height.x *= x_scale;
+		float& h = level.GetComponent<WidthAndHeight>(id)->width_and_height.y;
 		h *= y_scale;
-		level.GetComponent<OnReleasedThisFrame>()[id].func = button_functions[i];
-		level.GetComponent<Text>()[id].content = button_texts[i];
+		level.GetComponent<OnReleasedThisFrame>(id)->func = button_functions[i];
+		level.GetComponent<Text>(id)->content = button_texts[i];
 		if (shortcut_keys.size() != 0)
 		{
 			assert(shortcut_keys.size() == n);
-			level.GetComponent<ShortcutKey>()[id].key = shortcut_keys[i];
+			level.AddComponent<ShortcutKey>(id)->key = shortcut_keys[i];
 		}
-		level.GetComponent<Text>()[id].size *= y_scale;
+		level.GetComponent<Text>(id)->size *= y_scale;
 
 		float x = 0;
 		float spacing = h * 0.5;
@@ -196,10 +195,10 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 			default:
 				assert(false);
 		}
-		level.GetComponent<Position>()[id].position = position + sf::Vector2f(x, y);
+		level.GetComponent<Position>(id)->position = position + sf::Vector2f(x, y);
 	}
 
-	level.GetComponent<WidthAndHeight>()[navigator_id].width_and_height *= y_scale;
+	level.GetComponent<WidthAndHeight>(navigator_id)->width_and_height *= y_scale;
 	return ids;
 }
 
@@ -207,6 +206,7 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 {
 
 	int id = level.AddBlueprint("BPButton");
+	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	level.AddComponent<Position>(id)->position = { sf::Vector2f(pos_x, pos_y) };
 	level.AddComponent<KeyConfigButton>(id)->key = key;
 	level.AddComponent<Text>(id)->content = button_text;
@@ -226,10 +226,10 @@ int AddScrollingText(Level& level, float pos_x, float pos_y, std::string text)
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority)
 {
 	int id = level.CreateEntityId();
-	level.GetComponent<Position>()[id].position = level.GetSize() / 2.f;
-	level.GetComponent<WidthAndHeight>()[id].width_and_height = level.GetSize();
-	level.GetComponent<DrawPriority>()[id].draw_priority = draw_priority;
-	level.GetComponent<DrawInfo>()[id].image_path = "content\\textures\\transparent.png";
-	level.GetComponent<Shader>()[id].fragment_shader_path = shader_path;
+	level.AddComponent<Position>(id)->position = level.GetSize() / 2.f;
+	level.AddComponent<WidthAndHeight>(id)->width_and_height = level.GetSize();
+	level.AddComponent<DrawPriority>(id)->draw_priority = draw_priority;
+	level.AddComponent<DrawInfo>(id)->image_path = "content\\textures\\transparent.png";
+	level.AddComponent<Shader>(id)->fragment_shader_path = shader_path;
 	return id;
 }

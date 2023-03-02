@@ -9,10 +9,10 @@ void CollisionSystem::Update(Level& level, float dt)
 	{
 		return;
 	}
-	auto& collision_map = level.GetComponent<Collision>();
-	auto& width_and_height_map = level.GetComponent<WidthAndHeight>();
-	auto& sound_info_map = level.GetComponent<SoundInfo>();
-	auto& position_map = level.GetComponent<Position>();
+	auto& collision_map = level.GetComponentMap<Collision>();
+	auto& width_and_height_map = level.GetComponentMap<WidthAndHeight>();
+	auto& sound_info_map = level.GetComponentMap<SoundInfo>();
+	auto& position_map = level.GetComponentMap<Position>();
 
 	for (auto& [entity_id, intersection, collision, velocity, position, radius] : level.GetEntitiesWith<Intersection, Collision, Velocity, Position, Radius>())
 	{

@@ -23,7 +23,7 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 		auto switch_key = player_i == 1 ? sf::Keyboard::C : globals.key_config.PLAYER_SWITCH_CHARGE;
 		auto neutral_key = player_i == 1 ? sf::Keyboard::V : globals.key_config.PLAYER_GO_NEUTRAL;
 
-		if (cursor_and_keys.key_pressed_this_frame[neutral_key] && player->can_go_neutral)
+		if (!player_behaviours->is_neutral && cursor_and_keys.key_pressed_this_frame[neutral_key] && player->can_go_neutral)
 		{
 			player_behaviours->default_charge = charge->charge;
 			player_behaviours->is_neutral = true;

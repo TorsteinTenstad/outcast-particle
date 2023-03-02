@@ -134,10 +134,10 @@ public:
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
 	template <class Component>
-	std::map<int, Component>& GetComponent();
+	std::map<int, Component>& GetComponentMap();
 
-	template <class Component>
-	std::map<int, Component>* GetComponentMap();
+	friend class CollisionSystem; // System is written using the old GetComponent. Gets access to the new, private version until the system is rewritten.
+	friend class EditModeSystem;  // System is written using the old GetComponent. Gets access to the new, private version until the system is rewritten.
 
 	int CreateEntityId();
 
@@ -151,6 +151,9 @@ public:
 
 	template <class Component>
 	Component* AddComponent(int entity_id);
+
+	template <class Component>
+	Component* AddComponent(int entity_id, Component&& value);
 
 	template <class... Component>
 	std::tuple<Component*...> AddComponents(int entity_id);
@@ -223,6 +226,9 @@ std::tuple<int, Component*> GetSingletonIncludeID(Level& level);
 
 template <class Component>
 Component* GetSingleton(Level& level);
+
+template <class ResponsibleComponent>
+int EnsureExistanceOfChildEntity(Children* parents_children, std::function<int(void)> child_creation_func);
 
 template <class ResponsibleComponent>
 Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority);

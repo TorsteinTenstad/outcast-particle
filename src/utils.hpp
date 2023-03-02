@@ -2,6 +2,7 @@
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Keyboard.hpp"
 #include <array>
+#include <iterator>
 #include <map>
 #include <string>
 #include <vector>
@@ -36,28 +37,28 @@ std::string HumanName(sf::Keyboard::Key key);
 std::string OptionsDescriptionTextSetter(std::string options_description);
 
 template <class K, class V>
-K NextKey(const std::map<K, V>& m, K key)
+typename std::map<K, V>::const_iterator NextInMap(const std::map<K, V>& m, K key)
 {
 	assert(m.count(key) == 1);
 	auto it = m.find(key);
 	++it;
 	if (it == m.end())
 	{
-		return key;
+		return --it;
 	}
-	return it->first;
+	return it;
 }
 template <class K, class V>
-K PrevKey(const std::map<K, V>& m, K key)
+typename std::map<K, V>::const_iterator PrevInMap(const std::map<K, V>& m, K key)
 {
 	assert(m.count(key) == 1);
 	auto it = m.find(key);
 	if (it == m.begin())
 	{
-		return key;
+		return it;
 	}
 	--it;
-	return it->first;
+	return it;
 }
 
 template <class T>

@@ -1,8 +1,10 @@
 #include "game.hpp"
+#include "components/level_menu.hpp"
 #include "userdata_storage.hpp"
 #include <chrono>
 #include <filesystem>
 #include <functional>
+#include <iostream>
 #include <string>
 #include <thread>
 
@@ -10,15 +12,15 @@ Game::Game()
 {
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
-	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-	RegisterGameSystem<ScrollSystem>(); // Has timing interactions with LevelMenuSystem
+	RegisterGameSystem<ButtonSystem>();
+	RegisterGameSystem<ScrollSystem>(); // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
 	RegisterGameSystem<ButtonEventsSystem>();
 	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly below ButtonEventsSystem for Hovered component to work correctly
 	RegisterGameSystem<StickyButtonSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
-	RegisterGameSystem<BackgroundSystem>();
+	RegisterGameSystem<BackgroundSystem>(); // Must
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<FaceSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
@@ -27,9 +29,9 @@ Game::Game()
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
 	RegisterGameSystem<SegmentedGlowEffectSystem>();
+	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
-	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_);
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this));
 	RegisterGameSystem<ScheduledDeleteSystem>();
@@ -73,6 +75,10 @@ Game::~Game()
 Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
+	if (!IsMenu(level_id))
+	{
+		LevelMenuUI::last_at_level_id = level_id;
+	}
 	active_level_ = Level();
 	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
 	if (IsMenu(active_level_id_) && !level_id_is_top)
@@ -113,10 +119,15 @@ Level& Game::SetLevel(std::string level_id)
 
 void Game::Update(float dt)
 {
+	if (dt > 1.f / 30)
+	{
+		std::cout << "Lag spike detected, overriding dt\n";
+		dt = 1.f / 30;
+	}
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
 	{
-		game_systems_[system_id]->Update(active_level_, dt);
+		game_systems_.at(system_id)->Update(active_level_, dt);
 		if (restart_update_loop_)
 		{
 			restart_update_loop_ = false;

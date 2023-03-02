@@ -24,9 +24,9 @@ public:
 class MouseInteractionDependentFillColor
 {
 public:
-	sf::Color hovered_color = sf::Color::White;
-	sf::Color pressed_color = sf::Color::White;
-	sf::Color default_color = sf::Color::White;
+	sf::Color hovered_color = sf::Color(200, 200, 200);
+	sf::Color pressed_color = sf::Color(120, 120, 120);
+	sf::Color default_color = sf::Color(150, 150, 150);
 };
 
 class ChargeDependentDrawInfo

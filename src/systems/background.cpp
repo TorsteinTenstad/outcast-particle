@@ -2,14 +2,14 @@
 
 void BackgroundSystem::Update(Level& level, float dt)
 {
-	auto entities = level.GetEntitiesWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
-	assert(!(entities.size() > 1));
-	if (entities.size() == 0)
+	auto entity = level.GetEntitiesWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
+	assert(!(entity.size() > 1));
+	if (entity.size() == 0)
 	{
-		auto entity = level.CreateEntitiyWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
-		level.GetComponent<DrawPriority>(std::get<int>(entity))->draw_priority = BACKGROUND_DRAW_PRIORITY;
+		entity.push_back(level.CreateEntitiyWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>());
+		level.GetComponent<DrawPriority>(std::get<int>(entity[0]))->draw_priority = BACKGROUND_DRAW_PRIORITY;
 	}
-	for (auto [entity_id, background, draw_info, draw_priority, width_and_height, position] : entities)
+	for (auto [entity_id, background, draw_info, draw_priority, width_and_height, position] : entity)
 	{
 		auto level_size = level.GetSize();
 		width_and_height->width_and_height = level_size;

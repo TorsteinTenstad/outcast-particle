@@ -12,7 +12,7 @@ class BPButton
 	DrawPriority draw_priority = { 100 };
 	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };
 	FillColor fill_color = {};
-	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = { sf::Color(200, 200, 200), sf::Color(120, 120, 120), sf::Color(150, 150, 150) };
+	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = {};
 	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
 	Text text = {};
 	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
@@ -127,6 +127,7 @@ class BPCoin : public BPEditableEntity
 	Editable editable = { 120 };
 	Coin coin = {};
 	SegmentedGlowEffect segmented_glow_effect = {};
+	Children children = {};
 	Radius radius = { 60 };
 	SoundInfo sound_info = { "content\\sounds\\coin.wav" };
 };
@@ -165,8 +166,9 @@ class BPGoal : public BPEditableEntity
 
 class BPElectricField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\electric_field.png", false, 0 };
+	DrawInfo draw_info = { "", false, 0 };
 	DrawPriority draw_priority = { 1 };
+	Shader shader = { "", "shaders\\electric_field.frag", {}, {}, {} };
 
 	// [Serialize]
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
@@ -177,8 +179,9 @@ class BPElectricField : public BPEditableEntity
 
 class BPMagneticField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\magnetic_field.png", false, 0 };
+	DrawInfo draw_info = { "", false, 0 };
 	DrawPriority draw_priority = { 1 };
+	Shader shader = { "", "shaders\\magnetic_field.frag", {}, {}, {} };
 
 	// [Serialize]
 	MagneticField magnetic_field = { 0.1 };

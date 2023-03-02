@@ -4,7 +4,6 @@ uniform sampler2D _texture;
 uniform vec2 _wh;
 uniform float grid_width;
 uniform float grid_height;
-uniform float grid_size;
 
 bool IsWallAt(vec2 gc_id){
     if (gc_id.x < 0 || gc_id.y < 0 || gc_id.x>=grid_width || gc_id.y>=grid_height){
@@ -61,6 +60,6 @@ void main()
     }
 
     float val = smoothstep(0.1, 0.5, dist_from_edge/FAR_AWAY);
-    gl_FragColor.rgb = mix(ColorOf(GAt(g_id)), vec3(0.1), val);
+    gl_FragColor.rgb = mix(ColorOf(GAt(g_id)), vec3(0.15), val);
     gl_FragColor.a = IsWallAt(g_id) ? 1 : 0;
 }

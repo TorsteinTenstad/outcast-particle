@@ -5,41 +5,41 @@
 
 void FaceSystem::Update(Level& level, float dt)
 {
-	auto& children_map = level.GetComponent<Children>();
-	auto& draw_info_map = level.GetComponent<DrawInfo>();
-	auto& draw_priority_map = level.GetComponent<DrawPriority>();
-	auto& position_map = level.GetComponent<Position>();
-	auto& radius_map = level.GetComponent<Radius>();
-
-	for (auto& [entity_id, face, draw_info, draw_priority, radius, velocity, position] : level.GetEntitiesWith<Face, DrawInfo, DrawPriority, Radius, Velocity, Position>())
+	for (auto& [entity_id, face, children, draw_info, draw_priority, radius, position] : level.GetEntitiesWith<Face, Children, DrawInfo, DrawPriority, Radius, Position>())
 	{
-		std::vector<int>& children = children_map[entity_id].ids_owned_by_component[typeid(Face)];
 
-		if (children.size() == 0)
+		std::function<int(void)> create_face = [&, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
+			int face_id = level.CreateEntityId();
+			level.AddComponent<DrawInfo>(face_id);
+			level.AddComponent<DrawPriority>(face_id)->draw_priority = draw_priority->draw_priority;
+			level.AddComponent<Radius>(face_id)->radius = radius->radius;
+			level.AddComponent<Position>(face_id)->position = position->position;
+			return face_id;
+		};
+
+		int child_id = EnsureExistanceOfChildEntity<Face>(children, create_face);
+		level.GetComponent<DrawInfo>(child_id)->image_path = face->image_path;
+		if (!level.HasComponents<Velocity>(entity_id))
 		{
-			int id = level.CreateEntityId();
-			draw_info_map[id] = *draw_info;
-			position_map[id] = *position;
-			draw_priority_map[id] = *draw_priority;
-			radius_map[id] = *radius;
+			continue;
+		}
+		sf::Vector2f& pos = position->position;
+		sf::Vector2f& vel = level.GetComponent<Velocity>(entity_id)->velocity;
+		sf::Vector2f& child_pos = level.GetComponent<Position>(child_id)->position;
 
-			draw_priority_map[id].draw_priority++;
-
-			children.push_back(id);
+		if (level.GetMode() == PLAY_MODE)
+		{
+			child_pos += vel * dt;
 		}
 
-		int child_id = children[0];
-
-		position_map[child_id].position += velocity->velocity * dt;
-		sf::Vector2f offset = position_map[child_id].position - position->position;
+		sf::Vector2f offset = child_pos - pos;
 		sf::Vector2f target_offset = sf::Vector2f(0, 0);
-		if (Magnitude(velocity->velocity) > MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT)
+		if (Magnitude(vel) > MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT)
 		{
-			target_offset = 20.f * Normalized(velocity->velocity);
+			target_offset = 20.f * Normalized(vel);
 		}
 		float snap = 0.01f * dt * 600;
 		sf::Vector2f next_offset = (1 - snap) * offset + snap * target_offset;
-		position_map[child_id].position = position->position + next_offset;
-		draw_info_map[child_id].image_path = face->image_path;
+		child_pos = pos + next_offset;
 	}
 }
