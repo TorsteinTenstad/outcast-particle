@@ -1,6 +1,7 @@
 #pragma once
 #include "controls_config.hpp"
 #include "cursor_and_keys.hpp"
+#include "general_user_config.hpp"
 #include "level.hpp"
 
 #include "sfml_event_handler.hpp"
@@ -23,7 +24,6 @@ class Game
 {
 private:
 	int physics_ticks_per_frame_ = 10;
-	bool fullscreen_ = false;
 
 	bool restart_update_loop_ = false;
 	bool is_in_level_editing_ = false;
@@ -61,12 +61,14 @@ private:
 	void ButtonFuncEditLevel();
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
 	void ToggleFullscreen();
+	void LimitFrameRate();
 	void ExitGame();
 
 	void GoToMainMenu();
 	void GoToLevelMenu();
 	void GoToOptionsMenu();
 	void GoToKeyConfigMenu();
+	void GoToGraphicsAndDisplayMenu();
 	void GoToLastMenu();
 
 public:

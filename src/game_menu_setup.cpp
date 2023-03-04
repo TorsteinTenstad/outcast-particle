@@ -49,17 +49,10 @@ void Game::GoToOptionsMenu()
 	sf::Vector2f level_size = active_level_.GetSize();
 
 	float x_center_offset = -8 * BLOCK_SIZE;
-	float y_offset = level_size.y - 8 * BLOCK_SIZE;
+	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
-	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU) };
-	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display" };
-	/*auto button_positions = GridHelper(text.size(), 2, 2 * BLOCK_SIZE, 2 * BLOCK_SIZE);
-	for (unsigned i = 0; i < text.size(); ++i)
-	{
-		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
-		button_position.x += x_center_offset;
-		AddMenuButton(active_level_, functions[i], button_position.x, button_position.y, text[i]);
-	}*/
+	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, GRAPHICS_AND_DISPLAY_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU) };
+	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display & Graphics", "Main Menu" };
 	AddButtonList(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), functions, text);
 
 	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
@@ -68,14 +61,9 @@ void Game::GoToOptionsMenu()
 	title_position->position.x = level_size.x / 2.f + x_center_offset;
 	title_position->position.y = 2 * BLOCK_SIZE;
 
-	int menu_button_position_x = level_size.x / 2.f + x_center_offset;
-	int menu_button_position_y = level_size.y - 2 * BLOCK_SIZE;
-	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, MAIN_MENU), menu_button_position_x, menu_button_position_y, "Main Menu");
-
 	int entity_position_x = level_size.x - 8 * BLOCK_SIZE;
 
 	int player_id = active_level_.AddBlueprint("BPPlayer");
-	//active_level_.AddComponent<Position>(player_id)->position = sf::Vector2f(button_positions[1].x + level_size.x / 2.f + x_center_offset, button_positions[1].y + level_size.y / 2.f);
 	active_level_.AddComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
 	active_level_.AddComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
 
@@ -101,7 +89,6 @@ void Game::GoToKeyConfigMenu()
 	width_and_height->width_and_height = level_size;
 	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
 	position->position = level_size / 2.f;
-	//position->position.y -= 1 * BLOCK_SIZE;
 
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.MENU };
 	std::vector<std::string> button_description = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
@@ -128,5 +115,31 @@ void Game::GoToKeyConfigMenu()
 	title_text->size = 150;
 	title_text->content = "Key Config";
 	title_position->position.x = level_size.x / 2.f;
+	title_position->position.y = 2 * BLOCK_SIZE;
+}
+
+void Game::GoToGraphicsAndDisplayMenu()
+{
+	active_level_id_ = GRAPHICS_AND_DISPLAY_MENU;
+	active_level_.ResetSize();
+	sf::Vector2f level_size = active_level_.GetSize();
+
+	/*auto [scroll_window_entity_id, scroll_window, width_and_height, position] = active_level_.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+	scroll_window->entity_height = 2 * BLOCK_SIZE;
+	width_and_height->width_and_height = level_size;
+	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
+	position->position = level_size / 2.f;*/
+
+	float x_center_offset = 0 * BLOCK_SIZE;
+	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
+
+	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, GRAPHICS_AND_DISPLAY_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU) };
+	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display & Graphics", "Main Menu" };
+	AddButtonList(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), functions, text);
+
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
+	title_text->size = 150;
+	title_text->content = "Graphics and Display";
+	title_position->position.x = level_size.x / 2.f + x_center_offset;
 	title_position->position.y = 2 * BLOCK_SIZE;
 }
