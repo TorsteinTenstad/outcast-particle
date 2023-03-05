@@ -16,9 +16,10 @@ void SerializeComponent(const GeneralConfig* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(GeneralConfig* c, const std::string& str_rep)
+void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "GeneralConfig{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -27,11 +28,12 @@ void DeserializeComponent(GeneralConfig* c, const std::string& str_rep)
         {
             FromString(c->fullscreen, statement_parts[1]);
         }
-
-        if (statement_parts[0] == "limit_fps_to_60")
+        else if (statement_parts[0] == "limit_fps_to_60")
         {
             FromString(c->limit_fps_to_60, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }

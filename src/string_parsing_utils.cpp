@@ -7,8 +7,16 @@
 std::string GetSubstrBetween(std::string s, std::string prefix, std::string postfix)
 {
 	auto prefix_idx = s.find(prefix);
+	if (prefix_idx == std::string::npos)
+	{
+		return "";
+	}
 	s = s.substr(prefix_idx + prefix.length());
 	auto postfix_idx = s.find(postfix);
+	if (postfix_idx == std::string::npos)
+	{
+		return "";
+	}
 	s = s.substr(0, postfix_idx);
 	return s;
 }

@@ -46,21 +46,26 @@ void SerializeComponent(const {component}* c, std::string& str_rep)
         cpp += "}\n"
 
         cpp += f"""
-void DeserializeComponent({component}* c, const std::string& str_rep)
+void DeserializeComponent({component}* c, const std::string& entity_str_rep)
 {{
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "{component}{{", "}}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {{
         std::vector<std::string> statement_parts = SplitString(variable, "=");
 """
-        for attribute in attributes:
+        for i, attribute in enumerate(attributes):
             cpp += f"""
-        if (statement_parts[0] == "{attribute}")
+        {"else " if i else ""}if (statement_parts[0] == "{attribute}")
         {{
             FromString(c->{attribute}, statement_parts[1]);
+        }}"""
+        cpp += """
+        else {{
+            assert(false);
         }}
-"""
-        cpp += "\t}\n}\n"
+        }
+    }"""
 
     return cpp + "\n"
 
@@ -144,8 +149,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
         for component in blueprint.get("explicit", []):
             body += f"""
-            DeserializeComponent(AddComponent<{component}>(entity_id),
-                GetSubstrBetween(line, "{component}{{", "}}"));"""
+            DeserializeComponent(AddComponent<{component}>(entity_id),line);"""
         body += """
         }
         """

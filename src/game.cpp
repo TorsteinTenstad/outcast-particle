@@ -63,8 +63,8 @@ Game::Game()
 	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
 	LoadOptionsFromFile("user\\controls_config.txt", "user\\general_config.txt");
 
-	CheckFramerateLimit();
 	CheckFullscreen();
+	CheckFramerateLimit();
 
 	GoToMainMenu();
 }
@@ -186,6 +186,7 @@ void Game::CheckFullscreen()
 	{
 		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
 	}
+	CheckFramerateLimit();
 }
 
 void Game::ToggleFullscreen()

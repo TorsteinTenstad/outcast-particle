@@ -22,9 +22,10 @@ void SerializeComponent(const Tag* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(Tag* c, const std::string& str_rep)
+void DeserializeComponent(Tag* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Tag{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -33,9 +34,11 @@ void DeserializeComponent(Tag* c, const std::string& str_rep)
         {
             FromString(c->tag, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const Position* c, std::string& str_rep)
 {
 	str_rep += "Position{";
@@ -44,9 +47,10 @@ void SerializeComponent(const Position* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(Position* c, const std::string& str_rep)
+void DeserializeComponent(Position* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Position{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -55,9 +59,11 @@ void DeserializeComponent(Position* c, const std::string& str_rep)
         {
             FromString(c->position, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const Charge* c, std::string& str_rep)
 {
 	str_rep += "Charge{";
@@ -66,9 +72,10 @@ void SerializeComponent(const Charge* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(Charge* c, const std::string& str_rep)
+void DeserializeComponent(Charge* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Charge{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -77,9 +84,11 @@ void DeserializeComponent(Charge* c, const std::string& str_rep)
         {
             FromString(c->charge, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const Velocity* c, std::string& str_rep)
 {
 	str_rep += "Velocity{";
@@ -88,9 +97,10 @@ void SerializeComponent(const Velocity* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(Velocity* c, const std::string& str_rep)
+void DeserializeComponent(Velocity* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Velocity{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -99,9 +109,11 @@ void DeserializeComponent(Velocity* c, const std::string& str_rep)
         {
             FromString(c->velocity, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const WidthAndHeight* c, std::string& str_rep)
 {
 	str_rep += "WidthAndHeight{";
@@ -110,9 +122,10 @@ void SerializeComponent(const WidthAndHeight* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(WidthAndHeight* c, const std::string& str_rep)
+void DeserializeComponent(WidthAndHeight* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "WidthAndHeight{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -121,9 +134,11 @@ void DeserializeComponent(WidthAndHeight* c, const std::string& str_rep)
         {
             FromString(c->width_and_height, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const Player* c, std::string& str_rep)
 {
 	str_rep += "Player{";
@@ -138,9 +153,10 @@ void SerializeComponent(const Player* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(Player* c, const std::string& str_rep)
+void DeserializeComponent(Player* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Player{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -149,19 +165,19 @@ void DeserializeComponent(Player* c, const std::string& str_rep)
         {
             FromString(c->can_switch_charge, statement_parts[1]);
         }
-
-        if (statement_parts[0] == "can_go_neutral")
+        else if (statement_parts[0] == "can_go_neutral")
         {
             FromString(c->can_go_neutral, statement_parts[1]);
         }
-
-        if (statement_parts[0] == "move_force")
+        else if (statement_parts[0] == "move_force")
         {
             FromString(c->move_force, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const ElectricField* c, std::string& str_rep)
 {
 	str_rep += "ElectricField{";
@@ -170,9 +186,10 @@ void SerializeComponent(const ElectricField* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(ElectricField* c, const std::string& str_rep)
+void DeserializeComponent(ElectricField* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "ElectricField{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -181,9 +198,11 @@ void DeserializeComponent(ElectricField* c, const std::string& str_rep)
         {
             FromString(c->field_vector, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const MagneticField* c, std::string& str_rep)
 {
 	str_rep += "MagneticField{";
@@ -192,9 +211,10 @@ void SerializeComponent(const MagneticField* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(MagneticField* c, const std::string& str_rep)
+void DeserializeComponent(MagneticField* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "MagneticField{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -203,9 +223,11 @@ void DeserializeComponent(MagneticField* c, const std::string& str_rep)
         {
             FromString(c->field_strength, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 void SerializeComponent(const TextPopupSpawner* c, std::string& str_rep)
 {
 	str_rep += "TextPopupSpawner{";
@@ -214,9 +236,10 @@ void SerializeComponent(const TextPopupSpawner* c, std::string& str_rep)
 	str_rep += "}";
 }
 
-void DeserializeComponent(TextPopupSpawner* c, const std::string& str_rep)
+void DeserializeComponent(TextPopupSpawner* c, const std::string& entity_str_rep)
 {
-    std::vector<std::string> variables = SplitString(str_rep, ";");
+    std::string component_str = GetSubstrBetween(entity_str_rep, "TextPopupSpawner{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
@@ -225,9 +248,11 @@ void DeserializeComponent(TextPopupSpawner* c, const std::string& str_rep)
         {
             FromString(c->content, statement_parts[1]);
         }
-	}
-}
-
+        else {{
+            assert(false);
+        }}
+        }
+    }
 
 void Level::SaveToFile(std::string savefile_path)
 {
@@ -407,8 +432,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, { "_", false, 0 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             AddComponent<Position>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPButton")
@@ -422,8 +446,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Text>(entity_id, {});
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
             AddComponent<Position>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPMenuNavigationButton")
@@ -439,8 +462,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Position>(entity_id, {});
             AddComponent<OnReleasedThisFrame>(entity_id, {});
             AddComponent<MenuNavigatable>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPMenuNavigator")
@@ -451,18 +473,15 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 101 });
             AddComponent<MenuNavigator>(entity_id, {});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPEditableEntity")
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
         }
         
         if (tag == "BPStaticParticle")
@@ -474,12 +493,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 6 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
             AddComponent<Radius>(entity_id, { 120 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<Charge>(entity_id),
-                GetSubstrBetween(line, "Charge{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<Charge>(entity_id),line);
         }
         
         if (tag == "BPMovingParticle")
@@ -496,14 +512,10 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Intersection>(entity_id, {});
             AddComponent<Collision>(entity_id, {});
             AddComponent<Trail>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<Charge>(entity_id),
-                GetSubstrBetween(line, "Charge{", "}"));
-            DeserializeComponent(AddComponent<Velocity>(entity_id),
-                GetSubstrBetween(line, "Velocity{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<Charge>(entity_id),line);
+            DeserializeComponent(AddComponent<Velocity>(entity_id),line);
         }
         
         if (tag == "BPBlackHole")
@@ -513,12 +525,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\black_hole.frag", {}, {}, {} });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPPlayer")
@@ -539,16 +548,11 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Face>(entity_id, {});
             AddComponent<ForceVisualization>(entity_id, {});
             AddComponent<PlayerBehaviors>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<Charge>(entity_id),
-                GetSubstrBetween(line, "Charge{", "}"));
-            DeserializeComponent(AddComponent<Velocity>(entity_id),
-                GetSubstrBetween(line, "Velocity{", "}"));
-            DeserializeComponent(AddComponent<Player>(entity_id),
-                GetSubstrBetween(line, "Player{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<Charge>(entity_id),line);
+            DeserializeComponent(AddComponent<Velocity>(entity_id),line);
+            DeserializeComponent(AddComponent<Player>(entity_id),line);
         }
         
         if (tag == "BPLaser")
@@ -560,12 +564,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<OrientationDependentDrawInfo>(entity_id, {});
             AddComponent<KillOnIntersection>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\laser.wav" });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPCoin")
@@ -579,10 +580,8 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Children>(entity_id, {});
             AddComponent<Radius>(entity_id, { 60 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\coin.wav" });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
         }
         
         if (tag == "BPWall")
@@ -593,12 +592,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 0.2, 75 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPBounceWall")
@@ -609,12 +605,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 1, 75 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPNoBounceWall")
@@ -625,12 +618,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 0.05, 75 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPGoal")
@@ -641,12 +631,9 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPElectricField")
@@ -656,14 +643,10 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, { "", false, 0 });
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<ElectricField>(entity_id),
-                GetSubstrBetween(line, "ElectricField{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<ElectricField>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPMagneticField")
@@ -673,14 +656,10 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, { "", false, 0 });
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<MagneticField>(entity_id),
-                GetSubstrBetween(line, "MagneticField{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<MagneticField>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPTextPopupSpawner")
@@ -689,14 +668,10 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity_id, {});
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
             AddComponent<DrawPriority>(entity_id, { 2 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
-            DeserializeComponent(AddComponent<Position>(entity_id),
-                GetSubstrBetween(line, "Position{", "}"));
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),
-                GetSubstrBetween(line, "WidthAndHeight{", "}"));
-            DeserializeComponent(AddComponent<TextPopupSpawner>(entity_id),
-                GetSubstrBetween(line, "TextPopupSpawner{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
+            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
+            DeserializeComponent(AddComponent<TextPopupSpawner>(entity_id),line);
         }
         
         if (tag == "BPText")
@@ -705,8 +680,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 101 });
             AddComponent<Shader>(entity_id, { "", "shaders\\scroll.frag", {}, {}, {} });
             AddComponent<Position>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),
-                GetSubstrBetween(line, "Tag{", "}"));
+            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
     }
