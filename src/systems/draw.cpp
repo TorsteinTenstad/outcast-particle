@@ -81,6 +81,10 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 	{
 		shaders_[shader_id].setUniform(name, value);
 	}
+	for (const auto& [name, value] : shader->vec4_uniforms)
+	{
+		shaders_[shader_id].setUniform(name, value);
+	}
 	// Redirect to nothing
 	std::streambuf* previous = sf::err().rdbuf(NULL);
 	shaders_[shader_id].setUniform("_time", globals.time);
@@ -92,6 +96,10 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 	if (level.HasComponents<WidthAndHeight>(entity_id))
 	{
 		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>(entity_id)->width_and_height);
+	}
+	if (level.HasComponents<Radius>(entity_id))
+	{
+		shaders_[shader_id].setUniform("_wh", sf::Vector2f(2, 2) * level.GetComponent<Radius>(entity_id)->radius);
 	}
 	// Restore the original output
 	sf::err().rdbuf(previous);

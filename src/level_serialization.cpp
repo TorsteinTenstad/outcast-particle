@@ -470,6 +470,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
             AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 6 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
             AddComponent<Radius>(entity_id, { 120 });
@@ -486,6 +487,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
             AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 7 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
             AddComponent<Radius>(entity_id, { 120 });
@@ -766,6 +768,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
             AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 6 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
             AddComponent<Radius>(entity_id, { 120 });
@@ -777,6 +780,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
             AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 7 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
             AddComponent<Radius>(entity_id, { 120 });
