@@ -1,4 +1,5 @@
 #pragma once
+#include "blueprint.hpp"
 #include "components/animated_position.hpp"
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
@@ -125,11 +126,12 @@ private:
 
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
+	int grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
 
 public:
 	bool editable = false;
 	std::string name = "Untitled";
-	int grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
+	sf::Vector2f ui_bars_size = sf::Vector2f(0, 0);
 
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
@@ -184,13 +186,13 @@ public:
 	template <class Component>
 	void ClearComponent();
 
-	int AddBlueprint(std::string tag);
+	int AddBlueprint(Blueprint blueprint);
 
 	template <class... Component>
-	std::tuple<int, Component*...> AddBlueprintGetComponents(std::string tag);
+	std::tuple<int, Component*...> AddBlueprintGetComponents(Blueprint blueprint);
 
 	template <class... Component>
-	std::tuple<int, Component*...> AddBlueprintAddComponents(std::string tag);
+	std::tuple<int, Component*...> AddBlueprintAddComponents(Blueprint blueprint);
 
 	int CopyEntity(int from_id);
 	void DeleteEntity(int id);

@@ -146,7 +146,7 @@ void Level::SaveToFile()
 
 int AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
 {
-	int id = level.AddBlueprint("BPMenuNavigationButton");
+	int id = level.AddBlueprint(BPMenuNavigationButton);
 	level.GetComponent<Position>(id)->position = sf::Vector2f(pos_x, pos_y);
 	level.GetComponent<OnReleasedThisFrame>(id)->func = on_click;
 	level.GetComponent<Text>(id)->content = button_text;
@@ -159,12 +159,12 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 
 	std::vector<int> ids = {};
 
-	int navigator_id = level.AddBlueprint("BPMenuNavigator");
+	int navigator_id = level.AddBlueprint(BPMenuNavigator);
 	ids.push_back(navigator_id);
 
 	for (unsigned i = 0; i < n; ++i)
 	{
-		int id = level.AddBlueprint("BPMenuNavigationButton");
+		int id = level.AddBlueprint(BPMenuNavigationButton);
 		ids.push_back(id);
 		level.GetComponent<WidthAndHeight>(id)->width_and_height.x *= x_scale;
 		float& h = level.GetComponent<WidthAndHeight>(id)->width_and_height.y;
@@ -205,7 +205,7 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, std::string button_text)
 {
 
-	int id = level.AddBlueprint("BPButton");
+	int id = level.AddBlueprint(BPButton);
 	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	level.AddComponent<Position>(id)->position = { sf::Vector2f(pos_x, pos_y) };
 	level.AddComponent<KeyConfigButton>(id)->key = key;
@@ -216,7 +216,7 @@ int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float po
 
 int AddScrollingText(Level& level, float pos_x, float pos_y, std::string text)
 {
-	int id = level.AddBlueprint("BPText");
+	int id = level.AddBlueprint(BPText);
 	level.AddComponent<Position>(id)->position = { sf::Vector2f(pos_x, pos_y) };
 	level.AddComponent<Text>(id)->content = text;
 	level.AddComponent<Text>(id)->apply_shader = true;

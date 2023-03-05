@@ -6,6 +6,7 @@ def gen_level_serialization(data):
 #include <fstream>
 
 #include "level.hpp"
+#include "blueprint.hpp"
 #include "string_parsing_utils.hpp"
 
 /*
@@ -153,26 +154,39 @@ void Level::LoadFromFile(std::string savefile_path)
 
 def gen_add_blueprint(data):
     start = """
-int Level::AddBlueprint(std::string tag)
+int Level::AddBlueprint(Blueprint blueprint)
 {
-    int entity_id = CreateEntityId();"""
+    int entity_id = CreateEntityId();
+    switch (blueprint){"""
     end = """
-    assert(false);
-    return -1;
+        default:
+            assert(false);
+    }
+    return entity_id;
 }"""
     body = ""
     for (tag, blueprint) in data.items():
         body += f"""
-    if (tag == \"{tag}\")
-    {{"""
+        case {tag}:"""
         for (component, value) in blueprint.get(
                 "implicit", {}).items():
             body += f"""
-        AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
+            AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
         for (component, value) in blueprint.get("explicit", {}).items():
             body += f"""
-        AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
+            AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
         body += f"""
-        return entity_id;
-    }}"""
+            break;"""
+    return start + body + end
+
+
+def gen_blueprint_enum(data):
+    start = """#pragma once
+    
+enum Blueprint
+{
+    """
+    end = """
+};"""
+    body = ",\n\t".join([tag for tag in data.keys()])
     return start + body + end

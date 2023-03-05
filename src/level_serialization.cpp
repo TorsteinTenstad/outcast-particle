@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "level.hpp"
+#include "blueprint.hpp"
 #include "string_parsing_utils.hpp"
 
 /*
@@ -709,264 +710,229 @@ void Level::LoadFromFile(std::string savefile_path)
     }
 }
 
-int Level::AddBlueprint(std::string tag)
+int Level::AddBlueprint(Blueprint blueprint)
 {
     int entity_id = CreateEntityId();
-    if (tag == "BPTexturedRectangle")
-    {
-        AddComponent<DrawPriority>(entity_id, { 0 });
-        AddComponent<DrawInfo>(entity_id, { "_", false, 0 });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        AddComponent<Position>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPTexturedRectangle"});
-        return entity_id;
+    switch (blueprint){
+        case BPTexturedRectangle:
+            AddComponent<DrawPriority>(entity_id, { 0 });
+            AddComponent<DrawInfo>(entity_id, { "_", false, 0 });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            AddComponent<Position>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPTexturedRectangle"});
+            break;
+        case BPButton:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 100 });
+            AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
+            AddComponent<FillColor>(entity_id, {});
+            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
+            AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
+            AddComponent<Text>(entity_id, {});
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
+            AddComponent<Position>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPButton"});
+            break;
+        case BPMenuNavigationButton:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 100 });
+            AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
+            AddComponent<FillColor>(entity_id, {});
+            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
+            AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
+            AddComponent<Text>(entity_id, {});
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
+            AddComponent<Position>(entity_id, {});
+            AddComponent<OnReleasedThisFrame>(entity_id, {});
+            AddComponent<MenuNavigatable>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPMenuNavigationButton"});
+            break;
+        case BPMenuNavigator:
+            AddComponent<DrawInfo>(entity_id, { "content\\textures\\menu_navigator.png", true, 0 });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 180) });
+            AddComponent<FillColor>(entity_id, { sf::Color(120, 120, 120) });
+            AddComponent<DrawPriority>(entity_id, { 101 });
+            AddComponent<MenuNavigator>(entity_id, {});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Tag>(entity_id, {"BPMenuNavigator"});
+            break;
+        case BPEditableEntity:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPEditableEntity"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            break;
+        case BPStaticParticle:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 6 });
+            AddComponent<ChargeDependentDrawInfo>(entity_id, {});
+            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Tag>(entity_id, {"BPStaticParticle"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Charge>(entity_id, { 10000 });
+            break;
+        case BPMovingParticle:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 7 });
+            AddComponent<ChargeDependentDrawInfo>(entity_id, {});
+            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Acceleration>(entity_id, {});
+            AddComponent<ReceivedForces>(entity_id, {});
+            AddComponent<Intersection>(entity_id, {});
+            AddComponent<Collision>(entity_id, {});
+            AddComponent<Trail>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPMovingParticle"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Charge>(entity_id, { 10000 });
+            AddComponent<Velocity>(entity_id, { sf::Vector2f(0, 0) });
+            break;
+        case BPBlackHole:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 1 });
+            AddComponent<Shader>(entity_id, { "", "shaders\\black_hole.frag", {}, {}, {} });
+            AddComponent<Tag>(entity_id, {"BPBlackHole"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
+            break;
+        case BPPlayer:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, {});
+            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Acceleration>(entity_id, {});
+            AddComponent<ReceivedForces>(entity_id, {});
+            AddComponent<Intersection>(entity_id, {});
+            AddComponent<Collision>(entity_id, {});
+            AddComponent<Children>(entity_id, {});
+            AddComponent<Trail>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 8 });
+            AddComponent<Shader>(entity_id, { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} });
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\wav.wav" });
+            AddComponent<Face>(entity_id, {});
+            AddComponent<ForceVisualization>(entity_id, {});
+            AddComponent<PlayerBehaviors>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPPlayer"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Charge>(entity_id, { 10000 });
+            AddComponent<Velocity>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Player>(entity_id, { true, true, 1000 });
+            break;
+        case BPLaser:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, { 60 });
+            AddComponent<Laser>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 3 });
+            AddComponent<OrientationDependentDrawInfo>(entity_id, {});
+            AddComponent<KillOnIntersection>(entity_id, {});
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\laser.wav" });
+            AddComponent<Tag>(entity_id, {"BPLaser"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 60) });
+            break;
+        case BPCoin:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, { 120 });
+            AddComponent<DrawInfo>(entity_id, { "content\\textures\\coin.png", true, 0 });
+            AddComponent<DrawPriority>(entity_id, { 3 });
+            AddComponent<Coin>(entity_id, {});
+            AddComponent<SegmentedGlowEffect>(entity_id, {});
+            AddComponent<Children>(entity_id, {});
+            AddComponent<Radius>(entity_id, { 60 });
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\coin.wav" });
+            AddComponent<Tag>(entity_id, {"BPCoin"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            break;
+        case BPWall:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<Wall>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 4 });
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
+            AddComponent<Collision>(entity_id, { 0.2, 75 });
+            AddComponent<Tag>(entity_id, {"BPWall"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            break;
+        case BPBounceWall:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<Wall>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 4 });
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
+            AddComponent<Collision>(entity_id, { 1, 75 });
+            AddComponent<Tag>(entity_id, {"BPBounceWall"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            break;
+        case BPNoBounceWall:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<Wall>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 4 });
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
+            AddComponent<Collision>(entity_id, { 0.05, 75 });
+            AddComponent<Tag>(entity_id, {"BPNoBounceWall"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            break;
+        case BPGoal:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, { "content\\textures\\goal.png", false, 0 });
+            AddComponent<DrawPriority>(entity_id, { 2 });
+            AddComponent<Goal>(entity_id, {});
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
+            AddComponent<Tag>(entity_id, {"BPGoal"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
+            break;
+        case BPElectricField:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawPriority>(entity_id, { 1 });
+            AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
+            AddComponent<Tag>(entity_id, {"BPElectricField"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<ElectricField>(entity_id, { sf::Vector2f(0, 0.25) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            break;
+        case BPMagneticField:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawPriority>(entity_id, { 1 });
+            AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
+            AddComponent<Tag>(entity_id, {"BPMagneticField"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<MagneticField>(entity_id, { 0.1 });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            break;
+        case BPTextPopupSpawner:
+            AddComponent<ReceivesButtonEvents>(entity_id, {});
+            AddComponent<Editable>(entity_id, {});
+            AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawPriority>(entity_id, { 2 });
+            AddComponent<Tag>(entity_id, {"BPTextPopupSpawner"});
+            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            AddComponent<TextPopupSpawner>(entity_id, { "ipsum lorem" });
+            break;
+        case BPText:
+            AddComponent<Text>(entity_id, {});
+            AddComponent<DrawPriority>(entity_id, { 101 });
+            AddComponent<Shader>(entity_id, { "", "shaders\\scroll.frag", {}, {}, {} });
+            AddComponent<Position>(entity_id, {});
+            AddComponent<Tag>(entity_id, {"BPText"});
+            break;
+        default:
+            assert(false);
     }
-    if (tag == "BPButton")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 100 });
-        AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-        AddComponent<FillColor>(entity_id, {});
-        AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
-        AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-        AddComponent<Text>(entity_id, {});
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
-        AddComponent<Position>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPButton"});
-        return entity_id;
-    }
-    if (tag == "BPMenuNavigationButton")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 100 });
-        AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-        AddComponent<FillColor>(entity_id, {});
-        AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
-        AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-        AddComponent<Text>(entity_id, {});
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
-        AddComponent<Position>(entity_id, {});
-        AddComponent<OnReleasedThisFrame>(entity_id, {});
-        AddComponent<MenuNavigatable>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPMenuNavigationButton"});
-        return entity_id;
-    }
-    if (tag == "BPMenuNavigator")
-    {
-        AddComponent<DrawInfo>(entity_id, { "content\\textures\\menu_navigator.png", true, 0 });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 180) });
-        AddComponent<FillColor>(entity_id, { sf::Color(120, 120, 120) });
-        AddComponent<DrawPriority>(entity_id, { 101 });
-        AddComponent<MenuNavigator>(entity_id, {});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<Tag>(entity_id, {"BPMenuNavigator"});
-        return entity_id;
-    }
-    if (tag == "BPEditableEntity")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPEditableEntity"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        return entity_id;
-    }
-    if (tag == "BPStaticParticle")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 6 });
-        AddComponent<ChargeDependentDrawInfo>(entity_id, {});
-        AddComponent<Radius>(entity_id, { 120 });
-        AddComponent<Tag>(entity_id, {"BPStaticParticle"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<Charge>(entity_id, { 10000 });
-        return entity_id;
-    }
-    if (tag == "BPMovingParticle")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 7 });
-        AddComponent<ChargeDependentDrawInfo>(entity_id, {});
-        AddComponent<Radius>(entity_id, { 120 });
-        AddComponent<Acceleration>(entity_id, {});
-        AddComponent<ReceivedForces>(entity_id, {});
-        AddComponent<Intersection>(entity_id, {});
-        AddComponent<Collision>(entity_id, {});
-        AddComponent<Trail>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPMovingParticle"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<Charge>(entity_id, { 10000 });
-        AddComponent<Velocity>(entity_id, { sf::Vector2f(0, 0) });
-        return entity_id;
-    }
-    if (tag == "BPBlackHole")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 1 });
-        AddComponent<Shader>(entity_id, { "", "shaders\\black_hole.frag", {}, {}, {} });
-        AddComponent<Tag>(entity_id, {"BPBlackHole"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
-        return entity_id;
-    }
-    if (tag == "BPPlayer")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, {});
-        AddComponent<Radius>(entity_id, { 120 });
-        AddComponent<Acceleration>(entity_id, {});
-        AddComponent<ReceivedForces>(entity_id, {});
-        AddComponent<Intersection>(entity_id, {});
-        AddComponent<Collision>(entity_id, {});
-        AddComponent<Children>(entity_id, {});
-        AddComponent<Trail>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 8 });
-        AddComponent<Shader>(entity_id, { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} });
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\wav.wav" });
-        AddComponent<Face>(entity_id, {});
-        AddComponent<ForceVisualization>(entity_id, {});
-        AddComponent<PlayerBehaviors>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPPlayer"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<Charge>(entity_id, { 10000 });
-        AddComponent<Velocity>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<Player>(entity_id, { true, true, 1000 });
-        return entity_id;
-    }
-    if (tag == "BPLaser")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, { 60 });
-        AddComponent<Laser>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 3 });
-        AddComponent<OrientationDependentDrawInfo>(entity_id, {});
-        AddComponent<KillOnIntersection>(entity_id, {});
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\laser.wav" });
-        AddComponent<Tag>(entity_id, {"BPLaser"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 60) });
-        return entity_id;
-    }
-    if (tag == "BPCoin")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, { 120 });
-        AddComponent<DrawInfo>(entity_id, { "content\\textures\\coin.png", true, 0 });
-        AddComponent<DrawPriority>(entity_id, { 3 });
-        AddComponent<Coin>(entity_id, {});
-        AddComponent<SegmentedGlowEffect>(entity_id, {});
-        AddComponent<Children>(entity_id, {});
-        AddComponent<Radius>(entity_id, { 60 });
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\coin.wav" });
-        AddComponent<Tag>(entity_id, {"BPCoin"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        return entity_id;
-    }
-    if (tag == "BPWall")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<Wall>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 4 });
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-        AddComponent<Collision>(entity_id, { 0.2, 75 });
-        AddComponent<Tag>(entity_id, {"BPWall"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        return entity_id;
-    }
-    if (tag == "BPBounceWall")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<Wall>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 4 });
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-        AddComponent<Collision>(entity_id, { 1, 75 });
-        AddComponent<Tag>(entity_id, {"BPBounceWall"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        return entity_id;
-    }
-    if (tag == "BPNoBounceWall")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<Wall>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 4 });
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-        AddComponent<Collision>(entity_id, { 0.05, 75 });
-        AddComponent<Tag>(entity_id, {"BPNoBounceWall"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        return entity_id;
-    }
-    if (tag == "BPGoal")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, { "content\\textures\\goal.png", false, 0 });
-        AddComponent<DrawPriority>(entity_id, { 2 });
-        AddComponent<Goal>(entity_id, {});
-        AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
-        AddComponent<Tag>(entity_id, {"BPGoal"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
-        return entity_id;
-    }
-    if (tag == "BPElectricField")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, { "", false, 0 });
-        AddComponent<DrawPriority>(entity_id, { 1 });
-        AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
-        AddComponent<Tag>(entity_id, {"BPElectricField"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<ElectricField>(entity_id, { sf::Vector2f(0, 0.25) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        return entity_id;
-    }
-    if (tag == "BPMagneticField")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, { "", false, 0 });
-        AddComponent<DrawPriority>(entity_id, { 1 });
-        AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
-        AddComponent<Tag>(entity_id, {"BPMagneticField"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<MagneticField>(entity_id, { 0.1 });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        return entity_id;
-    }
-    if (tag == "BPTextPopupSpawner")
-    {
-        AddComponent<ReceivesButtonEvents>(entity_id, {});
-        AddComponent<Editable>(entity_id, {});
-        AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
-        AddComponent<DrawPriority>(entity_id, { 2 });
-        AddComponent<Tag>(entity_id, {"BPTextPopupSpawner"});
-        AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-        AddComponent<TextPopupSpawner>(entity_id, { "ipsum lorem" });
-        return entity_id;
-    }
-    if (tag == "BPText")
-    {
-        AddComponent<Text>(entity_id, {});
-        AddComponent<DrawPriority>(entity_id, { 101 });
-        AddComponent<Shader>(entity_id, { "", "shaders\\scroll.frag", {}, {}, {} });
-        AddComponent<Position>(entity_id, {});
-        AddComponent<Tag>(entity_id, {"BPText"});
-        return entity_id;
-    }
-    assert(false);
-    return -1;
+    return entity_id;
 }

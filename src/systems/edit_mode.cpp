@@ -19,8 +19,10 @@ void EditModeSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
+		level.ui_bars_size = sf::Vector2f(0, 0);
 		return;
 	}
+	level.ui_bars_size = sf::Vector2f(0, 2) * float(BLOCK_SIZE);
 
 	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
 	{
@@ -254,6 +256,7 @@ void EditModeSystem::OpenBlueprintMenu(Level& level)
 	level.AddComponent<Border>(menu_background_id);
 	level.AddComponent<BlueprintMenuItem>(menu_background_id);
 	int entity_id;
+	/*
 	for (const auto& tag : blueprint_menu_entry_tags_)
 	{
 		entity_id = level.AddBlueprint(tag);
@@ -261,7 +264,7 @@ void EditModeSystem::OpenBlueprintMenu(Level& level)
 		level.GetComponentMap<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
 		level.AddComponent<BlueprintMenuItem>(entity_id);
 		i++;
-	}
+	}*/
 	blueprint_menu_is_open_ = true;
 }
 void EditModeSystem::CloseBlueprintMenu(Level& level)

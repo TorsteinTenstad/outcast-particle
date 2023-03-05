@@ -1,6 +1,6 @@
 from os import listdir
 from cpp_blueprints import get_blueprints as get_cpp_blueprints, ClassType
-from serialization import gen_level_serialization, gen_components
+from serialization import gen_level_serialization, gen_components, gen_blueprint_enum
 import json
 
 path_components = "src/components/"
@@ -22,6 +22,10 @@ print(json.dumps(data, indent=2))
 
 with open("src/level_serialization.cpp", "w") as file:
     file.write(gen_level_serialization(data))
+
+
+with open("src/blueprint.hpp", "w") as file:
+    file.write(gen_blueprint_enum(data["blueprints"]))
 
 
 controls_config_data = {}

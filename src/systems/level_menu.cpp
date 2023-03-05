@@ -168,7 +168,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		scroll_window = scroll_window_local;
 		scroll_window->entity_height = BUTTON_HEIGHT;
-		int menu_navigator_id = level.AddBlueprint("BPMenuNavigator");
+		int menu_navigator_id = level.AddBlueprint(BPMenuNavigator);
 
 		level.GetComponent<WidthAndHeight>(menu_navigator_id)->width_and_height /= 2.f;
 		scroll_window->menu_navigator = menu_navigator_id;
@@ -187,7 +187,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
 		{ // Button
-			auto [entity_id, on_released_this_frame, shader, width_and_height, position] = level.AddBlueprintAddComponents<OnReleasedThisFrame, Shader, WidthAndHeight, Position>("BPMenuNavigationButton");
+			auto [entity_id, on_released_this_frame, shader, width_and_height, position] = level.AddBlueprintAddComponents<OnReleasedThisFrame, Shader, WidthAndHeight, Position>(BPMenuNavigationButton);
 			if (level_id == ui->at_level_id)
 			{
 				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = entity_id;
