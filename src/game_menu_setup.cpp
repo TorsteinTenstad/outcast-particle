@@ -125,15 +125,15 @@ void Game::GoToKeyConfigMenu()
 
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.MENU };
 	std::vector<std::string> button_texts = {};
-	std::vector<std::function<int(sf::Vector2f, int)>> button_functions;
+	std::vector<std::function<int(sf::Vector2f, int)>> create_button_functions;
 	for (unsigned i = 0; i < keys.size(); ++i)
 	{
 		button_texts.push_back(HumanName(*keys[i]));
-		button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), keys[i], std::placeholders::_1, std::placeholders::_2));
+		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), keys[i], std::placeholders::_1, std::placeholders::_2));
 	}
 	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
 
-	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), button_functions);
+	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()
@@ -142,22 +142,14 @@ void Game::GoToGraphicsAndDisplayMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
-	/*auto [scroll_window_entity_id, scroll_window, width_and_height, position] = active_level_.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
-	scroll_window->entity_height = 2 * BLOCK_SIZE;
-	width_and_height->width_and_height = level_size;
-	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
-	position->position = level_size / 2.f;*/
+	std::vector<std::string> button_texts = { "FillText" };
+	std::vector<std::function<void(void)>> button_functions = { std::bind(&Game::ToggleFullscreen, this) };
+	std::vector<std::function<int(sf::Vector2f, int)>> create_button_functions;
+	for (unsigned i = 0; i < button_functions.size(); ++i)
+	{
+		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), std::ref(button_functions[i]), std::placeholders::_1, std::placeholders::_2));
+	}
+	std::vector<std::string> description_texts = { "Fullscreen" };
 
-	float x_center_offset = 0 * BLOCK_SIZE;
-	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
-
-	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, GRAPHICS_AND_DISPLAY_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU) };
-	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display & Graphics", "Main Menu" };
-	AddButtonList(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), functions, text);
-
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
-	title_text->size = 150;
-	title_text->content = "Graphics and Display";
-	title_position->position.x = level_size.x / 2.f + x_center_offset;
-	title_position->position.y = 2 * BLOCK_SIZE;
+	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
 }
