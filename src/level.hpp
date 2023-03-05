@@ -9,6 +9,7 @@
 #include "components/coin.hpp"
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
+#include "components/edit_mode.hpp"
 #include "components/editable.hpp"
 #include "components/force_visualization.hpp"
 #include "components/goal.hpp"
@@ -58,6 +59,7 @@ typedef std::variant<
 	std::map<int, DrawInfo>,
 	std::map<int, DrawPriority>,
 	std::map<int, Editable>,
+	std::map<int, EditMode>,
 	std::map<int, ElectricField>,
 	std::map<int, Face>,
 	std::map<int, ForceVisualization>,
