@@ -47,6 +47,7 @@ void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subs
 		texture.display();
 		shape.setSize(level.GetSize());
 		shape.setTexture(&texture.getTexture());
+		shape.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 		level.drawables[draw_priority].push_back({ entity_id, &shape });
 	}
 }
