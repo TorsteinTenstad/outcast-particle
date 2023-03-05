@@ -79,10 +79,12 @@ void Game::GoToOptionsMenu()
 	active_level_.AddComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
 }
 
-static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> button_texts, std::vector<std::string> description_texts, std::function<std::vector<int>(sf::Vector2f, std::vector<int>)> create_button_list)
+static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> button_texts, std::vector<std::string> description_texts, std::vector<std::function<int(sf::Vector2f, int)>> create_buttons)
 {
+	assert(button_texts.size() == description_texts.size() && button_texts.size() == create_buttons.size());
+
 	sf::Vector2f level_size = level.GetSize();
-	sf::Vector2f button_position = sf::Vector2f(1.33 * level_size.x / 2.f, 5 * BLOCK_SIZE);
+	sf::Vector2f button_position = sf::Vector2f(1.33 * level_size.x / 2.f, 2 * BLOCK_SIZE);
 
 	//Create menu title
 	auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
@@ -92,23 +94,22 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	title_position->position.y = 2 * BLOCK_SIZE;
 
 	//Set up scroll window
-	/*auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
 	scroll_window->entity_height = 2 * BLOCK_SIZE;
 	width_and_height->width_and_height = level_size;
 	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
-	position->position = level_size / 2.f;*/
+	position->position = level_size / 2.f;
 
 	//Create buttons, texts and add to scroll window
-	std::vector<int> button_text_ids = AddOptionsDescriptionTextList(level, button_position, button_texts);
-	//scroll_window->entities.insert(scroll_window->entities.end(), button_text_ids.begin(), button_text_ids.end());
-
-	std::vector<int> button_ids = create_button_list(button_position, button_text_ids);
-	//scroll_window->entities.insert(scroll_window->entities.end(), button_ids.begin(), button_ids.end());
-
-	sf::Vector2f description_position = button_position;
-	description_position.x = level_size.x - button_position.x;
-	std::vector<int> description_text_ids = AddOptionsDescriptionTextList(level, description_position, description_texts);
-	//scroll_window->entities.insert(scroll_window->entities.end(), description_text_ids.begin(), description_text_ids.end());
+	for (unsigned i = 0; i < button_texts.size(); ++i)
+	{
+		button_position = button_position + sf::Vector2f(0, 3 * BLOCK_SIZE);
+		int button_text_id = AddScrollingText(level, button_position, button_texts[i]);
+		int button_id = create_buttons[i](button_position, button_text_id);
+		sf::Vector2f description_position = sf::Vector2f(level_size.x - button_position.x, button_position.y);
+		int description_id = AddScrollingText(level, description_position, description_texts[i]);
+		scroll_window->entities.insert(scroll_window->entities.end(), { button_id, button_text_id, description_id });
+	}
 
 	//Add menu button
 	int menu_button_position_x = level_size.x / 2.f;
@@ -124,54 +125,16 @@ void Game::GoToKeyConfigMenu()
 
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.MENU };
 	std::vector<std::string> button_texts = {};
+	std::vector<std::function<int(sf::Vector2f, int)>> button_functions;
 	for (unsigned i = 0; i < keys.size(); ++i)
 	{
 		button_texts.push_back(HumanName(*keys[i]));
+		button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), keys[i], std::placeholders::_1, std::placeholders::_2));
 	}
 	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
 
-	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), std::bind(&AddKeyConfigButtonList, active_level_, std::placeholders::_1, keys, std::placeholders::_2));
+	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), button_functions);
 }
-
-/*void Game::GoToKeyConfigMenu()
-{
-	active_level_id_ = KEY_CONFIG_MENU;
-	active_level_.ResetSize();
-	sf::Vector2f level_size = active_level_.GetSize();
-
-	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = active_level_.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
-	scroll_window->entity_height = 2 * BLOCK_SIZE;
-	width_and_height->width_and_height = level_size;
-	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
-	position->position = level_size / 2.f;
-
-	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.MENU };
-	std::vector<std::string> button_description = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
-	assert(keys.size() == button_description.size());
-
-	auto button_positions = GridHelper(button_description.size(), 1, 0, 120);
-	for (unsigned i = 0; i < button_description.size(); ++i)
-	{
-		sf::Vector2 button_position = button_positions[i] + level_size / 2.f;
-		button_position.y += 0.3 * level_size.y;
-		button_position.x *= 1.33;
-		int button_id = AddOptionsButton(active_level_, keys[i], button_position.x, button_position.y, "");
-		int button_text_id = AddScrollingText(active_level_, button_position.x, button_position.y, HumanName(*keys[i]));
-		active_level_.AddComponent<KeyConfigButton>(button_id)->button_text = &active_level_.AddComponent<Text>(button_text_id)->content;
-		float description_position = level_size.x - button_position.x;
-		int description_id = AddScrollingText(active_level_, description_position, button_position.y, OptionsDescriptionTextSetter(button_description[i]));
-		scroll_window->entities.insert(scroll_window->entities.end(), { button_id, button_text_id, description_id });
-	}
-	int menu_button_position_x = level_size.x / 2.f;
-	int menu_button_position_y = level_size.y - 2 * BLOCK_SIZE;
-	AddMenuButton(active_level_, std::bind(&Game::SetLevel, this, OPTIONS_MENU), menu_button_position_x, menu_button_position_y, "Options Menu");
-
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
-	title_text->size = 150;
-	title_text->content = "Key Config";
-	title_position->position.x = level_size.x / 2.f;
-	title_position->position.y = 2 * BLOCK_SIZE;
-}*/
 
 void Game::GoToGraphicsAndDisplayMenu()
 {
