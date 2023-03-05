@@ -1,12 +1,16 @@
 #pragma once
-#include "edit_mode.hpp"
 #include "components/editable.hpp"
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils.hpp"
+
+const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
+const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
+const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPPlayer, BPLaser, BPWall, BPBounceWall, BPNoBounceWall, BPGoal, BPElectricField, BPMagneticField, BPCoin, BPBlackHole };
 
 static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 {
@@ -15,16 +19,50 @@ static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 	return v;
 }
 
+static void OpenBlueprintMenu(Level& level)
+{
+	int i = 0;
+	int menu_background_id = level.CreateEntityId();
+	level.GetComponentMap<Position>()[menu_background_id].position = level.GetSize() / 2.f;
+	level.GetComponentMap<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
+	level.GetComponentMap<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
+	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
+	float menu_width = (3 * BLUEPRINT_ENTRIES.size() + 1) * BLOCK_SIZE;
+	level.GetComponentMap<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
+	level.AddComponent<Border>(menu_background_id);
+	level.AddComponent<BlueprintMenuItem>(menu_background_id);
+	int entity_id;
+	for (const auto& tag : BLUEPRINT_ENTRIES)
+	{
+		entity_id = level.AddBlueprint(tag);
+		level.GetComponentMap<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
+		level.GetComponentMap<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
+		level.AddComponent<BlueprintMenuItem>(entity_id);
+		i++;
+	}
+	GetSingleton<EditMode>(level)->blueprint_menu_is_open_ = true;
+}
+
+static void CloseBlueprintMenu(Level& level)
+{
+	level.DeleteEntitiesWith<BlueprintMenuItem>();
+	GetSingleton<EditMode>(level)->blueprint_menu_is_open_ = false;
+}
+
 void EditModeSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
+		level.ui_bars_size = sf::Vector2f(0, 0);
 		return;
 	}
+	level.ui_bars_size = sf::Vector2f(0, 2) * float(BLOCK_SIZE);
+
+	EditMode* edit_mode = GetSingleton<EditMode>(level);
 
 	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
 	{
-		if (blueprint_menu_is_open_)
+		if (edit_mode->blueprint_menu_is_open_)
 		{
 			CloseBlueprintMenu(level);
 		}
@@ -127,19 +165,19 @@ void EditModeSystem::Update(Level& level, float dt)
 		float sensitivity_modifier = cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1;
 		if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY])
 		{
-			velocity_magnitude += default_velocity_magnitude_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_magnitude += DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY])
 		{
-			velocity_magnitude -= default_velocity_magnitude_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_magnitude -= DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY_ANGLE])
 		{
-			velocity_angle += default_velocity_angle_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_angle += DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY_ANGLE])
 		{
-			velocity_angle -= default_velocity_angle_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_angle -= DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		velocity->velocity.x = velocity_magnitude * std::cos(velocity_angle);
 		velocity->velocity.y = velocity_magnitude * std::sin(velocity_angle);
@@ -240,32 +278,4 @@ void EditModeSystem::Update(Level& level, float dt)
 			position->position.y = level.GetSize().y;
 		}
 	}
-}
-void EditModeSystem::OpenBlueprintMenu(Level& level)
-{
-	int i = 0;
-	int menu_background_id = level.CreateEntityId();
-	level.GetComponentMap<Position>()[menu_background_id].position = level.GetSize() / 2.f;
-	level.GetComponentMap<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
-	level.GetComponentMap<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
-	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
-	float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
-	level.GetComponentMap<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
-	level.AddComponent<Border>(menu_background_id);
-	level.AddComponent<BlueprintMenuItem>(menu_background_id);
-	int entity_id;
-	for (const auto& tag : blueprint_menu_entry_tags_)
-	{
-		entity_id = level.AddBlueprint(tag);
-		level.GetComponentMap<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
-		level.GetComponentMap<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
-		level.AddComponent<BlueprintMenuItem>(entity_id);
-		i++;
-	}
-	blueprint_menu_is_open_ = true;
-}
-void EditModeSystem::CloseBlueprintMenu(Level& level)
-{
-	level.DeleteEntitiesWith<BlueprintMenuItem>();
-	blueprint_menu_is_open_ = false;
 }

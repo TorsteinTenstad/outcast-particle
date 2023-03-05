@@ -81,16 +81,16 @@ std::tuple<int, Component*...> Level::CreateEntitiyWith()
 }
 
 template <class... Component>
-std::tuple<int, Component*...> Level::AddBlueprintGetComponents(std::string tag)
+std::tuple<int, Component*...> Level::AddBlueprintGetComponents(Blueprint blueprint)
 {
-	int entity_id = AddBlueprint(tag);
+	int entity_id = AddBlueprint(blueprint);
 	return std::tuple_cat(std::make_tuple(entity_id), GetComponents<Component...>(entity_id));
 }
 
 template <class... Component>
-std::tuple<int, Component*...> Level::AddBlueprintAddComponents(std::string tag)
+std::tuple<int, Component*...> Level::AddBlueprintAddComponents(Blueprint blueprint)
 {
-	int entity_id = AddBlueprint(tag);
+	int entity_id = AddBlueprint(blueprint);
 	return std::tuple_cat(std::make_tuple(entity_id), AddComponents<Component...>(entity_id));
 }
 
