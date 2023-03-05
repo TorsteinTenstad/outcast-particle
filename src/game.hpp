@@ -59,8 +59,10 @@ private:
 	Level& SetLevel(std::string level_id);
 	void ButtonFuncEditLevel();
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
+	void CheckFullscreen();
 	void ToggleFullscreen();
-	void LimitFrameRate();
+	void CheckFramerateLimit();
+	void ToggleFramerateLimit();
 	void ExitGame();
 
 	void GoToMainMenu();

@@ -61,7 +61,10 @@ Game::Game()
 		}
 	}
 	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
-	LoadOptionsFromFile("user\\controls_config.txt");
+	LoadOptionsFromFile("user\\controls_config.txt", "user\\general_config.txt");
+
+	CheckFramerateLimit();
+	CheckFullscreen();
 
 	GoToMainMenu();
 }
@@ -69,7 +72,7 @@ Game::Game()
 Game::~Game()
 {
 	SaveMapOfMapToFile("user\\records.txt", level_completion_time_records_);
-	SaveOptionsToFile("user\\controls_config.txt");
+	SaveOptionsToFile("user\\controls_config.txt", "user\\general_config.txt");
 }
 
 Level& Game::SetLevel(std::string level_id)
@@ -173,22 +176,39 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 	return identifier;
 }
 
-void Game::ToggleFullscreen()
+void Game::CheckFullscreen()
 {
 	if (globals.general_config.fullscreen)
 	{
-		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
+		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
+		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
 	}
-	globals.general_config.fullscreen = !globals.general_config.fullscreen;
 }
 
-void Game::LimitFrameRate()
+void Game::ToggleFullscreen()
+{
+	globals.general_config.fullscreen = !globals.general_config.fullscreen;
+	CheckFullscreen();
+}
+
+void Game::CheckFramerateLimit()
+{
+	if (globals.general_config.limit_fps_to_60)
+	{
+		globals.render_window.setFramerateLimit(60);
+	}
+	else
+	{
+		globals.render_window.setFramerateLimit(0);
+	}
+}
+void Game::ToggleFramerateLimit()
 {
 	globals.general_config.limit_fps_to_60 = !globals.general_config.limit_fps_to_60;
+	CheckFramerateLimit();
 }
 
 void Game::GoToLastMenu()

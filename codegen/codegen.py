@@ -28,17 +28,25 @@ with open("src/blueprint.hpp", "w") as file:
     file.write(gen_blueprint_enum(data["blueprints"]))
 
 
-controls_config_data = {}
-get_cpp_blueprints("src/controls_config.hpp",
-                   ClassType.component, controls_config_data)
-print(json.dumps(controls_config_data, indent=2))
+def serialize_single_class(class_definition_filepath, output_filepath, classname):
+    data = {}
+    get_cpp_blueprints(class_definition_filepath,
+                       ClassType.component, data)
+    print(json.dumps(data, indent=2))
+    filename = "/".join(class_definition_filepath.split("/")[1:])
 
-cpp = """
-#pragma once
-#include <string>
-#include "controls_config.hpp"
-#include "string_parsing_utils.hpp"
-"""
-cpp += gen_components(controls_config_data, ["KeyConfig"])
-with open("src/controls_config_serialization.hpp", "w") as file:
-    file.write(cpp)
+    cpp = f"""
+    #pragma once
+    #include <string>
+    #include "{filename}"
+    #include "string_parsing_utils.hpp"
+    """
+    cpp += gen_components(data, [classname])
+    with open(output_filepath, "w") as file:
+        file.write(cpp)
+
+
+serialize_single_class("src/controls_config.hpp",
+                       "src/controls_config_serialization.hpp", "KeyConfig")
+serialize_single_class("src/general_user_config.hpp",
+                       "src/general_user_config_serialization.hpp", "GeneralConfig")

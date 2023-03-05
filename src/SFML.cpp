@@ -8,10 +8,6 @@
 SFML::SFML()
 {
 	globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
-	if (globals.general_config.limit_fps_to_60)
-	{
-		globals.render_window.setFramerateLimit(60);
-	}
 }
 
 void SFML::RunWindow(std::function<void(float)> update_func)

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "controls_config_serialization.hpp"
+#include "general_user_config_serialization.hpp"
 #include "level.hpp"
 #include "string_parsing_utils.hpp"
 
@@ -70,18 +71,28 @@ void LoadMapOfMapFromFile(std::string savefile_path, std::map<K, V>& map_of_map)
 	}
 }
 
-void SaveOptionsToFile(std::string savefile_path)
+void SaveOptionsToFile(std::string savefile_path_key_config, std::string savefile_path_general_config)
 {
 	std::string key_string;
-	std::ofstream f(savefile_path);
+	std::ofstream key_f(savefile_path_key_config);
 	SerializeComponent(&globals.key_config, key_string);
-	f << key_string;
+	key_f << key_string;
+
+	std::string general_string;
+	std::ofstream general_f(savefile_path_general_config);
+	SerializeComponent(&globals.general_config, general_string);
+	general_f << general_string;
 }
 
-void LoadOptionsFromFile(std::string savefile_path)
+void LoadOptionsFromFile(std::string savefile_path_key_config, std::string savefile_path_general_config)
 {
-	std::ifstream f(savefile_path);
+	std::ifstream key_f(savefile_path_key_config);
 	std::string key_string;
-	f >> key_string;
+	key_f >> key_string;
 	DeserializeComponent(&globals.key_config, key_string);
+
+	std::ifstream general_f(savefile_path_general_config);
+	std::string general_string;
+	general_f >> general_string;
+	DeserializeComponent(&globals.general_config, general_string);
 }
