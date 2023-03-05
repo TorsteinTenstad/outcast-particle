@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "string_parsing_utils.hpp"
 #include <functional>
+#include <iostream>
 #include <optional>
 #include <string>
 
@@ -200,6 +201,70 @@ std::vector<int> AddButtonList(Level& level, sf::Vector2f position, std::vector<
 
 	level.GetComponent<WidthAndHeight>(navigator_id)->width_and_height *= y_scale;
 	return ids;
+}
+
+std::vector<int> AddOptionsButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<int> button_text_ids)
+{
+	int n = button_functions.size();
+	assert(button_text_ids.size() == n);
+	std::vector<int> ids = {};
+
+	for (unsigned i = 0; i < n; ++i)
+	{
+		int id = level.AddBlueprint("BPButton");
+		ids.push_back(id);
+		level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+		level.GetComponent<OnReleasedThisFrame>(id)->func = button_functions[i];
+
+		float& h = level.GetComponent<WidthAndHeight>(id)->width_and_height.y;
+		float y = (1.5 * h) * i + h / 2;
+
+		level.GetComponent<Position>(id)->position = position + sf::Vector2f(0, y);
+	}
+	return (ids);
+}
+
+std::vector<int> AddKeyConfigButtonList(Level& level, sf::Vector2f position, std::vector<sf::Keyboard::Key*> keys, std::vector<int> button_text_ids)
+{
+	int n = keys.size();
+	assert(button_text_ids.size() == n);
+	std::vector<int> ids = {};
+
+	for (unsigned i = 0; i < n; ++i)
+	{
+		int id = level.AddBlueprint("BPButton");
+		ids.push_back(id);
+		level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+		level.AddComponent<KeyConfigButton>(id)->key = keys[i];
+		level.AddComponent<KeyConfigButton>(id)->button_text = &level.AddComponent<Text>(button_text_ids[i])->content;
+		level.AddComponent<StickyButton>(id);
+		std::cout << id << std::endl;
+
+		float h = BLOCK_SIZE;
+		float y = (3 * h) * i;
+
+		level.GetComponent<Position>(id)->position = position + sf::Vector2f(0, y);
+	}
+	return (ids);
+}
+
+std::vector<int> AddOptionsDescriptionTextList(Level& level, sf::Vector2f position, std::vector<std::string> description_texts)
+{
+	std::vector<int> ids;
+
+	for (unsigned i = 0; i < description_texts.size(); ++i)
+	{
+		int id = level.AddBlueprint("BPText");
+		ids.push_back(id);
+		level.AddComponent<Text>(id)->content = description_texts[i];
+		level.AddComponent<Text>(id)->apply_shader = true;
+
+		float h = BLOCK_SIZE;
+		float y = (3 * h) * i;
+
+		level.GetComponent<Position>(id)->position = position + sf::Vector2f(0, y);
+	}
+	return (ids);
 }
 
 int AddOptionsButton(Level& level, sf::Keyboard::Key* key, float pos_x, float pos_y, std::string button_text)

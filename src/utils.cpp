@@ -174,9 +174,12 @@ std::string HumanName(sf::Keyboard::Key key)
 	}
 }
 
-std::string OptionsDescriptionTextSetter(std::string options_text)
+std::vector<std::string> OptionsDescriptionTextSetter(std::vector<std::string> strings)
 {
-	assert(options_text.size() <= 17);
-	options_text.append(17 - options_text.size(), ' ');
-	return options_text;
+	for (unsigned i = 0; i < strings.size(); ++i)
+	{
+		assert(strings[i].size() <= 17);
+		strings[i].append(17 - strings[i].size(), ' ');
+	}
+	return strings;
 }

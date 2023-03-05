@@ -34,7 +34,7 @@ std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacin
 
 std::string HumanName(sf::Keyboard::Key key);
 
-std::string OptionsDescriptionTextSetter(std::string options_description);
+std::vector<std::string> OptionsDescriptionTextSetter(std::vector<std::string> strings);
 
 template <class K, class V>
 typename std::map<K, V>::const_iterator NextInMap(const std::map<K, V>& m, K key)
