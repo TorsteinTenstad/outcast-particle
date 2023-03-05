@@ -8,9 +8,9 @@
 #include "systems/_pure_DO_systems.hpp"
 #include "utils.hpp"
 
-const float default_velocity_magnitude_change_sensitivity_ = 400;
-const float default_velocity_angle_change_sensitivity_ = PI / 2;
-const std::vector<Blueprint> blueprint_menu_entry_tags_ { BPStaticParticle, BPPlayer, BPLaser, BPWall, BPBounceWall, BPNoBounceWall, BPGoal, BPElectricField, BPMagneticField, BPCoin, BPBlackHole };
+const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
+const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
+const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPPlayer, BPLaser, BPWall, BPBounceWall, BPNoBounceWall, BPGoal, BPElectricField, BPMagneticField, BPCoin, BPBlackHole };
 
 static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 {
@@ -27,20 +27,19 @@ static void OpenBlueprintMenu(Level& level)
 	level.GetComponentMap<DrawInfo>()[menu_background_id].image_path = "content\\textures\\gray.png";
 	level.GetComponentMap<DrawPriority>()[menu_background_id].draw_priority = UI_BASE_DRAW_PRIORITY;
 	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
-	float menu_width = (3 * blueprint_menu_entry_tags_.size() + 1) * BLOCK_SIZE;
+	float menu_width = (3 * BLUEPRINT_ENTRIES.size() + 1) * BLOCK_SIZE;
 	level.GetComponentMap<WidthAndHeight>()[menu_background_id].width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 	level.AddComponent<Border>(menu_background_id);
 	level.AddComponent<BlueprintMenuItem>(menu_background_id);
 	int entity_id;
-	/*
-	for (const auto& tag : blueprint_menu_entry_tags_)
+	for (const auto& tag : BLUEPRINT_ENTRIES)
 	{
 		entity_id = level.AddBlueprint(tag);
 		level.GetComponentMap<Position>()[entity_id].position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
 		level.GetComponentMap<DrawPriority>()[entity_id].draw_priority += UI_BASE_DRAW_PRIORITY;
 		level.AddComponent<BlueprintMenuItem>(entity_id);
 		i++;
-	}*/
+	}
 	GetSingleton<EditMode>(level)->blueprint_menu_is_open_ = true;
 }
 
@@ -166,19 +165,19 @@ void EditModeSystem::Update(Level& level, float dt)
 		float sensitivity_modifier = cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1;
 		if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY])
 		{
-			velocity_magnitude += default_velocity_magnitude_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_magnitude += DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY])
 		{
-			velocity_magnitude -= default_velocity_magnitude_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_magnitude -= DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY_ANGLE])
 		{
-			velocity_angle += default_velocity_angle_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_angle += DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY_ANGLE])
 		{
-			velocity_angle -= default_velocity_angle_change_sensitivity_ * dt / sensitivity_modifier;
+			velocity_angle -= DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
 		velocity->velocity.x = velocity_magnitude * std::cos(velocity_angle);
 		velocity->velocity.y = velocity_magnitude * std::sin(velocity_angle);
