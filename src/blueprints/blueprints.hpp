@@ -47,6 +47,7 @@ class BPEditableEntity
 class BPStaticParticle : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
+	Shader shader = { "", "shaders\\particle.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 6 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Radius radius = { 120 };

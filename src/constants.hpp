@@ -1,4 +1,5 @@
 #pragma once
+#include "SFML/Graphics/Color.hpp"
 #include "SFML/Window/Keyboard.hpp"
 #include <array>
 #include <string>
@@ -20,6 +21,32 @@
 
 const std::array<float, 6> CHARGE_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1, sf::Keyboard::Num0 };
 const std::array<float, 11> PARTICLE_CHARGE_CATEGORIES = { -160'000, -40'000, -10'000, -2500, -625, 0, 625, 2500, 10'000, 40'000, 160'000 };
+const std::array<sf::Color, 11> PARTICLE_INNER_COLOR = {
+	sf::Color(std::stoul("0x002500ff", nullptr, 16)),
+	sf::Color(std::stoul("0x002e00ff", nullptr, 16)),
+	sf::Color(std::stoul("0x003700ff", nullptr, 16)),
+	sf::Color(std::stoul("0x004100ff", nullptr, 16)),
+	sf::Color(std::stoul("0x004b00ff", nullptr, 16)),
+	sf::Color(std::stoul("0x003d73ff", nullptr, 16)), //
+	sf::Color(std::stoul("0x880000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x7b0000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x6e0000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x610000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x550000ff", nullptr, 16))
+};
+const std::array<sf::Color, 11> PARTICLE_OUTER_COLOR = {
+	sf::Color(std::stoul("0x002e00ff", nullptr, 16)),
+	sf::Color(std::stoul("0x003700ff", nullptr, 16)),
+	sf::Color(std::stoul("0x004100ff", nullptr, 16)),
+	sf::Color(std::stoul("0x004b00ff", nullptr, 16)),
+	sf::Color(std::stoul("0x005500ff", nullptr, 16)),
+	sf::Color(std::stoul("0x00477eff", nullptr, 16)), //
+	sf::Color(std::stoul("0x960000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x880000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x7b0000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x6e0000ff", nullptr, 16)),
+	sf::Color(std::stoul("0x610000ff", nullptr, 16))
+};
 const std::array<std::string, 11> PARTICLE_TEXTURES = {
 	"content\\textures\\particle_green_-5.png",
 	"content\\textures\\particle_green_-4.png",
