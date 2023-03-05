@@ -10,16 +10,10 @@
 class RenderGridAdaptiveTexturesSystem : public GameSystem
 {
 private:
-	// int: draw_priority
-	std::map<int, sf::RenderTexture> wall_render_textures_;
-	std::map<int, sf::RectangleShape> wall_shapes_;
-	std::map<int, sf::RenderTexture> laser_render_textures_;
-	std::map<int, sf::RectangleShape> laser_shapes_;
-
 	std::map<std::string, std::map<int, std::tuple<int, sf::RenderTexture, sf::RectangleShape>>> textures_and_shapes_;
 
-	sf::RenderTexture* EnsureTextureSetup(Level& level, unsigned subsampling, std::string fragment_shader_path, int draw_priority);
-	void UpdateTexture(Level& level, unsigned subsampling, std::string fragment_shader_path, std::function<void(Level&, std::function<sf::RenderTexture*(int)>)> draw_func);
+	sf::RenderTexture& EnsureTextureSetup(Level& level, unsigned subsampling, std::string fragment_shader_path, int draw_priority);
+	void UpdateTexture(Level& level, unsigned subsampling, std::string fragment_shader_path, std::function<void(Level&, std::function<sf::RenderTexture&(int)>)> draw_func);
 
 public:
 	using GameSystem::GameSystem;

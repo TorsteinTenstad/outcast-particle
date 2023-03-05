@@ -5,7 +5,7 @@
 #include <optional>
 #include <string>
 
-sf::RenderTexture* RenderGridAdaptiveTexturesSystem::EnsureTextureSetup(Level& level, unsigned subsampling, std::string fragment_shader_path, int draw_priority)
+sf::RenderTexture& RenderGridAdaptiveTexturesSystem::EnsureTextureSetup(Level& level, unsigned subsampling, std::string fragment_shader_path, int draw_priority)
 {
 	auto view_size = level.GetSize();
 	auto texture_size = level.GetGridSize() * subsampling;
@@ -21,15 +21,18 @@ sf::RenderTexture* RenderGridAdaptiveTexturesSystem::EnsureTextureSetup(Level& l
 		render_texture.create(texture_size.x, texture_size.y);
 		render_texture.setView(sf::View(view_size / 2.f, view_size));
 	};
-	return &render_texture;
+	return render_texture;
 }
 
-void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subsampling, std::string fragment_shader_path, std::function<void(Level&, std::function<sf::RenderTexture*(int)>)> draw_func)
+void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subsampling, std::string fragment_shader_path, std::function<void(Level&, std::function<sf::RenderTexture&(int)>)> draw_func)
 {
-	std::function<sf::RenderTexture*(int)> get_texture = std::bind(&RenderGridAdaptiveTexturesSystem::EnsureTextureSetup, this, level, subsampling, fragment_shader_path, std::placeholders::_1);
+	std::function<sf::RenderTexture&(int)> get_texture = std::bind(&RenderGridAdaptiveTexturesSystem::EnsureTextureSetup, this, std::ref(level), subsampling, fragment_shader_path, std::placeholders::_1);
 	draw_func(level, get_texture);
 
-	sf::RenderTexture* t = EnsureTextureSetup(level, subsampling, fragment_shader_path, 1);
+	if (textures_and_shapes_.count(fragment_shader_path) == 0)
+	{ // The draw function may not draw anything
+		return;
+	}
 
 	for (auto& [draw_priority, tup] : textures_and_shapes_.at(fragment_shader_path))
 	{
@@ -61,25 +64,25 @@ static void SetAndAssertSync(std::optional<T>& current, T new_val)
 	}
 }
 
-static void LaserDrawFunc(Level& level, std::function<sf::RenderTexture*(int)> get_render_texture)
+static void LaserDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> get_render_texture)
 {
 	for (auto const& [entity_id, laser, draw_priority, width_and_height, position] : level.GetEntitiesWith<Laser, DrawPriority, WidthAndHeight, Position>())
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);
 		shape.setFillColor(sf::Color(255, 0, 0, 255));
-		get_render_texture(draw_priority->draw_priority)->draw(shape);
+		get_render_texture(draw_priority->draw_priority).draw(shape);
 	}
 }
 
-static void WallDrawFunc(Level& level, std::function<sf::RenderTexture*(int)> get_render_texture)
+static void WallDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> get_render_texture)
 {
 	for (auto const& [entity_id, wall, collision, draw_priority, width_and_height, position] : level.GetEntitiesWith<Wall, Collision, DrawPriority, WidthAndHeight, Position>())
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);
 		shape.setFillColor(sf::Color(255, collision->bounce_factor * 255, 0, 255));
-		get_render_texture(draw_priority->draw_priority)->draw(shape);
+		get_render_texture(draw_priority->draw_priority).draw(shape);
 	}
 }
 
