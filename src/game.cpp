@@ -108,6 +108,10 @@ Level& Game::SetLevel(std::string level_id)
 	{
 		GoToKeyConfigMenu();
 	}
+	else if (level_id == GRAPHICS_AND_DISPLAY_MENU)
+	{
+		GoToGraphicsAndDisplayMenu();
+	}
 	else
 	{
 		active_level_.LoadFromFile(level_id);
@@ -171,7 +175,7 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 
 void Game::ToggleFullscreen()
 {
-	if (fullscreen_)
+	if (globals.general_config.fullscreen)
 	{
 		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
 	}
@@ -179,7 +183,12 @@ void Game::ToggleFullscreen()
 	{
 		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
 	}
-	fullscreen_ = !fullscreen_;
+	globals.general_config.fullscreen = !globals.general_config.fullscreen;
+}
+
+void Game::LimitFrameRate()
+{
+	globals.general_config.limit_fps_to_60 = !globals.general_config.limit_fps_to_60;
 }
 
 void Game::GoToLastMenu()
