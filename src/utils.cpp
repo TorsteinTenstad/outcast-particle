@@ -183,3 +183,15 @@ std::vector<std::string> OptionsDescriptionTextSetter(std::vector<std::string> s
 	}
 	return strings;
 }
+
+std::string BoolToStringAsEnabledOrDisabled(bool x)
+{
+	if (x)
+	{
+		return "Enabled";
+	}
+	else
+	{
+		return "Disabled";
+	}
+}

@@ -126,10 +126,10 @@ void Game::GoToKeyConfigMenu()
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.MENU };
 	std::vector<std::string> button_texts = {};
 	std::vector<std::function<int(sf::Vector2f, int)>> create_button_functions;
-	for (unsigned i = 0; i < keys.size(); ++i)
+	for (auto key : keys)
 	{
-		button_texts.push_back(HumanName(*keys[i]));
-		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), keys[i], std::placeholders::_1, std::placeholders::_2));
+		button_texts.push_back(HumanName(*key));
+		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), key, std::placeholders::_1, std::placeholders::_2));
 	}
 	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
 
@@ -142,12 +142,12 @@ void Game::GoToGraphicsAndDisplayMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
-	std::vector<std::string> button_texts = { "FillText", "FillText" };
+	std::vector<std::string> button_texts = { BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen), BoolToStringAsEnabledOrDisabled(globals.general_config.limit_fps_to_60) };
 	std::vector<std::function<void(void)>> button_functions = { std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ToggleFramerateLimit, this) };
 	std::vector<std::function<int(sf::Vector2f, int)>> create_button_functions;
-	for (unsigned i = 0; i < button_functions.size(); ++i)
+	for (auto button_function : button_functions)
 	{
-		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_functions[i], std::placeholders::_1, std::placeholders::_2));
+		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_function, std::placeholders::_1, std::placeholders::_2));
 	}
 	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate" };
 

@@ -27,3 +27,9 @@ public:
 	sf::Keyboard::Key* key;
 	std::string* button_text;
 };
+
+class BinaryOptionsButton
+{
+public:
+	std::string* button_text;
+};

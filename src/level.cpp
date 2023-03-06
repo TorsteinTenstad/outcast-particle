@@ -222,6 +222,7 @@ int AddOptionsButton(Level& level, std::function<void(void)> on_click, sf::Vecto
 	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	level.AddComponent<Position>(id)->position = button_position;
 	level.AddComponent<OnReleasedThisFrame>(id)->func = on_click;
+	level.AddComponent<BinaryOptionsButton>(id)->button_text = &level.AddComponent<Text>(button_text_id)->content;
 	return id;
 }
 

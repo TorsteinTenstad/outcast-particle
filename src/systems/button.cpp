@@ -52,4 +52,10 @@ void ButtonSystem::Update(Level& level, float dt)
 			}
 		}
 	}
+
+	for (auto [entity_id, released_this_frame, on_released_this_frame, binary_options_button] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame, BinaryOptionsButton>())
+	{
+		*(level.AddComponent<BinaryOptionsButton>(entity_id)->button_text) = BoolToStringAsEnabledOrDisabled(*(level.GetComponent<BinaryOptionsButton>(entity_id)->button_text) == "Disabled");
+		//return;
+	}
 }
