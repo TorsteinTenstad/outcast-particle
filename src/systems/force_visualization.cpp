@@ -5,6 +5,10 @@
 
 void ForceVisualizationSystem::Update(Level& level, float dt)
 {
+	if (!globals.general_config.forces_are_visualized)
+	{
+		return;
+	}
 	for (const auto& [entity_id, player, force_visualization, children, radius, player_charge, draw_priority, player_position] : level.GetEntitiesWith<Player, ForceVisualization, Children, Radius, Charge, DrawPriority, Position>())
 	{
 		Shader* shader = EnsureExistanceOfScreenwideFragmentShaderChildEntity<ForceVisualization>(level, children, "shaders\\force.frag", 5);

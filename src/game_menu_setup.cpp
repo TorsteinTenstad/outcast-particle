@@ -142,14 +142,14 @@ void Game::GoToGraphicsAndDisplayMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
-	std::vector<std::string> button_texts = { BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen), BoolToStringAsEnabledOrDisabled(globals.general_config.limit_fps_to_60) };
-	std::vector<std::function<void(void)>> button_functions = { std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ToggleFramerateLimit, this) };
+	std::vector<std::string> button_texts = { BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen), BoolToStringAsEnabledOrDisabled(globals.general_config.limit_fps_to_60), BoolToStringAsEnabledOrDisabled(globals.general_config.forces_are_visualized) };
+	std::vector<std::function<void(void)>> button_functions = { std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ToggleFramerateLimit, this), [](void) { globals.general_config.forces_are_visualized = !globals.general_config.forces_are_visualized; } };
 	std::vector<std::function<int(sf::Vector2f, int)>> create_button_functions;
 	for (auto button_function : button_functions)
 	{
 		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_function, std::placeholders::_1, std::placeholders::_2));
 	}
-	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate" };
+	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate", "Show Forces" };
 
 	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
 }
