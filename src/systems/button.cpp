@@ -50,14 +50,14 @@ void ButtonSystem::Update(Level& level, float dt)
 			{
 				*key_config_button->key = (sf::Keyboard::Key)key;
 				level.RemoveComponents<StickyButtonDown>(entity_id);
-				*(level.AddComponent<KeyConfigButton>(entity_id)->button_text) = HumanName(*key_config_button->key);
+				*(key_config_button->button_text) = HumanName(*key_config_button->key);
 			}
 		}
 	}
 
 	for (auto [entity_id, released_this_frame, on_released_this_frame, binary_options_button] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame, BinaryOptionsButton>())
 	{
-		*(level.AddComponent<BinaryOptionsButton>(entity_id)->button_text) = BoolToStringAsEnabledOrDisabled(*(level.GetComponent<BinaryOptionsButton>(entity_id)->button_text) == "Disabled");
+		*(binary_options_button->button_text) = BoolToStringAsEnabledOrDisabled(*(binary_options_button->button_text) == "Disabled");
 		//return;
 	}
 	for (auto [entity_id, position, pressed, slider_button, width_and_height] : level.GetEntitiesWith<Position, Pressed, SliderButton, WidthAndHeight>())
