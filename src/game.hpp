@@ -70,6 +70,7 @@ private:
 	void GoToOptionsMenu();
 	void GoToKeyConfigMenu();
 	void GoToGraphicsAndDisplayMenu();
+	void GoToMusicAndSoundMenu();
 	void GoToLastMenu();
 
 public:

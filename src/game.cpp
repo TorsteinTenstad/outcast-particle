@@ -115,6 +115,10 @@ Level& Game::SetLevel(std::string level_id)
 	{
 		GoToGraphicsAndDisplayMenu();
 	}
+	else if (level_id == MUSIC_AND_SOUND_MENU)
+	{
+		GoToMusicAndSoundMenu();
+	}
 	else
 	{
 		active_level_.LoadFromFile(level_id);

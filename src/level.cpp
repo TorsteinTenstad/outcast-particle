@@ -226,6 +226,16 @@ int AddOptionsButton(Level& level, std::function<void(void)> on_click, sf::Vecto
 	return id;
 }
 
+int AddSliderButton(Level& level, int* f, sf::Vector2f button_position, int button_text_id)
+{
+
+	int id = level.AddBlueprint(BPButton);
+	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	level.AddComponent<Position>(id)->position = button_position;
+	level.AddComponent<SliderButton>(id)->slider_value = f;
+	return id;
+}
+
 int AddScrollingText(Level& level, sf::Vector2f position, std::string text)
 {
 	int id = level.AddBlueprint(BPText);

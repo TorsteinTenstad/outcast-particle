@@ -33,3 +33,10 @@ class BinaryOptionsButton
 public:
 	std::string* button_text;
 };
+
+class SliderButton
+{
+public:
+	int* slider_value; //float normalized from 0-100.
+	std::string* button_text;
+};

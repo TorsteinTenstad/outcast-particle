@@ -50,7 +50,7 @@ std::string GetLevelDisplayNameFromId(const std::string& level_id)
 
 bool IsMenu(const std::string& level_id)
 {
-	return level_id == MAIN_MENU || level_id == LEVEL_MENU || level_id == OPTIONS_MENU || level_id == KEY_CONFIG_MENU || level_id == GRAPHICS_AND_DISPLAY_MENU;
+	return level_id == MAIN_MENU || level_id == LEVEL_MENU || level_id == OPTIONS_MENU || level_id == KEY_CONFIG_MENU || level_id == GRAPHICS_AND_DISPLAY_MENU || level_id == MUSIC_AND_SOUND_MENU;
 }
 
 float FakeSigmoid(float x)

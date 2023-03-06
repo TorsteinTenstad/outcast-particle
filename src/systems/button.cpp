@@ -1,6 +1,8 @@
 #include "_pure_DO_systems.hpp"
 #include "string_parsing_utils.hpp"
 #include "utils.hpp"
+#include <cmath>
+#include <iostream>
 
 void ButtonSystem::Update(Level& level, float dt)
 {
@@ -57,5 +59,17 @@ void ButtonSystem::Update(Level& level, float dt)
 	{
 		*(level.AddComponent<BinaryOptionsButton>(entity_id)->button_text) = BoolToStringAsEnabledOrDisabled(*(level.GetComponent<BinaryOptionsButton>(entity_id)->button_text) == "Disabled");
 		//return;
+	}
+	for (auto [entity_id, position, pressed, slider_button, width_and_height] : level.GetEntitiesWith<Position, Pressed, SliderButton, WidthAndHeight>())
+	{
+		float relative_cursor_x_pos = cursor_and_keys_.cursor_position.x - position->position.x;
+		float half_button_width = width_and_height->width_and_height.x / 2;
+		if (abs(relative_cursor_x_pos) > half_button_width)
+		{
+			continue;
+		}
+		float intermediary_slider_value = 50 * relative_cursor_x_pos / half_button_width + 50;
+		*(slider_button->slider_value) = intermediary_slider_value;
+		std::cout << *(slider_button->slider_value) << std::endl;
 	}
 }

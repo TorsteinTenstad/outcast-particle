@@ -13,6 +13,12 @@ void SerializeComponent(const GeneralConfig* c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "limit_fps_to_60=";
 	str_rep += ToString(c->limit_fps_to_60);
+	str_rep += ";";
+	str_rep += "forces_are_visualized=";
+	str_rep += ToString(c->forces_are_visualized);
+	str_rep += ";";
+	str_rep += "sound_volume=";
+	str_rep += ToString(c->sound_volume);
 	str_rep += "}";
 }
 
@@ -31,6 +37,14 @@ void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "limit_fps_to_60")
         {
             FromString(c->limit_fps_to_60, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "forces_are_visualized")
+        {
+            FromString(c->forces_are_visualized, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "sound_volume")
+        {
+            FromString(c->sound_volume, statement_parts[1]);
         }
         else {{
             assert(false);

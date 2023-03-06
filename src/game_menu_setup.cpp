@@ -52,7 +52,7 @@ void Game::GoToOptionsMenu()
 	float x_center_offset = -8 * BLOCK_SIZE;
 	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
-	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::SetLevel, this, GRAPHICS_AND_DISPLAY_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU) };
+	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, MUSIC_AND_SOUND_MENU), std::bind(&Game::SetLevel, this, GRAPHICS_AND_DISPLAY_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU) };
 	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display & Graphics", "Main Menu" };
 	AddButtonList(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), functions, text);
 
@@ -150,6 +150,24 @@ void Game::GoToGraphicsAndDisplayMenu()
 		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_function, std::placeholders::_1, std::placeholders::_2));
 	}
 	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate", "Show Forces" };
+
+	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
+}
+
+void Game::GoToMusicAndSoundMenu()
+{
+	active_level_id_ = MUSIC_AND_SOUND_MENU;
+	active_level_.ResetSize();
+	sf::Vector2f level_size = active_level_.GetSize();
+
+	std::vector<std::string> button_texts = { "" };
+	std::vector<std::function<int(sf::Vector2f, int)>> create_button_functions;
+
+	std::vector<std::string> description_texts = { "Sound Volume" };
+	for (auto description_text : description_texts)
+	{
+		create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1, std::placeholders::_2));
+	}
 
 	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
 }
