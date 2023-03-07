@@ -59,7 +59,7 @@ float particle_grid(vec2 uv, vec2 cell_size, float relative_particle_size, float
 	return particle((gc-offset)/particle_d, charge_sign)*existance;
 }
 
-float arrow(vec2 uv, vec2 wh_rotated){
+vec4 arrow(vec2 uv, vec2 wh_rotated){
 	uv = wh_rotated*fract(uv/wh_rotated);
    	vec2 c = uv/vec2(120);
     vec2 gc = vec2(fract(c.x), c.y);
@@ -83,7 +83,12 @@ float arrow(vec2 uv, vec2 wh_rotated){
 	lines_mask *= smoothstep(0, AA, c.y - margin);
 
 	float arrow = max(arrow_front_mask*arrow_back_mask*arrow_width_mask, lines_mask);
-	return arrow;
+	//float gradient_t = 1-smoothstep(0, 100, wh_rotated.y -uv.y);
+	float gradient_t = smoothstep(0, 1, 1-smoothstep(wh_rotated.y, 0, uv.y));
+	//float gradient_t = 1/(1+(wh_rotated.y - uv.y - margin*120)/10);
+	gradient_t = clamp(gradient_t, 0, 1);
+	vec3 rgb = mix(vec3(0.6), vec3(0.99, 0.99, 0.6), gradient_t);
+	return vec4(rgb, arrow);
 }
 
 vec4 blend(vec4 base, vec4 top){
@@ -112,7 +117,7 @@ void main()
 	
 	color = blend(color, particles_color);
 
-	vec4 arrow_color = vec4(vec3(0.8), 1)*arrow((gl_TexCoord[0].xy)*m_rot, abs(_wh*m_rot));
+	vec4 arrow_color = arrow((gl_TexCoord[0].xy)*m_rot, abs(_wh*m_rot));
 	color = blend(color, arrow_color);
 
 	gl_FragColor = color;

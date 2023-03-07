@@ -81,7 +81,7 @@ float particles(vec2 uv, float particles_per_cell_side, float speed, float rand_
     return particle_grid(gc, rot(-theta), vec2(1/particles_per_cell_side), n, 0.6, rand_seed+id);
 }
 
-float crosses_and_dots(vec2 uv){
+vec4 crosses_and_dots(vec2 uv){
    	vec2 c = uv/vec2(GRID_SIZE);
     vec2 gc = fract(c);
     float gc_id = floor(c.x);
@@ -99,7 +99,11 @@ float crosses_and_dots(vec2 uv){
 
     float dots_mask = smoothstep(0, AA, 0.15-length(gc));
 
-    return field_strength > 0 ? dots_mask : crosses_mask;
+	float alpha = field_strength > 0 ? dots_mask : crosses_mask;
+	vec3 light_purple = vec3(0.7890625, 0.6953125, 0.8359375);
+    vec3 purple = vec3(0.59375, 0.3046875, 0.63671875);
+	vec3 rgb = mix(light_purple, purple, 1-(gc.x+gc.y));
+	return vec4(rgb, alpha);
 }
 
 vec4 blend(vec4 base, vec4 top){
@@ -130,9 +134,7 @@ void main()
 	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(00, 0)),  4, 80, 1.511)*0.4));
 	
 	color = blend(color, particles_color);
-
-	vec4 arrow_color = vec4(vec3(0.8), 1)*crosses_and_dots((uv));
-	color = blend(color, arrow_color);
+	color = blend(color, crosses_and_dots((uv)));
 
 	gl_FragColor = color;
 }
