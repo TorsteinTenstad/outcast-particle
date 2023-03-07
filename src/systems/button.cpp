@@ -70,6 +70,7 @@ void ButtonSystem::Update(Level& level, float dt)
 		}
 		float intermediary_slider_value = 50 * relative_cursor_x_pos / half_button_width + 50;
 		*(slider_button->slider_value) = intermediary_slider_value;
+		level.GetComponent<Position>(slider_button->moving_button_id)->position.x = cursor_and_keys_.cursor_position.x;
 		std::cout << *(slider_button->slider_value) << std::endl;
 	}
 }
