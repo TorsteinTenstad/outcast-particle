@@ -82,6 +82,7 @@ typedef std::variant<
 	std::map<int, OnHoveredStartedThisFrame>,
 	std::map<int, OnReleasedThisFrame>,
 	std::map<int, OrientationDependentDrawInfo>,
+	std::map<int, ParentButton>,
 	std::map<int, PauseMenuItems>,
 	std::map<int, Player>,
 	std::map<int, PlayerBehaviors>,

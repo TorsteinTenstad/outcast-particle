@@ -236,37 +236,49 @@ std::vector<int> AddOptionsButton(Level& level, std::function<void(void)> on_cli
 std::vector<int> AddSliderButton(Level& level, int* f, sf::Vector2f button_position)
 {
 	//Creating operating button:
-	int background_button_id = level.AddBlueprint(BPButton);
-	level.GetComponent<Shader>(background_button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<Position>(background_button_id)->position = button_position;
-	level.AddComponent<SliderButton>(background_button_id)->slider_value = f;
-	level.GetComponent<WidthAndHeight>(background_button_id)->width_and_height.y = BLOCK_SIZE / 4;
+	int slider_bar_id = level.CreateEntityId();
+	level.AddComponent<DrawPriority>(slider_bar_id)->draw_priority = 101;
+	level.AddComponent<DrawInfo>(slider_bar_id, { "content\\textures\\white.png", false, 0 });
+	level.AddComponent<FillColor>(slider_bar_id, {});
+	level.AddComponent<Shader>(slider_bar_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	level.AddComponent<Position>(slider_bar_id)->position = button_position;
+	level.GetComponent<Position>(slider_bar_id)->position.x -= 1 * BLOCK_SIZE;
+	level.AddComponent<WidthAndHeight>(slider_bar_id)->width_and_height = sf::Vector2f(7, 0.1) * float(BLOCK_SIZE);
 
-	level.GetComponent<Position>(background_button_id)->position.x -= 1.25 * BLOCK_SIZE;
-	level.GetComponent<WidthAndHeight>(background_button_id)->width_and_height.x *= 0.7;
+	level.AddComponent<SliderButton>(slider_bar_id)->slider_value = f;
 
 	//Creating moving button:
-	//float moving_button_position_x_pos = button_position.x + level.GetComponent<WidthAndHeight>(background_button_id)->width_and_height.x * (*(f) / 100 - 1 / 2);
-	float moving_button_x_pos = level.GetComponent<Position>(background_button_id)->position.x + level.GetComponent<WidthAndHeight>(background_button_id)->width_and_height.x * (*(f)*0.01 - 0.5);
+	float slider_x_pos = level.GetComponent<Position>(slider_bar_id)->position.x + level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height.x * (*(f)*0.01 - 0.5);
 
-	int moving_button_id = level.CreateEntityId();
-	level.AddComponent<DrawPriority>(moving_button_id)->draw_priority = 100;
-	level.AddComponent<DrawInfo>(moving_button_id, { "content\\textures\\white.png", false, 0 });
-	level.AddComponent<FillColor>(moving_button_id, {});
-	level.AddComponent<MouseInteractionDependentFillColor>(moving_button_id, {});
-	level.AddComponent<Shader>(moving_button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<Radius>(moving_button_id)->radius = BLOCK_SIZE / 3;
-	level.AddComponent<Position>(moving_button_id)->position = sf::Vector2f(moving_button_x_pos, button_position.y);
+	int slider_id = level.CreateEntityId();
+	level.AddComponent<DrawPriority>(slider_id)->draw_priority = 101;
+	level.AddComponent<DrawInfo>(slider_id, { "content\\textures\\white.png", false, 0 });
+	level.AddComponent<FillColor>(slider_id, {});
+	level.AddComponent<Shader>(slider_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	level.AddComponent<Radius>(slider_id)->radius = BLOCK_SIZE / 4;
+	level.AddComponent<Position>(slider_id)->position = sf::Vector2f(slider_x_pos, button_position.y);
+
+	//Add parent button:
+	int parent_button_id = level.CreateEntityId();
+	level.AddComponent<ReceivesButtonEvents>(parent_button_id);
+	level.AddComponent<DrawPriority>(parent_button_id)->draw_priority = 100;
+	level.AddComponent<DrawInfo>(parent_button_id, { "content\\textures\\white.png", false, 0 });
+	level.AddComponent<FillColor>(parent_button_id, {});
+	level.AddComponent<MouseInteractionDependentFillColor>(parent_button_id, {});
+	level.AddComponent<Shader>(parent_button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	level.AddComponent<WidthAndHeight>(parent_button_id)->width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
+	level.AddComponent<Position>(parent_button_id)->position = sf::Vector2f(button_position.x, button_position.y);
+	level.AddComponent<ParentButton>(parent_button_id)->child_buttons = { slider_bar_id, slider_id };
 
 	//Adding text entity
-	float text_x_position = level.GetComponent<Position>(background_button_id)->position.x + level.GetComponent<WidthAndHeight>(background_button_id)->width_and_height.x / 2 + 1.75 * BLOCK_SIZE;
+	float text_x_position = level.GetComponent<Position>(slider_bar_id)->position.x + level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height.x / 2 + 1.5 * BLOCK_SIZE;
 	int button_text_id = AddScrollingText(level, sf::Vector2f(text_x_position, button_position.y), LeftOrRightShiftString(std::vector { ToString(*(f)) }, 3, true)[0]);
 
 	//Connect moving button and text to background button
-	level.GetComponent<SliderButton>(background_button_id)->moving_button_x_pos = &level.GetComponent<Position>(moving_button_id)->position.x;
-	level.GetComponent<SliderButton>(background_button_id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
+	level.GetComponent<SliderButton>(slider_bar_id)->moving_button_x_pos = &level.GetComponent<Position>(slider_id)->position.x;
+	level.GetComponent<SliderButton>(slider_bar_id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
 
-	std::vector<int> ids { background_button_id, moving_button_id, button_text_id };
+	std::vector<int> ids { slider_bar_id, slider_id, parent_button_id, button_text_id };
 	return ids;
 }
 

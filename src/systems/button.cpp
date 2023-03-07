@@ -83,4 +83,19 @@ void ButtonSystem::Update(Level& level, float dt)
 		*(slider_button->slider_value) = intermediary_slider_value;
 		*(level.GetComponent<SliderButton>(entity_id)->button_text) = LeftOrRightShiftString(std::vector { ToString(std::ceil(intermediary_slider_value)) }, 3, true)[0];
 	}
+	for (auto [entity_id, hovered, parent_button] : level.GetEntitiesWith<Hovered, ParentButton>())
+	{
+		for (int children_ids : level.GetComponent<ParentButton>(entity_id)->child_buttons)
+		{
+			level.AddComponent<Hovered>(children_ids);
+		}
+	}
+
+	for (auto [entity_id, pressed, parent_button] : level.GetEntitiesWith<Pressed, ParentButton>())
+	{
+		for (int children_ids : level.GetComponent<ParentButton>(entity_id)->child_buttons)
+		{
+			level.AddComponent<Pressed>(children_ids);
+		}
+	}
 }

@@ -41,3 +41,9 @@ public:
 	std::string* button_text;
 	float* moving_button_x_pos;
 };
+
+class ParentButton
+{
+public:
+	std::vector<int> child_buttons;
+};
