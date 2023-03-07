@@ -174,12 +174,22 @@ std::string HumanName(sf::Keyboard::Key key)
 	}
 }
 
-std::vector<std::string> OptionsDescriptionTextSetter(std::vector<std::string> strings)
+std::vector<std::string> LeftOrRightShiftString(std::vector<std::string> strings, int max_size, bool right_shift)
 {
-	for (unsigned i = 0; i < strings.size(); ++i)
+	for (std::string& str : strings)
 	{
-		assert(strings[i].size() <= 17);
-		strings[i].append(17 - strings[i].size(), ' ');
+		assert(str.size() <= max_size);
+		if (!right_shift)
+		{
+			str.append(max_size - str.size(), ' ');
+		}
+		else
+		{
+			for (unsigned j = 0; j < max_size - str.size(); j++)
+			{
+				str.insert(0, " ");
+			}
+		}
 	}
 	return strings;
 }

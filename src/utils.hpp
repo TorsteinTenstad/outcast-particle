@@ -34,7 +34,7 @@ std::vector<sf::Vector2f> GridHelper(int n_elements, int n_columns, float spacin
 
 std::string HumanName(sf::Keyboard::Key key);
 
-std::vector<std::string> OptionsDescriptionTextSetter(std::vector<std::string> strings);
+std::vector<std::string> LeftOrRightShiftString(std::vector<std::string> strings, int max_size, bool right_shift);
 std::string BoolToStringAsEnabledOrDisabled(bool is);
 
 template <class K, class V>

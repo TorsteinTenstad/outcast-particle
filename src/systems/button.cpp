@@ -64,13 +64,23 @@ void ButtonSystem::Update(Level& level, float dt)
 	{
 		float relative_cursor_x_pos = cursor_and_keys_.cursor_position.x - position->position.x;
 		float half_button_width = width_and_height->width_and_height.x / 2;
-		if (abs(relative_cursor_x_pos) > half_button_width)
+		float intermediary_slider_value;
+		if (relative_cursor_x_pos >= half_button_width)
 		{
-			continue;
+			intermediary_slider_value = 100;
+			*(level.GetComponent<SliderButton>(entity_id)->moving_button_x_pos) = position->position.x + half_button_width;
 		}
-		float intermediary_slider_value = 50 * relative_cursor_x_pos / half_button_width + 50;
+		else if (relative_cursor_x_pos <= -1 * half_button_width)
+		{
+			intermediary_slider_value = 0;
+			*(level.GetComponent<SliderButton>(entity_id)->moving_button_x_pos) = position->position.x - half_button_width;
+		}
+		else
+		{
+			intermediary_slider_value = 50 * relative_cursor_x_pos / half_button_width + 50;
+			*(level.GetComponent<SliderButton>(entity_id)->moving_button_x_pos) = cursor_and_keys_.cursor_position.x;
+		}
 		*(slider_button->slider_value) = intermediary_slider_value;
-		level.GetComponent<Position>(slider_button->moving_button_id)->position.x = cursor_and_keys_.cursor_position.x;
-		std::cout << *(slider_button->slider_value) << std::endl;
+		*(level.GetComponent<SliderButton>(entity_id)->button_text) = LeftOrRightShiftString(std::vector { ToString(std::ceil(intermediary_slider_value)) }, 3, true)[0];
 	}
 }

@@ -79,9 +79,9 @@ void Game::GoToOptionsMenu()
 	active_level_.AddComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
 }
 
-static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> button_texts, std::vector<std::string> description_texts, std::vector<std::function<std::vector<int>(sf::Vector2f, int)>> create_buttons)
+static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> description_texts, std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_buttons)
 {
-	assert(button_texts.size() == description_texts.size() && button_texts.size() == create_buttons.size());
+	assert(description_texts.size() == create_buttons.size());
 
 	sf::Vector2f level_size = level.GetSize();
 	sf::Vector2f button_position = sf::Vector2f(1.33 * level_size.x / 2.f, 2 * BLOCK_SIZE);
@@ -101,14 +101,13 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	position->position = level_size / 2.f;
 
 	//Create buttons, texts and add to scroll window
-	for (unsigned i = 0; i < button_texts.size(); ++i)
+	for (unsigned i = 0; i < description_texts.size(); ++i)
 	{
 		button_position = button_position + sf::Vector2f(0, 3 * BLOCK_SIZE);
-		int button_text_id = AddScrollingText(level, button_position, button_texts[i]);
-		std::vector<int> button_ids = create_buttons[i](button_position, button_text_id);
+		std::vector<int> button_ids = create_buttons[i](button_position);
 		sf::Vector2f description_position = sf::Vector2f(level_size.x - button_position.x, button_position.y);
 		int description_id = AddScrollingText(level, description_position, description_texts[i]);
-		scroll_window->entities.insert(scroll_window->entities.end(), { button_text_id, description_id });
+		scroll_window->entities.insert(scroll_window->entities.end(), { description_id });
 		scroll_window->entities.insert(scroll_window->entities.end(), button_ids.begin(), button_ids.end());
 	}
 
@@ -125,16 +124,15 @@ void Game::GoToKeyConfigMenu()
 	sf::Vector2f level_size = active_level_.GetSize();
 
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT, &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.MENU };
-	std::vector<std::string> button_texts = {};
-	std::vector<std::function<std::vector<int>(sf::Vector2f, int)>> create_button_functions;
+	std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_button_functions;
 	for (auto key : keys)
 	{
-		button_texts.push_back(HumanName(*key));
-		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), key, std::placeholders::_1, std::placeholders::_2));
+		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), key, std::placeholders::_1));
 	}
+	create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1));
 	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause", "Test" };
 
-	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
+	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()
@@ -145,14 +143,14 @@ void Game::GoToGraphicsAndDisplayMenu()
 
 	std::vector<std::string> button_texts = { BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen), BoolToStringAsEnabledOrDisabled(globals.general_config.limit_fps_to_60), BoolToStringAsEnabledOrDisabled(globals.general_config.forces_are_visualized) };
 	std::vector<std::function<void(void)>> button_functions = { std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ToggleFramerateLimit, this), [](void) { globals.general_config.forces_are_visualized = !globals.general_config.forces_are_visualized; } };
-	std::vector<std::function<std::vector<int>(sf::Vector2f, int)>> create_button_functions;
-	for (auto button_function : button_functions)
+	std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_button_functions;
+	for (unsigned i = 0; i < button_functions.size(); i++)
 	{
-		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_function, std::placeholders::_1, std::placeholders::_2));
+		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_functions[i], button_texts[i], std::placeholders::_1));
 	}
 	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate", "Show Forces" };
 
-	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
+	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
 }
 
 void Game::GoToMusicAndSoundMenu()
@@ -161,14 +159,13 @@ void Game::GoToMusicAndSoundMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
-	std::vector<std::string> button_texts = { "" };
-	std::vector<std::function<std::vector<int>(sf::Vector2f, int)>> create_button_functions;
+	std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_button_functions;
 
 	std::vector<std::string> description_texts = { "Sound Volume" };
 	for (auto description_text : description_texts)
 	{
-		create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1, std::placeholders::_2));
+		create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1));
 	}
 
-	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), button_texts, OptionsDescriptionTextSetter(description_texts), create_button_functions);
+	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
 }
