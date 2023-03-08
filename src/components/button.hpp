@@ -39,11 +39,6 @@ class SliderButton
 public:
 	int* slider_value; //float normalized from 0-100.
 	std::string* button_text;
-	float* moving_button_x_pos;
-};
-
-class ParentButton
-{
-public:
-	std::vector<int> child_buttons;
+	float* slider_x_pos;
+	int slider_bar_id;
 };

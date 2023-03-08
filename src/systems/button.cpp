@@ -60,42 +60,28 @@ void ButtonSystem::Update(Level& level, float dt)
 		*(binary_options_button->button_text) = BoolToStringAsEnabledOrDisabled(*(binary_options_button->button_text) == "Disabled");
 		//return;
 	}
-	for (auto [entity_id, position, pressed, slider_button, width_and_height] : level.GetEntitiesWith<Position, Pressed, SliderButton, WidthAndHeight>())
+	for (auto [entity_id, pressed, slider_button] : level.GetEntitiesWith<Pressed, SliderButton>())
 	{
-		float relative_cursor_x_pos = cursor_and_keys_.cursor_position.x - position->position.x;
-		float half_button_width = width_and_height->width_and_height.x / 2;
+		float slider_x_pos = level.GetComponent<Position>(slider_button->slider_bar_id)->position.x;
+		float relative_cursor_x_pos = cursor_and_keys_.cursor_position.x - slider_x_pos;
+		float half_slider_width = level.GetComponent<WidthAndHeight>(slider_button->slider_bar_id)->width_and_height.x * 0.5;
 		float intermediary_slider_value;
-		if (relative_cursor_x_pos >= half_button_width)
+		if (relative_cursor_x_pos >= half_slider_width)
 		{
 			intermediary_slider_value = 100;
-			*(level.GetComponent<SliderButton>(entity_id)->moving_button_x_pos) = position->position.x + half_button_width;
+			*(level.GetComponent<SliderButton>(entity_id)->slider_x_pos) = slider_x_pos + half_slider_width;
 		}
-		else if (relative_cursor_x_pos <= -1 * half_button_width)
+		else if (relative_cursor_x_pos <= -1 * half_slider_width)
 		{
 			intermediary_slider_value = 0;
-			*(level.GetComponent<SliderButton>(entity_id)->moving_button_x_pos) = position->position.x - half_button_width;
+			*(level.GetComponent<SliderButton>(entity_id)->slider_x_pos) = slider_x_pos - half_slider_width;
 		}
 		else
 		{
-			intermediary_slider_value = 50 * relative_cursor_x_pos / half_button_width + 50;
-			*(level.GetComponent<SliderButton>(entity_id)->moving_button_x_pos) = cursor_and_keys_.cursor_position.x;
+			intermediary_slider_value = 50 * relative_cursor_x_pos / half_slider_width + 50;
+			*(level.GetComponent<SliderButton>(entity_id)->slider_x_pos) = cursor_and_keys_.cursor_position.x;
 		}
 		*(slider_button->slider_value) = intermediary_slider_value;
 		*(level.GetComponent<SliderButton>(entity_id)->button_text) = LeftOrRightShiftString(std::vector { ToString(std::ceil(intermediary_slider_value)) }, 3, true)[0];
-	}
-	for (auto [entity_id, hovered, parent_button] : level.GetEntitiesWith<Hovered, ParentButton>())
-	{
-		for (int children_ids : level.GetComponent<ParentButton>(entity_id)->child_buttons)
-		{
-			level.AddComponent<Hovered>(children_ids);
-		}
-	}
-
-	for (auto [entity_id, pressed, parent_button] : level.GetEntitiesWith<Pressed, ParentButton>())
-	{
-		for (int children_ids : level.GetComponent<ParentButton>(entity_id)->child_buttons)
-		{
-			level.AddComponent<Pressed>(children_ids);
-		}
 	}
 }

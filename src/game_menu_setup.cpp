@@ -129,8 +129,7 @@ void Game::GoToKeyConfigMenu()
 	{
 		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), key, std::placeholders::_1));
 	}
-	create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1));
-	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause", "Test" };
+	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
 
 	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
 }
@@ -161,7 +160,7 @@ void Game::GoToMusicAndSoundMenu()
 
 	std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_button_functions;
 
-	std::vector<std::string> description_texts = { "Sound Volume" };
+	std::vector<std::string> description_texts = { "SFX Volume" };
 	for (auto description_text : description_texts)
 	{
 		create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1));
