@@ -145,9 +145,13 @@ void Level::LoadFromFile(std::string savefile_path)
         {{"""
         for (component, value) in blueprint.get(
                 "implicit", {}).items():
+            if component == 'Tag':
+                continue
             body += f"""
             AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
         for component in blueprint.get("explicit", []):
+            if component == 'Tag':
+                continue
             body += f"""
             DeserializeComponent(AddComponent<{component}>(entity_id),line);"""
         body += """

@@ -432,7 +432,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, { "_", false, 0 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             AddComponent<Position>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPButton")
@@ -446,7 +445,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Text>(entity_id, {});
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
             AddComponent<Position>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPMenuNavigationButton")
@@ -462,7 +460,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Position>(entity_id, {});
             AddComponent<OnReleasedThisFrame>(entity_id, {});
             AddComponent<MenuNavigatable>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPMenuNavigator")
@@ -473,14 +470,12 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 101 });
             AddComponent<MenuNavigator>(entity_id, {});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
         if (tag == "BPEditableEntity")
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
         }
         
@@ -493,7 +488,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 6 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
             AddComponent<Radius>(entity_id, { 120 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<Charge>(entity_id),line);
         }
@@ -512,7 +506,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Intersection>(entity_id, {});
             AddComponent<Collision>(entity_id, {});
             AddComponent<Trail>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<Charge>(entity_id),line);
             DeserializeComponent(AddComponent<Velocity>(entity_id),line);
@@ -525,7 +518,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\black_hole.frag", {}, {}, {} });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -548,7 +540,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Face>(entity_id, {});
             AddComponent<ForceVisualization>(entity_id, {});
             AddComponent<PlayerBehaviors>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<Charge>(entity_id),line);
             DeserializeComponent(AddComponent<Velocity>(entity_id),line);
@@ -564,7 +555,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<OrientationDependentDrawInfo>(entity_id, {});
             AddComponent<KillOnIntersection>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\laser.wav" });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -580,7 +570,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Children>(entity_id, {});
             AddComponent<Radius>(entity_id, { 60 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\coin.wav" });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
         }
         
@@ -592,7 +581,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 0.2, 75 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -605,7 +593,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 1, 75 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -618,7 +605,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 0.05, 75 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -631,7 +617,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -643,7 +628,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, { "", false, 0 });
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<ElectricField>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
@@ -656,7 +640,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawInfo>(entity_id, { "", false, 0 });
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<MagneticField>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
@@ -668,7 +651,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity_id, {});
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
             AddComponent<DrawPriority>(entity_id, { 2 });
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
             DeserializeComponent(AddComponent<TextPopupSpawner>(entity_id),line);
@@ -680,7 +662,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 101 });
             AddComponent<Shader>(entity_id, { "", "shaders\\scroll.frag", {}, {}, {} });
             AddComponent<Position>(entity_id, {});
-            DeserializeComponent(AddComponent<Tag>(entity_id),line);
         }
         
     }

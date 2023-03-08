@@ -187,7 +187,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
 		{ // Button
-			auto [entity_id, on_released_this_frame, shader, width_and_height, position] = level.AddBlueprintAddComponents<OnReleasedThisFrame, Shader, WidthAndHeight, Position>(BPMenuNavigationButton);
+			int entity_id = level.AddBlueprint(BPMenuNavigationButton);
 			if (level_id == ui->at_level_id)
 			{
 				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = entity_id;
@@ -195,10 +195,10 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			ui->button_entity_ids.push_back(entity_id);
 			scroll_window->entities.push_back(entity_id);
 
-			shader->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-			on_released_this_frame->func = std::bind(&LevelMenuSystem::EnterLevel, this, level_id);
-			width_and_height->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
-			position->position = button_position;
+			level.GetComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.GetComponent<OnReleasedThisFrame>(entity_id)->func = std::bind(&LevelMenuSystem::EnterLevel, this, level_id);
+			level.GetComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
+			level.GetComponent<Position>(entity_id)->position = button_position;
 		}
 		{ // Text
 			auto [entity_id, text, draw_priority, shader, position] = level.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();

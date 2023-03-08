@@ -209,11 +209,11 @@ std::vector<int> AddKeyConfigButton(Level& level, sf::Keyboard::Key* key, sf::Ve
 
 	int id = level.AddBlueprint(BPButton);
 	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<Position>(id)->position = button_position;
+	level.GetComponent<Position>(id)->position = button_position;
 	level.AddComponent<KeyConfigButton>(id)->key = key;
 	level.AddComponent<StickyButton>(id);
 	int button_text_id = AddScrollingText(level, button_position, HumanName(*key));
-	level.GetComponent<KeyConfigButton>(id)->button_text = &level.AddComponent<Text>(button_text_id)->content;
+	level.GetComponent<KeyConfigButton>(id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
 
 	std::vector<int> ids { id, button_text_id };
 	return ids;
@@ -224,11 +224,11 @@ std::vector<int> AddOptionsButton(Level& level, std::function<void(void)> on_cli
 
 	int id = level.AddBlueprint(BPButton);
 	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<Position>(id)->position = button_position;
+	level.GetComponent<Position>(id)->position = button_position;
 	level.AddComponent<OnReleasedThisFrame>(id)->func = on_click;
 
 	int button_text_id = AddScrollingText(level, button_position, button_text);
-	level.AddComponent<BinaryOptionsButton>(id)->button_text = &level.AddComponent<Text>(button_text_id)->content;
+	level.AddComponent<BinaryOptionsButton>(id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
 	std::vector<int> ids { id, button_text_id };
 	return ids;
 }
@@ -284,9 +284,9 @@ std::vector<int> AddSliderButton(Level& level, int* f, sf::Vector2f button_posit
 int AddScrollingText(Level& level, sf::Vector2f position, std::string text)
 {
 	int id = level.AddBlueprint(BPText);
-	level.AddComponent<Position>(id)->position = position;
-	level.AddComponent<Text>(id)->content = text;
-	level.AddComponent<Text>(id)->apply_shader = true;
+	level.GetComponent<Position>(id)->position = position;
+	level.GetComponent<Text>(id)->content = text;
+	level.GetComponent<Text>(id)->apply_shader = true;
 	return id;
 }
 

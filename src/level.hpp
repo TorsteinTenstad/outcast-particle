@@ -156,6 +156,12 @@ public:
 	bool HasComponents(int entity_id);
 
 	template <class Component>
+	Component* EnsureExistanceOfComponent(int entity_id);
+
+	template <class... Component>
+	std::tuple<Component*...> EnsureExistanceOfComponents(int entity_id);
+
+	template <class Component>
 	Component* AddComponent(int entity_id);
 
 	template <class Component>

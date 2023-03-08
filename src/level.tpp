@@ -26,10 +26,23 @@ bool Level::HasComponents(int entity_id)
 }
 
 template <class Component>
-Component* Level::AddComponent(int entity_id)
+Component* Level::EnsureExistanceOfComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	return &m[entity_id];
+}
+
+template <class... Component>
+std::tuple<Component*...> Level::EnsureExistanceOfComponents(int entity_id)
+{
+	return std::make_tuple(EnsureExistanceOfComponent<Component>(entity_id)...);
+}
+
+template <class Component>
+Component* Level::AddComponent(int entity_id)
+{
+	assert(!HasComponent<Component>(entity_id));
+	return EnsureExistanceOfComponent<Component>(entity_id);
 }
 
 template <class Component>
@@ -51,6 +64,7 @@ template <class Component>
 Component* Level::GetComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
+	assert(m.count(entity_id) > 0);
 	return &m.at(entity_id);
 }
 

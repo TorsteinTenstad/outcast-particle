@@ -65,18 +65,18 @@ void Game::GoToOptionsMenu()
 	int entity_position_x = level_size.x - 8 * BLOCK_SIZE;
 
 	int player_id = active_level_.AddBlueprint(BPPlayer);
-	active_level_.AddComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
-	active_level_.AddComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
+	active_level_.GetComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
+	active_level_.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
 
 	int electric_field_1 = active_level_.AddBlueprint(BPElectricField);
-	active_level_.AddComponent<Position>(electric_field_1)->position = sf::Vector2f(entity_position_x, 360);
-	active_level_.AddComponent<ElectricField>(electric_field_1)->field_vector = sf::Vector2f(0, 0.25);
-	active_level_.AddComponent<WidthAndHeight>(electric_field_1)->width_and_height = sf::Vector2f(480, 240);
+	active_level_.GetComponent<Position>(electric_field_1)->position = sf::Vector2f(entity_position_x, 360);
+	active_level_.GetComponent<ElectricField>(electric_field_1)->field_vector = sf::Vector2f(0, 0.25);
+	active_level_.GetComponent<WidthAndHeight>(electric_field_1)->width_and_height = sf::Vector2f(480, 240);
 
 	int electric_field_2 = active_level_.AddBlueprint(BPElectricField);
-	active_level_.AddComponent<Position>(electric_field_2)->position = sf::Vector2f(entity_position_x, 1800);
-	active_level_.AddComponent<ElectricField>(electric_field_2)->field_vector = sf::Vector2f(0, -0.25);
-	active_level_.AddComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
+	active_level_.GetComponent<Position>(electric_field_2)->position = sf::Vector2f(entity_position_x, 1800);
+	active_level_.GetComponent<ElectricField>(electric_field_2)->field_vector = sf::Vector2f(0, -0.25);
+	active_level_.GetComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
 }
 
 static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> description_texts, std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_buttons)
