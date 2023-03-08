@@ -87,12 +87,18 @@ void SaveOptionsToFile(std::string savefile_path_key_config, std::string savefil
 void LoadOptionsFromFile(std::string savefile_path_key_config, std::string savefile_path_general_config)
 {
 	std::ifstream key_f(savefile_path_key_config);
-	std::string key_string;
-	key_f >> key_string;
-	DeserializeComponent(&globals.key_config, key_string);
+	if (key_f.is_open())
+	{
+		std::string key_string;
+		key_f >> key_string;
+		DeserializeComponent(&globals.key_config, key_string);
+	}
 
 	std::ifstream general_f(savefile_path_general_config);
-	std::string general_string;
-	general_f >> general_string;
-	DeserializeComponent(&globals.general_config, general_string);
+	if (general_f.is_open())
+	{
+		std::string general_string;
+		general_f >> general_string;
+		DeserializeComponent(&globals.general_config, general_string);
+	}
 }
