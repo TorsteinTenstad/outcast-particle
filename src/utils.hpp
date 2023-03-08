@@ -37,6 +37,17 @@ std::string HumanName(sf::Keyboard::Key key);
 std::vector<std::string> LeftOrRightShiftString(std::vector<std::string> strings, int max_size, bool right_shift);
 std::string BoolToStringAsEnabledOrDisabled(bool is);
 
+template <class InputType, class OutputType>
+std::vector<OutputType> ApplyFuncToVector(std::vector<InputType> vec, std::function<OutputType(InputType)> func)
+{
+	std::vector<OutputType> result = {};
+	for (auto& x : vec)
+	{
+		result.push_back(func(x));
+	}
+	return result;
+}
+
 template <class K, class V>
 typename std::map<K, V>::const_iterator NextInMap(const std::map<K, V>& m, K key)
 {
