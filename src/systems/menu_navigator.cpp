@@ -1,5 +1,6 @@
 #include "_pure_DO_systems.hpp"
 #include "level.hpp"
+#include <cassert>
 
 static int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possble_positions)
 {

@@ -1,5 +1,6 @@
 
     #pragma once
+    #include <cassert>
     #include <string>
     #include "controls_config.hpp"
     #include "string_parsing_utils.hpp"

@@ -1,4 +1,5 @@
 #include "_pure_DO_systems.hpp"
+#include "entity_creation.hpp"
 #include "physics_utils.hpp"
 #include "string_parsing_utils.hpp"
 #include "utils.hpp"

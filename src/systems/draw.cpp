@@ -4,6 +4,7 @@
 #include "SFML/Graphics/Shader.hpp"
 #include "SFML/System/Err.hpp"
 #include "constants.hpp"
+#include <cassert>
 
 void DrawSystem::Update(Level& level, float dt)
 {

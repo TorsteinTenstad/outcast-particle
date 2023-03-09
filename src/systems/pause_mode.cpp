@@ -1,4 +1,5 @@
 #include "systems/pause_mode.hpp"
+#include "entity_creation.hpp"
 #include "utils.hpp"
 #include <algorithm>
 #include <functional>
@@ -25,7 +26,7 @@ void PauseMode::Update(Level& level, float dt)
 			|| level_state == FAILED))
 	{
 		level.SetMode(PAUSE_MODE);
-		MenuDelayTimer* menu_delay_timer = GetSingleton<MenuDelayTimer>(level);
+		MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 		menu_delay_timer->pevious_mode = level_mode;
 		menu_delay_timer->duration = (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] || !globals.render_window.hasFocus()) ? -1 : PAUSE_MENU_DELAY;
 		menu_delay_timer->buttons_initialized = false;
@@ -33,7 +34,7 @@ void PauseMode::Update(Level& level, float dt)
 
 	if (level_mode == PAUSE_MODE)
 	{
-		MenuDelayTimer* menu_delay_timer = GetSingleton<MenuDelayTimer>(level);
+		MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 		if (!menu_delay_timer->buttons_initialized && (menu_delay_timer->duration < 0 || cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]))
 		{
 			AddAppropriateButtons(level, menu_delay_timer->pevious_mode);

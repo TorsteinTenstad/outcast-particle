@@ -1,4 +1,5 @@
 #include "_pure_DO_systems.hpp"
+#include <cassert>
 
 void BackgroundSystem::Update(Level& level, float dt)
 {

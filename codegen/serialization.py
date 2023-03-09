@@ -1,6 +1,7 @@
 
 def gen_level_serialization(data):
     cpp = """
+#include <cassert>
 #include <string>
 #include <vector>
 #include <fstream>

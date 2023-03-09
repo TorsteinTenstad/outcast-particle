@@ -1,6 +1,7 @@
 #include "SFML/Graphics/Shader.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "_pure_DO_systems.hpp"
+#include "entity_creation.hpp"
 #include "level.hpp"
 
 void SegmentedGlowEffectSystem::Update(Level& level, float dt)

@@ -8,6 +8,7 @@
 #include "globals.hpp"
 #include "level.hpp"
 #include "render_shapes.hpp"
+#include <cassert>
 
 sf::Texture* RenderShapesSystem::GetLoadedSFMLTexture(std::string image_path)
 {

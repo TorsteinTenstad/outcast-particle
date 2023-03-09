@@ -1,3 +1,4 @@
+#include "cassert"
 #include "game.hpp"
 
 template <class System>

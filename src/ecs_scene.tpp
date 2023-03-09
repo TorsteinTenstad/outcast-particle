@@ -1,8 +1,8 @@
-#include "level.hpp"
+#include "ecs_scene.hpp"
 #include <cassert>
 
 template <class Component>
-std::map<int, Component>& Level::GetComponentMap()
+std::map<int, Component>& ESCScene::GetComponentMap()
 {
 	if (components_.count(typeid(Component)) == 0)
 	{
@@ -13,40 +13,40 @@ std::map<int, Component>& Level::GetComponentMap()
 }
 
 template <class Component>
-bool Level::HasComponent(int entity_id)
+bool ESCScene::HasComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	return m.find(entity_id) != m.end();
 }
 
 template <class... Component>
-bool Level::HasComponents(int entity_id)
+bool ESCScene::HasComponents(int entity_id)
 {
 	return (HasComponent<Component>(entity_id) && ...);
 }
 
 template <class Component>
-Component* Level::EnsureExistanceOfComponent(int entity_id)
+Component* ESCScene::EnsureExistanceOfComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	return &m[entity_id];
 }
 
 template <class... Component>
-std::tuple<Component*...> Level::EnsureExistanceOfComponents(int entity_id)
+std::tuple<Component*...> ESCScene::EnsureExistanceOfComponents(int entity_id)
 {
 	return std::make_tuple(EnsureExistanceOfComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-Component* Level::AddComponent(int entity_id)
+Component* ESCScene::AddComponent(int entity_id)
 {
 	assert(!HasComponent<Component>(entity_id));
 	return EnsureExistanceOfComponent<Component>(entity_id);
 }
 
 template <class Component>
-Component* Level::AddComponent(int entity_id, Component&& value)
+Component* ESCScene::AddComponent(int entity_id, Component&& value)
 {
 	auto& m = GetComponentMap<Component>();
 	assert(m.count(entity_id) == 0);
@@ -55,13 +55,13 @@ Component* Level::AddComponent(int entity_id, Component&& value)
 }
 
 template <class... Component>
-std::tuple<Component*...> Level::AddComponents(int entity_id)
+std::tuple<Component*...> ESCScene::AddComponents(int entity_id)
 {
 	return std::make_tuple(AddComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-Component* Level::GetComponent(int entity_id)
+Component* ESCScene::GetComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	assert(m.count(entity_id) > 0);
@@ -69,42 +69,28 @@ Component* Level::GetComponent(int entity_id)
 }
 
 template <class... Component>
-std::tuple<Component*...> Level::GetComponents(int entity_id)
+std::tuple<Component*...> ESCScene::GetComponents(int entity_id)
 {
 	return std::make_tuple(GetComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-bool Level::RemoveComponent(int entity_id)
+bool ESCScene::RemoveComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	return m.erase(entity_id) > 0;
 }
 
 template <class... Component>
-bool Level::RemoveComponents(int entity_id)
+bool ESCScene::RemoveComponents(int entity_id)
 {
 	return (RemoveComponent<Component>(entity_id) || ...);
 }
 
 template <class... Component>
-std::tuple<int, Component*...> Level::CreateEntitiyWith()
+std::tuple<int, Component*...> ESCScene::CreateEntitiyWith()
 {
 	int entity_id = CreateEntityId();
-	return std::tuple_cat(std::make_tuple(entity_id), AddComponents<Component...>(entity_id));
-}
-
-template <class... Component>
-std::tuple<int, Component*...> Level::AddBlueprintGetComponents(Blueprint blueprint)
-{
-	int entity_id = AddBlueprint(blueprint);
-	return std::tuple_cat(std::make_tuple(entity_id), GetComponents<Component...>(entity_id));
-}
-
-template <class... Component>
-std::tuple<int, Component*...> Level::AddBlueprintAddComponents(Blueprint blueprint)
-{
-	int entity_id = AddBlueprint(blueprint);
 	return std::tuple_cat(std::make_tuple(entity_id), AddComponents<Component...>(entity_id));
 }
 
@@ -146,7 +132,7 @@ static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& com
 }
 
 template <class... Component>
-std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
+std::vector<std::tuple<int, Component*...>> ESCScene::GetEntitiesWith()
 {
 	int component_idx = 0;
 	std::vector<std::tuple<int, Component*...>> matching_entities = {};
@@ -155,7 +141,7 @@ std::vector<std::tuple<int, Component*...>> Level::GetEntitiesWith()
 }
 
 template <class... Component>
-void Level::DeleteEntitiesWith()
+void ESCScene::DeleteEntitiesWith()
 {
 	auto entities = GetEntitiesWith<Component...>();
 	for (auto tup : entities)
@@ -166,47 +152,28 @@ void Level::DeleteEntitiesWith()
 }
 
 template <class Component>
-std::tuple<int, Component*> GetSingletonIncludeID(Level& level)
+std::tuple<int, Component*> ESCScene::GetSingletonIncludeID()
 {
-	auto& component_map = level.GetComponentMap<Component>();
+	auto& component_map = GetComponentMap<Component>();
 	assert(!(component_map.size() > 1));
 
 	if (component_map.size() == 0)
 	{
-		int entity_id = level.CreateEntityId();
+		int entity_id = CreateEntityId();
 		component_map[entity_id];
 	}
 	return { component_map.begin()->first, &component_map.begin()->second };
 }
 
 template <class Component>
-Component* GetSingleton(Level& level)
+Component* ESCScene::GetSingleton()
 {
-	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>(level);
+	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>();
 	return std::get<Component*>(tup);
 }
 
 template <class Component>
-void Level::ClearComponent()
+void ESCScene::ClearComponent()
 {
 	GetComponentMap<Component>().clear();
-}
-
-template <class ResponsibleComponent>
-int EnsureExistanceOfChildEntity(Children* parents_children, std::function<int(void)> child_creation_func)
-{
-	if (parents_children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
-	{
-		int child_id = child_creation_func();
-		parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(child_id);
-	}
-	return parents_children->ids_owned_by_component[typeid(ResponsibleComponent)][0];
-}
-
-template <class ResponsibleComponent>
-Shader* EnsureExistanceOfScreenwideFragmentShaderChildEntity(Level& level, Children* parents_children, std::string shader_path, int draw_priority)
-{
-	std::function<int(void)> child_creation_func = [&]() { return CreateScreenwideFragmentShaderEntity(level, shader_path, draw_priority); };
-	int child_id = EnsureExistanceOfChildEntity<ResponsibleComponent>(parents_children, child_creation_func);
-	return level.GetComponent<Shader>(child_id);
 }

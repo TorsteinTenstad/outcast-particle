@@ -1,7 +1,7 @@
-
 #include "_pure_DO_systems.hpp"
 #include "globals.hpp"
 #include "utils.hpp"
+#include <cassert>
 
 void CollisionSystem::Update(Level& level, float dt)
 {

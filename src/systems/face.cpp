@@ -1,4 +1,5 @@
 #include "_pure_DO_systems.hpp"
+#include "entity_creation.hpp"
 #include "utils.hpp"
 
 #define MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT 10

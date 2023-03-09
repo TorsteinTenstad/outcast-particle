@@ -37,6 +37,7 @@ def serialize_single_class(class_definition_filepath, output_filepath, classname
 
     cpp = f"""
     #pragma once
+    #include <cassert>
     #include <string>
     #include "{filename}"
     #include "string_parsing_utils.hpp"

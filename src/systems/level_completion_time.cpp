@@ -10,8 +10,8 @@ void LevelCompletionTimeSystem::SetLevelCompletionTimeRecords(std::map<int, std:
 }
 void LevelCompletionTimeSystem::Update(Level& level, float dt)
 {
-	LevelCompletionTimer* level_completion_timer = GetSingleton<LevelCompletionTimer>(level);
-	CoinCounter* coin_counter = GetSingleton<CoinCounter>(level);
+	LevelCompletionTimer* level_completion_timer = level.GetSingleton<LevelCompletionTimer>();
+	CoinCounter* coin_counter = level.GetSingleton<CoinCounter>();
 
 	if (level.GetMode() == PLAY_MODE)
 	{

@@ -4,6 +4,7 @@
 #include "globals.hpp"
 #include "level.hpp"
 #include "utils.hpp"
+#include <cassert>
 
 static bool CheckIntersection(Position* position_a, Position* position_b, Radius* radius_a, Radius* radius_b)
 {

@@ -3,6 +3,7 @@
 #include "components/physics.hpp"
 #include "globals.hpp"
 #include "systems/coin.hpp"
+#include <cassert>
 
 void CoinSystem::SetCoinRecords(std::map<std::string, int>* coin_records)
 {
@@ -15,7 +16,7 @@ void CoinSystem::Update(Level& level, float dt)
 		return;
 	}
 
-	CoinCounter* coin_counter = GetSingleton<CoinCounter>(level);
+	CoinCounter* coin_counter = level.GetSingleton<CoinCounter>();
 	int& counter = coin_counter->coin_counter;
 
 	for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
