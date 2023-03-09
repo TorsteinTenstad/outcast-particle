@@ -123,9 +123,7 @@ class BPLaser : public BPEditableEntity
 
 class BPCoin : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\coin.png", true, 0 };
 	DrawPriority draw_priority = { 3 };
-	Editable editable = { 120 };
 	Coin coin = {};
 	SegmentedGlowEffect segmented_glow_effect = {};
 	Children children = {};

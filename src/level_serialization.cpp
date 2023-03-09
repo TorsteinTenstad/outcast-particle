@@ -563,8 +563,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPCoin")
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, { 120 });
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\coin.png", true, 0 });
+            AddComponent<Editable>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 3 });
             AddComponent<Coin>(entity_id, {});
             AddComponent<SegmentedGlowEffect>(entity_id, {});
@@ -797,8 +796,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             break;
         case BPCoin:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, { 120 });
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\coin.png", true, 0 });
+            AddComponent<Editable>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 3 });
             AddComponent<Coin>(entity_id, {});
             AddComponent<SegmentedGlowEffect>(entity_id, {});

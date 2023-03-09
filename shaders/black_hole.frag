@@ -6,9 +6,9 @@ uniform sampler2D texture;
 uniform float _time;
 uniform vec2 _wh;
 
-mat2 rot(float a) {
-	float s = sin(a);
-	float c = cos(a);
+mat2 rot(float theta) {
+	float s = sin(theta);
+	float c = cos(theta);
 	mat2 m = mat2(c, -s, s, c);
     return m;
 }
