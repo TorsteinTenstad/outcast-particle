@@ -101,7 +101,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Select entities:
 	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<Editable, PressedThisFrame>())
 	{
-		level.AddComponent<Selected>(entity_id);
+		level.EnsureExistanceOfComponent<Selected>(entity_id);
 		for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 		{
 			selected->mouse_offset = cursor_and_keys_.cursor_position - position->position;

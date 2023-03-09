@@ -11,13 +11,9 @@ name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(2280,1980)}WidthAndHeight{width_and_height=(3840,360)}
 "BPWall":Tag{tag=BPWall}Position{position=(1020,780)}WidthAndHeight{width_and_height=(720,120)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,1320)}Charge{charge=10000}
-"BPWall":Tag{tag=BPWall}Position{position=(1440,540)}WidthAndHeight{width_and_height=(240,600)}
-"BPWall":Tag{tag=BPWall}Position{position=(840,1320)}WidthAndHeight{width_and_height=(360,360)}
-"BPWall":Tag{tag=BPWall}Position{position=(2640,900)}WidthAndHeight{width_and_height=(240,1200)}
-"BPWall":Tag{tag=BPWall}Position{position=(1020,720)}WidthAndHeight{width_and_height=(720,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(1440,1500)}WidthAndHeight{width_and_height=(240,720)}
-"BPWall":Tag{tag=BPWall}Position{position=(2040,840)}WidthAndHeight{width_and_height=(360,360)}
+"BPWall":Tag{tag=BPWall}Position{position=(1440,600)}WidthAndHeight{width_and_height=(240,600)}
+"BPWall":Tag{tag=BPWall}Position{position=(2640,840)}WidthAndHeight{width_and_height=(240,1200)}
+"BPWall":Tag{tag=BPWall}Position{position=(1440,1620)}WidthAndHeight{width_and_height=(240,720)}
 "BPWall":Tag{tag=BPWall}Position{position=(1860,1380)}WidthAndHeight{width_and_height=(720,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(1860,1440)}WidthAndHeight{width_and_height=(720,120)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(2040,840)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3120,1980)}Charge{charge=-10000}
