@@ -47,8 +47,8 @@ void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
         {
             FromString(c->sound_volume, statement_parts[1]);
         }
-        else {{
+        else {
             assert(false);
-        }}
         }
     }
+}

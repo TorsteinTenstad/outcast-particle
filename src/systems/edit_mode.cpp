@@ -23,13 +23,12 @@ static void OpenBlueprintMenu(Level& level)
 {
 	int i = 0;
 	int menu_background_id = level.CreateEntityId();
-	level.GetComponent<Position>(menu_background_id)->position = level.GetSize() / 2.f;
-	level.GetComponent<DrawInfo>(menu_background_id)->image_path = "content\\textures\\gray.png";
-	level.GetComponent<DrawPriority>(menu_background_id)->draw_priority = UI_BASE_DRAW_PRIORITY;
+	level.AddComponent<Position>(menu_background_id)->position = level.GetSize() / 2.f;
+	level.AddComponent<DrawInfo>(menu_background_id)->image_path = "content\\textures\\gray.png";
+	level.AddComponent<DrawPriority>(menu_background_id)->draw_priority = UI_BASE_DRAW_PRIORITY;
 	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
 	float menu_width = (3 * BLUEPRINT_ENTRIES.size() + 1) * BLOCK_SIZE;
-	level.GetComponent<WidthAndHeight>(menu_background_id)->width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
-	level.AddComponent<Border>(menu_background_id);
+	level.AddComponent<WidthAndHeight>(menu_background_id)->width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
 	level.AddComponent<BlueprintMenuItem>(menu_background_id);
 	int entity_id;
 	for (const auto& tag : BLUEPRINT_ENTRIES)
@@ -107,13 +106,6 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			selected->mouse_offset = cursor_and_keys_.cursor_position - position->position;
 		}
-	}
-
-	// Mark selected entities with border:
-	level.ClearComponent<Border>();
-	for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
-	{
-		level.GetComponent<Border>(entity_id)->color = sf::Color::Blue;
 	}
 
 	// Move entities with the curser:

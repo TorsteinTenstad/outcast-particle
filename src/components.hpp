@@ -40,7 +40,6 @@ typedef std::variant<
 	std::map<int, Background>,
 	std::map<int, BinaryOptionsButton>,
 	std::map<int, BlueprintMenuItem>,
-	std::map<int, Border>,
 	std::map<int, Charge>,
 	std::map<int, ChargeDependentDrawInfo>,
 	std::map<int, Children>,

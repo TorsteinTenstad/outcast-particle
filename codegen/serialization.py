@@ -22,14 +22,14 @@ Changes will be overwritten.
             if component_tag not in explicit_components:
                 explicit_components.append(component_tag)
 
-    cpp += gen_components(data["components"], explicit_components)
+    cpp += gen_components(data["components"], explicit_components, True)
     cpp += gen_save_to_file(data["blueprints"])
     cpp += gen_load_from_file(data["blueprints"])
     cpp += gen_add_blueprint(data["blueprints"])
     return cpp
 
 
-def gen_components(data, components_to_generate):
+def gen_components(data, components_to_generate, allow_unmatched_statements=False):
     cpp = "\n"
     for component in components_to_generate:
         cpp += f"""
@@ -61,12 +61,14 @@ void DeserializeComponent({component}* c, const std::string& entity_str_rep)
         {{
             FromString(c->{attribute}, statement_parts[1]);
         }}"""
-        cpp += """
-        else {{
+        if not allow_unmatched_statements:
+            cpp += """
+        else {
             assert(false);
-        }}
-        }
-    }"""
+        }"""
+        cpp += """
+    }
+}"""
 
     return cpp + "\n"
 

@@ -52,7 +52,7 @@ void main()
 	vec4 glow_contribution = vec4(glow_color, glow_alpha);
 
 	vec2 gem_c = abs(rot(PI/4)*lc);
-	vec2 gem_color_c = (1.f/120.f)*abs(rot(PI/8)*(lc+vec2(0, 60)));
+	vec2 gem_color_c = (1.f/120.f)*(rot(PI/8)*(lc+vec2(0, 60)));
 	//vec3 gem_color = gem_color_c.x*vec3(0.8, 0.8, 0.1) + gem_color_c.y*vec3(0.9, 0.9, 0.9);
 	vec3 gem_color = gem_color_c.x*vec3(0, 1, 1) + gem_color_c.y*vec3(0, 0, 1);
 	float gem_alpha = 1-smoothstep(0, AA, max(gem_c.x, gem_c.y)-SQRT2*30);

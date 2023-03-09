@@ -154,7 +154,8 @@ class BPNoBounceWall : public BPWall
 
 class BPGoal : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\goal.png", false, 0 };
+	DrawInfo draw_info = { "", false, 0 };
+	Shader shader = { "", "shaders\\wormhole.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };

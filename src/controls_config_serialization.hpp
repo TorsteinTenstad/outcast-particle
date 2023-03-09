@@ -201,8 +201,8 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         {
             FromString(c->INCREMENT_VELOCITY_ANGLE, statement_parts[1]);
         }
-        else {{
+        else {
             assert(false);
-        }}
         }
     }
+}

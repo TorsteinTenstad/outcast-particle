@@ -5,18 +5,11 @@
 class Radius
 {
 public:
-	float radius;
+	float radius = 240;
 };
 
 class WidthAndHeight
 {
 public:
 	sf::Vector2f width_and_height;
-};
-
-class Border
-{
-public:
-	int thickness = 20;
-	sf::Color color = sf::Color::White;
 };

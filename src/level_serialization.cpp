@@ -35,11 +35,8 @@ void DeserializeComponent(Tag* c, const std::string& entity_str_rep)
         {
             FromString(c->tag, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const Position* c, std::string& str_rep)
 {
 	str_rep += "Position{";
@@ -60,11 +57,8 @@ void DeserializeComponent(Position* c, const std::string& entity_str_rep)
         {
             FromString(c->position, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const Charge* c, std::string& str_rep)
 {
 	str_rep += "Charge{";
@@ -85,11 +79,8 @@ void DeserializeComponent(Charge* c, const std::string& entity_str_rep)
         {
             FromString(c->charge, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const Velocity* c, std::string& str_rep)
 {
 	str_rep += "Velocity{";
@@ -110,11 +101,8 @@ void DeserializeComponent(Velocity* c, const std::string& entity_str_rep)
         {
             FromString(c->velocity, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const WidthAndHeight* c, std::string& str_rep)
 {
 	str_rep += "WidthAndHeight{";
@@ -135,11 +123,8 @@ void DeserializeComponent(WidthAndHeight* c, const std::string& entity_str_rep)
         {
             FromString(c->width_and_height, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const Player* c, std::string& str_rep)
 {
 	str_rep += "Player{";
@@ -174,11 +159,8 @@ void DeserializeComponent(Player* c, const std::string& entity_str_rep)
         {
             FromString(c->move_force, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const ElectricField* c, std::string& str_rep)
 {
 	str_rep += "ElectricField{";
@@ -199,11 +181,8 @@ void DeserializeComponent(ElectricField* c, const std::string& entity_str_rep)
         {
             FromString(c->field_vector, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const MagneticField* c, std::string& str_rep)
 {
 	str_rep += "MagneticField{";
@@ -224,11 +203,8 @@ void DeserializeComponent(MagneticField* c, const std::string& entity_str_rep)
         {
             FromString(c->field_strength, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 void SerializeComponent(const TextPopupSpawner* c, std::string& str_rep)
 {
 	str_rep += "TextPopupSpawner{";
@@ -249,11 +225,8 @@ void DeserializeComponent(TextPopupSpawner* c, const std::string& entity_str_rep
         {
             FromString(c->content, statement_parts[1]);
         }
-        else {{
-            assert(false);
-        }}
-        }
     }
+}
 
 void Level::SaveToFile(std::string savefile_path)
 {
@@ -613,7 +586,8 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\goal.png", false, 0 });
+            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
@@ -842,7 +816,8 @@ int Level::AddBlueprint(Blueprint blueprint)
         case BPGoal:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\goal.png", false, 0 });
+            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
