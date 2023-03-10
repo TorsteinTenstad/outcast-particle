@@ -1,6 +1,6 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,180)}WidthAndHeight{width_and_height=(3840,360)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3120,1800)}WidthAndHeight{width_and_height=(600,360)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3120,1800)}WidthAndHeight{width_and_height=(600,600)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(540,540)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPWall":Tag{tag=BPWall}Position{position=(180,1200)}WidthAndHeight{width_and_height=(360,1680)}
 "BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,120)}

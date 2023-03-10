@@ -8,7 +8,7 @@
 
 void DrawSystem::Update(Level& level, float dt)
 {
-	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Numpad0])
+	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::BackSpace])
 	{
 		shaders_.clear();
 	}

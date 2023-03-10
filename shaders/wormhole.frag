@@ -40,25 +40,27 @@ void main()
     float a = 0.5*theta/PI+0.5;
 
     //c_uv = max(0, 0.4*(3*log(r)+r)+1)*c_uv/length(c_uv);
-    float k = sqrt(r*r+1);
-    c_uv = (k-tanh(k))*c_uv/length(c_uv);
+    float f = sqrt(sqrt(pow(r/2+1, 4)-1));
+    c_uv = (f)*c_uv/length(c_uv);
     float r_tranformed = length(c_uv);
 
 
-    float AA = 5.f/float(BLOCK_SIZE);
+    float AA = 10.f/float(BLOCK_SIZE);
     float g = smoothstep(0, AA, max_component(abs(fract(3*c_uv)-0.5))-0.43);
-    float light = exp(r+1-R)/exp(1.f);
-    light *= smoothstep(0.35, 0.5, r);
-    light = 1;
+    float light = exp(1.5*r+1-R)/exp(1.f);
+    //light *= smoothstep(0.35, 0.5, r);
+    //light = 1;
     float swirl = sin01(r_tranformed + a + 0.2*_time + 0.06*sin(10*theta));
+    //vec3 swirl_color = mix(vec3(0.34, 0.1, 1), mix(vec3(0.45, 0.5, 1), vec3(0.4, 0.5, 0.8), sin01(a+0.01*_time)), swirl);
     vec3 swirl_color = mix(vec3(0.4, 0.1, 1), mix(vec3(0.5, 0.5, 1), vec3(0.3, 0.7, 1), sin01(a+0.01*_time)), swirl);
+    //vec3 swirl_color = mix(vec3(0.34, 0.1, 0.8), mix(vec3(0.55, 0.5, 0.8), vec3(0.4, 0.6, 0.8), sin01(a+0.01*_time)), swirl);
     
-    vec4 forground = blend(vec4(swirl_color, 1), vec4(vec3(1), g*0.5));
+    vec4 forground = blend(vec4(swirl_color, 1), vec4(vec3(0.8), g*0.5));
     forground.a = light;
     vec4 color = vec4(0,0,0,1);
     color = blend(color, forground);
 
 
 
-    gl_FragColor = color;//*(1-smoothstep(-0.3, 0, r-R));
+    gl_FragColor = color*(1-smoothstep(-1.2, 0, r-0.3-R-0.1*sin01(10*a+2*r)));
 }
