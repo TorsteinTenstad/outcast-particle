@@ -38,7 +38,7 @@ class SliderButton
 {
 public:
 	int* slider_value; //float normalized from 0-100.
-	std::string* button_text;
-	float* slider_x_pos;
+	int slider_text_id;
+	int slider_button_id;
 	int slider_bar_id;
 };

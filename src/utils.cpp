@@ -174,24 +174,21 @@ std::string HumanName(sf::Keyboard::Key key)
 	}
 }
 
-std::vector<std::string> LeftOrRightShiftString(std::vector<std::string> strings, int max_size, bool right_shift)
+std::string LeftShiftString(std::string string, int max_size)
 {
-	for (std::string& str : strings)
+	assert(string.size() <= max_size);
+	string.append(max_size - string.size(), ' ');
+	return (string);
+}
+
+std::string RightShiftString(std::string string, int max_size)
+{
+	assert(string.size() <= max_size);
+	for (unsigned i = 0; i < max_size - string.size(); i++)
 	{
-		assert(str.size() <= max_size);
-		if (!right_shift)
-		{
-			str.append(max_size - str.size(), ' ');
-		}
-		else
-		{
-			for (unsigned j = 0; j < max_size - str.size(); j++)
-			{
-				str.insert(0, " ");
-			}
-		}
+		string.insert(0, " ");
 	}
-	return strings;
+	return (string);
 }
 
 std::string BoolToStringAsEnabledOrDisabled(bool x)
