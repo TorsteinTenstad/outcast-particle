@@ -410,6 +410,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPButton")
         {
+            AddComponent<NotSerialized>(entity_id, {});
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 100 });
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
@@ -423,6 +424,7 @@ void Level::LoadFromFile(std::string savefile_path)
         
         if (tag == "BPMenuNavigationButton")
         {
+            AddComponent<NotSerialized>(entity_id, {});
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 100 });
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
@@ -653,6 +655,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Tag>(entity_id, {"BPTexturedRectangle"});
             break;
         case BPButton:
+            AddComponent<NotSerialized>(entity_id, {});
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 100 });
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
@@ -665,6 +668,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Tag>(entity_id, {"BPButton"});
             break;
         case BPMenuNavigationButton:
+            AddComponent<NotSerialized>(entity_id, {});
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 100 });
             AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });

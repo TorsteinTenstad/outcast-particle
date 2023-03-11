@@ -8,6 +8,7 @@ class BPTexturedRectangle
 };
 class BPButton
 {
+	NotSerialized not_serialized = {};
 	ReceivesButtonEvents can_receive_press = {};
 	DrawPriority draw_priority = { 100 };
 	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };

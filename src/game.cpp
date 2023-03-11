@@ -172,6 +172,7 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 	level.LoadFromFile(level_id);
 	GetGameSystem<BackgroundSystem>().Update(level, 0);
 	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);
+	GetGameSystem<SegmentedGlowEffectSystem>().Update(level, 0);
 	GetGameSystem<PlayerSystem>().Update(level, 0);
 	GetGameSystem<FaceSystem>().Update(level, 0);
 	GetGameSystem<RenderGridAdaptiveTexturesSystem>().Update(level, 0);
