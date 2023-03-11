@@ -94,6 +94,7 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 	shaders_[shader_id].setUniform("_view_size", globals.render_window.getView().getSize());
 	shaders_[shader_id].setUniform("_view_center", globals.render_window.getView().getCenter());
 	shaders_[shader_id].setUniform("_texture", sf::Shader::CurrentTexture);
+	shaders_[shader_id].setUniform("_noise_texture", noise_texture_);
 	if (level.HasComponents<WidthAndHeight>(entity_id))
 	{
 		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>(entity_id)->width_and_height);
