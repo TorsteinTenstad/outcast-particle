@@ -13,4 +13,5 @@ class PlayerBehaviors
 public:
 	float default_charge = 0;
 	float is_neutral = false;
+	bool switch_key_is_up = true;
 };

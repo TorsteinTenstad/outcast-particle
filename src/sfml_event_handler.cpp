@@ -29,7 +29,7 @@ void SFMLEventHandler::Update(CursorAndKeys& cursor_and_keys)
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code != sf::Keyboard::Unknown)
 		{
-			cursor_and_keys.key_pressed_this_frame[event.key.code] = !cursor_and_keys.key_down[event.key.code];
+			cursor_and_keys.key_pressed_this_frame[event.key.code] = true;
 			cursor_and_keys.key_down[event.key.code] = true;
 		}
 		if (event.type == sf::Event::KeyReleased && event.key.code != sf::Keyboard::Unknown)

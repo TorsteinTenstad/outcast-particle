@@ -34,13 +34,14 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 			charge->charge = player_behaviours->default_charge;
 			player_behaviours->is_neutral = false;
 		}
-		if (cursor_and_keys.key_pressed_this_frame[switch_key] && player->can_switch_charge)
+		if (cursor_and_keys.key_pressed_this_frame[switch_key] && player_behaviours->switch_key_is_up && player->can_switch_charge)
 		{
 			sound_info->play_sound = true;
 			charge->charge = -charge->charge;
 			player_behaviours->default_charge = -player_behaviours->default_charge;
 			shader->float_uniforms["start_switch_charge_animation"] = globals.time;
 		}
+		player_behaviours->switch_key_is_up = !cursor_and_keys.key_down[switch_key];
 		player_i++;
 	}
 }
