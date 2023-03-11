@@ -3,14 +3,13 @@
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
-#include "game_system.hpp"
+#include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils.hpp"
 
 const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
 const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
-const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPPlayer, BPLaser, BPWall, BPBounceWall, BPNoBounceWall, BPGoal, BPElectricField, BPMagneticField, BPCoin, BPBlackHole };
 
 static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 {
@@ -19,56 +18,11 @@ static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 	return v;
 }
 
-static void OpenBlueprintMenu(Level& level)
-{
-	int i = 0;
-	int menu_background_id = level.CreateEntityId();
-	level.AddComponent<Position>(menu_background_id)->position = level.GetSize() / 2.f;
-	level.AddComponent<DrawInfo>(menu_background_id)->image_path = "content\\textures\\gray.png";
-	level.AddComponent<DrawPriority>(menu_background_id)->draw_priority = UI_BASE_DRAW_PRIORITY;
-	level.AddComponent<ReceivesButtonEvents>(menu_background_id);
-	float menu_width = (3 * BLUEPRINT_ENTRIES.size() + 1) * BLOCK_SIZE;
-	level.AddComponent<WidthAndHeight>(menu_background_id)->width_and_height = sf::Vector2f(menu_width, 4 * BLOCK_SIZE);
-	level.AddComponent<BlueprintMenuItem>(menu_background_id);
-	int entity_id;
-	for (const auto& tag : BLUEPRINT_ENTRIES)
-	{
-		entity_id = level.AddBlueprint(tag);
-		level.GetComponent<Position>(entity_id)->position = sf::Vector2f(level.GetSize().x / 2 - menu_width / 2 + (2 + 3 * i) * BLOCK_SIZE, level.GetSize().y / 2);
-		level.GetComponent<DrawPriority>(entity_id)->draw_priority += UI_BASE_DRAW_PRIORITY;
-		level.AddComponent<BlueprintMenuItem>(entity_id);
-		i++;
-	}
-	level.GetSingleton<EditMode>()->blueprint_menu_is_open_ = true;
-}
-
-static void CloseBlueprintMenu(Level& level)
-{
-	level.DeleteEntitiesWith<BlueprintMenuItem>();
-	level.GetSingleton<EditMode>()->blueprint_menu_is_open_ = false;
-}
-
 void EditModeSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
-		level.ui_bars_size = sf::Vector2f(0, 0);
 		return;
-	}
-	level.ui_bars_size = sf::Vector2f(0, 2) * float(BLOCK_SIZE);
-
-	EditMode* edit_mode = level.GetSingleton<EditMode>();
-
-	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
-	{
-		if (edit_mode->blueprint_menu_is_open_)
-		{
-			CloseBlueprintMenu(level);
-		}
-		else
-		{
-			OpenBlueprintMenu(level);
-		}
 	}
 
 	// Change level size:

@@ -18,7 +18,7 @@ void BackgroundSystem::Update(Level& level, float dt)
 		auto level_size = level.GetSize();
 		bool in_edit_mode = level.GetMode() == EDIT_MODE;
 		draw_info->image_path = in_edit_mode ? "content\\textures\\grid.png" : "content\\textures\\background.png";
-		draw_info->image_path = main_background ? draw_info->image_path : "content\\textures\\ui_background.png";
+		draw_info->image_path = main_background ? draw_info->image_path : "content\\textures\\background.png";
 		width_and_height->width_and_height = main_background ? level_size : level_size + level.ui_bars_size;
 		position->position = main_background ? level_size / 2.f : level_size / 2.f - level.ui_bars_size / 2.f;
 		draw_info->scale_to_fit = !in_edit_mode;
