@@ -127,12 +127,12 @@ std::vector<int> AddSliderButton(Level& level, int* f, sf::Vector2f button_posit
 
 	//Adding text entity
 	float text_x_position = level.GetComponent<Position>(slider_bar_id)->position.x + level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height.x / 2 + 1.5 * BLOCK_SIZE;
-	int button_text_id = AddScrollingText(level, sf::Vector2f(text_x_position, button_position.y), LeftOrRightShiftString(std::vector { ToString(*(f)) }, 3, true)[0]);
+	int button_text_id = AddScrollingText(level, sf::Vector2f(text_x_position, button_position.y), RightShiftString(ToString(*(f)), 3));
 
 	//Connect sliderbar, slider and text to background button
 	level.GetComponent<SliderButton>(parent_button_id)->slider_bar_id = slider_bar_id;
-	level.GetComponent<SliderButton>(parent_button_id)->slider_x_pos = &level.GetComponent<Position>(slider_id)->position.x;
-	level.GetComponent<SliderButton>(parent_button_id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
+	level.GetComponent<SliderButton>(parent_button_id)->slider_button_id = slider_id;
+	level.GetComponent<SliderButton>(parent_button_id)->slider_text_id = button_text_id;
 
 	std::vector<int> ids { slider_bar_id, slider_id, parent_button_id, button_text_id };
 	return ids;

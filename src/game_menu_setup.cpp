@@ -131,8 +131,9 @@ void Game::GoToKeyConfigMenu()
 		create_button_functions.push_back(std::bind(&AddKeyConfigButton, std::ref(active_level_), key, std::placeholders::_1));
 	}
 	std::vector<std::string> description_texts = { "Up", "Left", "Down", "Right", "Switch charge", "Neutral", "Pause" };
+	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
-	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
+	SetupOptionsSubMenu(active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), create_button_functions);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()
@@ -149,8 +150,9 @@ void Game::GoToGraphicsAndDisplayMenu()
 		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_functions[i], button_texts[i], std::placeholders::_1));
 	}
 	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate", "Show Forces" };
+	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
-	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
+	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), create_button_functions);
 }
 
 void Game::GoToMusicAndSoundMenu()
@@ -167,5 +169,7 @@ void Game::GoToMusicAndSoundMenu()
 		create_button_functions.push_back(std::bind(&AddSliderButton, std::ref(active_level_), &globals.general_config.sound_volume, std::placeholders::_1));
 	}
 
-	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), LeftOrRightShiftString(description_texts, 17, false), create_button_functions);
+	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
+
+	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), create_button_functions);
 }

@@ -1,6 +1,7 @@
 #include "_pure_DO_systems.hpp"
 #include "string_parsing_utils.hpp"
 #include "utils.hpp"
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 
@@ -65,23 +66,9 @@ void ButtonSystem::Update(Level& level, float dt)
 		float slider_x_pos = level.GetComponent<Position>(slider_button->slider_bar_id)->position.x;
 		float relative_cursor_x_pos = cursor_and_keys_.cursor_position.x - slider_x_pos;
 		float half_slider_width = level.GetComponent<WidthAndHeight>(slider_button->slider_bar_id)->width_and_height.x * 0.5;
-		float intermediary_slider_value;
-		if (relative_cursor_x_pos >= half_slider_width)
-		{
-			intermediary_slider_value = 100;
-			*(level.GetComponent<SliderButton>(entity_id)->slider_x_pos) = slider_x_pos + half_slider_width;
-		}
-		else if (relative_cursor_x_pos <= -1 * half_slider_width)
-		{
-			intermediary_slider_value = 0;
-			*(level.GetComponent<SliderButton>(entity_id)->slider_x_pos) = slider_x_pos - half_slider_width;
-		}
-		else
-		{
-			intermediary_slider_value = 50 * relative_cursor_x_pos / half_slider_width + 50;
-			*(level.GetComponent<SliderButton>(entity_id)->slider_x_pos) = cursor_and_keys_.cursor_position.x;
-		}
-		*(slider_button->slider_value) = intermediary_slider_value;
-		*(level.GetComponent<SliderButton>(entity_id)->button_text) = LeftOrRightShiftString(std::vector { ToString(std::ceil(intermediary_slider_value)) }, 3, true)[0];
+
+		*(slider_button->slider_value) = std::max(0, std::min(100, int(50 * relative_cursor_x_pos / half_slider_width + 50)));
+		level.GetComponent<Position>(slider_button->slider_button_id)->position.x = std::max(slider_x_pos - half_slider_width, std::min(slider_x_pos + half_slider_width, slider_x_pos + relative_cursor_x_pos));
+		level.GetComponent<Text>(slider_button->slider_text_id)->content = RightShiftString(ToString(*(slider_button->slider_value)), 3);
 	}
 }
