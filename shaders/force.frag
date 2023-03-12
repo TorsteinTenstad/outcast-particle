@@ -82,7 +82,7 @@ void main()
 		}
 	}
 	color.a = clamp(color.a, 0,0.5);
-	gl_FragColor = color;
+	gl_FragColor = gl_Color*color;
 	return;
 }
 /*

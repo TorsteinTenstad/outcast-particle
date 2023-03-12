@@ -1,5 +1,6 @@
 #include "_pure_DO_systems.hpp"
 #include "entity_creation.hpp"
+#include "make_fade_into_level.hpp"
 #include "utils.hpp"
 
 #define MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT 10
@@ -9,17 +10,14 @@ void FaceSystem::Update(Level& level, float dt)
 	for (auto& [entity_id, face, children, draw_info, draw_priority, radius, position] : level.GetEntitiesWith<Face, Children, DrawInfo, DrawPriority, Radius, Position>())
 	{
 
-		std::function<int(void)> create_face = [&level, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
-			int face_id = level.CreateEntityId();
-			level.AddComponent<DrawInfo>(face_id);
-			level.AddComponent<DrawPriority>(face_id)->draw_priority = draw_priority->draw_priority;
-			level.AddComponent<Radius>(face_id)->radius = radius->radius;
-			level.AddComponent<Position>(face_id)->position = position->position;
-			level.AddComponent<FillColor>(face_id);
-			AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(face_id);
-			animated_opacity->animation_func = [](float t) {{ return sf::Uint8(255 * Smoothstep(2*t-1)); }; };
-			animated_opacity->start_time = globals.time_of_last_level_enter;
-			return face_id;
+		std::function<int(void)> create_face = [&level, active_level_id = active_level_id_, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
+			int entity_id = level.CreateEntityId();
+			level.AddComponent<DrawInfo>(entity_id);
+			level.AddComponent<DrawPriority>(entity_id)->draw_priority = draw_priority->draw_priority;
+			level.AddComponent<Radius>(entity_id)->radius = radius->radius;
+			level.AddComponent<Position>(entity_id)->position = position->position;
+			MakeFadeIntoLevel(level, entity_id, active_level_id);
+			return entity_id;
 		};
 
 		int child_id = EnsureExistanceOfChildEntity<Face>(children, create_face);
