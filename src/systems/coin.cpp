@@ -11,7 +11,7 @@ void CoinSystem::SetCoinRecords(std::map<std::string, int>* coin_records)
 }
 void CoinSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() == EDIT_MODE)
+	if (level.GetMode() != PLAY_MODE)
 	{
 		return;
 	}

@@ -1,5 +1,17 @@
 #include "game.hpp"
 #include "components/level_menu.hpp"
+#include "systems/_pure_DO_systems.hpp"
+#include "systems/coin.hpp"
+#include "systems/draw.hpp"
+#include "systems/level_completion_time.hpp"
+#include "systems/level_menu.hpp"
+#include "systems/menu_escape.hpp"
+#include "systems/pause_mode.hpp"
+#include "systems/render_grid_adaptive_textures.hpp"
+#include "systems/render_shapes.hpp"
+#include "systems/render_text.hpp"
+#include "systems/render_trail.hpp"
+#include "systems/sound_system.hpp"
 #include "userdata_storage.hpp"
 #include <chrono>
 #include <filesystem>
@@ -10,6 +22,7 @@
 
 Game::Game()
 {
+	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
@@ -37,7 +50,7 @@ Game::Game()
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this));
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
-	RegisterGameSystem<AnimatedPositionSystem>();
+	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<IntersectionSystem>();
 	RegisterGameSystem<CollisionSystem>();
 	RegisterGameSystem<GoalSystem>();
@@ -123,6 +136,7 @@ Level& Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_.LoadFromFile(level_id);
+		active_level_.SetMode(READY_MODE);
 	}
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;

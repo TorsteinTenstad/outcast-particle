@@ -30,7 +30,7 @@ void LevelMenuSystem::Update(Level& level, float dt)
 	{
 		return;
 	}
-
+	assert(level_menu_ui_entities.size() < 3); // Is allowed to be 2 for one frame, when the ui is re-setup
 	auto [entity_id, ui] = level_menu_ui_entities.back();
 	for (const auto [id, _] : level_menu_ui_entities)
 	{

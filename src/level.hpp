@@ -16,6 +16,10 @@ public:
 	sf::Drawable* drawable;
 };
 
+const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vector2u(32, 18), sf::Vector2u(48, 27), sf::Vector2u(64, 36), sf::Vector2u(80, 45) } };
+
+#define DEFAULT_LEVEL_GRID_SIZE_ID 1
+
 class Level : public ESCScene
 {
 private:

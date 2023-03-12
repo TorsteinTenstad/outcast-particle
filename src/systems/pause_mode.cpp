@@ -98,7 +98,7 @@ void PauseMode::AddAppropriateButtons(Level& level, LevelMode previous_mode)
 		shortcut_keys.push_back(sf::Keyboard::Escape);
 
 		text.push_back("Play level");
-		functions.push_back([&]() { level.SetMode(PLAY_MODE); });
+		functions.push_back([&]() { level.SetMode(READY_MODE); });
 		shortcut_keys.push_back(sf::Keyboard::Unknown);
 	}
 

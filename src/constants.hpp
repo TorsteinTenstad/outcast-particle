@@ -18,8 +18,6 @@
 #define UI_BASE_DRAW_PRIORITY 100
 #define GLOBAL_MAX_ACCELERATION 10000
 
-#define DEFAULT_LEVEL_GRID_SIZE_ID 1
-
 const std::array<float, 6> CHARGE_CATEGORY_KEYS = { sf::Keyboard::Num5, sf::Keyboard::Num4, sf::Keyboard::Num3, sf::Keyboard::Num2, sf::Keyboard::Num1, sf::Keyboard::Num0 };
 const std::array<float, 11> PARTICLE_CHARGE_CATEGORIES = { -160'000, -40'000, -10'000, -2500, -625, 0, 625, 2500, 10'000, 40'000, 160'000 };
 const std::array<sf::Color, 11> PARTICLE_INNER_COLOR = {

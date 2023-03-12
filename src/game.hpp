@@ -1,22 +1,11 @@
 #pragma once
 #include "controls_config.hpp"
 #include "cursor_and_keys.hpp"
+#include "game_system.hpp"
 #include "general_user_config.hpp"
 #include "level.hpp"
-
 #include "sfml_event_handler.hpp"
-#include "systems/_pure_DO_systems.hpp"
-#include "systems/coin.hpp"
-#include "systems/draw.hpp"
-#include "systems/level_completion_time.hpp"
-#include "systems/level_menu.hpp"
-#include "systems/menu_escape.hpp"
-#include "systems/pause_mode.hpp"
-#include "systems/render_grid_adaptive_textures.hpp"
-#include "systems/render_shapes.hpp"
-#include "systems/render_text.hpp"
-#include "systems/render_trail.hpp"
-#include "systems/sound_system.hpp"
+
 #include <stack>
 
 class Game

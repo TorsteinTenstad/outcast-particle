@@ -1,5 +1,5 @@
 #pragma once
-#include "components/animated_position.hpp"
+#include "components/animated_properties.hpp"
 #include "components/area.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
@@ -22,6 +22,7 @@
 #include "components/pause_menu_items.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
+#include "components/ready_screen.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/scroll.hpp"
 #include "components/shader.hpp"
@@ -38,6 +39,7 @@
 typedef std::variant<
 	std::map<int, Acceleration>,
 	std::map<int, AnimatedPosition>,
+	std::map<int, AnimatedOpacity>,
 	std::map<int, Background>,
 	std::map<int, BinaryOptionsButton>,
 	std::map<int, BlueprintMenuItem>,
@@ -84,6 +86,7 @@ typedef std::variant<
 	std::map<int, ReceivedForces>,
 	std::map<int, ReceivesButtonEvents>,
 	std::map<int, MouseInteractionDependentFillColor>,
+	std::map<int, ReadyScreen>,
 	std::map<int, ReleasedThisFrame>,
 	std::map<int, ScheduledDelete>,
 	std::map<int, ScrollWindow>,

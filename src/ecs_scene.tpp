@@ -152,17 +152,31 @@ void ESCScene::DeleteEntitiesWith()
 }
 
 template <class Component>
-std::tuple<int, Component*> ESCScene::GetSingletonIncludeID()
+std::tuple<int, Component*> ESCScene::GetSingletonIncludeID(std::function<void(ESCScene&, int)> creation_func)
 {
 	auto& component_map = GetComponentMap<Component>();
-	assert(!(component_map.size() > 1));
 
 	if (component_map.size() == 0)
 	{
 		int entity_id = CreateEntityId();
 		component_map[entity_id];
+		creation_func(*this, entity_id);
 	}
+	assert(component_map.size() == 1);
 	return { component_map.begin()->first, &component_map.begin()->second };
+}
+
+template <class Component>
+std::tuple<int, Component*> ESCScene::GetSingletonIncludeID()
+{
+	return GetSingletonIncludeID<Component>([](ESCScene& scene, int) {});
+}
+
+template <class Component>
+Component* ESCScene::GetSingleton(std::function<void(ESCScene&, int)> creation_func)
+{
+	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>(creation_func);
+	return std::get<Component*>(tup);
 }
 
 template <class Component>

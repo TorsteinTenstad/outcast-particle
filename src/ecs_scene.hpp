@@ -1,5 +1,6 @@
 #pragma once
 #include "components.hpp"
+#include <functional>
 #include <map>
 #include <optional>
 #include <typeindex>
@@ -71,6 +72,12 @@ public:
 	void DeleteEntity(std::optional<int> id);
 
 	int CopyEntity(int from_id);
+
+	template <class Component>
+	std::tuple<int, Component*> GetSingletonIncludeID(std::function<void(ESCScene&, int)> creation_func);
+
+	template <class Component>
+	Component* GetSingleton(std::function<void(ESCScene&, int)> creation_func);
 
 	template <class Component>
 	std::tuple<int, Component*> GetSingletonIncludeID();

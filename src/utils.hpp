@@ -12,6 +12,7 @@
 #define PI 3.141593
 
 float Smoothstep(float a, float b, float x);
+float Smoothstep(float x);
 float Ease(float x, float undershoot, float overshoot);
 
 std::string GetGroupNameFromId(const std::string& level_id);
@@ -87,17 +88,9 @@ int Sign(T x)
 }
 
 template <class T>
-int Clamp(T val, T min, T max)
+T Clamp(T val, T min, T max)
 {
-	if (val < min)
-	{
-		return min;
-	}
-	if (val > max)
-	{
-		return max;
-	}
-	return val;
+	return std::min(max, std::max(min, val));
 }
 
 // NOTE: The array is assumed sorted

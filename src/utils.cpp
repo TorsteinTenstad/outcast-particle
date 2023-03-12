@@ -15,6 +15,11 @@ float Smoothstep(float a, float b, float x)
 	return t * t * (3.0 - 2.0 * t);
 }
 
+float Smoothstep(float x)
+{
+	return Smoothstep(0, 1, x);
+}
+
 float Ease(float x, float undershoot, float overshoot)
 {
 	x = Clamp(x, 0.f, 1.f);
