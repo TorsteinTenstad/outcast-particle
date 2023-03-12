@@ -47,6 +47,16 @@ void ButtonSystem::Update(Level& level, float dt)
 	{
 		for (const auto& [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
 		{
+			if (key == (sf::Keyboard::Escape) && pressed_this_frame)
+			{
+				level.RemoveComponents<StickyButtonDown>(entity_id);
+				auto [error_text_id, text, position, draw_priority, scheduled_delete] = level.CreateEntitiyWith<Text, Position, DrawPriority, ScheduledDelete>();
+				text->content = "Escape can't be \n bound as key";
+				position->position = sf::Vector2f(4.5, 1) * float(BLOCK_SIZE);
+				draw_priority->draw_priority = 101;
+				scheduled_delete->delete_at = globals.time + 3;
+				continue;
+			}
 			if (pressed_this_frame)
 			{
 				*key_config_button->key = (sf::Keyboard::Key)key;
@@ -59,7 +69,6 @@ void ButtonSystem::Update(Level& level, float dt)
 	for (auto [entity_id, released_this_frame, on_released_this_frame, binary_options_button] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame, BinaryOptionsButton>())
 	{
 		*(binary_options_button->button_text) = BoolToStringAsEnabledOrDisabled(*(binary_options_button->button_text) == "Disabled");
-		//return;
 	}
 	for (auto [entity_id, pressed, slider_button] : level.GetEntitiesWith<Pressed, SliderButton>())
 	{
