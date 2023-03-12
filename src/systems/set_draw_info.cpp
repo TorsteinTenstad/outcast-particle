@@ -7,12 +7,13 @@
 
 void SetDrawInfoSystem::Update(Level& level, float dt)
 {
-	for (auto const& [entity_id, charge_dependent_draw_info, charge, shader] : level.GetEntitiesWith<ChargeDependentDrawInfo, Charge, Shader>())
+	for (auto const& [entity_id, charge, shader] : level.GetEntitiesWith<Charge, Shader>())
 	{
 		int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge->charge);
 		shader->vec4_uniforms["inner_color"] = PARTICLE_INNER_COLOR[category];
 		shader->vec4_uniforms["outer_color"] = PARTICLE_OUTER_COLOR[category];
 		shader->float_uniforms["charge"] = charge->charge;
+		shader->float_uniforms["sign_alpha"] = level.HasComponents<Player>(entity_id) ? 0 : 1;
 	}
 
 	for (auto const& [entity_id, orientation_dependent_drawinfo, width_and_height, draw_info] : level.GetEntitiesWith<OrientationDependentDrawInfo, WidthAndHeight, DrawInfo>())

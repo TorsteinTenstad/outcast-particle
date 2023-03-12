@@ -511,7 +511,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Children>(entity_id, {});
             AddComponent<Trail>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 8 });
-            AddComponent<Shader>(entity_id, { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} });
+            AddComponent<Shader>(entity_id, { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\wav.wav" });
             AddComponent<Face>(entity_id, {});
             AddComponent<ForceVisualization>(entity_id, {});
@@ -749,7 +749,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Children>(entity_id, {});
             AddComponent<Trail>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 8 });
-            AddComponent<Shader>(entity_id, { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} });
+            AddComponent<Shader>(entity_id, { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\wav.wav" });
             AddComponent<Face>(entity_id, {});
             AddComponent<ForceVisualization>(entity_id, {});

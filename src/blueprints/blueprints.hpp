@@ -93,7 +93,7 @@ class BPPlayer : public BPEditableEntity
 	Children children = {};
 	Trail trail = {};
 	DrawPriority draw_priority = { 8 };
-	Shader shader = { "shaders\\player.vert", "shaders\\player.frag", {}, {}, {} };
+	Shader shader = { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	Face face = {};
 	ForceVisualization force_visualization = {};

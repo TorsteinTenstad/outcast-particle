@@ -7,6 +7,7 @@ uniform vec2 _wh;
 uniform vec4 inner_color;
 uniform vec4 outer_color;
 uniform float charge;
+uniform float sign_alpha;
 
 float particle(vec2 uv, float charge_sign){
 	float AA = 0.01;
@@ -52,14 +53,19 @@ void main()
 
 
     float alpha = smoothstep(0, AA, 1-r);
-    float is_red = (sign(charge)+1)/2;
-    float red_alpha = alpha*(is_red);
-    float green_alpha = alpha*(1-is_red);
+    float is_red = step(1, charge);
+    float is_green = 1-step(-1, charge);
+    float is_blue = 1-is_red-is_green;
+    float red_alpha = alpha*is_red;
+    float green_alpha = alpha*is_green;
+    float blue_alpha = alpha*is_blue;
+
     //vec4 color = mix(vec4(0.98046875, 0.6015625, 0.59765625, alpha), vec4(0.88671875, 0.109375, 0.1015625, alpha), 1-smoothstep(0, 0.2, 0.7-r));
     vec4 color = vec4(0);
     color = blend(color, mix(vec4(0.88671875, 0.109375, 0.1015625, red_alpha), vec4(0.98046875, 0.6015625, 0.59765625, red_alpha), 1-smoothstep(-0.8, 1, r*r)));
     color = blend(color, mix(vec4(0.19921875, 0.625, 0.171875, green_alpha), vec4(0.6953125, 0.87109375, 0.5390625, green_alpha), 1-smoothstep(-0.8, 1, r*r)));
-    color = blend(color, vec4(vec3(1), particle(centered_normalized_uv, sign(charge))));
+    color = blend(color, mix(vec4(0.1171875, 0.46875, 0.703125, blue_alpha), vec4(0.6484375, 0.8046875, 0.88671875, blue_alpha), 1-smoothstep(-0.8, 1, r*r)));
+    color = blend(color, vec4(vec3(1), sign_alpha*(1-is_blue)*particle(centered_normalized_uv, sign(charge))));
     gl_FragColor = mix(inner_color, outer_color, r);
     gl_FragColor = vec4(particle(centered_normalized_uv, sign(charge)), a, 0, 1);
     gl_FragColor = color;
