@@ -13,7 +13,7 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 	sf::Vector2f level_size = level.GetSize();
 	sf::Vector2u level_grid_size = level.GetGridSize();
 
-	auto [entity_id, ready_screen] = level.GetSingletonIncludeID<ReadyScreen>([&level_size, &level_grid_size](ESCScene& level, int entity_id) {
+	level.GetSingleton<ReadyScreen>([&level_size, &level_grid_size](ESCScene& level, int entity_id) {
 		level.AddComponent<DrawInfo>(entity_id)->image_path = "content\\textures\\transparent.png";
 		level.AddComponent<DrawPriority>(entity_id)->draw_priority = UI_BASE_DRAW_PRIORITY + 5;
 		level.AddComponent<Position>(entity_id)->position = level_size / 2.f;

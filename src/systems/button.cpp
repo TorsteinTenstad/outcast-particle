@@ -67,7 +67,7 @@ void ButtonSystem::Update(Level& level, float dt)
 		float relative_cursor_x_pos = cursor_and_keys_.cursor_position.x - slider_x_pos;
 		float half_slider_width = level.GetComponent<WidthAndHeight>(slider_button->slider_bar_id)->width_and_height.x * 0.5;
 
-		*(slider_button->slider_value) = std::max(0, std::min(100, int(50 * relative_cursor_x_pos / half_slider_width + 50)));
+		*(slider_button->slider_value) = Clamp(0, 100, int(50 * relative_cursor_x_pos / half_slider_width + 50));
 		level.GetComponent<Position>(slider_button->slider_button_id)->position.x = std::max(slider_x_pos - half_slider_width, std::min(slider_x_pos + half_slider_width, slider_x_pos + relative_cursor_x_pos));
 		level.GetComponent<Text>(slider_button->slider_text_id)->content = RightShiftString(ToString(*(slider_button->slider_value)), 3);
 	}
