@@ -7,8 +7,6 @@
 
 SFML::SFML()
 {
-	globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
-	globals.render_window.setVerticalSyncEnabled(true);
 }
 
 void SFML::RunWindow(std::function<void(float)> update_func)

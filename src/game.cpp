@@ -201,11 +201,11 @@ void Game::CheckFullscreen()
 {
 	if (globals.general_config.fullscreen)
 	{
-		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
+		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen, sf::ContextSettings(0, 0, 8));
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle");
+		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle", sf::Style::Default, sf::ContextSettings(0, 0, 8));
 	}
 	CheckFramerateLimit();
 }
