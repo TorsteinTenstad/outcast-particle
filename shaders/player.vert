@@ -2,8 +2,15 @@
 
 uniform float _time = 0.;
 uniform float start_switch_charge_animation = -1.;
+uniform float time_of_last_level_enter = -1.;
 #define PI 3.1415926535897932384626433832795
 
+float ease(float t){
+    t = max(0, t);
+    float a = 2*pow(t  , 2);
+    float b = 1-pow(t-1, 2);
+    return mix(a, b, t);
+}
 
 void main()
 {
@@ -15,9 +22,14 @@ void main()
     vec2 offset = vec2(0, 0);
 
 	float switch_charge_t = (_time - start_switch_charge_animation)*8;
+	float enter_level_t = (_time - time_of_last_level_enter)*3;
 	if (0 < start_switch_charge_animation && 0 < switch_charge_t && switch_charge_t < 1)
 	{
         offset -= 20*centered_coord*sin(PI*switch_charge_t);
+	}
+    else if (0 < enter_level_t && enter_level_t < 2)
+	{
+        offset -= 120*centered_coord*(1-ease(enter_level_t-1));
 	}
 
     // transform the vertex position

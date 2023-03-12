@@ -153,7 +153,7 @@ int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, 
 	level.AddComponent<Position>(id)->position = level.GetSize() / 2.f;
 	level.AddComponent<WidthAndHeight>(id)->width_and_height = level.GetSize();
 	level.AddComponent<DrawPriority>(id)->draw_priority = draw_priority;
-	level.AddComponent<DrawInfo>(id)->image_path = "content\\textures\\transparent.png";
+	level.AddComponent<DrawInfo>(id);
 	level.AddComponent<Shader>(id)->fragment_shader_path = shader_path;
 	return id;
 }

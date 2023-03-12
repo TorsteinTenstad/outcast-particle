@@ -9,12 +9,16 @@ void FaceSystem::Update(Level& level, float dt)
 	for (auto& [entity_id, face, children, draw_info, draw_priority, radius, position] : level.GetEntitiesWith<Face, Children, DrawInfo, DrawPriority, Radius, Position>())
 	{
 
-		std::function<int(void)> create_face = [&, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
+		std::function<int(void)> create_face = [&level, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
 			int face_id = level.CreateEntityId();
 			level.AddComponent<DrawInfo>(face_id);
 			level.AddComponent<DrawPriority>(face_id)->draw_priority = draw_priority->draw_priority;
 			level.AddComponent<Radius>(face_id)->radius = radius->radius;
 			level.AddComponent<Position>(face_id)->position = position->position;
+			level.AddComponent<FillColor>(face_id);
+			AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(face_id);
+			animated_opacity->animation_func = [](float t) {{ return sf::Uint8(255 * Smoothstep(2*t-1)); }; };
+			animated_opacity->start_time = globals.time_of_last_level_enter;
 			return face_id;
 		};
 

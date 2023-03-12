@@ -47,7 +47,7 @@ void PauseMode::Update(Level& level, float dt)
 	}
 	else
 	{
-		RemovePauseButtons(level);
+		level.DeleteEntitiesWith<PauseMenuItem>();
 	}
 }
 void PauseMode::AddAppropriateButtons(Level& level, LevelMode previous_mode)
@@ -118,10 +118,6 @@ void PauseMode::AddFloatingButtons(Level& level, std::vector<std::function<void(
 	std::vector<int> pause_menu_ids = AddButtonList(level, level.GetSize() / 2.f, button_functions, button_texts, shortcut_keys, button_scale, button_scale);
 	for (auto id : pause_menu_ids)
 	{
-		level.AddComponent<PauseMenuItems>(id);
+		level.AddComponent<PauseMenuItem>(id);
 	}
-}
-void PauseMode::RemovePauseButtons(Level& level)
-{
-	level.DeleteEntitiesWith<PauseMenuItems>();
 }

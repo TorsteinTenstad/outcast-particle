@@ -138,6 +138,7 @@ Level& Game::SetLevel(std::string level_id)
 		active_level_.LoadFromFile(level_id);
 		active_level_.SetMode(READY_MODE);
 	}
+	globals.time_of_last_level_enter = globals.time;
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;
 	return active_level_;

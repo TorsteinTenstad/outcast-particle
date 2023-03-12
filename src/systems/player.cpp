@@ -74,4 +74,8 @@ void PlayerSystem::Update(Level& level, float dt)
 		ProcessPlayerControls(level, cursor_and_keys_);
 	}
 	SetTextures(level);
+	for (auto const& [entity_id, player, player_behaviors, shader] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader>())
+	{
+		shader->float_uniforms["time_of_last_level_enter"] = globals.time_of_last_level_enter;
+	}
 }

@@ -19,7 +19,7 @@
 #include "components/level_menu.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/not_serialized.hpp"
-#include "components/pause_menu_items.hpp"
+#include "components/pause_menu_item.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/ready_screen.hpp"
@@ -76,7 +76,7 @@ typedef std::variant<
 	std::map<int, OnHoveredStartedThisFrame>,
 	std::map<int, OnReleasedThisFrame>,
 	std::map<int, OrientationDependentDrawInfo>,
-	std::map<int, PauseMenuItems>,
+	std::map<int, PauseMenuItem>,
 	std::map<int, Player>,
 	std::map<int, PlayerBehaviors>,
 	std::map<int, Position>,

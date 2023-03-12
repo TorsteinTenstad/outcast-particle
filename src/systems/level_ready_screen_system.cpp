@@ -11,9 +11,9 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 	}
 
 	sf::Vector2f level_size = level.GetSize();
-	sf::Vector2u level_grid_size = level.GetGridSize();
+	float level_scale = level.GetScale();
 
-	level.GetSingleton<ReadyScreen>([&level_size, &level_grid_size](ESCScene& level, int entity_id) {
+	level.GetSingleton<ReadyScreen>([&level_size, &level_scale](ESCScene& level, int entity_id) {
 		level.AddComponent<DrawInfo>(entity_id)->image_path = "content\\textures\\transparent.png";
 		level.AddComponent<DrawPriority>(entity_id)->draw_priority = UI_BASE_DRAW_PRIORITY + 5;
 		level.AddComponent<Position>(entity_id)->position = level_size / 2.f;
@@ -21,9 +21,9 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 		level.AddComponent<FillColor>(entity_id);
 		Text* text = level.AddComponent<Text>(entity_id);
 		text->content = "Press any key to start";
-		text->size = 200 * float(level_grid_size.y) / 16.f;
 		text->outline_color = sf::Color::Black;
-		text->outline_thickness = 10 * float(level_grid_size.y) / 16.f;
+		text->size = 200 * level_scale;
+		text->outline_thickness = 10 * level_scale;
 		AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(entity_id);
 		animated_opacity->animation_func = [](float t) { return sf::Uint8(255 * Smoothstep(0.5 * std::cos(PI * t) + 0.5)); };
 		animated_opacity->start_time = globals.time;
