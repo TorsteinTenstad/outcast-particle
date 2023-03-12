@@ -22,8 +22,8 @@
 
 Game::Game()
 {
-	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
+	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
@@ -136,7 +136,10 @@ Level& Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_.LoadFromFile(level_id);
-		active_level_.SetMode(READY_MODE);
+		if (globals.general_config.use_ready_mode)
+		{
+			active_level_.SetMode(READY_MODE);
+		}
 	}
 	globals.time_of_last_level_enter = globals.time;
 	active_level_id_ = level_id;
