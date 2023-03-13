@@ -8,9 +8,9 @@ uniform float time_of_last_level_enter = -1.;
 
 float ease(float t){
     t = max(0, t);
-    float a = 2*pow(t  , 2);
-    float b = 1-pow(t-1, 2);
-    return mix(a, b, t);
+    float a = 4.0*pow(t  , 2);
+    float b = 1-2.0*pow(t-1, 2);
+    return mix(a, b, smoothstep(0, 1, t));
 }
 
 void main()
@@ -28,9 +28,9 @@ void main()
 	{
         offset -= 0.1*centered_coord*sin(PI*switch_charge_t);
 	}
-    else if (0 < enter_level_t && enter_level_t < 2)
+    else if (0 < enter_level_t && enter_level_t < 1.5)
 	{
-        offset -= 0.5*centered_coord*(1-ease(enter_level_t-1));
+        offset -= 0.5*centered_coord*(1-ease(enter_level_t-0.5));
 	}
 
     // transform the vertex position

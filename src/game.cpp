@@ -22,8 +22,8 @@
 
 Game::Game()
 {
-	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();
+	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system

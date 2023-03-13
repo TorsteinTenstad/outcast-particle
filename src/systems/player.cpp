@@ -78,8 +78,9 @@ void PlayerSystem::Update(Level& level, float dt)
 	{
 		return;
 	}
+	LevelMode level_mode = level.GetMode();
 	for (auto const& [entity_id, player, player_behaviors, shader] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader>())
 	{
-		shader->float_uniforms["time_of_last_level_enter"] = globals.time_of_last_level_enter;
+		shader->float_uniforms["time_of_last_level_enter"] = level_mode == READY_MODE ? globals.time_of_last_level_enter : -1;
 	}
 }
