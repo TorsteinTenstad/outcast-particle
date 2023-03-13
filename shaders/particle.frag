@@ -68,5 +68,5 @@ void main()
     color = blend(color, vec4(vec3(1), sign_alpha*(1-is_blue)*particle(centered_normalized_uv, sign(charge))));
     gl_FragColor = mix(inner_color, outer_color, r);
     gl_FragColor = vec4(particle(centered_normalized_uv, sign(charge)), a, 0, 1);
-    gl_FragColor = color;
+    gl_FragColor = gl_Color*color;
 }

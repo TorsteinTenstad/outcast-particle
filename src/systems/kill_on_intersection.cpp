@@ -31,14 +31,12 @@ void KillOnIntersectionSystem::Update(Level& level, float dt)
 				level.GetComponent<Face>(entity_id)->image_path = "content\\textures\\face_dead.png";
 			}
 			level.RemoveComponents<Intersection>(entity_id);
-			level.RemoveComponents<Shader>(entity_id);
 			level.RemoveComponents<Velocity>(entity_id);
 			level.RemoveComponents<Player>(entity_id);
 
 			level.AddComponent<ScheduledDelete>(entity_id)->delete_at = globals.time + 2;
-			Shader* shader = level.AddComponent<Shader>(entity_id);
+			Shader* shader = level.EnsureExistanceOfComponent<Shader>(entity_id);
 			shader->vertex_shader_path = "shaders\\zapped.vert";
-			shader->fragment_shader_path = "shaders\\zapped.frag";
 			shader->float_uniforms["start_animation"] = globals.time;
 		}
 	}
