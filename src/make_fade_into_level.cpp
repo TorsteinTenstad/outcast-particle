@@ -3,7 +3,7 @@
 
 void MakeFadeIntoLevel(Level& level, int entity_id, std::string active_level_id)
 {
-	if (!IsMenu(active_level_id))
+	if (!IsMenu(active_level_id) && level.GetMode() == READY_MODE)
 	{
 		level.AddComponent<FillColor>(entity_id);
 		AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(entity_id);
