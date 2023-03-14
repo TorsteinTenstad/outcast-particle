@@ -41,7 +41,7 @@ float particle(vec2 uv, float charge_sign){
 	return ring+pluss;
 }
 
-#define CELL_SIZE 60
+#define CELL_SIZE 90
 
 float particle_grid(vec2 uv, vec2 cell_size, float relative_particle_size, float rand_seed){
    	vec2 c = uv/vec2(CELL_SIZE);
@@ -55,7 +55,7 @@ float particle_grid(vec2 uv, vec2 cell_size, float relative_particle_size, float
 	vec2 offset = vec2(0);
 	offset.x += rand(-(1-particle_d)/2, (1-particle_d)/2, id*1.234*rand_seed);
 	offset.y += rand(-(1-particle_d)/2, (1-particle_d)/2, id*1.312*rand_seed);
-	float existance = float(rand01(id*1.623*rand_seed) < 0.1 && fract((id.x+id.y)/2) > 0.4);
+	float existance = float(rand01(id*1.623*rand_seed) < 0.08 && fract((id.x+id.y)/2) > 0.4);
 	return particle((gc-offset)/particle_d, charge_sign)*existance;
 }
 
@@ -65,9 +65,9 @@ vec4 arrow(vec2 uv, vec2 wh_rotated){
     vec2 gc = vec2(fract(c.x), c.y);
     float gc_id = floor(c.x);
 
-	float arrow_head_length = 0.15;
+	float arrow_head_length = 0.18;
 	float arrow_head_width = 0.6;
-    float arrow_line_width = 0.1;
+    float arrow_line_width = 0.13;
 	float margin = 0.15;
 	float center_dist = abs(gc.x-0.5);
 	float arrow_c = gc.y-(wh_rotated.y/120)+1*center_dist;
@@ -87,7 +87,7 @@ vec4 arrow(vec2 uv, vec2 wh_rotated){
 	float gradient_t = smoothstep(0, 1, 1-smoothstep(wh_rotated.y, 0, uv.y));
 	//float gradient_t = 1/(1+(wh_rotated.y - uv.y - margin*120)/10);
 	gradient_t = clamp(gradient_t, 0, 1);
-	vec3 rgb = mix(vec3(0.6), vec3(0.99, 0.99, 0.6), gradient_t);
+	vec3 rgb = mix(vec3(0.17), vec3(0.12), gradient_t);
 	return vec4(rgb, arrow);
 }
 
@@ -105,20 +105,28 @@ void main()
 	float theta = atan(field_vector.x, field_vector.y);
 	mat2 m_rot = rot(theta);
 
-	vec4 background_color = vec4(vec3(1), 0.1);
+	vec4 background_color = vec4(vec3(1), 0.0);
 	vec4 color = background_color;
 
-	vec3 particle_rgb = charge_sign < 0 ? vec3(0.3, 0.8, 0.3) : vec3(0.95, 0.3, 0.3);
+	vec3 red = vec3(0.88671875, 0.109375, 0.1015625);
+    vec3 light_red = vec3(0.98046875, 0.6015625, 0.59765625);
+    vec3 green = vec3(0.19921875, 0.625, 0.171875);
+    vec3 light_green = vec3(0.6953125, 0.87109375, 0.5390625);
+    vec3 blue = vec3(0.1171875, 0.46875, 0.703125);
+    vec3 light_blue = vec3(0.6484375, 0.8046875, 0.88671875);
+
+    vec3 particle_rgb = charge_sign < 0 ? (0.2*light_green+0.8*green) : (0.2*light_red+0.8*red);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(90, -100*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142)*0.1));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(60, -200*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721)*0.2));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(30, -200*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161)*0.3));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(00, -400*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511)*0.4));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(90, -100*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142)*0.1*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(60, -200*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721)*0.2*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(30, -200*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161)*0.3*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy)*m_rot+vec2(00, -400*movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511)*0.4*0.5));
 	
-	color = blend(color, particles_color);
 
 	vec4 arrow_color = arrow((gl_TexCoord[0].xy)*m_rot, abs(_wh*m_rot));
 	color = blend(color, arrow_color);
 
+	color = blend(color, particles_color);
+	
 	gl_FragColor = color;
 }

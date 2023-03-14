@@ -21,7 +21,23 @@ float GAt(vec2 gc_id){
 
 vec3 ColorOf(float g_val)
 {
-    return mix(vec3(0.8), vec3(0.6, 1, 0.6), (g_val));
+    if (g_val < 0.1){
+        return vec3(0.3);
+    }
+    if (g_val < 0.6){
+        return vec3(0.45);
+    }
+    return vec3(0.5, 0.8, 0.5);
+}
+float DepthOf(float g_val)
+{
+    if (g_val < 0.1){
+        return 0.2;
+    }
+    if (g_val < 0.6){
+        return 0.4;
+    }
+    return 0.8;
 }
 
 #define FAR_AWAY 1
@@ -59,7 +75,7 @@ void main()
         dist_from_edge = min(dist_from_edge, length(vec2(1-gc.x, gc.y)));
     }
 
-    float val = smoothstep(0.1, 0.5, dist_from_edge/FAR_AWAY);
-    gl_FragColor.rgb = mix(ColorOf(GAt(g_id)), vec3(0.15), val);
+    float val = smoothstep(0.2, 0.3, dist_from_edge/FAR_AWAY);
+    gl_FragColor.rgb = mix(ColorOf(GAt(g_id)), vec3(0.1), val);
     gl_FragColor.a = IsWallAt(g_id) ? 1 : 0;
 }

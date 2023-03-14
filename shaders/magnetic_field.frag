@@ -10,8 +10,12 @@ uniform float charge_sign;
 uniform float movement_animation_time;
 uniform float field_strength;
 
-float rand01(vec2 seed){
-    return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 443758.5453);
+
+uniform sampler2D _noise_texture;
+#define noise_size 1000
+float rand01(vec2 uv){
+    uv = fract(uv/noise_size);
+    return texture2D(_noise_texture, 1-uv).r;
 }
 
 float rand(float a, float b, vec2 seed){
@@ -25,7 +29,7 @@ mat2 rot(float a) {
     return m;
 }
 
-#define CELL_SIZE 60
+#define CELL_SIZE 90
 
 float particle(vec2 uv, mat2 m_rot, float charge_sign){
 	float AA = 0.01;
@@ -46,8 +50,6 @@ float particle(vec2 uv, mat2 m_rot, float charge_sign){
 	float ring = ring_inner_mask*ring_outer_mask;
 	return ring+pluss;
 }
-
-#define CELL_SIZE 60
 
 float particle_grid(vec2 uv, mat2 m_rot, vec2 cell_size, float n, float relative_particle_size, vec2 rand_seed){
    	vec2 c = uv/cell_size;
@@ -102,7 +104,7 @@ vec4 crosses_and_dots(vec2 uv){
 	float alpha = field_strength > 0 ? dots_mask : crosses_mask;
 	vec3 light_purple = vec3(0.7890625, 0.6953125, 0.8359375);
     vec3 purple = vec3(0.59375, 0.3046875, 0.63671875);
-	vec3 rgb = mix(light_purple, purple, 1-(gc.x+gc.y));
+	vec3 rgb = mix(vec3(0.17), vec3(0.12), 1-(gc.x+gc.y));
 	return vec4(rgb, alpha);
 }
 
@@ -119,22 +121,30 @@ void main()
 {
     vec2 uv = gl_TexCoord[0].xy;
 
-	vec4 background_color = vec4(vec3(1), 0.1);
+	vec4 background_color = vec4(vec3(1), 0);
 	vec4 color = background_color;
 
-    vec3 particle_rgb = charge_sign < 0 ? vec3(0.3, 0.8, 0.3) : vec3(0.95, 0.3, 0.3);
-	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(90, 0)), 12, 20, 1.142)*0.1));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(90, 0)), 10, 20, 1.142)*0.1));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(60, 0)), 10, 40, 1.721)*0.2));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(60, 0)),  8, 40, 1.721)*0.2));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(30, 0)),  8, 60, 1.161)*0.3));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(30, 0)),  6, 60, 1.161)*0.3));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(00, 0)),  6, 80, 1.511)*0.4));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(00, 0)),  4, 80, 1.511)*0.4));
 	
-	color = blend(color, particles_color);
+    vec3 red = vec3(0.88671875, 0.109375, 0.1015625);
+    vec3 light_red = vec3(0.98046875, 0.6015625, 0.59765625);
+    vec3 green = vec3(0.19921875, 0.625, 0.171875);
+    vec3 light_green = vec3(0.6953125, 0.87109375, 0.5390625);
+    vec3 blue = vec3(0.1171875, 0.46875, 0.703125);
+    vec3 light_blue = vec3(0.6484375, 0.8046875, 0.88671875);
+
+    vec3 particle_rgb = charge_sign < 0 ? (0.2*light_green+0.8*green) : (0.2*light_red+0.8*red);
+	vec4 particles_color = vec4(0);
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(90, 0)), 12, 20, 1.142)*0.1*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(90, 0)), 10, 20, 1.142)*0.1*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(60, 0)), 10, 40, 1.721)*0.2*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(60, 0)),  8, 40, 1.721)*0.2*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(30, 0)),  8, 60, 1.161)*0.3*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(30, 0)),  6, 60, 1.161)*0.3*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(00, 0)),  6, 80, 1.511)*0.4*0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv+vec2(00, 0)),  4, 80, 1.511)*0.4*0.5));
+	
 	color = blend(color, crosses_and_dots((uv)));
+	color = blend(color, particles_color);
 
 	gl_FragColor = color;
 }
