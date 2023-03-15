@@ -4,6 +4,7 @@
 #define SQRT2 1.41421356237
 
 uniform float _time;
+uniform float animation_start_time = -1;
 uniform vec2 origin;
 uniform vec2 _window_resolution;
 uniform vec2 _wh;
@@ -29,25 +30,38 @@ mat2 rot(float theta) {
     return m;
 }
 
+float ease(float t, float undershoot, float overshoot){
+    t = clamp(t, 0, 1);
+    float a =    overshoot*pow(t  , 2);
+    float b = 1-undershoot*pow(t-1, 2);
+    return mix(a, b, smoothstep(0, 1, t));
+}
+
+float ease(float t){
+    return ease(t, 1, 1);
+}
+
 
 #define glow_color vec3(1, 0.9, 0.27)
 //#define gem_color vec3(1, 1, 1)
 #define n 5
 #define glow_r 180
-#define rotational_frequency 0.5
+#define rotational_base_frequency 0.5
 #define radial_frequency 0.5
 #define AA 3
 
 void main()
 {
+	float animation_t = animation_start_time > 0 ? _time - animation_start_time : 0;
+
 	vec2 screen_coords = gl_TexCoord[0].xy;
-	vec2 lc = screen_coords - origin;
+	vec2 lc = screen_coords - origin - vec2(0, -300*animation_t);
 	float r = length(lc);
     float theta = atan(lc.x, lc.y);
     float a = 0.5*theta/PI+0.5;
 
 	float intensity = radial_falloff(r, 0, glow_r+15*sin(2*PI*radial_frequency*_time));
-	float radial_mask = float(fract(n*a+rotational_frequency*_time) > 0.5);
+	float radial_mask = float(fract(n*a+rotational_base_frequency*_time+1.5*ease(animation_t)) > 0.5);
 	float glow_alpha = intensity*radial_mask;
 	vec4 glow_contribution = vec4(glow_color, glow_alpha);
 
@@ -58,6 +72,8 @@ void main()
 	float gem_alpha = 1-smoothstep(0, AA, max(gem_c.x, gem_c.y)-SQRT2*30);
 	vec4 gem_contribution = vec4(1-gem_color, gem_alpha);
 
-	gl_FragColor = blend(glow_contribution, gem_contribution);
+	vec4 color = blend(glow_contribution, gem_contribution);
+	color.a *= 1-animation_t;
+	gl_FragColor = color;
 	//gl_FragColor = gem_contribution;
 }

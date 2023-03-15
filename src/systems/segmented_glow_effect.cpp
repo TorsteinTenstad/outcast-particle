@@ -10,5 +10,6 @@ void SegmentedGlowEffectSystem::Update(Level& level, float dt)
 	{
 		Shader* shader = EnsureExistanceOfScreenwideFragmentShaderChildEntity<SegmentedGlowEffect>(level, children, "shaders\\segmented_glow_effect.frag", draw_priority->draw_priority - 1);
 		shader->vec_uniforms["origin"] = position->position;
+		shader->float_uniforms["animation_start_time"] = segmented_glow_effect->animation_start_time.value_or(-1);
 	}
 }

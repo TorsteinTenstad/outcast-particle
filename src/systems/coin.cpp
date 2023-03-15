@@ -19,17 +19,21 @@ void CoinSystem::Update(Level& level, float dt)
 	CoinCounter* coin_counter = level.GetSingleton<CoinCounter>();
 	int& counter = coin_counter->coin_counter;
 
-	for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
+	for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
 		for (auto& id : intersection->entered_this_frame_ids)
 		{
-			if (level.HasComponents<Coin>(id))
+			if (!level.HasComponents<Coin>(id))
 			{
-				assert(level.HasComponents<SoundInfo>(id));
-				level.GetComponent<SoundInfo>(id)->play_sound = true;
-				level.AddComponent<ScheduledDelete>(id)->delete_at = globals.time;
-				counter += 1;
+				continue;
 			}
+			assert(level.HasComponents<Coin>(id));
+			assert(level.HasComponents<SegmentedGlowEffect>(id));
+			level.RemoveComponents<Coin>(id);
+			level.GetComponent<SegmentedGlowEffect>(id)->animation_start_time = globals.time;
+			level.GetComponent<SoundInfo>(id)->play_sound = true;
+			level.AddComponent<ScheduledDelete>(id)->delete_at = globals.time + 1;
+			counter += 1;
 		}
 	}
 

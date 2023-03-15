@@ -1,5 +1,11 @@
 #pragma once
+#include <optional>
 
-class ForceVisualization{};
+class ForceVisualization
+{};
 
-class SegmentedGlowEffect{};
+class SegmentedGlowEffect
+{
+public:
+	std::optional<float> animation_start_time;
+};
