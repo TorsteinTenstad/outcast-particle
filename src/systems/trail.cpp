@@ -4,6 +4,10 @@
 
 void TrailSystem::Update(Level& level, float dt)
 {
+	if (globals.time - globals.time_of_last_level_enter < 0.3) //Quick fix untill the trail system becomes shader-based
+	{
+		return;
+	}
 	for (auto& [entity_id, trail, radius, velocity] : level.GetEntitiesWith<Trail, Radius, Velocity>())
 	{
 		trail->path.insert(trail->path.begin(), -velocity->velocity * dt - (radius->radius / TRAIL_N) * Normalized(velocity->velocity));

@@ -13,6 +13,10 @@ void RenderTrailSystem::Update(Level& level, float dt)
 {
 	for (auto [entity_id, trail, radius, draw_priority, position] : level.GetEntitiesWith<Trail, Radius, DrawPriority, Position>())
 	{
+		if (trail->path.size() == 0)
+		{
+			return;
+		}
 		sf::Vector2f global_segment_position = position->position;
 		sf::Vector2f p1 = global_segment_position;
 		sf::Vector2f p2 = global_segment_position;
