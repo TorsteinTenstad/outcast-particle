@@ -4,7 +4,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(60,1080)}WidthAndHeight{width_and_height=(120,1920)}
 "BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,1920)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3120,1740)}WidthAndHeight{width_and_height=(600,360)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3060,1740)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1500,600)}WidthAndHeight{width_and_height=(60,1020)}
 "BPWall":Tag{tag=BPWall}Position{position=(1500,1080)}WidthAndHeight{width_and_height=(120,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(1500,1500)}WidthAndHeight{width_and_height=(120,120)}

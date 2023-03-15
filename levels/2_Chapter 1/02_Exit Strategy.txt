@@ -1,6 +1,6 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(780,480)}Charge{charge=10000}Velocity{velocity=(-423.944,6.40138e-05)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"BPGoal":Tag{tag=BPGoal}Position{position=(2340,480)}WidthAndHeight{width_and_height=(480,480)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(2400,480)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(420,1740)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2760,1740)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3420,1080)}

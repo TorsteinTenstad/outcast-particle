@@ -336,7 +336,6 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
             SerializeComponent(GetComponent<Position>(entity_id), entity_string);
-            SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
         }
         
         if (tag->tag == "BPElectricField")
@@ -593,8 +592,8 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
+            AddComponent<Radius>(entity_id, { 240 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
         if (tag == "BPElectricField")
@@ -825,9 +824,9 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
+            AddComponent<Radius>(entity_id, { 240 });
             AddComponent<Tag>(entity_id, {"BPGoal"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
             break;
         case BPElectricField:
             AddComponent<ReceivesButtonEvents>(entity_id, {});

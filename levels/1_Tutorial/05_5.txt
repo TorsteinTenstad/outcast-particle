@@ -1,7 +1,7 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1860,1620)}WidthAndHeight{width_and_height=(120,840)}
 "BPWall":Tag{tag=BPWall}Position{position=(2040,60)}WidthAndHeight{width_and_height=(3360,120)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3240,600)}WidthAndHeight{width_and_height=(840,360)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3240,600)}
 "BPWall":Tag{tag=BPWall}Position{position=(60,1080)}WidthAndHeight{width_and_height=(120,1440)}
 "BPWall":Tag{tag=BPWall}Position{position=(2820,2100)}WidthAndHeight{width_and_height=(1320,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,900)}WidthAndHeight{width_and_height=(120,1800)}
@@ -11,7 +11,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(2520,240)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3600,1920)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(240,1920)}Charge{charge=-10000}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(1680,1920)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(1680,1920)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(240,240)}Charge{charge=-10000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(240,2100)}WidthAndHeight{width_and_height=(360,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,1920)}WidthAndHeight{width_and_height=(60,420)}

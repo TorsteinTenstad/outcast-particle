@@ -84,7 +84,7 @@ name=Untitled;grid_size_id=3;editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,4020)}WidthAndHeight{width_and_height=(4320,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(5460,1920)}WidthAndHeight{width_and_height=(60,2400)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(300,1920)}WidthAndHeight{width_and_height=(60,2400)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(2880,540)}WidthAndHeight{width_and_height=(480,360)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(2880,540)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(2880,780)}WidthAndHeight{width_and_height=(4320,120)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(4080,3540)}WidthAndHeight{width_and_height=(1920,120)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(4980,2160)}WidthAndHeight{width_and_height=(120,2640)}

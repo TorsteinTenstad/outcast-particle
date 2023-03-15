@@ -5,7 +5,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,180)}WidthAndHeight{width_and_height=(3840,360)}
 "BPWall":Tag{tag=BPWall}Position{position=(3660,1080)}WidthAndHeight{width_and_height=(360,2160)}
 "BPWall":Tag{tag=BPWall}Position{position=(1860,1980)}WidthAndHeight{width_and_height=(3840,360)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3000,720)}WidthAndHeight{width_and_height=(480,480)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3000,720)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2520,1320)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1920,1080)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1320,840)}

@@ -1,6 +1,6 @@
 name=Untitled;grid_size_id=1;editable=1
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(2340,480)}Charge{charge=2500}Velocity{velocity=(-9.99963,-1.5099e-06)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"BPGoal":Tag{tag=BPGoal}Position{position=(1500,480)}WidthAndHeight{width_and_height=(360,600)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(2340,480)}Charge{charge=-2500}Velocity{velocity=(-9.99963,-1.5099e-06)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+"BPGoal":Tag{tag=BPGoal}Position{position=(1440,480)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3720,120)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3720,2040)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(120,2040)}Charge{charge=10000}

@@ -71,7 +71,7 @@ void main()
 
     float R = 2;
 
-	vec2 c_uv = (uv - _wh/2)/BLOCK_SIZE;
+	vec2 c_uv = (uv - _wh/2)/(BLOCK_SIZE);
 	float r = length(c_uv);
     float theta = atan(c_uv.x, c_uv.y);
     float a = 0.5*theta/PI+0.5;
@@ -103,5 +103,6 @@ void main()
 
 
 
-    gl_FragColor = color*(1-smoothstep(-1.2, 0, r-0.3-R-0.1*sin01(10*a+2*r)));
+    color.a = (1-smoothstep(-1.0, 0, r-R-0.1*sin01(10*a+2*r)));
+    gl_FragColor = color;
 }

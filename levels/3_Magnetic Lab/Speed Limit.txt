@@ -41,7 +41,7 @@ name=Untitled;grid_size_id=2;editable=1
 "BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(3780,720)}WidthAndHeight{width_and_height=(120,240)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3120,360)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(3120,780)}WidthAndHeight{width_and_height=(1200,120)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3120,1080)}WidthAndHeight{width_and_height=(240,240)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3120,1080)}
 "BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(2460,720)}WidthAndHeight{width_and_height=(120,240)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(5700,660)}WidthAndHeight{width_and_height=(120,1320)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(4740,60)}WidthAndHeight{width_and_height=(1800,120)}

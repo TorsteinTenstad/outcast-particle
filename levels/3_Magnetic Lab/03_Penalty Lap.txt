@@ -9,7 +9,7 @@ name=Untitled;grid_size_id=2;editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,1620)}WidthAndHeight{width_and_height=(60,3120)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(2460,2040)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(1560,720)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(5280,2400)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(720,1440)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3600,840)}WidthAndHeight{width_and_height=(360,1320)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3600,840)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(4080,1620)}WidthAndHeight{width_and_height=(1560,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(5700,1620)}WidthAndHeight{width_and_height=(60,3120)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(2040,2760)}MagneticField{field_strength=-0.2}WidthAndHeight{width_and_height=(720,720)}

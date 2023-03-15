@@ -56,10 +56,10 @@ name=Untitled;grid_size_id=2;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(2280,2400)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(2100,1920)}ElectricField{field_vector=(-0.125,0)}WidthAndHeight{width_and_height=(360,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1800,2340)}ElectricField{field_vector=(0,0.125)}WidthAndHeight{width_and_height=(240,1080)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(5640,3000)}WidthAndHeight{width_and_height=(240,240)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(240,3000)}WidthAndHeight{width_and_height=(240,240)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(240,240)}WidthAndHeight{width_and_height=(240,240)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(5520,240)}WidthAndHeight{width_and_height=(240,240)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(5640,3000)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(240,3000)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(240,240)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(5520,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1440,2160)}ElectricField{field_vector=(0,0.125)}WidthAndHeight{width_and_height=(240,1440)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1680,3000)}ElectricField{field_vector=(0.25,-0)}WidthAndHeight{width_and_height=(720,240)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(3120,2460)}WidthAndHeight{width_and_height=(240,120)}

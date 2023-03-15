@@ -1,8 +1,8 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,2160)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(480,1740)}WidthAndHeight{width_and_height=(600,360)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(420,540)}Charge{charge=-2500}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+"BPGoal":Tag{tag=BPGoal}Position{position=(420,1740)}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(420,540)}Charge{charge=2500}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPWall":Tag{tag=BPWall}Position{position=(1560,180)}WidthAndHeight{width_and_height=(3240,360)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,1740)}WidthAndHeight{width_and_height=(60,660)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1620,660)}ElectricField{field_vector=(0.0625,-0)}WidthAndHeight{width_and_height=(2880,360)}

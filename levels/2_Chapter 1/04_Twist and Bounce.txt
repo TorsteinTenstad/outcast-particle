@@ -1,5 +1,5 @@
 name=Untitled;grid_size_id=1;editable=1
-"BPGoal":Tag{tag=BPGoal}Position{position=(360,1560)}WidthAndHeight{width_and_height=(360,600)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(420,1500)}
 "BPWall":Tag{tag=BPWall}Position{position=(300,60)}WidthAndHeight{width_and_height=(600,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2220,2100)}WidthAndHeight{width_and_height=(3120,60)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(240,300)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}

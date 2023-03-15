@@ -8,7 +8,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,180)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,1980)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3660,1980)}Charge{charge=10000}
-"BPGoal":Tag{tag=BPGoal}Position{position=(1800,720)}WidthAndHeight{width_and_height=(360,600)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(1800,720)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1500,960)}WidthAndHeight{width_and_height=(60,300)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(540,1620)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3300,540)}

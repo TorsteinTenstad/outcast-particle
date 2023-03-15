@@ -1,7 +1,7 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3840,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,2160)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(2520,600)}WidthAndHeight{width_and_height=(360,840)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(2520,600)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(360,360)}Charge{charge=10000}Velocity{velocity=(-0.977689,-1.7775)}Player{can_switch_charge=0;can_go_neutral=0;move_force=1000}
 "BPWall":Tag{tag=BPWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3840,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(780,840)}ElectricField{field_vector=(-0.25,0)}WidthAndHeight{width_and_height=(360,1440)}

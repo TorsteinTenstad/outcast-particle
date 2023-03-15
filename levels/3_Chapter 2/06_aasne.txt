@@ -1,6 +1,6 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(1260,420)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3420,420)}WidthAndHeight{width_and_height=(600,600)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3420,420)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(420,420)}Charge{charge=-10000}
 "BPWall":Tag{tag=BPWall}Position{position=(240,600)}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(420,240)}WidthAndHeight{width_and_height=(420,60)}

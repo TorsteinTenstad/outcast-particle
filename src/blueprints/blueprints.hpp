@@ -160,9 +160,7 @@ class BPGoal : public BPEditableEntity
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };
-
-	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+	Radius Radius = { 240 };
 };
 
 class BPElectricField : public BPEditableEntity
