@@ -1,6 +1,6 @@
 #include "ecs_scene.hpp"
 #include "game.hpp"
-#include "string_parsing_utils.hpp"
+#include "utils/string_parsing.hpp"
 #include <functional>
 #include <iostream>
 #include <optional>

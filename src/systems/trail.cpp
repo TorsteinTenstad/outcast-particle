@@ -1,6 +1,6 @@
 #include "_pure_DO_systems.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
 
 void TrailSystem::Update(Level& level, float dt)
 {
@@ -16,7 +16,7 @@ void TrailSystem::Update(Level& level, float dt)
 			trail->widths.clear();
 			for (unsigned i = 0; i < trail->path.size(); ++i)
 			{
-				trail->widths.push_back(0.8 * radius->radius * pow((float)(trail->path.size() - i) / trail->path.size(), 1.5));
+				trail->widths.push_back(0.8 * pow((float)(trail->path.size() - i) / trail->path.size(), 1.5));
 			}
 		}
 	}

@@ -5,7 +5,7 @@
 #include "controls_config_serialization.hpp"
 #include "general_user_config_serialization.hpp"
 #include "level.hpp"
-#include "string_parsing_utils.hpp"
+#include "utils/string_parsing.hpp"
 
 template <typename K, typename V>
 inline std::string ToString(const std::map<K, V>& map)

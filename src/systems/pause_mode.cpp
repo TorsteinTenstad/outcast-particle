@@ -1,6 +1,6 @@
 #include "systems/pause_mode.hpp"
 #include "entity_creation.hpp"
-#include "utils.hpp"
+#include "utils/level_id.hpp"
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -19,16 +19,18 @@ void PauseMode::Update(Level& level, float dt)
 
 	LevelState level_state = level.ComputeState();
 	LevelMode level_mode = level.GetMode();
+	bool lost_focus = !globals.render_window.hasFocus(); // && false; //for debugging
 	if (level_mode != PAUSE_MODE
 		&& (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]
-			|| (!globals.render_window.hasFocus() && level_mode == PLAY_MODE)
+			|| (lost_focus && level_mode == PLAY_MODE)
+			//|| level_state == COMPLETED // Temporary
 			|| level_state == FAILED))
 	{
 		assert(level_mode != READY_MODE);
 		level.SetMode(PAUSE_MODE);
 		MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 		menu_delay_timer->pevious_mode = level_mode;
-		menu_delay_timer->duration = (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] || !globals.render_window.hasFocus()) ? -1 : PAUSE_MENU_DELAY;
+		menu_delay_timer->duration = (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] || lost_focus) ? -1 : PAUSE_MENU_DELAY;
 		menu_delay_timer->buttons_initialized = false;
 	}
 

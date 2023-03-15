@@ -1,5 +1,6 @@
 #include "make_fade_into_level.hpp"
-#include "utils.hpp"
+#include "utils/level_id.hpp"
+#include "utils/math.hpp"
 
 void MakeFadeIntoLevel(Level& level, int entity_id, std::string active_level_id)
 {

@@ -2,7 +2,8 @@
 #include "components/draw_info.hpp"
 #include "constants.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/math.hpp"
 #include <cassert>
 
 void SetDrawInfoSystem::Update(Level& level, float dt)

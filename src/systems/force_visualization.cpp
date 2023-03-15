@@ -1,9 +1,9 @@
 #include "_pure_DO_systems.hpp"
 #include "entity_creation.hpp"
 #include "make_fade_into_level.hpp"
-#include "physics_utils.hpp"
-#include "string_parsing_utils.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/physics.hpp"
+#include "utils/string_parsing.hpp"
 
 void ForceVisualizationSystem::Update(Level& level, float dt)
 {

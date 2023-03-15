@@ -1,6 +1,8 @@
 #include "_pure_DO_systems.hpp"
-#include "string_parsing_utils.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
+#include "utils/string_manip.hpp"
+#include "utils/string_parsing.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>

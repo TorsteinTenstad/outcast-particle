@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/System/Vector2.hpp"
+#include <optional>
 
 class Position
 {
@@ -19,14 +20,20 @@ public:
 	sf::Vector2f acceleration = sf::Vector2f(0, 0);
 };
 
-class ReceivedForces
+class Mass
 {
 public:
 	float mass = 1;
+};
+
+class ReceivedForces
+{
+public:
 	sf::Vector2f electric_force = sf::Vector2f(0, 0);
 	sf::Vector2f player_force = sf::Vector2f(0, 0);
 	sf::Vector2f electric_field_force = sf::Vector2f(0, 0);
 	sf::Vector2f magnetic_field_force = sf::Vector2f(0, 0);
+	sf::Vector2f gravitational_force = sf::Vector2f(0, 0);
 };
 
 class Charge

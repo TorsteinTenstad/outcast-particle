@@ -1,7 +1,7 @@
 #include "_pure_DO_systems.hpp"
 #include "entity_creation.hpp"
 #include "make_fade_into_level.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
 
 #define MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT 10
 
@@ -12,7 +12,7 @@ void FaceSystem::Update(Level& level, float dt)
 
 		std::function<int(void)> create_face = [&level, active_level_id = active_level_id_, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
 			int entity_id = level.CreateEntityId();
-			level.AddComponent<DrawInfo>(entity_id);
+			level.AddComponent<DrawInfo>(entity_id)->scale_to_fit = true;
 			level.AddComponent<DrawPriority>(entity_id)->draw_priority = draw_priority->draw_priority;
 			level.AddComponent<Radius>(entity_id)->radius = radius->radius;
 			level.AddComponent<Position>(entity_id)->position = position->position;
@@ -22,12 +22,19 @@ void FaceSystem::Update(Level& level, float dt)
 
 		int child_id = EnsureExistanceOfChildEntity<Face>(children, create_face);
 		level.GetComponent<DrawInfo>(child_id)->image_path = face->image_path;
-		if (!level.HasComponents<Velocity>(entity_id))
+		level.GetComponent<Radius>(child_id)->radius = radius->radius;
+		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity_id))
 		{
-			continue;
+			level.EnsureExistanceOfComponent<FillColor>(child_id)->color = fill_color->color;
 		}
+
 		sf::Vector2f& pos = position->position;
-		sf::Vector2f& vel = level.GetComponent<Velocity>(entity_id)->velocity;
+		Velocity* velocity = level.RawGetComponent<Velocity>(entity_id);
+		if (!velocity)
+		{
+			return;
+		}
+		sf::Vector2f& vel = velocity->velocity;
 		sf::Vector2f& child_pos = level.GetComponent<Position>(child_id)->position;
 
 		if (level.GetMode() == PLAY_MODE)
@@ -41,7 +48,7 @@ void FaceSystem::Update(Level& level, float dt)
 		{
 			target_offset = 20.f * Normalized(vel);
 		}
-		float snap = 0.01f * dt * 600;
+		float snap = 0.05f * dt * radius->radius;
 		sf::Vector2f next_offset = (1 - snap) * offset + snap * target_offset;
 		child_pos = pos + next_offset;
 	}

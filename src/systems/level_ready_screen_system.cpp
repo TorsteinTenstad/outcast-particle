@@ -1,6 +1,7 @@
 #include "SFML/Config.hpp"
 #include "_pure_DO_systems.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
+
 #include <cmath>
 
 void LevelReadyScreenSystem::Update(Level& level, float dt)
@@ -41,7 +42,8 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 	for (auto [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
 	{
 		conditionaly_enter_play_mode(pressed_this_frame);
-		if (pressed_this_frame && key == globals.key_config.PLAYER_SWITCH_CHARGE){
+		if (pressed_this_frame && key == globals.key_config.PLAYER_SWITCH_CHARGE)
+		{
 			cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] = false;
 		}
 	}

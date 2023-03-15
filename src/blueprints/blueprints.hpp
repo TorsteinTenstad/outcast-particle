@@ -63,6 +63,7 @@ class BPMovingParticle : public BPStaticParticle
 
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
+	Mass mass = {};
 	Intersection intersection = {};
 	Collision collision = {};
 	Trail trail = {};
@@ -88,6 +89,7 @@ class BPPlayer : public BPEditableEntity
 
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
+	Mass mass = {};
 	Intersection intersection = {};
 	Collision collision = {};
 	Children children = {};
@@ -159,6 +161,8 @@ class BPGoal : public BPEditableEntity
 	Shader shader = { "", "shaders\\wormhole.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
+	Wormhole wormhole = {};
+	Mass mass = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };
 	Radius Radius = { 240 };
 };

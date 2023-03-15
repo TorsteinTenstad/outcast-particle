@@ -3,7 +3,7 @@
 #include "components/physics.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
 
 static sf::Vector2f CalculateMagneticFieldForce(Charge* particle_charge, Velocity* particle_velocity, MagneticField* magnetic_field)
 {

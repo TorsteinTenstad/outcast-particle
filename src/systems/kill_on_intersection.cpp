@@ -4,7 +4,7 @@
 #include "components/physics.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+
 #include <iostream>
 
 void KillOnIntersectionSystem::Update(Level& level, float dt)

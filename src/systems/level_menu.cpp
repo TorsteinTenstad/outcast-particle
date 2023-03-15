@@ -2,8 +2,9 @@
 #include "systems/level_menu.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "string_parsing_utils.hpp"
-#include "utils.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/level_id.hpp"
+
 #include <cassert>
 #include <iomanip>
 #include <sstream>

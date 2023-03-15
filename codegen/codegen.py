@@ -40,7 +40,7 @@ def serialize_single_class(class_definition_filepath, output_filepath, classname
     #include <cassert>
     #include <string>
     #include "{filename}"
-    #include "string_parsing_utils.hpp"
+    #include "utils/string_parsing.hpp"
     """
     cpp += gen_components(data, [classname])
     with open(output_filepath, "w") as file:

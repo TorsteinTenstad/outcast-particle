@@ -4,7 +4,8 @@
 #include "controls_config.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/level_id.hpp"
 
 void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 {

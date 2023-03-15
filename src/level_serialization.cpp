@@ -6,7 +6,7 @@
 
 #include "level.hpp"
 #include "blueprint.hpp"
-#include "string_parsing_utils.hpp"
+#include "utils/string_parsing.hpp"
 
 /*
 Warning!
@@ -478,6 +478,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Radius>(entity_id, { 120 });
             AddComponent<Acceleration>(entity_id, {});
             AddComponent<ReceivedForces>(entity_id, {});
+            AddComponent<Mass>(entity_id, {});
             AddComponent<Intersection>(entity_id, {});
             AddComponent<Collision>(entity_id, {});
             AddComponent<Trail>(entity_id, {});
@@ -505,6 +506,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Radius>(entity_id, { 120 });
             AddComponent<Acceleration>(entity_id, {});
             AddComponent<ReceivedForces>(entity_id, {});
+            AddComponent<Mass>(entity_id, {});
             AddComponent<Intersection>(entity_id, {});
             AddComponent<Collision>(entity_id, {});
             AddComponent<Children>(entity_id, {});
@@ -591,6 +593,8 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
+            AddComponent<Wormhole>(entity_id, {});
+            AddComponent<Mass>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
             AddComponent<Radius>(entity_id, { 240 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
@@ -718,6 +722,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Radius>(entity_id, { 120 });
             AddComponent<Acceleration>(entity_id, {});
             AddComponent<ReceivedForces>(entity_id, {});
+            AddComponent<Mass>(entity_id, {});
             AddComponent<Intersection>(entity_id, {});
             AddComponent<Collision>(entity_id, {});
             AddComponent<Trail>(entity_id, {});
@@ -743,6 +748,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Radius>(entity_id, { 120 });
             AddComponent<Acceleration>(entity_id, {});
             AddComponent<ReceivedForces>(entity_id, {});
+            AddComponent<Mass>(entity_id, {});
             AddComponent<Intersection>(entity_id, {});
             AddComponent<Collision>(entity_id, {});
             AddComponent<Children>(entity_id, {});
@@ -823,6 +829,8 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
+            AddComponent<Wormhole>(entity_id, {});
+            AddComponent<Mass>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\happy_transition.wav", false, 1 });
             AddComponent<Radius>(entity_id, { 240 });
             AddComponent<Tag>(entity_id, {"BPGoal"});

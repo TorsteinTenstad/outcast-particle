@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 
-#define PAUSE_MENU_DELAY 1 //seconds
+#define PAUSE_MENU_DELAY 2 //seconds
 
 class PauseMode : public GameSystem
 {

@@ -1,6 +1,6 @@
 #include "_pure_DO_systems.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
 #include <algorithm>
 
 void ScrollSystem::Update(Level& level, float dt)

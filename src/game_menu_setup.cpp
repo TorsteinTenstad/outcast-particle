@@ -1,7 +1,8 @@
 #include "entity_creation.hpp"
 #include "game.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/string_manip.hpp"
 
 void Game::ButtonFuncEditLevel()
 {

@@ -13,6 +13,7 @@
 #include "systems/render_trail.hpp"
 #include "systems/sound_system.hpp"
 #include "userdata_storage.hpp"
+#include "utils/level_id.hpp"
 #include <chrono>
 #include <filesystem>
 #include <functional>
@@ -37,7 +38,8 @@ Game::Game()
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>(); // Must
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
-	RegisterGameSystem<FaceSystem>();
+	RegisterGameSystem<AnimatedPropertiesSystem>();
+	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
@@ -50,7 +52,6 @@ Game::Game()
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
-	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<IntersectionSystem>();
 	RegisterGameSystem<CollisionSystem>();
 	RegisterGameSystem<GoalSystem>();
