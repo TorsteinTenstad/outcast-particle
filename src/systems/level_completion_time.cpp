@@ -13,14 +13,16 @@ void LevelCompletionTimeSystem::Update(Level& level, float dt)
 	LevelCompletionTimer* level_completion_timer = level.GetSingleton<LevelCompletionTimer>();
 	CoinCounter* coin_counter = level.GetSingleton<CoinCounter>();
 
-	if (level.GetMode() == PLAY_MODE)
+	LevelState level_state = level.ComputeState();
+	if (level.GetMode() == PLAY_MODE && level_state == PLAYING)
 	{
 		level_completion_timer->duration += dt;
 		return;
 	}
-	if (level.ComputeState() == COMPLETED && ((*level_completion_time_records_)[coin_counter->coin_counter][active_level_id_] <= 0 || (*level_completion_time_records_)[coin_counter->coin_counter][active_level_id_] > level_completion_timer->duration))
+	float& current_record = (*level_completion_time_records_)[coin_counter->coin_counter][active_level_id_];
+	if (level_state == COMPLETED && (current_record <= 0 || current_record > level_completion_timer->duration))
 	{
-		(*level_completion_time_records_)[coin_counter->coin_counter][active_level_id_] = level_completion_timer->duration;
+		current_record = level_completion_timer->duration;
 		return;
 	}
 }

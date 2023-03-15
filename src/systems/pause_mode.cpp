@@ -5,6 +5,8 @@
 #include <functional>
 #include <string>
 
+const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
+
 void PauseMode::Give(std::function<void(std::string)> set_level, const std::map<std::string, std::vector<std::string>>* level_groups)
 {
 	set_level_ = set_level;
@@ -19,40 +21,37 @@ void PauseMode::Update(Level& level, float dt)
 
 	LevelState level_state = level.ComputeState();
 	LevelMode level_mode = level.GetMode();
-	bool lost_focus = !globals.render_window.hasFocus(); // && false; //for debugging
-	if (level_mode != PAUSE_MODE
-		&& (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]
-			|| (lost_focus && level_mode == PLAY_MODE)
-			//|| level_state == COMPLETED // Temporary
-			|| level_state == FAILED))
+
+	if (level_mode == READY_MODE)
 	{
-		assert(level_mode != READY_MODE);
-		level.SetMode(PAUSE_MODE);
-		MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
-		menu_delay_timer->pevious_mode = level_mode;
-		menu_delay_timer->duration = (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape] || lost_focus) ? -1 : PAUSE_MENU_DELAY;
-		menu_delay_timer->buttons_initialized = false;
+		return;
 	}
 
-	if (level_mode == PAUSE_MODE)
+	assert(level_state == COMPLETED || level_state == PLAYING || level_state == FAILED); // To remind us to verify the state logic when adding new states
+	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == EDIT_MODE);
+
+	MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
+	if (level_mode == PLAY_MODE && level_state != PLAYING)
 	{
-		MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
-		if (!menu_delay_timer->buttons_initialized && (menu_delay_timer->duration < 0 || cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]))
-		{
-			AddAppropriateButtons(level, menu_delay_timer->pevious_mode);
-			menu_delay_timer->buttons_initialized = true;
-		}
-		else
-		{
-			menu_delay_timer->duration -= dt;
-		}
+		menu_delay_timer->duration += dt;
 	}
-	else
+
+	bool lost_focus = !globals.render_window.hasFocus() && false; //for debugging
+	if ((level_mode == PLAY_MODE || level_mode == EDIT_MODE)
+			&& cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]
+		|| (level_mode == PLAY_MODE
+			&& (lost_focus || menu_delay_timer->duration > PAUSE_MENU_DELAY.at(level_state))))
+	{
+		level.SetMode(PAUSE_MODE);
+		SetupPauseMenu(level, level_mode);
+		level.DeleteEntitiesWith<MenuDelayTimer>();
+	}
+	else if (level_mode != PAUSE_MODE)
 	{
 		level.DeleteEntitiesWith<PauseMenuItem>();
 	}
 }
-void PauseMode::AddAppropriateButtons(Level& level, LevelMode previous_mode)
+void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
 	LevelState level_state = level.ComputeState();
 	std::vector<std::function<void(void)>> functions;
