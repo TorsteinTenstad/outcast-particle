@@ -42,15 +42,15 @@ void RenderShapesSystem::Update(Level& level, float dt)
 	{
 		sf::Shape* shape;
 		sf::Vector2f w_h = sf::Vector2f(0, 0);
-		if (level.HasComponents<WidthAndHeight>(entity_id))
+		if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity_id))
 		{
-			w_h = level.GetComponent<WidthAndHeight>(entity_id)->width_and_height;
+			w_h = width_and_height->width_and_height;
 			rectangle_shapes_[entity_id].setSize(w_h);
 			shape = &rectangle_shapes_[entity_id];
 		}
-		else if (level.HasComponents<Radius>(entity_id))
+		else if (Radius* radius = level.RawGetComponent<Radius>(entity_id))
 		{
-			float r = level.GetComponent<Radius>(entity_id)->radius;
+			float r = radius->radius;
 			w_h.x = 2 * r;
 			w_h.y = 2 * r;
 			circle_shapes_[entity_id].setRadius(r);

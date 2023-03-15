@@ -18,9 +18,9 @@ void MagneticFieldForceSystem::Update(Level& level, float dt)
 		sf::Vector2f magnetic_field_force;
 		for (const auto& intersection_id : intersection->intersecting_ids)
 		{
-			if (level.HasComponents<MagneticField>(intersection_id))
+			if (MagneticField* magnetic_field = level.RawGetComponent<MagneticField>(intersection_id))
 			{
-				magnetic_field_force += CalculateMagneticFieldForce(charge, velocity, level.GetComponent<MagneticField>(intersection_id));
+				magnetic_field_force += CalculateMagneticFieldForce(charge, velocity, magnetic_field);
 			}
 		}
 		received_forces->magnetic_field_force = magnetic_field_force;

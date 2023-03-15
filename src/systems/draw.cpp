@@ -95,13 +95,13 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shade
 	shaders_[shader_id].setUniform("_view_center", globals.render_window.getView().getCenter());
 	shaders_[shader_id].setUniform("_texture", sf::Shader::CurrentTexture);
 	shaders_[shader_id].setUniform("_noise_texture", noise_texture_);
-	if (level.HasComponents<WidthAndHeight>(entity_id))
+	if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity_id))
 	{
-		shaders_[shader_id].setUniform("_wh", level.GetComponent<WidthAndHeight>(entity_id)->width_and_height);
+		shaders_[shader_id].setUniform("_wh", width_and_height->width_and_height);
 	}
-	if (level.HasComponents<Radius>(entity_id))
+	if (Radius* radius = level.RawGetComponent<Radius>(entity_id))
 	{
-		shaders_[shader_id].setUniform("_wh", sf::Vector2f(2, 2) * level.GetComponent<Radius>(entity_id)->radius);
+		shaders_[shader_id].setUniform("_wh", sf::Vector2f(2, 2) * radius->radius);
 	}
 	// Restore the original output
 	sf::err().rdbuf(previous);

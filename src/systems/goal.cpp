@@ -1,6 +1,6 @@
 
-#include "_pure_DO_systems.hpp"
 #include "components/goal.hpp"
+#include "_pure_DO_systems.hpp"
 #include "components/intersection.hpp"
 #include "components/physics.hpp"
 #include "globals.hpp"
@@ -22,7 +22,6 @@ void GoalSystem::Update(Level& level, float dt)
 				continue;
 			}
 			level.RemoveComponents<Intersection>(entity_id);
-			level.RemoveComponents<Velocity>(entity_id);
 			level.RemoveComponents<Player>(entity_id);
 			level.GetComponent<Goal>(intersecting_id)->is_goal = true;
 			level.GetComponent<SoundInfo>(intersecting_id)->play_sound = true;

@@ -22,13 +22,13 @@ void KillOnIntersectionSystem::Update(Level& level, float dt)
 			{
 				continue;
 			}
-			if (level.HasComponents<SoundInfo>(i))
+			if (SoundInfo* sound_info = level.GetComponent<SoundInfo>(i))
 			{
-				level.GetComponent<SoundInfo>(i)->play_sound = true;
+				sound_info->play_sound = true;
 			}
-			if (level.HasComponents<Face>(entity_id))
+			if (Face* face = level.RawGetComponent<Face>(entity_id))
 			{
-				level.GetComponent<Face>(entity_id)->image_path = "content\\textures\\face_dead.png";
+				face->image_path = "content\\textures\\face_dead.png";
 			}
 			level.RemoveComponents<Intersection>(entity_id);
 			level.RemoveComponents<Velocity>(entity_id);
