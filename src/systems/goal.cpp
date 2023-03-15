@@ -34,7 +34,7 @@ void GoalSystem::Update(Level& level, float dt)
 			}
 			level.RemoveComponents<Player>(entity_id);
 			level.RemoveComponents<ForceVisualization>(entity_id);
-			level.AddComponent<ScheduledDelete>(entity_id)->delete_at = globals.time + 10;
+			level.AddComponent<ScheduledDelete>(entity_id)->delete_at = globals.time + 2;
 			level.GetComponent<Goal>(intersecting_id)->is_goal = true;
 			break;
 		}

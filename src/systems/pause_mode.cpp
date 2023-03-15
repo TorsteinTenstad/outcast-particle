@@ -22,13 +22,8 @@ void PauseMode::Update(Level& level, float dt)
 	LevelState level_state = level.ComputeState();
 	LevelMode level_mode = level.GetMode();
 
-	if (level_mode == READY_MODE)
-	{
-		return;
-	}
-
 	assert(level_state == COMPLETED || level_state == PLAYING || level_state == FAILED); // To remind us to verify the state logic when adding new states
-	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == EDIT_MODE);
+	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == EDIT_MODE || level_mode == READY_MODE);
 
 	MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 	if (level_mode == PLAY_MODE && level_state != PLAYING)
