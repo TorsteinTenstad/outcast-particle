@@ -10,7 +10,6 @@
 #include "systems/render_grid_adaptive_textures.hpp"
 #include "systems/render_shapes.hpp"
 #include "systems/render_text.hpp"
-#include "systems/render_trail.hpp"
 #include "systems/sound_system.hpp"
 #include "userdata_storage.hpp"
 #include "utils/level_id.hpp"
@@ -40,7 +39,6 @@ Game::Game()
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
-	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
