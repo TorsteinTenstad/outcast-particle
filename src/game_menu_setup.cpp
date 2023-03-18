@@ -144,14 +144,27 @@ void Game::GoToGraphicsAndDisplayMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
-	std::vector<std::string> button_texts = { BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen), BoolToStringAsEnabledOrDisabled(globals.general_config.limit_fps_to_60), BoolToStringAsEnabledOrDisabled(globals.general_config.forces_are_visualized), BoolToStringAsEnabledOrDisabled(globals.general_config.use_ready_mode) };
-	std::vector<std::function<void(void)>> button_functions = { std::bind(&Game::ToggleFullscreen, this), std::bind(&Game::ToggleFramerateLimit, this), [](void) { globals.general_config.forces_are_visualized = !globals.general_config.forces_are_visualized; }, [](void) { globals.general_config.use_ready_mode = !globals.general_config.use_ready_mode; } };
+	std::vector<std::string> button_texts = {
+		BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen),
+		BoolToStringAsEnabledOrDisabled(globals.general_config.forces_are_visualized),
+		BoolToStringAsEnabledOrDisabled(globals.general_config.use_ready_mode)
+	};
+	std::vector<std::function<void(void)>> button_functions = {
+		std::bind(&Game::ToggleFullscreen, this),
+		[](void) { globals.general_config.forces_are_visualized = !globals.general_config.forces_are_visualized; },
+		[](void) { globals.general_config.use_ready_mode = !globals.general_config.use_ready_mode; }
+	};
+	std::vector<std::string> description_texts = {
+		"Fullscreen",
+		"Show Forces",
+		"Use Ready Mode"
+	};
+
 	std::vector<std::function<std::vector<int>(sf::Vector2f)>> create_button_functions;
 	for (unsigned i = 0; i < button_functions.size(); i++)
 	{
 		create_button_functions.push_back(std::bind(&AddOptionsButton, std::ref(active_level_), button_functions[i], button_texts[i], std::placeholders::_1));
 	}
-	std::vector<std::string> description_texts = { "Fullscreen", "Limit Framerate", "Show Forces", "Use Ready Mode" };
 	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
 	SetupOptionsSubMenu(active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), create_button_functions);

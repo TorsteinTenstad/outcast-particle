@@ -77,7 +77,6 @@ Game::Game()
 	LoadOptionsFromFile("user\\controls_config.txt", "user\\general_config.txt");
 
 	CheckFullscreen();
-	CheckFramerateLimit();
 
 	GoToMainMenu();
 }
@@ -209,30 +208,13 @@ void Game::CheckFullscreen()
 	{
 		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle", sf::Style::Default, sf::ContextSettings(0, 0, 8));
 	}
-	CheckFramerateLimit();
+	globals.render_window.setVerticalSyncEnabled(true);
 }
 
 void Game::ToggleFullscreen()
 {
 	globals.general_config.fullscreen = !globals.general_config.fullscreen;
 	CheckFullscreen();
-}
-
-void Game::CheckFramerateLimit()
-{
-	if (globals.general_config.limit_fps_to_60)
-	{
-		globals.render_window.setFramerateLimit(60);
-	}
-	else
-	{
-		globals.render_window.setFramerateLimit(0);
-	}
-}
-void Game::ToggleFramerateLimit()
-{
-	globals.general_config.limit_fps_to_60 = !globals.general_config.limit_fps_to_60;
-	CheckFramerateLimit();
 }
 
 void Game::GoToLastMenu()

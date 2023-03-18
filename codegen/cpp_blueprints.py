@@ -46,7 +46,9 @@ def cpp_to_dict(cpp, class_type):
 
 
 def add_assignment(class_, left, right, class_type, decorators=[]):
-    type_name, var_name = striplist(left.split(" "))
+    type_and_var_name = striplist(left.split(" "))
+    type_name = " ".join(type_and_var_name[:-1])
+    var_name = type_and_var_name[-1]
     if class_type == ClassType.blueprint:
         if "serialize" in decorators:
             class_["explicit"][type_name] = right
