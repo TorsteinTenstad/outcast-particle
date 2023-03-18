@@ -8,7 +8,7 @@
 
 void TrailSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, trail, children, radius, draw_priority, position] : level.GetEntitiesWith<Trail, Children, Radius, DrawPriority, Position>())
+	for (auto [entity_id, trail, children, radius, draw_priority, velocity, position] : level.GetEntitiesWith<Trail, Children, Radius, DrawPriority, Velocity, Position>())
 	{
 		std::function<int(void)> child_creation_func = [&level, active_level_id = active_level_id_, draw_priority = draw_priority]() {
 			int entity_id = CreateScreenwideFragmentShaderEntity(level, "shaders\\trail.frag", draw_priority->draw_priority - 1);
@@ -23,7 +23,8 @@ void TrailSystem::Update(Level& level, float dt)
 		int n = trail->max_segments;
 		shader->int_uniforms["segment_last_updated"] = i;
 		shader->int_uniforms["segments_created"] = trail->segments_created;
-		shader->vec_uniforms["path[" + ToString(i) + "]"] = position->position;
+		shader->vec_uniforms["path[" + ToString(i) + "]"] = -velocity->velocity * dt;
+		shader->vec_uniforms["origin"] = position->position;
 		shader->float_uniforms["radius"] = radius->radius;
 		i = (i + 1) % n;
 	}
