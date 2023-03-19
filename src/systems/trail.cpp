@@ -1,31 +1,27 @@
 #include "_pure_DO_systems.hpp"
-#include "entity_creation.hpp"
 #include "level.hpp"
-#include "make_fade_into_level.hpp"
 #include "utils/math.hpp"
-#include "utils/string_parsing.hpp"
-#include <math.h>
 
 void TrailSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, trail, children, radius, draw_priority, velocity, position] : level.GetEntitiesWith<Trail, Children, Radius, DrawPriority, Velocity, Position>())
+	if (globals.time - globals.time_of_last_level_enter < 0.3) // Because of pop-in animation
 	{
-		std::function<int(void)> child_creation_func = [&level, active_level_id = active_level_id_, draw_priority = draw_priority]() {
-			int entity_id = CreateScreenwideFragmentShaderEntity(level, "shaders\\trail.frag", draw_priority->draw_priority - 1);
-			MakeFadeIntoLevel(level, entity_id, active_level_id);
-			return entity_id;
-		};
-		int child_id = EnsureExistanceOfChildEntity<Trail>(children, child_creation_func);
-		Shader* shader = level.GetComponent<Shader>(child_id);
-
-		trail->segments_created = std::min(trail->segments_created + 1, trail->max_segments);
-		int& i = trail->segment_to_update_next;
-		int n = trail->max_segments;
-		shader->int_uniforms["segment_last_updated"] = i;
-		shader->int_uniforms["segments_created"] = trail->segments_created;
-		shader->vec_uniforms["path[" + ToString(i) + "]"] = -velocity->velocity * dt;
-		shader->vec_uniforms["origin"] = position->position;
-		shader->float_uniforms["radius"] = radius->radius;
-		i = (i + 1) % n;
+		return;
+	}
+	for (auto& [entity_id, trail, radius, velocity] : level.GetEntitiesWith<Trail, Radius, Velocity>())
+	{
+		trail->path.insert(trail->path.begin(), -velocity->velocity * dt - (radius->radius / TRAIL_N) * Normalized(velocity->velocity));
+		if (trail->path.size() > TRAIL_N)
+		{
+			trail->path.pop_back();
+		}
+		if (trail->path.size() != trail->widths.size())
+		{
+			trail->widths.clear();
+			for (unsigned i = 0; i < trail->path.size(); ++i)
+			{
+				trail->widths.push_back(0.8 * pow((float)(trail->path.size() - i) / trail->path.size(), 1.5));
+			}
+		}
 	}
 }

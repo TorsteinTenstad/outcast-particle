@@ -10,6 +10,7 @@
 #include "systems/render_grid_adaptive_textures.hpp"
 #include "systems/render_shapes.hpp"
 #include "systems/render_text.hpp"
+#include "systems/render_trail.hpp"
 #include "systems/sound_system.hpp"
 #include "userdata_storage.hpp"
 #include "utils/level_id.hpp"
@@ -40,6 +41,7 @@ Game::Game()
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
+	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
@@ -202,11 +204,11 @@ void Game::CheckFullscreen()
 {
 	if (globals.general_config.fullscreen)
 	{
-		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen, sf::ContextSettings(0, 0, 8));
+		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle", sf::Style::Default, sf::ContextSettings(0, 0, 8));
+		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle", sf::Style::Default);
 	}
 	globals.render_window.setVerticalSyncEnabled(true);
 }
