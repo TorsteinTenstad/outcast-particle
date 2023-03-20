@@ -84,7 +84,7 @@ class BPBlackHole : public BPEditableEntity
 class BPPlayer : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
-	Radius radius = { 120 };
+	Radius radius = { 108 };
 
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};

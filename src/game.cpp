@@ -74,6 +74,12 @@ Game::Game()
 			level_groups_[group].push_back(level_id);
 		}
 	}
+
+	if (!std::filesystem::exists("user"))
+	{
+		std::filesystem::create_directory("user");
+	}
+
 	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
 	LoadOptionsFromFile("user\\controls_config.txt", "user\\general_config.txt");
 
