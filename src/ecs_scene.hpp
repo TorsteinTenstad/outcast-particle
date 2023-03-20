@@ -47,6 +47,12 @@ public:
 	template <class... Component>
 	std::tuple<Component*...> GetComponents(int entity_id);
 
+	template <class Component>
+	Component* RawGetComponent(int entity_id);
+
+	template <class... Component>
+	std::tuple<Component*...> RawGetComponents(int entity_id);
+
 protected:
 	template <class Component>
 	bool RemoveComponent(int entity_id);

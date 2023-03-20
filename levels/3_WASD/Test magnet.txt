@@ -3,4 +3,4 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(1260,1020)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1620,1020)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1980,1020)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(2520,1020)}WidthAndHeight{width_and_height=(240,240)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(2520,1020)}

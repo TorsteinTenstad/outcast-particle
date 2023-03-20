@@ -6,7 +6,6 @@
 #include "globals.hpp"
 #include "level.hpp"
 #include "trail.hpp"
-#include "utils.hpp"
 
 class RenderTrailSystem : public GameSystem
 {

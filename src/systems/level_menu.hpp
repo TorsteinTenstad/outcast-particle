@@ -1,8 +1,8 @@
 #pragma once
 #include "game_system.hpp"
 #include "level.hpp"
-#include "string_parsing_utils.hpp"
-#include "utils.hpp"
+#include "utils/string_parsing.hpp"
+
 #include <iomanip>
 #include <sstream>
 

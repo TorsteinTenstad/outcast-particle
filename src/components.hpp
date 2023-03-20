@@ -67,6 +67,7 @@ typedef std::variant<
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,
 	std::map<int, MagneticField>,
+	std::map<int, Mass>,
 	std::map<int, MenuNavigator>,
 	std::map<int, MenuNavigatable>,
 	std::map<int, NotSerialized>,
@@ -107,5 +108,6 @@ typedef std::variant<
 	std::map<int, Velocity>,
 	std::map<int, Wall>,
 	std::map<int, WallTexture>,
-	std::map<int, WidthAndHeight>>
+	std::map<int, WidthAndHeight>,
+	std::map<int, Wormhole>>
 	ComponentMap;

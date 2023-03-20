@@ -1,9 +1,13 @@
 #include "_pure_DO_systems.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
 
 void TrailSystem::Update(Level& level, float dt)
 {
+	if (globals.time - globals.time_of_last_level_enter < 0.3) // Because of pop-in animation
+	{
+		return;
+	}
 	for (auto& [entity_id, trail, radius, velocity] : level.GetEntitiesWith<Trail, Radius, Velocity>())
 	{
 		trail->path.insert(trail->path.begin(), -velocity->velocity * dt - (radius->radius / TRAIL_N) * Normalized(velocity->velocity));
@@ -16,7 +20,7 @@ void TrailSystem::Update(Level& level, float dt)
 			trail->widths.clear();
 			for (unsigned i = 0; i < trail->path.size(); ++i)
 			{
-				trail->widths.push_back(0.8 * radius->radius * pow((float)(trail->path.size() - i) / trail->path.size(), 1.5));
+				trail->widths.push_back(0.8 * pow((float)(trail->path.size() - i) / trail->path.size(), 1.5));
 			}
 		}
 	}

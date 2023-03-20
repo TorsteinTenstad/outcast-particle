@@ -1,6 +1,6 @@
 #include "ecs_scene.hpp"
 #include "game.hpp"
-#include "string_parsing_utils.hpp"
+#include "utils/string_parsing.hpp"
 #include <functional>
 #include <iostream>
 #include <optional>
@@ -25,7 +25,7 @@ int ESCScene::CopyEntity(int from_id)
 		std::visit([from_id, to_id](auto& component_map) {
 			if (component_map.count(from_id) != 0)
 			{
-				component_map[to_id] = component_map[from_id];
+				component_map.emplace(to_id, component_map[from_id]);
 			} },
 			component_map_variant);
 	}

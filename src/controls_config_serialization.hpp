@@ -3,7 +3,7 @@
     #include <cassert>
     #include <string>
     #include "controls_config.hpp"
-    #include "string_parsing_utils.hpp"
+    #include "utils/string_parsing.hpp"
     
 
 void SerializeComponent(const KeyConfig* c, std::string& str_rep)

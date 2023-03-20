@@ -1,5 +1,5 @@
 name=Untitled;grid_size_id=1;editable=1
-"BPGoal":Tag{tag=BPGoal}Position{position=(3600,1920)}WidthAndHeight{width_and_height=(240,240)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3600,1920)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(240,240)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=0;can_go_neutral=0;move_force=1000}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1680,540)}ElectricField{field_vector=(-0,-0.25)}WidthAndHeight{width_and_height=(240,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(960,660)}ElectricField{field_vector=(0,0.25)}WidthAndHeight{width_and_height=(240,480)}

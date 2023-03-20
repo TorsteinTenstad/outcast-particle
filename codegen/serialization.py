@@ -8,7 +8,7 @@ def gen_level_serialization(data):
 
 #include "level.hpp"
 #include "blueprint.hpp"
-#include "string_parsing_utils.hpp"
+#include "utils/string_parsing.hpp"
 
 /*
 Warning!

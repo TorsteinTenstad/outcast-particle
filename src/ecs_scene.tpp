@@ -9,7 +9,7 @@ std::map<int, Component>& ESCScene::GetComponentMap()
 		std::map<int, Component> t_map;
 		components_[typeid(Component)] = t_map;
 	}
-	return std::get<std::map<int, Component>>(components_[typeid(Component)]);
+	return std::get<std::map<int, Component>>(components_.at(typeid(Component)));
 }
 
 template <class Component>
@@ -64,8 +64,9 @@ template <class Component>
 Component* ESCScene::GetComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
-	assert(m.count(entity_id) > 0);
-	return &m.at(entity_id);
+	auto it = m.find(entity_id);
+	assert(it != m.end());
+	return &(it->second);
 }
 
 template <class... Component>
@@ -75,9 +76,38 @@ std::tuple<Component*...> ESCScene::GetComponents(int entity_id)
 }
 
 template <class Component>
+Component* ESCScene::RawGetComponent(int entity_id)
+{
+	auto& m = GetComponentMap<Component>();
+	auto it = m.find(entity_id);
+	if (it == m.end())
+	{
+		return nullptr;
+	}
+	return &(it->second);
+}
+
+template <class... Component>
+std::tuple<Component*...> ESCScene::RawGetComponents(int entity_id)
+{
+	return std::make_tuple(RawGetComponent<Component>(entity_id)...);
+}
+
+template <class Component>
 bool ESCScene::RemoveComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
+	if (Children* children = RawGetComponent<Children>(entity_id))
+	{
+		auto& it = children->ids_owned_by_component.find(typeid(Component));
+		if (it != children->ids_owned_by_component.end())
+		{
+			for (int owned_entity : it->second)
+			{
+				DeleteEntity(owned_entity);
+			}
+		}
+	}
 	return m.erase(entity_id) > 0;
 }
 

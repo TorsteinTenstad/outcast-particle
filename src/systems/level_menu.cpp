@@ -2,8 +2,9 @@
 #include "systems/level_menu.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "string_parsing_utils.hpp"
-#include "utils.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/level_id.hpp"
+
 #include <cassert>
 #include <iomanip>
 #include <sstream>
@@ -134,6 +135,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	{ // Title
 		auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+		text->size = 100;
 		text->content = GetGroupDisplayNameFromGroupName(level_group);
 		position->position = sf::Vector2f(button_panel_center, title_h / 2 - 0.5 * dot_indicator_h);
 	}

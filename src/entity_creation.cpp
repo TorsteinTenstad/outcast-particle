@@ -1,6 +1,6 @@
 #include "entity_creation.hpp"
-#include "string_parsing_utils.hpp"
-#include "utils.hpp"
+#include "utils/string_manip.hpp"
+#include "utils/string_parsing.hpp"
 
 std::vector<int> AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
 {

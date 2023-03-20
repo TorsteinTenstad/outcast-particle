@@ -49,7 +49,7 @@ class BPStaticParticle : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
 	Shader shader = { "", "shaders\\particle.frag", {}, {}, {} };
-	DrawPriority draw_priority = { 6 };
+	DrawPriority draw_priority = { 10 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Radius radius = { 120 };
 
@@ -59,10 +59,11 @@ class BPStaticParticle : public BPEditableEntity
 
 class BPMovingParticle : public BPStaticParticle
 {
-	DrawPriority draw_priority = { 7 };
+	DrawPriority draw_priority = { 11 };
 
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
+	Mass mass = {};
 	Intersection intersection = {};
 	Collision collision = {};
 	Trail trail = {};
@@ -88,11 +89,12 @@ class BPPlayer : public BPEditableEntity
 
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
+	Mass mass = {};
 	Intersection intersection = {};
 	Collision collision = {};
 	Children children = {};
 	Trail trail = {};
-	DrawPriority draw_priority = { 8 };
+	DrawPriority draw_priority = { 12 };
 	Shader shader = { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} };
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	Face face = {};
@@ -124,7 +126,7 @@ class BPLaser : public BPEditableEntity
 
 class BPCoin : public BPEditableEntity
 {
-	DrawPriority draw_priority = { 3 };
+	DrawPriority draw_priority = { 5 };
 	Coin coin = {};
 	SegmentedGlowEffect segmented_glow_effect = {};
 	Children children = {};
@@ -159,10 +161,10 @@ class BPGoal : public BPEditableEntity
 	Shader shader = { "", "shaders\\wormhole.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
+	Wormhole wormhole = {};
+	Mass mass = {};
 	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };
-
-	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+	Radius Radius = { 240 };
 };
 
 class BPElectricField : public BPEditableEntity

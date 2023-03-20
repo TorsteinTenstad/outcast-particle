@@ -2,7 +2,8 @@
 #include "components/draw_info.hpp"
 #include "constants.hpp"
 #include "level.hpp"
-#include "utils.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/math.hpp"
 #include <cassert>
 
 void SetDrawInfoSystem::Update(Level& level, float dt)
@@ -13,7 +14,7 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 		shader->vec4_uniforms["inner_color"] = PARTICLE_INNER_COLOR[category];
 		shader->vec4_uniforms["outer_color"] = PARTICLE_OUTER_COLOR[category];
 		shader->float_uniforms["charge"] = charge->charge;
-		shader->float_uniforms["sign_alpha"] = level.HasComponents<Player>(entity_id) ? 0 : 1;
+		shader->float_uniforms["sign_alpha"] = level.HasComponents<PlayerBehaviors>(entity_id) ? 0 : 1;
 	}
 
 	for (auto const& [entity_id, orientation_dependent_drawinfo, width_and_height, draw_info] : level.GetEntitiesWith<OrientationDependentDrawInfo, WidthAndHeight, DrawInfo>())

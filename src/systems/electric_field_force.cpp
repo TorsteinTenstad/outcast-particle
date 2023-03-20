@@ -1,6 +1,6 @@
 #include "_pure_DO_systems.hpp"
 #include "globals.hpp"
-#include "utils.hpp"
+
 
 static sf::Vector2f CalculateElectricFieldForce(Charge* particle, ElectricField* electric_field)
 {
@@ -14,9 +14,8 @@ void ElectricFieldForceSystem::Update(Level& level, float dt)
 		received_forces->electric_field_force = sf::Vector2f(0, 0);
 		for (auto& intersecting_id : intersection->intersecting_ids)
 		{
-			if (level.HasComponents<ElectricField>(intersecting_id))
+			if (ElectricField* electric_field = level.RawGetComponent<ElectricField>(intersecting_id))
 			{
-				ElectricField* electric_field = level.GetComponent<ElectricField>(intersecting_id);
 				received_forces->electric_field_force += CalculateElectricFieldForce(charge, electric_field);
 			}
 		}

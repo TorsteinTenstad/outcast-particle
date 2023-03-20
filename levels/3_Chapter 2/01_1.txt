@@ -17,7 +17,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3000,1260)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(360,360)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(960,480)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(360,360)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(300,420)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3540,1200)}WidthAndHeight{width_and_height=(120,120)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3540,1200)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1440,480)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1620,1740)}
 "BPBounceWall":Tag{tag=BPBounceWall}Position{position=(1140,1680)}WidthAndHeight{width_and_height=(120,120)}

@@ -1,4 +1,6 @@
 #pragma once
+#include "SFML/System/Vector2.hpp"
+#include <vector>
 
 #define TRAIL_N 64
 

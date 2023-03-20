@@ -13,7 +13,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(780,660)}ElectricField{field_vector=(0.125,-0)}WidthAndHeight{width_and_height=(120,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1140,660)}ElectricField{field_vector=(-0.125,0)}WidthAndHeight{width_and_height=(120,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1260,660)}ElectricField{field_vector=(-0.25,0)}WidthAndHeight{width_and_height=(120,120)}
-"BPGoal":Tag{tag=BPGoal}Position{position=(3540,240)}WidthAndHeight{width_and_height=(240,240)}
+"BPGoal":Tag{tag=BPGoal}Position{position=(3540,240)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(540,660)}ElectricField{field_vector=(0,1)}WidthAndHeight{width_and_height=(120,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(660,900)}ElectricField{field_vector=(-0,-1)}WidthAndHeight{width_and_height=(120,120)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1140,900)}ElectricField{field_vector=(-0.125,0)}WidthAndHeight{width_and_height=(120,120)}

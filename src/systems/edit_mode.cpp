@@ -6,7 +6,7 @@
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
 #include "systems/_pure_DO_systems.hpp"
-#include "utils.hpp"
+#include "utils/math.hpp"
 
 const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
 const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
@@ -125,8 +125,8 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			velocity_angle -= DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
 		}
-		velocity->velocity.x = velocity_magnitude * std::cos(velocity_angle);
-		velocity->velocity.y = velocity_magnitude * std::sin(velocity_angle);
+
+		velocity->velocity = Vector2fFromPolar(velocity_magnitude, velocity_angle);
 	}
 	// Edit magnetic field:
 	for (auto [entity_id, selected, magnetic_field] : level.GetEntitiesWith<Selected, MagneticField>())
