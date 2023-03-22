@@ -211,11 +211,11 @@ void Game::CheckFullscreen()
 {
 	if (globals.general_config.fullscreen)
 	{
-		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "outcast-particle", sf::Style::Fullscreen);
+		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "Volatile Particle", sf::Style::Fullscreen);
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode(1280, 720), "outcast-particle", sf::Style::Default);
+		globals.render_window.create(sf::VideoMode(1280, 720), "Volatile Particle", sf::Style::Default);
 	}
 	globals.render_window.setVerticalSyncEnabled(true);
 }

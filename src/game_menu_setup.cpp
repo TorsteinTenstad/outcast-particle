@@ -26,7 +26,7 @@ void Game::GoToMainMenu()
 
 	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
-	title_text->content = "Outcast\n   Particle";
+	title_text->content = "Volatile\n  Particle";
 	title_position->position.x = level_size.x / 2.f - x_center_offset;
 	title_position->position.y = 2 * BLOCK_SIZE;
 

@@ -8,7 +8,7 @@
             "name": "Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/outcast-particle-app.exe",
+            "program": "${workspaceFolder}/build/Debug/Volatile Particle.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
