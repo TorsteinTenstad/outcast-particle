@@ -462,7 +462,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 10 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
-            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Radius>(entity_id, { 108 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<Charge>(entity_id),line);
         }
@@ -475,7 +475,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 11 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
-            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Radius>(entity_id, { 108 });
             AddComponent<Acceleration>(entity_id, {});
             AddComponent<ReceivedForces>(entity_id, {});
             AddComponent<Mass>(entity_id, {});
@@ -707,7 +707,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 10 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
-            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Radius>(entity_id, { 108 });
             AddComponent<Tag>(entity_id, {"BPStaticParticle"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
             AddComponent<Charge>(entity_id, { 10000 });
@@ -719,7 +719,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Shader>(entity_id, { "", "shaders\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 11 });
             AddComponent<ChargeDependentDrawInfo>(entity_id, {});
-            AddComponent<Radius>(entity_id, { 120 });
+            AddComponent<Radius>(entity_id, { 108 });
             AddComponent<Acceleration>(entity_id, {});
             AddComponent<ReceivedForces>(entity_id, {});
             AddComponent<Mass>(entity_id, {});

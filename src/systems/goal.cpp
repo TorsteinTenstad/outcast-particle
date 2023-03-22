@@ -74,7 +74,7 @@ void GoalSystem::Update(Level& level, float dt)
 				vel_angle = vel_angle - relative_angle * 2 * dt;
 			}
 
-			radius->radius = 120 * std::sqrt(relative_depth);
+			radius->radius = 108 * std::sqrt(relative_depth);
 
 			float target_vel_magnitude = std::sqrt(relative_depth) * 8 * radius->radius;
 			float snap = 8 * dt;

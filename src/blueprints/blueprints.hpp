@@ -51,7 +51,7 @@ class BPStaticParticle : public BPEditableEntity
 	Shader shader = { "", "shaders\\particle.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 10 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
-	Radius radius = { 120 };
+	Radius radius = { 108 };
 
 	// [Serialize]
 	Charge charge = { 10000 };
