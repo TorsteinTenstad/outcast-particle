@@ -30,9 +30,9 @@ Game::Game()
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();
-	RegisterGameSystem<ScrollSystem>(); // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
+	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
+	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly
 	RegisterGameSystem<ButtonEventsSystem>();
-	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly below ButtonEventsSystem for Hovered component to work correctly
 	RegisterGameSystem<StickyButtonSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
@@ -155,6 +155,7 @@ Level& Game::SetLevel(std::string level_id)
 
 void Game::Update(float dt)
 {
+	globals.time = absolute_clock.getElapsedTime().asSeconds();
 	if (dt > 1.f / 30)
 	{
 		std::cout << "Lag spike detected, overriding dt\n";

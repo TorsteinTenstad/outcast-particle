@@ -66,23 +66,5 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 
 		position->position = possible_positions[at_id];
 		position->position.x -= width_and_height->width_and_height.x;
-		if (level.HasComponents<ReceivesButtonEvents>(at_id) && !level.HasComponents<Hovered>(at_id))
-		{
-			level.AddComponents<HoveredStartedThisFrame>(at_id);
-		}
-		for (auto [entity_id, hovered, menu_navigatable] : level.GetEntitiesWith<Hovered, MenuNavigatable>())
-		{
-			level.RemoveComponents<Hovered>(entity_id);
-		}
-		level.AddComponent<Hovered>(at_id);
-
-		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Enter])
-		{
-			level.AddComponent<PressedThisFrame>(at_id);
-		}
-		if (cursor_and_keys_.key_released_this_frame[sf::Keyboard::Enter])
-		{
-			level.AddComponent<ReleasedThisFrame>(at_id);
-		}
 	}
 }

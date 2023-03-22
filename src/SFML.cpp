@@ -11,7 +11,6 @@ SFML::SFML()
 
 void SFML::RunWindow(std::function<void(float)> update_func)
 {
-	sf::Clock absolute_clock = sf::Clock();
 	sf::Clock frame_clock = sf::Clock();
 	float seconds_since_last_fps_print = 0;
 	int fps = 0;
@@ -20,7 +19,6 @@ void SFML::RunWindow(std::function<void(float)> update_func)
 	{
 		float dt = frame_clock.getElapsedTime().asSeconds();
 		frame_clock.restart();
-		globals.time = absolute_clock.getElapsedTime().asSeconds();
 		seconds_since_last_fps_print += dt;
 		fps++;
 		worst_fps = std::min(worst_fps, 1.f / dt);

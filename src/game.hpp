@@ -30,6 +30,8 @@ private:
 	std::vector<int> physics_game_system_ids_;
 	std::map<int, std::unique_ptr<GameSystem>> game_systems_;
 
+	sf::Clock absolute_clock;
+
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
 

@@ -70,8 +70,11 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	{
 		if (level.HasComponents<HoveredStartedThisFrame>(button_entity_id))
 		{
-			ui->at_level_id = level_groups_->at(level_group)[button_i];
-			*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE), unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE));
+			if (ui->at_level_id != level_groups_->at(level_group)[button_i])
+			{
+				ui->at_level_id = level_groups_->at(level_group)[button_i];
+				*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE), unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE));
+			}
 		}
 		button_i++;
 	}
