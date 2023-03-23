@@ -11,8 +11,8 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 	for (auto const& [entity_id, charge, shader] : level.GetEntitiesWith<Charge, Shader>())
 	{
 		int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge->charge);
-		shader->vec4_uniforms["inner_color"] = PARTICLE_INNER_COLOR[category];
-		shader->vec4_uniforms["outer_color"] = PARTICLE_OUTER_COLOR[category];
+		//shader->vec4_uniforms["inner_color"] = PARTICLE_INNER_COLOR[category];
+		//shader->vec4_uniforms["outer_color"] = PARTICLE_OUTER_COLOR[category];
 		shader->float_uniforms["charge"] = charge->charge;
 		shader->float_uniforms["sign_alpha"] = level.HasComponents<PlayerBehaviors>(entity_id) ? 0 : 1;
 	}

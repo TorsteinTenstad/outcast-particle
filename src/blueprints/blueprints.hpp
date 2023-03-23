@@ -2,7 +2,7 @@
 class BPTexturedRectangle
 {
 	DrawPriority draw_priority = { 0 };
-	DrawInfo draw_info = { "_", false, 0 };
+	DrawInfo draw_info = { "", false, 0 };
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 	Position position = {};
 };

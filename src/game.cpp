@@ -158,7 +158,7 @@ void Game::Update(float dt)
 	globals.time = absolute_clock.getElapsedTime().asSeconds();
 	if (dt > 1.f / 30)
 	{
-		std::cout << "Lag spike detected, overriding dt\n";
+		//std::cout << "Lag spike detected, overriding dt\n";
 		dt = 1.f / 30;
 	}
 	sfml_event_handler_.Update(cursor_and_keys_);

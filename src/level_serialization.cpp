@@ -402,7 +402,7 @@ void Level::LoadFromFile(std::string savefile_path)
         if (tag == "BPTexturedRectangle")
         {
             AddComponent<DrawPriority>(entity_id, { 0 });
-            AddComponent<DrawInfo>(entity_id, { "_", false, 0 });
+            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             AddComponent<Position>(entity_id, {});
         }
@@ -652,7 +652,7 @@ int Level::AddBlueprint(Blueprint blueprint)
     switch (blueprint){
         case BPTexturedRectangle:
             AddComponent<DrawPriority>(entity_id, { 0 });
-            AddComponent<DrawInfo>(entity_id, { "_", false, 0 });
+            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             AddComponent<Position>(entity_id, {});
             AddComponent<Tag>(entity_id, {"BPTexturedRectangle"});

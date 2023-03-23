@@ -2,7 +2,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPGoal":Tag{tag=BPGoal}Position{position=(3420,1740)}
 "BPWall":Tag{tag=BPWall}Position{position=(2340,60)}WidthAndHeight{width_and_height=(2760,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,2160)}
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(1260,420)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=0;move_force=0}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(1260,420)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPWall":Tag{tag=BPWall}Position{position=(60,1080)}WidthAndHeight{width_and_height=(120,2160)}
 "BPWall":Tag{tag=BPWall}Position{position=(1620,2100)}WidthAndHeight{width_and_height=(3000,120)}
 "BPWall":Tag{tag=BPWall}Position{position=(3540,2100)}WidthAndHeight{width_and_height=(360,120)}

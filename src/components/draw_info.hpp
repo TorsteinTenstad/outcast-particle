@@ -4,7 +4,7 @@
 class DrawInfo
 {
 public:
-	std::string image_path = "_";
+	std::string image_path = "";
 	bool scale_to_fit = false;
 	int quarter_turn_rotations = 0;
 };

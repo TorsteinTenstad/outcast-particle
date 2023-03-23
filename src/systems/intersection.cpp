@@ -39,6 +39,10 @@ static bool CheckIntersection(Position* circle_position, Position* square_positi
 
 void IntersectionSystem::Update(Level& level, float dt)
 {
+	if (level.GetMode() != PLAY_MODE)
+	{
+		return;
+	}
 	for (auto [entity_id, intersection, radius, position] : level.GetEntitiesWith<Intersection, Radius, Position>())
 	{
 		assert(!level.HasComponents<WidthAndHeight>(entity_id));
