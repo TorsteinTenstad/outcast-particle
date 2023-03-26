@@ -17,5 +17,5 @@ public:
 
 	std::vector<int> button_entity_ids = {};
 
-	std::string* stats_string;
+	std::vector<int> stats_block_ids = {};
 };

@@ -109,7 +109,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 		auto [new_id, new_ui] = level.CreateEntitiyWith<LevelMenuUI>();
 		new_ui->at_level_id = new_level_id;
 	}
-	GenerateStatsString(ui);
+	GenerateStatsBadges(level, ui);
 }
 
 void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
@@ -232,10 +232,19 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	{ // Stats display
-		auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+		std::vector<sf::Vector2f> badge_positions = { sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 7 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 5 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 3 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)) };
+		for (int i = 0; i < 4; i++)
+		{
+			auto [entity_id, draw_priority] = level.CreateEntitiyWith<DrawPriority>();
 
-		ui->stats_string = &text->content;
-		position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE));
+			level.AddComponent<DrawInfo>(entity_id, { "content\\textures\\gray.png", false, 0 });
+			level.AddComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(4.5, 3) * float(BLOCK_SIZE);
+			level.AddComponent<Position>(entity_id)->position = badge_positions[i];
+			level.AddComponent<FillColor>(entity_id)->color.a = 100;
+			level.AddComponent<Text>(entity_id)->size = 100;
+			ui->stats_block_ids.push_back(entity_id);
+		}
 	}
 }
 
@@ -248,23 +257,30 @@ void LevelMenuSystem::EnterLevel(std::string level_id)
 	}
 }
 
-void LevelMenuSystem::GenerateStatsString(LevelMenuUI* ui)
+void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
 {
-	std::stringstream ss;
-	ss << std::fixed << std::setprecision(2);
-	ss << "\nBest completion times:\n";
-	for (const auto& [coin_n, records] : *level_completion_time_records_)
+	for (int i = 0; i < 4; i++)
 	{
-		ss << "   " << std::to_string(coin_n) << " coins: ";
-		if (records.count(ui->at_level_id) > 0)
+		if ((*level_completion_time_records_).count(i) == 0)
 		{
-			ss << records.at(ui->at_level_id);
+			continue;
+		}
+
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision(2);
+		ss << "\n";
+
+		std::map<std::string, float> i_coin_record = (*level_completion_time_records_).at(i);
+		if (i_coin_record.count(ui->at_level_id) > 0)
+		{
+			ss << i_coin_record.at(ui->at_level_id);
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
 		}
 		else
 		{
-			ss << "-";
+			ss << " ";
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 100;
 		}
-		ss << "\n";
+		level.GetComponent<Text>(ui->stats_block_ids[i])->content = ss.str();
 	}
-	*ui->stats_string = ss.str();
 }
