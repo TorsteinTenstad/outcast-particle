@@ -49,5 +49,5 @@ void main()
 	color = blend(color, gem(c_uv/coin_size-vec2(+0.0,0))*vec4(vec3(1), clamp(float(n_collected)-1.f, 0.25f, 1.f)));
 	color = blend(color, gem(c_uv/coin_size-vec2(+1.5,0))*vec4(vec3(1), clamp(float(n_collected)-2.f, 0.25f, 1.f)));
 
-	gl_FragColor = color;
+	gl_FragColor = color * gl_Color;
 }

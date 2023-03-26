@@ -238,10 +238,11 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			auto [entity_id, draw_priority] = level.CreateEntitiyWith<DrawPriority>();
 
 			level.AddComponent<DrawInfo>(entity_id, { "content\\textures\\gray.png", false, 0 });
-			level.AddComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.AddComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\stats_badge.frag";
+			level.GetComponent<Shader>(entity_id)->int_uniforms["n_collected"] = i;
 			level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(4.5, 3) * float(BLOCK_SIZE);
 			level.AddComponent<Position>(entity_id)->position = badge_positions[i];
-			level.AddComponent<FillColor>(entity_id)->color.a = 100;
+			level.AddComponent<FillColor>(entity_id)->color.a = 50;
 			level.AddComponent<Text>(entity_id)->size = 100;
 			ui->stats_block_ids.push_back(entity_id);
 		}
@@ -279,7 +280,7 @@ void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
 		else
 		{
 			ss << " ";
-			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 100;
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 50;
 		}
 		level.GetComponent<Text>(ui->stats_block_ids[i])->content = ss.str();
 	}
