@@ -1,5 +1,6 @@
 #pragma once
 #include "systems/level_menu.hpp"
+#include "entity_creation.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 #include "utils/container_operations.hpp"
@@ -235,16 +236,9 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<sf::Vector2f> badge_positions = { sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 7 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 5 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 3 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)) };
 		for (int i = 0; i < 4; i++)
 		{
-			auto [entity_id, draw_priority] = level.CreateEntitiyWith<DrawPriority>();
-
-			level.AddComponent<DrawInfo>(entity_id, { "content\\textures\\gray.png", false, 0 });
-			level.AddComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\stats_badge.frag";
-			level.GetComponent<Shader>(entity_id)->int_uniforms["n_collected"] = i;
-			level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(4.5, 3) * float(BLOCK_SIZE);
-			level.AddComponent<Position>(entity_id)->position = badge_positions[i];
-			level.AddComponent<FillColor>(entity_id)->color.a = 50;
-			level.AddComponent<Text>(entity_id)->size = 100;
-			ui->stats_block_ids.push_back(entity_id);
+			auto [stat_badge_id, height] = AddStatsBadge(level, badge_positions[i], i);
+			level.GetComponent<FillColor>(stat_badge_id[0])->color.a = 50;
+			ui->stats_block_ids.push_back(stat_badge_id[0]);
 		}
 	}
 }

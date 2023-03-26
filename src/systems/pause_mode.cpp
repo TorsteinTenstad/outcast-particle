@@ -3,6 +3,7 @@
 #include "utils/level_id.hpp"
 #include <algorithm>
 #include <functional>
+#include <iostream>
 #include <string>
 
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
@@ -49,40 +50,59 @@ void PauseMode::Update(Level& level, float dt)
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
 	LevelState level_state = level.ComputeState();
-	std::vector<std::function<void(void)>> functions;
+	std::vector<std::function<void(void)>> button_functions;
+	std::vector<std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)>> entity_creating_functions;
 	std::vector<sf::Keyboard::Key> shortcut_keys;
 	std::vector<std::string> text;
+	std::string menu_title;
+
+	int background_blur_id = level.CreateEntityId();
+	level.AddComponent<DrawInfo>(background_blur_id, { "content\\textures\\gray.png", false, 0 });
+	level.AddComponent<WidthAndHeight>(background_blur_id)->width_and_height = level.GetSize();
+	level.AddComponent<Position>(background_blur_id)->position = level.GetSize() / 2.f;
+	level.AddComponent<FillColor>(background_blur_id)->color.a = 200;
+	level.AddComponent<DrawPriority>(background_blur_id)->draw_priority = 50;
+	level.AddComponent<PauseMenuItem>(background_blur_id);
 
 	if (previous_mode == PLAY_MODE)
 	{
 		if (level_state == PLAYING)
 		{
+			menu_title = "Paused";
 			text.push_back("Continue");
-			functions.push_back([&]() { level.SetMode(PLAY_MODE); });
+			button_functions.push_back([&]() { level.SetMode(PLAY_MODE); });
 			shortcut_keys.push_back(sf::Keyboard::Escape);
 		}
 
 		if (level_state == COMPLETED && !is_in_level_editing_)
 		{
+			menu_title = "Level Complete";
+			std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)> create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter);
+			entity_creating_functions.push_back(create_badge_function);
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
 			auto active_level_index = std::find(level_group.begin(), level_group.end(), active_level_id_);
 			auto next_level_index = ++active_level_index;
 			if (next_level_index != level_group.end())
 			{
 				text.push_back("Next level");
-				functions.push_back(std::bind(set_level_, *next_level_index));
+				button_functions.push_back(std::bind(set_level_, *next_level_index));
 				shortcut_keys.push_back(sf::Keyboard::Unknown);
 			}
 		}
 
+		if (level_state == FAILED)
+		{
+			menu_title = "You Died";
+		}
+
 		text.push_back("Restart level");
-		functions.push_back(std::bind(set_level_, active_level_id_));
+		button_functions.push_back(std::bind(set_level_, active_level_id_));
 		shortcut_keys.push_back(sf::Keyboard::R);
 
 		if (is_in_level_editing_)
 		{
 			text.push_back("Edit level");
-			functions.push_back([&]() { level.SetMode(EDIT_MODE); });
+			button_functions.push_back([&]() { level.SetMode(EDIT_MODE); });
 			shortcut_keys.push_back(sf::Keyboard::Unknown);
 		}
 	}
@@ -90,28 +110,42 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	if (previous_mode == EDIT_MODE)
 	{
 		text.push_back("Continue editing");
-		functions.push_back([&]() { level.SetMode(EDIT_MODE); });
+		button_functions.push_back([&]() { level.SetMode(EDIT_MODE); });
 		shortcut_keys.push_back(sf::Keyboard::Escape);
 
 		text.push_back("Play level");
-		functions.push_back([&]() { level.SetMode(READY_MODE); });
+		button_functions.push_back([&]() { level.SetMode(READY_MODE); });
 		shortcut_keys.push_back(sf::Keyboard::Unknown);
 	}
 
 	text.push_back("Level menu");
-	functions.push_back(std::bind(set_level_, LEVEL_MENU));
+	button_functions.push_back(std::bind(set_level_, LEVEL_MENU));
 	shortcut_keys.push_back(sf::Keyboard::Unknown);
 
 	text.push_back("Main menu");
-	functions.push_back(std::bind(set_level_, MAIN_MENU));
+	button_functions.push_back(std::bind(set_level_, MAIN_MENU));
 	shortcut_keys.push_back(sf::Keyboard::Unknown);
 
-	AddFloatingButtons(level, functions, text, shortcut_keys);
+	std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)> button_list_func = std::bind(&AddButtonList, std::ref(level), std::placeholders::_1, button_functions, text, shortcut_keys, level.GetScale(), level.GetScale() * 0.8, CenterCenter);
+	std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)> title_func = std::bind(&AddText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
+	entity_creating_functions.insert(entity_creating_functions.begin(), button_list_func);
+	entity_creating_functions.push_back(title_func);
+	AddMenuEntities(level, entity_creating_functions);
 }
-void PauseMode::AddFloatingButtons(Level& level, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys)
+
+void PauseMode::AddMenuEntities(Level& level, std::vector<std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)>> entity_creating_functions)
 {
-	float button_scale = level.GetScale();
-	std::vector<int> pause_menu_ids = AddButtonList(level, level.GetSize() / 2.f, button_functions, button_texts, shortcut_keys, button_scale, button_scale);
+	float x_pos = level.GetSize().x / 2.f;
+	float y_pos = level.GetSize().y / 2.f;
+	std::vector<int> pause_menu_ids;
+	for (auto function : entity_creating_functions)
+	{
+		auto [ids, height] = function(sf::Vector2f(x_pos, y_pos));
+		y_pos -= height;
+		y_pos -= 1.5 * BLOCK_SIZE * level.GetScale();
+		pause_menu_ids.insert(pause_menu_ids.end(), ids.begin(), ids.end());
+	}
+
 	for (auto id : pause_menu_ids)
 	{
 		level.AddComponent<PauseMenuItem>(id);
