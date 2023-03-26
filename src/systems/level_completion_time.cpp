@@ -19,8 +19,12 @@ void LevelCompletionTimeSystem::Update(Level& level, float dt)
 		level_completion_timer->duration += dt;
 		return;
 	}
+	if (level_state != COMPLETED)
+	{
+		return;
+	}
 	float& current_record = (*level_completion_time_records_)[coin_counter->coin_counter][active_level_id_];
-	if (level_state == COMPLETED && (current_record <= 0 || current_record > level_completion_timer->duration))
+	if (current_record <= 0 || current_record > level_completion_timer->duration)
 	{
 		current_record = level_completion_timer->duration;
 		return;

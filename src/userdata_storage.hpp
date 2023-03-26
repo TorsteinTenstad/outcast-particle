@@ -56,12 +56,13 @@ void LoadMapOfMapFromFile(std::string savefile_path, std::map<K, V>& map_of_map)
 	std::ifstream f(savefile_path);
 	std::string line;
 	K key;
+	V value;
 	while (std::getline(f, line))
 	{
-		V value;
 		if (line.find("Key: ") == 0)
 		{
 			FromString(key, line.substr(5));
+			value.clear();
 		}
 		else
 		{
