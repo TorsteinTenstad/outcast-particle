@@ -112,8 +112,12 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	AddButton(std::bind(set_level_, LEVEL_MENU), "Level menu", sf::Keyboard::Unknown);
 	AddButton(std::bind(set_level_, MAIN_MENU), "Main menu", sf::Keyboard::Unknown);
 
+	int navigator_id = level.AddBlueprint(BPMenuNavigator);
+	level.AddComponent<PauseMenuItem>(navigator_id);
+
 	entities_creator title_func = std::bind(&AddText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
 	entities_creators.insert(entities_creators.begin(), title_func);
+
 	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_creators, BLOCK_SIZE);
 	for (auto id : ids)
 	{
