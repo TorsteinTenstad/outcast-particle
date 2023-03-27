@@ -10,7 +10,6 @@ private:
 	const std::map<std::string, std::vector<std::string>>* level_groups_;
 
 	void SetupPauseMenu(Level& level, LevelMode previous_mode);
-	void AddMenuEntities(Level& level, std::vector<std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)>> create_entity_functions);
 
 public:
 	using GameSystem::GameSystem;

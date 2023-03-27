@@ -1,9 +1,11 @@
 #include "systems/pause_mode.hpp"
 #include "entity_creation.hpp"
+#include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <numeric>
 #include <string>
 
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
@@ -51,7 +53,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
 	LevelState level_state = level.ComputeState();
 	std::vector<std::function<void(void)>> button_functions;
-	std::vector<std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)>> entity_creating_functions;
+	std::vector<entities_creator> entities_creators;
 	std::vector<sf::Keyboard::Key> shortcut_keys;
 	std::vector<std::string> text;
 	std::string menu_title;
@@ -77,8 +79,8 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		if (level_state == COMPLETED && !is_in_level_editing_)
 		{
 			menu_title = "Level Complete";
-			std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)> create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter);
-			entity_creating_functions.push_back(create_badge_function);
+			entities_creator create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter);
+			entities_creators.push_back(create_badge_function);
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
 			auto active_level_index = std::find(level_group.begin(), level_group.end(), active_level_id_);
 			auto next_level_index = ++active_level_index;
@@ -126,27 +128,12 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	button_functions.push_back(std::bind(set_level_, MAIN_MENU));
 	shortcut_keys.push_back(sf::Keyboard::Unknown);
 
-	std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)> button_list_func = std::bind(&AddButtonList, std::ref(level), std::placeholders::_1, button_functions, text, shortcut_keys, level.GetScale(), level.GetScale() * 0.8, CenterCenter);
-	std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)> title_func = std::bind(&AddText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
-	entity_creating_functions.insert(entity_creating_functions.begin(), button_list_func);
-	entity_creating_functions.push_back(title_func);
-	AddMenuEntities(level, entity_creating_functions);
-}
-
-void PauseMode::AddMenuEntities(Level& level, std::vector<std::function<std::tuple<std::vector<int>, float>(sf::Vector2f)>> entity_creating_functions)
-{
-	float x_pos = level.GetSize().x / 2.f;
-	float y_pos = level.GetSize().y / 2.f;
-	std::vector<int> pause_menu_ids;
-	for (auto function : entity_creating_functions)
-	{
-		auto [ids, height] = function(sf::Vector2f(x_pos, y_pos));
-		y_pos -= height;
-		y_pos -= 1.5 * BLOCK_SIZE * level.GetScale();
-		pause_menu_ids.insert(pause_menu_ids.end(), ids.begin(), ids.end());
-	}
-
-	for (auto id : pause_menu_ids)
+	entities_creator button_list_func = std::bind(&AddButtonList, std::ref(level), std::placeholders::_1, button_functions, text, shortcut_keys, level.GetScale(), level.GetScale(), CenterCenter);
+	entities_creator title_func = std::bind(&AddText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
+	entities_creators.insert(entities_creators.begin(), title_func);
+	entities_creators.insert(entities_creators.end(), button_list_func);
+	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_creators, BLOCK_SIZE);
+	for (auto id : ids)
 	{
 		level.AddComponent<PauseMenuItem>(id);
 	}
