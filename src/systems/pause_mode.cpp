@@ -52,10 +52,7 @@ void PauseMode::Update(Level& level, float dt)
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
 	LevelState level_state = level.ComputeState();
-	std::vector<std::function<void(void)>> button_functions;
 	std::vector<entities_creator> entities_creators;
-	std::vector<sf::Keyboard::Key> shortcut_keys;
-	std::vector<std::string> text;
 	std::string menu_title;
 
 	int background_blur_id = level.CreateEntityId();
@@ -66,14 +63,16 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	level.AddComponent<DrawPriority>(background_blur_id)->draw_priority = 50;
 	level.AddComponent<PauseMenuItem>(background_blur_id);
 
+	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
+		entities_creators.push_back(std::bind(&AddNavigatorButton, std::ref(level), std::placeholders::_1, button_function, button_text, shortcut_key));
+	};
+
 	if (previous_mode == PLAY_MODE)
 	{
 		if (level_state == PLAYING)
 		{
 			menu_title = "Paused";
-			text.push_back("Continue");
-			button_functions.push_back([&]() { level.SetMode(PLAY_MODE); });
-			shortcut_keys.push_back(sf::Keyboard::Escape);
+			AddButton([&]() { level.SetMode(PLAY_MODE); }, "Continue", sf::Keyboard::Escape);
 		}
 
 		if (level_state == COMPLETED && !is_in_level_editing_)
@@ -81,14 +80,13 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			menu_title = "Level Complete";
 			entities_creator create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter);
 			entities_creators.push_back(create_badge_function);
+
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
 			auto active_level_index = std::find(level_group.begin(), level_group.end(), active_level_id_);
 			auto next_level_index = ++active_level_index;
 			if (next_level_index != level_group.end())
 			{
-				text.push_back("Next level");
-				button_functions.push_back(std::bind(set_level_, *next_level_index));
-				shortcut_keys.push_back(sf::Keyboard::Unknown);
+				AddButton(std::bind(set_level_, *next_level_index), "Next level", sf::Keyboard::Unknown);
 			}
 		}
 
@@ -97,41 +95,25 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			menu_title = "You Died";
 		}
 
-		text.push_back("Restart level");
-		button_functions.push_back(std::bind(set_level_, active_level_id_));
-		shortcut_keys.push_back(sf::Keyboard::R);
+		AddButton(std::bind(set_level_, active_level_id_), "Restart level", sf::Keyboard::R);
 
 		if (is_in_level_editing_)
 		{
-			text.push_back("Edit level");
-			button_functions.push_back([&]() { level.SetMode(EDIT_MODE); });
-			shortcut_keys.push_back(sf::Keyboard::Unknown);
+			AddButton([&]() { level.SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
 		}
 	}
 
 	if (previous_mode == EDIT_MODE)
 	{
-		text.push_back("Continue editing");
-		button_functions.push_back([&]() { level.SetMode(EDIT_MODE); });
-		shortcut_keys.push_back(sf::Keyboard::Escape);
-
-		text.push_back("Play level");
-		button_functions.push_back([&]() { level.SetMode(READY_MODE); });
-		shortcut_keys.push_back(sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Contitue editing", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(READY_MODE); }, "Play level", sf::Keyboard::Unknown);
 	}
 
-	text.push_back("Level menu");
-	button_functions.push_back(std::bind(set_level_, LEVEL_MENU));
-	shortcut_keys.push_back(sf::Keyboard::Unknown);
+	AddButton(std::bind(set_level_, LEVEL_MENU), "Level menu", sf::Keyboard::Unknown);
+	AddButton(std::bind(set_level_, MAIN_MENU), "Main menu", sf::Keyboard::Unknown);
 
-	text.push_back("Main menu");
-	button_functions.push_back(std::bind(set_level_, MAIN_MENU));
-	shortcut_keys.push_back(sf::Keyboard::Unknown);
-
-	entities_creator button_list_func = std::bind(&AddButtonList, std::ref(level), std::placeholders::_1, button_functions, text, shortcut_keys, level.GetScale(), level.GetScale(), CenterCenter);
 	entities_creator title_func = std::bind(&AddText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
 	entities_creators.insert(entities_creators.begin(), title_func);
-	entities_creators.insert(entities_creators.end(), button_list_func);
 	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_creators, BLOCK_SIZE);
 	for (auto id : ids)
 	{

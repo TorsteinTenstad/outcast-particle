@@ -51,6 +51,16 @@ std::vector<int> AddMenuButton(Level& level, std::function<void(void)> on_click,
 	return ids;
 }
 
+entities_handle AddNavigatorButton(Level& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key)
+{
+	int id = level.AddBlueprint(BPMenuNavigationButton);
+	level.GetComponent<Position>(id)->position = position;
+	level.GetComponent<OnReleasedThisFrame>(id)->func = button_function;
+	level.GetComponent<Text>(id)->content = button_text;
+	level.AddComponent<ShortcutKey>(id)->key = shortcut_key;
+	return { std::vector { id }, level.GetComponent<WidthAndHeight>(id)->width_and_height };
+}
+
 entities_handle AddButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys, float x_scale, float y_scale, UiOrigin ui_origin)
 {
 	int n = button_functions.size();
