@@ -4,41 +4,17 @@
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 
-entities_handle VerticalEntityLayout(Level& level, sf::Vector2f position, std::vector<entities_creator> entities_creators, float spacing)
-{
-	std::function<entities_handle(entities_creator)> f = [](entities_creator entities_creator) { return entities_creator(sf::Vector2f(0, 0)); };
-	std::vector<entities_handle> ids_and_heights = ApplyFuncToVector(entities_creators, f);
-	sf::Vector2f total_height;
-	std::vector<int> total_ids;
-
-	for (auto [ids, height] : ids_and_heights)
-	{
-		total_height.y += height.y;
-		total_height.x = std::max(total_height.x, height.x);
-	}
-	total_height.y += spacing * (ids_and_heights.size() - 1);
-
-	float current_height = -total_height.y / 2;
-	for (auto [ids, height] : ids_and_heights)
-	{
-		current_height += height.y / 2;
-		for (int id : ids)
-		{
-			level.GetComponent<Position>(id)->position += sf::Vector2f(position.x, current_height + position.y);
-			total_ids.push_back(id);
-		}
-		current_height += height.y / 2 + spacing;
-	}
-	return (std::tuple { total_ids, total_height });
-}
-
 entities_handle AddText(Level& level, sf::Vector2f position, std::string text, unsigned int text_size)
 {
 	int id = level.AddBlueprint(BPText);
 	level.GetComponent<Position>(id)->position = position;
 	level.GetComponent<Text>(id)->content = text;
 	level.GetComponent<Text>(id)->size = text_size;
-	return { std::vector<int> { id }, sf::Vector2f(0, text_size) };
+
+	sf::Vector2f width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
+	level.AddComponent<WidthAndHeight>(id)->width_and_height = width_and_height;
+	//level.AddComponent<DrawInfo>(id);
+	return { std::vector<int> { id }, width_and_height };
 }
 
 std::vector<int> AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
@@ -195,6 +171,8 @@ std::vector<int> AddSliderButton(Level& level, int* f, sf::Vector2f button_posit
 
 int AddScrollingText(Level& level, sf::Vector2f position, std::string text)
 {
+	//auto [int, height] = AddText(level, position, text, 120);
+
 	int id = level.AddBlueprint(BPText);
 	level.GetComponent<Position>(id)->position = position;
 	level.GetComponent<Text>(id)->content = text;
@@ -202,17 +180,17 @@ int AddScrollingText(Level& level, sf::Vector2f position, std::string text)
 	return id;
 }
 
-entities_handle AddStatsBadge(Level& level, sf::Vector2f position, int coin_number)
+entities_handle AddStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha)
 {
 	int entity_id = level.CreateEntityId();
 
 	level.AddComponent<DrawInfo>(entity_id, { "content\\textures\\gray.png", false, 0 });
 	level.AddComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\stats_badge.frag";
 	level.GetComponent<Shader>(entity_id)->int_uniforms["n_collected"] = coin_number;
-	level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
+	level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(7.5, 1.5) * float(BLOCK_SIZE);
 	level.AddComponent<Position>(entity_id)->position = position;
-	level.AddComponent<FillColor>(entity_id);
-	level.AddComponent<Text>(entity_id)->size = 100;
+	level.AddComponent<FillColor>(entity_id)->color.a = alpha;
+	level.AddComponent<Text>(entity_id)->size = 120;
 	level.AddComponent<DrawPriority>(entity_id)->draw_priority = 100;
 
 	return { std::vector { entity_id }, level.GetComponent<WidthAndHeight>(entity_id)->width_and_height };
@@ -227,4 +205,32 @@ int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, 
 	level.AddComponent<DrawInfo>(id);
 	level.AddComponent<Shader>(id)->fragment_shader_path = shader_path;
 	return id;
+}
+
+entities_handle VerticalEntityLayout(Level& level, sf::Vector2f position, std::vector<entities_creator> entities_creators, float spacing)
+{
+	std::function<entities_handle(entities_creator)> f = [](entities_creator entities_creator) { return entities_creator(sf::Vector2f(0, 0)); };
+	std::vector<entities_handle> ids_and_heights = ApplyFuncToVector(entities_creators, f);
+	sf::Vector2f total_height;
+	std::vector<int> total_ids;
+
+	for (auto [ids, height] : ids_and_heights)
+	{
+		total_height.y += height.y;
+		total_height.x = std::max(total_height.x, height.x);
+	}
+	total_height.y += spacing * (ids_and_heights.size() - 1);
+
+	float current_height = -total_height.y / 2;
+	for (auto [ids, height] : ids_and_heights)
+	{
+		current_height += height.y / 2;
+		for (int id : ids)
+		{
+			level.GetComponent<Position>(id)->position += sf::Vector2f(position.x, current_height + position.y);
+			total_ids.push_back(id);
+		}
+		current_height += height.y / 2 + spacing;
+	}
+	return (std::tuple { total_ids, total_height });
 }

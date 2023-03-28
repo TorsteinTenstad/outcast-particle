@@ -57,11 +57,11 @@ std::string LeftShiftString(std::string string, int max_size)
 std::string RightShiftString(std::string string, int max_size)
 {
 	assert(string.size() <= max_size);
-	for (unsigned i = 0; i < max_size - string.size(); i++)
-	{
-		string.insert(0, " ");
-	}
-	return (string);
+	size_t size_difference = size_t(max_size) - string.size();
+	std::string shifted_string = std::string(size_difference, ' ');
+	shifted_string += string;
+
+	return shifted_string;
 }
 
 std::string BoolToStringAsEnabledOrDisabled(bool x)

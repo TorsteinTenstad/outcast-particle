@@ -78,7 +78,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		if (level_state == COMPLETED && !is_in_level_editing_)
 		{
 			menu_title = "Level Complete";
-			entities_creator create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter);
+			entities_creator create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter, 255);
 			entities_creators.push_back(create_badge_function);
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));

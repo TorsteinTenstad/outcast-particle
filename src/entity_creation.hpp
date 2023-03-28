@@ -15,7 +15,7 @@ std::vector<int> AddKeyConfigButton(Level& level, sf::Keyboard::Key* key, sf::Ve
 std::vector<int> AddOptionsButton(Level& level, std::function<void(void)> on_click, std::string button_text, sf::Vector2f position);
 std::vector<int> AddSliderButton(Level& level, int* f, sf::Vector2f button_position);
 int AddScrollingText(Level& level, sf::Vector2f position, std::string text);
-entities_handle AddStatsBadge(Level& level, sf::Vector2f position, int coin_number);
+entities_handle AddStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha);
 int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 
 #include "entity_creation.tpp"

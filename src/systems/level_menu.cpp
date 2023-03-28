@@ -5,6 +5,7 @@
 #include "level.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
+#include "utils/string_manip.hpp"
 
 #include <cassert>
 #include <iomanip>
@@ -233,13 +234,14 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	{ // Stats display
-		std::vector<sf::Vector2f> badge_positions = { sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 7 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 5 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE * 3 / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)), sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 8), level.GetSize().y * (1 - LEVEL_PREVIEW_SCALE / 2)) };
+		sf::Vector2f badge_center_positions = sf::Vector2f(level_size.x * (1 - LEVEL_PREVIEW_SCALE) + 3.75 * BLOCK_SIZE, level_size.y * (0.5 + 0.5 * LEVEL_PREVIEW_SCALE));
+		std::vector<entities_creator> entities_creator;
 		for (int i = 0; i < 4; i++)
 		{
-			auto [stat_badge_id, height] = AddStatsBadge(level, badge_positions[i], i);
-			level.GetComponent<FillColor>(stat_badge_id[0])->color.a = 50;
-			ui->stats_block_ids.push_back(stat_badge_id[0]);
+			entities_creator.push_back(std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, i, 50));
 		}
+		auto [ids, heights] = VerticalEntityLayout(level, badge_center_positions, entities_creator, BLOCK_SIZE / 4);
+		ui->stats_block_ids = ids;
 	}
 }
 
@@ -260,22 +262,19 @@ void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
 		{
 			continue;
 		}
-
-		std::stringstream ss;
-		ss << std::fixed << std::setprecision(2);
-		ss << "\n";
-
 		std::map<std::string, float> i_coin_record = (*level_completion_time_records_).at(i);
-		if (i_coin_record.count(ui->at_level_id) > 0)
+		if (i_coin_record.count(ui->at_level_id) < 1)
 		{
-			ss << i_coin_record.at(ui->at_level_id);
-			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 50;
+			level.GetComponent<Text>(ui->stats_block_ids[i])->content = "";
 		}
 		else
 		{
-			ss << " ";
-			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 50;
+			std::stringstream ss;
+			ss << std::fixed << std::setprecision(2);
+			ss << i_coin_record.at(ui->at_level_id);
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
+			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(ss.str(), 13);
 		}
-		level.GetComponent<Text>(ui->stats_block_ids[i])->content = ss.str();
 	}
 }
