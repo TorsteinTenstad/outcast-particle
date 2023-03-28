@@ -4,7 +4,7 @@
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 
-entities_handle AddText(Level& level, sf::Vector2f position, std::string text, unsigned int text_size)
+entities_handle CreateText(Level& level, sf::Vector2f position, std::string text, unsigned int text_size)
 {
 	int id = level.AddBlueprint(BPText);
 	level.GetComponent<Position>(id)->position = position;
@@ -17,27 +17,73 @@ entities_handle AddText(Level& level, sf::Vector2f position, std::string text, u
 	return { std::vector<int> { id }, width_and_height };
 }
 
-std::vector<int> AddMenuButton(Level& level, std::function<void(void)> on_click, float pos_x, float pos_y, std::string button_text)
+entities_handle CreateScrollingText(Level& level, sf::Vector2f position, std::string text)
 {
-	int id = level.AddBlueprint(BPMenuNavigationButton);
-	level.GetComponent<Position>(id)->position = sf::Vector2f(pos_x, pos_y);
-	level.GetComponent<OnReleasedThisFrame>(id)->func = on_click;
-	level.GetComponent<Text>(id)->content = button_text;
-	std::vector<int> ids { id };
-	return ids;
+	auto [ids, height] = CreateText(level, position, text, 120);
+	level.GetComponent<Text>(ids[0])->apply_shader = true;
+	return { ids, height };
 }
 
-entities_handle AddNavigatorButton(Level& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key)
+entities_handle CreateButtonTemplate(Level& level, sf::Vector2f position)
 {
-	int id = level.AddBlueprint(BPMenuNavigationButton);
-	level.GetComponent<Position>(id)->position = position;
-	level.GetComponent<OnReleasedThisFrame>(id)->func = button_function;
-	level.GetComponent<Text>(id)->content = button_text;
-	level.AddComponent<ShortcutKey>(id)->key = shortcut_key;
-	return { std::vector { id }, level.GetComponent<WidthAndHeight>(id)->width_and_height };
+	int id = level.CreateEntityId();
+	level.AddComponent<DrawPriority>(id)->draw_priority = 100;
+	level.AddComponent<DrawInfo>(id, { "content\\textures\\white.png", false, 0 });
+	level.AddComponent<Shader>(id, { "", "shaders\\round_corners.frag", {}, {}, {} });
+	level.AddComponent<FillColor>(id, {});
+	level.AddComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
+	level.AddComponent<Position>(id)->position = position;
+	return { { id }, sf::Vector2f(10, 2) * float(BLOCK_SIZE) };
 }
 
-entities_handle AddButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys, float x_scale, float y_scale, UiOrigin ui_origin)
+entities_handle CreateMenuButton(Level& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
+{
+	auto [ids, height] = CreateButtonTemplate(level, position);
+	int id = ids[0];
+	level.AddComponent<Text>(id)->content = button_text;
+	level.AddComponent<MouseInteractionDependentFillColor>(id);
+	level.AddComponent<ReceivesButtonEvents>(id);
+	level.AddComponent<OnReleasedThisFrame>(id)->func = on_click;
+	return { ids, height };
+}
+
+entities_handle CreateNavigatorButton(Level& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key)
+{
+	auto [ids, height] = CreateMenuButton(level, position, button_function, button_text);
+	level.AddComponent<ShortcutKey>(ids[0])->key = shortcut_key;
+	level.AddComponent<MenuNavigatable>(ids[0]);
+
+	return { ids, height };
+}
+
+entities_handle CreateKeyConfigButton(Level& level, sf::Vector2f position, sf::Keyboard::Key* key)
+{
+
+	auto [ids, height] = CreateButtonTemplate(level, position);
+	level.AddComponent<MouseInteractionDependentFillColor>(ids[0]);
+	level.AddComponent<ReceivesButtonEvents>(ids[0]);
+	level.AddComponent<KeyConfigButton>(ids[0])->key = key;
+	level.AddComponent<StickyButton>(ids[0]);
+	level.GetComponent<Shader>(ids[0])->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	auto [button_text_id, button_text_height] = CreateScrollingText(level, position, HumanName(*key));
+	level.GetComponent<KeyConfigButton>(ids[0])->button_text = &level.GetComponent<Text>(button_text_id[0])->content;
+	ids.push_back(button_text_id[0]);
+
+	return { ids, height };
+}
+
+entities_handle CreateOptionsButton(Level& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
+{
+
+	auto [ids, height] = CreateMenuButton(level, position, on_click, "");
+	auto [button_text_id, button_text_height] = CreateScrollingText(level, position, button_text);
+	level.AddComponent<BinaryOptionsButton>(ids[0])->button_text = &level.GetComponent<Text>(button_text_id[0])->content;
+	ids.push_back(button_text_id[0]);
+	return { ids, height };
+}
+
+//CreateButtonList is in a out-phasing process. Use VerticalEntityLayout for a more flexible variant.
+entities_handle CreateButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys, float x_scale, float y_scale, UiOrigin ui_origin)
 {
 	int n = button_functions.size();
 	assert(button_texts.size() == n);
@@ -92,95 +138,44 @@ entities_handle AddButtonList(Level& level, sf::Vector2f position, std::vector<s
 	return { ids, width_and_height };
 }
 
-std::vector<int> AddKeyConfigButton(Level& level, sf::Keyboard::Key* key, sf::Vector2f button_position)
-{
-
-	int id = level.AddBlueprint(BPButton);
-	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.GetComponent<Position>(id)->position = button_position;
-	level.AddComponent<KeyConfigButton>(id)->key = key;
-	level.AddComponent<StickyButton>(id);
-	int button_text_id = AddScrollingText(level, button_position, HumanName(*key));
-	level.GetComponent<KeyConfigButton>(id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
-
-	std::vector<int> ids { id, button_text_id };
-	return ids;
-}
-
-std::vector<int> AddOptionsButton(Level& level, std::function<void(void)> on_click, std::string button_text, sf::Vector2f button_position)
-{
-
-	int id = level.AddBlueprint(BPButton);
-	level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.GetComponent<Position>(id)->position = button_position;
-	level.AddComponent<OnReleasedThisFrame>(id)->func = on_click;
-
-	int button_text_id = AddScrollingText(level, button_position, button_text);
-	level.AddComponent<BinaryOptionsButton>(id)->button_text = &level.GetComponent<Text>(button_text_id)->content;
-	std::vector<int> ids { id, button_text_id };
-	return ids;
-}
-
-std::vector<int> AddSliderButton(Level& level, int* f, sf::Vector2f button_position)
+entities_handle CreateSliderButton(Level& level, sf::Vector2f position, int* f)
 {
 	//Add parent button:
-	int parent_button_id = level.CreateEntityId();
+	auto [ids, height] = CreateButtonTemplate(level, position);
+	int parent_button_id = ids[0];
 	level.AddComponent<ReceivesButtonEvents>(parent_button_id);
-	level.AddComponent<DrawPriority>(parent_button_id)->draw_priority = 100;
-	level.AddComponent<DrawInfo>(parent_button_id, { "content\\textures\\white.png", false, 0 });
-	level.AddComponent<FillColor>(parent_button_id, {});
 	level.AddComponent<MouseInteractionDependentFillColor>(parent_button_id, {});
-	level.AddComponent<Shader>(parent_button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<WidthAndHeight>(parent_button_id)->width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
-	level.AddComponent<Position>(parent_button_id)->position = sf::Vector2f(button_position.x, button_position.y);
 	level.AddComponent<SliderButton>(parent_button_id)->slider_value = f;
 
 	//Creating slider bar:
-	int slider_bar_id = level.CreateEntityId();
-	level.AddComponent<DrawPriority>(slider_bar_id)->draw_priority = 101;
-	level.AddComponent<DrawInfo>(slider_bar_id, { "content\\textures\\white.png", false, 0 });
-	level.AddComponent<FillColor>(slider_bar_id, {});
-	level.AddComponent<Shader>(slider_bar_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<Position>(slider_bar_id)->position = button_position;
+	auto [slider_bar_ids, slider_bar_height] = CreateButtonTemplate(level, position);
+	int slider_bar_id = slider_bar_ids[0];
+	level.GetComponent<DrawPriority>(slider_bar_id)->draw_priority = 101;
 	level.GetComponent<Position>(slider_bar_id)->position.x -= 1 * BLOCK_SIZE;
-	level.AddComponent<WidthAndHeight>(slider_bar_id)->width_and_height = sf::Vector2f(7, 0.1) * float(BLOCK_SIZE);
+	level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height = sf::Vector2f(7, 0.1) * float(BLOCK_SIZE);
 
 	//Creating slider:
 	float slider_x_pos = level.GetComponent<Position>(slider_bar_id)->position.x + level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height.x * (*(f)*0.01 - 0.5);
 
-	int slider_id = level.CreateEntityId();
-	level.AddComponent<DrawPriority>(slider_id)->draw_priority = 101;
-	level.AddComponent<DrawInfo>(slider_id, { "content\\textures\\white.png", false, 0 });
-	level.AddComponent<FillColor>(slider_id, {});
-	level.AddComponent<Shader>(slider_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	level.AddComponent<Radius>(slider_id)->radius = BLOCK_SIZE / 4;
-	level.AddComponent<Position>(slider_id)->position = sf::Vector2f(slider_x_pos, button_position.y);
+	auto [slider_ids, slider_height] = CreateButtonTemplate(level, sf::Vector2f(slider_x_pos, position.y));
+	level.GetComponent<DrawPriority>(slider_ids[0])->draw_priority = 101;
+	level.RemoveComponents<WidthAndHeight>(slider_ids[0]);
+	level.AddComponent<Radius>(slider_ids[0])->radius = BLOCK_SIZE / 4;
 
 	//Adding text entity
 	float text_x_position = level.GetComponent<Position>(slider_bar_id)->position.x + level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height.x / 2 + 1.5 * BLOCK_SIZE;
-	int button_text_id = AddScrollingText(level, sf::Vector2f(text_x_position, button_position.y), RightShiftString(ToString(*(f)), 3));
+	auto [button_text_id, button_text_height] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), RightShiftString(ToString(*(f)), 3));
 
 	//Connect sliderbar, slider and text to background button
 	level.GetComponent<SliderButton>(parent_button_id)->slider_bar_id = slider_bar_id;
-	level.GetComponent<SliderButton>(parent_button_id)->slider_button_id = slider_id;
-	level.GetComponent<SliderButton>(parent_button_id)->slider_text_id = button_text_id;
+	level.GetComponent<SliderButton>(parent_button_id)->slider_button_id = slider_ids[0];
+	level.GetComponent<SliderButton>(parent_button_id)->slider_text_id = button_text_id[0];
 
-	std::vector<int> ids { slider_bar_id, slider_id, parent_button_id, button_text_id };
-	return ids;
+	ids.insert(ids.begin(), { slider_bar_id, slider_ids[0], button_text_id[0] });
+	return { ids, height };
 }
 
-int AddScrollingText(Level& level, sf::Vector2f position, std::string text)
-{
-	//auto [int, height] = AddText(level, position, text, 120);
-
-	int id = level.AddBlueprint(BPText);
-	level.GetComponent<Position>(id)->position = position;
-	level.GetComponent<Text>(id)->content = text;
-	level.GetComponent<Text>(id)->apply_shader = true;
-	return id;
-}
-
-entities_handle AddStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha)
+entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha)
 {
 	int entity_id = level.CreateEntityId();
 

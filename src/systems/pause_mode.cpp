@@ -64,7 +64,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	level.AddComponent<PauseMenuItem>(background_blur_id);
 
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
-		entities_creators.push_back(std::bind(&AddNavigatorButton, std::ref(level), std::placeholders::_1, button_function, button_text, shortcut_key));
+		entities_creators.push_back(std::bind(&CreateNavigatorButton, std::ref(level), std::placeholders::_1, button_function, button_text, shortcut_key));
 	};
 
 	if (previous_mode == PLAY_MODE)
@@ -78,7 +78,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		if (level_state == COMPLETED && !is_in_level_editing_)
 		{
 			menu_title = "Level Complete";
-			entities_creator create_badge_function = std::bind(&AddStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter, 255);
+			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter, 255);
 			entities_creators.push_back(create_badge_function);
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
@@ -115,7 +115,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	int navigator_id = level.AddBlueprint(BPMenuNavigator);
 	level.AddComponent<PauseMenuItem>(navigator_id);
 
-	entities_creator title_func = std::bind(&AddText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
+	entities_creator title_func = std::bind(&CreateText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
 	entities_creators.insert(entities_creators.begin(), title_func);
 
 	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_creators, BLOCK_SIZE);
