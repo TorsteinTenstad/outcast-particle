@@ -20,7 +20,7 @@ const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vecto
 
 #define DEFAULT_LEVEL_GRID_SIZE_ID 1
 
-class Level : public ESCScene
+class Level : public ECSScene
 {
 private:
 	std::string savefile_path_;
@@ -28,6 +28,8 @@ private:
 	int grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
 
 public:
+	Level(const Level&) = delete;
+	Level() = default;
 	bool editable = false;
 	std::string name = "Untitled";
 	sf::Vector2f ui_bars_size = sf::Vector2f(0, 0);

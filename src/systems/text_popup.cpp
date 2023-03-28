@@ -14,7 +14,7 @@ void TextPopupSystem::Update(Level& level, float dt)
 		{
 			if (TextPopupSpawner* text_popup_spawner = level.RawGetComponent<TextPopupSpawner>(i))
 			{
-				auto [popup_id, popup_width_and_height, popup_draw_info, popup_text, popup_draw_priority, popup_position, popup_animated_position] = level.CreateEntitiyWith<WidthAndHeight, DrawInfo, Text, DrawPriority, Position, AnimatedPosition>();
+				auto [popup_id, popup_width_and_height, popup_draw_info, popup_text, popup_draw_priority, popup_position, popup_animated_position] = level.CreateEntityWith<WidthAndHeight, DrawInfo, Text, DrawPriority, Position, AnimatedPosition>();
 				popup_draw_info->scale_to_fit = true;
 				popup_draw_info->image_path = "content\\textures\\gray.png";
 				popup_width_and_height->width_and_height = sf::Vector2f(2400, 240);

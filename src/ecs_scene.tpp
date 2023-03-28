@@ -2,7 +2,7 @@
 #include <cassert>
 
 template <class Component>
-std::map<int, Component>& ESCScene::GetComponentMap()
+std::map<int, Component>& ECSScene::GetComponentMap()
 {
 	if (components_.count(typeid(Component)) == 0)
 	{
@@ -13,40 +13,40 @@ std::map<int, Component>& ESCScene::GetComponentMap()
 }
 
 template <class Component>
-bool ESCScene::HasComponent(int entity_id)
+bool ECSScene::HasComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	return m.find(entity_id) != m.end();
 }
 
 template <class... Component>
-bool ESCScene::HasComponents(int entity_id)
+bool ECSScene::HasComponents(int entity_id)
 {
 	return (HasComponent<Component>(entity_id) && ...);
 }
 
 template <class Component>
-Component* ESCScene::EnsureExistanceOfComponent(int entity_id)
+Component* ECSScene::EnsureExistenceOfComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	return &m[entity_id];
 }
 
 template <class... Component>
-std::tuple<Component*...> ESCScene::EnsureExistanceOfComponents(int entity_id)
+std::tuple<Component*...> ECSScene::EnsureExistenceOfComponents(int entity_id)
 {
-	return std::make_tuple(EnsureExistanceOfComponent<Component>(entity_id)...);
+	return std::make_tuple(EnsureExistenceOfComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-Component* ESCScene::AddComponent(int entity_id)
+Component* ECSScene::AddComponent(int entity_id)
 {
 	assert(!HasComponent<Component>(entity_id));
-	return EnsureExistanceOfComponent<Component>(entity_id);
+	return EnsureExistenceOfComponent<Component>(entity_id);
 }
 
 template <class Component>
-Component* ESCScene::AddComponent(int entity_id, Component&& value)
+Component* ECSScene::AddComponent(int entity_id, Component&& value)
 {
 	auto& m = GetComponentMap<Component>();
 	assert(m.count(entity_id) == 0);
@@ -55,13 +55,13 @@ Component* ESCScene::AddComponent(int entity_id, Component&& value)
 }
 
 template <class... Component>
-std::tuple<Component*...> ESCScene::AddComponents(int entity_id)
+std::tuple<Component*...> ECSScene::AddComponents(int entity_id)
 {
 	return std::make_tuple(AddComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-Component* ESCScene::GetComponent(int entity_id)
+Component* ECSScene::GetComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	auto it = m.find(entity_id);
@@ -70,13 +70,13 @@ Component* ESCScene::GetComponent(int entity_id)
 }
 
 template <class... Component>
-std::tuple<Component*...> ESCScene::GetComponents(int entity_id)
+std::tuple<Component*...> ECSScene::GetComponents(int entity_id)
 {
 	return std::make_tuple(GetComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-Component* ESCScene::RawGetComponent(int entity_id)
+Component* ECSScene::RawGetComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	auto it = m.find(entity_id);
@@ -88,13 +88,13 @@ Component* ESCScene::RawGetComponent(int entity_id)
 }
 
 template <class... Component>
-std::tuple<Component*...> ESCScene::RawGetComponents(int entity_id)
+std::tuple<Component*...> ECSScene::RawGetComponents(int entity_id)
 {
 	return std::make_tuple(RawGetComponent<Component>(entity_id)...);
 }
 
 template <class Component>
-bool ESCScene::RemoveComponent(int entity_id)
+bool ECSScene::RemoveComponent(int entity_id)
 {
 	auto& m = GetComponentMap<Component>();
 	if (Children* children = RawGetComponent<Children>(entity_id))
@@ -112,13 +112,13 @@ bool ESCScene::RemoveComponent(int entity_id)
 }
 
 template <class... Component>
-bool ESCScene::RemoveComponents(int entity_id)
+bool ECSScene::RemoveComponents(int entity_id)
 {
 	return (RemoveComponent<Component>(entity_id) || ...);
 }
 
 template <class... Component>
-std::tuple<int, Component*...> ESCScene::CreateEntitiyWith()
+std::tuple<int, Component*...> ECSScene::CreateEntityWith()
 {
 	int entity_id = CreateEntityId();
 	return std::tuple_cat(std::make_tuple(entity_id), AddComponents<Component...>(entity_id));
@@ -162,7 +162,7 @@ static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& com
 }
 
 template <class... Component>
-std::vector<std::tuple<int, Component*...>> ESCScene::GetEntitiesWith()
+std::vector<std::tuple<int, Component*...>> ECSScene::GetEntitiesWith()
 {
 	int component_idx = 0;
 	std::vector<std::tuple<int, Component*...>> matching_entities = {};
@@ -171,7 +171,7 @@ std::vector<std::tuple<int, Component*...>> ESCScene::GetEntitiesWith()
 }
 
 template <class... Component>
-void ESCScene::DeleteEntitiesWith()
+void ECSScene::DeleteEntitiesWith()
 {
 	auto entities = GetEntitiesWith<Component...>();
 	for (auto tup : entities)
@@ -182,7 +182,7 @@ void ESCScene::DeleteEntitiesWith()
 }
 
 template <class Component>
-std::tuple<int, Component*> ESCScene::GetSingletonIncludeID(std::function<void(ESCScene&, int)> creation_func)
+std::tuple<int, Component*> ECSScene::GetSingletonIncludeID(std::function<void(ECSScene&, int)> creation_func)
 {
 	auto& component_map = GetComponentMap<Component>();
 
@@ -197,27 +197,27 @@ std::tuple<int, Component*> ESCScene::GetSingletonIncludeID(std::function<void(E
 }
 
 template <class Component>
-std::tuple<int, Component*> ESCScene::GetSingletonIncludeID()
+std::tuple<int, Component*> ECSScene::GetSingletonIncludeID()
 {
-	return GetSingletonIncludeID<Component>([](ESCScene& scene, int) {});
+	return GetSingletonIncludeID<Component>([](ECSScene& scene, int) {});
 }
 
 template <class Component>
-Component* ESCScene::GetSingleton(std::function<void(ESCScene&, int)> creation_func)
+Component* ECSScene::GetSingleton(std::function<void(ECSScene&, int)> creation_func)
 {
 	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>(creation_func);
 	return std::get<Component*>(tup);
 }
 
 template <class Component>
-Component* ESCScene::GetSingleton()
+Component* ECSScene::GetSingleton()
 {
 	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>();
 	return std::get<Component*>(tup);
 }
 
 template <class Component>
-void ESCScene::ClearComponent()
+void ECSScene::ClearComponent()
 {
 	GetComponentMap<Component>().clear();
 }

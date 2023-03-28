@@ -25,7 +25,7 @@ void FaceSystem::Update(Level& level, float dt)
 		level.GetComponent<Radius>(child_id)->radius = radius->radius;
 		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity_id))
 		{
-			level.EnsureExistanceOfComponent<FillColor>(child_id)->color = fill_color->color;
+			level.EnsureExistenceOfComponent<FillColor>(child_id)->color = fill_color->color;
 		}
 
 		sf::Vector2f& pos = position->position;

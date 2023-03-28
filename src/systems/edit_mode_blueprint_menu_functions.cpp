@@ -1,9 +1,13 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
+#include "entity_creation_observer.hpp"
+#include <iostream>
 
 const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPGoal, BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
 void OpenBlueprintMenu(Level& level)
 {
+	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { std::cout << id << "\n"; });
+
 	int i = 0;
 	int menu_background_id = level.CreateEntityId();
 	level.AddComponent<Position>(menu_background_id)->position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);

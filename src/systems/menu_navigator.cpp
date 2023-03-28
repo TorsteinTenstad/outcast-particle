@@ -29,7 +29,7 @@ static int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map
 static std::map<int, sf::Vector2f> GetPossiblePossiblePositions(Level& level)
 {
 	std::map<int, sf::Vector2f> possible_positions;
-	for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigatable, WidthAndHeight, Position>())
+	for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>())
 	{
 		possible_positions[entity_id] = position->position;
 		possible_positions[entity_id].x -= width_and_height->width_and_height.x / 2;
@@ -56,7 +56,7 @@ void MenuNavigatonSystem::Update(Level& level, float dt)
 		}
 		else
 		{
-			for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigatable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigatable, WidthAndHeight, Position>())
+			for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigable, WidthAndHeight, Position>())
 			{
 				at_id = hovered_started_this_frame_id;
 				break;

@@ -75,7 +75,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 			&& !cursor_and_keys_.cursor_moved_this_frame
 			&& !cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left]
 			&& !cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left]
-			&& level.HasComponents<MenuNavigatable>(top_intersecting_id);
+			&& level.HasComponents<MenuNavigable>(top_intersecting_id);
 
 		if (!mouse_hover_inactive)
 		{
@@ -104,19 +104,19 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (pressed_this_frame)
 		{
-			level.EnsureExistanceOfComponent<PressedThisFrame>(entity_id);
-			level.EnsureExistanceOfComponent<Pressed>(entity_id);
+			level.EnsureExistenceOfComponent<PressedThisFrame>(entity_id);
+			level.EnsureExistenceOfComponent<Pressed>(entity_id);
 		}
 		if (released_this_frame)
 		{
-			level.EnsureExistanceOfComponent<ReleasedThisFrame>(entity_id);
+			level.EnsureExistenceOfComponent<ReleasedThisFrame>(entity_id);
 			level.RemoveComponents<Pressed>(entity_id);
 		}
 
-		level.EnsureExistanceOfComponent<Hovered>(entity_id);
+		level.EnsureExistenceOfComponent<Hovered>(entity_id);
 		if (!hovered_last_frame)
 		{
-			level.EnsureExistanceOfComponent<HoveredStartedThisFrame>(entity_id);
+			level.EnsureExistenceOfComponent<HoveredStartedThisFrame>(entity_id);
 		}
 	}
 }

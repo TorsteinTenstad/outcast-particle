@@ -69,7 +69,7 @@ typedef std::variant<
 	std::map<int, MagneticField>,
 	std::map<int, Mass>,
 	std::map<int, MenuNavigator>,
-	std::map<int, MenuNavigatable>,
+	std::map<int, MenuNavigable>,
 	std::map<int, NotSerialized>,
 	std::map<int, Hovered>,
 	std::map<int, OnHovered>,

@@ -24,7 +24,7 @@ void Game::GoToMainMenu()
 	std::vector<std::string> text = { "Play", "Level Creator", "Options", "Exit Game" };
 	CreateButtonList(active_level_, sf::Vector2f(level_size.x / 2 - x_center_offset, y_offset), functions, text);
 
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Volatile\n  Particle";
 	title_position->position.x = level_size.x / 2.f - x_center_offset;
@@ -37,13 +37,21 @@ void Game::GoToMainMenu()
 	active_level_.GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
 	active_level_.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
 	active_level_.GetComponent<Charge>(player_id)->charge *= -1;
+
+	{
+		auto [entity_id, shader, draw_info, draw_priority, width_and_height, position] = active_level_.CreateEntityWith<Shader, DrawInfo, DrawPriority, WidthAndHeight, Position>();
+		draw_priority->draw_priority = 200;
+		position->position = active_level_.GetSize() / 2.f + sf::Vector2f(400, -400);
+		width_and_height->width_and_height = sf::Vector2f(6, 4) * float(BLOCK_SIZE);
+		shader->fragment_shader_path = "shaders\\twinkle.frag";
+	}
 }
 
 void Game::GoToLevelMenu()
 {
 	active_level_id_ = LEVEL_MENU;
 	active_level_.ResetSize();
-	active_level_.CreateEntitiyWith<LevelMenuUI>();
+	active_level_.CreateEntityWith<LevelMenuUI>();
 }
 
 void Game::GoToOptionsMenu()
@@ -59,7 +67,7 @@ void Game::GoToOptionsMenu()
 	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display & Graphics", "Main Menu" };
 	CreateButtonList(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), functions, text);
 
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntitiyWith<Text, DrawPriority, Position>();
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Options";
 	title_position->position.x = level_size.x / 2.f + x_center_offset;
@@ -90,14 +98,14 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	sf::Vector2f button_position = sf::Vector2f(1.33 * level_size.x / 2.f, 2 * BLOCK_SIZE);
 
 	//Create menu title
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 150;
 	title_text->content = menu_title;
 	title_position->position.x = level_size.x / 2.f;
 	title_position->position.y = 2 * BLOCK_SIZE;
 
 	//Set up scroll window
-	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
 	scroll_window->entity_height = 2 * BLOCK_SIZE;
 	width_and_height->width_and_height = level_size;
 	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;

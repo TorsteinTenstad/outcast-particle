@@ -108,7 +108,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	}
 	if (new_level_id != level_group)
 	{
-		auto [new_id, new_ui] = level.CreateEntitiyWith<LevelMenuUI>();
+		auto [new_id, new_ui] = level.CreateEntityWith<LevelMenuUI>();
 		new_ui->at_level_id = new_level_id;
 	}
 	GenerateStatsBadges(level, ui);
@@ -126,7 +126,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 	float dot_indicator_h = 0.5 * float(BLOCK_SIZE);
 	{ // Dot indicator
-		auto [entity_id, shader, receives_button_events, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<Shader, ReceivesButtonEvents, DrawInfo, DrawPriority, WidthAndHeight, Position>();
+		auto [entity_id, shader, receives_button_events, draw_info, draw_priority, width_and_height, position] = level.CreateEntityWith<Shader, ReceivesButtonEvents, DrawInfo, DrawPriority, WidthAndHeight, Position>();
 		ui->dot_indicator_id = entity_id;
 		shader->fragment_shader_path = "shaders\\dots_indicator.frag";
 		shader->int_uniforms["n_dots"] = level_groups_->size();
@@ -138,7 +138,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 	}
 	{ // Title
-		auto [entity_id, text, draw_priority, position] = level.CreateEntitiyWith<Text, DrawPriority, Position>();
+		auto [entity_id, text, draw_priority, position] = level.CreateEntityWith<Text, DrawPriority, Position>();
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		text->size = 100;
 		text->content = GetGroupDisplayNameFromGroupName(level_group);
@@ -149,7 +149,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	for (int p : { -1, 1 })
 	{
 		auto [entity_id, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key] =
-			level.CreateEntitiyWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey>();
+			level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey>();
 
 		if (p == -1)
 		{
@@ -172,7 +172,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	// Scroll window
 	ScrollWindow* scroll_window;
 	{
-		auto [entity_id, scroll_window_local, width_and_height, position] = level.CreateEntitiyWith<ScrollWindow, WidthAndHeight, Position>();
+		auto [entity_id, scroll_window_local, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
 
 		scroll_window = scroll_window_local;
 		scroll_window->entity_height = BUTTON_HEIGHT;
@@ -209,7 +209,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			level.GetComponent<Position>(entity_id)->position = button_position;
 		}
 		{ // Text
-			auto [entity_id, text, draw_priority, shader, position] = level.CreateEntitiyWith<Text, DrawPriority, Shader, Position>();
+			auto [entity_id, text, draw_priority, shader, position] = level.CreateEntityWith<Text, DrawPriority, Shader, Position>();
 
 			scroll_window->entities.push_back(entity_id);
 			position->position = button_position;
@@ -223,7 +223,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	{ // Level preview
-		auto [entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntitiyWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
+		auto [entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntityWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();
 
 		position->position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE / 2));
 		width_and_height->width_and_height = sf::Vector2f(level.GetSize().x * LEVEL_PREVIEW_SCALE, level.GetSize().y * LEVEL_PREVIEW_SCALE);

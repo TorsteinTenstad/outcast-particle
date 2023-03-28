@@ -48,7 +48,7 @@ void GoalSystem::Update(Level& level, float dt)
 				continue;
 			}
 			level.RemoveComponents<Acceleration, ReceivedForces, Trail>(entity_id);
-			FillColor* fill_color = level.EnsureExistanceOfComponent<FillColor>(entity_id);
+			FillColor* fill_color = level.EnsureExistenceOfComponent<FillColor>(entity_id);
 
 			assert(level.HasComponents<Position>(intersecting_id));
 			assert(level.HasComponents<Radius>(intersecting_id));

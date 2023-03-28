@@ -1,5 +1,6 @@
 #pragma once
 #include "components.hpp"
+#include "entity_creation_observer.hpp"
 #include <functional>
 #include <map>
 #include <optional>
@@ -7,12 +8,22 @@
 #include <variant>
 #include <vector>
 
-class ESCScene
+class EntityCreationObserver;
+
+class ECSScene
 {
 protected:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
+protected:
+	std::vector<EntityCreationObserver*> entity_creation_observers;
+
+public:
+	void AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer);
+	void RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer);
+
+protected:
 	template <class Component>
 	std::map<int, Component>& GetComponentMap();
 
@@ -27,10 +38,10 @@ public:
 	int CreateEntityId();
 
 	template <class Component>
-	Component* EnsureExistanceOfComponent(int entity_id);
+	Component* EnsureExistenceOfComponent(int entity_id);
 
 	template <class... Component>
-	std::tuple<Component*...> EnsureExistanceOfComponents(int entity_id);
+	std::tuple<Component*...> EnsureExistenceOfComponents(int entity_id);
 
 	template <class Component>
 	Component* AddComponent(int entity_id);
@@ -65,7 +76,7 @@ public:
 	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
 
 	template <class... Component>
-	std::tuple<int, Component*...> CreateEntitiyWith();
+	std::tuple<int, Component*...> CreateEntityWith();
 
 	template <class... Component>
 	void DeleteEntitiesWith();
@@ -80,10 +91,10 @@ public:
 	int CopyEntity(int from_id);
 
 	template <class Component>
-	std::tuple<int, Component*> GetSingletonIncludeID(std::function<void(ESCScene&, int)> creation_func);
+	std::tuple<int, Component*> GetSingletonIncludeID(std::function<void(ECSScene&, int)> creation_func);
 
 	template <class Component>
-	Component* GetSingleton(std::function<void(ESCScene&, int)> creation_func);
+	Component* GetSingleton(std::function<void(ECSScene&, int)> creation_func);
 
 	template <class Component>
 	std::tuple<int, Component*> GetSingletonIncludeID();
