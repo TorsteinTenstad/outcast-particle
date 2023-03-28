@@ -41,13 +41,13 @@ uniform int n_collected = 2;
 void main()
 {
 	vec2 uv = gl_TexCoord[0].xy;
-    vec2 c_uv = uv-vec2(_wh.x/2, _wh.y/4);
+    vec2 c_uv = uv-vec2(0, _wh.y/2);
 
     vec4 color = vec4(0.4, 0.4, 0.4, 1);
 
-	color = blend(color, gem(c_uv/coin_size-vec2(-1.5,0))*vec4(vec3(1), clamp(float(n_collected)-0.f, 0.25f, 1.f)));
-	color = blend(color, gem(c_uv/coin_size-vec2(+0.0,0))*vec4(vec3(1), clamp(float(n_collected)-1.f, 0.25f, 1.f)));
-	color = blend(color, gem(c_uv/coin_size-vec2(+1.5,0))*vec4(vec3(1), clamp(float(n_collected)-2.f, 0.25f, 1.f)));
+	color = blend(color, gem(c_uv/coin_size-vec2(1.0,0))*vec4(vec3(1), clamp(float(n_collected)-0.f, 0.20f, 1.f)));
+	color = blend(color, gem(c_uv/coin_size-vec2(2.5,0))*vec4(vec3(1), clamp(float(n_collected)-1.f, 0.20f, 1.f)));
+	color = blend(color, gem(c_uv/coin_size-vec2(4.0,0))*vec4(vec3(1), clamp(float(n_collected)-2.f, 0.20f, 1.f)));
 
 	gl_FragColor = color * gl_Color;
 }
