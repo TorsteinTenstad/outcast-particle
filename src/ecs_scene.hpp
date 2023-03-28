@@ -1,5 +1,6 @@
 #pragma once
 #include "components.hpp"
+#include "entity_creation_observer.hpp"
 #include <functional>
 #include <map>
 #include <optional>
@@ -7,12 +8,22 @@
 #include <variant>
 #include <vector>
 
+class EntityCreationObserver;
+
 class ESCScene
 {
 protected:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
 
+protected:
+	std::vector<EntityCreationObserver*> entity_creation_observers;
+
+public:
+	void AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer);
+	void RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer);
+
+protected:
 	template <class Component>
 	std::map<int, Component>& GetComponentMap();
 

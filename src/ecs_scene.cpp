@@ -8,9 +8,26 @@
 
 int ESCScene::next_available_entity_id_ = 0;
 
+void ESCScene::AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
+{
+	entity_creation_observers.push_back(entity_creation_observer);
+}
+
+void ESCScene::RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
+{
+	auto it = std::find(entity_creation_observers.begin(), entity_creation_observers.end(), entity_creation_observer);
+	assert(it != entity_creation_observers.end());
+	entity_creation_observers.erase(it);
+}
+
 int ESCScene::CreateEntityId()
 {
-	return next_available_entity_id_++;
+	int new_id = next_available_entity_id_++;
+	for (auto entity_creation_observer : entity_creation_observers)
+	{
+		entity_creation_observer->Notify(new_id);
+	}
+	return new_id;
 }
 
 int ESCScene::CopyEntity(int from_id)
