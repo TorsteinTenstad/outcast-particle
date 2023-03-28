@@ -20,7 +20,7 @@ const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vecto
 
 #define DEFAULT_LEVEL_GRID_SIZE_ID 1
 
-class Level : public ESCScene
+class Level : public ECSScene
 {
 private:
 	std::string savefile_path_;

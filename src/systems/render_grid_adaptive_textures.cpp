@@ -40,7 +40,7 @@ void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subs
 		sf::RenderTexture& texture = std::get<sf::RenderTexture>(tup);
 		sf::RectangleShape& shape = std::get<sf::RectangleShape>(tup);
 		sf::Vector2u grid_size = texture.getSize();
-		Shader* shader = level.EnsureExistanceOfComponent<Shader>(entity_id);
+		Shader* shader = level.EnsureExistenceOfComponent<Shader>(entity_id);
 		shader->fragment_shader_path = fragment_shader_path;
 		shader->float_uniforms["grid_width"] = grid_size.x;
 		shader->float_uniforms["grid_height"] = grid_size.y;

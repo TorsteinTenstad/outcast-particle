@@ -6,9 +6,9 @@ void BackgroundSystem::Update(Level& level, float dt)
 	auto backgrounds = level.GetEntitiesWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
 	if (backgrounds.size() == 0)
 	{
-		backgrounds.push_back(level.CreateEntitiyWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>());
+		backgrounds.push_back(level.CreateEntityWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>());
 		level.GetComponent<DrawPriority>(std::get<int>(backgrounds.back()))->draw_priority = BACKGROUND_DRAW_PRIORITY;
-		backgrounds.push_back(level.CreateEntitiyWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>());
+		backgrounds.push_back(level.CreateEntityWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>());
 		level.GetComponent<DrawPriority>(std::get<int>(backgrounds.back()))->draw_priority = BACKGROUND_DRAW_PRIORITY;
 	}
 	assert(backgrounds.size() == 2);

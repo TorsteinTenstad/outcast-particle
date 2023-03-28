@@ -52,7 +52,7 @@ void ButtonSystem::Update(Level& level, float dt)
 			if (key == (sf::Keyboard::Escape) && pressed_this_frame)
 			{
 				level.RemoveComponents<StickyButtonDown>(entity_id);
-				auto [error_text_id, text, position, draw_priority, scheduled_delete] = level.CreateEntitiyWith<Text, Position, DrawPriority, ScheduledDelete>();
+				auto [error_text_id, text, position, draw_priority, scheduled_delete] = level.CreateEntityWith<Text, Position, DrawPriority, ScheduledDelete>();
 				text->content = "Escape can't be \n bound as key";
 				position->position = sf::Vector2f(4.5, 1) * float(BLOCK_SIZE);
 				draw_priority->draw_priority = 101;

@@ -1,7 +1,7 @@
 #include "entity_creation_observer.hpp"
 #include <iostream>
 
-EntityCreationObserver::EntityCreationObserver(ESCScene& subject, std::function<void(ESCScene&, int)> f) :
+EntityCreationObserver::EntityCreationObserver(ECSScene& subject, std::function<void(ECSScene&, int)> f) :
 	subject_(subject),
 	f_(f)
 {

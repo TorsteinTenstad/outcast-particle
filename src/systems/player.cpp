@@ -10,7 +10,7 @@
 void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 {
 	int player_i = 0;
-	for (const auto& [entity_id, player, player_behaviours, received_forces, charge, children, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Children, Shader, SoundInfo, Position>())
+	for (const auto& [entity_id, player, player_behaviors, received_forces, charge, children, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Children, Shader, SoundInfo, Position>())
 	{
 		int x_direction = 0;
 		x_direction -= cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_LEFT] ? 1 : 0;
@@ -24,25 +24,25 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 		auto switch_key = player_i == 1 ? sf::Keyboard::C : globals.key_config.PLAYER_SWITCH_CHARGE;
 		auto neutral_key = player_i == 1 ? sf::Keyboard::V : globals.key_config.PLAYER_GO_NEUTRAL;
 
-		if (!player_behaviours->is_neutral && cursor_and_keys.key_pressed_this_frame[neutral_key] && player->can_go_neutral)
+		if (!player_behaviors->is_neutral && cursor_and_keys.key_pressed_this_frame[neutral_key] && player->can_go_neutral)
 		{
-			player_behaviours->default_charge = charge->charge;
-			player_behaviours->is_neutral = true;
+			player_behaviors->default_charge = charge->charge;
+			player_behaviors->is_neutral = true;
 			charge->charge = 0;
 		}
-		if (player_behaviours->is_neutral && !cursor_and_keys.key_down[neutral_key])
+		if (player_behaviors->is_neutral && !cursor_and_keys.key_down[neutral_key])
 		{
-			charge->charge = player_behaviours->default_charge;
-			player_behaviours->is_neutral = false;
+			charge->charge = player_behaviors->default_charge;
+			player_behaviors->is_neutral = false;
 		}
-		if (cursor_and_keys.key_pressed_this_frame[switch_key] && player_behaviours->switch_key_is_up && player->can_switch_charge)
+		if (cursor_and_keys.key_pressed_this_frame[switch_key] && player_behaviors->switch_key_is_up && player->can_switch_charge)
 		{
 			sound_info->play_sound = true;
 			charge->charge = -charge->charge;
-			player_behaviours->default_charge = -player_behaviours->default_charge;
+			player_behaviors->default_charge = -player_behaviors->default_charge;
 			shader->float_uniforms["start_switch_charge_animation"] = globals.time;
 		}
-		player_behaviours->switch_key_is_up = !cursor_and_keys.key_down[switch_key];
+		player_behaviors->switch_key_is_up = !cursor_and_keys.key_down[switch_key];
 		player_i++;
 	}
 }

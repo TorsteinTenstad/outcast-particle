@@ -23,7 +23,7 @@ class BPButton
 class BPMenuNavigationButton : public BPButton
 {
 	OnReleasedThisFrame on_released_this_frame = {};
-	MenuNavigatable menu_navigatable = {};
+	MenuNavigable menu_navigable = {};
 };
 
 class BPMenuNavigator
@@ -99,7 +99,7 @@ class BPPlayer : public BPEditableEntity
 	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
 	Face face = {};
 	ForceVisualization force_visualization = {};
-	PlayerBehaviors player_behaviours = {};
+	PlayerBehaviors player_behaviors = {};
 
 	// [Serialize]
 	Charge charge = { 10000 };

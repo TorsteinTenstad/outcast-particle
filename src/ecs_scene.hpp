@@ -10,7 +10,7 @@
 
 class EntityCreationObserver;
 
-class ESCScene
+class ECSScene
 {
 protected:
 	static int next_available_entity_id_;
@@ -38,10 +38,10 @@ public:
 	int CreateEntityId();
 
 	template <class Component>
-	Component* EnsureExistanceOfComponent(int entity_id);
+	Component* EnsureExistenceOfComponent(int entity_id);
 
 	template <class... Component>
-	std::tuple<Component*...> EnsureExistanceOfComponents(int entity_id);
+	std::tuple<Component*...> EnsureExistenceOfComponents(int entity_id);
 
 	template <class Component>
 	Component* AddComponent(int entity_id);
@@ -76,7 +76,7 @@ public:
 	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
 
 	template <class... Component>
-	std::tuple<int, Component*...> CreateEntitiyWith();
+	std::tuple<int, Component*...> CreateEntityWith();
 
 	template <class... Component>
 	void DeleteEntitiesWith();
@@ -91,10 +91,10 @@ public:
 	int CopyEntity(int from_id);
 
 	template <class Component>
-	std::tuple<int, Component*> GetSingletonIncludeID(std::function<void(ESCScene&, int)> creation_func);
+	std::tuple<int, Component*> GetSingletonIncludeID(std::function<void(ECSScene&, int)> creation_func);
 
 	template <class Component>
-	Component* GetSingleton(std::function<void(ESCScene&, int)> creation_func);
+	Component* GetSingleton(std::function<void(ECSScene&, int)> creation_func);
 
 	template <class Component>
 	std::tuple<int, Component*> GetSingletonIncludeID();

@@ -6,21 +6,21 @@
 #include <optional>
 #include <string>
 
-int ESCScene::next_available_entity_id_ = 0;
+int ECSScene::next_available_entity_id_ = 0;
 
-void ESCScene::AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
+void ECSScene::AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
 {
 	entity_creation_observers.push_back(entity_creation_observer);
 }
 
-void ESCScene::RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
+void ECSScene::RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
 {
 	auto it = std::find(entity_creation_observers.begin(), entity_creation_observers.end(), entity_creation_observer);
 	assert(it != entity_creation_observers.end());
 	entity_creation_observers.erase(it);
 }
 
-int ESCScene::CreateEntityId()
+int ECSScene::CreateEntityId()
 {
 	int new_id = next_available_entity_id_++;
 	for (auto entity_creation_observer : entity_creation_observers)
@@ -30,7 +30,7 @@ int ESCScene::CreateEntityId()
 	return new_id;
 }
 
-int ESCScene::CopyEntity(int from_id)
+int ECSScene::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();
 	for (auto& [component_type_id, component_map_variant] : components_)
@@ -49,7 +49,7 @@ int ESCScene::CopyEntity(int from_id)
 	return to_id;
 }
 
-void ESCScene::DeleteEntity(std::optional<int> id)
+void ECSScene::DeleteEntity(std::optional<int> id)
 {
 	if (id.has_value())
 	{
@@ -57,7 +57,7 @@ void ESCScene::DeleteEntity(std::optional<int> id)
 	}
 }
 
-void ESCScene::DeleteEntity(int id)
+void ECSScene::DeleteEntity(int id)
 {
 	if (HasComponents<Children>(id))
 	{

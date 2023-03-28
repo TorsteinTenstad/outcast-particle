@@ -6,7 +6,7 @@ const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPGoal, BPStaticParticle, BPLas
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
 void OpenBlueprintMenu(Level& level)
 {
-	auto e = EntityCreationObserver(level, [](ESCScene& level, int id) { std::cout << id << "\n"; });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { std::cout << id << "\n"; });
 
 	int i = 0;
 	int menu_background_id = level.CreateEntityId();

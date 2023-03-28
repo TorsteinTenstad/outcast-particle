@@ -434,7 +434,7 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
             AddComponent<Position>(entity_id, {});
             AddComponent<OnReleasedThisFrame>(entity_id, {});
-            AddComponent<MenuNavigatable>(entity_id, {});
+            AddComponent<MenuNavigable>(entity_id, {});
         }
         
         if (tag == "BPMenuNavigator")
@@ -682,7 +682,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
             AddComponent<Position>(entity_id, {});
             AddComponent<OnReleasedThisFrame>(entity_id, {});
-            AddComponent<MenuNavigatable>(entity_id, {});
+            AddComponent<MenuNavigable>(entity_id, {});
             AddComponent<Tag>(entity_id, {"BPMenuNavigationButton"});
             break;
         case BPMenuNavigator:

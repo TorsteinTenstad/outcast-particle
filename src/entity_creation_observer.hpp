@@ -2,16 +2,16 @@
 #include "ecs_scene.hpp"
 #include <functional>
 
-class ESCScene;
+class ECSScene;
 
 class EntityCreationObserver
 {
 private:
-	std::function<void(ESCScene&, int)> f_;
-	ESCScene& subject_;
+	std::function<void(ECSScene&, int)> f_;
+	ECSScene& subject_;
 
 public:
-	EntityCreationObserver(ESCScene& subject, std::function<void(ESCScene&, int)> f);
+	EntityCreationObserver(ECSScene& subject, std::function<void(ECSScene&, int)> f);
 	~EntityCreationObserver();
 	void Notify(int created_id);
 };
