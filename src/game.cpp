@@ -21,7 +21,8 @@
 #include <string>
 #include <thread>
 
-Game::Game()
+Game::Game() :
+	active_level_(Level())
 {
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();

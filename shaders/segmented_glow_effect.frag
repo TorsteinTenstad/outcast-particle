@@ -79,5 +79,5 @@ void main()
 	vec4 color = blend(glow_contribution, gem_contribution);
 	color.a *= 1-animation_t;
 	gl_FragColor = color;
-	gl_FragColor = gem_contribution;
+	//gl_FragColor = gem_contribution;
 }
