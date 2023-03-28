@@ -51,7 +51,7 @@ entities_handle CreateNavigatorButton(Level& level, sf::Vector2f position, std::
 {
 	auto [ids, height] = CreateMenuButton(level, position, button_function, button_text);
 	level.AddComponent<ShortcutKey>(ids[0])->key = shortcut_key;
-	level.AddComponent<MenuNavigatable>(ids[0]);
+	level.AddComponent<MenuNavigable>(ids[0]);
 
 	return { ids, height };
 }

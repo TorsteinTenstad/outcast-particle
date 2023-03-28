@@ -187,37 +187,27 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	// Level buttons
-	std::vector<std::function<void(void)>> button_functions = {};
-	std::vector<std::string> button_texts = {};
 	int i = 0;
 	for (auto& level_id : (*level_groups_).at(level_group))
 	{
 
 		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
 		{ // Button
-			int entity_id = level.AddBlueprint(BPMenuNavigationButton);
+			auto [ids, height] = CreateNavigatorButton(level, button_position, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), "", sf::Keyboard::Unknown);
 			if (level_id == ui->at_level_id)
 			{
-				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = entity_id;
+				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = ids[0];
 			}
-			ui->button_entity_ids.push_back(entity_id);
-			scroll_window->entities.push_back(entity_id);
+			ui->button_entity_ids.push_back(ids[0]);
+			scroll_window->entities.push_back(ids[0]);
 
-			level.GetComponent<Shader>(entity_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-			level.GetComponent<OnReleasedThisFrame>(entity_id)->func = std::bind(&LevelMenuSystem::EnterLevel, this, level_id);
-			level.GetComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
-			level.GetComponent<Position>(entity_id)->position = button_position;
+			level.GetComponent<WidthAndHeight>(ids[0])->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
+			level.GetComponent<Shader>(ids[0])->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 		}
 		{ // Text
-			auto [entity_id, text, draw_priority, shader, position] = level.CreateEntityWith<Text, DrawPriority, Shader, Position>();
-
-			scroll_window->entities.push_back(entity_id);
-			position->position = button_position;
-			shader->fragment_shader_path = "shaders\\scroll.frag";
-			text->content = GetLevelDisplayNameFromId(level_id);
-			text->size = 75;
-			text->apply_shader = true;
-			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
+			auto [ids, height] = CreateScrollingText(level, button_position, GetLevelDisplayNameFromId(level_id));
+			level.GetComponent<Text>(ids[0])->size = 75;
+			scroll_window->entities.push_back(ids[0]);
 		}
 		i++;
 	}
