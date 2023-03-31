@@ -255,7 +255,7 @@ void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
 		std::map<std::string, float> i_coin_record = (*level_completion_time_records_).at(i);
 		if (i_coin_record.count(ui->at_level_id) < 1)
 		{
-			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 50;
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 0;
 			level.GetComponent<Text>(ui->stats_block_ids[i])->content = "";
 		}
 		else
