@@ -82,6 +82,15 @@ entities_handle CreateOptionsButton(Level& level, sf::Vector2f position, std::fu
 	return { ids, height };
 }
 
+entities_handle CreateTimerButton(Level& level, sf::Vector2f position)
+{
+	auto [ids, size] = CreateButtonTemplate(level, position);
+	level.AddComponents<Text, TimerButton>(ids[0]);
+	level.GetComponent<WidthAndHeight>(ids[0])->width_and_height = sf::Vector2f(5 * BLOCK_SIZE, 1 * BLOCK_SIZE);
+	level.GetComponent<FillColor>(ids[0])->color.a = 50;
+	return { ids, size };
+}
+
 //CreateButtonList is in a out-phasing process. Use VerticalEntityLayout for a more flexible variant.
 entities_handle CreateButtonList(Level& level, sf::Vector2f position, std::vector<std::function<void(void)>> button_functions, std::vector<std::string> button_texts, std::vector<sf::Keyboard::Key> shortcut_keys, float x_scale, float y_scale, UiOrigin ui_origin)
 {
@@ -175,7 +184,7 @@ entities_handle CreateSliderButton(Level& level, sf::Vector2f position, int* f)
 	return { ids, height };
 }
 
-entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha)
+entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text)
 {
 	int entity_id = level.CreateEntityId();
 
@@ -186,6 +195,7 @@ entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_n
 	level.AddComponent<Position>(entity_id)->position = position;
 	level.AddComponent<FillColor>(entity_id)->color.a = alpha;
 	level.AddComponent<Text>(entity_id)->size = 120;
+	level.GetComponent<Text>(entity_id)->content = text;
 	level.AddComponent<DrawPriority>(entity_id)->draw_priority = 100;
 
 	return { std::vector { entity_id }, level.GetComponent<WidthAndHeight>(entity_id)->width_and_height };

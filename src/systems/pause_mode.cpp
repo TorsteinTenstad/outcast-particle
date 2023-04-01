@@ -2,8 +2,11 @@
 #include "entity_creation.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
+#include "utils/string_manip.hpp"
+#include < sstream>
 #include <algorithm>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <numeric>
 #include <string>
@@ -78,7 +81,11 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		if (level_state == COMPLETED && !is_in_level_editing_)
 		{
 			menu_title = "Level Complete";
-			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter, 255);
+
+			std::stringstream ss;
+			ss << std::fixed << std::setprecision(2);
+			ss << level.GetSingleton<LevelCompletionTimer>()->duration;
+			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter, 255, RightShiftString(ss.str(), 13));
 			entities_creators.push_back(create_badge_function);
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));

@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "components/level_menu.hpp"
+#include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "systems/coin.hpp"
 #include "systems/draw.hpp"
@@ -56,6 +57,7 @@ Game::Game() :
 	RegisterGameSystem<IntersectionSystem>();
 	RegisterGameSystem<CollisionSystem>();
 	RegisterGameSystem<GoalSystem>();
+	RegisterGameSystem<TimerSystem>();
 	RegisterGameSystem<KillOnIntersectionSystem>();
 	RegisterGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
@@ -143,6 +145,7 @@ Level& Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_.LoadFromFile(level_id);
+		CreateTimerButton(active_level_, sf::Vector2f(active_level_.GetSize().x - 2.5 * BLOCK_SIZE, BLOCK_SIZE));
 		if (globals.general_config.use_ready_mode)
 		{
 			active_level_.SetMode(READY_MODE);

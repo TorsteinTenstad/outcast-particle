@@ -42,3 +42,6 @@ public:
 	int slider_button_id;
 	int slider_bar_id;
 };
+
+class TimerButton
+{};

@@ -104,6 +104,7 @@ typedef std::variant<
 	std::map<int, Text>,
 	std::map<int, TextPopup>,
 	std::map<int, TextPopupSpawner>,
+	std::map<int, TimerButton>,
 	std::map<int, Trail>,
 	std::map<int, Velocity>,
 	std::map<int, Wall>,

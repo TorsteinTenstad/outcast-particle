@@ -228,7 +228,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<entities_creator> entities_creator;
 		for (int i = 0; i < 4; i++)
 		{
-			entities_creator.push_back(std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, i, 50));
+			entities_creator.push_back(std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, i, 50, ""));
 		}
 		auto [ids, heights] = VerticalEntityLayout(level, badge_center_positions, entities_creator, BLOCK_SIZE / 4);
 		ui->stats_block_ids = ids;
