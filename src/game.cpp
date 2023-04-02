@@ -58,6 +58,7 @@ Game::Game() :
 	RegisterGameSystem<CollisionSystem>();
 	RegisterGameSystem<GoalSystem>();
 	RegisterGameSystem<TimerSystem>();
+	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<KillOnIntersectionSystem>();
 	RegisterGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
