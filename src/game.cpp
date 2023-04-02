@@ -47,11 +47,11 @@ Game::Game() :
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
-	RegisterGameSystem<SegmentedGlowEffectSystem>();
+	RegisterGameSystem<ScreenWideShaderEffectsSystem>();
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
-	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_);
+	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_, &level_completion_time_records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<IntersectionSystem>();
@@ -205,7 +205,7 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 	level.LoadFromFile(level_id);
 	GetGameSystem<BackgroundSystem>().Update(level, 0);
 	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);
-	GetGameSystem<SegmentedGlowEffectSystem>().Update(level, 0);
+	GetGameSystem<ScreenWideShaderEffectsSystem>().Update(level, 0);
 	GetGameSystem<PlayerSystem>().Update(level, 0);
 	GetGameSystem<FaceSystem>().Update(level, 0);
 	GetGameSystem<RenderGridAdaptiveTexturesSystem>().Update(level, 0);

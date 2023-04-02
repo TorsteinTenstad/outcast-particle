@@ -185,7 +185,7 @@ entities_handle CreateSliderButton(Level& level, sf::Vector2f position, int* f)
 	return { ids, height };
 }
 
-entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text)
+entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle)
 {
 	int entity_id = level.CreateEntityId();
 
@@ -198,11 +198,16 @@ entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_n
 	level.AddComponent<Text>(entity_id)->size = 120;
 	level.GetComponent<Text>(entity_id)->content = text;
 	level.AddComponent<DrawPriority>(entity_id)->draw_priority = 100;
+	if (twinkle)
+	{
+		level.AddComponent<TwinkleEffect>(entity_id);
+		level.AddComponent<Children>(entity_id);
+	}
 
 	return { std::vector { entity_id }, level.GetComponent<WidthAndHeight>(entity_id)->width_and_height };
 }
 
-int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority)
+int CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority)
 {
 	int id = level.CreateEntityId();
 	level.AddComponent<Position>(id)->position = level.GetSize() / 2.f;

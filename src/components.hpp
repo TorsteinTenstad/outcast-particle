@@ -11,7 +11,6 @@
 #include "components/edit_mode.hpp"
 #include "components/edit_mode_ui.hpp"
 #include "components/editable.hpp"
-#include "components/force_visualization.hpp"
 #include "components/goal.hpp"
 #include "components/grid_adaptive_textures.hpp"
 #include "components/intersection.hpp"
@@ -24,6 +23,7 @@
 #include "components/player.hpp"
 #include "components/ready_screen.hpp"
 #include "components/scheduled_delete.hpp"
+#include "components/screen_wide_shader_effects.hpp"
 #include "components/scroll.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
@@ -96,6 +96,7 @@ typedef std::variant<
 	std::map<int, Selected>,
 	std::map<int, Shader>,
 	std::map<int, SliderButton>,
+	std::map<int, TwinkleEffect>,
 	std::map<int, StickyButton>,
 	std::map<int, StickyButtonDown>,
 	std::map<int, MenuDelayTimer>,
