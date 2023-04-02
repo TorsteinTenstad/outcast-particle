@@ -15,7 +15,7 @@ entities_handle CreateTimerButton(Level& level, sf::Vector2f position);
 entities_handle CreateOptionsButton(Level& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
 entities_handle CreateSliderButton(Level& level, sf::Vector2f position, int* f);
 entities_handle CreateScrollingText(Level& level, sf::Vector2f position, std::string text);
-entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text);
-int CreateScreenwideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
+entities_handle CreateStatsBadge(Level& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle);
+int CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 
 #include "entity_creation.tpp"

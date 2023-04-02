@@ -37,14 +37,6 @@ void Game::GoToMainMenu()
 	active_level_.GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
 	active_level_.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
 	active_level_.GetComponent<Charge>(player_id)->charge *= -1;
-
-	{
-		auto [entity_id, shader, draw_info, draw_priority, width_and_height, position] = active_level_.CreateEntityWith<Shader, DrawInfo, DrawPriority, WidthAndHeight, Position>();
-		draw_priority->draw_priority = 200;
-		position->position = active_level_.GetSize() / 2.f + sf::Vector2f(400, -400);
-		width_and_height->width_and_height = sf::Vector2f(6, 4) * float(BLOCK_SIZE);
-		shader->fragment_shader_path = "shaders\\twinkle.frag";
-	}
 }
 
 void Game::GoToLevelMenu()

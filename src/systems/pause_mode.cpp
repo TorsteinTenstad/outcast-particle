@@ -13,10 +13,14 @@
 
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
 
-void PauseMode::Give(std::function<void(std::string)> set_level, const std::map<std::string, std::vector<std::string>>* level_groups)
+void PauseMode::Give(
+	std::function<void(std::string)> set_level,
+	const std::map<std::string, std::vector<std::string>>* level_groups,
+	const std::map<int, std::map<std::string, float>>* level_completion_time_records)
 {
 	set_level_ = set_level;
 	level_groups_ = level_groups;
+	level_completion_time_records_ = level_completion_time_records;
 }
 void PauseMode::Update(Level& level, float dt)
 {
@@ -82,10 +86,13 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		{
 			menu_title = "Level Complete";
 
+			float duration = level.GetSingleton<LevelCompletionTimer>()->duration;
+			int coin_count = level.GetSingleton<CoinCounter>()->coin_counter;
+			bool is_new_record = duration == level_completion_time_records_->at(coin_count).at(active_level_id_);
 			std::stringstream ss;
 			ss << std::fixed << std::setprecision(2);
-			ss << level.GetSingleton<LevelCompletionTimer>()->duration;
-			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, level.GetSingleton<CoinCounter>()->coin_counter, 255, RightShiftString(ss.str(), 13));
+			ss << duration;
+			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, coin_count, 255, RightShiftString(ss.str(), 13), is_new_record);
 			entities_creators.push_back(create_badge_function);
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));

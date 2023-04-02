@@ -14,11 +14,11 @@ void ForceVisualizationSystem::Update(Level& level, float dt)
 	for (const auto& [entity_id, force_visualization, children, radius, player_charge, draw_priority, player_position] : level.GetEntitiesWith<ForceVisualization, Children, Radius, Charge, DrawPriority, Position>())
 	{
 		std::function<int(void)> child_creation_func = [&level, active_level_id = active_level_id_, draw_priority = draw_priority]() {
-			int entity_id = CreateScreenwideFragmentShaderEntity(level, "shaders\\force.frag", 9);
+			int entity_id = CreateScreenWideFragmentShaderEntity(level, "shaders\\force.frag", 9);
 			MakeFadeIntoLevel(level, entity_id, active_level_id);
 			return entity_id;
 		};
-		int child_id = EnsureExistanceOfChildEntity<ForceVisualization>(children, child_creation_func);
+		int child_id = EnsureExistenceOfChildEntity<ForceVisualization>(children, child_creation_func);
 		Shader* shader = level.GetComponent<Shader>(child_id);
 
 		shader->vec_uniforms["player_pos"] = player_position->position;

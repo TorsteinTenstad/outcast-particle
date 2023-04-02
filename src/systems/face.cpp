@@ -20,7 +20,7 @@ void FaceSystem::Update(Level& level, float dt)
 			return entity_id;
 		};
 
-		int child_id = EnsureExistanceOfChildEntity<Face>(children, create_face);
+		int child_id = EnsureExistenceOfChildEntity<Face>(children, create_face);
 		level.GetComponent<DrawInfo>(child_id)->image_path = face->image_path;
 		level.GetComponent<Radius>(child_id)->radius = radius->radius;
 		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity_id))
