@@ -145,7 +145,10 @@ Level& Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_.LoadFromFile(level_id);
-		CreateTimerButton(active_level_, sf::Vector2f(active_level_.GetSize().x - 2.5 * BLOCK_SIZE, BLOCK_SIZE));
+		if (globals.general_config.show_timer)
+		{
+			CreateTimerButton(active_level_, sf::Vector2f(active_level_.GetSize().x - 2.5 * BLOCK_SIZE, BLOCK_SIZE));
+		}
 		if (globals.general_config.use_ready_mode)
 		{
 			active_level_.SetMode(READY_MODE);

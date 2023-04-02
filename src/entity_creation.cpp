@@ -77,6 +77,7 @@ entities_handle CreateOptionsButton(Level& level, sf::Vector2f position, std::fu
 
 	auto [ids, height] = CreateMenuButton(level, position, on_click, "");
 	auto [button_text_id, button_text_height] = CreateScrollingText(level, position, button_text);
+	level.GetComponent<Shader>(ids[0])->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	level.AddComponent<BinaryOptionsButton>(ids[0])->button_text = &level.GetComponent<Text>(button_text_id[0])->content;
 	ids.push_back(button_text_id[0]);
 	return { ids, height };

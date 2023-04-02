@@ -18,6 +18,9 @@ void SerializeComponent(const GeneralConfig* c, std::string& str_rep)
 	str_rep += "use_ready_mode=";
 	str_rep += ToString(c->use_ready_mode);
 	str_rep += ";";
+	str_rep += "show_timer=";
+	str_rep += ToString(c->show_timer);
+	str_rep += ";";
 	str_rep += "sound_volume=";
 	str_rep += ToString(c->sound_volume);
 	str_rep += "}";
@@ -42,6 +45,10 @@ void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "use_ready_mode")
         {
             FromString(c->use_ready_mode, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "show_timer")
+        {
+            FromString(c->show_timer, statement_parts[1]);
         }
         else if (statement_parts[0] == "sound_volume")
         {
