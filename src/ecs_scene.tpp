@@ -94,21 +94,30 @@ std::tuple<Component*...> ECSScene::RawGetComponents(int entity_id)
 }
 
 template <class Component>
+void ECSScene::DeleteChildEntitiesOwnedByComponent(int entity_id)
+{
+	Children* children = RawGetComponent<Children>(entity_id);
+	if (children == nullptr)
+	{
+		return;
+	}
+	auto& it = children->ids_owned_by_component.find(typeid(Component));
+	if (it == children->ids_owned_by_component.end())
+	{
+		return;
+	}
+	for (int owned_entity : it->second)
+	{
+		DeleteEntity(owned_entity);
+	}
+	children->ids_owned_by_component.erase(it);
+}
+
+template <class Component>
 bool ECSScene::RemoveComponent(int entity_id)
 {
-	auto& m = GetComponentMap<Component>();
-	if (Children* children = RawGetComponent<Children>(entity_id))
-	{
-		auto& it = children->ids_owned_by_component.find(typeid(Component));
-		if (it != children->ids_owned_by_component.end())
-		{
-			for (int owned_entity : it->second)
-			{
-				DeleteEntity(owned_entity);
-			}
-		}
-	}
-	return m.erase(entity_id) > 0;
+	DeleteChildEntitiesOwnedByComponent<Component>(entity_id);
+	return GetComponentMap<Component>().erase(entity_id) > 0;
 }
 
 template <class... Component>
@@ -176,8 +185,8 @@ void ECSScene::DeleteEntitiesWith()
 	auto entities = GetEntitiesWith<Component...>();
 	for (auto tup : entities)
 	{
-		int entiy_id = std::get<0>(tup);
-		DeleteEntity(entiy_id);
+		int entity_id = std::get<0>(tup);
+		DeleteEntity(entity_id);
 	}
 }
 
@@ -219,5 +228,9 @@ Component* ECSScene::GetSingleton()
 template <class Component>
 void ECSScene::ClearComponent()
 {
+	for (auto [entity_id, _] : GetComponentMap<Component>())
+	{
+		DeleteChildEntitiesOwnedByComponent<Component>(entity_id);
+	}
 	GetComponentMap<Component>().clear();
 }

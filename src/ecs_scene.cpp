@@ -35,15 +35,18 @@ int ECSScene::CopyEntity(int from_id)
 	int to_id = CreateEntityId();
 	for (auto& [component_type_id, component_map_variant] : components_)
 	{
-		if (component_type_id == typeid(Children))
-		{
-			continue;
-		}
-		std::visit([from_id, to_id](auto& component_map) {
-			if (component_map.count(from_id) != 0)
+		std::visit([from_id, to_id, component_type_id = component_type_id](auto& component_map) {
+			if (component_map.count(from_id) == 0)
 			{
-				component_map.emplace(to_id, component_map[from_id]);
-			} },
+				return;
+			}
+			if (component_type_id == typeid(Children)) // We do not copy children entities, but an empty children component gets added
+			{
+				component_map[to_id];
+				return;
+			}
+			component_map.emplace(to_id, component_map.at(from_id));
+		},
 			component_map_variant);
 	}
 	return to_id;
@@ -59,9 +62,9 @@ void ECSScene::DeleteEntity(std::optional<int> id)
 
 void ECSScene::DeleteEntity(int id)
 {
-	if (HasComponents<Children>(id))
+	if (Children* children = RawGetComponent<Children>(id))
 	{
-		for (auto& [component_type_id, child_ids] : GetComponent<Children>(id)->ids_owned_by_component)
+		for (auto& [component_type_id, child_ids] : children->ids_owned_by_component)
 		{
 			for (auto& child_id : child_ids)
 			{
