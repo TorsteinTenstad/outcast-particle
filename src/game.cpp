@@ -13,7 +13,6 @@
 #include "systems/render_text.hpp"
 #include "systems/render_trail.hpp"
 #include "systems/sound_system.hpp"
-#include "systems/timer.hpp"
 #include "userdata_storage.hpp"
 #include "utils/level_id.hpp"
 #include <chrono>
@@ -58,7 +57,7 @@ Game::Game() :
 	RegisterGameSystem<IntersectionSystem>();
 	RegisterGameSystem<CollisionSystem>();
 	RegisterGameSystem<GoalSystem>();
-	RegisterGameSystem<TimerSystem>().Give(&active_level_id_);
+	RegisterGameSystem<TimerSystem>();
 	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<KillOnIntersectionSystem>();
 	RegisterGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);

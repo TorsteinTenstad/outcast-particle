@@ -1,19 +1,14 @@
 #pragma once
-#include "systems/timer.hpp"
 #include "entity_creation.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/level_id.hpp"
 #include "utils/string_parsing.hpp"
 #include <iomanip>
 #include <sstream>
 
-void TimerSystem::Give(const std::string* level_id)
-{
-	level_id_ = level_id;
-}
-
 void TimerSystem::Update(Level& level, float dt)
 {
-	if (!globals.general_config.show_timer || IsMenu(*level_id_))
+	if (!globals.general_config.show_timer || IsMenu(active_level_id_))
 	{
 		return;
 	}
