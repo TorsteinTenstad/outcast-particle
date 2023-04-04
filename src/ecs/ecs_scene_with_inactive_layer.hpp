@@ -24,7 +24,7 @@ private:
 				}
 			}
 		}
-		MoveAllEntriesAtKey(entity_id, from_container, to_container);
+		MoveAllComponentsAtKey(entity_id, from_container, to_container);
 	}
 
 public:
@@ -35,5 +35,23 @@ public:
 	void DeactivateEntity(int entity_id)
 	{
 		RecursiveMoveEntityActiveState(entity_id, components_, inactive_entities.components_);
+	}
+
+	template <class Component>
+	void ActivateComponent(int entity_id)
+	{
+		assert(!inactive_entities.HasComponents<Children>(entity_id)); //Activating/Deactivating components on entities that have children is not supported as of now.
+		assert(inactive_entities.HasComponents<Component>(entity_id));
+		std::type_index type_index = typeid(Component);
+		MoveComponentAtKey(entity_id, type_index, inactive_entities.components_.at(type_index), components_);
+	}
+
+	template <class Component>
+	void DeactivateComponent(int entity_id)
+	{
+		assert(!HasComponents<Children>(entity_id)); //Activating/Deactivating components on entities that have children is not supported as of now.
+		assert(HasComponents<Component>(entity_id));
+		std::type_index type_index = typeid(Component);
+		MoveComponentAtKey(entity_id, type_index, components_.at(type_index), inactive_entities.components_);
 	}
 };
