@@ -193,21 +193,21 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
 		{ // Button
-			auto [ids, height] = CreateNavigatorButton(level, button_position, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), "", sf::Keyboard::Unknown);
+			auto [id, size] = CreateNavigatorButton(level, button_position, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), "", sf::Keyboard::Unknown);
 			if (level_id == ui->at_level_id)
 			{
-				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = ids[0];
+				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = id;
 			}
-			ui->button_entity_ids.push_back(ids[0]);
-			scroll_window->entities.push_back(ids[0]);
+			ui->button_entity_ids.push_back(id);
+			scroll_window->entities.push_back(id);
 
-			level.GetComponent<WidthAndHeight>(ids[0])->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
-			level.GetComponent<Shader>(ids[0])->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.GetComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
+			level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 		}
 		{ // Text
-			auto [ids, height] = CreateScrollingText(level, button_position, GetLevelDisplayNameFromId(level_id));
-			level.GetComponent<Text>(ids[0])->size = 75;
-			scroll_window->entities.push_back(ids[0]);
+			auto [id, size] = CreateScrollingText(level, button_position, GetLevelDisplayNameFromId(level_id));
+			level.GetComponent<Text>(id)->size = 75;
+			scroll_window->entities.push_back(id);
 		}
 		i++;
 	}
@@ -228,7 +228,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<entities_creator> entities_creator;
 		for (int i = 0; i < 4; i++)
 		{
-			entities_creator.push_back(std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, i, 50, "", false));
+			entities_creator.push_back(AdaptToEntitiesCreator(std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, i, 50, "", false)));
 		}
 		auto [ids, heights] = VerticalEntityLayout(level, badge_center_positions, entities_creator, BLOCK_SIZE / 4);
 		ui->stats_block_ids = ids;

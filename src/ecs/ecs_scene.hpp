@@ -97,10 +97,10 @@ public:
 	int CopyEntity(int from_id);
 
 	template <class Component>
-	std::tuple<int, Component*> GetSingletonIncludeID(std::function<void(ECSScene&, int)> creation_func);
+	std::tuple<int, Component*> GetSingletonIncludeID(std::function<int(ECSScene&)> creation_func);
 
 	template <class Component>
-	Component* GetSingleton(std::function<void(ECSScene&, int)> creation_func);
+	Component* GetSingleton(std::function<int(ECSScene&)> creation_func);
 
 	template <class Component>
 	std::tuple<int, Component*> GetSingletonIncludeID();

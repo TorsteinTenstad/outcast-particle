@@ -71,7 +71,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	level.AddComponent<PauseMenuItem>(background_blur_id);
 
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
-		entities_creators.push_back(std::bind(&CreateNavigatorButton, std::ref(level), std::placeholders::_1, button_function, button_text, shortcut_key));
+		entities_creators.push_back(AdaptToEntitiesCreator(std::bind(&CreateNavigatorButton, std::ref(level), std::placeholders::_1, button_function, button_text, shortcut_key)));
 	};
 
 	if (previous_mode == PLAY_MODE)
@@ -91,8 +91,8 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			bool is_new_record = duration == level_completion_time_records_->at(coin_count).at(active_level_id_);
 			std::stringstream ss;
 
-			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, coin_count, 255, RightShiftString(FloatToStringWithPrecision(duration, 2), 13), is_new_record);
-			entities_creators.push_back(create_badge_function);
+			entity_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, coin_count, 255, RightShiftString(FloatToStringWithPrecision(duration, 2), 13), is_new_record);
+			entities_creators.push_back(AdaptToEntitiesCreator(create_badge_function));
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
 			auto active_level_index = std::find(level_group.begin(), level_group.end(), active_level_id_);
@@ -128,8 +128,8 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	int navigator_id = level.AddBlueprint(BPMenuNavigator);
 	level.AddComponent<PauseMenuItem>(navigator_id);
 
-	entities_creator title_func = std::bind(&CreateText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
-	entities_creators.insert(entities_creators.begin(), title_func);
+	entity_creator title_func = std::bind(&CreateText, std::ref(level), std::placeholders::_1, menu_title, unsigned(240));
+	entities_creators.insert(entities_creators.begin(), AdaptToEntitiesCreator(title_func));
 
 	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_creators, BLOCK_SIZE);
 	for (auto id : ids)

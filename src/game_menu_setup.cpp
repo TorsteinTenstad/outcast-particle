@@ -110,7 +110,7 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 		auto [button_ids, button_height] = create_buttons[i](button_position);
 		sf::Vector2f description_position = sf::Vector2f(level_size.x - button_position.x, button_position.y);
 		auto [description_id, description_height] = CreateScrollingText(level, description_position, description_texts[i]);
-		scroll_window->entities.insert(scroll_window->entities.end(), { description_id[0] });
+		scroll_window->entities.insert(scroll_window->entities.end(), { description_id });
 		scroll_window->entities.insert(scroll_window->entities.end(), button_ids.begin(), button_ids.end());
 	}
 

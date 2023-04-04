@@ -15,14 +15,9 @@ void TimerSystem::Update(Level& level, float dt)
 	}
 
 	sf::Vector2f level_size = level.GetSize();
-	auto [id, timer_button] = level.GetSingletonIncludeID<TimerButton>([level_size](ECSScene& level, int entity_id) {
-		level.AddComponent<DrawPriority>(entity_id)->draw_priority = 100;
-		level.AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-		level.AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-		level.AddComponent<Position>(entity_id)->position = sf::Vector2f(level_size.x - 2.5 * BLOCK_SIZE, 0.5 * BLOCK_SIZE);
-		level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(5 * BLOCK_SIZE, 1 * BLOCK_SIZE);
-		level.AddComponent<FillColor>(entity_id)->color.a = 50;
-		level.AddComponent<Text>(entity_id);
+	auto [id, timer_button] = level.GetSingletonIncludeID<TimerButton>([level_size](ECSScene& level) {
+		auto [entity_id, _] = CreateTimerButton(level, sf::Vector2f(level_size.x - 2.5 * BLOCK_SIZE, 0.5 * BLOCK_SIZE));
+		return entity_id;
 	});
 	level.GetComponent<Text>(id)->content = FloatToStringWithPrecision(level.GetSingleton<LevelCompletionTimer>()->duration, 3);
 }

@@ -14,7 +14,8 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 	sf::Vector2f level_size = level.GetSize();
 	float level_scale = level.GetScale();
 
-	level.GetSingleton<ReadyScreen>([&level_size, &level_scale](ECSScene& level, int entity_id) {
+	level.GetSingleton<ReadyScreen>([&level_size, &level_scale](ECSScene& level) {
+		int entity_id = level.CreateEntityId();
 		level.AddComponent<DrawInfo>(entity_id)->image_path = "content\\textures\\transparent.png";
 		level.AddComponent<DrawPriority>(entity_id)->draw_priority = UI_BASE_DRAW_PRIORITY + 5;
 		level.AddComponent<Position>(entity_id)->position = level_size / 2.f;
@@ -28,6 +29,7 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 		AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(entity_id);
 		animated_opacity->animation_func = [](float t) { return sf::Uint8(255 * Smoothstep(0.5 * std::cos(PI * t) + 0.5)); };
 		animated_opacity->start_time = globals.time;
+		return entity_id;
 	});
 
 	auto conditionaly_enter_play_mode = [&level](bool enter) {
