@@ -9,8 +9,10 @@ typedef std::function<entity_handle(sf::Vector2f)> entity_creator;
 typedef std::function<entities_handle(sf::Vector2f)> entities_creator;
 
 entities_creator AdaptToEntitiesCreator(entity_creator entity_creator);
+entities_handle AdaptToEntitiesHandle(entity_handle entity_handle);
 
 entities_handle VerticalEntityLayout(Level& level, sf::Vector2f position, std::vector<entities_creator> entities_creators, float spacing);
+entities_handle VerticalEntityLayout(Level& level, sf::Vector2f position, std::vector<entities_handle> entities_creators, float spacing);
 entity_handle CreateText(Level& level, sf::Vector2f position, std::string text, unsigned int text_size);
 entity_handle CreateMenuButton(Level& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
 entity_handle CreateNavigatorButton(Level& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key);

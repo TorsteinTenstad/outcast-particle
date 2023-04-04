@@ -12,6 +12,12 @@ entities_creator AdaptToEntitiesCreator(entity_creator entity_creator)
 	};
 }
 
+entities_handle AdaptToEntitiesHandle(entity_handle entity_handle)
+{
+	auto [id, size] = entity_handle;
+	return entities_handle({ id }, size);
+}
+
 entity_handle CreateText(Level& level, sf::Vector2f position, std::string text, unsigned int text_size)
 {
 	int id = level.AddBlueprint(BPText);
@@ -248,4 +254,30 @@ entities_handle VerticalEntityLayout(Level& level, sf::Vector2f position, std::v
 		current_height += size.y / 2 + spacing;
 	}
 	return (std::tuple { total_ids, total_height });
+}
+
+entities_handle VerticalEntityLayout(Level& level, sf::Vector2f position, std::vector<entities_handle> entities_handles, float spacing)
+{
+	sf::Vector2f total_size;
+	std::vector<int> total_ids;
+
+	for (auto [ids, size] : entities_handles)
+	{
+		total_size.y += size.y;
+		total_size.x = std::max(total_size.x, size.x);
+	}
+	total_size.y += spacing * (entities_handles.size() - 1);
+
+	float current_height = -total_size.y / 2;
+	for (auto [ids, size] : entities_handles)
+	{
+		current_height += size.y / 2;
+		for (int id : ids)
+		{
+			level.GetComponent<Position>(id)->position += sf::Vector2f(position.x, current_height + position.y);
+			total_ids.push_back(id);
+		}
+		current_height += size.y / 2 + spacing;
+	}
+	return (std::tuple { total_ids, total_size });
 }
