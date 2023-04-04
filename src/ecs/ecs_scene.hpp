@@ -12,6 +12,8 @@ class EntityCreationObserver;
 
 class ECSScene
 {
+	friend class ECSSceneWithInactiveLayer;
+
 protected:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;

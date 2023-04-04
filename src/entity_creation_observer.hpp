@@ -1,5 +1,5 @@
 #pragma once
-#include "ecs_scene.hpp"
+#include "ecs/ecs_scene.hpp"
 #include <functional>
 
 class ECSScene;

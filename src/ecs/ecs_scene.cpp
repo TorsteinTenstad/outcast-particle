@@ -1,4 +1,4 @@
-#include "ecs_scene.hpp"
+#include "ecs/ecs_scene.hpp"
 #include "game.hpp"
 #include "utils/string_parsing.hpp"
 #include <functional>

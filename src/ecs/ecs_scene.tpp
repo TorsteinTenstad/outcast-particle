@@ -1,4 +1,4 @@
-#include "ecs_scene.hpp"
+#include "ecs/ecs_scene.hpp"
 #include <cassert>
 
 template <class Component>
