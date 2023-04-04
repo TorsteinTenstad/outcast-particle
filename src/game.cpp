@@ -4,6 +4,7 @@
 #include "systems/_pure_DO_systems.hpp"
 #include "systems/coin.hpp"
 #include "systems/draw.hpp"
+#include "systems/edit_mode.hpp"
 #include "systems/level_completion_time.hpp"
 #include "systems/level_menu.hpp"
 #include "systems/menu_escape.hpp"
@@ -51,6 +52,7 @@ Game::Game() :
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
+	RegisterGameSystem<EditModeSelectedEffectSystem>();
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_, &level_completion_time_records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();

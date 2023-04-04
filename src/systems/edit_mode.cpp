@@ -1,11 +1,11 @@
 #pragma once
+#include "systems/edit_mode.hpp"
 #include "components/editable.hpp"
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
-#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 
 const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
