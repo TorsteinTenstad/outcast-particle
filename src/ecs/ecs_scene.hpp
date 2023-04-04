@@ -12,6 +12,8 @@ class EntityCreationObserver;
 
 class ECSScene
 {
+	friend class ECSSceneWithInactiveLayer;
+
 protected:
 	static int next_available_entity_id_;
 	std::map<std::type_index, ComponentMap> components_;
@@ -63,6 +65,10 @@ public:
 
 	template <class... Component>
 	std::tuple<Component*...> RawGetComponents(int entity_id);
+
+private:
+	template <class Component>
+	void DeleteChildEntitiesOwnedByComponent(int entity_id);
 
 protected:
 	template <class Component>
