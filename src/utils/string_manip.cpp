@@ -1,5 +1,7 @@
 #include "utils/string_manip.hpp"
 #include <cassert>
+#include <iomanip>
+#include <sstream>
 
 std::string HumanName(sf::Keyboard::Key key)
 {
@@ -74,4 +76,12 @@ std::string BoolToStringAsEnabledOrDisabled(bool x)
 	{
 		return "Disabled";
 	}
+}
+
+std::string FloatToStringWithPrecision(float f, int precision)
+{
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(precision);
+	ss << f;
+	return ss.str();
 }

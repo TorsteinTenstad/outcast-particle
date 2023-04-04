@@ -2,6 +2,7 @@
 #include "systems/timer.hpp"
 #include "entity_creation.hpp"
 #include "utils/level_id.hpp"
+#include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 #include <iomanip>
 #include <sstream>
@@ -18,10 +19,6 @@ void TimerSystem::Update(Level& level, float dt)
 		return;
 	}
 
-	std::stringstream current_duration;
-	current_duration << std::fixed << std::setprecision(3);
-	current_duration << level.GetSingleton<LevelCompletionTimer>()->duration;
-
 	sf::Vector2f level_size = level.GetSize();
 	auto [id, timer_button] = level.GetSingletonIncludeID<TimerButton>([level_size](ECSScene& level, int entity_id) {
 		level.AddComponent<DrawPriority>(entity_id)->draw_priority = 100;
@@ -32,5 +29,5 @@ void TimerSystem::Update(Level& level, float dt)
 		level.AddComponent<FillColor>(entity_id)->color.a = 50;
 		level.AddComponent<Text>(entity_id);
 	});
-	level.GetComponent<Text>(id)->content = current_duration.str();
+	level.GetComponent<Text>(id)->content = FloatToStringWithPrecision(level.GetSingleton<LevelCompletionTimer>()->duration, 3);
 }

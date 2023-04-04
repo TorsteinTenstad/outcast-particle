@@ -260,11 +260,8 @@ void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
 		}
 		else
 		{
-			std::stringstream ss;
-			ss << std::fixed << std::setprecision(2);
-			ss << i_coin_record.at(ui->at_level_id);
 			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
-			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(ss.str(), 13);
+			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(FloatToStringWithPrecision(i_coin_record.at(ui->at_level_id), 2), 13);
 		}
 	}
 }

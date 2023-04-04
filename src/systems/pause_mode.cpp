@@ -90,9 +90,8 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			int coin_count = level.GetSingleton<CoinCounter>()->coin_counter;
 			bool is_new_record = duration == level_completion_time_records_->at(coin_count).at(active_level_id_);
 			std::stringstream ss;
-			ss << std::fixed << std::setprecision(2);
-			ss << duration;
-			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, coin_count, 255, RightShiftString(ss.str(), 13), is_new_record);
+
+			entities_creator create_badge_function = std::bind(&CreateStatsBadge, std::ref(level), std::placeholders::_1, coin_count, 255, RightShiftString(FloatToStringWithPrecision(duration, 2), 13), is_new_record);
 			entities_creators.push_back(create_badge_function);
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
