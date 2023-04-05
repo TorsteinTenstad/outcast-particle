@@ -170,6 +170,17 @@ static bool IdIntersection(int component_idx, std::map<int, OtherComponent>& com
 	return true;
 }
 
+template <class Component>
+std::vector<int> ECSScene::GetIdsWithComponent()
+{
+	std::vector<int> ids;
+	for (auto [id, _] : GetComponentMap<Component>())
+	{
+		ids.push_back(id);
+	}
+	return ids;
+}
+
 template <class... Component>
 std::vector<std::tuple<int, Component*...>> ECSScene::GetEntitiesWith()
 {

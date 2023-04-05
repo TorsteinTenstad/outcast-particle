@@ -4,9 +4,12 @@
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
+#include "edit_mode.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
+#include "utils/level_id.hpp"
 #include "utils/math.hpp"
+#include <iostream>
 
 const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
 const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
@@ -20,10 +23,38 @@ static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 
 void EditModeSystem::Update(Level& level, float dt)
 {
+	if (IsMenu(active_level_id_))
+	{
+		level_editor_.Clear();
+	}
 	if (level.GetMode() != EDIT_MODE)
 	{
 		return;
 	}
+
+	if (cursor_and_keys_.key_down[sf::Keyboard::LControl] && cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Z])
+	{
+		level_editor_.Undo();
+	}
+	if (cursor_and_keys_.key_down[sf::Keyboard::LControl] && cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Y])
+	{
+		level_editor_.Redo();
+	}
+
+	// Select entities:
+	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<Editable, PressedThisFrame>())
+	{
+		level_editor_.SelectEntities(level, { entity_id });
+	}
+
+	// Conditional deselect all:
+	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
+		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
+	{
+		level_editor_.DeselectAllEntities(level);
+	}
+
+	return;
 
 	// Change level size:
 	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREASE_LEVEL_SIZE])
@@ -43,13 +74,6 @@ void EditModeSystem::Update(Level& level, float dt)
 			level.RemoveComponents<Selected>(new_id);
 			level.GetComponent<Position>(new_id)->position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
 		}
-	}
-
-	// Conditional deselect all:
-	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
-		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
-	{
-		level.ClearComponent<Selected>();
 	}
 
 	// Select entities:
