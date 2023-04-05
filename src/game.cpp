@@ -103,7 +103,7 @@ Game::~Game()
 
 Level& Game::SetLevel(std::string level_id)
 {
-	assert(active_level_.GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
+	assert(active_level_.paused || IsMenu(active_level_id_));
 	if (!IsMenu(level_id))
 	{
 		LevelMenuUI::last_at_level_id = level_id;
@@ -177,7 +177,7 @@ void Game::Update(float dt)
 			return;
 		}
 	}
-	if (active_level_.GetMode() == PLAY_MODE)
+	if (active_level_.GetMode() == PLAY_MODE && !active_level_.paused)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{

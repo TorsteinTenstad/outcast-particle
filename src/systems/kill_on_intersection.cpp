@@ -9,7 +9,7 @@
 
 void KillOnIntersectionSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != PLAY_MODE || level.ComputeState() != PLAYING)
+	if (level.GetMode() != PLAY_MODE || level.paused || level.ComputeState() != PLAYING)
 	{
 		return;
 	}
