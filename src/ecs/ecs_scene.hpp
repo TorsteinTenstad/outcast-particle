@@ -78,6 +78,9 @@ public:
 	template <class... Component>
 	bool RemoveComponents(int entity_id);
 
+	template <class Component>
+	std::vector<int> GetIdsWithComponent();
+
 	template <class... Component>
 	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
 
