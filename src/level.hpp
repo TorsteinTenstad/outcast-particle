@@ -31,7 +31,6 @@ public:
 	Level(const Level&) = delete;
 	Level() = default;
 	bool editable = false;
-	bool paused = false;
 	std::string name = "Untitled";
 	sf::Vector2f ui_bars_size = sf::Vector2f(0, 0);
 

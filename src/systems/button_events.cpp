@@ -45,8 +45,8 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key])
 		{
-			level.EnsureExistenceOfComponent<PressedThisFrame>(entity_id);
-			level.EnsureExistenceOfComponent<Pressed>(entity_id);
+			level.AddComponent<PressedThisFrame>(entity_id);
+			level.AddComponent<Pressed>(entity_id);
 		}
 	}
 

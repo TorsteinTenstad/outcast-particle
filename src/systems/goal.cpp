@@ -12,7 +12,7 @@
 
 void GoalSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != PLAY_MODE || level.paused)
+	if (level.GetMode() != PLAY_MODE)
 	{
 		return;
 	}

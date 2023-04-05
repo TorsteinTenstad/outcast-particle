@@ -3,12 +3,12 @@
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
 #include "utils/string_manip.hpp"
+#include < sstream>
 #include <algorithm>
 #include <functional>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
-#include <sstream>
 #include <string>
 
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
@@ -33,7 +33,7 @@ void PauseMode::Update(Level& level, float dt)
 	LevelMode level_mode = level.GetMode();
 
 	assert(level_state == COMPLETED || level_state == PLAYING || level_state == FAILED); // To remind us to verify the state logic when adding new states
-	assert(level_mode == PLAY_MODE || level_mode == EDIT_MODE || level_mode == READY_MODE);
+	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == EDIT_MODE || level_mode == READY_MODE);
 
 	MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 	if (level_mode == PLAY_MODE && level_state != PLAYING)
@@ -42,17 +42,16 @@ void PauseMode::Update(Level& level, float dt)
 	}
 
 	bool lost_focus = !globals.render_window.hasFocus() && false; //for debugging
-	if ((!level.paused)
+	if ((level_mode == PLAY_MODE || level_mode == EDIT_MODE)
 			&& cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]
 		|| (level_mode == PLAY_MODE
-			&& !level.paused
 			&& (lost_focus || menu_delay_timer->duration > PAUSE_MENU_DELAY.at(level_state))))
 	{
-		level.paused = true;
+		level.SetMode(PAUSE_MODE);
 		SetupPauseMenu(level, level_mode);
 		level.DeleteEntitiesWith<MenuDelayTimer>();
 	}
-	else if (!level.paused)
+	else if (level_mode != PAUSE_MODE)
 	{
 		level.DeleteEntitiesWith<PauseMenuItem>();
 	}
@@ -81,7 +80,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		if (level_state == PLAYING)
 		{
 			menu_title = "Paused";
-			AddButton([&]() { level.paused = false; }, "Continue", sf::Keyboard::Escape);
+			AddButton([&]() { level.SetMode(PLAY_MODE); }, "Continue", sf::Keyboard::Escape);
 		}
 
 		if (level_state == COMPLETED && !is_in_level_editing_)
@@ -114,14 +113,14 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 
 		if (is_in_level_editing_)
 		{
-			AddButton([&]() { level.paused = false; level.SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
+			AddButton([&]() { level.SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
 		}
 	}
 
 	if (previous_mode == EDIT_MODE)
 	{
-		AddButton([&]() { level.paused = false; }, "Continue editing", sf::Keyboard::Unknown);
-		AddButton([&]() { level.paused = false; level.SetMode(READY_MODE); }, "Play level", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Contitue editing", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(READY_MODE); }, "Play level", sf::Keyboard::Unknown);
 	}
 
 	AddButton(std::bind(set_level_, LEVEL_MENU), "Level menu", sf::Keyboard::Unknown);

@@ -70,7 +70,7 @@ void SetTextures(Level& level)
 
 void PlayerSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() == PLAY_MODE && !level.paused)
+	if (level.GetMode() == PLAY_MODE)
 	{
 		ProcessPlayerControls(level, cursor_and_keys_);
 	}
