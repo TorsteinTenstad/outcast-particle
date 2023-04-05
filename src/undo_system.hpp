@@ -1,29 +1,56 @@
 #pragma once
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <vector>
 
-struct UndoableAction
+class UndoableAction
 {
-	std::function<void(void)> do_func;
-	std::function<void(void)> undo_func;
+public:
+	virtual void Do() = 0;
+	virtual void Undo() = 0;
 
-	UndoableAction(std::function<void(void)>&& do_f, std::function<void(void)>&& undo_f) :
-		do_func(std::move(do_f)),
-		undo_func(std::move(undo_f))
+	// Derived actions may support the merging of actions. On a successful merge, the argument is consumed and an empty option is returned.
+	// If the actions cannot be merged, the function does nothing and returns the argument.
+	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> other)
+	{
+		return other;
+	}
+};
+
+class FunctionalUndoableAction : public UndoableAction
+{
+private:
+	std::function<void(void)> do_func_;
+	std::function<void(void)> undo_func_;
+
+public:
+	FunctionalUndoableAction(std::function<void(void)>&& do_func, std::function<void(void)>&& undo_func) :
+		do_func_(std::move(do_func)),
+		undo_func_(std::move(undo_func))
 	{}
 
-	UndoableAction(const UndoableAction& other) = delete;
-	UndoableAction(UndoableAction&& other) = delete;
-	UndoableAction& operator=(const UndoableAction& other) = delete;
-	UndoableAction& operator=(UndoableAction&& other) = delete;
+	void Do()
+	{
+		do_func_();
+	}
+
+	void Undo()
+	{
+		undo_func_();
+	}
+
+	FunctionalUndoableAction(const FunctionalUndoableAction& other) = delete;
+	FunctionalUndoableAction(FunctionalUndoableAction&& other) = delete;
+	FunctionalUndoableAction& operator=(const FunctionalUndoableAction& other) = delete;
+	FunctionalUndoableAction& operator=(FunctionalUndoableAction&& other) = delete;
 };
 
 class UndoSystem
 {
 private:
-	std::list<UndoableAction> actions_;
-	std::list<UndoableAction>::iterator next_action_;
+	std::list<std::unique_ptr<UndoableAction>> actions_;
+	std::list<std::unique_ptr<UndoableAction>>::iterator next_action_;
 
 public:
 	UndoSystem()
@@ -31,12 +58,19 @@ public:
 		next_action_ = actions_.end();
 	}
 
-	template <class... Args>
-	void Do(Args... args)
+	void Do(std::unique_ptr<UndoableAction> action)
 	{
+		action->Do();
 		actions_.erase(next_action_, actions_.end());
-		actions_.emplace_back(std::forward<Args>(args)...);
-		actions_.back().do_func();
+
+		std::optional<std::unique_ptr<UndoableAction>> unmerged_action = actions_.size() == 0 ?
+			std::move(action) :
+			actions_.back()->TryMerge(std::move(action));
+
+		if (unmerged_action)
+		{
+			actions_.push_back(std::move(unmerged_action.value()));
+		}
 		next_action_ = actions_.end();
 	}
 	bool Undo()
@@ -46,7 +80,7 @@ public:
 			return false;
 		}
 		std::advance(next_action_, -1);
-		next_action_->undo_func();
+		(*next_action_)->Undo();
 		return true;
 	}
 
@@ -56,7 +90,7 @@ public:
 		{
 			return false;
 		}
-		next_action_->do_func();
+		(*next_action_)->Do();
 		std::advance(next_action_, 1);
 		return true;
 	}
