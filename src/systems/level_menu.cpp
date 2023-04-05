@@ -193,7 +193,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
 		{ // Button
-			auto [id, size] = CreateNavigatorButton(level, button_position, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), "", sf::Keyboard::Unknown);
+			auto [id, size] = CreateNavigatorButton(level, button_position, std::bind(set_level_, level_id), "", sf::Keyboard::Unknown);
 			if (level_id == ui->at_level_id)
 			{
 				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = id;
@@ -232,15 +232,6 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		}
 		auto [ids, heights] = VerticalEntityLayout(level, badge_center_positions, entities_handles, BLOCK_SIZE / 4);
 		ui->stats_block_ids = ids;
-	}
-}
-
-void LevelMenuSystem::EnterLevel(std::string level_id)
-{
-	Level& entered_level = set_level_(level_id);
-	if (is_in_level_editing_)
-	{
-		entered_level.SetMode(EDIT_MODE);
 	}
 }
 

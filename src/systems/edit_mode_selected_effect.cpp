@@ -7,7 +7,7 @@
 
 void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != EDIT_MODE)
+	if (!in_edit_mode_)
 	{
 		return;
 	}

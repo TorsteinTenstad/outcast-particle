@@ -12,7 +12,7 @@
 
 void GoalSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != PLAY_MODE)
+	if (level.GetMode() != PLAY_MODE || in_edit_mode_)
 	{
 		return;
 	}

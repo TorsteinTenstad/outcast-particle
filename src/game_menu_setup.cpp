@@ -4,23 +4,24 @@
 #include "utils/container_operations.hpp"
 #include "utils/string_manip.hpp"
 
-void Game::ButtonFuncEditLevel()
+void Game::LevelCreatorButtonFunc()
 {
-	is_in_level_editing_ = true;
+	in_level_creator_ = true;
+	in_edit_mode_ = true;
 	SetLevel(LEVEL_MENU);
 }
 
 void Game::GoToMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
-	is_in_level_editing_ = false;
+	in_level_creator_ = false;
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
 	float x_center_offset = 8 * BLOCK_SIZE;
 	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
-	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::ButtonFuncEditLevel, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
+	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::LevelCreatorButtonFunc, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
 	std::vector<std::string> text = { "Play", "Level Creator", "Options", "Exit Game" };
 	CreateButtonList(active_level_, sf::Vector2f(level_size.x / 2 - x_center_offset, y_offset), functions, text);
 

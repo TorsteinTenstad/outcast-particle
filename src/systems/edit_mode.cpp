@@ -28,7 +28,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		level_editor_.Clear();
 	}
-	if (level.GetMode() != EDIT_MODE)
+	if (!in_edit_mode_)
 	{
 		return;
 	}

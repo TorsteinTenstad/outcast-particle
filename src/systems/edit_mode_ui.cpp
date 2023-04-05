@@ -1,5 +1,6 @@
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "systems/_pure_DO_systems.hpp"
+#include "utils/level_id.hpp"
 
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui);
@@ -8,7 +9,7 @@ static void SetupUI(Level& level, EditModeUI* ui);
 
 void EditModeUISystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != EDIT_MODE)
+	if (!in_edit_mode_ || IsMenu(active_level_id_))
 	{
 		level.ui_bars_size = sf::Vector2f(0, 0);
 		return;

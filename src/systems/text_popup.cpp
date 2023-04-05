@@ -1,12 +1,13 @@
 #include "_pure_DO_systems.hpp"
 #include "level.hpp"
+#include "utils/level_id.hpp"
 #include "utils/math.hpp"
 
 void TextPopupSystem::Update(Level& level, float dt)
 {
 	for (auto [entity_id, text_popup_spawner, draw_info] : level.GetEntitiesWith<TextPopupSpawner, DrawInfo>())
 	{
-		draw_info->image_path = level.GetMode() == EDIT_MODE ? "content\\textures\\white.png" : "content\\textures\\transparent.png";
+		draw_info->image_path = (in_edit_mode_ && !IsMenu(active_level_id_)) ? "content\\textures\\white.png" : "content\\textures\\transparent.png";
 	}
 	for (auto [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{

@@ -14,13 +14,15 @@
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
 
 void PauseMode::Give(
-	std::function<void(std::string)> set_level,
 	const std::map<std::string, std::vector<std::string>>* level_groups,
-	const std::map<int, std::map<std::string, float>>* level_completion_time_records)
+	const std::map<int, std::map<std::string, float>>* level_completion_time_records,
+	std::function<void(std::string)> set_level,
+	std::function<void(bool)> set_edit_mode)
 {
-	set_level_ = set_level;
 	level_groups_ = level_groups;
 	level_completion_time_records_ = level_completion_time_records;
+	set_level_ = set_level;
+	set_edit_mode_ = set_edit_mode;
 }
 void PauseMode::Update(Level& level, float dt)
 {
@@ -33,7 +35,7 @@ void PauseMode::Update(Level& level, float dt)
 	LevelMode level_mode = level.GetMode();
 
 	assert(level_state == COMPLETED || level_state == PLAYING || level_state == FAILED); // To remind us to verify the state logic when adding new states
-	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == EDIT_MODE || level_mode == READY_MODE);
+	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == READY_MODE);
 
 	MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 	if (level_mode == PLAY_MODE && level_state != PLAYING)
@@ -42,13 +44,13 @@ void PauseMode::Update(Level& level, float dt)
 	}
 
 	bool lost_focus = !globals.render_window.hasFocus() && false; //for debugging
-	if ((level_mode == PLAY_MODE || level_mode == EDIT_MODE)
+	if ((level_mode != PAUSE_MODE)
 			&& cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Escape]
 		|| (level_mode == PLAY_MODE
 			&& (lost_focus || menu_delay_timer->duration > PAUSE_MENU_DELAY.at(level_state))))
 	{
 		level.SetMode(PAUSE_MODE);
-		SetupPauseMenu(level, level_mode);
+		SetupPauseMenu(level);
 		level.DeleteEntitiesWith<MenuDelayTimer>();
 	}
 	else if (level_mode != PAUSE_MODE)
@@ -56,7 +58,7 @@ void PauseMode::Update(Level& level, float dt)
 		level.DeleteEntitiesWith<PauseMenuItem>();
 	}
 }
-void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
+void PauseMode::SetupPauseMenu(Level& level)
 {
 	LevelState level_state = level.ComputeState();
 	std::vector<entities_handle> entities_handles;
@@ -75,7 +77,24 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		entities_handles.push_back(AdaptToEntitiesHandle(button_handle));
 	};
 
-	if (previous_mode == PLAY_MODE)
+	if (in_level_creator_)
+	{
+		if (in_edit_mode_)
+		{
+			AddButton([&]() { level.SetMode(PLAY_MODE); }, "Continue editing", sf::Keyboard::Escape);
+			AddButton([&]() { set_edit_mode_(false); level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
+		}
+		else
+		{
+			if (level_state == PLAYING)
+			{
+				AddButton([&]() { level.SetMode(PLAY_MODE); }, "Continue", sf::Keyboard::Escape);
+			}
+			AddButton([&]() { set_edit_mode_(true); level.SetMode(PLAY_MODE); }, "Edit level", sf::Keyboard::Unknown);
+			AddButton(std::bind(set_level_, active_level_id_), "Restart level", sf::Keyboard::R);
+		}
+	}
+	else
 	{
 		if (level_state == PLAYING)
 		{
@@ -83,7 +102,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			AddButton([&]() { level.SetMode(PLAY_MODE); }, "Continue", sf::Keyboard::Escape);
 		}
 
-		if (level_state == COMPLETED && !is_in_level_editing_)
+		if (level_state == COMPLETED)
 		{
 			menu_title = "Level Complete";
 
@@ -108,19 +127,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		{
 			menu_title = "You Died";
 		}
-
 		AddButton(std::bind(set_level_, active_level_id_), "Restart level", sf::Keyboard::R);
-
-		if (is_in_level_editing_)
-		{
-			AddButton([&]() { level.SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
-		}
-	}
-
-	if (previous_mode == EDIT_MODE)
-	{
-		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Contitue editing", sf::Keyboard::Unknown);
-		AddButton([&]() { level.SetMode(READY_MODE); }, "Play level", sf::Keyboard::Unknown);
 	}
 
 	AddButton(std::bind(set_level_, LEVEL_MENU), "Level menu", sf::Keyboard::Unknown);

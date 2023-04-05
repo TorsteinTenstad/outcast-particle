@@ -39,7 +39,7 @@ static bool CheckIntersection(Position* circle_position, Position* square_positi
 
 void IntersectionSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != PLAY_MODE)
+	if (level.GetMode() != PLAY_MODE || in_edit_mode_)
 	{
 		return;
 	}

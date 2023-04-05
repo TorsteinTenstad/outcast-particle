@@ -53,7 +53,7 @@ Game::Game() :
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
-	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_, &level_completion_time_records_);
+	RegisterGameSystem<PauseMode>().Give(&level_groups_, &level_completion_time_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), [this](bool x) { this->in_edit_mode_ = x; });
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<IntersectionSystem>();
@@ -177,7 +177,7 @@ void Game::Update(float dt)
 			return;
 		}
 	}
-	if (active_level_.GetMode() == PLAY_MODE)
+	if (active_level_.GetMode() == PLAY_MODE && !in_edit_mode_)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{

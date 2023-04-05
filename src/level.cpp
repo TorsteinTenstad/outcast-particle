@@ -29,15 +29,6 @@ LevelMode Level::GetMode()
 
 void Level::SetMode(LevelMode level_mode)
 {
-	if (mode_ == EDIT_MODE)
-	{
-		SaveToFile();
-		LoadFromFile();
-	}
-	if (level_mode == EDIT_MODE)
-	{
-		LoadFromFile();
-	}
 	mode_ = level_mode;
 }
 

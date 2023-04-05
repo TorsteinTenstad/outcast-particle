@@ -12,8 +12,8 @@ private:
 	sf::Texture noise_texture_;
 
 public:
-	DrawSystem(std::string& active_level_id, bool& is_in_level_editing, CursorAndKeys& cursor_and_keys) :
-		GameSystem(active_level_id, is_in_level_editing, cursor_and_keys)
+	DrawSystem(std::string& active_level_id, const bool& in_level_creator, const bool& in_edit_mode, CursorAndKeys& cursor_and_keys) :
+		GameSystem(active_level_id, in_level_creator, in_edit_mode, cursor_and_keys)
 	{
 		noise_texture_.loadFromFile("content\\textures\\noise.png");
 	}

@@ -16,7 +16,7 @@ System& Game::RegisterGameSystem(std::vector<int>& category)
 	int id = next_available_system_id_++;
 	type_to_system_id_[typeid(System)] = id;
 	category.push_back(id);
-	game_systems_[id] = std::move(std::make_unique<System>(active_level_id_, is_in_level_editing_, cursor_and_keys_));
+	game_systems_[id] = std::move(std::make_unique<System>(active_level_id_, in_level_creator_, in_edit_mode_, cursor_and_keys_));
 	return GetGameSystem<System>();
 }
 

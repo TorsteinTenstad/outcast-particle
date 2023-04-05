@@ -14,7 +14,8 @@ private:
 	int physics_ticks_per_frame_ = 10;
 
 	bool restart_update_loop_ = false;
-	bool is_in_level_editing_ = false;
+	bool in_level_creator_ = false;
+	bool in_edit_mode_ = false;
 
 	std::stack<std::string> menu_stack;
 
@@ -48,7 +49,7 @@ private:
 	System& RegisterPhysicsGameSystem();
 
 	Level& SetLevel(std::string level_id);
-	void ButtonFuncEditLevel();
+	void LevelCreatorButtonFunc();
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
 	void CheckFullscreen();
 	void ToggleFullscreen();
