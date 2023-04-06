@@ -91,10 +91,10 @@ entity_handle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std:
 	return { id, size };
 }
 
-entity_handle CreateMenuNavigator(ECSScene& level)
+entity_handle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size)
 {
-	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE);
-	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", false);
+	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE) * buttons_height_in_block_size / 2.f;
+	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", true);
 	level.AddComponent<FillColor>(id)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(id);
 	return { id, size };

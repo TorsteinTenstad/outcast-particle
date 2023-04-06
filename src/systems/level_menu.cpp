@@ -176,9 +176,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		scroll_window = scroll_window_local;
 		scroll_window->entity_height = BUTTON_HEIGHT;
-		auto [menu_navigator_id, _] = CreateMenuNavigator(level);
-
-		level.GetComponent<WidthAndHeight>(menu_navigator_id)->width_and_height /= 2.f;
+		auto [menu_navigator_id, _] = CreateMenuNavigator(level, 1);
 		scroll_window->menu_navigator = menu_navigator_id;
 		width_and_height->width_and_height = level_size;
 		width_and_height->width_and_height.y -= title_h;
