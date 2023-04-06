@@ -2,11 +2,7 @@
     
 enum Blueprint
 {
-    BPTexturedRectangle,
-	BPButton,
-	BPMenuNavigationButton,
-	BPMenuNavigator,
-	BPEditableEntity,
+    BPEditableEntity,
 	BPStaticParticle,
 	BPMovingParticle,
 	BPBlackHole,
@@ -19,6 +15,5 @@ enum Blueprint
 	BPGoal,
 	BPElectricField,
 	BPMagneticField,
-	BPTextPopupSpawner,
-	BPText
+	BPTextPopupSpawner
 };

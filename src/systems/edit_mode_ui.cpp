@@ -1,4 +1,5 @@
 #include "edit_mode_blueprint_menu_functions.hpp"
+#include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
 
 static void UpdateUI(Level& level, EditModeUI* ui);
@@ -37,8 +38,7 @@ static void SetupUI(Level& level, EditModeUI* ui)
 {
 	{
 		float w = 3 * BLOCK_SIZE;
-		int entity_id = level.AddBlueprint(BPButton);
-		level.GetComponent<Position>(entity_id)->position = sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2);
+		auto [entity_id, size] = CreateButtonTemplate(level, sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2));
 		level.GetComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(w, UI_BAR_HEIGHT);
 		level.GetComponent<Text>(entity_id)->content = "+";
 		level.GetComponent<Text>(entity_id)->size = 200;

@@ -241,26 +241,6 @@ void Level::SaveToFile(std::string savefile_path)
         }
         f << "\"" << tag->tag << "\":";
 
-        if (tag->tag == "BPTexturedRectangle")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPButton")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPMenuNavigationButton")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPMenuNavigator")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-        }
-        
         if (tag->tag == "BPEditableEntity")
         {
             SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
@@ -362,11 +342,6 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<TextPopupSpawner>(entity_id), entity_string);
         }
         
-        if (tag->tag == "BPText")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-        }
-        
         f << entity_string << "\n";
         entity_string.clear();
     }
@@ -399,54 +374,6 @@ void Level::LoadFromFile(std::string savefile_path)
         std::string tag = GetSubstrBetween(line, "\"", "\"");
         AddComponent<Tag>(entity_id)->tag = tag;
 
-        if (tag == "BPTexturedRectangle")
-        {
-            AddComponent<DrawPriority>(entity_id, { 0 });
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-            AddComponent<Position>(entity_id, {});
-        }
-        
-        if (tag == "BPButton")
-        {
-            AddComponent<NotSerialized>(entity_id, {});
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 100 });
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-            AddComponent<FillColor>(entity_id, {});
-            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
-            AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-            AddComponent<Text>(entity_id, {});
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
-            AddComponent<Position>(entity_id, {});
-        }
-        
-        if (tag == "BPMenuNavigationButton")
-        {
-            AddComponent<NotSerialized>(entity_id, {});
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 100 });
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-            AddComponent<FillColor>(entity_id, {});
-            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
-            AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-            AddComponent<Text>(entity_id, {});
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
-            AddComponent<Position>(entity_id, {});
-            AddComponent<OnReleasedThisFrame>(entity_id, {});
-            AddComponent<MenuNavigable>(entity_id, {});
-        }
-        
-        if (tag == "BPMenuNavigator")
-        {
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\menu_navigator.png", true, 0 });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 180) });
-            AddComponent<FillColor>(entity_id, { sf::Color(120, 120, 120) });
-            AddComponent<DrawPriority>(entity_id, { 101 });
-            AddComponent<MenuNavigator>(entity_id, {});
-            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-        }
-        
         if (tag == "BPEditableEntity")
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
@@ -635,14 +562,6 @@ void Level::LoadFromFile(std::string savefile_path)
             DeserializeComponent(AddComponent<TextPopupSpawner>(entity_id),line);
         }
         
-        if (tag == "BPText")
-        {
-            AddComponent<Text>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 101 });
-            AddComponent<Shader>(entity_id, { "", "shaders\\scroll.frag", {}, {}, {} });
-            AddComponent<Position>(entity_id, {});
-        }
-        
     }
 }
 
@@ -650,50 +569,6 @@ int Level::AddBlueprint(Blueprint blueprint)
 {
     int entity_id = CreateEntityId();
     switch (blueprint){
-        case BPTexturedRectangle:
-            AddComponent<DrawPriority>(entity_id, { 0 });
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-            AddComponent<Position>(entity_id, {});
-            AddComponent<Tag>(entity_id, {"BPTexturedRectangle"});
-            break;
-        case BPButton:
-            AddComponent<NotSerialized>(entity_id, {});
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 100 });
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-            AddComponent<FillColor>(entity_id, {});
-            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
-            AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-            AddComponent<Text>(entity_id, {});
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
-            AddComponent<Position>(entity_id, {});
-            AddComponent<Tag>(entity_id, {"BPButton"});
-            break;
-        case BPMenuNavigationButton:
-            AddComponent<NotSerialized>(entity_id, {});
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 100 });
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\white.png", false, 0 });
-            AddComponent<FillColor>(entity_id, {});
-            AddComponent<MouseInteractionDependentFillColor>(entity_id, {});
-            AddComponent<Shader>(entity_id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-            AddComponent<Text>(entity_id, {});
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(10, 2) * 120.f });
-            AddComponent<Position>(entity_id, {});
-            AddComponent<OnReleasedThisFrame>(entity_id, {});
-            AddComponent<MenuNavigable>(entity_id, {});
-            AddComponent<Tag>(entity_id, {"BPMenuNavigationButton"});
-            break;
-        case BPMenuNavigator:
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\menu_navigator.png", true, 0 });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 180) });
-            AddComponent<FillColor>(entity_id, { sf::Color(120, 120, 120) });
-            AddComponent<DrawPriority>(entity_id, { 101 });
-            AddComponent<MenuNavigator>(entity_id, {});
-            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            AddComponent<Tag>(entity_id, {"BPMenuNavigator"});
-            break;
         case BPEditableEntity:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
@@ -867,13 +742,6 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             AddComponent<TextPopupSpawner>(entity_id, { "ipsum lorem" });
-            break;
-        case BPText:
-            AddComponent<Text>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 101 });
-            AddComponent<Shader>(entity_id, { "", "shaders\\scroll.frag", {}, {}, {} });
-            AddComponent<Position>(entity_id, {});
-            AddComponent<Tag>(entity_id, {"BPText"});
             break;
         default:
             assert(false);

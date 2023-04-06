@@ -1,40 +1,4 @@
 #include "level.hpp"
-class BPTexturedRectangle
-{
-	DrawPriority draw_priority = { 0 };
-	DrawInfo draw_info = { "", false, 0 };
-	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
-	Position position = {};
-};
-class BPButton
-{
-	NotSerialized not_serialized = {};
-	ReceivesButtonEvents can_receive_press = {};
-	DrawPriority draw_priority = { 100 };
-	DrawInfo draw_info = { "content\\textures\\white.png", false, 0 };
-	FillColor fill_color = {};
-	MouseInteractionDependentFillColor mouse_interaction_dependent_fill_color = {};
-	Shader shader = { "", "shaders\\round_corners.frag", {}, {}, {} };
-	Text text = {};
-	WidthAndHeight width_and_height = { sf::Vector2f(10, 2) * 120.f };
-	Position position = {};
-};
-
-class BPMenuNavigationButton : public BPButton
-{
-	OnReleasedThisFrame on_released_this_frame = {};
-	MenuNavigable menu_navigable = {};
-};
-
-class BPMenuNavigator
-{
-	DrawInfo draw_info = { "content\\textures\\menu_navigator.png", true, 0 };
-	WidthAndHeight width_and_height = { sf::Vector2f(120, 180) };
-	FillColor fill_color = { sf::Color(120, 120, 120) };
-	DrawPriority draw_priority = { 101 };
-	MenuNavigator menu_navigator = {};
-	Position position = { sf::Vector2f(0, 0) };
-};
 
 class BPEditableEntity
 {
@@ -203,12 +167,4 @@ class BPTextPopupSpawner : public BPEditableEntity
 
 	// [Serialize]
 	TextPopupSpawner text_popup_spawner = { "ipsum lorem" };
-};
-
-class BPText
-{
-	Text text = {};
-	DrawPriority draw_priority = { 101 };
-	Shader shader = { "", "shaders\\scroll.frag", {}, {}, {} };
-	Position position = {};
 };

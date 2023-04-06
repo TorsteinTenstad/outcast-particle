@@ -17,24 +17,35 @@ void Game::GoToMainMenu()
 	active_level_.ResetSize();
 	sf::Vector2f level_size = active_level_.GetSize();
 
-	float x_center_offset = 8 * BLOCK_SIZE;
+	float x_center_offset = -8 * BLOCK_SIZE;
 	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
-	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, LEVEL_MENU), std::bind(&Game::ButtonFuncEditLevel, this), std::bind(&Game::SetLevel, this, OPTIONS_MENU), std::bind(&Game::ExitGame, this) };
-	std::vector<std::string> text = { "Play", "Level Creator", "Options", "Exit Game" };
-	CreateButtonList(active_level_, sf::Vector2f(level_size.x / 2 - x_center_offset, y_offset), functions, text);
+	std::vector<entities_handle> entities_handles;
+	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text) {
+		entity_handle button_handle = CreateNavigatorButton(active_level_, sf::Vector2f(0, 0), button_function, button_text, sf::Keyboard::Unknown);
+		entities_handles.push_back(AdaptToEntitiesHandle(button_handle));
+	};
+
+	AddButton(std::bind(&Game::SetLevel, this, LEVEL_MENU), "Play");
+	AddButton(std::bind(&Game::ButtonFuncEditLevel, this), "Level Creator");
+	AddButton(std::bind(&Game::SetLevel, this, OPTIONS_MENU), "Options");
+	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
+
+	auto [ids, height] = VerticalEntityLayout(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
+
+	CreateMenuNavigator(active_level_);
 
 	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Volatile\n  Particle";
-	title_position->position.x = level_size.x / 2.f - x_center_offset;
+	title_position->position.x = level_size.x / 2.f + x_center_offset;
 	title_position->position.y = 2 * BLOCK_SIZE;
 
 	int static_particle_id = active_level_.AddBlueprint(BPStaticParticle);
-	active_level_.GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset);
+	active_level_.GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset);
 
 	int player_id = active_level_.AddBlueprint(BPPlayer);
-	active_level_.GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f + x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
+	active_level_.GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
 	active_level_.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
 	active_level_.GetComponent<Charge>(player_id)->charge *= -1;
 }
@@ -55,9 +66,20 @@ void Game::GoToOptionsMenu()
 	float x_center_offset = -8 * BLOCK_SIZE;
 	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
-	std::vector<std::function<void(void)>> functions = { std::bind(&Game::SetLevel, this, KEY_CONFIG_MENU), std::bind(&Game::SetLevel, this, MUSIC_AND_SOUND_MENU), std::bind(&Game::SetLevel, this, GRAPHICS_AND_DISPLAY_MENU), std::bind(&Game::SetLevel, this, MAIN_MENU) };
-	std::vector<std::string> text = { "Key Config", "Music & Sound", "Display & Graphics", "Main Menu" };
-	CreateButtonList(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), functions, text);
+	std::vector<entities_handle> entities_handles;
+	auto AddButton = [&](std::string level_id, std::string button_text) {
+		entity_handle button_handle = CreateNavigatorButton(active_level_, sf::Vector2f(0, 0), std::bind(&Game::SetLevel, this, level_id), button_text, sf::Keyboard::Unknown);
+		entities_handles.push_back(AdaptToEntitiesHandle(button_handle));
+	};
+
+	AddButton(KEY_CONFIG_MENU, "Key Config");
+	AddButton(MUSIC_AND_SOUND_MENU, "Music & Sound");
+	AddButton(GRAPHICS_AND_DISPLAY_MENU, "Display & Graphics");
+	AddButton(MAIN_MENU, "Main Menu");
+
+	auto [ids, height] = VerticalEntityLayout(active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
+
+	CreateMenuNavigator(active_level_);
 
 	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
