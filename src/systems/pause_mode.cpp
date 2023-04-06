@@ -130,7 +130,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
-	int navigator_id = level.AddBlueprint(BPMenuNavigator);
+	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
 	level.AddComponent<PauseMenuItem>(navigator_id);
 
 	entity_handle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240));

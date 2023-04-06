@@ -50,7 +50,7 @@ Component* ECSScene::AddComponent(int entity_id, Component&& value)
 {
 	auto& m = GetComponentMap<Component>();
 	assert(m.count(entity_id) == 0);
-	m.emplace(entity_id, value);
+	m.emplace(entity_id, std::move(value));
 	return &m.at(entity_id);
 }
 

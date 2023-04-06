@@ -176,7 +176,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 		scroll_window = scroll_window_local;
 		scroll_window->entity_height = BUTTON_HEIGHT;
-		int menu_navigator_id = level.AddBlueprint(BPMenuNavigator);
+		auto [menu_navigator_id, _] = CreateMenuNavigator(level);
 
 		level.GetComponent<WidthAndHeight>(menu_navigator_id)->width_and_height /= 2.f;
 		scroll_window->menu_navigator = menu_navigator_id;
