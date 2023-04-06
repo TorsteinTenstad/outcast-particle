@@ -113,18 +113,22 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 
 		if (is_in_level_editing_)
 		{
-			AddButton([&]() { level.SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
+			AddButton([&]() { level.SetMode(EDIT_MODE); level.LoadFromFile(); }, "Edit level", sf::Keyboard::Unknown);
 		}
 	}
 
 	if (previous_mode == EDIT_MODE)
 	{
-		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Contitue editing", sf::Keyboard::Unknown);
-		AddButton([&]() { level.SetMode(READY_MODE); }, "Play level", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Continue editing", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SaveToFile(); level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SaveToFile(); set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SaveToFile(); set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
-
-	AddButton(std::bind(set_level_, LEVEL_MENU), "Level menu", sf::Keyboard::Unknown);
-	AddButton(std::bind(set_level_, MAIN_MENU), "Main menu", sf::Keyboard::Unknown);
+	else
+	{
+		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
+	}
 
 	int navigator_id = level.AddBlueprint(BPMenuNavigator);
 	level.AddComponent<PauseMenuItem>(navigator_id);

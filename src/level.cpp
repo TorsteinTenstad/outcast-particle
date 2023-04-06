@@ -29,15 +29,6 @@ LevelMode Level::GetMode()
 
 void Level::SetMode(LevelMode level_mode)
 {
-	if (mode_ == EDIT_MODE)
-	{
-		SaveToFile();
-		LoadFromFile();
-	}
-	if (level_mode == EDIT_MODE)
-	{
-		LoadFromFile();
-	}
 	mode_ = level_mode;
 }
 
@@ -79,10 +70,12 @@ void Level::DecreaseSize()
 
 void Level::LoadFromFile()
 {
+	std::cout << "Load\n";
 	LoadFromFile(savefile_path_);
 }
 
 void Level::SaveToFile()
 {
+	std::cout << "Save\n";
 	SaveToFile(savefile_path_);
 }

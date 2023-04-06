@@ -9,6 +9,7 @@ void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
+		level.DeleteEntitiesWith<SelectedEffect>();
 		return;
 	}
 
