@@ -58,6 +58,7 @@ void PauseMode::Update(Level& level, float dt)
 }
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
+	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<PauseMenuItem>(id); });
 	LevelState level_state = level.ComputeState();
 	std::vector<entities_handle> entities_handles;
 	std::string menu_title;
@@ -68,7 +69,6 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	level.AddComponent<Position>(background_blur_id)->position = level.GetSize() / 2.f;
 	level.AddComponent<FillColor>(background_blur_id)->color.a = 200;
 	level.AddComponent<DrawPriority>(background_blur_id)->draw_priority = 50;
-	level.AddComponent<PauseMenuItem>(background_blur_id);
 
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
 		entity_handle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, button_text, shortcut_key);
@@ -119,22 +119,16 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 
 	if (previous_mode == EDIT_MODE)
 	{
-		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Contitue editing", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Continue editing", sf::Keyboard::Escape);
 		AddButton([&]() { level.SetMode(READY_MODE); }, "Play level", sf::Keyboard::Unknown);
 	}
 
 	AddButton(std::bind(set_level_, LEVEL_MENU), "Level menu", sf::Keyboard::Unknown);
 	AddButton(std::bind(set_level_, MAIN_MENU), "Main menu", sf::Keyboard::Unknown);
 
-	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
-	level.AddComponent<PauseMenuItem>(navigator_id);
-
 	entity_handle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240));
 	entities_handles.insert(entities_handles.begin(), AdaptToEntitiesHandle(title_handle));
 
 	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
-	for (auto id : ids)
-	{
-		level.AddComponent<PauseMenuItem>(id);
-	}
+	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
 }
