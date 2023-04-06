@@ -38,10 +38,12 @@ static void SetupUI(Level& level, EditModeUI* ui)
 {
 	{
 		float w = 3 * BLOCK_SIZE;
-		auto [entity_id, size] = CreateButtonTemplate(level, sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2));
-		level.GetComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(w, UI_BAR_HEIGHT);
-		level.GetComponent<Text>(entity_id)->content = "+";
-		level.GetComponent<Text>(entity_id)->size = 200;
-		level.AddComponent<OnReleasedThisFrame>(entity_id)->func = [&level]() { ToggleBlueprintMenu(level); };
+		auto [entity_id, size] = CreateButton(
+			level,
+			sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2),
+			sf::Vector2f(w, UI_BAR_HEIGHT),
+			[&level]() { ToggleBlueprintMenu(level); },
+			"+",
+			200);
 	}
 }

@@ -49,19 +49,32 @@ entity_handle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf
 	level.AddComponent<Position>(id)->position = position;
 	return { id, size };
 }
-
-entity_handle CreateButtonTemplate(ECSScene& level, sf::Vector2f position)
+entity_handle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
+{
+	auto [id, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\white.png", false);
+	level.AddComponent<FillColor>(id);
+	level.AddComponent<Shader>(id, { "", "shaders\\round_corners.frag", {}, {}, {} });
+	return { id, size };
+}
+entity_handle CreateSizedButtonTemplate(ECSScene& level, sf::Vector2f position)
 {
 	sf::Vector2f size = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
-	auto [id, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\white.png", false);
-	level.AddComponent<Shader>(id, { "", "shaders\\round_corners.frag", {}, {}, {} });
-	level.AddComponent<FillColor>(id);
+	auto [id, _] = CreateButtonTemplate(level, position, size);
+	return { id, size };
+}
+entity_handle CreateButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> on_click, std::string text, unsigned textsize)
+{
+	auto [id, _] = CreateButtonTemplate(level, position, size);
+	level.AddComponent<Text>(id, { text, textsize });
+	level.AddComponent<MouseInteractionDependentFillColor>(id);
+	level.AddComponent<ReceivesButtonEvents>(id);
+	level.AddComponent<OnReleasedThisFrame>(id)->func = on_click;
 	return { id, size };
 }
 
 entity_handle CreateMenuButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
 {
-	auto [id, size] = CreateButtonTemplate(level, position);
+	auto [id, size] = CreateSizedButtonTemplate(level, position);
 	level.AddComponent<Text>(id)->content = button_text;
 	level.AddComponent<MouseInteractionDependentFillColor>(id);
 	level.AddComponent<ReceivesButtonEvents>(id);
@@ -90,7 +103,7 @@ entity_handle CreateMenuNavigator(ECSScene& level)
 entities_handle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key)
 {
 	std::vector<int> ids = {};
-	auto [id, size] = CreateButtonTemplate(level, position);
+	auto [id, size] = CreateSizedButtonTemplate(level, position);
 	level.AddComponent<MouseInteractionDependentFillColor>(id);
 	level.AddComponent<ReceivesButtonEvents>(id);
 	level.AddComponent<KeyConfigButton>(id)->key = key;
@@ -114,7 +127,7 @@ entities_handle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std:
 
 entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 {
-	auto [id, size] = CreateButtonTemplate(level, position);
+	auto [id, size] = CreateSizedButtonTemplate(level, position);
 	level.AddComponents<Text, TimerButton>(id);
 	level.GetComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(5 * BLOCK_SIZE, 1 * BLOCK_SIZE);
 	level.GetComponent<FillColor>(id)->color.a = 50;
@@ -124,13 +137,13 @@ entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 entities_handle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f)
 {
 	//Add parent button:
-	auto [parent_button_id, size] = CreateButtonTemplate(level, position);
+	auto [parent_button_id, size] = CreateSizedButtonTemplate(level, position);
 	level.AddComponent<ReceivesButtonEvents>(parent_button_id);
 	level.AddComponent<MouseInteractionDependentFillColor>(parent_button_id, {});
 	level.AddComponent<SliderButton>(parent_button_id)->slider_value = f;
 
 	//Creating slider bar:
-	auto [slider_bar_id, slider_bar_height] = CreateButtonTemplate(level, position);
+	auto [slider_bar_id, slider_bar_height] = CreateSizedButtonTemplate(level, position);
 	level.GetComponent<DrawPriority>(slider_bar_id)->draw_priority = 101;
 	level.GetComponent<Position>(slider_bar_id)->position.x -= 1 * BLOCK_SIZE;
 	level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height = sf::Vector2f(7, 0.1) * float(BLOCK_SIZE);
@@ -138,7 +151,7 @@ entities_handle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* 
 	//Creating slider:
 	float slider_x_pos = level.GetComponent<Position>(slider_bar_id)->position.x + level.GetComponent<WidthAndHeight>(slider_bar_id)->width_and_height.x * (*(f)*0.01 - 0.5);
 
-	auto [slider_id, slider_height] = CreateButtonTemplate(level, sf::Vector2f(slider_x_pos, position.y));
+	auto [slider_id, slider_height] = CreateSizedButtonTemplate(level, sf::Vector2f(slider_x_pos, position.y));
 	level.GetComponent<DrawPriority>(slider_id)->draw_priority = 101;
 	level.RemoveComponents<WidthAndHeight>(slider_id);
 	level.AddComponent<Radius>(slider_id)->radius = BLOCK_SIZE / 4;
