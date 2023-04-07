@@ -37,6 +37,7 @@ public:
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
 	int AddBlueprint(Blueprint blueprint);
+	int AddBlueprint(std::string blueprint_tag);
 
 	LevelState ComputeState();
 	LevelMode GetMode();
@@ -46,11 +47,10 @@ public:
 	sf::Vector2u GetGridSize();
 	float GetScale();
 	void ResetSize();
-	void IncreaseSize();
-	void DecreaseSize();
+	int GetValidNewSizeId(int increment);
+	void ModifyLevelSize(int increment);
 
-	void
-	SaveToFile();
+	void SaveToFile();
 	void LoadFromFile();
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);

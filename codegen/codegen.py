@@ -1,6 +1,6 @@
 from os import listdir
 from cpp_blueprints import get_blueprints as get_cpp_blueprints, ClassType
-from serialization import gen_level_serialization, gen_components, gen_blueprint_enum
+from serialization import gen_level_serialization, gen_components, gen_blueprint_enum_hpp, gen_blueprint_enum_cpp
 import json
 
 path_components = "src/components/"
@@ -25,7 +25,9 @@ with open("src/level_serialization.cpp", "w") as file:
 
 
 with open("src/blueprint.hpp", "w") as file:
-    file.write(gen_blueprint_enum(data["blueprints"]))
+    file.write(gen_blueprint_enum_hpp(data["blueprints"]))
+with open("src/blueprint.cpp", "w") as file:
+    file.write(gen_blueprint_enum_cpp(data["blueprints"]))
 
 
 def serialize_single_class(class_definition_filepath, output_filepath, classname):

@@ -40,9 +40,9 @@ float Angle(sf::Vector2f v)
 {
 	return atan2(v.y, v.x);
 }
-sf::Vector2f Vector2fFromPolar(float magnitude, float angle)
+sf::Vector2f Vector2fFromPolar(float magnitude, float radians)
 {
-	return magnitude * sf::Vector2f(cos(angle), sin(angle));
+	return magnitude * sf::Vector2f(cos(radians), sin(radians));
 }
 
 sf::Vector2f Normalized(sf::Vector2f v)
@@ -53,6 +53,13 @@ sf::Vector2f Normalized(sf::Vector2f v)
 sf::Vector2f Abs(sf::Vector2f v)
 {
 	return sf::Vector2f(abs(v.x), abs(v.y));
+}
+
+sf::Vector2f GetRotated(sf::Vector2f v, float radians)
+{
+	float new_x = cos(radians) * v.x - sin(radians) * v.y;
+	float new_y = sin(radians) * v.x + cos(radians) * v.y;
+	return sf::Vector2f(new_x, new_y);
 }
 
 sf::Vector2f GetQuarterTurnRotation(sf::Vector2f v)

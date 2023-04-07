@@ -165,6 +165,10 @@ void Level::LoadFromFile(std::string savefile_path)
 
 def gen_add_blueprint(data):
     start = """
+int Level::AddBlueprint(std::string blueprint_tag){
+    return AddBlueprint(ToBlueprintEnum(blueprint_tag));
+}
+
 int Level::AddBlueprint(Blueprint blueprint)
 {
     int entity_id = CreateEntityId();
@@ -191,13 +195,45 @@ int Level::AddBlueprint(Blueprint blueprint)
     return start + body + end
 
 
-def gen_blueprint_enum(data):
-    start = """#pragma once
-    
+def gen_blueprint_enum_hpp(data):
+    enum_entries = ",\n\t".join([f"{tag} = {i}" for i, tag in enumerate(data.keys())])
+    enum_decl = f"""#pragma once
+#include <string>
+#include <vector>
+#include <map>
+
 enum Blueprint
-{
-    """
-    end = """
-};"""
-    body = ",\n\t".join([tag for tag in data.keys()])
-    return start + body + end
+{{
+    {enum_entries}
+}};"""
+
+    enum_entries = ",\n\t\t".join([f"\"{tag}\"" for tag in data.keys()])
+    converters = """
+    
+std::string ToBlueprintTag(Blueprint blueprint);
+Blueprint ToBlueprintEnum(std::string blueprint_tag);
+"""
+    return enum_decl + converters
+
+
+
+def gen_blueprint_enum_cpp(data):
+    enum_entries = ",\n\t\t".join([f"\"{tag}\"" for tag in data.keys()])
+    to_tag = f"""
+#include "blueprint.hpp"
+
+std::string ToBlueprintTag(Blueprint blueprint)
+{{
+    return std::vector<std::string>({{
+        {enum_entries}}})[(int(blueprint))];
+}}"""
+
+    enum_entries = ",\n\t\t".join([f"{{\"{tag}\", {tag}}}" for tag in data.keys()])
+    to_enum = f"""
+
+Blueprint ToBlueprintEnum(std::string blueprint_tag)
+{{
+    return std::map<std::string, Blueprint>({{
+        {enum_entries}}}).at(blueprint_tag);
+}}"""
+    return to_tag + to_enum

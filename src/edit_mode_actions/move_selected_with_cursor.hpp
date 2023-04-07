@@ -36,24 +36,22 @@ public:
 			new_positions_.push_back(LimitAndSnapToGrid(level, mouse_pos + selected->mouse_offset, BLOCK_SIZE / 2));
 		}
 	}
-	void Do()
+
+private:
+	void SetPositions(std::vector<sf::Vector2f>& positions)
 	{
 		int i = 0;
 		for (int entity : entities_)
 		{
 			sf::Vector2f& position = level_.GetComponent<Position>(entity)->position;
-			position = new_positions_[i++];
+			position = positions[i++];
 		}
 	}
-	void Undo()
-	{
-		int i = 0;
-		for (int entity : entities_)
-		{
-			sf::Vector2f& position = level_.GetComponent<Position>(entity)->position;
-			position = original_positions_[i++];
-		}
-	}
+
+public:
+	void Do() { SetPositions(new_positions_); }
+	void Undo() { SetPositions(original_positions_); }
+
 	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action) override
 	{
 		if (typeid(*this) != typeid(*next_action))

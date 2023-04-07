@@ -1,5 +1,6 @@
 #include "level.hpp"
 #include "game.hpp"
+#include "utils/math.hpp"
 #include "utils/string_parsing.hpp"
 #include <functional>
 #include <iostream>
@@ -52,30 +53,22 @@ void Level::ResetSize()
 	grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
 }
 
-void Level::IncreaseSize()
+int Level::GetValidNewSizeId(int increment)
 {
-	if (grid_size_id < LEVEL_SIZES.size() - 1)
-	{
-		grid_size_id++;
-	}
+	return Clamp(grid_size_id + increment, 0, int(LEVEL_SIZES.size() - 1)) - grid_size_id;
 }
 
-void Level::DecreaseSize()
+void Level::ModifyLevelSize(int increment)
 {
-	if (grid_size_id > 0)
-	{
-		grid_size_id--;
-	}
+	grid_size_id += GetValidNewSizeId(increment);
 }
 
 void Level::LoadFromFile()
 {
-	std::cout << "Load\n";
 	LoadFromFile(savefile_path_);
 }
 
 void Level::SaveToFile()
 {
-	std::cout << "Save\n";
 	SaveToFile(savefile_path_);
 }

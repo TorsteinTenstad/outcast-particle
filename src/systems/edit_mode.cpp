@@ -5,8 +5,11 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "edit_mode.hpp"
+#include "edit_mode_actions/delete_selected.hpp"
+#include "edit_mode_actions/modify_level_size.hpp"
 #include "edit_mode_actions/move_selected_with_cursor.hpp"
 #include "edit_mode_actions/resize_selected.hpp"
+#include "edit_mode_actions/rotate_selected_fields.hpp"
 #include "edit_mode_actions/select_entities.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
@@ -89,17 +92,42 @@ void EditModeSystem::Update(Level& level, float dt)
 		}
 	}
 
-	return;
+	// Delete:
+	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
+	{
+		level_editor_.Do<DeleteSelected>(level);
+	}
 
 	// Change level size:
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREASE_LEVEL_SIZE])
+	for (auto [key, increment] : std::vector<std::tuple<sf::Keyboard::Key, int>>(
+			 { { globals.key_config.INCREASE_LEVEL_SIZE, +1 },
+				 { globals.key_config.DECREASE_LEVEL_SIZE, -1 } }))
 	{
-		level.IncreaseSize();
+		if (!cursor_and_keys_.key_pressed_this_frame[key])
+		{
+			continue;
+		}
+		if (level.GetValidNewSizeId(increment) == 0)
+		{
+			continue;
+		}
+		level_editor_.Do<ModifyLevelSize>(level, increment);
 	}
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREASE_LEVEL_SIZE])
+
+	// Handle selection of entity in blueprint menu:
+	for (auto& [entity_id, blueprint_menu_item, selected] : level.GetEntitiesWith<Selected, BlueprintMenuItem>())
 	{
-		level.DecreaseSize();
+		CloseBlueprintMenu(level);
 	}
+
+	// Rotate fields:
+	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
+	{
+		level_editor_.Do<RotateSelectedFields>(level, PI / 2);
+	}
+
+	return;
+
 	// Copy entities:
 	for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
 	{
@@ -109,20 +137,6 @@ void EditModeSystem::Update(Level& level, float dt)
 			level.RemoveComponents<Selected>(new_id);
 			level.GetComponent<Position>(new_id)->position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
 		}
-	}
-
-	// Handle selection of entity in blueprint menu:
-	for (auto& [entity_id, blueprint_menu_item, selected, draw_priority] : level.GetEntitiesWith<BlueprintMenuItem, Selected, DrawPriority>())
-	{
-		level.GetComponentMap<BlueprintMenuItem>().erase(entity_id);
-		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
-		CloseBlueprintMenu(level);
-	}
-
-	// Delete entities:
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
-	{
-		level.DeleteEntitiesWith<Selected>();
 	}
 
 	// Edit charge:
@@ -193,75 +207,6 @@ void EditModeSystem::Update(Level& level, float dt)
 			{
 				electric_field->field_vector = Normalized(electric_field->field_vector) * abs(ELECTRIC_FIELD_STRENGTH_CATEGORIES[i]);
 			}
-		}
-	}
-
-	// Edit rotation:
-	auto& electric_field_map = level.GetComponentMap<ElectricField>();
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
-	{
-		for (auto [entity_id, selected, width_and_height] : level.GetEntitiesWith<Selected, WidthAndHeight>())
-		{
-			width_and_height->width_and_height = sf::Vector2f(width_and_height->width_and_height.y, width_and_height->width_and_height.x);
-			if (electric_field_map.count(entity_id) > 0)
-			{
-				electric_field_map[entity_id].field_vector = GetQuarterTurnRotation(electric_field_map[entity_id].field_vector);
-			}
-		}
-	}
-
-	// Edit rectangular size:
-	for (auto [entity_id, selected, width_and_height, editable] : level.GetEntitiesWith<Selected, WidthAndHeight, Editable>())
-	{
-		float increment = editable->smallest_allowed_size * (cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1);
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_HEIGHT])
-		{
-			width_and_height->width_and_height.y += increment;
-			width_and_height->width_and_height.y -= std::fmod(width_and_height->width_and_height.y, increment);
-		}
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREMENT_HEIGHT])
-		{
-			width_and_height->width_and_height.y -= increment;
-			width_and_height->width_and_height.y -= std::fmod(width_and_height->width_and_height.y, increment);
-			if (width_and_height->width_and_height.y < editable->smallest_allowed_size)
-			{
-				width_and_height->width_and_height.y = editable->smallest_allowed_size;
-			}
-		}
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.INCREMENT_WIDTH])
-		{
-			width_and_height->width_and_height.x += increment;
-			width_and_height->width_and_height.x -= std::fmod(width_and_height->width_and_height.x, increment);
-		}
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DECREMENT_WIDTH])
-		{
-			width_and_height->width_and_height.x -= increment;
-			width_and_height->width_and_height.x -= std::fmod(width_and_height->width_and_height.x, increment);
-			if (width_and_height->width_and_height.x < editable->smallest_allowed_size)
-			{
-				width_and_height->width_and_height.x = editable->smallest_allowed_size;
-			}
-		}
-	}
-
-	//Limit position:
-	for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
-	{
-		if (position->position.x < 0)
-		{
-			position->position.x = 0;
-		}
-		else if (position->position.x > level.GetSize().x)
-		{
-			position->position.x = level.GetSize().x;
-		}
-		if (position->position.y < 0)
-		{
-			position->position.y = 0;
-		}
-		else if (position->position.y > level.GetSize().y)
-		{
-			position->position.y = level.GetSize().y;
 		}
 	}
 }

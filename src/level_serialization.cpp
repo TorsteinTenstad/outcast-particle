@@ -565,6 +565,10 @@ void Level::LoadFromFile(std::string savefile_path)
     }
 }
 
+int Level::AddBlueprint(std::string blueprint_tag){
+    return AddBlueprint(ToBlueprintEnum(blueprint_tag));
+}
+
 int Level::AddBlueprint(Blueprint blueprint)
 {
     int entity_id = CreateEntityId();
