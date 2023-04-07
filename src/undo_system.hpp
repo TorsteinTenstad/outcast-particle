@@ -12,7 +12,7 @@ public:
 
 	// Derived actions may support the merging of actions. On a successful merge, the argument is consumed and an empty option is returned.
 	// If the actions cannot be merged, the function does nothing and returns the argument.
-	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> other)
+	virtual std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> other)
 	{
 		return other;
 	}

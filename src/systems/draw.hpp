@@ -8,7 +8,7 @@
 class DrawSystem : public GameSystem
 {
 private:
-	std::map<std::tuple<int, std::string, std::string>, sf::Shader> shaders_;
+	std::map<std::tuple<std::string, std::string>, sf::Shader> shaders_;
 	sf::Texture noise_texture_;
 
 public:

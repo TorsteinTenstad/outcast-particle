@@ -92,6 +92,17 @@ void EditModeSystem::Update(Level& level, float dt)
 			level_editor_.MoveSelectedEntities(level, cursor_and_keys_.cursor_position - cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left]);
 		}
 	}
+	for (auto [key, size_delta_step] : std::vector<std::tuple<sf::Keyboard::Key, sf::Vector2f>>(
+			 { { globals.key_config.INCREMENT_HEIGHT, sf::Vector2f(0, 1) },
+				 { globals.key_config.DECREMENT_HEIGHT, sf::Vector2f(0, -1) },
+				 { globals.key_config.INCREMENT_WIDTH, sf::Vector2f(1, 0) },
+				 { globals.key_config.DECREMENT_WIDTH, sf::Vector2f(-1, 0) } }))
+	{
+		if (cursor_and_keys_.key_pressed_this_frame[key])
+		{
+			level_editor_.Do(std::move(std::make_unique<ResizeEntities>(level, size_delta_step)));
+		}
+	}
 
 	return;
 

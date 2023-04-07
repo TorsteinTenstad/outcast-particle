@@ -50,7 +50,7 @@ void DrawSystem::Draw(Level& level, sf::RenderTarget* render_target, std::map<in
 
 sf::Shader* DrawSystem::SetupSFMLShader(Level& level, int entity_id, const Shader* shader)
 {
-	std::tuple<int, std::string, std::string> shader_id = { entity_id, shader->vertex_shader_path, shader->fragment_shader_path };
+	std::tuple<std::string, std::string> shader_id = { shader->vertex_shader_path, shader->fragment_shader_path };
 	if (shaders_.count(shader_id) == 0)
 	{
 		if (!shader->vertex_shader_path.empty() && !shader->fragment_shader_path.empty())
