@@ -12,9 +12,9 @@ public:
 
 	// Derived actions may support the merging of actions. On a successful merge, the argument is consumed and an empty option is returned.
 	// If the actions cannot be merged, the function does nothing and returns the argument.
-	virtual std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> other)
+	virtual std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action)
 	{
-		return other;
+		return next_action;
 	}
 };
 
@@ -25,25 +25,14 @@ private:
 	std::function<void(void)> undo_func_;
 
 public:
-	FunctionalUndoableAction(std::function<void(void)>&& do_func, std::function<void(void)>&& undo_func) :
+	FunctionalUndoableAction(
+		std::function<void(void)>&& do_func,
+		std::function<void(void)>&& undo_func) :
 		do_func_(std::move(do_func)),
 		undo_func_(std::move(undo_func))
 	{}
-
-	void Do()
-	{
-		do_func_();
-	}
-
-	void Undo()
-	{
-		undo_func_();
-	}
-
-	FunctionalUndoableAction(const FunctionalUndoableAction& other) = delete;
-	FunctionalUndoableAction(FunctionalUndoableAction&& other) = delete;
-	FunctionalUndoableAction& operator=(const FunctionalUndoableAction& other) = delete;
-	FunctionalUndoableAction& operator=(FunctionalUndoableAction&& other) = delete;
+	void Do() { do_func_(); }
+	void Undo() { undo_func_(); }
 };
 
 class UndoSystem
@@ -58,14 +47,20 @@ public:
 		next_action_ = actions_.end();
 	}
 
+	template <class Action, class... Args>
+	void Do(Args&&... args)
+	{
+		Do(std::move(std::make_unique<Action>(std::forward<Args>(args)...)));
+	}
+
 	void Do(std::unique_ptr<UndoableAction> action)
 	{
 		action->Do();
 		actions_.erase(next_action_, actions_.end());
 
 		std::optional<std::unique_ptr<UndoableAction>> unmerged_action = actions_.size() == 0 ?
-			std::move(action) :
-			actions_.back()->TryMerge(std::move(action));
+																			 std::move(action) :
+																			 actions_.back()->TryMerge(std::move(action));
 
 		if (unmerged_action)
 		{

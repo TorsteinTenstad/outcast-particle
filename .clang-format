@@ -5,14 +5,14 @@ AllowShortBlocksOnASingleLine: false
 AlwaysBreakTemplateDeclarations: Yes
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
-AlignOperands: false
+AlignOperands: true
 AlignTrailingComments: true
 AlignAfterOpenBracket: DontAlign
 AllowAllConstructorInitializersOnNextLine: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 AllowShortCaseLabelsOnASingleLine: true
-AllowShortIfStatementsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
 BinPackArguments: false
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeTernaryOperators: false

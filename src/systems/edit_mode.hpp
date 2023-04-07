@@ -1,11 +1,11 @@
 #pragma once
 #include "game_system.hpp"
-#include "level_editor.hpp"
+#include "undo_system.hpp"
 
 class EditModeSystem : public GameSystem
 {
 private:
-	LevelEditor level_editor_;
+	UndoSystem level_editor_;
 
 public:
 	using GameSystem::GameSystem;

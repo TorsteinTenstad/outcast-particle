@@ -3,13 +3,7 @@
 #include "undo_system.hpp"
 #include <vector>
 
-void Deselect(Level& level, std::vector<int> entity_ids);
-void Select(Level& level, std::vector<int> entity_ids);
-void LimitPosition(Level& level, sf::Vector2f& position, sf::Vector2f size);
-void SnapToGrid(sf::Vector2f& v, float grid_size);
-void LimitAndSnapPosition(Level& level, sf::Vector2f& position, sf::Vector2f size);
-
-class ResizeEntities : public UndoableAction
+class ResizeSelected : public UndoableAction
 {
 private:
 	Level& level_;
@@ -17,10 +11,10 @@ private:
 	std::vector<sf::Vector2f> original_sizes_;
 	sf::Vector2f size_delta_;
 
-	friend class ResizeEntities;
+	friend class ResizeSelected;
 
 public:
-	ResizeEntities(Level& level, sf::Vector2f size_delta) :
+	ResizeSelected(Level& level, sf::Vector2f size_delta) :
 		level_(level),
 		size_delta_(size_delta)
 	{
@@ -51,29 +45,18 @@ public:
 			width_and_height = original_sizes_[i++];
 		}
 	}
-	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> other) override
+	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action) override
 	{
-		if (typeid(*this) != typeid(*other))
+		if (typeid(*this) != typeid(*next_action))
 		{
-			return other;
+			return next_action;
 		}
-		auto other_modify_entity_size = static_cast<ResizeEntities*>(other.get());
+		auto other_modify_entity_size = static_cast<ResizeSelected*>(next_action.get());
 		if (other_modify_entity_size->entities_ != entities_)
 		{
-			return other;
+			return next_action;
 		}
 		size_delta_ += other_modify_entity_size->size_delta_;
 		return {};
 	}
-};
-
-class LevelEditor : public UndoSystem
-{
-private:
-	void FunctionalDo(std::function<void(void)>&& do_func, std::function<void(void)>&& undo_func);
-
-public:
-	void SelectEntities(Level& level, std::vector<int> entity_ids, bool deselect_others);
-	void DeselectAllEntities(Level& level);
-	void MoveSelectedEntities(Level& level, sf::Vector2f distance);
 };

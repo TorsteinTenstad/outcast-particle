@@ -5,6 +5,9 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "edit_mode.hpp"
+#include "edit_mode_actions/move_selected_with_cursor.hpp"
+#include "edit_mode_actions/resize_selected.hpp"
+#include "edit_mode_actions/select_entities.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
 #include "utils/get_size.hpp"
@@ -50,48 +53,30 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			continue;
 		}
-		level_editor_.SelectEntities(level, { entity_id }, !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES]);
+		level_editor_.Do<SelectEntities>(level, std::vector<int>({ entity_id }), !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES]);
 	}
 
 	// Conditional deselect all:
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
 		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{
-		level_editor_.DeselectAllEntities(level);
+		level_editor_.Do<DeselectAll>(level);
 	}
 
 	// Move entities with the curser:
-	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left])
+	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 	{
 		for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 		{
-			TemporarilyMoved* temporarily_moved = level.EnsureExistenceOfComponent<TemporarilyMoved>(entity_id);
-			if (!temporarily_moved->original_position)
-			{
-				temporarily_moved->original_position = position->position;
-			}
-			position->position = temporarily_moved->original_position.value() + cursor_and_keys_.cursor_position - cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left];
-			LimitAndSnapPosition(level, position->position, GetSize(level, entity_id, false));
+			selected->mouse_offset = position->position - cursor_and_keys_.cursor_position;
 		}
+	}
+	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && cursor_and_keys_.cursor_moved_this_frame)
+	{
+		level_editor_.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}
 
-	if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
-	{
-		bool non_zero_move = false;
-		for (auto [entity_id, selected, temporarily_moved, position] : level.GetEntitiesWith<Selected, TemporarilyMoved, Position>())
-		{
-			if (temporarily_moved->original_position.has_value() && position->position != temporarily_moved->original_position.value())
-			{
-				position->position = temporarily_moved->original_position.value();
-				non_zero_move = true;
-			}
-			level.RemoveComponents<TemporarilyMoved>(entity_id);
-		}
-		if (non_zero_move)
-		{
-			level_editor_.MoveSelectedEntities(level, cursor_and_keys_.cursor_position - cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left]);
-		}
-	}
+	// Resize:
 	for (auto [key, size_delta_step] : std::vector<std::tuple<sf::Keyboard::Key, sf::Vector2f>>(
 			 { { globals.key_config.INCREMENT_HEIGHT, sf::Vector2f(0, 1) },
 				 { globals.key_config.DECREMENT_HEIGHT, sf::Vector2f(0, -1) },
@@ -100,7 +85,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[key])
 		{
-			level_editor_.Do(std::move(std::make_unique<ResizeEntities>(level, size_delta_step)));
+			level_editor_.Do<ResizeSelected>(level, size_delta_step);
 		}
 	}
 
