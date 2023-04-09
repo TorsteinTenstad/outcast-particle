@@ -9,6 +9,7 @@ int EnsureExistenceOfChildEntity(Children* parents_children, std::function<int(v
 		int child_id = child_creation_func();
 		parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(child_id);
 	}
+	assert(parents_children->ids_owned_by_component[typeid(ResponsibleComponent)].size() == 1);
 	return parents_children->ids_owned_by_component[typeid(ResponsibleComponent)][0];
 }
 

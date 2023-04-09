@@ -10,17 +10,17 @@ public:
 
 private:
 	template <class... Components>
-	void RecursiveMoveEntityActiveState(int entity_id,
+	void RecursiveMoveEntityActiveState(int entity_id, ECSScene& from_scene,
 		std::map<std::type_index, std::variant<std::map<int, Components>...>>& from_container,
 		std::map<std::type_index, std::variant<std::map<int, Components>...>>& to_container)
 	{
-		if (Children* children = RawGetComponent<Children>(entity_id))
+		if (Children* children = from_scene.RawGetComponent<Children>(entity_id))
 		{
 			for (auto& [component_type_id, child_ids] : children->ids_owned_by_component)
 			{
 				for (auto& child_id : child_ids)
 				{
-					RecursiveMoveEntityActiveState(child_id, from_container, to_container);
+					RecursiveMoveEntityActiveState(child_id, from_scene, from_container, to_container);
 				}
 			}
 		}
@@ -43,14 +43,13 @@ public:
 		return new_id;
 	}
 
-	void
-	ActivateEntity(int entity_id)
+	void ActivateEntity(int entity_id)
 	{
-		RecursiveMoveEntityActiveState(entity_id, inactive_entities.components_, components_);
+		RecursiveMoveEntityActiveState(entity_id, inactive_entities, inactive_entities.components_, components_);
 	}
 	void DeactivateEntity(int entity_id)
 	{
-		RecursiveMoveEntityActiveState(entity_id, components_, inactive_entities.components_);
+		RecursiveMoveEntityActiveState(entity_id, *this, components_, inactive_entities.components_);
 	}
 
 	template <class Component>
