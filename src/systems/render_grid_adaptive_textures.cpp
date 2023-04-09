@@ -10,11 +10,6 @@ sf::RenderTexture& RenderGridAdaptiveTexturesSystem::EnsureTextureSetup(Level& l
 	auto view_size = level.GetSize();
 	auto texture_size = level.GetGridSize() * subsampling;
 
-	if (textures_and_shapes_[fragment_shader_path].count(draw_priority) == 0)
-	{
-		std::get<int>(textures_and_shapes_[fragment_shader_path][draw_priority]) = level.CreateEntityId();
-	}
-
 	sf::RenderTexture& render_texture = std::get<sf::RenderTexture>(textures_and_shapes_[fragment_shader_path][draw_priority]);
 	if (render_texture.getSize() != texture_size)
 	{
@@ -36,19 +31,18 @@ void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subs
 
 	for (auto& [draw_priority, tup] : textures_and_shapes_.at(fragment_shader_path))
 	{
-		int entity_id = std::get<int>(tup);
+		Shader& shader = std::get<Shader>(tup);
 		sf::RenderTexture& texture = std::get<sf::RenderTexture>(tup);
 		sf::RectangleShape& shape = std::get<sf::RectangleShape>(tup);
 		sf::Vector2u grid_size = texture.getSize();
-		Shader* shader = level.EnsureExistenceOfComponent<Shader>(entity_id);
-		shader->fragment_shader_path = fragment_shader_path;
-		shader->float_uniforms["grid_width"] = grid_size.x;
-		shader->float_uniforms["grid_height"] = grid_size.y;
+		shader.fragment_shader_path = fragment_shader_path;
+		shader.float_uniforms["grid_width"] = grid_size.x;
+		shader.float_uniforms["grid_height"] = grid_size.y;
 		texture.display();
 		shape.setSize(level.GetSize());
 		shape.setTexture(&texture.getTexture());
 		shape.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
-		level.drawables[draw_priority].push_back({ entity_id, &shape });
+		level.drawables[draw_priority].push_back({ &shape, std::optional<int>(), &shader });
 	}
 }
 

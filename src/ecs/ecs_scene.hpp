@@ -15,7 +15,7 @@ class ECSScene
 	friend class ECSSceneWithInactiveLayer;
 
 protected:
-	static int next_available_entity_id_;
+	int next_available_entity_id_ = 0;
 	std::map<std::type_index, ComponentMap> components_;
 
 protected:

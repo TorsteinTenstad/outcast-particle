@@ -31,12 +31,16 @@ static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 void EditModeSystem::Update(Level& level, float dt)
 {
 	auto level_mode = level.GetMode();
-	if (IsMenu(active_level_id_) || (level_mode != EDIT_MODE && level_mode != PAUSE_MODE))
+	if (IsMenu(active_level_id_))
 	{
 		level_editor_.Clear();
 	}
-	if (level.GetMode() != EDIT_MODE)
+	if (level_mode != EDIT_MODE)
 	{
+		if (level_mode != PAUSE_MODE && level.GetIdsWithComponent<Selected>().size() > 0)
+		{
+			level_editor_.Do<DeselectAll>(level);
+		}
 		return;
 	}
 

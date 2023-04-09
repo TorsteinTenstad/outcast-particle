@@ -6,8 +6,6 @@
 #include <optional>
 #include <string>
 
-int ECSScene::next_available_entity_id_ = 0;
-
 void ECSScene::AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
 {
 	entity_creation_observers.push_back(entity_creation_observer);

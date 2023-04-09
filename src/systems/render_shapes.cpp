@@ -33,7 +33,7 @@ EntityBoundDrawable RenderShapesSystem::RenderShape(int entity_id, sf::Shape* sh
 	shape->setTexture(texture);
 	shape->setPosition(position->position);
 	shape->setFillColor(fill_color);
-	return { entity_id, shape };
+	return { shape, entity_id };
 }
 
 void RenderShapesSystem::Update(Level& level, float dt)

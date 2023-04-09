@@ -14,7 +14,7 @@
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
 
 void PauseMode::Give(
-	std::function<void(std::string)> set_level,
+	std::function<Level&(std::string)> set_level,
 	const std::map<std::string, std::vector<std::string>>* level_groups,
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records)
 {
@@ -113,7 +113,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 
 		if (is_in_level_editing_)
 		{
-			AddButton([&]() { level.SetMode(EDIT_MODE); level.LoadFromFile(); }, "Edit level", sf::Keyboard::Unknown);
+			AddButton([&]() { set_level_(active_level_id_).SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
 		}
 	}
 

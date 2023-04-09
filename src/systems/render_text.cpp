@@ -30,6 +30,6 @@ void RenderTextSystem::Update(Level& level, float dt)
 		text_[entity_id].setFillColor(text->color);
 		text_[entity_id].setOutlineColor(text->outline_color);
 		text_[entity_id].setOutlineThickness(text->outline_thickness);
-		level.drawables[draw_priority->draw_priority].push_back({ text->apply_shader ? entity_id : -1, &text_[entity_id] });
+		level.drawables[draw_priority->draw_priority].push_back({ &text_[entity_id], text->apply_shader ? entity_id : std::optional<int>() });
 	}
 }
