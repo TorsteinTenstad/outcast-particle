@@ -28,7 +28,23 @@ private:
 	}
 
 public:
-	void ActivateEntity(int entity_id)
+	int CreateEntityId() override
+	{
+		int new_id = next_available_entity_id_++;
+		while (inactive_entities.IdExists(new_id))
+		{
+			new_id = next_available_entity_id_++;
+		}
+
+		for (auto entity_creation_observer : entity_creation_observers)
+		{
+			entity_creation_observer->Notify(new_id);
+		}
+		return new_id;
+	}
+
+	void
+	ActivateEntity(int entity_id)
 	{
 		RecursiveMoveEntityActiveState(entity_id, inactive_entities.components_, components_);
 	}

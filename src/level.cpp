@@ -28,9 +28,17 @@ LevelMode Level::GetMode()
 	return mode_;
 }
 
-void Level::SetMode(LevelMode level_mode)
+void Level::SetMode(LevelMode new_mode)
 {
-	mode_ = level_mode;
+	if (mode_ == EDIT_MODE)
+	{
+		SaveToFile();
+	}
+	if (new_mode == EDIT_MODE)
+	{
+		LoadFromFile();
+	}
+	mode_ = new_mode;
 }
 
 sf::Vector2f Level::GetSize()

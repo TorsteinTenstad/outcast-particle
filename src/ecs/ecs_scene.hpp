@@ -37,7 +37,10 @@ public:
 	template <class... Component>
 	bool HasComponents(int entity_id);
 
-	int CreateEntityId();
+	bool IdExists(int entity_id);
+
+	virtual int CreateEntityId();
+	void Clear();
 
 	template <class Component>
 	Component* EnsureExistenceOfComponent(int entity_id);

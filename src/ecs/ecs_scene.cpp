@@ -28,6 +28,28 @@ int ECSScene::CreateEntityId()
 	return new_id;
 }
 
+bool ECSScene::IdExists(int entity_id)
+{
+	for (auto& [component_type_id, component_map_variant] : components_)
+	{
+		bool has_component = std::visit([entity_id](auto& component_map) { return component_map.count(entity_id) > 0; }, component_map_variant);
+		if (has_component)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void ECSScene::Clear()
+{
+	for (auto& [component_type_id, component_map_variant] : components_)
+	{
+		std::visit([](auto& component_map) { component_map.clear(); }, component_map_variant);
+	}
+	next_available_entity_id_ = 0;
+}
+
 int ECSScene::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();

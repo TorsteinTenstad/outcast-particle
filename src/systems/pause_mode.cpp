@@ -109,20 +109,20 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			menu_title = "You Died";
 		}
 
-		AddButton(std::bind(set_level_, active_level_id_), "Restart level", sf::Keyboard::R);
+		AddButton([&]() {level.SetMode(READY_MODE); level.LoadFromFile(); }, "Restart level", sf::Keyboard::R);
 
 		if (is_in_level_editing_)
 		{
-			AddButton([&]() { set_level_(active_level_id_).SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
+			AddButton([&]() { level.SetMode(EDIT_MODE); }, "Edit level", sf::Keyboard::Unknown);
 		}
 	}
 
 	if (previous_mode == EDIT_MODE)
 	{
 		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Continue editing", sf::Keyboard::Escape);
-		AddButton([&]() { level.SaveToFile(); level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
-		AddButton([&]() { level.SaveToFile(); set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
-		AddButton([&]() { level.SaveToFile(); set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
+		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 	else
 	{
