@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <vector>
 
 class UndoableAction
@@ -46,6 +47,7 @@ public:
 	{
 		next_action_ = actions_.end();
 	}
+	UndoSystem(const UndoSystem& other) = delete;
 
 	template <class Action, class... Args>
 	void Do(Args&&... args)

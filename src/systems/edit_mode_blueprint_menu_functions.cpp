@@ -1,5 +1,5 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
-#include "entity_creation_observer.hpp"
+#include "ecs/entity_creation_observer.hpp"
 
 const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPGoal, BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)

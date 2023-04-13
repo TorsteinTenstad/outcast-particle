@@ -2,7 +2,7 @@
 #include "SFML/System/Vector2.hpp"
 #include <array>
 
-#define PI 3.141593
+#define PI 3.141593f
 
 float Smoothstep(float a, float b, float x);
 float Smoothstep(float x);

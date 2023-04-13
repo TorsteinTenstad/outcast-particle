@@ -9,30 +9,31 @@ void CollisionSystem::Update(Level& level, float dt)
 	{
 		return;
 	}
-	auto& collision_map = level.GetComponentMap<Collision>();
-	auto& width_and_height_map = level.GetComponentMap<WidthAndHeight>();
-	auto& sound_info_map = level.GetComponentMap<SoundInfo>();
-	auto& position_map = level.GetComponentMap<Position>();
 
 	for (auto& [entity_id, intersection, collision, velocity, position, radius] : level.GetEntitiesWith<Intersection, Collision, Velocity, Position, Radius>())
 	{
 		for (auto& intersecting_id : intersection->intersecting_ids)
 		{
-			if (collision_map.count(intersecting_id) == 0 || width_and_height_map.count(intersecting_id) == 0)
+			Collision* intersecting_entity_collision = level.RawGetComponent<Collision>(intersecting_id);
+			WidthAndHeight* intersecting_entity_width_and_height = level.RawGetComponent<WidthAndHeight>(intersecting_id);
+			Position* intersecting_entity_position = level.RawGetComponent<Position>(intersecting_id);
+			if (!intersecting_entity_collision
+				|| !intersecting_entity_width_and_height
+				|| !intersecting_entity_position)
 			{
 				continue;
 			}
-			float compound_bounce_factor = collision->bounce_factor * collision_map[intersecting_id].bounce_factor;
-			float compound_friction = collision->friction + collision_map[intersecting_id].friction;
+			float compound_bounce_factor = collision->bounce_factor * intersecting_entity_collision->bounce_factor;
+			float compound_friction = collision->friction + intersecting_entity_collision->friction;
 			float collision_sound_factor = 0;
 			if (compound_bounce_factor < 0)
 			{
 				compound_friction = 0;
 			}
-			sf::Vector2f distance = position->position - position_map[intersecting_id].position;
+			sf::Vector2f distance = position->position - intersecting_entity_position->position;
 			sf::Vector2f& v = velocity->velocity;
-			float w_radius = width_and_height_map[intersecting_id].width_and_height.x / 2;
-			float h_radius = width_and_height_map[intersecting_id].width_and_height.y / 2;
+			float w_radius = intersecting_entity_width_and_height->width_and_height.x / 2;
+			float h_radius = intersecting_entity_width_and_height->width_and_height.y / 2;
 			float radius_used_for_repositioning = 1.001 * radius->radius;
 			if (abs(distance.x) < w_radius)
 			{
@@ -47,7 +48,7 @@ void CollisionSystem::Update(Level& level, float dt)
 				{
 					v.x -= velocity_lost_to_friction;
 				}
-				position->position.y = position_map[intersecting_id].position.y + Sign(distance.y) * (radius_used_for_repositioning + h_radius);
+				position->position.y = intersecting_entity_position->position.y + Sign(distance.y) * (radius_used_for_repositioning + h_radius);
 			}
 			else if (abs(distance.y) < h_radius)
 			{
@@ -62,7 +63,7 @@ void CollisionSystem::Update(Level& level, float dt)
 				{
 					v.y -= velocity_lost_to_friction;
 				}
-				position->position.x = position_map[intersecting_id].position.x + Sign(distance.x) * (radius_used_for_repositioning + w_radius);
+				position->position.x = intersecting_entity_position->position.x + Sign(distance.x) * (radius_used_for_repositioning + w_radius);
 			}
 			else
 			{
@@ -78,15 +79,17 @@ void CollisionSystem::Update(Level& level, float dt)
 				}
 			}
 
-			assert(sound_info_map.count(intersecting_id) > 0);
-			if (collision_sound_factor > 0.1)
+			if (SoundInfo* intersecting_entity_sound_info = level.RawGetComponent<SoundInfo>(intersecting_id))
 			{
-				if (collision_sound_factor > 1)
+				if (collision_sound_factor > 0.1)
 				{
-					collision_sound_factor = 1;
+					if (collision_sound_factor > 1)
+					{
+						collision_sound_factor = 1;
+					}
+					intersecting_entity_sound_info->sound_volume = collision_sound_factor * collision_sound_factor;
+					intersecting_entity_sound_info->play_sound = true;
 				}
-				sound_info_map[intersecting_id].sound_volume = collision_sound_factor * collision_sound_factor;
-				sound_info_map[intersecting_id].play_sound = true;
 			}
 		}
 	}

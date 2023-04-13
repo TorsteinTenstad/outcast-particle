@@ -114,4 +114,4 @@ typedef std::variant<
 	std::map<int, WallTexture>,
 	std::map<int, WidthAndHeight>,
 	std::map<int, Wormhole>>
-	ComponentMap;
+	ComponentMapVariant;

@@ -1,6 +1,6 @@
 #pragma once
 #include "components.hpp"
-#include "entity_creation_observer.hpp"
+#include "ecs/entity_creation_observer.hpp"
 #include <functional>
 #include <map>
 #include <optional>
@@ -16,7 +16,7 @@ class ECSScene
 
 protected:
 	int next_available_entity_id_ = 0;
-	std::map<std::type_index, ComponentMap> components_;
+	std::map<std::type_index, ComponentMapVariant> components_;
 
 protected:
 	std::vector<EntityCreationObserver*> entity_creation_observers;

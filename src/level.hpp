@@ -6,6 +6,7 @@
 #include "globals.hpp"
 #include "level_mode.hpp"
 #include "ui_origin.hpp"
+#include "undo_system.hpp"
 #include <functional>
 #include <optional>
 #include <variant>
@@ -36,6 +37,8 @@ public:
 	std::string name = "Untitled";
 	sf::Vector2f ui_bars_size = sf::Vector2f(0, 0);
 
+	UndoSystem editor;
+
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
 	int AddBlueprint(Blueprint blueprint);
@@ -56,7 +59,4 @@ public:
 	void LoadFromFile();
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
-
-	friend class CollisionSystem; // System is written using the old GetComponent. Gets access to the new, private version until the system is rewritten.
-	friend class EditModeSystem;  // System is written using the old GetComponent. Gets access to the new, private version until the system is rewritten.
 };

@@ -1,10 +1,9 @@
 #pragma once
-#include "systems/edit_mode.hpp"
+#include "edit_mode.hpp"
 #include "components/editable.hpp"
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
-#include "edit_mode.hpp"
 #include "edit_mode_actions/delete_selected.hpp"
 #include "edit_mode_actions/modify_level_size.hpp"
 #include "edit_mode_actions/move_selected_with_cursor.hpp"
@@ -13,6 +12,7 @@
 #include "edit_mode_actions/select_entities.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/get_size.hpp"
 #include "utils/level_id.hpp"
 #include "utils/math.hpp"
@@ -31,26 +31,22 @@ static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
 void EditModeSystem::Update(Level& level, float dt)
 {
 	auto level_mode = level.GetMode();
-	if (IsMenu(active_level_id_))
-	{
-		level_editor_.Clear();
-	}
 	if (level_mode != EDIT_MODE)
 	{
 		if (level_mode != PAUSE_MODE && level.GetIdsWithComponent<Selected>().size() > 0)
 		{
-			level_editor_.Do<DeselectAll>(level);
+			level.editor.Do<DeselectAll>(level);
 		}
 		return;
 	}
 
 	if (cursor_and_keys_.key_down[sf::Keyboard::LControl] && cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Z])
 	{
-		level_editor_.Undo();
+		level.editor.Undo();
 	}
 	if (cursor_and_keys_.key_down[sf::Keyboard::LControl] && cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Y])
 	{
-		level_editor_.Redo();
+		level.editor.Redo();
 	}
 
 	// Select entities:
@@ -60,14 +56,14 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			continue;
 		}
-		level_editor_.Do<SelectEntities>(level, std::vector<int>({ entity_id }), !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES]);
+		level.editor.Do<SelectEntities>(level, std::vector<int>({ entity_id }), !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES]);
 	}
 
 	// Conditional deselect all:
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
 		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{
-		level_editor_.Do<DeselectAll>(level);
+		level.editor.Do<DeselectAll>(level);
 	}
 
 	// Move entities with the curser:
@@ -80,7 +76,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && cursor_and_keys_.cursor_moved_this_frame)
 	{
-		level_editor_.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
+		level.editor.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}
 
 	// Resize:
@@ -92,14 +88,14 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[key])
 		{
-			level_editor_.Do<ResizeSelected>(level, size_delta_step);
+			level.editor.Do<ResizeSelected>(level, size_delta_step);
 		}
 	}
 
 	// Delete:
 	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
 	{
-		level_editor_.Do<DeleteSelected>(level);
+		level.editor.Do<DeleteSelected>(level);
 	}
 
 	// Change level size:
@@ -115,7 +111,7 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			continue;
 		}
-		level_editor_.Do<ModifyLevelSize>(level, increment);
+		level.editor.Do<ModifyLevelSize>(level, increment);
 	}
 
 	// Handle selection of entity in blueprint menu:
@@ -127,7 +123,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Rotate fields:
 	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
 	{
-		level_editor_.Do<RotateSelectedFields>(level, PI / 2);
+		level.editor.Do<RotateSelectedFields>(level, PI / 2);
 	}
 
 	return;

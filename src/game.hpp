@@ -6,6 +6,7 @@
 #include "level.hpp"
 #include "sfml_event_handler.hpp"
 
+#include <memory>
 #include <stack>
 
 class Game
@@ -19,7 +20,7 @@ private:
 	std::stack<std::string> menu_stack;
 
 	std::string active_level_id_ = MAIN_MENU;
-	Level active_level_;
+	std::unique_ptr<Level> active_level_;
 	std::map<std::string, std::vector<std::string>> level_groups_;
 	std::map<int, std::map<std::string, float>> level_completion_time_records_;
 	std::map<std::string, int> level_coin_records_;
@@ -34,6 +35,8 @@ private:
 
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
+
+	Level& GetActiveLevel();
 
 	template <class System>
 	System& GetGameSystem();

@@ -32,17 +32,17 @@ void ButtonSystem::Update(Level& level, float dt)
 	for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
 	{
 		on_hovered_started_this_frame->func();
-		//return;
+		return;
 	}
 	for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
 	{
 		on_hovered->func();
-		//return;
+		return;
 	}
 	for (auto [entity_id, released_this_frame, on_released_this_frame] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame>())
 	{
 		on_released_this_frame->func();
-		//return;
+		return;
 	}
 
 	for (auto [entity_id, key_config_button, sticky_button_down] : level.GetEntitiesWith<KeyConfigButton, StickyButtonDown>())

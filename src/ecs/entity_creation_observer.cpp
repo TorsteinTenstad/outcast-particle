@@ -1,4 +1,4 @@
-#include "entity_creation_observer.hpp"
+#include "ecs/entity_creation_observer.hpp"
 #include <iostream>
 
 EntityCreationObserver::EntityCreationObserver(ECSScene& subject, std::function<void(ECSScene&, int)> f) :

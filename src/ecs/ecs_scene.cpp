@@ -14,8 +14,10 @@ void ECSScene::AddEntityCreationObserver(EntityCreationObserver* entity_creation
 void ECSScene::RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer)
 {
 	auto it = std::find(entity_creation_observers.begin(), entity_creation_observers.end(), entity_creation_observer);
-	assert(it != entity_creation_observers.end());
-	entity_creation_observers.erase(it);
+	if (it != entity_creation_observers.end())
+	{
+		entity_creation_observers.erase(it);
+	}
 }
 
 int ECSScene::CreateEntityId()

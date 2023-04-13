@@ -21,8 +21,7 @@ void MoveComponentAtKey(Key key, std::type_index component_type_index,
 	std::map<std::type_index, std::variant<std::map<Key, Ts>...>>& to_container)
 {
 	std::visit([&to_container, key, component_type_index](auto& from_map) {
-		using FromMapType = std::decay_t<decltype(from_map)>;
-		using ValueType = typename FromMapType::mapped_type;
+		using ComponentMap = std::decay_t<decltype(from_map)>;
 		auto it = from_map.find(key);
 		if (it == from_map.end())
 		{
@@ -31,11 +30,11 @@ void MoveComponentAtKey(Key key, std::type_index component_type_index,
 		auto to_variant_it = to_container.find(component_type_index);
 		if (to_variant_it == to_container.end())
 		{
-			auto [inserted_it, inserted] = to_container.emplace(component_type_index, std::map<Key, ValueType> {});
+			auto [inserted_it, inserted] = to_container.emplace(component_type_index, ComponentMap {});
 			to_variant_it = inserted_it;
 			assert(inserted);
 		}
-		auto& to_map = std::get<std::map<Key, ValueType>>(to_variant_it->second);
+		auto& to_map = std::get<ComponentMap>(to_variant_it->second);
 		auto [to_it, inserted] = to_map.emplace(key, it->second);
 		assert(inserted);
 		from_map.erase(it);
