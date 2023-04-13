@@ -3,7 +3,7 @@
 #include "undo_system.hpp"
 #include <vector>
 
-class ResizeSelected : public UndoableAction
+class ResizeSelected : public MergeableUndoableAction<ResizeSelected>
 {
 private:
 	Level& level_;
@@ -45,18 +45,13 @@ public:
 			width_and_height = original_sizes_[i++];
 		}
 	}
-	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action) override
+	bool TryMerge(const ResizeSelected& next_action) override
 	{
-		if (typeid(*this) != typeid(*next_action))
+		if (next_action.entities_ != entities_)
 		{
-			return next_action;
+			return false;
 		}
-		auto other_modify_entity_size = static_cast<ResizeSelected*>(next_action.get());
-		if (other_modify_entity_size->entities_ != entities_)
-		{
-			return next_action;
-		}
-		size_delta_ += other_modify_entity_size->size_delta_;
-		return {};
+		size_delta_ += next_action.size_delta_;
+		return true;
 	}
 };

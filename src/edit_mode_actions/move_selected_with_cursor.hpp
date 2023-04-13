@@ -14,7 +14,7 @@ static sf::Vector2f LimitAndSnapToGrid(Level& level, sf::Vector2f position, floa
 	return position;
 }
 
-class MoveSelectedWithCursor : public UndoableAction
+class MoveSelectedWithCursor : public MergeableUndoableAction<MoveSelectedWithCursor>
 {
 private:
 	Level& level_;
@@ -52,18 +52,13 @@ public:
 	void Do() { SetPositions(new_positions_); }
 	void Undo() { SetPositions(original_positions_); }
 
-	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action) override
+	bool TryMerge(const MoveSelectedWithCursor& next_action) override
 	{
-		if (typeid(*this) != typeid(*next_action))
+		if (next_action.entities_ != entities_)
 		{
-			return next_action;
+			return false;
 		}
-		auto next_reposition_selected = static_cast<MoveSelectedWithCursor*>(next_action.get());
-		if (next_reposition_selected->entities_ != entities_)
-		{
-			return next_action;
-		}
-		new_positions_ = std::move(next_reposition_selected->new_positions_);
-		return {};
+		new_positions_ = std::move(next_action.new_positions_);
+		return true;
 	}
 };

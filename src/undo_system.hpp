@@ -19,6 +19,30 @@ public:
 	}
 };
 
+template <class DerivingClass>
+class MergeableUndoableAction : public UndoableAction
+{
+public:
+	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action) override
+	{
+		if (typeid(*this) != typeid(*next_action))
+		{
+			return next_action;
+		}
+		const DerivingClass& deriving = *static_cast<DerivingClass*>(next_action.get());
+		bool merge_happened = TryMerge(deriving);
+		if (!merge_happened)
+		{
+			return next_action;
+		}
+		return {};
+	}
+	virtual bool TryMerge(const DerivingClass& next_action)
+	{
+		return false;
+	}
+};
+
 class FunctionalUndoableAction : public UndoableAction
 {
 private:

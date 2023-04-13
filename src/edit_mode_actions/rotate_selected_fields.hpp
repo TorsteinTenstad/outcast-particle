@@ -4,7 +4,7 @@
 #include "utils/math.hpp"
 #include <vector>
 
-class RotateSelectedFields : public UndoableAction
+class RotateSelectedFields : public MergeableUndoableAction<RotateSelectedFields>
 {
 private:
 	Level& level_;
@@ -39,18 +39,13 @@ public:
 	void Do() { Rotate(radians_); }
 	void Undo() { Rotate(-radians_); }
 
-	std::optional<std::unique_ptr<UndoableAction>> TryMerge(std::unique_ptr<UndoableAction> next_action) override
+	bool TryMerge(const RotateSelectedFields& next_action) override
 	{
-		if (typeid(*this) != typeid(*next_action))
+		if (next_action.entities_ != entities_)
 		{
-			return next_action;
+			return true;
 		}
-		auto other_modify_entity_size = static_cast<RotateSelectedFields*>(next_action.get());
-		if (other_modify_entity_size->entities_ != entities_)
-		{
-			return next_action;
-		}
-		radians_ += other_modify_entity_size->radians_;
-		return {};
+		radians_ += next_action.radians_;
+		return false;
 	}
 };
