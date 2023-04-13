@@ -60,6 +60,7 @@ void EditModeSystem::Update(Level& level, float dt)
 
 	bool is_selecting_not_dragging = level.GetIdsWithComponent<Pressed>().size() == 0;
 
+	// Rectangle select
 	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
 	int drag_select_tool_id = level.GetSingleton("EditModeDragSelectTool", creation_func);
 
@@ -93,15 +94,18 @@ void EditModeSystem::Update(Level& level, float dt)
 		}
 	}
 
-	// Select entities:
+	// Select entities on click
 	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<PressedThisFrame, Editable>())
 	{
-		if (level.HasComponents<Selected>(entity_id))
+		if (!level.HasComponents<Selected>(entity_id))
 		{
-			continue;
+			bool deselect_others = !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES];
+			level.editor.Do<SelectEntities>(level, std::vector<int>({ entity_id }), deselect_others ? level.GetIdsWithComponent<Selected>() : std::vector<int> {});
 		}
-		bool deselect_others = !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES];
-		level.editor.Do<SelectEntities>(level, std::vector<int>({ entity_id }), deselect_others ? level.GetIdsWithComponent<Selected>() : std::vector<int> {});
+		else if (cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
+		{
+			level.editor.Do<SelectEntities>(level, std::vector<int> {}, std::vector<int>({ entity_id }));
+		}
 	}
 
 	// Conditional deselect all:
