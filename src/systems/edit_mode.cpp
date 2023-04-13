@@ -4,6 +4,7 @@
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
+#include "edit_mode_actions/add_blueprint.hpp"
 #include "edit_mode_actions/delete_selected.hpp"
 #include "edit_mode_actions/modify_level_size.hpp"
 #include "edit_mode_actions/move_selected_with_cursor.hpp"
@@ -115,9 +116,11 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Handle selection of entity in blueprint menu:
-	for (auto& [entity_id, blueprint_menu_item, selected] : level.GetEntitiesWith<Selected, BlueprintMenuItem>())
+	for (auto& [entity_id, selected, tag, blueprint_menu_item] : level.GetEntitiesWith<Selected, Tag, BlueprintMenuItem>())
 	{
+		Blueprint selected_blueprint = ToBlueprintEnum(tag->tag);
 		CloseBlueprintMenu(level);
+		level.editor.Do<AddBlueprint>(level, selected_blueprint, cursor_and_keys_.cursor_position);
 	}
 
 	// Rotate fields:
