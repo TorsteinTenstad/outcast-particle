@@ -27,12 +27,11 @@ private:
 	std::vector<int> entities_to_deselect_;
 
 public:
-	SelectEntities(Level& level, std::vector<int>&& entities_to_select, bool deselect_others) :
+	SelectEntities(Level& level, std::vector<int>&& entities_to_select, std::vector<int>&& entities_to_deselect) :
 		level_(level),
-		entities_to_select_(entities_to_select)
-	{
-		entities_to_deselect_ = deselect_others ? level.GetIdsWithComponent<Selected>() : std::vector<int> {};
-	}
+		entities_to_select_(entities_to_select),
+		entities_to_deselect_(entities_to_deselect)
+	{}
 	void Do()
 	{
 		Deselect(level_, entities_to_deselect_);
@@ -42,27 +41,5 @@ public:
 	{
 		Deselect(level_, entities_to_select_);
 		Select(level_, entities_to_deselect_);
-	}
-};
-
-class DeselectAll : public UndoableAction
-{
-private:
-	Level& level_;
-	std::vector<int> entities_;
-
-public:
-	DeselectAll(Level& level) :
-		level_(level)
-	{
-		entities_ = level.GetIdsWithComponent<Selected>();
-	}
-	void Do()
-	{
-		level_.ClearComponent<Selected>();
-	}
-	void Undo()
-	{
-		Select(level_, entities_);
 	}
 };

@@ -16,6 +16,7 @@ public:
 	{
 		entity = level.AddBlueprint(blueprint);
 		level.GetComponent<Position>(entity)->position = position;
+		level.AddComponents<Pressed, PressedThisFrame>(entity);
 		level.DeactivateEntity(entity);
 	}
 	void Do()

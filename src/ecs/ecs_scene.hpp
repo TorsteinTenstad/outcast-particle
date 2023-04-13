@@ -102,6 +102,10 @@ public:
 
 	int CopyEntity(int from_id);
 
+	int GetSingleton(std::string tag, std::function<int(ECSScene&)> creation_func);
+
+	int GetSingleton(std::string tag);
+
 	template <class Component>
 	std::tuple<int, Component*> GetSingletonIncludeID(std::function<int(ECSScene&)> creation_func);
 

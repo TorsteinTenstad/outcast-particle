@@ -36,7 +36,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		if (level_mode != PAUSE_MODE && level.GetIdsWithComponent<Selected>().size() > 0)
 		{
-			level.editor.Do<DeselectAll>(level);
+			level.editor.Do<SelectEntities>(level, std::vector<int> {}, level.GetIdsWithComponent<Selected>());
 		}
 		return;
 	}
@@ -50,6 +50,49 @@ void EditModeSystem::Update(Level& level, float dt)
 		level.editor.Redo();
 	}
 
+	// Handle selection of entity in blueprint menu:
+	for (auto& [entity_id, selected, tag, blueprint_menu_item] : level.GetEntitiesWith<Selected, Tag, BlueprintMenuItem>())
+	{
+		Blueprint selected_blueprint = ToBlueprintEnum(tag->tag);
+		CloseBlueprintMenu(level);
+		level.editor.Do<AddBlueprint>(level, selected_blueprint, cursor_and_keys_.cursor_position);
+	}
+
+	bool is_selecting_not_dragging = level.GetIdsWithComponent<Pressed>().size() == 0;
+
+	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
+	int drag_select_tool_id = level.GetSingleton("EditModeDragSelectTool", creation_func);
+
+	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && is_selecting_not_dragging)
+	{
+		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
+		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
+		size = Abs(size);
+		level.GetComponent<WidthAndHeight>(drag_select_tool_id)->width_and_height = size;
+		level.GetComponent<Position>(drag_select_tool_id)->position = position;
+	}
+	else
+	{
+		level.GetComponent<WidthAndHeight>(drag_select_tool_id)->width_and_height = sf::Vector2f(0, 0);
+	}
+	for (auto entity : level.GetComponent<Intersection>(drag_select_tool_id)->entered_this_frame_ids)
+	{
+		if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
+		{
+			level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
+		}
+	}
+	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && is_selecting_not_dragging)
+	{
+		for (auto entity : level.GetComponent<Intersection>(drag_select_tool_id)->left_this_frame_ids)
+		{
+			if (level.HasComponents<Editable, Selected>(entity))
+			{
+				level.editor.Do<SelectEntities>(level, std::vector<int>({}), std::vector<int>({ entity }));
+			}
+		}
+	}
+
 	// Select entities:
 	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<PressedThisFrame, Editable>())
 	{
@@ -57,14 +100,15 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			continue;
 		}
-		level.editor.Do<SelectEntities>(level, std::vector<int>({ entity_id }), !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES]);
+		bool deselect_others = !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES];
+		level.editor.Do<SelectEntities>(level, std::vector<int>({ entity_id }), deselect_others ? level.GetIdsWithComponent<Selected>() : std::vector<int> {});
 	}
 
 	// Conditional deselect all:
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
 		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{
-		level.editor.Do<DeselectAll>(level);
+		level.editor.Do<SelectEntities>(level, std::vector<int> {}, level.GetIdsWithComponent<Selected>());
 	}
 
 	// Move entities with the curser:
@@ -75,7 +119,7 @@ void EditModeSystem::Update(Level& level, float dt)
 			selected->mouse_offset = position->position - cursor_and_keys_.cursor_position;
 		}
 	}
-	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && cursor_and_keys_.cursor_moved_this_frame)
+	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && !is_selecting_not_dragging && cursor_and_keys_.cursor_moved_this_frame)
 	{
 		level.editor.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}
@@ -113,14 +157,6 @@ void EditModeSystem::Update(Level& level, float dt)
 			continue;
 		}
 		level.editor.Do<ModifyLevelSize>(level, increment);
-	}
-
-	// Handle selection of entity in blueprint menu:
-	for (auto& [entity_id, selected, tag, blueprint_menu_item] : level.GetEntitiesWith<Selected, Tag, BlueprintMenuItem>())
-	{
-		Blueprint selected_blueprint = ToBlueprintEnum(tag->tag);
-		CloseBlueprintMenu(level);
-		level.editor.Do<AddBlueprint>(level, selected_blueprint, cursor_and_keys_.cursor_position);
 	}
 
 	// Rotate fields:

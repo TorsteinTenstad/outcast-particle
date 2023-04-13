@@ -104,3 +104,24 @@ void ECSScene::DeleteEntity(int id)
 			component_map_variant);
 	}
 }
+
+int ECSScene::GetSingleton(std::string tag, std::function<int(ECSScene&)> creation_func)
+{
+	for (auto [entity_id, singleton_tag] : GetEntitiesWith<SingletonTag>())
+	{
+		if (singleton_tag->tag == tag)
+		{
+			return entity_id;
+		}
+	}
+	int entity_id = creation_func(*this);
+	EnsureExistenceOfComponent<SingletonTag>(entity_id)->tag = tag;
+	return entity_id;
+}
+
+int ECSScene::GetSingleton(std::string tag)
+{
+	return GetSingleton(tag, [](ECSScene& scene) { return scene.CreateEntityId(); });
+}
+
+
