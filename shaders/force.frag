@@ -42,7 +42,7 @@ void main()
 
 	vec4 color = vec4(0, 0, 0, 0);
 
-	for (int i = 0; i < min(n_charges, MAX_ARRAY_SIZE); i++)
+	for (int i = 0; i < min(float(n_charges), float(MAX_ARRAY_SIZE)); i++)
 	{
 		mat2 basis;
 		basis[0] = vec2(charge_positions[i].xy - player_pos) / 2;
