@@ -259,7 +259,7 @@ void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
 		else
 		{
 			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
-			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(FloatToStringWithPrecision(i_coin_record.at(ui->at_level_id), 2), 13);
+			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(CreateBadgeText(i_coin_record.at(ui->at_level_id), 2 + globals.general_config.display_precise_badge_time), 16);
 		}
 	}
 }

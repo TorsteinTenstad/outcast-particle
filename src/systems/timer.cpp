@@ -19,5 +19,5 @@ void TimerSystem::Update(Level& level, float dt)
 		auto [entity_id, _] = CreateTimerButton(level, sf::Vector2f(level_size.x - 2.5 * BLOCK_SIZE, 0.5 * BLOCK_SIZE));
 		return entity_id;
 	});
-	level.GetComponent<Text>(id)->content = FloatToStringWithPrecision(level.GetSingleton<LevelCompletionTimer>()->duration, 3);
+	level.GetComponent<Text>(id)->content = CreateBadgeText(level.GetSingleton<LevelCompletionTimer>()->duration, 2 + globals.general_config.display_precise_badge_time);
 }

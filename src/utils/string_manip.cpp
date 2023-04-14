@@ -78,10 +78,11 @@ std::string BoolToStringAsEnabledOrDisabled(bool x)
 	}
 }
 
-std::string FloatToStringWithPrecision(float f, int precision)
+std::string CreateBadgeText(float f, int precision)
 {
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
 	ss << f;
+	ss << "s";
 	return ss.str();
 }

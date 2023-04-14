@@ -6,4 +6,4 @@ std::string HumanName(sf::Keyboard::Key key);
 std::string LeftShiftString(std::string string, int max_size);
 std::string RightShiftString(std::string string, int max_size);
 std::string BoolToStringAsEnabledOrDisabled(bool is);
-std::string FloatToStringWithPrecision(float f, int precision);
+std::string CreateBadgeText(float f, int precision);
