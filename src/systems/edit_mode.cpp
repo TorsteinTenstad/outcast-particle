@@ -4,7 +4,7 @@
 #include "components/physics.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
-#include "edit_mode_actions/add_blueprint.hpp"
+#include "edit_mode_actions/add_entity.hpp"
 #include "edit_mode_actions/delete_selected.hpp"
 #include "edit_mode_actions/modify_level_size.hpp"
 #include "edit_mode_actions/move_selected_with_cursor.hpp"
@@ -51,15 +51,14 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Handle selection of entity in blueprint menu:
-	for (auto& [entity_id, selected, tag, blueprint_menu_item] : level.GetEntitiesWith<Selected, Tag, BlueprintMenuItem>())
+	if (std::optional<int> selected_entity = UpdateBlueprintMenu(level))
 	{
-		Blueprint selected_blueprint = ToBlueprintEnum(tag->tag);
-		CloseBlueprintMenu(level);
-		level.editor.Do<AddBlueprint>(level, selected_blueprint, cursor_and_keys_.cursor_position);
+		level.editor.Do<AddEntity>(level, selected_entity.value());
 	}
 
 	bool is_selecting_not_dragging = level.GetIdsWithComponent<Pressed>().size() == 0;
 
+	// Drag select
 	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
 	int drag_select_tool_id = level.GetSingleton("EditModeDragSelectTool", creation_func);
 
@@ -93,7 +92,7 @@ void EditModeSystem::Update(Level& level, float dt)
 		}
 	}
 
-	// Select entities:
+	// Select entities on click:
 	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<PressedThisFrame, Editable>())
 	{
 		if (level.HasComponents<Selected>(entity_id))

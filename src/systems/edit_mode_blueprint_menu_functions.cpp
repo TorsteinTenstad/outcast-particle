@@ -1,10 +1,10 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
 #include "ecs/entity_creation_observer.hpp"
-#include "edit_mode_actions/add_blueprint.hpp"
 #include "entity_creation.hpp"
 
 const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPGoal, BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
+
 void OpenBlueprintMenu(Level& level)
 {
 	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<BlueprintMenuItem>(id); });
@@ -24,6 +24,19 @@ void OpenBlueprintMenu(Level& level)
 		level.GetComponent<DrawPriority>(entity_id)->draw_priority += UI_BASE_DRAW_PRIORITY;
 		i++;
 	}
+}
+
+//Handle selection from blueprint menu. Return any selected id.
+std::optional<int> UpdateBlueprintMenu(Level& level)
+{
+	for (auto& [entity_id, pressed_this_frame, blueprint_menu_item, draw_priority] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority>())
+	{
+		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
+		level.RemoveComponents<BlueprintMenuItem>(entity_id);
+		CloseBlueprintMenu(level);
+		return entity_id;
+	}
+	return {};
 }
 
 void CloseBlueprintMenu(Level& level)
