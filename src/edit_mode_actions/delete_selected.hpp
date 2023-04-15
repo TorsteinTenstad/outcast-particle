@@ -17,16 +17,10 @@ public:
 	}
 	void Do()
 	{
-		for (int entity : entities_)
-		{
-			level_.DeactivateEntity(entity);
-		}
+		level_.DeactivateEntities(entities_);
 	}
 	void Undo()
 	{
-		for (int entity : entities_)
-		{
-			level_.ActivateEntity(entity);
-		}
+		level_.ActivateEntities(entities_);
 	}
 };

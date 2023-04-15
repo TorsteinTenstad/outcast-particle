@@ -15,14 +15,14 @@ public:
 		level_(level),
 		entity_(entity)
 	{
-		level.DeactivateEntity(entity);
+		level.DeactivateEntities(entity);
 	}
 	void Do()
 	{
-		level_.ActivateEntity(entity_);
+		level_.ActivateEntities(entity_);
 	}
 	void Undo()
 	{
-		level_.DeactivateEntity(entity_);
+		level_.DeactivateEntities(entity_);
 	}
 };

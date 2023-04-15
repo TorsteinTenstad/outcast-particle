@@ -17,8 +17,10 @@ private:
 public:
 	int CreateEntityId() override;
 
-	void ActivateEntity(int entity_id);
-	void DeactivateEntity(int entity_id);
+	void ActivateEntities(int entity_id);
+	void DeactivateEntities(int entity_id);
+	void ActivateEntities(std::vector<int> entities);
+	void DeactivateEntities(std::vector<int> entities);
 
 	template <class Component>
 	void ActivateComponent(int entity_id);

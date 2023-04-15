@@ -3,5 +3,6 @@
 class ScheduledDelete
 {
 public:
-    float delete_at = -1.f;
+	std::optional<float> delete_at;
+	std::optional<int> frames_left_to_live;
 };

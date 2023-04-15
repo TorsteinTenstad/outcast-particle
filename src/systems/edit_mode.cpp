@@ -5,6 +5,7 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "edit_mode_actions/add_entity.hpp"
+#include "edit_mode_actions/copy_selected.hpp"
 #include "edit_mode_actions/delete_selected.hpp"
 #include "edit_mode_actions/modify_level_size.hpp"
 #include "edit_mode_actions/move_selected_with_cursor.hpp"
@@ -22,11 +23,35 @@
 const float DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY = 400;
 const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
 
-static sf::Vector2f SnapToGrid(sf::Vector2f v, float grid_size)
+static void ShowCopyPreview(Level& level, sf::Vector2f origin)
 {
-	v.x -= std::fmod(v.x, grid_size);
-	v.y -= std::fmod(v.y, grid_size);
-	return v;
+	for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
+	{
+		int copy = level.CopyEntity(entity_id);
+		level.GetComponent<Position>(copy)->position = origin + selected->mouse_offset;
+		level.RemoveComponents<Selected>(copy);
+		level.EnsureExistenceOfComponent<ScheduledDelete>(copy)->frames_left_to_live = 1;
+	}
+}
+
+enum Tool
+{
+	Idle,
+	Moving,
+	Selecting
+};
+
+Tool ComputeCurrentTool(Level& level, CursorAndKeys cursor_and_keys)
+{
+	if (!cursor_and_keys.mouse_button_down[sf::Mouse::Left])
+	{
+		return Idle;
+	}
+	if (level.GetIdsWithComponent<Pressed>().size() > 0)
+	{
+		return Moving;
+	}
+	return Selecting;
 }
 
 void EditModeSystem::Update(Level& level, float dt)
@@ -56,13 +81,13 @@ void EditModeSystem::Update(Level& level, float dt)
 		level.editor.Do<AddEntity>(level, selected_entity.value());
 	}
 
-	bool is_selecting_not_dragging = level.GetIdsWithComponent<Pressed>().size() == 0;
+	Tool current_tool = ComputeCurrentTool(level, cursor_and_keys_);
 
 	// Rectangle select
 	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
 	int drag_select_tool_id = level.GetSingleton("EditModeDragSelectTool", creation_func);
 
-	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && is_selecting_not_dragging)
+	if (current_tool == Selecting)
 	{
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
 		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
@@ -74,6 +99,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		level.GetComponent<WidthAndHeight>(drag_select_tool_id)->width_and_height = sf::Vector2f(0, 0);
 	}
+
 	for (auto entity : level.GetComponent<Intersection>(drag_select_tool_id)->entered_this_frame_ids)
 	{
 		if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
@@ -81,7 +107,7 @@ void EditModeSystem::Update(Level& level, float dt)
 			level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
 		}
 	}
-	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && is_selecting_not_dragging)
+	if (current_tool == Selecting)
 	{
 		for (auto entity : level.GetComponent<Intersection>(drag_select_tool_id)->left_this_frame_ids)
 		{
@@ -93,7 +119,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Select entities on click:
-	for (auto [entity_id, editable, pressed_this_frame] : level.GetEntitiesWith<PressedThisFrame, Editable>())
+	for (auto [entity_id, pressed_this_frame, editable] : level.GetEntitiesWith<PressedThisFrame, Editable>())
 	{
 		if (!level.HasComponents<Selected>(entity_id))
 		{
@@ -121,7 +147,7 @@ void EditModeSystem::Update(Level& level, float dt)
 			selected->mouse_offset = position->position - cursor_and_keys_.cursor_position;
 		}
 	}
-	if (cursor_and_keys_.mouse_button_down[sf::Mouse::Left] && !is_selecting_not_dragging && cursor_and_keys_.cursor_moved_this_frame)
+	if (current_tool == Moving && cursor_and_keys_.cursor_moved_this_frame)
 	{
 		level.editor.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}
@@ -167,18 +193,20 @@ void EditModeSystem::Update(Level& level, float dt)
 		level.editor.Do<RotateSelectedFields>(level, PI / 2);
 	}
 
-	return;
-
-	// Copy entities:
-	for (auto [entity_id, selected] : level.GetEntitiesWith<Selected>())
+	// Copy selected:
+	if (cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY])
 	{
-		if (cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
+		if (cursor_and_keys_.mouse_button_released_this_frame[sf::Mouse::Left])
 		{
-			int new_id = level.CopyEntity(entity_id);
-			level.RemoveComponents<Selected>(new_id);
-			level.GetComponent<Position>(new_id)->position = SnapToGrid(cursor_and_keys_.cursor_position - selected->mouse_offset, BLOCK_SIZE / 2);
+			level.editor.Do<CopySelected>(level, cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left]);
+		}
+		else if (current_tool == Moving)
+		{
+			ShowCopyPreview(level, cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left]);
 		}
 	}
+
+	return;
 
 	// Edit charge:
 	for (auto [entity_id, selected, charge] : level.GetEntitiesWith<Selected, Charge>())
