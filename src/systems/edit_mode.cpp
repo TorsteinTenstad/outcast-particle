@@ -14,6 +14,7 @@
 #include "edit_mode_actions/select_entities.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
+#include "int_tag_enum.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/get_size.hpp"
 #include "utils/level_id.hpp"
@@ -85,22 +86,22 @@ void EditModeSystem::Update(Level& level, float dt)
 
 	// Rectangle select
 	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
-	int drag_select_tool_id = level.GetSingleton("EditModeDragSelectTool", creation_func);
+	int rectangle_select_tool_id = level.GetSingleton(EditModeRectangleSelectTool, creation_func);
 
 	if (current_tool == Selecting)
 	{
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
 		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
 		size = Abs(size);
-		level.GetComponent<WidthAndHeight>(drag_select_tool_id)->width_and_height = size;
-		level.GetComponent<Position>(drag_select_tool_id)->position = position;
+		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = size;
+		level.GetComponent<Position>(rectangle_select_tool_id)->position = position;
 	}
 	else
 	{
-		level.GetComponent<WidthAndHeight>(drag_select_tool_id)->width_and_height = sf::Vector2f(0, 0);
+		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = sf::Vector2f(0, 0);
 	}
 
-	for (auto entity : level.GetComponent<Intersection>(drag_select_tool_id)->entered_this_frame_ids)
+	for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entered_this_frame_ids)
 	{
 		if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
 		{
@@ -109,7 +110,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 	if (current_tool == Selecting)
 	{
-		for (auto entity : level.GetComponent<Intersection>(drag_select_tool_id)->left_this_frame_ids)
+		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->left_this_frame_ids)
 		{
 			if (level.HasComponents<Editable, Selected>(entity))
 			{

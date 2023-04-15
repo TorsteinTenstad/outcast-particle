@@ -6,8 +6,8 @@ public:
 	std::string tag;
 };
 
-class SingletonTag
+class IntTag
 {
 public:
-	std::string tag;
+	int tag;
 };

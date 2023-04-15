@@ -102,7 +102,7 @@ typedef std::variant<
 	std::map<int, MenuDelayTimer>,
 	std::map<int, SoundInfo>,
 	std::map<int, Tag>,
-	std::map<int, SingletonTag>,
+	std::map<int, IntTag>,
 	std::map<int, Text>,
 	std::map<int, TextPopup>,
 	std::map<int, TextPopupSpawner>,

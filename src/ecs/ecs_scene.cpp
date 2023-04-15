@@ -105,23 +105,38 @@ void ECSScene::DeleteEntity(int id)
 	}
 }
 
-int ECSScene::GetSingleton(std::string tag, std::function<int(ECSScene&)> creation_func)
+void ECSScene::DeleteEntitiesWithTag(int tag)
 {
-	for (auto [entity_id, singleton_tag] : GetEntitiesWith<SingletonTag>())
+	for (auto [entity_id, int_tag] : GetEntitiesWith<IntTag>())
 	{
-		if (singleton_tag->tag == tag)
+		if (int_tag->tag == tag)
 		{
-			return entity_id;
+			DeleteEntity(entity_id);
 		}
 	}
-	int entity_id = creation_func(*this);
-	EnsureExistenceOfComponent<SingletonTag>(entity_id)->tag = tag;
-	return entity_id;
 }
 
-int ECSScene::GetSingleton(std::string tag)
+int ECSScene::GetSingleton(int tag, std::function<int(ECSScene&)> creation_func)
+{
+	std::optional<int> singleton_id;
+	for (auto [entity_id, int_tag] : GetEntitiesWith<IntTag>())
+	{
+		if (int_tag->tag == tag)
+		{
+			assert(!singleton_id.has_value());
+			singleton_id = entity_id;
+		}
+	}
+	if (singleton_id.has_value())
+	{
+		return singleton_id.value();
+	}
+	int created_entity = creation_func(*this);
+	EnsureExistenceOfComponent<IntTag>(created_entity)->tag = tag;
+	return created_entity;
+}
+
+int ECSScene::GetSingleton(int tag)
 {
 	return GetSingleton(tag, [](ECSScene& scene) { return scene.CreateEntityId(); });
 }
-
-
