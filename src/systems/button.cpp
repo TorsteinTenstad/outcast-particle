@@ -29,22 +29,6 @@ void ButtonSystem::Update(Level& level, float dt)
 		}
 	}
 
-	for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
-	{
-		on_hovered_started_this_frame->func();
-		return;
-	}
-	for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
-	{
-		on_hovered->func();
-		return;
-	}
-	for (auto [entity_id, released_this_frame, on_released_this_frame] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame>())
-	{
-		on_released_this_frame->func();
-		return;
-	}
-
 	for (auto [entity_id, key_config_button, sticky_button_down] : level.GetEntitiesWith<KeyConfigButton, StickyButtonDown>())
 	{
 		for (const auto& [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
@@ -81,5 +65,21 @@ void ButtonSystem::Update(Level& level, float dt)
 		*(slider_button->slider_value) = Clamp(int(50 * relative_cursor_x_pos / half_slider_width + 50), 0, 100);
 		level.GetComponent<Position>(slider_button->slider_button_id)->position.x = std::max(slider_x_pos - half_slider_width, std::min(slider_x_pos + half_slider_width, slider_x_pos + relative_cursor_x_pos));
 		level.GetComponent<Text>(slider_button->slider_text_id)->content = RightShiftString(ToString(*(slider_button->slider_value)), 3);
+	}
+
+	for (auto [entity_id, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())
+	{
+		on_hovered_started_this_frame->func();
+		return;
+	}
+	for (auto [entity_id, hovered, on_hovered] : level.GetEntitiesWith<Hovered, OnHovered>())
+	{
+		on_hovered->func();
+		return;
+	}
+	for (auto [entity_id, released_this_frame, on_released_this_frame] : level.GetEntitiesWith<ReleasedThisFrame, OnReleasedThisFrame>())
+	{
+		on_released_this_frame->func();
+		return;
 	}
 }

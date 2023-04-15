@@ -63,6 +63,7 @@ typedef std::variant<
 	std::map<int, KeyConfigButton>,
 	std::map<int, KillOnIntersection>,
 	std::map<int, Laser>,
+	std::map<int, LaserProximity>,
 	std::map<int, LaserTexture>,
 	std::map<int, LevelCompletionTimer>,
 	std::map<int, LevelMenuUI>,

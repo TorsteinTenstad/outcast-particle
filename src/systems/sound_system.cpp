@@ -17,9 +17,10 @@ void SoundSystem::Update(Level& level, float dt)
 		{
 			sound_buffers_[sound_path].loadFromFile(sound_path);
 		}
+		float max_volume = 100; //SFML uses 0-100 for volume, we use 0-1
+
 		if (sound_info->play_sound)
 		{
-			float max_volume = 100; //SFML uses 0-100 for volume, we use 0-1
 
 			if (MAX_VOLUME.count(sound_path) > 0)
 			{
@@ -30,6 +31,17 @@ void SoundSystem::Update(Level& level, float dt)
 			sounds_[sound_path].play();
 			sound_info->play_sound = false;
 		}
+		if (sound_info->loop_sound)
+		{
+			sounds_[sound_path].setLoop(true);
+			sounds_[sound_path].setVolume(max_volume * sound_info->sound_volume * globals.general_config.sound_volume / 100);
+		}
+		else if (sounds_[sound_path].getLoop())
+		{
+			sounds_[sound_path].setLoop(false);
+			sounds_[sound_path].stop();
+		}
+
 		if (sounds_.count(sound_path) != 0)
 		{
 			if (sounds_[sound_path].getStatus() == sf::SoundSource::Status::Stopped)
