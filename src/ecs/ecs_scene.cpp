@@ -32,44 +32,21 @@ int ECSScene::CreateEntityId()
 
 bool ECSScene::IdExists(int entity_id)
 {
-	for (auto& [component_type_id, component_map_variant] : components_)
-	{
-		bool has_component = std::visit([entity_id](auto& component_map) { return component_map.count(entity_id) > 0; }, component_map_variant);
-		if (has_component)
-		{
-			return true;
-		}
-	}
-	return false;
+	return entity_container_.Exists(entity_id);
 }
 
 void ECSScene::Clear()
 {
-	for (auto& [component_type_id, component_map_variant] : components_)
-	{
-		std::visit([](auto& component_map) { component_map.clear(); }, component_map_variant);
-	}
-	next_available_entity_id_ = 0;
+	return entity_container_.Clear();
 }
 
 int ECSScene::CopyEntity(int from_id)
 {
 	int to_id = CreateEntityId();
-	for (auto& [component_type_id, component_map_variant] : components_)
+	entity_container_.CopyEntity(from_id, to_id);
+	if (Children* children = RawGetComponent<Children>(to_id))
 	{
-		std::visit([from_id, to_id, component_type_id = component_type_id](auto& component_map) {
-			if (component_map.count(from_id) == 0)
-			{
-				return;
-			}
-			if (component_type_id == typeid(Children)) // We do not copy children entities, but an empty children component gets added
-			{
-				component_map[to_id];
-				return;
-			}
-			component_map.emplace(to_id, component_map.at(from_id));
-		},
-			component_map_variant);
+		children->ids_owned_by_component.clear();
 	}
 	return to_id;
 }
@@ -94,49 +71,5 @@ void ECSScene::DeleteEntity(int id)
 			}
 		}
 	}
-	for (auto& [_, component_map_variant] : components_)
-	{
-		std::visit([id](auto& component_map) {
-			if (component_map.count(id) != 0)
-			{
-				component_map.erase(id);
-			} },
-			component_map_variant);
-	}
-}
-
-void ECSScene::DeleteEntitiesWithTag(int tag)
-{
-	for (auto [entity_id, int_tag] : GetEntitiesWith<IntTag>())
-	{
-		if (int_tag->tag == tag)
-		{
-			DeleteEntity(entity_id);
-		}
-	}
-}
-
-int ECSScene::GetSingleton(int tag, std::function<int(ECSScene&)> creation_func)
-{
-	std::optional<int> singleton_id;
-	for (auto [entity_id, int_tag] : GetEntitiesWith<IntTag>())
-	{
-		if (int_tag->tag == tag)
-		{
-			assert(!singleton_id.has_value());
-			singleton_id = entity_id;
-		}
-	}
-	if (singleton_id.has_value())
-	{
-		return singleton_id.value();
-	}
-	int created_entity = creation_func(*this);
-	EnsureExistenceOfComponent<IntTag>(created_entity)->tag = tag;
-	return created_entity;
-}
-
-int ECSScene::GetSingleton(int tag)
-{
-	return GetSingleton(tag, [](ECSScene& scene) { return scene.CreateEntityId(); });
+	entity_container_.DeleteEntity(id);
 }

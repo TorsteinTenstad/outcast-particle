@@ -1,5 +1,7 @@
 #pragma once
 #include "blueprint.hpp"
+#include "components.hpp"
+#include "components/shader.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "ecs/ecs_scene_with_inactive_layer.hpp"

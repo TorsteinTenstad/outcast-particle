@@ -198,7 +198,7 @@ std::string Game::GenerateLevelTexture(std::string level_id, unsigned width, uns
 {
 	std::string identifier = "_level_" + level_id;
 	sf::Texture* texture = GetGameSystem<RenderShapesSystem>().RegisterTexture(identifier);
-	Level level = Level();
+	Level level;
 	level.LoadFromFile(level_id);
 	GetGameSystem<BackgroundSystem>().Update(level, 0);
 	GetGameSystem<SetDrawInfoSystem>().Update(level, 0);

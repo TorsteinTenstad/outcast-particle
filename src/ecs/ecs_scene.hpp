@@ -1,6 +1,7 @@
 #pragma once
-#include "components.hpp"
+#include "components/children.hpp"
 #include "ecs/entity_creation_observer.hpp"
+#include "entity_container.hpp"
 #include <functional>
 #include <map>
 #include <optional>
@@ -16,7 +17,7 @@ class ECSScene
 
 protected:
 	int next_available_entity_id_ = 0;
-	std::map<std::type_index, ComponentMapVariant> components_;
+	EntityContainer entity_container_;
 
 protected:
 	std::vector<EntityCreationObserver*> entity_creation_observers;
@@ -24,10 +25,6 @@ protected:
 public:
 	void AddEntityCreationObserver(EntityCreationObserver* entity_creation_observer);
 	void RemoveEntityCreationObserver(EntityCreationObserver* entity_creation_observer);
-
-protected:
-	template <class Component>
-	std::map<int, Component>& GetComponentMap();
 
 protected:
 	template <class Component>
@@ -101,12 +98,6 @@ public:
 	void DeleteEntity(std::optional<int> id);
 
 	int CopyEntity(int from_id);
-
-	void DeleteEntitiesWithTag(int tag);
-
-	int GetSingleton(int tag, std::function<int(ECSScene&)> creation_func);
-
-	int GetSingleton(int tag);
 
 	template <class Component>
 	std::tuple<int, Component*> GetSingletonIncludeID(std::function<int(ECSScene&)> creation_func);

@@ -11,8 +11,8 @@ public:
 private:
 	template <class... Components>
 	void RecursiveMoveEntityActiveState(int entity_id, ECSScene& from_scene,
-		std::map<std::type_index, std::variant<std::map<int, Components>...>>& from_container,
-		std::map<std::type_index, std::variant<std::map<int, Components>...>>& to_container);
+		EntityContainer& from_container,
+		EntityContainer& to_container);
 
 public:
 	int CreateEntityId() override;

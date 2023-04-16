@@ -20,3 +20,6 @@ class TemporarilyMoved
 public:
 	std::optional<sf::Vector2f> original_position;
 };
+
+class EditModeRectangleSelectTool
+{};

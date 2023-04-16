@@ -19,11 +19,11 @@ int ECSSceneWithInactiveLayer::CreateEntityId()
 
 void ECSSceneWithInactiveLayer::ActivateEntities(int entity_id)
 {
-	RecursiveMoveEntityActiveState(entity_id, inactive_entities, inactive_entities.components_, components_);
+	RecursiveMoveEntityActiveState(entity_id, inactive_entities, inactive_entities.entity_container_, entity_container_);
 }
 void ECSSceneWithInactiveLayer::DeactivateEntities(int entity_id)
 {
-	RecursiveMoveEntityActiveState(entity_id, *this, components_, inactive_entities.components_);
+	RecursiveMoveEntityActiveState(entity_id, *this, entity_container_, inactive_entities.entity_container_);
 }
 void ECSSceneWithInactiveLayer::ActivateEntities(std::vector<int> entities)
 {

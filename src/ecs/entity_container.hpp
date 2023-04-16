@@ -9,7 +9,7 @@ typedef int Key;
 class ComponentMap
 {
 public:
-	virtual ~ComponentMap() = 0;
+	virtual ~ComponentMap() = default;
 	virtual void Clear() = 0;
 	virtual bool Exists(Key key) = 0;
 	virtual void DeleteComponent(Key key) = 0;
@@ -18,7 +18,7 @@ public:
 };
 
 template <class Component>
-class TypedComponentMap : ComponentMap
+class TypedComponentMap : public ComponentMap
 {
 private:
 	std::map<Key, Component> map_;
@@ -28,7 +28,7 @@ public:
 	{
 		return map_;
 	}
-	void Clear(Key key)
+	void Clear()
 	{
 		map_.clear();
 	}
@@ -47,7 +47,7 @@ public:
 		{
 			return;
 		}
-		auto [to_it, inserted] = map_.emplace(*it);
+		auto [to_it, inserted] = map_.emplace(to_key, it->second);
 		assert(inserted);
 	}
 	void CopyComponent(Key from_key, ComponentMap* to_other_map)
@@ -69,22 +69,25 @@ class EntityContainer
 private:
 	std::map<std::type_index, std::unique_ptr<ComponentMap>> components_;
 
-protected:
+public:
+	EntityContainer() = default;
+	EntityContainer(const EntityContainer& other) = delete;
+	EntityContainer operator=(const EntityContainer& other) = delete;
+
 	template <class Component>
 	std::map<Key, Component>& GetComponentMap()
 	{
 		auto it = components_.find(typeid(Component));
 		if (it == components_.end())
 		{
-			auto [inserted_it, inserted] = components_.emplace(typeid(Component), std::make_unique < TypedComponentMap<Component>);
+			auto new_typed_map = std::make_unique<TypedComponentMap<Component>>();
+			std::unique_ptr<ComponentMap> new_map = std::move(new_typed_map);
+			auto [inserted_it, inserted] = components_.try_emplace(typeid(Component), std::move(new_map));
 			assert(inserted);
 			it = inserted_it;
 		}
-		std::unique_ptr<ComponentMap> component_map = it->second;
-		return static_cast<TypedComponentMap<Component>*>(component_map.get())->GetMap();
+		return static_cast<TypedComponentMap<Component>*>(it->second.get())->GetMap();
 	}
-
-public:
 	bool Exists(Key key)
 	{
 		for (auto& [type_index, component_map] : components_)
@@ -117,7 +120,7 @@ public:
 			component_map->CopyComponent(from_key, to_key);
 		}
 	}
-	void CopyEntity(Key from_key, EntityContainer to_other_entity_container)
+	void CopyEntity(Key from_key, EntityContainer& to_other_entity_container)
 	{
 		for (auto& [type_index, component_map] : components_)
 		{

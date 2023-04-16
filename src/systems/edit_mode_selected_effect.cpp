@@ -2,7 +2,6 @@
 #include "SFML/System/Vector2.hpp"
 #include "_pure_DO_systems.hpp"
 #include "entity_creation.hpp"
-#include "int_tag_enum.hpp"
 #include "level.hpp"
 #include "utils/math.hpp"
 #include "utils/string_parsing.hpp"
@@ -35,7 +34,7 @@ void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 	}
 
 	{
-		int entity_id = level.GetSingleton(EditModeRectangleSelectTool);
+		int entity_id = std::get<int>(level.GetSingletonIncludeID<EditModeRectangleSelectTool>());
 		shader->vec_uniforms["positions[" + ToString(i) + "]"] = level.GetComponent<Position>(entity_id)->position;
 		shader->vec_uniforms["sizes[" + ToString(i) + "]"] = level.GetComponent<WidthAndHeight>(entity_id)->width_and_height;
 		i++;

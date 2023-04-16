@@ -3,8 +3,8 @@
 
 template <class... Components>
 void ECSSceneWithInactiveLayer::RecursiveMoveEntityActiveState(int entity_id, ECSScene& from_scene,
-	std::map<std::type_index, std::variant<std::map<int, Components>...>>& from_container,
-	std::map<std::type_index, std::variant<std::map<int, Components>...>>& to_container)
+	EntityContainer& from_container,
+	EntityContainer& to_container)
 {
 	if (Children* children = from_scene.RawGetComponent<Children>(entity_id))
 	{
@@ -16,7 +16,8 @@ void ECSSceneWithInactiveLayer::RecursiveMoveEntityActiveState(int entity_id, EC
 			}
 		}
 	}
-	MoveAllComponentsAtKey(entity_id, from_container, to_container);
+	from_container.CopyEntity(entity_id, to_container);
+	from_container.DeleteEntity(entity_id);
 }
 
 template <class Component>

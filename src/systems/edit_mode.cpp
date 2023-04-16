@@ -14,7 +14,6 @@
 #include "edit_mode_actions/select_entities.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
-#include "int_tag_enum.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/get_size.hpp"
 #include "utils/level_id.hpp"
@@ -86,7 +85,7 @@ void EditModeSystem::Update(Level& level, float dt)
 
 	// Rectangle select
 	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
-	int rectangle_select_tool_id = level.GetSingleton(EditModeRectangleSelectTool, creation_func);
+	int rectangle_select_tool_id = std::get<int>(level.GetSingletonIncludeID<EditModeRectangleSelectTool>(creation_func));
 
 	if (current_tool == Selecting)
 	{

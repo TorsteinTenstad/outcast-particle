@@ -2,20 +2,9 @@
 #include <cassert>
 
 template <class Component>
-std::map<int, Component>& ECSScene::GetComponentMap()
-{
-	if (components_.count(typeid(Component)) == 0)
-	{
-		std::map<int, Component> t_map;
-		components_[typeid(Component)] = t_map;
-	}
-	return std::get<std::map<int, Component>>(components_.at(typeid(Component)));
-}
-
-template <class Component>
 bool ECSScene::HasComponent(int entity_id)
 {
-	auto& m = GetComponentMap<Component>();
+	auto& m = entity_container_.GetComponentMap<Component>();
 	return m.find(entity_id) != m.end();
 }
 
@@ -28,7 +17,7 @@ bool ECSScene::HasComponents(int entity_id)
 template <class Component>
 Component* ECSScene::EnsureExistenceOfComponent(int entity_id)
 {
-	auto& m = GetComponentMap<Component>();
+	auto& m = entity_container_.GetComponentMap<Component>();
 	return &m[entity_id];
 }
 
@@ -48,7 +37,7 @@ Component* ECSScene::AddComponent(int entity_id)
 template <class Component>
 Component* ECSScene::AddComponent(int entity_id, Component&& value)
 {
-	auto& m = GetComponentMap<Component>();
+	auto& m = entity_container_.GetComponentMap<Component>();
 	assert(m.count(entity_id) == 0);
 	m.emplace(entity_id, std::move(value));
 	return &m.at(entity_id);
@@ -63,7 +52,7 @@ std::tuple<Component*...> ECSScene::AddComponents(int entity_id)
 template <class Component>
 Component* ECSScene::GetComponent(int entity_id)
 {
-	auto& m = GetComponentMap<Component>();
+	auto& m = entity_container_.GetComponentMap<Component>();
 	auto it = m.find(entity_id);
 	assert(it != m.end());
 	return &(it->second);
@@ -78,7 +67,7 @@ std::tuple<Component*...> ECSScene::GetComponents(int entity_id)
 template <class Component>
 Component* ECSScene::RawGetComponent(int entity_id)
 {
-	auto& m = GetComponentMap<Component>();
+	auto& m = entity_container_.GetComponentMap<Component>();
 	auto it = m.find(entity_id);
 	if (it == m.end())
 	{
@@ -117,7 +106,7 @@ template <class Component>
 bool ECSScene::RemoveComponent(int entity_id)
 {
 	DeleteChildEntitiesOwnedByComponent<Component>(entity_id);
-	return GetComponentMap<Component>().erase(entity_id) > 0;
+	return entity_container_.GetComponentMap<Component>().erase(entity_id) > 0;
 }
 
 template <class... Component>
@@ -174,7 +163,7 @@ template <class Component>
 std::vector<int> ECSScene::GetIdsWithComponent()
 {
 	std::vector<int> ids;
-	for (auto [id, _] : GetComponentMap<Component>())
+	for (auto [id, _] : entity_container_.GetComponentMap<Component>())
 	{
 		ids.push_back(id);
 	}
@@ -186,7 +175,7 @@ std::vector<std::tuple<int, Component*...>> ECSScene::GetEntitiesWith()
 {
 	int component_idx = 0;
 	std::vector<std::tuple<int, Component*...>> matching_entities = {};
-	(IdIntersection<Component, Component...>(component_idx++, GetComponentMap<Component>(), matching_entities) && ...);
+	(IdIntersection<Component, Component...>(component_idx++, entity_container_.GetComponentMap<Component>(), matching_entities) && ...);
 	return matching_entities;
 }
 
@@ -204,7 +193,7 @@ void ECSScene::DeleteEntitiesWith()
 template <class Component>
 std::tuple<int, Component*> ECSScene::GetSingletonIncludeID(std::function<int(ECSScene&)> creation_func)
 {
-	auto& component_map = GetComponentMap<Component>();
+	auto& component_map = entity_container_.GetComponentMap<Component>();
 
 	if (component_map.size() == 0)
 	{
@@ -238,9 +227,9 @@ Component* ECSScene::GetSingleton()
 template <class Component>
 void ECSScene::ClearComponent()
 {
-	for (auto [entity_id, _] : GetComponentMap<Component>())
+	for (auto [entity_id, _] : entity_container_.GetComponentMap<Component>())
 	{
 		DeleteChildEntitiesOwnedByComponent<Component>(entity_id);
 	}
-	GetComponentMap<Component>().clear();
+	entity_container_.GetComponentMap<Component>().clear();
 }
