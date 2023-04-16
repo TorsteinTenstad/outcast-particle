@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <functional>
 #include <map>
 #include <memory>
 #include <typeindex>
@@ -68,6 +69,7 @@ class EntityContainer
 {
 private:
 	std::map<std::type_index, std::unique_ptr<ComponentMap>> components_;
+	std::vector<std::function<void(EntityContainer&)>> add_types;
 
 public:
 	EntityContainer() = default;
@@ -85,6 +87,9 @@ public:
 			auto [inserted_it, inserted] = components_.try_emplace(typeid(Component), std::move(new_map));
 			assert(inserted);
 			it = inserted_it;
+
+			std::function<void(EntityContainer&)> add_type = [](EntityContainer& entity_container) { entity_container.GetComponentMap<Component>(); };
+			add_types.push_back(add_type);
 		}
 		return static_cast<TypedComponentMap<Component>*>(it->second.get())->GetMap();
 	}
@@ -122,6 +127,10 @@ public:
 	}
 	void CopyEntity(Key from_key, EntityContainer& to_other_entity_container)
 	{
+		for (auto& add_type : add_types)
+		{
+			add_type(to_other_entity_container);
+		}
 		for (auto& [type_index, component_map] : components_)
 		{
 			auto it = to_other_entity_container.components_.find(type_index);
