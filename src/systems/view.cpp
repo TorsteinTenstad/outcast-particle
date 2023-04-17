@@ -1,8 +1,7 @@
-#include "_pure_DO_systems.hpp"
 #include "constants.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-
+#include "systems/_pure_DO_systems.hpp"
 
 void ViewSystem::Update(Level& level, float dt)
 {

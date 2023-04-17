@@ -1,5 +1,15 @@
 #include "entity_creation.hpp"
 #include "SFML/Graphics/Text.hpp"
+#include "components/button.hpp"
+#include "components/button_events.hpp"
+#include "components/draw_info.hpp"
+#include "components/menu_navigator.hpp"
+#include "components/position.hpp"
+#include "components/screen_wide_shader_effects.hpp"
+#include "components/shader.hpp"
+#include "components/size.hpp"
+#include "components/sticky_button.hpp"
+#include "components/text.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
@@ -128,7 +138,7 @@ entities_handle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std:
 entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 {
 	auto [id, size] = CreateSizedButtonTemplate(level, position);
-	level.AddComponents<Text, TimerButton>(id);
+	level.AddComponent<Text>(id);
 	level.GetComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(5 * BLOCK_SIZE, 1 * BLOCK_SIZE);
 	level.GetComponent<FillColor>(id)->color.a = 50;
 	return { id, size };

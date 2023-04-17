@@ -1,4 +1,6 @@
 #include "systems/menu_escape.hpp"
+#include "components/button.hpp"
+#include "components/sticky_button.hpp"
 #include "utils/level_id.hpp"
 
 void MenuEscapeSystem::Give(std::function<void()> go_to_last_menu)

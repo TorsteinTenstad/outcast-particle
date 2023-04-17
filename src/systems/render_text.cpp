@@ -4,6 +4,7 @@
 #include "SFML/Graphics/Text.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
+#include "components/text.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"

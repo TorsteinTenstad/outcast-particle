@@ -5,6 +5,7 @@
 #include "SFML/Graphics/Texture.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
+#include "components/size.hpp"
 #include "globals.hpp"
 #include "level.hpp"
 #include "render_shapes.hpp"

@@ -1,4 +1,10 @@
 #include "systems/pause_mode.hpp"
+#include "components/coin.hpp"
+#include "components/draw_info.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
+#include "components/text.hpp"
+#include "components/timers.hpp"
 #include "entity_creation.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
@@ -10,6 +16,9 @@
 #include <iostream>
 #include <numeric>
 #include <string>
+
+class PauseMenuItem
+{};
 
 const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYING, 1.f }, { FAILED, 1.f } }; //seconds
 

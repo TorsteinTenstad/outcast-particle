@@ -12,6 +12,3 @@ public:
 
 class TwinkleEffect
 {};
-
-class SelectedEffect
-{};

@@ -1,4 +1,10 @@
-#include "_pure_DO_systems.hpp"
+#include "components/button_events.hpp"
+#include "components/button.hpp"
+#include "components/draw_info.hpp"
+#include "components/menu_navigator.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include <algorithm>
 

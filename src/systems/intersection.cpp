@@ -1,8 +1,10 @@
 #include "components/intersection.hpp"
-#include "_pure_DO_systems.hpp"
 #include "components/physics.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 
 #include <cassert>

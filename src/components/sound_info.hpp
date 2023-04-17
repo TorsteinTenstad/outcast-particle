@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class SoundInfo
 {
@@ -8,6 +9,3 @@ public:
 	float sound_volume = 1; // The scale is 0 - 1, default is 1
 	bool loop_sound = false;
 };
-
-class LaserProximity
-{};

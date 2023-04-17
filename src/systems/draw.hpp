@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics/Shader.hpp"
+#include "SFML/Graphics/Texture.hpp"
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "level.hpp"

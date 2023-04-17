@@ -1,5 +1,14 @@
-#include "_pure_DO_systems.hpp"
+#include "components/text_popup.hpp"
+#include "components/animated_properties.hpp"
+#include "components/draw_info.hpp"
+#include "components/intersection.hpp"
+#include "components/player.hpp"
+#include "components/position.hpp"
+#include "components/scheduled_delete.hpp"
+#include "components/size.hpp"
+#include "components/text.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 
 void TextPopupSystem::Update(Level& level, float dt)

@@ -1,4 +1,8 @@
-#include "_pure_DO_systems.hpp"
+#include "components/animated_properties.hpp"
+#include "components/draw_info.hpp"
+#include "components/position.hpp"
+#include "components/text.hpp"
+#include "systems/_pure_DO_systems.hpp"
 
 void AnimatedPropertiesSystem::Update(Level& level, float dt)
 {

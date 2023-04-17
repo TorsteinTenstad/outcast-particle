@@ -1,12 +1,13 @@
 #pragma once
+#include "systems/render_trail.hpp"
 #include "SFML/Graphics/ConvexShape.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
+#include "components/size.hpp"
+#include "components/trail.hpp"
 #include "game_system.hpp"
 #include "globals.hpp"
 #include "level.hpp"
-#include "systems/render_trail.hpp"
-#include "trail.hpp"
 #include "utils/math.hpp"
 
 void RenderTrailSystem::Update(Level& level, float dt)

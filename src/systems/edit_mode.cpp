@@ -1,7 +1,12 @@
 #pragma once
 #include "edit_mode.hpp"
+#include "components/button_events.hpp"
 #include "components/editable.hpp"
+#include "components/intersection.hpp"
 #include "components/physics.hpp"
+#include "components/position.hpp"
+#include "components/scheduled_delete.hpp"
+#include "components/size.hpp"
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "edit_mode_actions/add_entity.hpp"

@@ -1,5 +1,7 @@
 #pragma once
 #include "level_completion_time.hpp"
+#include "components/coin.hpp"
+#include "components/timers.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 #include "level_mode.hpp"

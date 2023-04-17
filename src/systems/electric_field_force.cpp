@@ -1,6 +1,7 @@
-#include "_pure_DO_systems.hpp"
+#include "components/intersection.hpp"
+#include "components/physics.hpp"
 #include "globals.hpp"
-
+#include "systems/_pure_DO_systems.hpp"
 
 static sf::Vector2f CalculateElectricFieldForce(Charge* particle, ElectricField* electric_field)
 {

@@ -1,4 +1,6 @@
 #include "make_fade_into_level.hpp"
+#include "components/animated_properties.hpp"
+#include "components/draw_info.hpp"
 #include "utils/level_id.hpp"
 #include "utils/math.hpp"
 

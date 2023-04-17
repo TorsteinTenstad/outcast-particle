@@ -1,4 +1,6 @@
 #include "level.hpp"
+#include "components/goal.hpp"
+#include "components/player.hpp"
 #include "game.hpp"
 #include "utils/math.hpp"
 #include "utils/string_parsing.hpp"

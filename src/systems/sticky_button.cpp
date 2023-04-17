@@ -1,5 +1,7 @@
-#include "_pure_DO_systems.hpp"
+#include "components/sticky_button.hpp"
+#include "components/button_events.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include <cassert>
 
 void StickyButtonSystem::Update(Level& level, float dt)

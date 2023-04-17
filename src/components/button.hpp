@@ -3,6 +3,12 @@
 #include <functional>
 #include <string>
 
+class ShortcutKey
+{
+public:
+	sf::Keyboard::Key key;
+};
+
 class OnReleasedThisFrame
 {
 public:
@@ -42,6 +48,3 @@ public:
 	int slider_button_id;
 	int slider_bar_id;
 };
-
-class TimerButton
-{};

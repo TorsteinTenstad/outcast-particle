@@ -1,7 +1,10 @@
-#include "_pure_DO_systems.hpp"
 #include "components/draw_info.hpp"
+#include "components/physics.hpp"
+#include "components/player.hpp"
+#include "components/size.hpp"
 #include "constants.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/math.hpp"
 #include <cassert>
@@ -17,7 +20,7 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 		shader->float_uniforms["sign_alpha"] = level.HasComponents<PlayerBehaviors>(entity_id) ? 0 : 1;
 	}
 
-	for (auto const& [entity_id, orientation_dependent_drawinfo, width_and_height, draw_info] : level.GetEntitiesWith<OrientationDependentDrawInfo, WidthAndHeight, DrawInfo>())
+	for (auto const& [entity_id, orientation_dependent_draw_info, width_and_height, draw_info] : level.GetEntitiesWith<OrientationDependentDrawInfo, WidthAndHeight, DrawInfo>())
 	{
 		if (width_and_height->width_and_height.x > width_and_height->width_and_height.y)
 		{

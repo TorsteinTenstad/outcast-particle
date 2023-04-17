@@ -1,8 +1,12 @@
 #include "SFML/Graphics/Shader.hpp"
 #include "SFML/System/Vector2.hpp"
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
+#include "components/position.hpp"
+#include "components/screen_wide_shader_effects.hpp"
+#include "components/size.hpp"
 #include "entity_creation.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 
 void ScreenWideShaderEffectsSystem::Update(Level& level, float dt)
 {

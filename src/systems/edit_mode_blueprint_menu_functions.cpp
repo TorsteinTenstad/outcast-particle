@@ -1,6 +1,12 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
+#include "components/button_events.hpp"
+#include "components/draw_info.hpp"
+#include "components/position.hpp"
 #include "ecs/entity_creation_observer.hpp"
 #include "entity_creation.hpp"
+
+class BlueprintMenuItem
+{};
 
 const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPGoal, BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)

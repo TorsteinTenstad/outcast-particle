@@ -1,5 +1,9 @@
 #include "systems/render_grid_adaptive_textures.hpp"
+#include "components/collision.hpp"
+#include "components/draw_info.hpp"
+#include "components/grid_adaptive_textures.hpp"
 #include "components/physics.hpp"
+#include "components/size.hpp"
 #include "level.hpp"
 #include <functional>
 #include <optional>

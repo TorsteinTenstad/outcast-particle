@@ -1,6 +1,7 @@
-#include "_pure_DO_systems.hpp"
+#include "components/scheduled_delete.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 
 void ScheduledDeleteSystem::Update(Level& level, float dt)
 {

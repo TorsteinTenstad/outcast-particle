@@ -1,6 +1,13 @@
+#include "components/button.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
+
+class EditModeUI
+{
+public:
+	bool initialized = false;
+};
 
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui);

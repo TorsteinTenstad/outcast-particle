@@ -1,5 +1,8 @@
-#include "_pure_DO_systems.hpp"
+#include "components/trail.hpp"
+#include "components/physics.hpp"
+#include "components/size.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 
 void TrailSystem::Update(Level& level, float dt)

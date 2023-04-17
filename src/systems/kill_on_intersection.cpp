@@ -1,9 +1,13 @@
 #include "components/kill_on_intersection.hpp"
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
 #include "components/intersection.hpp"
 #include "components/physics.hpp"
+#include "components/player.hpp"
+#include "components/scheduled_delete.hpp"
+#include "components/sound_info.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 
 #include <iostream>
 

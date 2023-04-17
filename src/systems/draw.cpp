@@ -3,6 +3,9 @@
 #include "SFML/Graphics/RenderTexture.hpp"
 #include "SFML/Graphics/Shader.hpp"
 #include "SFML/System/Err.hpp"
+#include "components/draw_info.hpp"
+#include "components/shader.hpp"
+#include "components/size.hpp"
 #include "constants.hpp"
 #include <cassert>
 

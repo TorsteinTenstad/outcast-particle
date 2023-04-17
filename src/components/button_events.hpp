@@ -6,12 +6,6 @@ class ReceivesButtonEvents
 {
 };
 
-class ShortcutKey
-{
-public:
-	sf::Keyboard::Key key;
-};
-
 class Pressed
 {
 };

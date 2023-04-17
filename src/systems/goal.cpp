@@ -1,10 +1,17 @@
 
 #include "components/goal.hpp"
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
 #include "components/intersection.hpp"
 #include "components/physics.hpp"
+#include "components/player.hpp"
+#include "components/scheduled_delete.hpp"
+#include "components/screen_wide_shader_effects.hpp"
+#include "components/size.hpp"
+#include "components/sound_info.hpp"
+#include "components/trail.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include "utils/physics.hpp"
 #include <cmath>

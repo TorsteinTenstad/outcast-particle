@@ -1,5 +1,11 @@
-#include "_pure_DO_systems.hpp"
+#include "components/collision.hpp"
+#include "components/intersection.hpp"
+#include "components/physics.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
+#include "components/sound_info.hpp"
 #include "globals.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include <cassert>
 

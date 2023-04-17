@@ -1,4 +1,7 @@
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include <cassert>
 
 void BackgroundSystem::Update(Level& level, float dt)

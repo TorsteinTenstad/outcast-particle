@@ -9,6 +9,7 @@ def gen_level_serialization(data):
 #include "level.hpp"
 #include "blueprint.hpp"
 #include "utils/string_parsing.hpp"
+#include "components/_used_in_serialization.hpp"
 
 /*
 Warning!
@@ -193,7 +194,8 @@ int Level::AddBlueprint(Blueprint blueprint)
 
 
 def gen_blueprint_enum_hpp(data):
-    enum_entries = ",\n\t".join([f"{tag} = {i}" for i, tag in enumerate(data.keys())])
+    enum_entries = ",\n\t".join(
+        [f"{tag} = {i}" for i, tag in enumerate(data.keys())])
     enum_decl = f"""#pragma once
 #include <string>
 #include <vector>
@@ -213,7 +215,6 @@ Blueprint ToBlueprintEnum(std::string blueprint_tag);
     return enum_decl + converters
 
 
-
 def gen_blueprint_enum_cpp(data):
     enum_entries = ",\n\t\t".join([f"\"{tag}\"" for tag in data.keys()])
     to_tag = f"""
@@ -225,7 +226,8 @@ std::string ToBlueprintTag(Blueprint blueprint)
         {enum_entries}}})[(int(blueprint))];
 }}"""
 
-    enum_entries = ",\n\t\t".join([f"{{\"{tag}\", {tag}}}" for tag in data.keys()])
+    enum_entries = ",\n\t\t".join(
+        [f"{{\"{tag}\", {tag}}}" for tag in data.keys()])
     to_enum = f"""
 
 Blueprint ToBlueprintEnum(std::string blueprint_tag)

@@ -1,6 +1,10 @@
 #include "components/coin.hpp"
 #include "components/intersection.hpp"
 #include "components/physics.hpp"
+#include "components/player.hpp"
+#include "components/scheduled_delete.hpp"
+#include "components/screen_wide_shader_effects.hpp"
+#include "components/sound_info.hpp"
 #include "globals.hpp"
 #include "systems/coin.hpp"
 #include <cassert>

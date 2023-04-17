@@ -1,12 +1,20 @@
 #pragma once
-#include "systems/level_menu.hpp"
+#include "components/level_menu.hpp"
+#include "components/button.hpp"
+#include "components/button_events.hpp"
+#include "components/draw_info.hpp"
+#include "components/menu_navigator.hpp"
+#include "components/position.hpp"
+#include "components/scroll.hpp"
+#include "components/size.hpp"
+#include "components/text.hpp"
 #include "entity_creation.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
+#include "systems/level_menu.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
 #include "utils/string_manip.hpp"
-
 #include <cassert>
 #include <iomanip>
 #include <sstream>

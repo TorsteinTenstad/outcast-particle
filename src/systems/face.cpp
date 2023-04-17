@@ -1,6 +1,10 @@
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
+#include "components/physics.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
 #include "entity_creation.hpp"
 #include "make_fade_into_level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 
 #define MINIMUM_PLAYER_VELOCITY_REQUIRED_FOR_FACE_MOVEMENT 10

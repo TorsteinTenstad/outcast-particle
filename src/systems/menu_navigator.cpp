@@ -1,29 +1,33 @@
-#include "_pure_DO_systems.hpp"
+#include "components/menu_navigator.hpp"
+#include "components/button_events.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include <cassert>
 
-static int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possble_positions)
+static int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possible_positions)
 {
-	for (auto it = possble_positions.rbegin(); it != possble_positions.rend(); ++it)
+	for (auto it = possible_positions.rbegin(); it != possible_positions.rend(); ++it)
 	{
 		if (it->first < menu_navigator->currently_at_entity_id)
 		{
 			return it->first;
 		}
 	}
-	return possble_positions.rbegin()->first;
+	return possible_positions.rbegin()->first;
 }
 
-static int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possble_positions)
+static int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possible_positions)
 {
-	for (auto it = possble_positions.begin(); it != possble_positions.end(); ++it)
+	for (auto it = possible_positions.begin(); it != possible_positions.end(); ++it)
 	{
 		if (it->first > menu_navigator->currently_at_entity_id)
 		{
 			return it->first;
 		}
 	}
-	return possble_positions.begin()->first;
+	return possible_positions.begin()->first;
 }
 
 static std::map<int, sf::Vector2f> GetPossiblePossiblePositions(Level& level)
@@ -38,7 +42,7 @@ static std::map<int, sf::Vector2f> GetPossiblePossiblePositions(Level& level)
 	return possible_positions;
 }
 
-void MenuNavigatonSystem::Update(Level& level, float dt)
+void MenuNavigatorSystem::Update(Level& level, float dt)
 {
 	for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigator, WidthAndHeight, Position>())
 	{

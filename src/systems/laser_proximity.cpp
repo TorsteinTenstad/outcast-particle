@@ -1,9 +1,17 @@
 #pragma once
+#include "components/kill_on_intersection.hpp"
+#include "components/player.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
+#include "components/sound_info.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/math.hpp"
 #include <algorithm>
 #include <iostream>
+
+class LaserProximity
+{};
 
 float FindShortestDistance(sf::Vector2f player_position, sf::Vector2f laser_position, sf::Vector2f laser_width_height)
 {

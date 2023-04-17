@@ -1,6 +1,7 @@
 #pragma once
-#include "_pure_DO_systems.hpp"
 #include "components/physics.hpp"
+#include "components/position.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/physics.hpp"
 
 void ElectricForceSystem::Update(Level& level, float dt)

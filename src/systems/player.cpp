@@ -1,9 +1,12 @@
 #include "components/player.hpp"
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
 #include "components/physics.hpp"
+#include "components/shader.hpp"
+#include "components/sound_info.hpp"
 #include "controls_config.hpp"
 #include "globals.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
 

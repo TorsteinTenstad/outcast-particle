@@ -1,8 +1,19 @@
 #include "SFML/Config.hpp"
-#include "_pure_DO_systems.hpp"
+#include "components/animated_properties.hpp"
+#include "components/draw_info.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
+#include "components/text.hpp"
+#include "draw_info.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 
 #include <cmath>
+
+class ReadyScreen
+{
+public:
+};
 
 void LevelReadyScreenSystem::Update(Level& level, float dt)
 {
@@ -32,7 +43,7 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 		return entity_id;
 	});
 
-	auto conditionaly_enter_play_mode = [&level](bool enter) {
+	auto conditionally_enter_play_mode = [&level](bool enter) {
 		if (enter)
 		{
 			level.SetMode(PLAY_MODE);
@@ -40,10 +51,10 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 		}
 	};
 
-	conditionaly_enter_play_mode(cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left]);
+	conditionally_enter_play_mode(cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left]);
 	for (auto [key, pressed_this_frame] : cursor_and_keys_.key_pressed_this_frame)
 	{
-		conditionaly_enter_play_mode(pressed_this_frame);
+		conditionally_enter_play_mode(pressed_this_frame);
 		if (pressed_this_frame && key == globals.key_config.PLAYER_SWITCH_CHARGE)
 		{
 			cursor_and_keys_.key_pressed_this_frame[globals.key_config.PLAYER_SWITCH_CHARGE] = false;

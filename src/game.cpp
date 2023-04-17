@@ -33,7 +33,7 @@ Game::Game() :
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
-	RegisterGameSystem<MenuNavigatonSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly
+	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly
 	RegisterGameSystem<ButtonEventsSystem>();
 	RegisterGameSystem<StickyButtonSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();

@@ -1,11 +1,18 @@
 #include "SFML/Graphics/Shader.hpp"
 #include "SFML/System/Vector2.hpp"
-#include "_pure_DO_systems.hpp"
+#include "components/draw_info.hpp"
+#include "components/editable.hpp"
+#include "components/position.hpp"
+#include "components/size.hpp"
 #include "entity_creation.hpp"
 #include "level.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include "utils/string_parsing.hpp"
 #include <functional>
+
+class SelectedEffect
+{};
 
 void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 {

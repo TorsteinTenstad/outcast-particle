@@ -7,6 +7,7 @@
 #include "level.hpp"
 #include "blueprint.hpp"
 #include "utils/string_parsing.hpp"
+#include "components/_used_in_serialization.hpp"
 
 /*
 Warning!

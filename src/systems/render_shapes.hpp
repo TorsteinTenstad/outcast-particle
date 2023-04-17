@@ -2,6 +2,7 @@
 #include "SFML/Graphics/CircleShape.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Texture.hpp"
+#include "components/position.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 
