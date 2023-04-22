@@ -26,9 +26,11 @@ void LevelMenuSystem::Give(
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 	const std::map<std::string, int>* level_coin_records,
 	std::function<Level&(std::string)> set_level,
+	std::function<std::string(std::string)> create_new_level,
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 {
 	level_groups_ = level_groups;
+	create_new_level_ = create_new_level;
 	level_completion_time_records_ = level_completion_time_records;
 	level_coin_records = level_coin_records;
 	set_level_ = set_level;
@@ -193,29 +195,37 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	// Level buttons
-	int i = 0;
-	for (auto& level_id : (*level_groups_).at(level_group))
-	{
-
+	auto AddButton = [&level, this, ui, scroll_window, title_h](int i, std::string button_text, std::function<void()> button_function) {
 		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
+		{ // Text
+			auto [id, size] = CreateScrollingText(level, button_position, button_text);
+			level.GetComponent<Text>(id)->size = 75;
+			scroll_window->entities.push_back(id);
+		}
 		{ // Button
-			auto [id, size] = CreateNavigatorButton(level, button_position, std::bind(&LevelMenuSystem::EnterLevel, this, level_id), "", sf::Keyboard::Unknown);
-			if (level_id == ui->at_level_id)
-			{
-				level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = id;
-			}
-			ui->button_entity_ids.push_back(id);
+			auto [id, size] = CreateNavigatorButton(level, button_position, button_function, "", sf::Keyboard::Unknown);
 			scroll_window->entities.push_back(id);
 
 			level.GetComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
 			level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			return id;
 		}
-		{ // Text
-			auto [id, size] = CreateScrollingText(level, button_position, GetLevelDisplayNameFromId(level_id));
-			level.GetComponent<Text>(id)->size = 75;
-			scroll_window->entities.push_back(id);
+	};
+
+	int i = 0;
+	for (auto& level_id : (*level_groups_).at(level_group))
+	{
+		int id = AddButton(i, GetLevelDisplayNameFromId(level_id), std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
+		ui->button_entity_ids.push_back(id);
+		if (level_id == ui->at_level_id)
+		{
+			level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = id;
 		}
 		i++;
+	}
+	if (is_in_level_editing_)
+	{
+		AddButton(i, "+", std::bind(&LevelMenuSystem::EnterLevel, this, (std::bind(create_new_level_, level_group))));
 	}
 
 	{ // Level preview

@@ -51,6 +51,8 @@ private:
 	System& RegisterPhysicsGameSystem();
 
 	Level& SetLevel(std::string level_id);
+	std::string CreateNewLevel(std::string group_name);
+	Level& CreateAndEnterNewLevel(std::string group_name);
 	void ButtonFuncEditLevel();
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
 	void CheckFullscreen();

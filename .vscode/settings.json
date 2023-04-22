@@ -93,6 +93,7 @@
         "span": "cpp",
         "any": "cpp",
         "stack": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "complex": "cpp"
     }
 }

@@ -1,7 +1,33 @@
 #include "utils/level_id.hpp"
 #include "constants.hpp"
+#include "folder_definitions.hpp"
+#include "level_id.hpp"
 #include "utils/string_parsing.hpp"
 #include <filesystem>
+
+// Level ID format: level\\<group-number>_<group-display-name>\\<level-number>_<level-display-name>.txt
+
+int GetLevelNumberFromId(const std::string& level_id)
+{
+	int number;
+	FromString(number, SplitString(GetLevelNameFromId(level_id), "_").front());
+	return number;
+}
+
+std::string AssembleLevelId(std::string group_name, int level_number, std::string level_display_name)
+{
+	std::filesystem::path path { LEVELS_FOLDER };
+	path.append(group_name);
+	std::string level_name = ToString(level_number);
+	if (level_name.length() == 1)
+	{
+		level_name = "0" + level_name;
+	}
+	level_name += "_" + level_display_name;
+	path.append(level_name);
+	path.replace_extension(".txt");
+	return path.string();
+}
 
 std::string GetGroupNameFromId(const std::string& level_id)
 {
@@ -19,10 +45,15 @@ std::string GetGroupDisplayNameFromId(const std::string& level_id)
 	return GetGroupDisplayNameFromGroupName(GetGroupNameFromId(level_id));
 }
 
-std::string GetLevelDisplayNameFromId(const std::string& level_id)
+std::string GetLevelNameFromId(const std::string& level_id)
 {
 	const std::filesystem::path path { level_id };
-	return SplitString(path.filename().stem().string(), "_").back();
+	return path.filename().stem().string();
+}
+
+std::string GetLevelDisplayNameFromId(const std::string& level_id)
+{
+	return SplitString(GetLevelNameFromId(level_id), "_").back();
 }
 
 bool IsMenu(const std::string& level_id)
