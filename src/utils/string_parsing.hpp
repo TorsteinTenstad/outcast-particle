@@ -40,3 +40,5 @@ void FromString(sf::Vector2<T>& x, std::string s)
 	FromString(x.x, x_y[0]);
 	FromString(x.y, x_y[1]);
 }
+
+std::string UTF32ToUTF8(sf::Uint32 utf32_char);

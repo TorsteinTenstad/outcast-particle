@@ -1,5 +1,6 @@
 #pragma once
 #include "utils/string_parsing.hpp"
+#include <cassert>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -67,4 +68,36 @@ void FromString(bool& x, std::string s)
 void FromString(sf::Color& x, std::string s)
 {
 	x = sf::Color(255, 0, 255);
+}
+
+std::string UTF32ToUTF8(sf::Uint32 utf32_char)
+{
+	std::vector<char> utf8_chars;
+	if (utf32_char <= 0x7F)
+	{
+		utf8_chars.push_back(static_cast<char>(utf32_char));
+	}
+	else if (utf32_char <= 0x7FF)
+	{
+		utf8_chars.push_back(static_cast<char>(0xC0 | (utf32_char >> 6)));
+		utf8_chars.push_back(static_cast<char>(0x80 | (utf32_char & 0x3F)));
+	}
+	else if (utf32_char <= 0xFFFF)
+	{
+		utf8_chars.push_back(static_cast<char>(0xE0 | (utf32_char >> 12)));
+		utf8_chars.push_back(static_cast<char>(0x80 | ((utf32_char >> 6) & 0x3F)));
+		utf8_chars.push_back(static_cast<char>(0x80 | (utf32_char & 0x3F)));
+	}
+	else if (utf32_char <= 0x10FFFF)
+	{
+		utf8_chars.push_back(static_cast<char>(0xF0 | (utf32_char >> 18)));
+		utf8_chars.push_back(static_cast<char>(0x80 | ((utf32_char >> 12) & 0x3F)));
+		utf8_chars.push_back(static_cast<char>(0x80 | ((utf32_char >> 6) & 0x3F)));
+		utf8_chars.push_back(static_cast<char>(0x80 | (utf32_char & 0x3F)));
+	}
+	else
+	{ // Invalid Unicode code point
+		assert(false);
+	}
+	return std::string(utf8_chars.begin(), utf8_chars.end());
 }

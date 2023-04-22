@@ -39,7 +39,7 @@ EntityBoundDrawable RenderShapesSystem::RenderShape(int entity_id, sf::Shape* sh
 
 void RenderShapesSystem::Update(Level& level, float dt)
 {
-	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::BackSpace])
+	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.RESET_SHADERS_AND_TEXTURES])
 	{
 		textures_.clear();
 	}

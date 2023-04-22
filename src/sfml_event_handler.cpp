@@ -3,6 +3,7 @@
 #include "SFML/Window/Event.hpp"
 #include "cursor_and_keys.hpp"
 #include "globals.hpp"
+#include "utils/string_parsing.hpp"
 
 void SFMLEventHandler::Update(CursorAndKeys& cursor_and_keys)
 {
@@ -53,6 +54,10 @@ void SFMLEventHandler::Update(CursorAndKeys& cursor_and_keys)
 			cursor_and_keys.mouse_button_released_this_frame[event.mouseButton.button] = true;
 			cursor_and_keys.mouse_button_down[event.mouseButton.button] = false;
 			cursor_and_keys.mouse_button_last_released_position[event.mouseButton.button] = cursor_and_keys.cursor_position;
+		}
+		if (event.type == sf::Event::TextEntered)
+		{
+			cursor_and_keys.text_input.push_back(UTF32ToUTF8(event.text.unicode));
 		}
 	}
 }

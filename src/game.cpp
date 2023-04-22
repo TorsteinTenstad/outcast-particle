@@ -43,6 +43,7 @@ Game::Game() :
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
+	RegisterGameSystem<TextBoxSystem>();
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();

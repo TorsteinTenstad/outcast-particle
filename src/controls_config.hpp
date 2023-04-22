@@ -30,4 +30,5 @@ public:
 	sf::Keyboard::Key DECREMENT_VELOCITY = sf::Keyboard::S;
 	sf::Keyboard::Key DECREMENT_VELOCITY_ANGLE = sf::Keyboard::A;
 	sf::Keyboard::Key INCREMENT_VELOCITY_ANGLE = sf::Keyboard::D;
+	sf::Keyboard::Key RESET_SHADERS_AND_TEXTURES = sf::Keyboard::F1;
 };
