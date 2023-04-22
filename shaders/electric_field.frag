@@ -3,12 +3,16 @@
 uniform float _time;
 uniform vec2 _wh;
 uniform float charge_sign;
+uniform float charge_strength;
 uniform float movement_animation_time;
 uniform vec2 field_vector;
 
-float rand01(vec2 seed)
+uniform sampler2D _noise_texture;
+#define noise_size 1000
+float rand01(vec2 uv)
 {
-	return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
+	uv = fract(uv / noise_size);
+	return texture2D(_noise_texture, 1 - uv).r;
 }
 
 float rand(float a, float b, vec2 seed)

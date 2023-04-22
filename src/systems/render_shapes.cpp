@@ -39,6 +39,10 @@ EntityBoundDrawable RenderShapesSystem::RenderShape(int entity_id, sf::Shape* sh
 
 void RenderShapesSystem::Update(Level& level, float dt)
 {
+	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::BackSpace])
+	{
+		textures_.clear();
+	}
 	for (auto const& [entity_id, draw_info, draw_priority, position] : level.GetEntitiesWith<DrawInfo, DrawPriority, Position>())
 	{
 		sf::Shape* shape;

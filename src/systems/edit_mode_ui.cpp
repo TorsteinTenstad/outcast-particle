@@ -9,6 +9,9 @@ public:
 	bool initialized = false;
 };
 
+class EditModeUIEntity
+{};
+
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui);
 
@@ -20,6 +23,7 @@ void EditModeUISystem::Update(Level& level, float dt)
 	{
 		level.ui_bars_size = sf::Vector2f(0, 0);
 		CloseBlueprintMenu(level);
+		level.DeleteEntitiesWith<EditModeUIEntity>();
 		return;
 	}
 	level.ui_bars_size = sf::Vector2f(0, UI_BAR_HEIGHT);
@@ -39,6 +43,7 @@ static void UpdateUI(Level& level, EditModeUI* ui)
 
 static void SetupUI(Level& level, EditModeUI* ui)
 {
+	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<EditModeUIEntity>(id); });
 	{
 		float w = 3 * BLOCK_SIZE;
 		auto [entity_id, size] = CreateButton(
