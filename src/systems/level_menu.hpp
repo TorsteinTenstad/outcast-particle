@@ -32,5 +32,5 @@ public:
 	void UpdateUI(Level& level, LevelMenuUI* ui);
 	void SetupUI(Level& level, LevelMenuUI* ui);
 	void EnterLevel(std::string level_id);
-	void GenerateStatsBadges(Level& level, LevelMenuUI* ui);
+	void UpdateStatsBadges(Level& level, LevelMenuUI* ui);
 };

@@ -121,7 +121,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 		auto [new_id, new_ui] = level.CreateEntityWith<LevelMenuUI>();
 		new_ui->at_level_id = new_level_id;
 	}
-	GenerateStatsBadges(level, ui);
+	UpdateStatsBadges(level, ui);
 }
 
 void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
@@ -197,23 +197,33 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	// Level buttons
 	auto AddLevelMenuButton = [](ECSScene& level, std::string button_text, std::function<void()> button_function, float blocks_wide) {
 		// Button
-		auto [button_id, size] = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, "", sf::Keyboard::Unknown);
-		level.GetComponent<WidthAndHeight>(button_id)->width_and_height = sf::Vector2f(blocks_wide, 1) * float(BLOCK_SIZE);
-		level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+		auto [button_id, size] = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(blocks_wide, 1) * float(BLOCK_SIZE));
+		level.AddComponent<OnReleasedThisFrame>(button_id)->func = button_function;
+		level.AddComponent<MenuNavigable>(button_id);
 		// Text
-		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(0, 0), button_text);
-		level.GetComponent<Text>(text_id)->size = 75;
+		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(0, 0), button_text, 75u);
 
-		EntitiesHandle main_button = { { button_id, text_id }, sf::Vector2f(10, 1) * float(BLOCK_SIZE) };
+		EntitiesHandle main_button = { { button_id, text_id }, size };
 		return main_button;
 	};
 
-	auto AddLevelMenuRow = [ui, AddLevelMenuButton](ECSScene& level, std::string button_text, std::function<void()> button_function) {
+	auto AddLevelMenuRow = [ui, AddLevelMenuButton, is_in_level_editing = is_in_level_editing_](ECSScene& level, std::string button_text, std::function<void()> button_function) {
 		std::vector<EntitiesHandle> row_items;
-		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, button_function, 10);
+		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, button_function, is_in_level_editing ? 7.5 : 10);
 		ui->button_entity_ids.push_back(std::get<std::vector<int>>(main_button)[0]);
+		if (!is_in_level_editing)
+		{
+			return main_button;
+		}
+		EntityHandle edit_name_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * float(BLOCK_SIZE));
+		EntityHandle delete_level_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * float(BLOCK_SIZE));
+
+		ui->edit_name_button_entity_ids.push_back(std::get<int>(edit_name_button));
+		ui->delete_level_button_entity_ids.push_back(std::get<int>(delete_level_button));
 		row_items.push_back(main_button);
-		return HorizontalEntityLayout(level, sf::Vector2f(0, 0), row_items, 0.5 * float(BLOCK_SIZE));
+		row_items.push_back(AdaptToEntitiesHandle(edit_name_button));
+		row_items.push_back(AdaptToEntitiesHandle(delete_level_button));
+		return HorizontalEntityLayout(level, sf::Vector2f(0, 0), row_items, 0.25 * float(BLOCK_SIZE));
 	};
 
 	std::vector<EntitiesHandle> scroll_menu_items;
@@ -269,7 +279,7 @@ void LevelMenuSystem::EnterLevel(std::string level_id)
 	}
 }
 
-void LevelMenuSystem::GenerateStatsBadges(Level& level, LevelMenuUI* ui)
+void LevelMenuSystem::UpdateStatsBadges(Level& level, LevelMenuUI* ui)
 {
 	for (int i = 0; i < 4; i++)
 	{
