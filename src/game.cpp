@@ -24,14 +24,15 @@
 #include <thread>
 
 Game::Game() :
-	active_level_(std::make_unique<Level>())
+	active_level_(std::make_unique<Level>()),
+	level_manager_(LEVELS_FOLDER)
 {
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
-	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::CreateNewLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_.GetLevels(), &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&LevelManager::CreateNewLevel, &level_manager_, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
 	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly
@@ -54,7 +55,7 @@ Game::Game() :
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
-	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_, &level_completion_time_records_);
+	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_manager_.GetLevels(), &level_completion_time_records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<IntersectionSystem>();
@@ -71,17 +72,6 @@ Game::Game() :
 	RegisterPhysicsGameSystem<ForceSystem>();
 	RegisterPhysicsGameSystem<AccelerationSystem>();
 	RegisterPhysicsGameSystem<VelocitySystem>();
-
-	const std::filesystem::path levels_path { LEVELS_FOLDER };
-	for (const auto& folder : std::filesystem::directory_iterator { levels_path })
-	{
-		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
-		{
-			std::string level_id = level_file_path.path().string();
-			std::string group = GetGroupNameFromId(level_id);
-			level_groups_[group].push_back(level_id);
-		}
-	}
 
 	if (!std::filesystem::exists(USER_FOLDER))
 	{
@@ -158,22 +148,6 @@ Level& Game::SetLevel(std::string level_id)
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;
 	return *active_level_;
-}
-
-Level& Game::CreateAndEnterNewLevel(std::string group_name)
-{
-	std::string new_level_id = CreateNewLevel(group_name);
-	return SetLevel(new_level_id);
-}
-
-std::string Game::CreateNewLevel(std::string group_name)
-{
-	int level_number = GetLevelNumberFromId(level_groups_.at(group_name).back()) + 1;
-	std::string level_display_name = "Unnamed level";
-	std::string new_level_id = AssembleLevelId(group_name, level_number, level_display_name);
-	std::ofstream file(new_level_id);
-	level_groups_.at(group_name).push_back(new_level_id);
-	return new_level_id;
 }
 
 void Game::Update(float dt)
