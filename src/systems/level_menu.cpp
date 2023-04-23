@@ -241,7 +241,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 	{ // Stats display
 		sf::Vector2f badge_center_positions = sf::Vector2f(level_size.x * (1 - LEVEL_PREVIEW_SCALE) + 3.75 * BLOCK_SIZE, level_size.y * (0.5 + 0.5 * LEVEL_PREVIEW_SCALE));
-		std::vector<entities_handle> entities_handles;
+		std::vector<EntitiesHandle> entities_handles;
 		for (int i = 0; i < 4; i++)
 		{
 			entities_handles.push_back(AdaptToEntitiesHandle(CreateStatsBadge(level, sf::Vector2f(0, 0), i, 50, "", false)));
