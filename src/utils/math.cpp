@@ -4,6 +4,16 @@
 #include <cassert>
 #include <math.h>
 
+float& GetX(sf::Vector2f& v)
+{
+	return v.x;
+}
+
+float& GetY(sf::Vector2f& v)
+{
+	return v.y;
+}
+
 float Smoothstep(float a, float b, float x)
 {
 	float t = Clamp((x - a) / (b - a), 0.f, 1.f);

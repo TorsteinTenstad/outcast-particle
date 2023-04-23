@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <cassert>
 #include <functional>
 #include <map>
 #include <vector>
@@ -63,4 +64,28 @@ unsigned FindClosest(const std::array<T, SIZE>& sorted_arr, const T& value)
 		}
 	}
 	return sorted_arr.size() - 1;
+}
+
+template <typename T, typename... Args>
+std::vector<std::tuple<T&, Args&...>> zip(std::vector<T>& a, std::vector<Args>&... args)
+{
+	std::vector<std::tuple<T&, Args&...>> zipped;
+	assert(((a.size() == args.size()) && ...));
+	for (auto i = 0; i < a.size(); i++)
+	{
+		zipped.push_back({ a[i], args[i]... });
+	}
+	return zipped;
+}
+
+template <typename T, typename... Args>
+std::vector<std::tuple<const T&, const Args&...>> zip(const std::vector<T>& a, const std::vector<Args>&... args)
+{
+	std::vector<std::tuple<const T&, const Args&...>> zipped;
+	assert(((a.size() == args.size()) && ...));
+	for (auto i = 0; i < a.size(); i++)
+	{
+		zipped.push_back({ a[i], args[i]... });
+	}
+	return zipped;
 }

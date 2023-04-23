@@ -180,13 +180,13 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	const float BUTTON_HEIGHT = float(BLOCK_SIZE);
 	// Scroll window
+	auto [menu_navigator_id, _] = CreateMenuNavigator(level, 1);
 	ScrollWindow* scroll_window;
 	{
 		auto [entity_id, scroll_window_local, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
 
 		scroll_window = scroll_window_local;
 		scroll_window->entity_height = BUTTON_HEIGHT;
-		auto [menu_navigator_id, _] = CreateMenuNavigator(level, 1);
 		scroll_window->menu_navigator = menu_navigator_id;
 		width_and_height->width_and_height = level_size;
 		width_and_height->width_and_height.y -= title_h;
@@ -195,38 +195,47 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	// Level buttons
-	auto AddButton = [&level, this, ui, scroll_window, title_h](int i, std::string button_text, std::function<void()> button_function) {
-		sf::Vector2f button_position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h + (0.5 + 1.5 * i) * float(BLOCK_SIZE));
-		{ // Text
-			auto [id, size] = CreateScrollingText(level, button_position, button_text);
-			level.GetComponent<Text>(id)->size = 75;
-			scroll_window->entities.push_back(id);
-		}
-		{ // Button
-			auto [id, size] = CreateNavigatorButton(level, button_position, button_function, "", sf::Keyboard::Unknown);
-			scroll_window->entities.push_back(id);
+	auto AddLevelMenuButton = [](ECSScene& level, std::string button_text, std::function<void()> button_function, float blocks_wide) {
+		// Button
+		auto [button_id, size] = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, "", sf::Keyboard::Unknown);
+		level.GetComponent<WidthAndHeight>(button_id)->width_and_height = sf::Vector2f(blocks_wide, 1) * float(BLOCK_SIZE);
+		level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+		// Text
+		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(0, 0), button_text);
+		level.GetComponent<Text>(text_id)->size = 75;
 
-			level.GetComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(10, 1) * float(BLOCK_SIZE);
-			level.GetComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-			return id;
-		}
+		EntitiesHandle main_button = { { button_id, text_id }, sf::Vector2f(10, 1) * float(BLOCK_SIZE) };
+		return main_button;
 	};
 
-	int i = 0;
-	for (auto& level_id : (*level_groups_).at(level_group))
+	auto AddLevelMenuRow = [ui, AddLevelMenuButton](ECSScene& level, std::string button_text, std::function<void()> button_function) {
+		std::vector<EntitiesHandle> row_items;
+		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, button_function, 10);
+		ui->button_entity_ids.push_back(std::get<std::vector<int>>(main_button)[0]);
+		row_items.push_back(main_button);
+		return HorizontalEntityLayout(level, sf::Vector2f(0, 0), row_items, 0.5 * float(BLOCK_SIZE));
+	};
+
+	std::vector<EntitiesHandle> scroll_menu_items;
+	for (const auto& level_id : level_groups_->at(level_group))
 	{
-		int id = AddButton(i, GetLevelDisplayNameFromId(level_id), std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
-		ui->button_entity_ids.push_back(id);
-		if (level_id == ui->at_level_id)
+		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
+		scroll_menu_items.push_back(row);
+	}
+	for (const auto& [button_id, level_id] : zip(ui->button_entity_ids, level_groups_->at(level_group)))
+	{
+		if (ui->last_at_level_id == level_id)
 		{
-			level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->currently_at_entity_id = id;
+			level.GetComponent<MenuNavigator>(menu_navigator_id)->currently_at_entity_id = button_id;
+			break;
 		}
-		i++;
 	}
 	if (is_in_level_editing_)
 	{
-		AddButton(i, "+", std::bind(&LevelMenuSystem::EnterLevel, this, (std::bind(create_new_level_, level_group))));
+		EntitiesHandle new_level_button = AddLevelMenuButton(level, "+", std::bind(&LevelMenuSystem::EnterLevel, this, (std::bind(create_new_level_, level_group))), 10);
+		scroll_menu_items.push_back(new_level_button);
 	}
+	VerticalEntityLayout(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), scroll_menu_items, 0.5 * float(BLOCK_SIZE), StartEdge);
 
 	{ // Level preview
 		auto [entity_id, draw_info, draw_priority, width_and_height, position] = level.CreateEntityWith<DrawInfo, DrawPriority, WidthAndHeight, Position>();

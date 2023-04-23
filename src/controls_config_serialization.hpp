@@ -86,6 +86,9 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "INCREMENT_VELOCITY_ANGLE=";
 	str_rep += ToString(c->INCREMENT_VELOCITY_ANGLE);
+	str_rep += ";";
+	str_rep += "RESET_SHADERS_AND_TEXTURES=";
+	str_rep += ToString(c->RESET_SHADERS_AND_TEXTURES);
 	str_rep += "}";
 }
 
@@ -200,6 +203,10 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "INCREMENT_VELOCITY_ANGLE")
         {
             FromString(c->INCREMENT_VELOCITY_ANGLE, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "RESET_SHADERS_AND_TEXTURES")
+        {
+            FromString(c->RESET_SHADERS_AND_TEXTURES, statement_parts[1]);
         }
         else {
             assert(false);

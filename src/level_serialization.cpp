@@ -359,18 +359,25 @@ void Level::LoadFromFile(std::string savefile_path)
     getline(f, line);
     std::vector<std::string> level_properties = SplitString(line, ";");
     for (auto& property_str : level_properties)
-    {
-        std::vector<std::string> property_statement_parts = SplitString(property_str, "=");
-        if (property_statement_parts[0] == "name"){
-            FromString(name, property_statement_parts[1]);
-        }
-        else if (property_statement_parts[0] == "grid_size_id"){
-            FromString(name, property_statement_parts[1]);
-        }
-        else if (property_statement_parts[0] == "editable"){
-            FromString(name, property_statement_parts[1]);
-        }
-    }
+	{
+		std::vector<std::string> property_statement_parts = SplitString(property_str, "=");
+		if (property_statement_parts[0] == "name")
+		{
+			FromString(name, property_statement_parts[1]);
+		}
+		else if (property_statement_parts[0] == "grid_size_id")
+		{
+			FromString(grid_size_id, property_statement_parts[1]);
+		}
+		else if (property_statement_parts[0] == "editable")
+		{
+			FromString(editable, property_statement_parts[1]);
+		}
+		else
+		{
+			assert(property_statement_parts[0].length() == 0);
+		}
+	}
 
     while (getline(f, line))
     {

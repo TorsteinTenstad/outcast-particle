@@ -10,6 +10,10 @@ void ScrollSystem::Update(Level& level, float dt)
 {
 	for (auto [entity_id, scroll_window, width_and_height, scroll_window_position] : level.GetEntitiesWith<ScrollWindow, WidthAndHeight, Position>())
 	{
+		if (scroll_window->entities.size() == 0)
+		{
+			continue;
+		}
 		float top = scroll_window_position->position.y - width_and_height->width_and_height.y / 2;
 		float bottom = scroll_window_position->position.y + width_and_height->width_and_height.y / 2;
 		float requested_movement = cursor_and_keys_.mouse_wheel_delta * 180;

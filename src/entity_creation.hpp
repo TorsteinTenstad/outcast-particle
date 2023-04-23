@@ -12,7 +12,8 @@ EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator);
 EntitiesHandle AdaptToEntitiesHandle(EntityHandle EntityHandle);
 
 EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesCreator> entities_creators, float spacing);
-EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_creators, float spacing);
+EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_creators, float spacing, UiOrigin ui_origin = Center);
+EntitiesHandle HorizontalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, UiOrigin ui_origin = Center);
 EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string text, unsigned int text_size);
 EntityHandle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size);
 EntityHandle CreateSizedButtonTemplate(ECSScene& level, sf::Vector2f position);

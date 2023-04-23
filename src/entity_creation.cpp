@@ -11,6 +11,7 @@
 #include "components/sticky_button.hpp"
 #include "components/text.hpp"
 #include "utils/container_operations.hpp"
+#include "utils/math.hpp"
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 
@@ -241,28 +242,56 @@ EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std:
 	return (std::tuple { total_ids, total_height });
 }
 
-EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing)
+static EntitiesHandle OneDimensionalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, std::function<float&(sf::Vector2f&)> access_layout_direction, std::function<float&(sf::Vector2f&)> access_other_direction, UiOrigin ui_origin)
 {
-	sf::Vector2f total_size;
 	std::vector<int> total_ids;
 
-	for (auto [ids, size] : entities_handles)
-	{
-		total_size.y += size.y;
-		total_size.x = std::max(total_size.x, size.x);
-	}
-	total_size.y += spacing * (entities_handles.size() - 1);
+	float total_size_in_layout_direction = 0;
+	float total_size_in_other_direction = 0;
 
-	float current_height = -total_size.y / 2;
 	for (auto [ids, size] : entities_handles)
 	{
-		current_height += size.y / 2;
+		total_size_in_layout_direction += access_layout_direction(size);
+		total_size_in_other_direction = std::max(total_size_in_other_direction, access_other_direction(size));
+	}
+	total_size_in_layout_direction += spacing * (entities_handles.size() - 1);
+
+	float current_position_in_layout_direction = 0;
+	switch (ui_origin)
+	{
+		case StartEdge:
+			break;
+		case Center:
+			current_position_in_layout_direction -= total_size_in_layout_direction / 2;
+			break;
+		case EndEdge:
+			current_position_in_layout_direction -= total_size_in_layout_direction;
+			break;
+		default:
+			assert(false);
+	}
+	for (auto [ids, size] : entities_handles)
+	{
+		current_position_in_layout_direction += access_layout_direction(size) / 2;
 		for (int id : ids)
 		{
-			level.GetComponent<Position>(id)->position += sf::Vector2f(position.x, current_height + position.y);
+			level.GetComponent<Position>(id)->position = position + sf::Vector2f(0, current_position_in_layout_direction);
 			total_ids.push_back(id);
 		}
-		current_height += size.y / 2 + spacing;
+		current_position_in_layout_direction += access_layout_direction(size) / 2 + spacing;
 	}
+	sf::Vector2f total_size;
+	access_layout_direction(total_size) = total_size_in_layout_direction;
+	access_other_direction(total_size) = total_size_in_other_direction;
 	return (std::tuple { total_ids, total_size });
+}
+
+EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, UiOrigin ui_origin)
+{
+	return OneDimensionalEntityLayout(level, position, entities_handles, spacing, GetY, GetX, ui_origin);
+}
+
+EntitiesHandle HorizontalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, UiOrigin ui_origin)
+{
+	return OneDimensionalEntityLayout(level, position, entities_handles, spacing, GetX, GetY, ui_origin);
 }
