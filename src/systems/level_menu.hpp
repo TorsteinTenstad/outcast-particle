@@ -3,6 +3,7 @@
 #include "level.hpp"
 #include "utils/string_parsing.hpp"
 
+#include "level_manager.hpp"
 #include <iomanip>
 #include <sstream>
 
@@ -11,22 +12,20 @@
 class LevelMenuSystem : public GameSystem
 {
 private:
-	const std::map<std::string, std::vector<std::string>>* level_groups_;
+	LevelManager* level_manager_;
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records_;
 	const std::map<std::string, int>* level_coin_records_;
 
 	std::function<Level&(std::string)> set_level_;
-	std::function<std::string(std::string)> create_new_level_;
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture_;
 
 public:
 	using GameSystem::GameSystem;
 	void Give(
-		const std::map<std::string, std::vector<std::string>>* level_groups,
+		LevelManager* level_manager,
 		const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 		const std::map<std::string, int>* level_coin_records,
 		std::function<Level&(std::string)> set_level,
-		std::function<std::string(std::string)> create_new_level,
 		std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture);
 	void Update(Level& level, float dt);
 	void UpdateUI(Level& level, LevelMenuUI* ui);

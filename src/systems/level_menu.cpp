@@ -22,15 +22,13 @@
 #define LEVEL_PREVIEW_SCALE 0.6
 
 void LevelMenuSystem::Give(
-	const std::map<std::string, std::vector<std::string>>* level_groups,
+	LevelManager* level_manager,
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 	const std::map<std::string, int>* level_coin_records,
 	std::function<Level&(std::string)> set_level,
-	std::function<std::string(std::string)> create_new_level,
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 {
-	level_groups_ = level_groups;
-	create_new_level_ = create_new_level;
+	level_manager_ = level_manager;
 	level_completion_time_records_ = level_completion_time_records;
 	level_coin_records = level_coin_records;
 	set_level_ = set_level;
@@ -38,6 +36,8 @@ void LevelMenuSystem::Give(
 }
 void LevelMenuSystem::Update(Level& level, float dt)
 {
+	const std::map<std::string, std::vector<std::string>>& level_groups = level_manager_->GetLevels();
+
 	auto level_menu_ui_entities = level.GetEntitiesWith<LevelMenuUI>();
 	if (level_menu_ui_entities.size() == 0)
 	{
@@ -60,7 +60,7 @@ void LevelMenuSystem::Update(Level& level, float dt)
 		{
 			if (ui->last_at_level_id.empty())
 			{
-				ui->at_level_id = level_groups_->begin()->second[0];
+				ui->at_level_id = level_groups.begin()->second[0];
 			}
 			else
 			{
@@ -76,57 +76,79 @@ void LevelMenuSystem::Update(Level& level, float dt)
 
 void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 {
-	std::string level_group = GetGroupNameFromId(ui->at_level_id);
-	int button_i = 0;
-	for (int button_entity_id : ui->button_entity_ids)
-	{
-		if (level.HasComponents<HoveredStartedThisFrame>(button_entity_id))
+	std::string current_level_group = GetGroupNameFromId(ui->at_level_id);
+	const std::map<std::string, std::vector<std::string>>& level_groups = level_manager_->GetLevels();
+
+	{ // Updates that don't require redraw, only modifications:
+		int button_i = 0;
+		for (int button_entity_id : ui->button_entity_ids)
 		{
-			if (ui->at_level_id != level_groups_->at(level_group)[button_i])
+			if (level.HasComponents<HoveredStartedThisFrame>(button_entity_id))
 			{
-				ui->at_level_id = level_groups_->at(level_group)[button_i];
-				*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE), unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE));
+				if (ui->at_level_id != level_groups.at(current_level_group)[button_i])
+				{
+					ui->at_level_id = level_groups.at(current_level_group)[button_i];
+					*ui->level_image_identifier = generate_level_texture_(ui->at_level_id, unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE), unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE));
+				}
+			}
+			button_i++;
+		}
+		UpdateStatsBadges(level, ui);
+	}
+
+	{ // Check for updates that require redraw:
+		std::optional<std::string> new_level_id;
+		if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_id))
+		{
+			new_level_id = NextInMap(level_groups, current_level_group)->second[0];
+		}
+		if (level.HasComponents<ReleasedThisFrame>(ui->prev_group_button_id))
+		{
+			new_level_id = PrevInMap(level_groups, current_level_group)->second[0];
+		}
+		if (level.HasComponents<ReleasedThisFrame>(ui->dot_indicator_id))
+		{
+			float pos_x = level.GetComponent<Position>(ui->dot_indicator_id)->position.x;
+			float w = level.GetComponent<WidthAndHeight>(ui->dot_indicator_id)->width_and_height.x;
+			float mouse_x = cursor_and_keys_.cursor_position.x;
+			float percentage = (mouse_x - pos_x + w / 2) / w;
+
+			if (0 <= percentage && percentage <= 1)
+			{
+				int n = level_groups.size();
+				int i = floor(percentage * n);
+
+				auto it = level_groups.begin();
+				std::advance(it, i);
+				new_level_id = it->second[0];
 			}
 		}
-		button_i++;
-	}
-	std::string new_level_id = level_group;
-	if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_id))
-	{
-		new_level_id = NextInMap(*level_groups_, level_group)->second[0];
-	}
-	if (level.HasComponents<ReleasedThisFrame>(ui->prev_group_button_id))
-	{
-		new_level_id = PrevInMap(*level_groups_, level_group)->second[0];
-	}
-	if (level.HasComponents<ReleasedThisFrame>(ui->dot_indicator_id))
-	{
-		float pos_x = level.GetComponent<Position>(ui->dot_indicator_id)->position.x;
-		float w = level.GetComponent<WidthAndHeight>(ui->dot_indicator_id)->width_and_height.x;
-		float mouse_x = cursor_and_keys_.cursor_position.x;
-		float percentage = (mouse_x - pos_x + w / 2) / w;
-
-		if (0 <= percentage && percentage <= 1)
+		if (new_level_id && GetGroupNameFromId(new_level_id.value()) != current_level_group)
 		{
-			int n = level_groups_->size();
-			int i = floor(percentage * n);
+			auto [new_id, new_ui] = level.CreateEntityWith<LevelMenuUI>();
+			new_ui->at_level_id = new_level_id.value();
+			return;
+		}
 
-			auto it = level_groups_->begin();
-			std::advance(it, i);
-			new_level_id = it->second[0];
+		int i = 0;
+		for (int button_id : ui->delete_level_button_entity_ids)
+		{
+			if (level.HasComponents<ReleasedThisFrame>(button_id))
+			{
+				level_manager_->DeleteLevel(level_groups.at(current_level_group)[i]);
+				auto [new_id, new_ui] = level.CreateEntityWith<LevelMenuUI>();
+				return;
+			}
+			i++;
 		}
 	}
-	if (new_level_id != level_group)
-	{
-		auto [new_id, new_ui] = level.CreateEntityWith<LevelMenuUI>();
-		new_ui->at_level_id = new_level_id;
-	}
-	UpdateStatsBadges(level, ui);
 }
 
 void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 {
-	std::string level_group = GetGroupNameFromId(ui->at_level_id);
+	const std::map<std::string, std::vector<std::string>>& level_groups = level_manager_->GetLevels();
+
+	std::string current_level_group = GetGroupNameFromId(ui->at_level_id);
 	auto level_size = level.GetSize();
 	assert(!ui->initialized);
 	assert(ui->button_entity_ids.size() == 0);
@@ -139,8 +161,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		auto [entity_id, shader, receives_button_events, draw_info, draw_priority, width_and_height, position] = level.CreateEntityWith<Shader, ReceivesButtonEvents, DrawInfo, DrawPriority, WidthAndHeight, Position>();
 		ui->dot_indicator_id = entity_id;
 		shader->fragment_shader_path = "shaders\\dots_indicator.frag";
-		shader->int_uniforms["n_dots"] = level_groups_->size();
-		shader->int_uniforms["active_dot"] = std::distance(level_groups_->cbegin(), level_groups_->find(level_group));
+		shader->int_uniforms["n_dots"] = level_groups.size();
+		shader->int_uniforms["active_dot"] = std::distance(level_groups.cbegin(), level_groups.find(current_level_group));
 		position->position.x = button_panel_center;
 		position->position.y = title_h - dot_indicator_h / 2 - 0.5 * float(BLOCK_SIZE);
 		width_and_height->width_and_height.x = 400;
@@ -151,7 +173,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		auto [entity_id, text, draw_priority, position] = level.CreateEntityWith<Text, DrawPriority, Position>();
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		text->size = 100;
-		text->content = GetGroupDisplayNameFromGroupName(level_group);
+		text->content = GetGroupDisplayNameFromGroupName(current_level_group);
 		position->position = sf::Vector2f(button_panel_center, title_h / 2 - 0.5 * dot_indicator_h);
 	}
 
@@ -227,12 +249,12 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	};
 
 	std::vector<EntitiesHandle> scroll_menu_items;
-	for (const auto& level_id : level_groups_->at(level_group))
+	for (const auto& level_id : level_groups.at(current_level_group))
 	{
 		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
 		scroll_menu_items.push_back(row);
 	}
-	for (const auto& [button_id, level_id] : zip(ui->button_entity_ids, level_groups_->at(level_group)))
+	for (const auto& [button_id, level_id] : zip(ui->button_entity_ids, level_groups.at(current_level_group)))
 	{
 		if (ui->last_at_level_id == level_id)
 		{
@@ -242,7 +264,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	if (is_in_level_editing_)
 	{
-		EntitiesHandle new_level_button = AddLevelMenuButton(level, "+", std::bind(&LevelMenuSystem::EnterLevel, this, (std::bind(create_new_level_, level_group))), 10);
+		EntitiesHandle new_level_button = AddLevelMenuButton(level, "+", std::bind(&LevelMenuSystem::EnterLevel, this, (std::bind(&LevelManager::CreateNewLevel, level_manager_, current_level_group))), 10);
 		scroll_menu_items.push_back(new_level_button);
 	}
 	VerticalEntityLayout(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), scroll_menu_items, 0.5 * float(BLOCK_SIZE), StartEdge);
