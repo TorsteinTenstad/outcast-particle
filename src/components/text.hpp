@@ -5,7 +5,7 @@
 class TextBox
 {
 public:
-	std::string illegal_characters = "\"*/:<>?\\|";
+	std::string illegal_characters = "\"*/:<>?\\|_";
 };
 
 class Text

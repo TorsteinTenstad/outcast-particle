@@ -10,6 +10,7 @@
 #include "components/sticky_button.hpp"
 #include "components/text.hpp"
 #include "entity_creation.hpp"
+#include "folder_definitions.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
 #include "level_menu.hpp"
@@ -42,11 +43,19 @@ static void UpdateLevelPreview(Level& level, LevelMenuUI* ui,
 	for (const auto& [button_entity_id, level_id] : zip(ui->button_entity_ids, level_groups.at(at_group)))
 	{
 		if (!level.HasComponents<HoveredStartedThisFrame>(button_entity_id)) { continue; }
-		if (ui->at_level_id.has_value() && ui->at_level_id.value() == level_id) { continue; }
+		if (ui->displaying_level_id.has_value() && ui->displaying_level_id.value() == level_id) { continue; }
 
+		ui->displaying_level_id = level_id;
 		ui->at_level_id = level_id;
 		LevelMenuUI::last_at_level_id[at_group] = level_id;
 		GenerateLevelPreview(level, ui, level_id, generate_level_texture);
+		return;
+	}
+	if (ui->new_level_button_id.has_value()
+		&& level.HasComponents<HoveredStartedThisFrame>(ui->new_level_button_id.value()))
+	{
+		GenerateLevelPreview(level, ui, NEW_LEVEL_TEMPLATE_FILE, generate_level_texture);
+		ui->displaying_level_id = NEW_LEVEL_TEMPLATE_FILE;
 	}
 }
 

@@ -1,4 +1,5 @@
 #include "level_manager.hpp"
+#include "folder_definitions.hpp"
 #include "utils/level_id.hpp"
 #include <cassert>
 #include <filesystem>
@@ -9,6 +10,10 @@ LevelManager::LevelManager(std::string levels_folder)
 	const std::filesystem::path levels_folder_path { levels_folder };
 	for (const auto& folder : std::filesystem::directory_iterator { levels_folder_path })
 	{
+		if (!folder.is_directory())
+		{
+			continue;
+		}
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
 			std::string level_id = level_file_path.path().string();
@@ -25,10 +30,10 @@ const std::map<std::string, std::vector<std::string>>& LevelManager::GetLevels()
 
 std::string LevelManager::CreateNewLevel(std::string group_name)
 {
-	int level_number = GetLevelNumberFromId(levels_.at(group_name).back()) + 1;
+	int level_number = levels_.at(group_name).size() > 0 ? GetLevelNumberFromId(levels_.at(group_name).back()) + 1 : 0;
 	std::string level_display_name = "Unnamed level";
 	std::string new_level_id = AssembleLevelId(group_name, level_number, level_display_name);
-	std::ofstream file(new_level_id);
+	std::filesystem::copy_file(NEW_LEVEL_TEMPLATE_FILE, new_level_id);
 	levels_.at(group_name).push_back(new_level_id);
 	return new_level_id;
 }
