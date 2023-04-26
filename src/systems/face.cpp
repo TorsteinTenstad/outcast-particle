@@ -14,7 +14,7 @@ void FaceSystem::Update(Level& level, float dt)
 	for (auto& [entity_id, face, children, draw_info, draw_priority, radius, position] : level.GetEntitiesWith<Face, Children, DrawInfo, DrawPriority, Radius, Position>())
 	{
 
-		std::function<int(void)> create_face = [&level, active_level_id = active_level_id_, face = face, draw_priority = draw_priority, radius = radius, position = position]() {
+		std::function<int(Level&)> create_face = [active_level_id = active_level_id_, face = face, draw_priority = draw_priority, radius = radius, position = position](Level& level) {
 			int entity_id = level.CreateEntityId();
 			level.AddComponent<DrawInfo>(entity_id)->scale_to_fit = true;
 			level.AddComponent<DrawPriority>(entity_id)->draw_priority = draw_priority->draw_priority;
@@ -24,7 +24,7 @@ void FaceSystem::Update(Level& level, float dt)
 			return entity_id;
 		};
 
-		int child_id = EnsureExistenceOfChildEntity<Face>(children, create_face);
+		int child_id = GetSingletonChildId<Face>(level, entity_id, create_face);
 		level.GetComponent<DrawInfo>(child_id)->image_path = face->image_path;
 		level.GetComponent<Radius>(child_id)->radius = radius->radius;
 		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity_id))

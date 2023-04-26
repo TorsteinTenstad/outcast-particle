@@ -7,6 +7,7 @@
 #include "components/position.hpp"
 #include "components/scroll.hpp"
 #include "components/size.hpp"
+#include "components/sticky_button.hpp"
 #include "components/text.hpp"
 #include "entity_creation.hpp"
 #include "game_system.hpp"
@@ -170,17 +171,34 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 		}
 	}
 
-	if (ui->delete_level_button_entity_ids.size() == 0)
+	if (ui->delete_level_button_entity_ids.size() > 0)
 	{
-		return;
-	}
-	for (const auto& [button_id, level_id] : zip(ui->delete_level_button_entity_ids, level_groups.at(at_group)))
-	{
-		if (level.HasComponents<ReleasedThisFrame>(button_id))
+		for (const auto& [main_button_id, text_id, edit_button_id, delete_button_id, level_id] : zip(
+				 ui->button_entity_ids,
+				 ui->text_entity_ids,
+				 ui->edit_name_button_entity_ids,
+				 ui->delete_level_button_entity_ids,
+				 level_groups.at(at_group)))
 		{
-			level_manager_->DeleteLevel(level_id);
-			RequestRedraw(level, ui, at_group);
-			return;
+			if (level.HasComponents<HoveredStartedThisFrame>(edit_button_id) || level.HasComponents<HoveredStartedThisFrame>(delete_button_id))
+			{
+				level.GetComponent<MenuNavigator>(ui->menu_navigator_id)->currently_at_entity_id = main_button_id;
+			}
+			if (level.HasComponents<ReleasedThisFrame>(delete_button_id))
+			{
+				level_manager_->DeleteLevel(level_id);
+				RequestRedraw(level, ui, at_group);
+				return;
+			}
+			if (level.HasComponents<StickyButtonDown>(edit_button_id) && !level.HasComponents<TextBox>(text_id))
+			{
+				level.AddComponents<TextBox>(text_id);
+			}
+			else if (!level.HasComponents<StickyButtonDown>(edit_button_id) && level.HasComponents<TextBox>(text_id))
+			{
+				level_manager_->RenameLevel(level_id, level.GetComponent<Text>(text_id)->content);
+				level.RemoveComponents<TextBox>(text_id);
+			}
 		}
 	}
 }
@@ -260,6 +278,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	const float BUTTON_HEIGHT = float(BLOCK_SIZE);
 	// Scroll window
 	auto [menu_navigator_id, _] = CreateMenuNavigator(level, 1);
+	ui->menu_navigator_id = menu_navigator_id;
 	ScrollWindow* scroll_window;
 	{
 		auto [entity_id, scroll_window_local, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
@@ -290,12 +309,15 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<EntitiesHandle> row_items;
 		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, button_function, is_in_level_editing ? 7.5 : 10);
 		ui->button_entity_ids.push_back(std::get<std::vector<int>>(main_button)[0]);
+		ui->text_entity_ids.push_back(std::get<std::vector<int>>(main_button)[1]);
 		if (!is_in_level_editing)
 		{
 			return main_button;
 		}
 		EntityHandle edit_name_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * float(BLOCK_SIZE));
 		EntityHandle delete_level_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * float(BLOCK_SIZE));
+		level.AddComponent<StickyButton>(std::get<int>(edit_name_button));
+		level.AddComponent<StickyButton>(std::get<int>(delete_level_button));
 
 		ui->edit_name_button_entity_ids.push_back(std::get<int>(edit_name_button));
 		ui->delete_level_button_entity_ids.push_back(std::get<int>(delete_level_button));
@@ -308,9 +330,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	std::vector<EntitiesHandle> scroll_menu_items;
 	for (const auto& level_id : level_groups.at(at_group))
 	{
-		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), [this]() {
-
-		});
+		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), std::bind(&LevelMenuSystem::EnterLevel, this, level_id));
 		scroll_menu_items.push_back(row);
 	}
 	for (const auto& [button_id, level_id] : zip(ui->button_entity_ids, level_groups.at(at_group)))

@@ -2,6 +2,9 @@
 #include "SFML/Graphics/Color.hpp"
 #include <string>
 
+class TextBox
+{};
+
 class Text
 {
 public:
