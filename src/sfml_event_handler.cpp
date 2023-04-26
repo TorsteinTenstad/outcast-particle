@@ -57,7 +57,23 @@ void SFMLEventHandler::Update(CursorAndKeys& cursor_and_keys)
 		}
 		if (event.type == sf::Event::TextEntered)
 		{
-			cursor_and_keys.text_input.push_back(UTF32ToUTF8(event.text.unicode));
+			switch (event.text.unicode)
+			{
+				//ignore illegal characters
+				case 34: break;	 // "
+				case 42: break;	 // *
+				case 47: break;	 // /
+				case 58: break;	 // :
+				case 60: break;	 // <
+				case 62: break;	 // >
+				case 63: break;	 // ?
+				case 92: break;	 // "\"
+				case 124: break; // |
+
+				default:
+					cursor_and_keys.text_input.push_back(UTF32ToUTF8(event.text.unicode));
+					break;
+			}
 		}
 	}
 }

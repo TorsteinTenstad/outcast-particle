@@ -143,14 +143,12 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_id))
 	{
 		std::string new_group = NextInMap(level_groups, at_group)->first;
-		RequestRedrawIfLevelGroupIsNew(level, ui, new_group);
-		return;
+		return RequestRedrawIfLevelGroupIsNew(level, ui, new_group);
 	}
 	if (level.HasComponents<ReleasedThisFrame>(ui->prev_group_button_id))
 	{
 		std::string new_group = PrevInMap(level_groups, at_group)->first;
-		RequestRedrawIfLevelGroupIsNew(level, ui, new_group);
-		return;
+		return RequestRedrawIfLevelGroupIsNew(level, ui, new_group);
 	}
 	if (level.HasComponents<ReleasedThisFrame>(ui->dot_indicator_id))
 	{
@@ -166,9 +164,13 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 
 			auto it = level_groups.begin();
 			std::advance(it, i);
-			RequestRedrawIfLevelGroupIsNew(level, ui, it->first);
-			return;
+			return RequestRedrawIfLevelGroupIsNew(level, ui, it->first);
 		}
+	}
+	if (ui->new_level_button_id.has_value() && level.HasComponents<ReleasedThisFrame>(ui->new_level_button_id.value()))
+	{
+		std::string new_level_id = level_manager_->CreateNewLevel(at_group);
+		return RequestRedraw(level, ui, at_group, new_level_id);
 	}
 
 	if (ui->delete_level_button_entity_ids.size() > 0)
@@ -187,8 +189,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 			if (level.HasComponents<ReleasedThisFrame>(delete_button_id))
 			{
 				level_manager_->DeleteLevel(level_id);
-				RequestRedraw(level, ui, at_group);
-				return;
+				return RequestRedraw(level, ui, at_group);
 			}
 			if (level.HasComponents<StickyButtonDown>(edit_button_id) && !level.HasComponents<TextBox>(text_id))
 			{
@@ -214,16 +215,18 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	std::string at_group = ui->at_group.value();
 
-	assert(!ui->at_level_id.has_value());
-	std::vector<std::string> levels_in_group = level_groups.at(at_group);
-	auto it = ui->last_at_level_id.find(at_group);
-	if (it != ui->last_at_level_id.end())
+	if (!ui->at_level_id.has_value())
 	{
-		ui->at_level_id = it->second;
-	}
-	else if (levels_in_group.size() > 0)
-	{
-		ui->at_level_id = levels_in_group[0];
+		std::vector<std::string> levels_in_group = level_groups.at(at_group);
+		auto it = ui->last_at_level_id.find(at_group);
+		if (it != ui->last_at_level_id.end())
+		{
+			ui->at_level_id = it->second;
+		}
+		else if (levels_in_group.size() > 0)
+		{
+			ui->at_level_id = levels_in_group[0];
+		}
 	}
 
 	auto level_size = level.GetSize();
@@ -293,11 +296,11 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	// Level buttons
-	auto AddLevelMenuButton = [](ECSScene& level, std::string button_text, std::function<void()> button_function, float blocks_wide) {
+	auto AddLevelMenuButton = [](ECSScene& level, std::string button_text, float blocks_wide) {
 		// Button
 		auto [button_id, size] = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(blocks_wide, 1) * float(BLOCK_SIZE));
-		level.AddComponent<OnReleasedThisFrame>(button_id)->func = button_function;
 		level.AddComponent<MenuNavigable>(button_id);
+		level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 		// Text
 		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(0, 0), button_text, 75u);
 
@@ -307,7 +310,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 	auto AddLevelMenuRow = [ui, AddLevelMenuButton, is_in_level_editing = is_in_level_editing_](ECSScene& level, std::string button_text, std::function<void()> button_function) {
 		std::vector<EntitiesHandle> row_items;
-		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, button_function, is_in_level_editing ? 7.5 : 10);
+		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, is_in_level_editing ? 7.5 : 10);
+		level.AddComponent<OnReleasedThisFrame>(std::get<std::vector<int>>(main_button)[0])->func = button_function;
 		ui->button_entity_ids.push_back(std::get<std::vector<int>>(main_button)[0]);
 		ui->text_entity_ids.push_back(std::get<std::vector<int>>(main_button)[1]);
 		if (!is_in_level_editing)
@@ -318,6 +322,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		EntityHandle delete_level_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * float(BLOCK_SIZE));
 		level.AddComponent<StickyButton>(std::get<int>(edit_name_button));
 		level.AddComponent<StickyButton>(std::get<int>(delete_level_button));
+		level.GetComponent<Shader>(std::get<int>(edit_name_button))->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+		level.GetComponent<Shader>(std::get<int>(delete_level_button))->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 
 		ui->edit_name_button_entity_ids.push_back(std::get<int>(edit_name_button));
 		ui->delete_level_button_entity_ids.push_back(std::get<int>(delete_level_button));
@@ -343,11 +349,12 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	if (is_in_level_editing_)
 	{
-		EntitiesHandle new_level_button = AddLevelMenuButton(
-			level, "+", [this, &level, ui, at_group]() { level_manager_->CreateNewLevel(at_group); RequestRedraw(level, ui, at_group); }, 10);
+		EntitiesHandle new_level_button = AddLevelMenuButton(level, "+", 10);
+		ui->new_level_button_id = std::get<std::vector<int>>(new_level_button)[0];
 		scroll_menu_items.push_back(new_level_button);
 	}
-	VerticalEntityLayout(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), scroll_menu_items, 0.5 * float(BLOCK_SIZE), StartEdge);
+	auto [scroll_menu_item_ids, scroll_menu_items_size] = VerticalEntityLayout(level, sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) / 2, title_h), scroll_menu_items, 0.5 * float(BLOCK_SIZE), StartEdge);
+	scroll_window->entities = scroll_menu_item_ids;
 
 	{ // Level preview
 		sf::Vector2f position = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE / 2), level.GetSize().y * (LEVEL_PREVIEW_SCALE / 2));
