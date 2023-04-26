@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include "components/level_menu.hpp"
 #include "entity_creation.hpp"
 #include "folder_definitions.hpp"
 #include "systems/_pure_DO_systems.hpp"
@@ -95,10 +94,6 @@ Game::~Game()
 Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_->GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
-	if (!IsMenu(level_id))
-	{
-		LevelMenuUI::last_at_level_id = level_id;
-	}
 	active_level_ = std::move(std::make_unique<Level>());
 	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
 	if (IsMenu(active_level_id_) && !level_id_is_top)
