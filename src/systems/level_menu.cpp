@@ -11,6 +11,7 @@
 #include "entity_creation.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
+#include "level_menu.hpp"
 #include "systems/level_menu.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
@@ -20,6 +21,72 @@
 #include <sstream>
 
 #define LEVEL_PREVIEW_SCALE 0.6
+
+static void UpdateLevelPreview(Level& level, LevelMenuUI* ui,
+	const std::map<std::string, std::vector<std::string>>& level_groups,
+	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
+{
+	assert(ui->at_group.has_value());
+	std::string at_group = ui->at_group.value();
+	for (const auto& [button_entity_id, level_id] : zip(ui->button_entity_ids, level_groups.at(at_group)))
+	{
+		if (!level.HasComponents<HoveredStartedThisFrame>(button_entity_id)) { continue; }
+		if (ui->at_level_id.has_value() && ui->at_level_id.value() == level_id) { continue; }
+
+		ui->at_level_id = level_id;
+		unsigned texture_size_x = unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE);
+		unsigned texture_size_y = unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE);
+		std::string texture_identifier = generate_level_texture(level_id, texture_size_x, texture_size_y);
+		level.GetComponent<DrawInfo>(ui->level_preview_id)->image_path = texture_identifier;
+	}
+}
+
+static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
+	const std::map<int, std::map<std::string, float>>* level_completion_time_records)
+{
+	if (!ui->at_level_id.has_value())
+	{
+		return;
+	}
+	std::string at_level_id = ui->at_level_id.value();
+	for (int i = 0; i < 4; i++)
+	{
+		if (level_completion_time_records->count(i) == 0)
+		{
+			continue;
+		}
+		std::map<std::string, float> i_coin_record = level_completion_time_records->at(i);
+		if (i_coin_record.count(at_level_id) > 1)
+		{
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
+			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(CreateBadgeText(i_coin_record.at(at_level_id), 2 + globals.general_config.display_precise_badge_time), 16);
+		}
+		else
+		{
+			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 0;
+			level.GetComponent<Text>(ui->stats_block_ids[i])->content = "";
+		}
+	}
+}
+
+static void RequestRedraw(Level& level, std::string level_group, std::optional<std::string> at_level_id = std::nullopt)
+{
+	level.Clear();
+	auto [entity_id, ui] = level.CreateEntityWith<LevelMenuUI>();
+	ui->at_group = level_group;
+	ui->at_level_id = at_level_id;
+}
+
+static void RequestRedrawIfLevelGroupIsNew(Level& level, LevelMenuUI* ui, std::string new_group, std::optional<std::string> at_level_id = std::nullopt)
+{
+
+	assert(ui->at_group.has_value());
+	std::string at_group = ui->at_group.value();
+	if (new_group != at_group)
+	{
+		RequestRedraw(level, new_group, at_level_id);
+	}
+}
 
 void LevelMenuSystem::Give(
 	LevelManager* level_manager,
@@ -34,6 +101,7 @@ void LevelMenuSystem::Give(
 	set_level_ = set_level;
 	generate_level_texture_ = generate_level_texture;
 }
+
 void LevelMenuSystem::Update(Level& level, float dt)
 {
 	const std::map<std::string, std::vector<std::string>>& level_groups = level_manager_->GetLevels();
@@ -50,82 +118,62 @@ void LevelMenuSystem::Update(Level& level, float dt)
 		ui->initialized = true;
 	}
 
-	bool redraw_ui = UpdateUI(level, ui);
-
-	if (redraw_ui)
-	{
-		level.Clear();
-		auto [entity_id, ui] = level.CreateEntityWith<LevelMenuUI>();
-	}
+	UpdateUI(level, ui);
 }
 
-bool LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
+void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 {
 	const std::map<std::string, std::vector<std::string>>& level_groups = level_manager_->GetLevels();
+	assert(ui->at_group.has_value());
 	std::string at_group = ui->at_group.value();
 
-	{ // Updates that don't require redraw, only modifications:
+	//Updates that don't require redraw, only modifications:
 
-		for (auto [button_entity_id, level_id] : zip(ui->button_entity_ids, level_groups.at(at_group)))
+	UpdateLevelPreview(level, ui, level_manager_->GetLevels(), generate_level_texture_);
+	UpdateStatsBadges(level, ui, level_completion_time_records_);
+
+	//	Check for updates that require redraw:
+	if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_id))
+	{
+		std::string new_group = NextInMap(level_groups, at_group)->first;
+		RequestRedrawIfLevelGroupIsNew(level, ui, new_group);
+	}
+	if (level.HasComponents<ReleasedThisFrame>(ui->prev_group_button_id))
+	{
+		std::string new_group = PrevInMap(level_groups, at_group)->first;
+		RequestRedrawIfLevelGroupIsNew(level, ui, new_group);
+	}
+	if (level.HasComponents<ReleasedThisFrame>(ui->dot_indicator_id))
+	{
+		float pos_x = level.GetComponent<Position>(ui->dot_indicator_id)->position.x;
+		float w = level.GetComponent<WidthAndHeight>(ui->dot_indicator_id)->width_and_height.x;
+		float mouse_x = cursor_and_keys_.cursor_position.x;
+		float percentage = (mouse_x - pos_x + w / 2) / w;
+
+		if (0 <= percentage && percentage <= 1)
 		{
-			if (!level.HasComponents<HoveredStartedThisFrame>(button_entity_id)) { continue; }
-			if (ui->at_level_id.has_value() && ui->at_level_id.value() == level_id) { continue; }
+			int n = level_groups.size();
+			int i = floor(percentage * n);
 
-			ui->at_level_id = level_id;
-			unsigned texture_size_x = unsigned(level.GetSize().x * LEVEL_PREVIEW_SCALE);
-			unsigned texture_size_y = unsigned(level.GetSize().y * LEVEL_PREVIEW_SCALE);
-			std::string texture_identifier = generate_level_texture_(level_id, texture_size_x, texture_size_y);
-			level.GetComponent<DrawInfo>(ui->level_preview_id)->image_path = texture_identifier;
-			UpdateStatsBadges(level, ui);
+			auto it = level_groups.begin();
+			std::advance(it, i);
+			RequestRedrawIfLevelGroupIsNew(level, ui, it->first);
 		}
 	}
 
-	{ // Check for updates that require redraw:
-		std::optional<std::string> new_level_id;
-		if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_id))
+	if (ui->delete_level_button_entity_ids.size() == 0)
+	{
+		return;
+	}
+	for (const auto& [button_id, level_id] : zip(ui->delete_level_button_entity_ids, level_groups.at(at_group)))
+	{
+		if (level.HasComponents<ReleasedThisFrame>(button_id))
 		{
-			new_level_id = NextInMap(level_groups, at_group)->second[0];
-		}
-		if (level.HasComponents<ReleasedThisFrame>(ui->prev_group_button_id))
-		{
-			new_level_id = PrevInMap(level_groups, at_group)->second[0];
-		}
-		if (level.HasComponents<ReleasedThisFrame>(ui->dot_indicator_id))
-		{
-			float pos_x = level.GetComponent<Position>(ui->dot_indicator_id)->position.x;
-			float w = level.GetComponent<WidthAndHeight>(ui->dot_indicator_id)->width_and_height.x;
-			float mouse_x = cursor_and_keys_.cursor_position.x;
-			float percentage = (mouse_x - pos_x + w / 2) / w;
-
-			if (0 <= percentage && percentage <= 1)
-			{
-				int n = level_groups.size();
-				int i = floor(percentage * n);
-
-				auto it = level_groups.begin();
-				std::advance(it, i);
-				new_level_id = it->second[0];
-			}
-		}
-		if (new_level_id && GetGroupNameFromId(new_level_id.value()) != at_group)
-		{
-			auto [new_id, new_ui] = level.CreateEntityWith<LevelMenuUI>();
-			new_ui->at_level_id = new_level_id.value();
-			return true;
-		}
-
-		int i = 0;
-		for (int button_id : ui->delete_level_button_entity_ids)
-		{
-			if (level.HasComponents<ReleasedThisFrame>(button_id))
-			{
-				level_manager_->DeleteLevel(level_groups.at(at_group)[i]);
-				return true;
-			}
-			i++;
+			level_manager_->DeleteLevel(level_id);
+			RequestRedraw(level, at_group);
+			return;
 		}
 	}
-	return false;
 }
 
 void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
@@ -293,29 +341,5 @@ void LevelMenuSystem::EnterLevel(std::string level_id)
 	if (is_in_level_editing_)
 	{
 		entered_level.SetMode(EDIT_MODE);
-	}
-}
-
-void LevelMenuSystem::UpdateStatsBadges(Level& level, LevelMenuUI* ui)
-{
-	assert(ui->at_level_id.has_value());
-	std::string at_level_id = ui->at_level_id.value();
-	for (int i = 0; i < 4; i++)
-	{
-		if (level_completion_time_records_->count(i) == 0)
-		{
-			continue;
-		}
-		std::map<std::string, float> i_coin_record = level_completion_time_records_->at(i);
-		if (i_coin_record.count(at_level_id) > 1)
-		{
-			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
-			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(CreateBadgeText(i_coin_record.at(at_level_id), 2 + globals.general_config.display_precise_badge_time), 16);
-		}
-		else
-		{
-			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 0;
-			level.GetComponent<Text>(ui->stats_block_ids[i])->content = "";
-		}
 	}
 }

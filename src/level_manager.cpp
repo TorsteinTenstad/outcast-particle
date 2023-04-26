@@ -18,7 +18,7 @@ LevelManager::LevelManager(std::string levels_folder)
 	}
 }
 
-const std::map<std::string, std::vector<std::string>>& LevelManager::GetLevels()
+const std::map<std::string, std::vector<std::string>>& LevelManager::GetLevels() const
 {
 	return levels_;
 }
