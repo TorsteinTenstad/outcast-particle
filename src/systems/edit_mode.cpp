@@ -90,7 +90,7 @@ void EditModeSystem::Update(Level& level, float dt)
 
 	// Rectangle select
 	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
-	int rectangle_select_tool_id = std::get<int>(level.GetSingletonIncludeID<EditModeRectangleSelectTool>(creation_func));
+	int rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
 
 	if (current_tool == Selecting)
 	{

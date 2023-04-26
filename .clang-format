@@ -1,7 +1,7 @@
 # Clang version 9.0.0
 Language: Cpp
 AccessModifierOffset: -4
-AllowShortBlocksOnASingleLine: false
+AllowShortBlocksOnASingleLine: true
 AlwaysBreakTemplateDeclarations: Yes
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false

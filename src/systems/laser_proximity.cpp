@@ -51,9 +51,11 @@ void LaserProximitySystem::Update(Level& level, float dt)
 			}
 		}
 	}
-	auto [id, _] = level.GetSingletonIncludeID<LaserProximity>([](ECSScene& level) {auto [id, sound_info] = level.CreateEntityWith<SoundInfo>();
-	sound_info->sound_path = "content\\sounds\\laser_proximity.wav";
-	return id; });
+	int id = level.GetSingletonId<LaserProximity>([](ECSScene& level) {
+		auto [id, sound_info] = level.CreateEntityWith<SoundInfo>();
+		sound_info->sound_path = "content\\sounds\\laser_proximity.wav";
+		return id;
+	});
 
 	auto sound_info = level.GetComponent<SoundInfo>(id);
 	if (smallest_laser_distance >= minimum_laser_distance || (level.GetMode() != PLAY_MODE))

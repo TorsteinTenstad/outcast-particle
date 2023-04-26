@@ -1,11 +1,9 @@
 #pragma once
+#include "components/level_menu.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
-#include "utils/string_parsing.hpp"
-
 #include "level_manager.hpp"
-#include <iomanip>
-#include <sstream>
+#include "utils/string_parsing.hpp"
 
 #define LEVEL_PREVIEW_SCALE 0.6
 
@@ -28,7 +26,7 @@ public:
 		std::function<Level&(std::string)> set_level,
 		std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture);
 	void Update(Level& level, float dt);
-	void UpdateUI(Level& level, LevelMenuUI* ui);
+	bool UpdateUI(Level& level, LevelMenuUI* ui);
 	void SetupUI(Level& level, LevelMenuUI* ui);
 	void EnterLevel(std::string level_id);
 	void UpdateStatsBadges(Level& level, LevelMenuUI* ui);

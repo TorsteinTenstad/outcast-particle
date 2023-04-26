@@ -38,7 +38,7 @@ void TextBoxSystem::Update(Level& level, float dt)
 	for (auto [entity_id, text, hovered, position] : level.GetEntitiesWith<Text, Hovered, Position>())
 	{
 		EditString(text->content, cursor_and_keys_.text_input);
-		auto [cursor_id, _] = level.GetSingletonIncludeID<TextBoxCurser>([text_size = text->size](ECSScene& scene) {
+		int cursor_id = level.GetSingletonId<TextBoxCurser>([text_size = text->size](ECSScene& scene) {
 			int cursor_id = scene.CreateEntityId();
 			scene.AddComponent<Position>(cursor_id);
 			scene.AddComponent<Text>(cursor_id)->size = text_size;

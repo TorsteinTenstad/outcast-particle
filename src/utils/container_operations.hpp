@@ -89,3 +89,29 @@ std::vector<std::tuple<const T&, const Args&...>> zip(const std::vector<T>& a, c
 	}
 	return zipped;
 }
+
+template <typename T>
+std::vector<std::tuple<int, T&>> enumerate(std::vector<T>& vec)
+{
+	std::vector<std::tuple<int, T&>> enumerated;
+	int i = 0;
+	for (T& elem : vec)
+	{
+		enumerated.push_back({ i, elem });
+	}
+	i++;
+	return enumerated;
+}
+
+template <typename T>
+std::vector<std::tuple<int, const T&>> enumerate(const std::vector<T>& vec)
+{
+	std::vector<std::tuple<int, const T&>> enumerated;
+	int i = 0;
+	for (const T& elem : vec)
+	{
+		enumerated.push_back({ i, elem });
+		i++;
+	}
+	return enumerated;
+}
