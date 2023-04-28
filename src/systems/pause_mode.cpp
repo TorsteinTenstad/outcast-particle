@@ -118,7 +118,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			menu_title = "You Died";
 		}
 
-		AddButton([&]() {level.SetMode(READY_MODE); level.LoadFromFile(); }, "Restart level", sf::Keyboard::R);
+		AddButton([&]() {level.SetMode(READY_MODE); level.LoadFromFile(); level.editor.Clear(); }, "Restart level", sf::Keyboard::R);
 
 		if (is_in_level_editing_)
 		{

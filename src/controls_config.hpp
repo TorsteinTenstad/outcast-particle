@@ -14,8 +14,7 @@ public:
 	sf::Keyboard::Key EDIT_MODE = sf::Keyboard::Tab;
 	sf::Keyboard::Key INCREASE_LEVEL_SIZE = sf::Keyboard::Up;
 	sf::Keyboard::Key DECREASE_LEVEL_SIZE = sf::Keyboard::Down;
-	sf::Keyboard::Key EDIT_MODE_SWITCH_CHARGE = sf::Keyboard::Space;
-	sf::Keyboard::Key EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION = sf::Keyboard::Space;
+	sf::Keyboard::Key EDIT_MODE_FLIP_CHARGES_AND_FIELDS = sf::Keyboard::Space;
 	sf::Keyboard::Key SELECT_MULTIPLE_ENTITIES = sf::Keyboard::LControl;
 	sf::Keyboard::Key COPY_ENTITY = sf::Keyboard::LAlt;
 	sf::Keyboard::Key DELETE_ENTITY = sf::Keyboard::Delete;
