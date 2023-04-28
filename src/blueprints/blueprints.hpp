@@ -141,7 +141,7 @@ class BPElectricField : public BPEditableEntity
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
 class BPMagneticField : public BPEditableEntity
@@ -154,7 +154,7 @@ class BPMagneticField : public BPEditableEntity
 	MagneticField magnetic_field = { 0.1 };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
 class BPTextPopupSpawner : public BPEditableEntity

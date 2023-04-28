@@ -41,10 +41,12 @@ void FaceSystem::Update(Level& level, float dt)
 		sf::Vector2f& vel = velocity->velocity;
 		sf::Vector2f& child_pos = level.GetComponent<Position>(child_id)->position;
 
-		if (level.GetMode() == PLAY_MODE)
+		if (level.GetMode() != PLAY_MODE)
 		{
-			child_pos += vel * dt;
+			child_pos = pos;
+			return;
 		}
+		child_pos += vel * dt;
 
 		sf::Vector2f offset = child_pos - pos;
 		sf::Vector2f target_offset = sf::Vector2f(0, 0);

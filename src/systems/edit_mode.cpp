@@ -34,6 +34,7 @@ static void ShowCopyPreview(Level& level, sf::Vector2f origin)
 {
 	for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 	{
+		if (level.HasComponents<Player>(entity_id)) { continue; }
 		int copy = level.CopyEntity(entity_id);
 		level.GetComponent<Position>(copy)->position = origin + selected->mouse_offset;
 		level.RemoveComponents<Selected>(copy);

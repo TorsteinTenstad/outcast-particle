@@ -735,7 +735,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Tag>(entity_id, {"BPElectricField"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
             AddComponent<ElectricField>(entity_id, { sf::Vector2f(0, 0.25) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
             break;
         case BPMagneticField:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
@@ -746,7 +746,7 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Tag>(entity_id, {"BPMagneticField"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
             AddComponent<MagneticField>(entity_id, { 0.1 });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
             break;
         case BPTextPopupSpawner:
             AddComponent<ReceivesButtonEvents>(entity_id, {});

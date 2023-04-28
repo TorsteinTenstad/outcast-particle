@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/System/Vector2.hpp"
+#include "components/player.hpp"
 #include "level.hpp"
 #include "undo_system.hpp"
 #include <vector>
@@ -14,9 +15,10 @@ public:
 	CopySelected(Level& level, sf::Vector2f origin) :
 		level_(level)
 	{
-		for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
+		for (auto [entity, selected, position] : level.GetEntitiesWith<Selected, Position>())
 		{
-			int copy = level.CopyEntity(entity_id);
+			if (level.HasComponents<Player>(entity)) { continue; }
+			int copy = level.CopyEntity(entity);
 			level.GetComponent<Position>(copy)->position = origin + selected->mouse_offset;
 			level.RemoveComponents<Selected>(copy);
 			level.DeactivateEntities(copy);

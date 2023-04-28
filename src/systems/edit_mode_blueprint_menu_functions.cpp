@@ -2,13 +2,16 @@
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
 #include "components/position.hpp"
+#include "components/size.hpp"
 #include "ecs/entity_creation_observer.hpp"
 #include "entity_creation.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/get_size.hpp"
 
 class BlueprintMenuItem
 {};
 
-const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPGoal, BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
+const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
 
 void OpenBlueprintMenu(Level& level)
@@ -22,14 +25,15 @@ void OpenBlueprintMenu(Level& level)
 		level.AddComponent<ReceivesButtonEvents>(id);
 	}
 
-	int i = 0;
+	std::vector<EntitiesHandle> blueprints;
 	for (const auto& blueprint : BLUEPRINT_ENTRIES)
 	{
 		int entity_id = level.AddBlueprint(blueprint);
-		level.GetComponent<Position>(entity_id)->position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, (2 + 2 * i + (i > 0 ? 1 : 0)) * BLOCK_SIZE);
+		sf::Vector2f size = GetSize(level, entity_id, false);
+		blueprints.push_back(AdaptToEntitiesHandle({ entity_id, size }));
 		level.GetComponent<DrawPriority>(entity_id)->draw_priority += UI_BASE_DRAW_PRIORITY;
-		i++;
 	}
+	VerticalEntityLayout(level, sf::Vector2f(BLUEPRINT_MENU_WIDTH / 2, BLOCK_SIZE), blueprints, BLOCK_SIZE, StartEdge);
 }
 
 //Handle selection from blueprint menu. Return any selected id.
