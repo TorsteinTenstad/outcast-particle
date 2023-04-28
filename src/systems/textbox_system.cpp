@@ -39,6 +39,7 @@ void TextBoxSystem::Update(Level& level, float dt)
 	for (auto [entity_id, text_box, text, position] : level.GetEntitiesWith<TextBox, Text, Position>())
 	{
 		EditString(text->content, cursor_and_keys_.text_input);
+		RemoveChars(text->content, text_box->illegal_characters);
 
 		int cursor_id = GetSingletonChildId<TextBox>(level, entity_id, [text_size = text->size](Level& level) {
 			int cursor_id = level.CreateEntityId();

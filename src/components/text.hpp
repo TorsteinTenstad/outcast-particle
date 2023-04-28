@@ -3,7 +3,10 @@
 #include <string>
 
 class TextBox
-{};
+{
+public:
+	std::string illegal_characters = "\"*/:<>?\\|_";
+};
 
 class Text
 {
