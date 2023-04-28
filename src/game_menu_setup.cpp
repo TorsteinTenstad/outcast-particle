@@ -129,6 +129,7 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
 	scroll_window->entity_height = 2 * BLOCK_SIZE;
 	width_and_height->width_and_height = level_size;
+	width_and_height->width_and_height.x -= 8 * BLOCK_SIZE;
 	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
 	position->position = level_size / 2.f;
 

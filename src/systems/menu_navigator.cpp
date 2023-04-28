@@ -46,29 +46,33 @@ void MenuNavigatorSystem::Update(Level& level, float dt)
 {
 	for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigator, WidthAndHeight, Position>())
 	{
-		int& at_id = menu_navigator->currently_at_entity_id;
+		menu_navigator->moved_itself_this_frame = false;
+		std::optional<int>& at_id = menu_navigator->currently_at_entity_id;
 		std::map<int, sf::Vector2f> possible_positions = GetPossiblePossiblePositions(level);
 
 		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Down]
-			|| at_id < 0)
+			|| !at_id.has_value())
 		{
 			at_id = SnapToNextBelow(level, menu_navigator, possible_positions);
+			menu_navigator->moved_itself_this_frame = true;
 		}
 		else if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Up])
 		{
 			at_id = SnapToNextAbove(level, menu_navigator, possible_positions);
+			menu_navigator->moved_itself_this_frame = true;
 		}
 		else
 		{
 			for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigable, WidthAndHeight, Position>())
 			{
 				at_id = hovered_started_this_frame_id;
+				menu_navigator->moved_itself_this_frame = true;
 				break;
 			}
 		}
-		assert(at_id >= 0);
+		assert(at_id.has_value());
 
-		position->position = possible_positions[at_id];
+		position->position = possible_positions[at_id.value()];
 		position->position.x -= width_and_height->width_and_height.x;
 	}
 }

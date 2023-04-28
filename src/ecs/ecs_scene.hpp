@@ -66,7 +66,6 @@ public:
 	template <class... Component>
 	std::tuple<Component*...> RawGetComponents(int entity_id);
 
-private:
 	template <class Component>
 	void DeleteChildEntitiesOwnedByComponent(int entity_id);
 

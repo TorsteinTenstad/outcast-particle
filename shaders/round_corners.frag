@@ -16,7 +16,7 @@ void main()
 	vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
     vec2 gs_c = _view_size*gl_FragCoord.xy/_window_resolution + (_view_size-_level_size)/2;
     gs_c.y = _view_size.y - gs_c.y;
-    float r = _wh.y/4;
+    float r = min(_wh.x, _wh.y)/4;
 
     vec2 folded_coords = abs(gl_TexCoord[0].xy-(_wh)/2);
     vec2 r_smaller_box = min(folded_coords, vec2(_wh)/2-r);

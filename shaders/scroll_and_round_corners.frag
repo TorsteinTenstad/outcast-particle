@@ -18,7 +18,7 @@ void main()
 	vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
     vec2 gs_c = _view_size*gl_FragCoord.xy/_window_resolution + (_view_size-_level_size)/2;
     gs_c.y = _view_size.y - gs_c.y;
-    float r = _wh.y/4;
+    float r = min(_wh.x, _wh.y)/4;
     float upper_fade_out = smoothstep(top-GS_AA, top, gs_c.y);
     float lower_fade_out = 1-smoothstep(bottom, bottom+GS_AA, gs_c.y);
 

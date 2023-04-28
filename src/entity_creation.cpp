@@ -114,6 +114,7 @@ EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_
 	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", true);
 	level.AddComponent<FillColor>(id)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(id);
+	level.AddComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll.frag";
 	return { id, size };
 }
 
