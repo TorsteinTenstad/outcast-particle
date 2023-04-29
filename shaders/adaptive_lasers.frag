@@ -13,13 +13,18 @@ float radial_falloff(float r, float a, float b)
 	return smoothstep(0.5, 1, f);
 }
 
-bool IsWallAt(vec2 gc_id)
+vec4 TextureAt(vec2 gc_id)
+{
+	return texture2D(_texture, (gc_id + vec2(0.5, 0.5)) / vec2(grid_width, grid_height));
+}
+
+bool IsLaserAt(vec2 gc_id)
 {
 	if (gc_id.x < 0 || gc_id.y < 0 || gc_id.x >= grid_width || gc_id.y >= grid_height)
 	{
 		return true;
 	}
-	return texture2D(_texture, (gc_id + vec2(0.5, 0.5)) / vec2(grid_width, grid_height)).r > 0.5;
+	return TextureAt(gc_id).r > 0.5;
 }
 #define FAR_AWAY 1
 
@@ -29,15 +34,15 @@ void main()
 	vec2 g_id = floor(c);
 	vec2 gc = fract(c);
 
-	bool b0 = IsWallAt(g_id + vec2(-1, +1));
-	bool b1 = IsWallAt(g_id + vec2(-1, +0));
-	bool b2 = IsWallAt(g_id + vec2(-1, -1));
-	bool b3 = IsWallAt(g_id + vec2(+0, +1));
-	bool b4 = IsWallAt(g_id + vec2(+0, +0));
-	bool b5 = IsWallAt(g_id + vec2(+0, -1));
-	bool b6 = IsWallAt(g_id + vec2(+1, +1));
-	bool b7 = IsWallAt(g_id + vec2(+1, +0));
-	bool b8 = IsWallAt(g_id + vec2(+1, -1));
+	bool b0 = IsLaserAt(g_id + vec2(-1, +1));
+	bool b1 = IsLaserAt(g_id + vec2(-1, +0));
+	bool b2 = IsLaserAt(g_id + vec2(-1, -1));
+	bool b3 = IsLaserAt(g_id + vec2(+0, +1));
+	bool b4 = IsLaserAt(g_id + vec2(+0, +0));
+	bool b5 = IsLaserAt(g_id + vec2(+0, -1));
+	bool b6 = IsLaserAt(g_id + vec2(+1, +1));
+	bool b7 = IsLaserAt(g_id + vec2(+1, +0));
+	bool b8 = IsLaserAt(g_id + vec2(+1, -1));
 
 	float dist = FAR_AWAY;
 	if (b0 && b1 && b3 && b4)
@@ -95,5 +100,5 @@ void main()
 	float intensity = radial_falloff(dist, 0.2, 0.9 + 0.1 * sin(0.5 * 2 * PI * _time));
 
 	gl_FragColor.rgb = vec3(1, 0, 0) + vec3(1) * 0.5 * radial_falloff(dist, 0, 0.3);
-	gl_FragColor.a = intensity;
+	gl_FragColor.a = intensity*TextureAt(g_id).b;
 }
