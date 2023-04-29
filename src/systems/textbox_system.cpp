@@ -48,7 +48,7 @@ void TextBoxSystem::Update(Level& level, float dt)
 			level.AddComponent<DrawPriority>(cursor_id)->draw_priority = UI_BASE_DRAW_PRIORITY;
 			AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(cursor_id);
 			animated_opacity->start_time = globals.time;
-			animated_opacity->animation_func = [](float t) { return sf::Uint16(255 * ((1 + int(t / (0.530))) % 2)); }; //530ms is the standard blink rate
+			animated_opacity->animation_func = [](float t) { return sf::Uint8(255 * ((1 + int(t / (0.530))) % 2)); }; //530ms is the standard blink rate
 			return cursor_id;
 		});
 
