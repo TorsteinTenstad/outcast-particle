@@ -6,6 +6,7 @@
 uniform vec2 positions[MAX_ARRAY_SIZE];
 uniform vec2 sizes[MAX_ARRAY_SIZE];
 uniform int n;
+uniform vec2 _wh;
 
 float Box(vec2 uv, vec2 position, vec2 size, float AA)
 {
@@ -31,6 +32,7 @@ vec4 ColoredBox(vec2 uv, vec2 position, vec2 size)
 void main()
 {
 	vec2 uv = gl_TexCoord[0].xy;
+	vec2 xy = uv*_wh;
 
 	vec4 color = vec4(0);
 

@@ -16,7 +16,7 @@ void FaceSystem::Update(Level& level, float dt)
 
 		std::function<int(Level&)> create_face = [active_level_id = active_level_id_, face = face, draw_priority = draw_priority, radius = radius, position = position](Level& level) {
 			int entity_id = level.CreateEntityId();
-			level.AddComponent<DrawInfo>(entity_id)->scale_to_fit = true;
+			level.AddComponent<DrawInfo>(entity_id);
 			level.AddComponent<DrawPriority>(entity_id)->draw_priority = draw_priority->draw_priority;
 			level.AddComponent<Radius>(entity_id)->radius = radius->radius;
 			level.AddComponent<Position>(entity_id)->position = position->position;

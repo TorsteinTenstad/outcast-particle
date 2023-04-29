@@ -16,7 +16,7 @@ uniform int active_dot;
 
 void main()
 {
-    vec2 c = gl_TexCoord[0].xy;
+    vec2 c = gl_TexCoord[0].xy*_wh;
     float cell_w = _wh.x/n_dots;
     float id = int(c.x/cell_w);
     vec2 gc = fract(c/cell_w);

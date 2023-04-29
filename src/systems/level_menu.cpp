@@ -21,6 +21,7 @@
 #include <cassert>
 #include <iomanip>
 #include <sstream>
+#include <vector>
 
 #define LEVEL_PREVIEW_SCALE 0.6
 
@@ -329,18 +330,19 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		{
 			return main_button;
 		}
-		EntityHandle edit_name_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT));
-		EntityHandle delete_level_button = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT));
-		level.AddComponent<StickyButton>(std::get<int>(edit_name_button));
-		level.AddComponent<StickyButton>(std::get<int>(delete_level_button));
-		level.GetComponent<Shader>(std::get<int>(edit_name_button))->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-		level.GetComponent<Shader>(std::get<int>(delete_level_button))->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-
-		ui->edit_name_button_entity_ids.push_back(std::get<int>(edit_name_button));
-		ui->delete_level_button_entity_ids.push_back(std::get<int>(delete_level_button));
 		row_items.push_back(main_button);
-		row_items.push_back(AdaptToEntitiesHandle(edit_name_button));
-		row_items.push_back(AdaptToEntitiesHandle(delete_level_button));
+		const std::vector<std::vector<int>*> ui_button_containers = { &ui->edit_name_button_entity_ids, &ui->delete_level_button_entity_ids };
+		const std::vector<std::string> icon_paths = { "content\\textures\\edit.png", "content\\textures\\delete.png" };
+		for (const auto& [ui_container, icon_path] : zip(ui_button_containers, icon_paths))
+		{
+			EntityHandle button_handle = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT));
+			int button_id = GetId(button_handle);
+			level.AddComponent<StickyButton>(button_id);
+			level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.GetComponent<DrawInfo>(button_id)->image_path = icon_path;
+			row_items.push_back(AdaptToEntitiesHandle(button_handle));
+			ui_container->push_back(button_id);
+		}
 		return HorizontalEntityLayout(level, sf::Vector2f(0, 0), row_items, edit_buttons_margin);
 	};
 
@@ -384,7 +386,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		for (int i = 0; i < 4; i++)
 		{
 			EntityHandle stats_badge = CreateStatsBadge(level, sf::Vector2f(0, 0), i, 50, "", false);
-			level.GetComponent<FillColor>(std::get<int>(stats_badge))->color.a = 0;
+			level.GetComponent<FillColor>(GetId(stats_badge))->color.a = 0;
 			entities_handles.push_back(AdaptToEntitiesHandle(stats_badge));
 		}
 		auto [ids, heights] = VerticalEntityLayout(level, badge_center_positions, entities_handles, BLOCK_SIZE / 4);

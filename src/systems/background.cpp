@@ -24,7 +24,7 @@ void BackgroundSystem::Update(Level& level, float dt)
 		draw_info->image_path = main_background ? draw_info->image_path : "content\\textures\\background.png";
 		width_and_height->width_and_height = main_background ? level_size : level_size + level.ui_bars_size;
 		position->position = main_background ? level_size / 2.f : level_size / 2.f - level.ui_bars_size / 2.f;
-		draw_info->scale_to_fit = !in_edit_mode;
+		draw_info->tile = in_edit_mode;
 		main_background++;
 	}
 }

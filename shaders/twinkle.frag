@@ -67,6 +67,7 @@ vec2 compute_path_animation(vec2 width_and_height, float t)
 void main()
 {
 	vec2 uv = gl_TexCoord[0].xy;
+	vec2 xy = uv*_wh;
 
 	float absolute_animation_t = _time / 3;
 
@@ -80,7 +81,7 @@ void main()
 		float animation_i = floor(absolute_animation_t - p);
 		float path_t = fract((i + rand01(vec2(animation_i, i))) / n);
 		vec2 path_v = compute_path_animation(width_and_height, path_t);
-		vec2 twinkle_uv = 1.3 * (uv - position + width_and_height / 2.f - path_v) / width_and_height.y;
+		vec2 twinkle_uv = 1.3 * (xy - position + width_and_height / 2.f - path_v) / width_and_height.y;
 		float theta = 1.1 * _time * PI / 4.0;
 		float intensity = clamp(0.5 * sin(2 * PI * (animation_t)), 0, 1);
 

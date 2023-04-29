@@ -11,7 +11,7 @@ void main()
     // transform the texture coordinates
     gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
 
-    vec2 centered_coord = 2*(gl_TexCoord[0].xy/_wh-0.5);
+    vec2 centered_coord = 2*(gl_TexCoord[0].xy-0.5);
     vec2 offset = vec2(0, 0);
     
 	float t = (_time - start_animation);

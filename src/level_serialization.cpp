@@ -519,7 +519,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
@@ -534,7 +534,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
@@ -546,7 +546,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
@@ -558,7 +558,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 2 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
@@ -685,7 +685,7 @@ int Level::AddBlueprint(Blueprint blueprint)
         case BPGoal:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
@@ -699,7 +699,7 @@ int Level::AddBlueprint(Blueprint blueprint)
         case BPElectricField:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
             AddComponent<Tag>(entity_id, {"BPElectricField"});
@@ -710,7 +710,7 @@ int Level::AddBlueprint(Blueprint blueprint)
         case BPMagneticField:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
             AddComponent<Tag>(entity_id, {"BPMagneticField"});
@@ -721,7 +721,7 @@ int Level::AddBlueprint(Blueprint blueprint)
         case BPTextPopupSpawner:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Tag>(entity_id, {"BPTextPopupSpawner"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });

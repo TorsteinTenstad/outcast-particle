@@ -6,7 +6,7 @@ class DrawInfo
 {
 public:
 	std::string image_path = "";
-	bool scale_to_fit = false;
+	bool tile = false;
 	int quarter_turn_rotations = 0;
 };
 

@@ -67,11 +67,12 @@ vec4 blend(vec4 base, vec4 top){
 void main()
 {
 	vec2 uv = gl_TexCoord[0].xy;
+    vec2 xy = uv*_wh;
 
 
     float R = 2;
 
-	vec2 c_uv = (uv - _wh/2)/(BLOCK_SIZE);
+	vec2 c_uv = (xy - _wh/2)/(BLOCK_SIZE);
 	float r = length(c_uv);
     float theta = atan(c_uv.x, c_uv.y);
     float a = 0.5*theta/PI+0.5;

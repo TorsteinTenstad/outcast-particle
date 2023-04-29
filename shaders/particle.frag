@@ -42,7 +42,8 @@ vec4 blend(vec4 base, vec4 top){
 void main()
 {
     vec2 uv = gl_TexCoord[0].xy;
-    vec2 centered_normalized_uv = (uv/_wh)-0.5;
+    vec2 xy = uv*_wh;
+    vec2 centered_normalized_uv = uv-0.5;
     float r = 2*length(centered_normalized_uv);
     float theta = atan(centered_normalized_uv.x, centered_normalized_uv.y);
     float a = 0.5*theta/PI+0.5;

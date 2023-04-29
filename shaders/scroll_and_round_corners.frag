@@ -14,6 +14,9 @@ uniform float bottom = 100000000;
 
 void main()
 {
+    vec2 uv = gl_TexCoord[0].xy;
+    vec2 xy = uv*_wh;
+
 	// lookup the pixel in the texture
 	vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
     vec2 gs_c = _view_size*gl_FragCoord.xy/_window_resolution + (_view_size-_level_size)/2;
@@ -22,7 +25,7 @@ void main()
     float upper_fade_out = smoothstep(top-GS_AA, top, gs_c.y);
     float lower_fade_out = 1-smoothstep(bottom, bottom+GS_AA, gs_c.y);
 
-    vec2 folded_coords = abs(gl_TexCoord[0].xy-(_wh)/2);
+    vec2 folded_coords = abs(xy-(_wh)/2);
     vec2 r_smaller_box = min(folded_coords, vec2(_wh)/2-r);
     vec2 dist_from_smaller_box = folded_coords-r_smaller_box;
     float alpha = 1-smoothstep(r-2, r+2, length(dist_from_smaller_box));

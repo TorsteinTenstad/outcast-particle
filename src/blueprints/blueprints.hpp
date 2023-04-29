@@ -113,7 +113,7 @@ class BPWall : public BPEditableEntity
 
 class BPGoal : public BPEditableEntity
 {
-	DrawInfo draw_info = { "", false, 0 };
+	DrawInfo draw_info = {};
 	Shader shader = { "", "shaders\\wormhole.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
@@ -125,7 +125,7 @@ class BPGoal : public BPEditableEntity
 
 class BPElectricField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
 	Shader shader = { "", "shaders\\electric_field.frag", {}, {}, {} };
 
@@ -138,7 +138,7 @@ class BPElectricField : public BPEditableEntity
 
 class BPMagneticField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
 	Shader shader = { "", "shaders\\magnetic_field.frag", {}, {}, {} };
 
@@ -151,7 +151,7 @@ class BPMagneticField : public BPEditableEntity
 
 class BPTextPopupSpawner : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 2 };
 
 	// [Serialize]

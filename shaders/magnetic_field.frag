@@ -12,10 +12,10 @@ uniform float field_strength;
 
 uniform sampler2D _noise_texture;
 #define noise_size 1000
-float rand01(vec2 uv)
+float rand01(vec2 xy)
 {
-	uv = fract(uv / noise_size);
-	return texture2D(_noise_texture, 1 - uv).r;
+	xy = fract(xy / noise_size);
+	return texture2D(_noise_texture, 1 - xy).r;
 }
 
 float rand(float a, float b, vec2 seed)
@@ -33,14 +33,14 @@ mat2 rot(float a)
 
 #define CELL_SIZE 90
 
-float particle(vec2 uv, mat2 m_rot, float charge_sign)
+float particle(vec2 xy, mat2 m_rot, float charge_sign)
 {
 	float AA = 0.01;
 	float LINES_WIDTH = 0.15;
 	float SIGN_SIZE = 0.2;
 
-	float r = length(uv);
-	vec2 uv_4 = abs(m_rot * uv);
+	float r = length(xy);
+	vec2 uv_4 = abs(m_rot * xy);
 	vec2 uv_8 = vec2(max(uv_4.x, uv_4.y), min(uv_4.x, uv_4.y));
 	vec2 uv_sign = charge_sign < 0 ? uv_4 : uv_8;
 	float pluss_base = smoothstep(0, AA, LINES_WIDTH / 2.f - uv_sign.y)
@@ -54,9 +54,9 @@ float particle(vec2 uv, mat2 m_rot, float charge_sign)
 	return ring + pluss;
 }
 
-float particle_grid(vec2 uv, mat2 m_rot, vec2 cell_size, float n, float relative_particle_size, vec2 rand_seed)
+float particle_grid(vec2 xy, mat2 m_rot, vec2 cell_size, float n, float relative_particle_size, vec2 rand_seed)
 {
-	vec2 c = uv / cell_size;
+	vec2 c = xy / cell_size;
 	vec2 gc = fract(c) - 0.5;
 	vec2 id = floor(c);
 	if (id.x < 0 || id.y < 0 || id.x > (n - 0.5) || id.y > (n - 0.5))
@@ -74,11 +74,11 @@ float particle_grid(vec2 uv, mat2 m_rot, vec2 cell_size, float n, float relative
 	return particle(((gc - offset) / particle_d), m_rot, charge_sign) * existence;
 }
 
-float particles(vec2 uv, float particles_per_cell_side, float speed, float rand_seed)
+float particles(vec2 xy, float particles_per_cell_side, float speed, float rand_seed)
 {
 	float particle_cell_size = CELL_SIZE;
 	float rotate_group_size = particles_per_cell_side * particle_cell_size;
-	vec2 c = uv / rotate_group_size;
+	vec2 c = xy / rotate_group_size;
 	vec2 gc = fract(c);
 	vec2 id = floor(c);
 	float n = floor(particles_per_cell_side / sqrt(2));
@@ -88,9 +88,9 @@ float particles(vec2 uv, float particles_per_cell_side, float speed, float rand_
 	return particle_grid(gc, rot(-theta), vec2(1 / particles_per_cell_side), n, 0.6, rand_seed + id);
 }
 
-vec4 crosses_and_dots(vec2 uv)
+vec4 crosses_and_dots(vec2 xy)
 {
-	vec2 c = uv / vec2(GRID_SIZE);
+	vec2 c = xy / vec2(GRID_SIZE);
 	vec2 gc = fract(c);
 	float gc_id = floor(c.x);
 
@@ -127,7 +127,7 @@ vec4 blend(vec4 base, vec4 top)
 
 void main()
 {
-	vec2 uv = gl_TexCoord[0].xy;
+	vec2 xy = gl_TexCoord[0].xy * _wh;
 
 	vec4 background_color = vec4(vec3(1), 0);
 	vec4 color = background_color;
@@ -141,16 +141,16 @@ void main()
 
 	vec3 particle_rgb = charge_sign < 0 ? (0.2 * light_green + 0.8 * green) : (0.2 * light_red + 0.8 * red);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(90, 0)), 12, 20, 1.142) * 0.1 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(90, 0)), 10, 20, 1.142) * 0.1 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(60, 0)), 10, 40, 1.721) * 0.2 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(60, 0)), 8, 40, 1.721) * 0.2 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(30, 0)), 8, 60, 1.161) * 0.3 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(30, 0)), 6, 60, 1.161) * 0.3 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(00, 0)), 6, 80, 1.511) * 0.4 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((uv + vec2(00, 0)), 4, 80, 1.511) * 0.4 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 12, 20, 1.142) * 0.1 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 10, 20, 1.142) * 0.1 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 10, 40, 1.721) * 0.2 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 8, 40, 1.721) * 0.2 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 8, 60, 1.161) * 0.3 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 6, 60, 1.161) * 0.3 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 6, 80, 1.511) * 0.4 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 4, 80, 1.511) * 0.4 * 0.5));
 
-	color = blend(color, crosses_and_dots((uv)));
+	color = blend(color, crosses_and_dots((xy)));
 	color = blend(color, particles_color);
 
 	gl_FragColor = color;

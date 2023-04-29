@@ -51,10 +51,10 @@ EntityHandle CreateScrollingText(ECSScene& level, sf::Vector2f position, std::st
 	return { id, size };
 }
 
-EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool scale_to_fit)
+EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool tile)
 {
 	int id = level.CreateEntityId();
-	level.AddComponent<DrawInfo>(id, { image_path, scale_to_fit, 0 });
+	level.AddComponent<DrawInfo>(id, { image_path, tile, 0 });
 	level.AddComponent<DrawPriority>(id)->draw_priority = draw_priority;
 	level.AddComponent<WidthAndHeight>(id)->width_and_height = size;
 	level.AddComponent<Position>(id)->position = position;
@@ -111,7 +111,7 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size)
 {
 	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE) * buttons_height_in_block_size / 2.f;
-	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", true);
+	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", false);
 	level.AddComponent<FillColor>(id)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(id);
 	level.AddComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll.frag";

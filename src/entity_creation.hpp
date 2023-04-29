@@ -8,6 +8,12 @@ typedef std::tuple<std::vector<int>, sf::Vector2f> EntitiesHandle;
 typedef std::function<EntityHandle(sf::Vector2f)> EntityCreator;
 typedef std::function<EntitiesHandle(sf::Vector2f)> EntitiesCreator;
 
+template <class T>
+int GetId(T& handle)
+{
+	return std::get<int>(handle);
+}
+
 EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator);
 EntitiesHandle AdaptToEntitiesHandle(EntityHandle EntityHandle);
 
@@ -23,7 +29,7 @@ EntityHandle CreateButton(ECSScene& level, sf::Vector2f position, sf::Vector2f s
 EntityHandle CreateMenuButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
 EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key);
 EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key);
-EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool scale_to_fit);
+EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool tile);
 EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position);
 EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size = 2.f);
 EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
