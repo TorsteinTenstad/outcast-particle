@@ -14,6 +14,9 @@
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 
+class ConfirmMenuEntity
+{};
+
 entities_creator AdaptToEntitiesCreator(entity_creator entity_creator)
 {
 	return [entity_creator](sf::Vector2f position) {
@@ -142,6 +145,47 @@ entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 	level.GetComponent<WidthAndHeight>(id)->width_and_height = sf::Vector2f(5 * BLOCK_SIZE, 1 * BLOCK_SIZE);
 	level.GetComponent<FillColor>(id)->color.a = 50;
 	return { id, size };
+}
+
+entities_handle CreateEntityPair(ECSScene& level, sf::Vector2f position, float spacing, std::function<entity_handle(sf::Vector2f)> function_1, std::function<entity_handle(sf::Vector2f)> function_2)
+{
+	auto [id_1, size_1] = function_1(sf::Vector2f(position.x - spacing / 2, position.y));
+	auto [id_2, size_2] = function_2(sf::Vector2f(position.x + spacing / 2, position.y));
+
+	return { { id_1, id_2 }, sf::Vector2f(std::max(size_1.x, size_2.x) + spacing, std::max(size_1.y, size_2.y)) };
+}
+
+entities_handle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void()> confirm_function)
+{
+	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<ConfirmMenuEntity>(id); });
+
+	int background_blur_id = level.CreateEntityId();
+	level.AddComponent<DrawInfo>(background_blur_id, { "content\\textures\\gray.png", false, 0 });
+	level.AddComponent<WidthAndHeight>(background_blur_id)->width_and_height = level_size;
+	level.AddComponent<Position>(background_blur_id)->position = level_size / 2.f;
+	level.AddComponent<FillColor>(background_blur_id)->color.a = 220;
+	level.AddComponent<DrawPriority>(background_blur_id)->draw_priority = 150;
+	level.AddComponent<ReceivesButtonEvents>(background_blur_id);
+
+	auto [text_id, text_size] = CreateText(level, sf::Vector2f(level_size.x / 2.f, level_size.y * 2 / 6), title, 150);
+	level.GetComponent<DrawPriority>(text_id)->draw_priority = 200;
+
+	auto confirm_lambda = [&level, confirm_function]() {
+		auto old_level = &level;
+		confirm_function();
+		if (&level == old_level)
+		{
+			level.DeleteEntitiesWith<ConfirmMenuEntity>();
+		}
+	};
+
+	auto [confirm_button_id, confirm_button_size] = CreateMenuButton(level, sf::Vector2f(level_size.x / 2 - 6 * BLOCK_SIZE, level_size.y * 4 / 6), confirm_lambda, "Confirm");
+	level.GetComponent<DrawPriority>(confirm_button_id)->draw_priority = 200;
+	auto [deny_button_id, deny_button_size] = CreateMenuButton(
+		level, sf::Vector2f(level_size.x / 2 + 6 * BLOCK_SIZE, level_size.y * 4 / 6), [&]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); }, "Deny");
+	level.GetComponent<DrawPriority>(deny_button_id)->draw_priority = 200;
+
+	return { { text_id, confirm_button_id, deny_button_id }, sf::Vector2f(22 * BLOCK_SIZE, 10 * BLOCK_SIZE) };
 }
 
 entities_handle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f)

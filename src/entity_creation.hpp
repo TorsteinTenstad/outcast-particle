@@ -13,6 +13,7 @@ entities_handle AdaptToEntitiesHandle(entity_handle entity_handle);
 
 entities_handle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<entities_creator> entities_creators, float spacing);
 entities_handle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<entities_handle> entities_creators, float spacing);
+entities_handle CreateEntityPair(ECSScene& level, sf::Vector2f position, float spacing, std::function<entity_handle(sf::Vector2f)> creation_func_1, std::function<entity_handle(sf::Vector2f)> creation_func_2);
 entity_handle CreateText(ECSScene& level, sf::Vector2f position, std::string text, unsigned int text_size);
 entity_handle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size);
 entity_handle CreateSizedButtonTemplate(ECSScene& level, sf::Vector2f position);
@@ -24,6 +25,7 @@ entity_handle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf
 entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position);
 entity_handle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size = 2.f);
 entities_handle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
+entities_handle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function);
 entities_handle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f);
 entity_handle CreateScrollingText(ECSScene& level, sf::Vector2f position, std::string text);
 entity_handle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle);
