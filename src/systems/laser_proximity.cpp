@@ -69,6 +69,5 @@ void LaserProximitySystem::Update(Level& level, float dt)
 		sound_info->loop_sound = true;
 	}
 	float volume = std::min(1.f, 750000 / (smallest_laser_distance * smallest_laser_distance * smallest_laser_distance));
-	std::cout << volume * 100 << std::endl;
 	sound_info->sound_volume = volume;
 }
