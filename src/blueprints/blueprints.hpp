@@ -103,20 +103,12 @@ class BPWall : public BPEditableEntity
 	Wall wall = {};
 	DrawPriority draw_priority = { 4 };
 	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
+
+	// [Serialize]
 	Collision collision = { 0.2, 75 };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
-};
-
-class BPBounceWall : public BPWall
-{
-	Collision collision = { 1, 75 };
-};
-
-class BPNoBounceWall : public BPWall
-{
-	Collision collision = { 0.05, 75 };
 };
 
 class BPGoal : public BPEditableEntity

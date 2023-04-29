@@ -162,6 +162,35 @@ void DeserializeComponent(Player* c, const std::string& entity_str_rep)
         }
     }
 }
+void SerializeComponent(const Collision* c, std::string& str_rep)
+{
+	str_rep += "Collision{";
+	str_rep += "bounce_factor=";
+	str_rep += ToString(c->bounce_factor);
+	str_rep += ";";
+	str_rep += "friction=";
+	str_rep += ToString(c->friction);
+	str_rep += "}";
+}
+
+void DeserializeComponent(Collision* c, const std::string& entity_str_rep)
+{
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Collision{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "bounce_factor")
+        {
+            FromString(c->bounce_factor, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "friction")
+        {
+            FromString(c->friction, statement_parts[1]);
+        }
+    }
+}
 void SerializeComponent(const ElectricField* c, std::string& str_rep)
 {
 	str_rep += "ElectricField{";
@@ -296,20 +325,7 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
             SerializeComponent(GetComponent<Position>(entity_id), entity_string);
-            SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPBounceWall")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-            SerializeComponent(GetComponent<Position>(entity_id), entity_string);
-            SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPNoBounceWall")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-            SerializeComponent(GetComponent<Position>(entity_id), entity_string);
+            SerializeComponent(GetComponent<Collision>(entity_id), entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
         }
         
@@ -494,32 +510,8 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Wall>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.2, 75 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
-        }
-        
-        if (tag == "BPBounceWall")
-        {
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 1, 75 });
-            DeserializeComponent(AddComponent<Position>(entity_id),line);
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
-        }
-        
-        if (tag == "BPNoBounceWall")
-        {
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.05, 75 });
-            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<Collision>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
@@ -685,31 +677,9 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Wall>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.2, 75 });
             AddComponent<Tag>(entity_id, {"BPWall"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-            break;
-        case BPBounceWall:
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 1, 75 });
-            AddComponent<Tag>(entity_id, {"BPBounceWall"});
-            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-            break;
-        case BPNoBounceWall:
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.05, 75 });
-            AddComponent<Tag>(entity_id, {"BPNoBounceWall"});
-            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Collision>(entity_id, { 0.2, 75 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             break;
         case BPGoal:

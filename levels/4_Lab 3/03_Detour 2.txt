@@ -4,9 +4,9 @@ name=Untitled;grid_size_id=1;editable=1
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1320,1800)}ElectricField{field_vector=(-0,-0.125)}WidthAndHeight{width_and_height=(480,480)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1800,300)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2640,1800)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(3720,1080)}WidthAndHeight{width_and_height=(240,2160)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(180,1080)}WidthAndHeight{width_and_height=(360,2160)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(2820,2100)}WidthAndHeight{width_and_height=(1560,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3720,1080)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(240,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(180,1080)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(360,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(2820,2100)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(1560,120)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(720,780)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,1800)}Charge{charge=10000}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3360,1800)}ElectricField{field_vector=(0.5,-0)}WidthAndHeight{width_and_height=(480,480)}
@@ -20,5 +20,5 @@ name=Untitled;grid_size_id=1;editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(1080,300)}WidthAndHeight{width_and_height=(60,480)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3060,1200)}WidthAndHeight{width_and_height=(60,420)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3360,660)}ElectricField{field_vector=(-0,-0.5)}WidthAndHeight{width_and_height=(480,1080)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(720,2100)}WidthAndHeight{width_and_height=(720,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(720,2100)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(720,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1560,2100)}WidthAndHeight{width_and_height=(1020,60)}
