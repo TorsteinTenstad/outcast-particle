@@ -1,6 +1,6 @@
-#include "components/kill_on_intersection.hpp"
 #include "components/draw_info.hpp"
 #include "components/intersection.hpp"
+#include "components/laser.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/scheduled_delete.hpp"

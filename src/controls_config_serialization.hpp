@@ -39,11 +39,8 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += "DECREASE_LEVEL_SIZE=";
 	str_rep += ToString(c->DECREASE_LEVEL_SIZE);
 	str_rep += ";";
-	str_rep += "EDIT_MODE_SWITCH_CHARGE=";
-	str_rep += ToString(c->EDIT_MODE_SWITCH_CHARGE);
-	str_rep += ";";
-	str_rep += "EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION=";
-	str_rep += ToString(c->EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION);
+	str_rep += "EDIT_MODE_FLIP_CHARGES_AND_FIELDS=";
+	str_rep += ToString(c->EDIT_MODE_FLIP_CHARGES_AND_FIELDS);
 	str_rep += ";";
 	str_rep += "SELECT_MULTIPLE_ENTITIES=";
 	str_rep += ToString(c->SELECT_MULTIPLE_ENTITIES);
@@ -86,6 +83,9 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "INCREMENT_VELOCITY_ANGLE=";
 	str_rep += ToString(c->INCREMENT_VELOCITY_ANGLE);
+	str_rep += ";";
+	str_rep += "RESET_SHADERS_AND_TEXTURES=";
+	str_rep += ToString(c->RESET_SHADERS_AND_TEXTURES);
 	str_rep += "}";
 }
 
@@ -137,13 +137,9 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         {
             FromString(c->DECREASE_LEVEL_SIZE, statement_parts[1]);
         }
-        else if (statement_parts[0] == "EDIT_MODE_SWITCH_CHARGE")
+        else if (statement_parts[0] == "EDIT_MODE_FLIP_CHARGES_AND_FIELDS")
         {
-            FromString(c->EDIT_MODE_SWITCH_CHARGE, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION")
-        {
-            FromString(c->EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION, statement_parts[1]);
+            FromString(c->EDIT_MODE_FLIP_CHARGES_AND_FIELDS, statement_parts[1]);
         }
         else if (statement_parts[0] == "SELECT_MULTIPLE_ENTITIES")
         {
@@ -200,6 +196,10 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "INCREMENT_VELOCITY_ANGLE")
         {
             FromString(c->INCREMENT_VELOCITY_ANGLE, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "RESET_SHADERS_AND_TEXTURES")
+        {
+            FromString(c->RESET_SHADERS_AND_TEXTURES, statement_parts[1]);
         }
         else {
             assert(false);

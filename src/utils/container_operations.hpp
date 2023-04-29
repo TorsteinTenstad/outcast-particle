@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <cassert>
 #include <functional>
 #include <map>
 #include <vector>
@@ -63,4 +64,54 @@ unsigned FindClosest(const std::array<T, SIZE>& sorted_arr, const T& value)
 		}
 	}
 	return sorted_arr.size() - 1;
+}
+
+template <typename T, typename... Args>
+std::vector<std::tuple<T&, Args&...>> zip(std::vector<T>& a, std::vector<Args>&... args)
+{
+	std::vector<std::tuple<T&, Args&...>> zipped;
+	assert(((a.size() == args.size()) && ...));
+	for (auto i = 0; i < a.size(); i++)
+	{
+		zipped.push_back({ a[i], args[i]... });
+	}
+	return zipped;
+}
+
+template <typename T, typename... Args>
+std::vector<std::tuple<const T&, const Args&...>> zip(const std::vector<T>& a, const std::vector<Args>&... args)
+{
+	std::vector<std::tuple<const T&, const Args&...>> zipped;
+	assert(((a.size() == args.size()) && ...));
+	for (auto i = 0; i < a.size(); i++)
+	{
+		zipped.push_back({ a[i], args[i]... });
+	}
+	return zipped;
+}
+
+template <typename T>
+std::vector<std::tuple<int, T&>> enumerate(std::vector<T>& vec)
+{
+	std::vector<std::tuple<int, T&>> enumerated;
+	int i = 0;
+	for (T& elem : vec)
+	{
+		enumerated.push_back({ i, elem });
+	}
+	i++;
+	return enumerated;
+}
+
+template <typename T>
+std::vector<std::tuple<int, const T&>> enumerate(const std::vector<T>& vec)
+{
+	std::vector<std::tuple<int, const T&>> enumerated;
+	int i = 0;
+	for (const T& elem : vec)
+	{
+		enumerated.push_back({ i, elem });
+		i++;
+	}
+	return enumerated;
 }

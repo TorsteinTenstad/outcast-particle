@@ -1,20 +1,16 @@
 #pragma once
+#include "components/level_menu.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
+#include "level_manager.hpp"
 #include "utils/string_parsing.hpp"
 
-#include <iomanip>
-#include <sstream>
-
 #define LEVEL_PREVIEW_SCALE 0.6
-#define BUTTON_HORISONTAL_MARGIN 0.06
-#define BUTTON_VERTICAL_MARGIN 0.01
-#define BUTTON_ASPECT_RATIO 8
 
 class LevelMenuSystem : public GameSystem
 {
 private:
-	const std::map<std::string, std::vector<std::string>>* level_groups_;
+	LevelManager* level_manager_;
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records_;
 	const std::map<std::string, int>* level_coin_records_;
 
@@ -24,14 +20,15 @@ private:
 public:
 	using GameSystem::GameSystem;
 	void Give(
-		const std::map<std::string, std::vector<std::string>>* level_groups,
+		LevelManager* level_manager,
 		const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 		const std::map<std::string, int>* level_coin_records,
 		std::function<Level&(std::string)> set_level,
 		std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture);
 	void Update(Level& level, float dt);
+
+private:
 	void UpdateUI(Level& level, LevelMenuUI* ui);
 	void SetupUI(Level& level, LevelMenuUI* ui);
 	void EnterLevel(std::string level_id);
-	void GenerateStatsBadges(Level& level, LevelMenuUI* ui);
 };

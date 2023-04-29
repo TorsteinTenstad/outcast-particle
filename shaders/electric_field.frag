@@ -3,12 +3,16 @@
 uniform float _time;
 uniform vec2 _wh;
 uniform float charge_sign;
+uniform float charge_strength;
 uniform float movement_animation_time;
 uniform vec2 field_vector;
 
-float rand01(vec2 seed)
+uniform sampler2D _noise_texture;
+#define noise_size 1000
+float rand01(vec2 uv)
 {
-	return fract(sin(dot(seed, vec2(12.9898, 78.233))) * 43758.5453);
+	uv = fract(uv / noise_size);
+	return texture2D(_noise_texture, 1 - uv).r;
 }
 
 float rand(float a, float b, vec2 seed)
@@ -109,6 +113,7 @@ vec4 blend(vec4 base, vec4 top)
 
 void main()
 {
+	vec2 xy = gl_TexCoord[0].xy * _wh;
 	float theta = atan(field_vector.x, field_vector.y);
 	mat2 m_rot = rot(theta);
 
@@ -124,12 +129,12 @@ void main()
 
 	vec3 particle_rgb = charge_sign < 0 ? (0.2 * light_green + 0.8 * green) : (0.2 * light_red + 0.8 * red);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy) * m_rot + vec2(90, -100 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy) * m_rot + vec2(60, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy) * m_rot + vec2(30, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161) * 0.3 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((gl_TexCoord[0].xy) * m_rot + vec2(00, -400 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511) * 0.4 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(90, -100 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(60, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(30, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161) * 0.3 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(00, -400 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511) * 0.4 * 0.5));
 
-	vec4 arrow_color = arrow((gl_TexCoord[0].xy) * m_rot, abs(_wh * m_rot));
+	vec4 arrow_color = arrow((xy) * m_rot, abs(_wh * m_rot));
 	color = blend(color, arrow_color);
 
 	color = blend(color, particles_color);

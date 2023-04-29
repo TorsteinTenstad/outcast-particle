@@ -3,6 +3,8 @@
 #include "SFML/window/Keyboard.hpp"
 #include "SFML/window/Mouse.hpp"
 #include <map>
+#include <string>
+#include <vector>
 
 class CursorAndKeys
 {
@@ -23,6 +25,8 @@ public:
 	std::map<int, bool> key_down;
 	std::map<int, bool> key_pressed_this_frame;
 	std::map<int, bool> key_released_this_frame;
+
+	std::vector<std::string> text_input;
 
 	CursorAndKeys();
 	void ResetFrameEvents();

@@ -1,6 +1,6 @@
 #include "game.hpp"
-#include "components/level_menu.hpp"
 #include "entity_creation.hpp"
+#include "folder_definitions.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "systems/coin.hpp"
 #include "systems/draw.hpp"
@@ -23,14 +23,15 @@
 #include <thread>
 
 Game::Game() :
-	active_level_(std::make_unique<Level>())
+	active_level_(std::make_unique<Level>()),
+	level_manager_(LEVELS_FOLDER)
 {
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
-	RegisterGameSystem<LevelMenuSystem>().Give(&level_groups_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
 	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly
@@ -42,6 +43,7 @@ Game::Game() :
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
+	RegisterGameSystem<TextBoxSystem>();
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
@@ -52,7 +54,7 @@ Game::Game() :
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
-	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_groups_, &level_completion_time_records_);
+	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_manager_.GetLevels(), &level_completion_time_records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<IntersectionSystem>();
@@ -70,20 +72,9 @@ Game::Game() :
 	RegisterPhysicsGameSystem<AccelerationSystem>();
 	RegisterPhysicsGameSystem<VelocitySystem>();
 
-	const std::filesystem::path levels_path { "levels" };
-	for (const auto& folder : std::filesystem::directory_iterator { levels_path })
+	if (!std::filesystem::exists(USER_FOLDER))
 	{
-		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
-		{
-			std::string level_id = level_file_path.path().string();
-			std::string group = GetGroupNameFromId(level_id);
-			level_groups_[group].push_back(level_id);
-		}
-	}
-
-	if (!std::filesystem::exists("user"))
-	{
-		std::filesystem::create_directory("user");
+		std::filesystem::create_directory(USER_FOLDER);
 	}
 
 	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
@@ -103,10 +94,6 @@ Game::~Game()
 Level& Game::SetLevel(std::string level_id)
 {
 	assert(active_level_->GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
-	if (!IsMenu(level_id))
-	{
-		LevelMenuUI::last_at_level_id = level_id;
-	}
 	active_level_ = std::move(std::make_unique<Level>());
 	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
 	if (IsMenu(active_level_id_) && !level_id_is_top)

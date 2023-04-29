@@ -1,5 +1,5 @@
 #pragma once
-#include "components/kill_on_intersection.hpp"
+#include "components/laser.hpp"
 #include "components/player.hpp"
 #include "components/position.hpp"
 #include "components/size.hpp"
@@ -42,7 +42,7 @@ void LaserProximitySystem::Update(Level& level, float dt)
 	float smallest_laser_distance = minimum_laser_distance;
 	for (auto [player_id, player, player_position] : level.GetEntitiesWith<Player, Position>())
 	{
-		for (auto [laser_id, kill_on_intersection, laser_position, laser_width_and_height] : level.GetEntitiesWith<KillOnIntersection, Position, WidthAndHeight>())
+		for (auto [laser_id, kill_on_intersection, laser_position, laser_width_and_height] : level.GetEntitiesWith<Laser, Position, WidthAndHeight>())
 		{
 			float min_distance = FindShortestDistance(player_position->position, laser_position->position, laser_width_and_height->width_and_height);
 			if (min_distance < smallest_laser_distance)
@@ -51,9 +51,11 @@ void LaserProximitySystem::Update(Level& level, float dt)
 			}
 		}
 	}
-	auto [id, _] = level.GetSingletonIncludeID<LaserProximity>([](ECSScene& level) {auto [id, sound_info] = level.CreateEntityWith<SoundInfo>();
-	sound_info->sound_path = "content\\sounds\\laser_proximity.wav";
-	return id; });
+	int id = level.GetSingletonId<LaserProximity>([](ECSScene& level) {
+		auto [id, sound_info] = level.CreateEntityWith<SoundInfo>();
+		sound_info->sound_path = "content\\sounds\\laser_proximity.wav";
+		return id;
+	});
 
 	auto sound_info = level.GetComponent<SoundInfo>(id);
 	if (smallest_laser_distance >= minimum_laser_distance || (level.GetMode() != PLAY_MODE))

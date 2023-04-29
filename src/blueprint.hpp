@@ -13,12 +13,10 @@ enum Blueprint
 	BPLaser = 5,
 	BPCoin = 6,
 	BPWall = 7,
-	BPBounceWall = 8,
-	BPNoBounceWall = 9,
-	BPGoal = 10,
-	BPElectricField = 11,
-	BPMagneticField = 12,
-	BPTextPopupSpawner = 13
+	BPGoal = 8,
+	BPElectricField = 9,
+	BPMagneticField = 10,
+	BPTextPopupSpawner = 11
 };
     
 std::string ToBlueprintTag(Blueprint blueprint);

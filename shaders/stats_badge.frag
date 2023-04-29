@@ -41,7 +41,8 @@ uniform int n_collected = 2;
 void main()
 {
 	vec2 uv = gl_TexCoord[0].xy;
-    vec2 c_uv = uv-vec2(0, _wh.y/2);
+	vec2 xy = uv*_wh;
+    vec2 c_uv = xy-vec2(0, _wh.y/2);
 
 	float margin_ratio = 0.25;
 	float gem_size = _wh.y/(1.f+2.f*margin_ratio);
@@ -50,7 +51,7 @@ void main()
 
 
     float r = _wh.y/4;
-	vec2 folded_coords = abs(gl_TexCoord[0].xy-(_wh)/2);
+	vec2 folded_coords = abs(xy-(_wh)/2);
     vec2 r_smaller_box = min(folded_coords, vec2(_wh)/2-r);
     vec2 dist_from_smaller_box = folded_coords-r_smaller_box;
     float round_corner_mask = 1-smoothstep(r-2, r+2, length(dist_from_smaller_box));

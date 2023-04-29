@@ -3,6 +3,15 @@
 #include <iomanip>
 #include <sstream>
 
+void RemoveChars(std::string& s, const std::string& chars)
+{
+	size_t pos = 0;
+	while ((pos = s.find_first_of(chars, pos)) != std::string::npos)
+	{
+		s.erase(pos, 1);
+	}
+}
+
 std::string HumanName(sf::Keyboard::Key key)
 {
 	if (sf::Keyboard::A <= key && key <= sf::Keyboard::Z)

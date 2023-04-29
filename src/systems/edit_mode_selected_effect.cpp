@@ -22,7 +22,7 @@ void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 		return;
 	}
 
-	auto [entity_id, selected_effect] = level.GetSingletonIncludeID<SelectedEffect>([&level](ECSScene& scene) {
+	int entity_id = level.GetSingletonId<SelectedEffect>([&level](ECSScene& scene) {
 		return CreateScreenWideFragmentShaderEntity(level, "shaders\\selected_effect.frag", 50);
 	});
 	Shader* shader = level.GetComponent<Shader>(entity_id);
@@ -41,10 +41,16 @@ void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 	}
 
 	{
-		int entity_id = std::get<int>(level.GetSingletonIncludeID<EditModeRectangleSelectTool>());
-		shader->vec_uniforms["positions[" + ToString(i) + "]"] = level.GetComponent<Position>(entity_id)->position;
-		shader->vec_uniforms["sizes[" + ToString(i) + "]"] = level.GetComponent<WidthAndHeight>(entity_id)->width_and_height;
-		i++;
+		std::optional<int> opt_entity_id = level.FindSingletonId<EditModeRectangleSelectTool>();
+		if (opt_entity_id)
+		{
+			int entity_id = opt_entity_id.value();
+
+			auto [position, width_and_height] = level.GetComponents<Position, WidthAndHeight>(entity_id);
+			shader->vec_uniforms["positions[" + ToString(i) + "]"] = position->position;
+			shader->vec_uniforms["sizes[" + ToString(i) + "]"] = width_and_height->width_and_height;
+			i++;
+		}
 	}
 	shader->int_uniforms["n"] = i;
 }

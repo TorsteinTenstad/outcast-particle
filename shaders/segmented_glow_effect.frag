@@ -63,8 +63,8 @@ void main()
 {
 	float animation_t = animation_start_time > 0 ? _time - animation_start_time : 0;
 
-	vec2 screen_coords = gl_TexCoord[0].xy;
-	vec2 uv = screen_coords - origin - vec2(0, -300*animation_t);
+	vec2 xy = gl_TexCoord[0].xy*_wh;
+	vec2 uv = xy - origin - vec2(0, -300*animation_t);
 	float r = length(uv);
     float theta = atan(uv.x, uv.y);
     float a = 0.5*theta/PI+0.5;

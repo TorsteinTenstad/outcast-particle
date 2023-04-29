@@ -191,40 +191,6 @@ void ECSScene::DeleteEntitiesWith()
 }
 
 template <class Component>
-std::tuple<int, Component*> ECSScene::GetSingletonIncludeID(std::function<int(ECSScene&)> creation_func)
-{
-	auto& component_map = entity_container_.GetComponentMap<Component>();
-
-	if (component_map.size() == 0)
-	{
-		int entity_id = creation_func(*this);
-		EnsureExistenceOfComponent<Component>(entity_id);
-	}
-	assert(component_map.size() == 1);
-	return { component_map.begin()->first, &component_map.begin()->second };
-}
-
-template <class Component>
-std::tuple<int, Component*> ECSScene::GetSingletonIncludeID()
-{
-	return GetSingletonIncludeID<Component>([](ECSScene& scene) { return scene.CreateEntityId(); });
-}
-
-template <class Component>
-Component* ECSScene::GetSingleton(std::function<int(ECSScene&)> creation_func)
-{
-	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>(creation_func);
-	return std::get<Component*>(tup);
-}
-
-template <class Component>
-Component* ECSScene::GetSingleton()
-{
-	std::tuple<int, Component*> tup = GetSingletonIncludeID<Component>();
-	return std::get<Component*>(tup);
-}
-
-template <class Component>
 void ECSScene::ClearComponent()
 {
 	for (auto [entity_id, _] : entity_container_.GetComponentMap<Component>())

@@ -5,12 +5,12 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(3480,1080)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2040,1800)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3480,360)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(480,480)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(120,2160)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3480,1800)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(480,480)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(360,1800)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(480,480)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(60,1080)}WidthAndHeight{width_and_height=(120,2160)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3600,120)}
-"BPNoBounceWall":Tag{tag=BPNoBounceWall}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3600,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,1080)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(3600,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,60)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(3600,120)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(2040,1800)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(480,480)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(360,840)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(480,480)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1200,840)}

@@ -11,33 +11,34 @@
 #include "components/sticky_button.hpp"
 #include "components/text.hpp"
 #include "utils/container_operations.hpp"
+#include "utils/math.hpp"
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 
 class ConfirmMenuEntity
 {};
 
-entities_creator AdaptToEntitiesCreator(entity_creator entity_creator)
+EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator)
 {
-	return [entity_creator](sf::Vector2f position) {
-		auto [id, size] = entity_creator(position);
-		return entities_handle({ id }, size);
+	return [EntityCreator](sf::Vector2f position) {
+		auto [id, size] = EntityCreator(position);
+		return EntitiesHandle({ id }, size);
 	};
 }
 
-entities_handle AdaptToEntitiesHandle(entity_handle entity_handle)
+EntitiesHandle AdaptToEntitiesHandle(EntityHandle EntityHandle)
 {
-	auto [id, size] = entity_handle;
-	return entities_handle({ id }, size);
+	auto [id, size] = EntityHandle;
+	return EntitiesHandle({ id }, size);
 }
 
-entity_handle CreateText(ECSScene& level, sf::Vector2f position, std::string text, unsigned int text_size)
+EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size)
 {
 	int id = level.CreateEntityId();
 	level.AddComponent<Position>(id)->position = position;
 	level.AddComponent<DrawPriority>(id)->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
 	level.AddComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll.frag";
-	level.AddComponent<Text>(id)->content = text;
+	level.AddComponent<Text>(id)->content = content;
 	level.GetComponent<Text>(id)->size = text_size;
 
 	sf::Vector2f width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
@@ -46,46 +47,52 @@ entity_handle CreateText(ECSScene& level, sf::Vector2f position, std::string tex
 	return { id, width_and_height };
 }
 
-entity_handle CreateScrollingText(ECSScene& level, sf::Vector2f position, std::string text)
+EntityHandle CreateScrollingText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size)
 {
-	auto [id, size] = CreateText(level, position, text, 120);
+	auto [id, size] = CreateText(level, position, content, text_size);
 	level.GetComponent<Text>(id)->apply_shader = true;
 	return { id, size };
 }
 
-entity_handle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool scale_to_fit)
+EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool tile)
 {
 	int id = level.CreateEntityId();
-	level.AddComponent<DrawInfo>(id, { image_path, scale_to_fit, 0 });
+	level.AddComponent<DrawInfo>(id, { image_path, tile, 0 });
 	level.AddComponent<DrawPriority>(id)->draw_priority = draw_priority;
 	level.AddComponent<WidthAndHeight>(id)->width_and_height = size;
 	level.AddComponent<Position>(id)->position = position;
 	return { id, size };
 }
-entity_handle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
+
+EntityHandle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
 {
 	auto [id, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\white.png", false);
 	level.AddComponent<FillColor>(id);
 	level.AddComponent<Shader>(id, { "", "shaders\\round_corners.frag", {}, {}, {} });
 	return { id, size };
 }
-entity_handle CreateSizedButtonTemplate(ECSScene& level, sf::Vector2f position)
+EntityHandle CreateMouseEventButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
+{
+	auto [id, _] = CreateButtonTemplate(level, position, size);
+	level.AddComponent<MouseInteractionDependentFillColor>(id);
+	level.AddComponent<ReceivesButtonEvents>(id);
+	return { id, size };
+}
+EntityHandle CreateSizedButtonTemplate(ECSScene& level, sf::Vector2f position)
 {
 	sf::Vector2f size = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
 	auto [id, _] = CreateButtonTemplate(level, position, size);
 	return { id, size };
 }
-entity_handle CreateButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> on_click, std::string text, unsigned textsize)
+EntityHandle CreateButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> on_click, std::string text, unsigned textsize)
 {
-	auto [id, _] = CreateButtonTemplate(level, position, size);
+	auto [id, _] = CreateMouseEventButton(level, position, size);
 	level.AddComponent<Text>(id, { text, textsize });
-	level.AddComponent<MouseInteractionDependentFillColor>(id);
-	level.AddComponent<ReceivesButtonEvents>(id);
 	level.AddComponent<OnReleasedThisFrame>(id)->func = on_click;
 	return { id, size };
 }
 
-entity_handle CreateMenuButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
+EntityHandle CreateMenuButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
 {
 	auto [id, size] = CreateSizedButtonTemplate(level, position);
 	level.AddComponent<Text>(id)->content = button_text;
@@ -95,7 +102,7 @@ entity_handle CreateMenuButton(ECSScene& level, sf::Vector2f position, std::func
 	return { id, size };
 }
 
-entity_handle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key)
+EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key)
 {
 	auto [id, size] = CreateMenuButton(level, position, button_function, button_text);
 	level.AddComponent<ShortcutKey>(id)->key = shortcut_key;
@@ -104,16 +111,17 @@ entity_handle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std:
 	return { id, size };
 }
 
-entity_handle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size)
+EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size)
 {
 	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE) * buttons_height_in_block_size / 2.f;
-	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", true);
+	auto [id, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", false);
 	level.AddComponent<FillColor>(id)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(id);
+	level.AddComponent<Shader>(id)->fragment_shader_path = "shaders\\scroll.frag";
 	return { id, size };
 }
 
-entities_handle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key)
+EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key)
 {
 	std::vector<int> ids = {};
 	auto [id, size] = CreateSizedButtonTemplate(level, position);
@@ -128,7 +136,7 @@ entities_handle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf
 	return { { id, button_text_id }, size };
 }
 
-entities_handle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
+EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
 {
 
 	auto [id, size] = CreateMenuButton(level, position, on_click, "");
@@ -138,7 +146,7 @@ entities_handle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std:
 	return { { id, button_text_id }, size };
 }
 
-entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position)
+EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 {
 	auto [id, size] = CreateSizedButtonTemplate(level, position);
 	level.AddComponent<Text>(id);
@@ -147,15 +155,7 @@ entity_handle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 	return { id, size };
 }
 
-entities_handle CreateEntityPair(ECSScene& level, sf::Vector2f position, float spacing, std::function<entity_handle(sf::Vector2f)> function_1, std::function<entity_handle(sf::Vector2f)> function_2)
-{
-	auto [id_1, size_1] = function_1(sf::Vector2f(position.x - spacing / 2, position.y));
-	auto [id_2, size_2] = function_2(sf::Vector2f(position.x + spacing / 2, position.y));
-
-	return { { id_1, id_2 }, sf::Vector2f(std::max(size_1.x, size_2.x) + spacing, std::max(size_1.y, size_2.y)) };
-}
-
-entities_handle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void()> confirm_function)
+EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void()> confirm_function)
 {
 	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<ConfirmMenuEntity>(id); });
 
@@ -188,7 +188,7 @@ entities_handle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std:
 	return { { text_id, confirm_button_id, deny_button_id }, sf::Vector2f(22 * BLOCK_SIZE, 10 * BLOCK_SIZE) };
 }
 
-entities_handle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f)
+EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f)
 {
 	//Add parent button:
 	auto [parent_button_id, size] = CreateSizedButtonTemplate(level, position);
@@ -222,7 +222,7 @@ entities_handle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* 
 	return { { parent_button_id, slider_bar_id, slider_id, button_text_id }, size };
 }
 
-entity_handle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle)
+EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle)
 {
 	int entity_id = level.CreateEntityId();
 
@@ -257,10 +257,10 @@ int CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, 
 }
 
 // Remove this version of VerticalEntityLayout?
-entities_handle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<entities_creator> entities_creators, float spacing)
+EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesCreator> entities_creators, float spacing)
 {
-	std::function<entities_handle(entities_creator)> f = [](entities_creator entities_creator) { return entities_creator(sf::Vector2f(0, 0)); };
-	std::vector<entities_handle> ids_and_heights = ApplyFuncToVector(entities_creators, f);
+	std::function<EntitiesHandle(EntitiesCreator)> f = [](EntitiesCreator EntitiesCreator) { return EntitiesCreator(sf::Vector2f(0, 0)); };
+	std::vector<EntitiesHandle> ids_and_heights = ApplyFuncToVector(entities_creators, f);
 	sf::Vector2f total_height;
 	std::vector<int> total_ids;
 
@@ -285,28 +285,56 @@ entities_handle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std
 	return (std::tuple { total_ids, total_height });
 }
 
-entities_handle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<entities_handle> entities_handles, float spacing)
+static EntitiesHandle OneDimensionalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, std::function<float&(sf::Vector2f&)> access_layout_direction, std::function<float&(sf::Vector2f&)> access_other_direction, UiOrigin ui_origin)
 {
-	sf::Vector2f total_size;
 	std::vector<int> total_ids;
+	sf::Vector2f total_size = sf::Vector2f(0, 0);
+
+	float& total_size_in_layout_direction = access_layout_direction(total_size);
+	float& total_size_in_other_direction = access_other_direction(total_size);
 
 	for (auto [ids, size] : entities_handles)
 	{
-		total_size.y += size.y;
-		total_size.x = std::max(total_size.x, size.x);
+		total_size_in_layout_direction += access_layout_direction(size);
+		total_size_in_other_direction = std::max(total_size_in_other_direction, access_other_direction(size));
 	}
-	total_size.y += spacing * (entities_handles.size() - 1);
+	total_size_in_layout_direction += spacing * (entities_handles.size() - 1);
 
-	float current_height = -total_size.y / 2;
+	float current_position_in_layout_direction = 0;
+	switch (ui_origin)
+	{
+		case StartEdge:
+			break;
+		case Center:
+			current_position_in_layout_direction -= total_size_in_layout_direction / 2;
+			break;
+		case EndEdge:
+			current_position_in_layout_direction -= total_size_in_layout_direction;
+			break;
+		default:
+			assert(false);
+	}
 	for (auto [ids, size] : entities_handles)
 	{
-		current_height += size.y / 2;
+		current_position_in_layout_direction += access_layout_direction(size) / 2;
 		for (int id : ids)
 		{
-			level.GetComponent<Position>(id)->position += sf::Vector2f(position.x, current_height + position.y);
+			sf::Vector2f& entity_position = level.GetComponent<Position>(id)->position;
+			entity_position += position;
+			access_layout_direction(entity_position) += current_position_in_layout_direction;
 			total_ids.push_back(id);
 		}
-		current_height += size.y / 2 + spacing;
+		current_position_in_layout_direction += access_layout_direction(size) / 2 + spacing;
 	}
 	return (std::tuple { total_ids, total_size });
+}
+
+EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, UiOrigin ui_origin)
+{
+	return OneDimensionalEntityLayout(level, position, entities_handles, spacing, GetY, GetX, ui_origin);
+}
+
+EntitiesHandle HorizontalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, UiOrigin ui_origin)
+{
+	return OneDimensionalEntityLayout(level, position, entities_handles, spacing, GetX, GetY, ui_origin);
 }

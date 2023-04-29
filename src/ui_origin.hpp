@@ -2,7 +2,7 @@
 
 enum UiOrigin
 {
-	TopCenter,
-	CenterCenter,
-	BottomCenter
+	StartEdge,
+	Center,
+	EndEdge
 };

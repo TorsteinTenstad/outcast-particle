@@ -8,6 +8,7 @@
 #include "level_mode.hpp"
 #include "ui_origin.hpp"
 #include "undo_system.hpp"
+#include <array>
 #include <functional>
 #include <optional>
 #include <variant>

@@ -103,25 +103,17 @@ class BPWall : public BPEditableEntity
 	Wall wall = {};
 	DrawPriority draw_priority = { 4 };
 	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
+
+	// [Serialize]
 	Collision collision = { 0.2, 75 };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
 };
 
-class BPBounceWall : public BPWall
-{
-	Collision collision = { 1, 75 };
-};
-
-class BPNoBounceWall : public BPWall
-{
-	Collision collision = { 0.05, 75 };
-};
-
 class BPGoal : public BPEditableEntity
 {
-	DrawInfo draw_info = { "", false, 0 };
+	DrawInfo draw_info = {};
 	Shader shader = { "", "shaders\\wormhole.frag", {}, {}, {} };
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
@@ -133,7 +125,7 @@ class BPGoal : public BPEditableEntity
 
 class BPElectricField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
 	Shader shader = { "", "shaders\\electric_field.frag", {}, {}, {} };
 
@@ -141,12 +133,12 @@ class BPElectricField : public BPEditableEntity
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
 class BPMagneticField : public BPEditableEntity
 {
-	DrawInfo draw_info = { "", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
 	Shader shader = { "", "shaders\\magnetic_field.frag", {}, {}, {} };
 
@@ -154,12 +146,12 @@ class BPMagneticField : public BPEditableEntity
 	MagneticField magnetic_field = { 0.1 };
 
 	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(120, 120) };
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
 class BPTextPopupSpawner : public BPEditableEntity
 {
-	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
+	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 2 };
 
 	// [Serialize]

@@ -2,6 +2,12 @@
 #include "SFML/Graphics/Color.hpp"
 #include <string>
 
+class TextBox
+{
+public:
+	std::string illegal_characters = "\"*/:<>?\\|_";
+};
+
 class Text
 {
 public:

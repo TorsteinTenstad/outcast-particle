@@ -1,10 +1,13 @@
 #include "systems/render_grid_adaptive_textures.hpp"
+#include "components/animated_properties.hpp"
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/grid_adaptive_textures.hpp"
+#include "components/laser.hpp"
 #include "components/physics.hpp"
 #include "components/size.hpp"
 #include "level.hpp"
+#include "utils/math.hpp"
 #include <functional>
 #include <optional>
 #include <string>
@@ -69,7 +72,12 @@ static void LaserDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> g
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);
-		shape.setFillColor(sf::Color(255, 0, 0, 255));
+		float alpha = 255;
+		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity_id))
+		{
+			alpha = fill_color->color.a;
+		}
+		shape.setFillColor(sf::Color(255, 0, alpha, 255)); //Since drawing on the image does alpha blending, using the alpha channel to encode transparency affects the other channels.
 		get_render_texture(draw_priority->draw_priority).draw(shape);
 	}
 }
@@ -80,7 +88,7 @@ static void WallDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> ge
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);
-		shape.setFillColor(sf::Color(255, collision->bounce_factor * 255, 0, 255));
+		shape.setFillColor(sf::Color(255, std::min(1.f, collision->bounce_factor) * 255, 0, 255));
 		get_render_texture(draw_priority->draw_priority).draw(shape);
 	}
 }

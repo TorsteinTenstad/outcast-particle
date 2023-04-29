@@ -17,9 +17,11 @@
 #include "edit_mode_actions/resize_selected.hpp"
 #include "edit_mode_actions/rotate_selected_fields.hpp"
 #include "edit_mode_actions/select_entities.hpp"
+#include "edit_mode_actions/set_property_value_of_selected.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
 #include "systems/_pure_DO_systems.hpp"
+#include "utils/container_operations.hpp"
 #include "utils/get_size.hpp"
 #include "utils/level_id.hpp"
 #include "utils/math.hpp"
@@ -32,6 +34,7 @@ static void ShowCopyPreview(Level& level, sf::Vector2f origin)
 {
 	for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
 	{
+		if (level.HasComponents<Player>(entity_id)) { continue; }
 		int copy = level.CopyEntity(entity_id);
 		level.GetComponent<Position>(copy)->position = origin + selected->mouse_offset;
 		level.RemoveComponents<Selected>(copy);
@@ -89,38 +92,36 @@ void EditModeSystem::Update(Level& level, float dt)
 	Tool current_tool = ComputeCurrentTool(level, cursor_and_keys_);
 
 	// Rectangle select
-	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
-	int rectangle_select_tool_id = std::get<int>(level.GetSingletonIncludeID<EditModeRectangleSelectTool>(creation_func));
-
 	if (current_tool == Selecting)
 	{
+		std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
+		int rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
 		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
 		size = Abs(size);
 		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = size;
 		level.GetComponent<Position>(rectangle_select_tool_id)->position = position;
+		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entered_this_frame_ids)
+		{
+			if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
+			{
+				level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
+			}
+		}
+		if (current_tool == Selecting)
+		{
+			for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->left_this_frame_ids)
+			{
+				if (level.HasComponents<Editable, Selected>(entity))
+				{
+					level.editor.Do<SelectEntities>(level, std::vector<int>({}), std::vector<int>({ entity }));
+				}
+			}
+		}
 	}
 	else
 	{
-		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = sf::Vector2f(0, 0);
-	}
-
-	for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entered_this_frame_ids)
-	{
-		if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
-		{
-			level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
-		}
-	}
-	if (current_tool == Selecting)
-	{
-		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->left_this_frame_ids)
-		{
-			if (level.HasComponents<Editable, Selected>(entity))
-			{
-				level.editor.Do<SelectEntities>(level, std::vector<int>({}), std::vector<int>({ entity }));
-			}
-		}
+		level.DeleteEntity(level.FindSingletonId<EditModeRectangleSelectTool>());
 	}
 
 	// Select entities on click:
@@ -164,10 +165,8 @@ void EditModeSystem::Update(Level& level, float dt)
 				 { globals.key_config.INCREMENT_WIDTH, sf::Vector2f(1, 0) },
 				 { globals.key_config.DECREMENT_WIDTH, sf::Vector2f(-1, 0) } }))
 	{
-		if (cursor_and_keys_.key_pressed_this_frame[key])
-		{
-			level.editor.Do<ResizeSelected>(level, size_delta_step);
-		}
+		if (!cursor_and_keys_.key_pressed_this_frame[key]) { continue; }
+		level.editor.Do<ResizeSelected>(level, size_delta_step);
 	}
 
 	// Delete:
@@ -181,14 +180,8 @@ void EditModeSystem::Update(Level& level, float dt)
 			 { { globals.key_config.INCREASE_LEVEL_SIZE, +1 },
 				 { globals.key_config.DECREASE_LEVEL_SIZE, -1 } }))
 	{
-		if (!cursor_and_keys_.key_pressed_this_frame[key])
-		{
-			continue;
-		}
-		if (level.GetValidNewSizeId(increment) == 0)
-		{
-			continue;
-		}
+		if (!cursor_and_keys_.key_pressed_this_frame[key]) { continue; }
+		if (level.GetValidNewSizeId(increment) == 0) { continue; }
 		level.editor.Do<ModifyLevelSize>(level, increment);
 	}
 
@@ -211,24 +204,18 @@ void EditModeSystem::Update(Level& level, float dt)
 		}
 	}
 
-	return;
-
-	// Edit charge:
-	for (auto [entity_id, selected, charge] : level.GetEntitiesWith<Selected, Charge>())
+	// Set charge, field strengths and wall bounce:
+	for (auto [i, key] : enumerate(CATEGORY_KEYS))
 	{
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_SWITCH_CHARGE])
-		{
-			charge->charge *= -1;
-		}
-
-		for (unsigned i = 0; i < CHARGE_CATEGORY_KEYS.size(); ++i)
-		{
-			if (cursor_and_keys_.key_pressed_this_frame[CHARGE_CATEGORY_KEYS[i]])
-			{
-				charge->charge = Sign(charge->charge) * abs(PARTICLE_CHARGE_CATEGORIES[i]);
-			}
-		}
+		if (!cursor_and_keys_.key_pressed_this_frame[key]) { continue; }
+		level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt);
 	}
+	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_FLIP_CHARGES_AND_FIELDS])
+	{
+		level.editor.Do<SetPropertyValueOfSelected>(level, std::nullopt, -1);
+	}
+
+	return;
 
 	// Edit velocity:
 	for (auto [entity_id, selected, velocity] : level.GetEntitiesWith<Selected, Velocity>())
@@ -255,32 +242,5 @@ void EditModeSystem::Update(Level& level, float dt)
 		}
 
 		velocity->velocity = Vector2fFromPolar(velocity_magnitude, velocity_angle);
-	}
-	// Edit magnetic field:
-	for (auto [entity_id, selected, magnetic_field] : level.GetEntitiesWith<Selected, MagneticField>())
-	{
-		if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION])
-		{
-			magnetic_field->field_strength *= -1;
-		}
-		for (unsigned i = 0; i < MAGNETIC_FIELD_CATEGORY_KEYS.size(); ++i)
-		{
-			if (cursor_and_keys_.key_pressed_this_frame[MAGNETIC_FIELD_CATEGORY_KEYS[i]])
-			{
-				magnetic_field->field_strength = Sign(magnetic_field->field_strength) * abs(MAGNETIC_FIELD_STRENGTH_CATEGORIES[i]);
-			}
-		}
-	}
-
-	// Edit electric field:
-	for (auto [entity_id, selected, electric_field] : level.GetEntitiesWith<Selected, ElectricField>())
-	{
-		for (unsigned i = 0; i < ELECTRIC_FIELD_CATEGORY_KEYS.size(); ++i)
-		{
-			if (cursor_and_keys_.key_pressed_this_frame[ELECTRIC_FIELD_CATEGORY_KEYS[i]])
-			{
-				electric_field->field_vector = Normalized(electric_field->field_vector) * abs(ELECTRIC_FIELD_STRENGTH_CATEGORIES[i]);
-			}
-		}
 	}
 }

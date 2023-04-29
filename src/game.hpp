@@ -4,6 +4,7 @@
 #include "game_system.hpp"
 #include "general_user_config.hpp"
 #include "level.hpp"
+#include "level_manager.hpp"
 #include "sfml_event_handler.hpp"
 
 #include <memory>
@@ -21,9 +22,10 @@ private:
 
 	std::string active_level_id_ = MAIN_MENU;
 	std::unique_ptr<Level> active_level_;
-	std::map<std::string, std::vector<std::string>> level_groups_;
 	std::map<int, std::map<std::string, float>> level_completion_time_records_;
 	std::map<std::string, int> level_coin_records_;
+
+	LevelManager level_manager_;
 
 	int next_available_system_id_ = 0;
 	std::map<std::type_index, int> type_to_system_id_;

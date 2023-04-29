@@ -7,6 +7,7 @@
 #define FORCE_THREASHOLD_NEEDED_TO_CONNECT pow(10000 / (5 * 240), 2)
 
 uniform float _time;
+uniform vec2 _wh;
 uniform vec2 _window_resolution;
 
 uniform vec2 player_pos;
@@ -38,7 +39,7 @@ float soft_threshold(float t, float threshold, float softness)
 }
 void main()
 {
-	vec2 screen_coords = gl_TexCoord[0].xy;
+	vec2 xy = gl_TexCoord[0].xy*_wh;
 
 	vec4 color = vec4(0, 0, 0, 0);
 
@@ -49,7 +50,7 @@ void main()
 		basis[1] = QUARTER_TURN * basis[0] / length(basis[0]);
 		basis[1] *= 0.5 * charge_radius;
 
-		vec2 local_coords = inverse(basis) * (screen_coords - player_pos - basis[0]);
+		vec2 local_coords = inverse(basis) * (xy - player_pos - basis[0]);
 
 		local_coords.y = abs(local_coords.y);
 		float square_mask = float(-1 <= local_coords.x && local_coords.x <= 1 && local_coords.y <= 1);
@@ -88,7 +89,7 @@ void main()
 	return;
 }
 /*
-	float shape = (1 - screen_coords.y) * (0.2 + 0.8 * pow(screen_coords.x, 4));
+	float shape = (1 - xy.y) * (0.2 + 0.8 * pow(xy.x, 4));
 	shape *= square_mask;
 	gl_FragColor = vec4(vec3(shape), 0.5 * float(shape > 0.15));
 	return;

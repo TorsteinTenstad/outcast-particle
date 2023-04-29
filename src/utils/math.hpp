@@ -4,6 +4,9 @@
 
 #define PI 3.141593f
 
+float& GetX(sf::Vector2f& v);
+float& GetY(sf::Vector2f& v);
+
 float Smoothstep(float a, float b, float x);
 float Smoothstep(float x);
 float Ease(float x, float undershoot, float overshoot);

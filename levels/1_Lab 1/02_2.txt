@@ -1,10 +1,10 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(480,600)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"BPWall":Tag{tag=BPWall}Position{position=(180,1080)}WidthAndHeight{width_and_height=(360,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(180,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,2160)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3660,180)}Charge{charge=-10000}
-"BPWall":Tag{tag=BPWall}Position{position=(960,180)}WidthAndHeight{width_and_height=(1200,360)}
-"BPWall":Tag{tag=BPWall}Position{position=(3660,1080)}WidthAndHeight{width_and_height=(360,2160)}
-"BPWall":Tag{tag=BPWall}Position{position=(1920,1980)}WidthAndHeight{width_and_height=(3120,360)}
+"BPWall":Tag{tag=BPWall}Position{position=(960,180)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1200,360)}
+"BPWall":Tag{tag=BPWall}Position{position=(3660,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,1980)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3120,360)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,180)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,1980)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(3660,1980)}Charge{charge=10000}
@@ -15,7 +15,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(3300,1620)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2160,1140)}WidthAndHeight{width_and_height=(1260,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2160,300)}WidthAndHeight{width_and_height=(1380,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(3120,180)}WidthAndHeight{width_and_height=(720,360)}
-"BPBounceWall":Tag{tag=BPBounceWall}Position{position=(1500,1140)}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3120,180)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(720,360)}
+"BPWall":Tag{tag=BPWall}Position{position=(1500,1140)}Collision{bounce_factor=1;friction=75}WidthAndHeight{width_and_height=(120,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1500,480)}WidthAndHeight{width_and_height=(60,300)}
-"BPWall":Tag{tag=BPWall}Position{position=(2160,120)}WidthAndHeight{width_and_height=(1200,240)}
+"BPWall":Tag{tag=BPWall}Position{position=(2160,120)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1200,240)}

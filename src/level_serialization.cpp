@@ -162,6 +162,35 @@ void DeserializeComponent(Player* c, const std::string& entity_str_rep)
         }
     }
 }
+void SerializeComponent(const Collision* c, std::string& str_rep)
+{
+	str_rep += "Collision{";
+	str_rep += "bounce_factor=";
+	str_rep += ToString(c->bounce_factor);
+	str_rep += ";";
+	str_rep += "friction=";
+	str_rep += ToString(c->friction);
+	str_rep += "}";
+}
+
+void DeserializeComponent(Collision* c, const std::string& entity_str_rep)
+{
+    std::string component_str = GetSubstrBetween(entity_str_rep, "Collision{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "bounce_factor")
+        {
+            FromString(c->bounce_factor, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "friction")
+        {
+            FromString(c->friction, statement_parts[1]);
+        }
+    }
+}
 void SerializeComponent(const ElectricField* c, std::string& str_rep)
 {
 	str_rep += "ElectricField{";
@@ -296,20 +325,7 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
             SerializeComponent(GetComponent<Position>(entity_id), entity_string);
-            SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPBounceWall")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-            SerializeComponent(GetComponent<Position>(entity_id), entity_string);
-            SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
-        }
-        
-        if (tag->tag == "BPNoBounceWall")
-        {
-            SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
-            SerializeComponent(GetComponent<Position>(entity_id), entity_string);
+            SerializeComponent(GetComponent<Collision>(entity_id), entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
         }
         
@@ -359,12 +375,25 @@ void Level::LoadFromFile(std::string savefile_path)
     getline(f, line);
     std::vector<std::string> level_properties = SplitString(line, ";");
     for (auto& property_str : level_properties)
-    {
-        property_str = SplitString(property_str, "=")[1];
-    }
-    FromString(name, level_properties[0]);
-    FromString(grid_size_id, level_properties[1]);
-    FromString(editable, level_properties[2]);
+	{
+		std::vector<std::string> property_statement_parts = SplitString(property_str, "=");
+		if (property_statement_parts[0] == "name")
+		{
+			FromString(name, property_statement_parts[1]);
+		}
+		else if (property_statement_parts[0] == "grid_size_id")
+		{
+			FromString(grid_size_id, property_statement_parts[1]);
+		}
+		else if (property_statement_parts[0] == "editable")
+		{
+			FromString(editable, property_statement_parts[1]);
+		}
+		else
+		{
+			assert(property_statement_parts[0].length() == 0);
+		}
+	}
 
     while (getline(f, line))
     {
@@ -481,32 +510,8 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Wall>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.2, 75 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
-        }
-        
-        if (tag == "BPBounceWall")
-        {
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 1, 75 });
-            DeserializeComponent(AddComponent<Position>(entity_id),line);
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
-        }
-        
-        if (tag == "BPNoBounceWall")
-        {
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.05, 75 });
-            DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<Collision>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
         
@@ -514,7 +519,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
@@ -529,7 +534,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
@@ -541,7 +546,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
@@ -553,7 +558,7 @@ void Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 2 });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
@@ -672,37 +677,15 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Wall>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 4 });
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.2, 75 });
             AddComponent<Tag>(entity_id, {"BPWall"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-            break;
-        case BPBounceWall:
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 1, 75 });
-            AddComponent<Tag>(entity_id, {"BPBounceWall"});
-            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
-            break;
-        case BPNoBounceWall:
-            AddComponent<ReceivesButtonEvents>(entity_id, {});
-            AddComponent<Editable>(entity_id, {});
-            AddComponent<Wall>(entity_id, {});
-            AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
-            AddComponent<Collision>(entity_id, { 0.05, 75 });
-            AddComponent<Tag>(entity_id, {"BPNoBounceWall"});
-            AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<Collision>(entity_id, { 0.2, 75 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             break;
         case BPGoal:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<Shader>(entity_id, { "", "shaders\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Goal>(entity_id, {});
@@ -716,29 +699,29 @@ int Level::AddBlueprint(Blueprint blueprint)
         case BPElectricField:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\electric_field.frag", {}, {}, {} });
             AddComponent<Tag>(entity_id, {"BPElectricField"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
             AddComponent<ElectricField>(entity_id, { sf::Vector2f(0, 0.25) });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
             break;
         case BPMagneticField:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 1 });
             AddComponent<Shader>(entity_id, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
             AddComponent<Tag>(entity_id, {"BPMagneticField"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
             AddComponent<MagneticField>(entity_id, { 0.1 });
-            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
+            AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(240, 240) });
             break;
         case BPTextPopupSpawner:
             AddComponent<ReceivesButtonEvents>(entity_id, {});
             AddComponent<Editable>(entity_id, {});
-            AddComponent<DrawInfo>(entity_id, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawInfo>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 2 });
             AddComponent<Tag>(entity_id, {"BPTextPopupSpawner"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });

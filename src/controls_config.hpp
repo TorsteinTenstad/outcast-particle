@@ -14,8 +14,7 @@ public:
 	sf::Keyboard::Key EDIT_MODE = sf::Keyboard::Tab;
 	sf::Keyboard::Key INCREASE_LEVEL_SIZE = sf::Keyboard::Up;
 	sf::Keyboard::Key DECREASE_LEVEL_SIZE = sf::Keyboard::Down;
-	sf::Keyboard::Key EDIT_MODE_SWITCH_CHARGE = sf::Keyboard::Space;
-	sf::Keyboard::Key EDIT_MODE_SWITCH_MAGNETIC_FIELD_DIRECTION = sf::Keyboard::Space;
+	sf::Keyboard::Key EDIT_MODE_FLIP_CHARGES_AND_FIELDS = sf::Keyboard::Space;
 	sf::Keyboard::Key SELECT_MULTIPLE_ENTITIES = sf::Keyboard::LControl;
 	sf::Keyboard::Key COPY_ENTITY = sf::Keyboard::LAlt;
 	sf::Keyboard::Key DELETE_ENTITY = sf::Keyboard::Delete;
@@ -30,4 +29,5 @@ public:
 	sf::Keyboard::Key DECREMENT_VELOCITY = sf::Keyboard::S;
 	sf::Keyboard::Key DECREMENT_VELOCITY_ANGLE = sf::Keyboard::A;
 	sf::Keyboard::Key INCREMENT_VELOCITY_ANGLE = sf::Keyboard::D;
+	sf::Keyboard::Key RESET_SHADERS_AND_TEXTURES = sf::Keyboard::F1;
 };

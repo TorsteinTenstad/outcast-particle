@@ -66,7 +66,6 @@ public:
 	template <class... Component>
 	std::tuple<Component*...> RawGetComponents(int entity_id);
 
-private:
 	template <class Component>
 	void DeleteChildEntitiesOwnedByComponent(int entity_id);
 
@@ -99,17 +98,7 @@ public:
 
 	int CopyEntity(int from_id);
 
-	template <class Component>
-	std::tuple<int, Component*> GetSingletonIncludeID(std::function<int(ECSScene&)> creation_func);
-
-	template <class Component>
-	Component* GetSingleton(std::function<int(ECSScene&)> creation_func);
-
-	template <class Component>
-	std::tuple<int, Component*> GetSingletonIncludeID();
-
-	template <class Component>
-	Component* GetSingleton();
+#include "ecs/ecs_scene_singleton_functions.tpp"
 };
 
 #include "ecs_scene.tpp"
