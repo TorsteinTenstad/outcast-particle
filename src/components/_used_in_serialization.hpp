@@ -7,7 +7,7 @@
 #include "components/goal.hpp"
 #include "components/grid_adaptive_textures.hpp"
 #include "components/intersection.hpp"
-#include "components/kill_on_intersection.hpp"
+#include "components/laser.hpp"
 #include "components/not_serialized.hpp"
 #include "components/physics.hpp"
 #include "components/player.hpp"

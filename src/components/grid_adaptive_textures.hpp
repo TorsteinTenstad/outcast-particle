@@ -11,6 +11,3 @@ class LaserTexture
 class Wall
 {
 };
-class Laser
-{
-};
