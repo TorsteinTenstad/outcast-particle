@@ -12,7 +12,7 @@ float Box(vec2 uv, vec2 position, vec2 size, float AA)
 	vec2 center_offset = position - uv;
 	vec2 sd = abs(center_offset) - size / 2.f;
 	float max_sd = max(sd.x, sd.y);
-	float box = 1 - smoothstep(0, AA, abs(max_sd + (BLOCK_SIZE / 16)) - BLOCK_SIZE / 16);
+	float box = 1 - smoothstep(0, AA, abs(max_sd - (BLOCK_SIZE / 16)) - BLOCK_SIZE / 16);
 	return box;
 }
 

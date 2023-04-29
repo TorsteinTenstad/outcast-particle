@@ -92,38 +92,36 @@ void EditModeSystem::Update(Level& level, float dt)
 	Tool current_tool = ComputeCurrentTool(level, cursor_and_keys_);
 
 	// Rectangle select
-	std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
-	int rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
-
 	if (current_tool == Selecting)
 	{
+		std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
+		int rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
 		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
 		size = Abs(size);
 		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = size;
 		level.GetComponent<Position>(rectangle_select_tool_id)->position = position;
+		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entered_this_frame_ids)
+		{
+			if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
+			{
+				level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
+			}
+		}
+		if (current_tool == Selecting)
+		{
+			for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->left_this_frame_ids)
+			{
+				if (level.HasComponents<Editable, Selected>(entity))
+				{
+					level.editor.Do<SelectEntities>(level, std::vector<int>({}), std::vector<int>({ entity }));
+				}
+			}
+		}
 	}
 	else
 	{
-		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = sf::Vector2f(0, 0);
-	}
-
-	for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entered_this_frame_ids)
-	{
-		if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
-		{
-			level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
-		}
-	}
-	if (current_tool == Selecting)
-	{
-		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->left_this_frame_ids)
-		{
-			if (level.HasComponents<Editable, Selected>(entity))
-			{
-				level.editor.Do<SelectEntities>(level, std::vector<int>({}), std::vector<int>({ entity }));
-			}
-		}
+		level.DeleteEntity(level.FindSingletonId<EditModeRectangleSelectTool>());
 	}
 
 	// Select entities on click:

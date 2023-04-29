@@ -80,7 +80,7 @@ static void WallDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> ge
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);
-		shape.setFillColor(sf::Color(255, collision->bounce_factor * 255, 0, 255));
+		shape.setFillColor(sf::Color(255, std::min(1.f, collision->bounce_factor) * 255, 0, 255));
 		get_render_texture(draw_priority->draw_priority).draw(shape);
 	}
 }

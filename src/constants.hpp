@@ -42,6 +42,14 @@ const std::vector<float> MAGNETIC_FIELD_STRENGTH_CATEGORIES = {
 	0.8,
 };
 
+const std::vector<float> WALL_BOUNCE_CATEGORIES = {
+	0.0,
+	0.05,
+	0.2,
+	1.0,
+	1.75,
+};
+
 const std::vector<sf::Keyboard::Key> CATEGORY_KEYS = {
 	sf::Keyboard::Num1,
 	sf::Keyboard::Num2,
