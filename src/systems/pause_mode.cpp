@@ -129,8 +129,9 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	if (previous_mode == EDIT_MODE)
 	{
 		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Continue editing", sf::Keyboard::Escape);
-		AddButton([&]() { level.editor.Clear(); level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
-		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
+
+		AddButton(std::bind(&CreateConfirmMenu, std::ref(level), level.GetSize(), "Are you sure you want to leave level editing?", [&]() { level.SetMode(READY_MODE); }), "Level Menu", sf::Keyboard::Unknown);
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 	else
