@@ -182,7 +182,7 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 	auto [confirm_button_id, confirm_button_size] = CreateMenuButton(level, sf::Vector2f(level_size.x / 2 - 6 * BLOCK_SIZE, level_size.y * 4 / 6), confirm_lambda, "Confirm");
 	level.GetComponent<DrawPriority>(confirm_button_id)->draw_priority = 200;
 	auto [deny_button_id, deny_button_size] = CreateMenuButton(
-		level, sf::Vector2f(level_size.x / 2 + 6 * BLOCK_SIZE, level_size.y * 4 / 6), [&]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); }, "Deny");
+		level, sf::Vector2f(level_size.x / 2 + 6 * BLOCK_SIZE, level_size.y * 4 / 6), [&]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); }, "Cancel");
 	level.GetComponent<DrawPriority>(deny_button_id)->draw_priority = 200;
 
 	return { { text_id, confirm_button_id, deny_button_id }, sf::Vector2f(22 * BLOCK_SIZE, 10 * BLOCK_SIZE) };

@@ -34,8 +34,8 @@ void Game::GoToMainMenu()
 	};
 
 	AddButton(std::bind(&Game::SetLevel, this, LEVEL_MENU), "Play");
-	AddButton(std::bind(&Game::ButtonFuncEditLevel, this), "Level Creator");
 	AddButton(std::bind(&Game::SetLevel, this, OPTIONS_MENU), "Options");
+	AddButton([]() {}, "Credits");
 	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
 
 	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);

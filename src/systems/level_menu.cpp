@@ -111,12 +111,14 @@ void LevelMenuSystem::Give(
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 	const std::map<std::string, int>* level_coin_records,
 	std::function<Level&(std::string)> set_level,
+	std::function<Level&(std::string)> set_level_and_edit,
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 {
 	level_manager_ = level_manager;
 	level_completion_time_records_ = level_completion_time_records;
 	level_coin_records = level_coin_records;
 	set_level_ = set_level;
+	set_level_and_edit_ = set_level_and_edit;
 	generate_level_texture_ = generate_level_texture;
 }
 
@@ -137,6 +139,14 @@ void LevelMenuSystem::Update(Level& level, float dt)
 
 	if (LevelMenuUI* ui = level.FindSingleton<LevelMenuUI>())
 	{
+		if (cursor_and_keys_.key_down[sf::Keyboard::LControl]
+			&& cursor_and_keys_.key_down[sf::Keyboard::LShift]
+			&& cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F3])
+		{
+			assert(ui->at_group.has_value());
+			globals.developer_options.all_level_groups_are_editable = !globals.developer_options.all_level_groups_are_editable;
+			RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
+		}
 		UpdateUI(level, ui);
 	}
 }
@@ -214,7 +224,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 			}
 			else if (level.HasComponents<ReleasedThisFrame>(edit_level_button_id))
 			{
-				CreateConfirmMenu(level, level.GetSize(), "Edit level?", [level_id = level_id, set_level = set_level_]() { set_level(level_id).SetMode(EDIT_MODE); });
+				CreateConfirmMenu(level, level.GetSize(), "Edit level?", [level_id = level_id, set_level_and_edit = set_level_and_edit_]() { set_level_and_edit(level_id); });
 			}
 		}
 	}
@@ -230,6 +240,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		ui->at_group = level_groups.begin()->first;
 	}
 	std::string at_group = ui->at_group.value();
+	bool levels_are_editable = GetGroupDisplayNameFromGroupName(at_group) == EDITABLE_LEVELS_FOLDER_DISPLAY_NAME || globals.developer_options.all_level_groups_are_editable;
 
 	if (!ui->at_level_id.has_value())
 	{
@@ -324,15 +335,15 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		return main_button;
 	};
 
-	auto AddLevelMenuRow = [ui, AddLevelMenuButton, BUTTONS_WIDTH, BUTTONS_HEIGHT, is_in_level_editing = is_in_level_editing_](ECSScene& level, std::string button_text, std::function<void()> button_function) {
+	auto AddLevelMenuRow = [ui, AddLevelMenuButton, BUTTONS_WIDTH, BUTTONS_HEIGHT, levels_are_editable](ECSScene& level, std::string button_text, std::function<void()> button_function) {
 		float edit_buttons_width = 1 * float(BLOCK_SIZE);
 		float edit_buttons_margin = 0.25 * float(BLOCK_SIZE);
 		std::vector<EntitiesHandle> row_items;
-		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, is_in_level_editing ? BUTTONS_WIDTH - 3 * (edit_buttons_width + edit_buttons_margin) : BUTTONS_WIDTH);
+		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, levels_are_editable ? BUTTONS_WIDTH - 3 * (edit_buttons_width + edit_buttons_margin) : BUTTONS_WIDTH);
 		level.AddComponent<OnReleasedThisFrame>(std::get<std::vector<int>>(main_button)[0])->func = button_function;
 		ui->button_entity_ids.push_back(std::get<std::vector<int>>(main_button)[0]);
 		ui->text_entity_ids.push_back(std::get<std::vector<int>>(main_button)[1]);
-		if (!is_in_level_editing)
+		if (!levels_are_editable)
 		{
 			return main_button;
 		}
@@ -366,7 +377,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			break;
 		}
 	}
-	if (is_in_level_editing_)
+	if (levels_are_editable)
 	{
 		EntitiesHandle new_level_button = AddLevelMenuButton(level, "+", BUTTONS_WIDTH);
 		ui->new_level_button_id = std::get<std::vector<int>>(new_level_button)[0];
