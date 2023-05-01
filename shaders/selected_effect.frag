@@ -38,7 +38,7 @@ void main()
 
 	for (int i = 0; i < min(float(n), float(MAX_ARRAY_SIZE)); i++)
 	{
-		vec4 color_contribution = ColoredBox(uv, positions[i], sizes[i]);
+		vec4 color_contribution = ColoredBox(xy, positions[i], sizes[i]);
 		if (color_contribution.a > 0.0001)
 		{
 			color = color_contribution;
