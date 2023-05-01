@@ -4,6 +4,11 @@
 #include "controls_config.hpp"
 #include "general_user_config.hpp"
 
+struct DeveloperOptions
+{
+	bool all_level_groups_are_editable = false;
+};
+
 struct Globals
 {
 	sf::RenderWindow render_window;
@@ -11,6 +16,7 @@ struct Globals
 	float time_of_last_level_enter = 0;
 	KeyConfig key_config;
 	GeneralConfig general_config;
+	DeveloperOptions developer_options;
 };
 
 extern Globals& globals;

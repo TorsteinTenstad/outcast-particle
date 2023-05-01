@@ -52,6 +52,7 @@ private:
 	template <class System>
 	System& RegisterPhysicsGameSystem();
 
+	Level& SetLevelAndEdit(std::string level_id);
 	Level& SetLevel(std::string level_id);
 	void ButtonFuncEditLevel();
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
