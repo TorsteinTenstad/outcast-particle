@@ -15,6 +15,7 @@ private:
 	const std::map<std::string, int>* level_coin_records_;
 
 	std::function<Level&(std::string)> set_level_;
+	std::function<Level&(std::string)> set_level_and_edit_;
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture_;
 
 public:
@@ -24,11 +25,11 @@ public:
 		const std::map<int, std::map<std::string, float>>* level_completion_time_records,
 		const std::map<std::string, int>* level_coin_records,
 		std::function<Level&(std::string)> set_level,
+		std::function<Level&(std::string)> set_level_and_edit_,
 		std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture);
 	void Update(Level& level, float dt);
 
 private:
 	void UpdateUI(Level& level, LevelMenuUI* ui);
 	void SetupUI(Level& level, LevelMenuUI* ui);
-	void EnterLevel(std::string level_id);
 };

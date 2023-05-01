@@ -5,6 +5,7 @@
 #include "components/draw_info.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/position.hpp"
+#include "components/scheduled_delete.hpp"
 #include "components/screen_wide_shader_effects.hpp"
 #include "components/shader.hpp"
 #include "components/size.hpp"
@@ -26,7 +27,7 @@ EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator)
 	};
 }
 
-EntitiesHandle AdaptToEntitiesHandle(EntityHandle EntityHandle)
+EntitiesHandle ToEntitiesHandle(EntityHandle EntityHandle)
 {
 	auto [id, size] = EntityHandle;
 	return EntitiesHandle({ id }, size);
@@ -171,18 +172,17 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 	level.GetComponent<DrawPriority>(text_id)->draw_priority = 200;
 
 	auto confirm_lambda = [&level, confirm_function]() {
-		auto old_level = &level;
-		confirm_function();
-		if (&level == old_level)
+		for (int entity_id : level.GetIdsWithComponent<ConfirmMenuEntity>())
 		{
-			level.DeleteEntitiesWith<ConfirmMenuEntity>();
+			level.EnsureExistenceOfComponent<ScheduledDelete>(entity_id)->frames_left_to_live = 0;
 		}
+		confirm_function();
 	};
 
 	auto [confirm_button_id, confirm_button_size] = CreateMenuButton(level, sf::Vector2f(level_size.x / 2 - 6 * BLOCK_SIZE, level_size.y * 4 / 6), confirm_lambda, "Confirm");
 	level.GetComponent<DrawPriority>(confirm_button_id)->draw_priority = 200;
 	auto [deny_button_id, deny_button_size] = CreateMenuButton(
-		level, sf::Vector2f(level_size.x / 2 + 6 * BLOCK_SIZE, level_size.y * 4 / 6), [&]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); }, "Deny");
+		level, sf::Vector2f(level_size.x / 2 + 6 * BLOCK_SIZE, level_size.y * 4 / 6), [&]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); }, "Cancel");
 	level.GetComponent<DrawPriority>(deny_button_id)->draw_priority = 200;
 
 	return { { text_id, confirm_button_id, deny_button_id }, sf::Vector2f(22 * BLOCK_SIZE, 10 * BLOCK_SIZE) };

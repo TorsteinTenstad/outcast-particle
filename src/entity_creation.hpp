@@ -13,9 +13,26 @@ int GetId(T& handle)
 {
 	return std::get<int>(handle);
 }
+template <class T>
+sf::Vector2f GetSize(T& handle)
+{
+	return std::get<sf::Vector2f>(handle);
+}
+
+template <class... EntityHandles>
+EntitiesHandle ToEntitiesHandle(EntityHandle handle, EntityHandles... handles)
+{
+	sf::Vector2f total_size = sf::Vector2f(
+		std::max(GetSize(handle).x, GetSize(handles).x...),
+		std::max(GetSize(handle).y, GetSize(handles).y...));
+
+	std::vector<int> ids = std::vector<int>({ GetId(handle), GetId(handles)... });
+	return { ids, total_size };
+}
+
+EntitiesHandle ToEntitiesHandle(EntityHandle EntityHandle);
 
 EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator);
-EntitiesHandle AdaptToEntitiesHandle(EntityHandle EntityHandle);
 
 EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesCreator> entities_creators, float spacing);
 EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_creators, float spacing, UiOrigin ui_origin = Center);

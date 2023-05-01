@@ -30,12 +30,12 @@ void Game::GoToMainMenu()
 	std::vector<EntitiesHandle> entities_handles;
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text) {
 		EntityHandle button_handle = CreateNavigatorButton(*active_level_, sf::Vector2f(0, 0), button_function, button_text, sf::Keyboard::Unknown);
-		entities_handles.push_back(AdaptToEntitiesHandle(button_handle));
+		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
 	AddButton(std::bind(&Game::SetLevel, this, LEVEL_MENU), "Play");
-	AddButton(std::bind(&Game::ButtonFuncEditLevel, this), "Level Creator");
 	AddButton(std::bind(&Game::SetLevel, this, OPTIONS_MENU), "Options");
+	AddButton([]() {}, "Credits");
 	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
 
 	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
@@ -76,7 +76,7 @@ void Game::GoToOptionsMenu()
 	std::vector<EntitiesHandle> entities_handles;
 	auto AddButton = [&](std::string level_id, std::string button_text) {
 		EntityHandle button_handle = CreateNavigatorButton(*active_level_, sf::Vector2f(0, 0), std::bind(&Game::SetLevel, this, level_id), button_text, sf::Keyboard::Unknown);
-		entities_handles.push_back(AdaptToEntitiesHandle(button_handle));
+		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
 	AddButton(KEY_CONFIG_MENU, "Key Config");

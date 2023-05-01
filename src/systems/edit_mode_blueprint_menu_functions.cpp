@@ -30,7 +30,7 @@ void OpenBlueprintMenu(Level& level)
 	{
 		int entity_id = level.AddBlueprint(blueprint);
 		sf::Vector2f size = GetSize(level, entity_id, false);
-		blueprints.push_back(AdaptToEntitiesHandle({ entity_id, size }));
+		blueprints.push_back(ToEntitiesHandle({ entity_id, size }));
 		level.GetComponent<DrawPriority>(entity_id)->draw_priority += UI_BASE_DRAW_PRIORITY;
 	}
 	VerticalEntityLayout(level, sf::Vector2f(BLUEPRINT_MENU_WIDTH / 2, BLOCK_SIZE), blueprints, BLOCK_SIZE, StartEdge);
