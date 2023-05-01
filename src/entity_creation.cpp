@@ -26,7 +26,7 @@ EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator)
 	};
 }
 
-EntitiesHandle AdaptToEntitiesHandle(EntityHandle EntityHandle)
+EntitiesHandle ToEntitiesHandle(EntityHandle EntityHandle)
 {
 	auto [id, size] = EntityHandle;
 	return EntitiesHandle({ id }, size);

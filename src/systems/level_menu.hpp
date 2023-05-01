@@ -30,5 +30,4 @@ public:
 private:
 	void UpdateUI(Level& level, LevelMenuUI* ui);
 	void SetupUI(Level& level, LevelMenuUI* ui);
-	void EnterLevel(std::string level_id);
 };

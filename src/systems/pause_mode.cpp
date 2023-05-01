@@ -81,7 +81,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
 		EntityHandle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, button_text, shortcut_key);
-		entities_handles.push_back(AdaptToEntitiesHandle(button_handle));
+		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
 	if (previous_mode == PLAY_MODE)
@@ -102,7 +102,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			std::stringstream ss;
 
 			EntityHandle badge_handle = CreateStatsBadge(level, sf::Vector2f(0, 0), coin_count, 255, RightShiftString(CreateBadgeText(duration, 2 + globals.general_config.display_precise_badge_time), 16), is_new_record);
-			entities_handles.push_back(AdaptToEntitiesHandle(badge_handle));
+			entities_handles.push_back(ToEntitiesHandle(badge_handle));
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
 			auto active_level_index = std::find(level_group.begin(), level_group.end(), active_level_id_);
@@ -141,7 +141,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	}
 
 	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240));
-	entities_handles.insert(entities_handles.begin(), AdaptToEntitiesHandle(title_handle));
+	entities_handles.insert(entities_handles.begin(), ToEntitiesHandle(title_handle));
 
 	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
 	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);

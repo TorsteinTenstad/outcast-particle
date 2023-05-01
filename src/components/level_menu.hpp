@@ -28,7 +28,8 @@ public:
 
 	std::vector<int> button_entity_ids = {};
 	std::vector<int> text_entity_ids = {};
-	std::vector<int> edit_name_button_entity_ids = {};
+	std::vector<int> rename_level_button_entity_ids = {};
+	std::vector<int> edit_level_button_entity_ids = {};
 	std::vector<int> delete_level_button_entity_ids = {};
 
 	std::vector<int> stats_block_ids = {};
