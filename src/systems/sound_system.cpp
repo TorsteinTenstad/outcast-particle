@@ -36,11 +36,6 @@ void SoundSystem::Update(Level& level, float dt)
 			sounds_[sound_path].setLoop(true);
 			sounds_[sound_path].setVolume(max_volume * sound_info->sound_volume * globals.general_config.sound_volume / 100);
 		}
-		else if (sounds_[sound_path].getLoop())
-		{
-			sounds_[sound_path].setLoop(false);
-			sounds_[sound_path].stop();
-		}
 
 		if (sounds_.count(sound_path) != 0)
 		{
