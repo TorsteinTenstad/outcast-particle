@@ -1,32 +1,15 @@
 #version 120
 
-uniform float _time;
-uniform vec2 _wh;
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
+#include "shaders\\include\\game_constants.glsl";
+#include "shaders\\include\\colors.glsl";
+#include "shaders\\include\\rand.glsl";
+
 uniform float charge_sign;
 uniform float charge_strength;
 uniform float movement_animation_time;
 uniform vec2 field_vector;
-
-uniform sampler2D _noise_texture;
-#define noise_size 1000
-float rand01(vec2 uv)
-{
-	uv = fract(uv / noise_size);
-	return texture2D(_noise_texture, 1 - uv).r;
-}
-
-float rand(float a, float b, vec2 seed)
-{
-	return a + rand01(seed) * (b - a);
-}
-
-mat2 rot(float a)
-{
-	float s = sin(a);
-	float c = cos(a);
-	mat2 m = mat2(c, -s, s, c);
-	return m;
-}
 
 float particle(vec2 uv, float charge_sign)
 {
@@ -46,7 +29,7 @@ float particle(vec2 uv, float charge_sign)
 	float ring_inner_mask = smoothstep(0, AA, r - 0.5 + LINES_WIDTH);
 	float ring_outer_mask = smoothstep(0, AA, 0.5 - r);
 	float ring = ring_inner_mask * ring_outer_mask;
-	return ring + pluss;
+	return ring_outer_mask - pluss;
 }
 
 #define CELL_SIZE 90
@@ -120,14 +103,7 @@ void main()
 	vec4 background_color = vec4(vec3(1), 0.0);
 	vec4 color = background_color;
 
-	vec3 red = vec3(0.88671875, 0.109375, 0.1015625);
-	vec3 light_red = vec3(0.98046875, 0.6015625, 0.59765625);
-	vec3 green = vec3(0.19921875, 0.625, 0.171875);
-	vec3 light_green = vec3(0.6953125, 0.87109375, 0.5390625);
-	vec3 blue = vec3(0.1171875, 0.46875, 0.703125);
-	vec3 light_blue = vec3(0.6484375, 0.8046875, 0.88671875);
-
-	vec3 particle_rgb = charge_sign < 0 ? (0.2 * light_green + 0.8 * green) : (0.2 * light_red + 0.8 * red);
+	vec3 particle_rgb = get_flat_particle_color(charge_sign);
 	vec4 particles_color = vec4(0);
 	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(90, -100 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 0.5));
 	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(60, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 0.5));

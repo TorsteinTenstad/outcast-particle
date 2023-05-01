@@ -1,17 +1,10 @@
 #version 120
 
-#define PI 3.1415926535897932384626433832795
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
 
-uniform sampler2D _texture;
-uniform float _time;
 uniform float grid_width;
 uniform float grid_height;
-
-float radial_falloff(float r, float a, float b)
-{
-	float f = 1 / (max((r - a), 0) / (b - a) + 1);
-	return smoothstep(0.5, 1, f);
-}
 
 vec4 TextureAt(vec2 gc_id)
 {

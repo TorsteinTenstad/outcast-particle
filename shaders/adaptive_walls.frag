@@ -1,6 +1,7 @@
 #version 120
 
-uniform sampler2D _texture;
+#include "shaders\\include\\standard_uniforms.glsl";
+
 uniform float grid_width;
 uniform float grid_height;
 

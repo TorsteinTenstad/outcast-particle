@@ -1,15 +1,13 @@
 #version 120
 
-#define PI 3.14193
-
-uniform float _time;
-uniform vec2 _wh;
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
+#include "shaders\\include\\game_constants.glsl";
 
 uniform int n_dots;
 uniform int active_dot;
 
 #define R 15
-#define GAME_SPACE_AA 3
 
 #define DEFAULT_COLOR vec3(float(100)/float(256))
 #define ACTIVE_COLOR vec3(float(200)/float(256))

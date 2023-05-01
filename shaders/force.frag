@@ -1,14 +1,13 @@
 #version 120
 
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
+
 #define PI 3.1415926535897932384626433832795
 #define MAX_ARRAY_SIZE 64
 #define QUARTER_TURN mat2(0, 1, -1, 0)
 #define MAX_FORCE pow(10000 / 240, 2)
 #define FORCE_THREASHOLD_NEEDED_TO_CONNECT pow(10000 / (5 * 240), 2)
-
-uniform float _time;
-uniform vec2 _wh;
-uniform vec2 _window_resolution;
 
 uniform vec2 player_pos;
 
@@ -16,16 +15,6 @@ uniform int n_charges;
 uniform float charge_radius;
 uniform vec2 charge_positions[MAX_ARRAY_SIZE];
 uniform float charge_force[MAX_ARRAY_SIZE];
-
-mat2 inverse(mat2 m)
-{
-	return mat2(m[1][1], -m[0][1], -m[1][0], m[0][0]) / (m[0][0] * m[1][1] - m[0][1] * m[1][0]);
-}
-
-float atan01(float x, float y)
-{
-	return (atan(x, y) / PI + 1) / 2;
-}
 
 float inverse_mix(float a, float b, float t)
 {

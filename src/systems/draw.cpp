@@ -13,7 +13,7 @@ void DrawSystem::Update(Level& level, float dt)
 {
 	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.RESET_SHADERS_AND_TEXTURES])
 	{
-		shaders_.clear();
+		shader_manager_.Clear();
 	}
 	Draw(level, &globals.render_window, level.drawables, true);
 	globals.render_window.display();
@@ -59,60 +59,41 @@ void DrawSystem::Draw(Level& level, sf::RenderTarget* render_target, std::map<in
 
 sf::Shader* DrawSystem::SetupSFMLShader(Level& level, const Shader* shader, std::optional<int> entity_id)
 {
-	std::tuple<std::string, std::string> shader_id = { shader->vertex_shader_path, shader->fragment_shader_path };
-	if (shaders_.count(shader_id) == 0)
-	{
-		if (!shader->vertex_shader_path.empty() && !shader->fragment_shader_path.empty())
-		{
-			shaders_[shader_id].loadFromFile(shader->vertex_shader_path, shader->fragment_shader_path);
-		}
-		else if (!shader->vertex_shader_path.empty())
-		{
-			shaders_[shader_id].loadFromFile(shader->vertex_shader_path, sf::Shader::Vertex);
-		}
-		else if (!shader->fragment_shader_path.empty())
-		{
-			shaders_[shader_id].loadFromFile(shader->fragment_shader_path, sf::Shader::Fragment);
-		}
-		else
-		{
-			assert(false);
-		}
-	}
+	sf::Shader& sfml_shader = shader_manager_.GetLoadedSFMLShader(shader->vertex_shader_path, shader->fragment_shader_path);
 	for (const auto& [name, value] : shader->float_uniforms)
 	{
-		shaders_[shader_id].setUniform(name, value);
+		sfml_shader.setUniform(name, value);
 	}
 	for (const auto& [name, value] : shader->int_uniforms)
 	{
-		shaders_[shader_id].setUniform(name, value);
+		sfml_shader.setUniform(name, value);
 	}
 	for (const auto& [name, value] : shader->vec_uniforms)
 	{
-		shaders_[shader_id].setUniform(name, value);
+		sfml_shader.setUniform(name, value);
 	}
 	for (const auto& [name, value] : shader->vec4_uniforms)
 	{
-		shaders_[shader_id].setUniform(name, value);
+		sfml_shader.setUniform(name, value);
 	}
 	// Redirect to nothing
 	std::streambuf* previous = sf::err().rdbuf(NULL);
-	shaders_[shader_id].setUniform("_time", globals.time);
-	shaders_[shader_id].setUniform("_window_resolution", sf::Vector2f(globals.render_window.getSize()));
-	shaders_[shader_id].setUniform("_level_size", level.GetSize());
-	shaders_[shader_id].setUniform("_view_size", globals.render_window.getView().getSize());
-	shaders_[shader_id].setUniform("_view_center", globals.render_window.getView().getCenter());
-	shaders_[shader_id].setUniform("_texture", sf::Shader::CurrentTexture);
-	shaders_[shader_id].setUniform("_noise_texture", noise_texture_);
+	sfml_shader.setUniform("_time", globals.time);
+	sfml_shader.setUniform("_window_resolution", sf::Vector2f(globals.render_window.getSize()));
+	sfml_shader.setUniform("_level_size", level.GetSize());
+	sfml_shader.setUniform("_view_size", globals.render_window.getView().getSize());
+	sfml_shader.setUniform("_view_center", globals.render_window.getView().getCenter());
+	sfml_shader.setUniform("_texture", sf::Shader::CurrentTexture);
+	sfml_shader.setUniform("_noise_texture", noise_texture_);
 	if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity_id.value_or(-1)))
 	{
-		shaders_[shader_id].setUniform("_wh", width_and_height->width_and_height);
+		sfml_shader.setUniform("_wh", width_and_height->width_and_height);
 	}
 	if (Radius* radius = level.RawGetComponent<Radius>(entity_id.value_or(-1)))
 	{
-		shaders_[shader_id].setUniform("_wh", sf::Vector2f(2, 2) * radius->radius);
+		sfml_shader.setUniform("_wh", sf::Vector2f(2, 2) * radius->radius);
 	}
 	// Restore the original output
 	sf::err().rdbuf(previous);
-	return &shaders_[shader_id];
+	return &sfml_shader;
 }

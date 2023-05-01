@@ -1,0 +1,2 @@
+#define GAME_SPACE_AA 3
+#define BLOCK_SIZE 120

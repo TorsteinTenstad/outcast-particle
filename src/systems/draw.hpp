@@ -4,13 +4,14 @@
 #include "cursor_and_keys.hpp"
 #include "game_system.hpp"
 #include "level.hpp"
+#include "shader_manager.hpp"
 #include <optional>
 #include <string>
 
 class DrawSystem : public GameSystem
 {
 private:
-	std::map<std::tuple<std::string, std::string>, sf::Shader> shaders_;
+	ShaderManager shader_manager_;
 	sf::Texture noise_texture_;
 
 public:

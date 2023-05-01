@@ -94,6 +94,7 @@
         "any": "cpp",
         "stack": "cpp",
         "cassert": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "regex": "cpp"
     }
 }

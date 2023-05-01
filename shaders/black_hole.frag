@@ -1,17 +1,7 @@
 #version 120
 
-uniform sampler2D texture;
-#define PI 3.14193
-
-uniform float _time;
-uniform vec2 _wh;
-
-mat2 rot(float theta) {
-	float s = sin(theta);
-	float c = cos(theta);
-	mat2 m = mat2(c, -s, s, c);
-    return m;
-}
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
 
 #define scale 1
 #define sweep 4
