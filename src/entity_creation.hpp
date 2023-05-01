@@ -14,6 +14,11 @@ int GetId(T& handle)
 	return std::get<int>(handle);
 }
 template <class T>
+std::vector<int> GetIds(T& handle)
+{
+	return std::get<std::vector<int>>(handle);
+}
+template <class T>
 sf::Vector2f GetSize(T& handle)
 {
 	return std::get<sf::Vector2f>(handle);
@@ -50,7 +55,9 @@ EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf:
 EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position);
 EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size = 2.f);
 EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
+EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority);
 EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function);
+EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function, EntitiesHandle middle_entities);
 EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f);
 EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle);
 int CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);

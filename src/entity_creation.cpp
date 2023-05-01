@@ -156,36 +156,45 @@ EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 	return { id, size };
 }
 
-EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void()> confirm_function)
+EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority)
 {
-	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<ConfirmMenuEntity>(id); });
+	EntityHandle handle = CreateTexturedRectangle(level, level_size / 2.f, level_size, draw_priority, "", false);
+	int id = GetId(handle);
+	level.AddComponent<FillColor>(id)->color = sf::Color(30, 30, 30, 220);
+	level.AddComponent<ReceivesButtonEvents>(id);
+	return handle;
+}
 
-	int background_blur_id = level.CreateEntityId();
-	level.AddComponent<DrawInfo>(background_blur_id, { "content\\textures\\gray.png", false, 0 });
-	level.AddComponent<WidthAndHeight>(background_blur_id)->width_and_height = level_size;
-	level.AddComponent<Position>(background_blur_id)->position = level_size / 2.f;
-	level.AddComponent<FillColor>(background_blur_id)->color.a = 220;
-	level.AddComponent<DrawPriority>(background_blur_id)->draw_priority = 150;
-	level.AddComponent<ReceivesButtonEvents>(background_blur_id);
+EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function)
+{
+	return CreateBlockingPopupMenu(level, level_size, title, confirm_function, {});
+}
+EntitiesHandle
+CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function, EntitiesHandle middle_entities)
+{
+	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<ConfirmMenuEntity>(id); });
 
-	auto [text_id, text_size] = CreateText(level, sf::Vector2f(level_size.x / 2.f, level_size.y * 2 / 6), title, 150);
-	level.GetComponent<DrawPriority>(text_id)->draw_priority = 200;
+	CreateScreenWideBlur(level, level_size, 150);
 
-	auto confirm_lambda = [&level, confirm_function]() {
+	auto confirm_func = [&level, confirm_function]() {
 		for (int entity_id : level.GetIdsWithComponent<ConfirmMenuEntity>())
 		{
 			level.EnsureExistenceOfComponent<ScheduledDelete>(entity_id)->frames_left_to_live = 0;
 		}
 		confirm_function();
 	};
+	auto cancel_func = [&level]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); };
 
-	auto [confirm_button_id, confirm_button_size] = CreateMenuButton(level, sf::Vector2f(level_size.x / 2 - 6 * BLOCK_SIZE, level_size.y * 4 / 6), confirm_lambda, "Confirm");
-	level.GetComponent<DrawPriority>(confirm_button_id)->draw_priority = 200;
-	auto [deny_button_id, deny_button_size] = CreateMenuButton(
-		level, sf::Vector2f(level_size.x / 2 + 6 * BLOCK_SIZE, level_size.y * 4 / 6), [&]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); }, "Cancel");
-	level.GetComponent<DrawPriority>(deny_button_id)->draw_priority = 200;
-
-	return { { text_id, confirm_button_id, deny_button_id }, sf::Vector2f(22 * BLOCK_SIZE, 10 * BLOCK_SIZE) };
+	EntitiesHandle title_handle = ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), title, 150));
+	EntitiesHandle confirm_button = ToEntitiesHandle(CreateMenuButton(level, sf::Vector2f(0, 0), confirm_func, "Confirm"));
+	EntitiesHandle cancel_button = ToEntitiesHandle(CreateMenuButton(level, sf::Vector2f(0, 0), cancel_func, "Cancel"));
+	EntitiesHandle button_row = HorizontalEntityLayout(level, sf::Vector2f(0, 0), { confirm_button, cancel_button }, level_size.x / 12.f);
+	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row }, level_size.y / 6.f);
+	for (int id : GetIds(menu_items))
+	{
+		level.GetComponent<DrawPriority>(id)->draw_priority = 200;
+	}
+	return menu_items;
 }
 
 EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f)
@@ -295,10 +304,12 @@ static EntitiesHandle OneDimensionalEntityLayout(ECSScene& level, sf::Vector2f p
 
 	for (auto [ids, size] : entities_handles)
 	{
+		if (ids.size() == 0) { continue; }
 		total_size_in_layout_direction += access_layout_direction(size);
 		total_size_in_other_direction = std::max(total_size_in_other_direction, access_other_direction(size));
+		total_size_in_layout_direction += spacing;
 	}
-	total_size_in_layout_direction += spacing * (entities_handles.size() - 1);
+	total_size_in_layout_direction -= spacing;
 
 	float current_position_in_layout_direction = 0;
 	switch (ui_origin)
@@ -316,6 +327,7 @@ static EntitiesHandle OneDimensionalEntityLayout(ECSScene& level, sf::Vector2f p
 	}
 	for (auto [ids, size] : entities_handles)
 	{
+		if (ids.size() == 0) { continue; }
 		current_position_in_layout_direction += access_layout_direction(size) / 2;
 		for (int id : ids)
 		{

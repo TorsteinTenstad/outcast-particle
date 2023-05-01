@@ -72,12 +72,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	std::vector<EntitiesHandle> entities_handles;
 	std::string menu_title;
 
-	int background_blur_id = level.CreateEntityId();
-	level.AddComponent<DrawInfo>(background_blur_id, { "content\\textures\\gray.png", false, 0 });
-	level.AddComponent<WidthAndHeight>(background_blur_id)->width_and_height = level.GetSize();
-	level.AddComponent<Position>(background_blur_id)->position = level.GetSize() / 2.f;
-	level.AddComponent<FillColor>(background_blur_id)->color.a = 200;
-	level.AddComponent<DrawPriority>(background_blur_id)->draw_priority = 50;
+	CreateScreenWideBlur(level, level.GetSize(), UI_BASE_DRAW_PRIORITY - 1);
 
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
 		EntityHandle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, button_text, shortcut_key);
@@ -136,7 +131,8 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	}
 	else
 	{
-		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { set_level_(LEVEL_MENU)
+		; }, "Level menu", sf::Keyboard::Unknown);
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
