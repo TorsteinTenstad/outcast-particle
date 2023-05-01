@@ -220,16 +220,15 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 			}
 			if (level.HasComponents<ReleasedThisFrame>(rename_level_button_id))
 			{
-				EntityHandle text_box = CreateText(level, sf::Vector2f(0, 0), GetLevelDisplayNameFromId(level_id));
-				level.AddComponent<TextBox>(GetId(text_box));
-				auto rename_func = [&level, level_manager_ = level_manager_, level_id = level_id, text_id = text_id, ui]() {
-					std::optional<int> text_box_entity = level.FindSingletonId<TextBox>();
-					assert(text_box_entity.has_value());
-					std::string new_display_name = level.GetComponent<Text>(text_box_entity.value())->content;
+				EntityHandle rename_box = CreateText(level, sf::Vector2f(0, 0), GetLevelDisplayNameFromId(level_id));
+				int rename_box_id = GetId(rename_box);
+				level.AddComponent<TextBox>(rename_box_id);
+				auto rename_func = [&level, level_manager_ = level_manager_, level_id = level_id, text_id = text_id, ui, rename_box_id]() {
+					std::string new_display_name = level.GetComponent<Text>(rename_box_id)->content;
 					level_manager_->RenameLevel(level_id, new_display_name);
 					level.GetComponent<Text>(text_id)->content = new_display_name;
 				};
-				CreateBlockingPopupMenu(level, level.GetSize(), "Rename level", { { "Rename", rename_func }, { "Cancel", []() {} } }, ToEntitiesHandle((text_box)));
+				CreateBlockingPopupMenu(level, level.GetSize(), "Rename level", { { "Rename", rename_func }, { "Cancel", []() {} } }, ToEntitiesHandle((rename_box)));
 			}
 			else if (level.HasComponents<ReleasedThisFrame>(edit_level_button_id))
 			{

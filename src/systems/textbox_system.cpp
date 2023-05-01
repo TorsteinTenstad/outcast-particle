@@ -36,16 +36,16 @@ class TextBoxCurser
 
 void TextBoxSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, text_box, text, position] : level.GetEntitiesWith<TextBox, Text, Position>())
+	for (auto [entity_id, text_box, text, draw_priority, position] : level.GetEntitiesWith<TextBox, Text, DrawPriority, Position>())
 	{
 		EditString(text->content, cursor_and_keys_.text_input);
 		RemoveChars(text->content, text_box->illegal_characters);
 
-		int cursor_id = GetSingletonChildId<TextBox>(level, entity_id, [text_size = text->size](Level& level) {
+		int cursor_id = GetSingletonChildId<TextBox>(level, entity_id, [text_size = text->size, draw_priority = draw_priority->draw_priority](Level& level) {
 			int cursor_id = level.CreateEntityId();
 			level.AddComponent<Position>(cursor_id);
 			level.AddComponent<Text>(cursor_id)->size = text_size;
-			level.AddComponent<DrawPriority>(cursor_id)->draw_priority = UI_BASE_DRAW_PRIORITY;
+			level.AddComponent<DrawPriority>(cursor_id)->draw_priority = draw_priority;
 			AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(cursor_id);
 			animated_opacity->start_time = globals.time;
 			animated_opacity->animation_func = [](float t) { return sf::Uint8(255 * ((1 + int(t / (0.530))) % 2)); }; //530ms is the standard blink rate
