@@ -54,21 +54,17 @@ void LaserProximitySystem::Update(Level& level, float dt)
 	int id = level.GetSingletonId<LaserProximity>([](ECSScene& level) {
 		auto [id, sound_info] = level.CreateEntityWith<SoundInfo>();
 		sound_info->sound_path = "content\\sounds\\laser_proximity.wav";
+		sound_info->play_sound = true;
+		sound_info->loop_sound = true;
 		return id;
 	});
 
 	auto sound_info = level.GetComponent<SoundInfo>(id);
 	if (smallest_laser_distance >= minimum_laser_distance || (level.GetMode() != PLAY_MODE))
 	{
-		sound_info->loop_sound = false;
+		sound_info->sound_volume = 0;
 		return;
 	}
-	else if (!sound_info->loop_sound)
-	{
-		sound_info->play_sound = true;
-		sound_info->loop_sound = true;
-	}
 	float volume = std::min(1.f, 750000 / (smallest_laser_distance * smallest_laser_distance * smallest_laser_distance));
-	std::cout << volume * 100 << std::endl;
 	sound_info->sound_volume = volume;
 }
