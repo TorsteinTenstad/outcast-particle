@@ -1,9 +1,9 @@
 #version 120
 
-uniform float _time = 0.;
-uniform vec2 _wh;
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
+
 uniform float start_animation = -1.;
-#define PI 3.1415926535897932384626433832795
 
 
 void main()

@@ -1,14 +1,14 @@
 #version 120
 
-uniform sampler2D texture;
-uniform float _time = 0.;
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
+
 uniform float start_animation = -1.;
-#define PI 3.1415926535897932384626433832795
 
 void main()
 {
 	// lookup the pixel in the texture
-	vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
+	vec4 pixel = texture2D(_texture, gl_TexCoord[0].xy);
 	float t = (_time - start_animation);
 	if (0 < start_animation)
 	{

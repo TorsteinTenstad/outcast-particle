@@ -1,20 +1,14 @@
 #version 120
 
-#define PI 3.14193
+#include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\math_utils.glsl";
+#include "shaders\\include\\blend.glsl";
+#include "shaders\\include\\colors.glsl";
 
-uniform float _time;
-uniform vec2 _wh;
 uniform vec4 inner_color;
 uniform vec4 outer_color;
 uniform float charge;
 uniform float sign_alpha;
-
-#define RED vec3(0.88671875, 0.109375, 0.1015625)
-#define LIGHT_RED vec3(0.98046875, 0.6015625, 0.59765625)
-#define GREEN vec3(0.19921875, 0.625, 0.171875)
-#define LIGHT_GREEN vec3(0.6953125, 0.87109375, 0.5390625)
-#define BLUE vec3(0.1171875, 0.46875, 0.703125)
-#define LIGHT_BLUE vec3(0.6484375, 0.8046875, 0.88671875)
 
 float particle(vec2 uv, float charge_sign){
 	float AA = 0.01;
@@ -35,15 +29,6 @@ float particle(vec2 uv, float charge_sign){
     float ring_outer_mask = smoothstep(0, AA, 0.5-r);
 	float ring = ring_inner_mask*ring_outer_mask;
 	return ring+pluss;
-}
-
-vec4 blend(vec4 base, vec4 top){
-	float a = top.a + base.a * (1-top.a);
-	if (abs(a) < 0.0001){
-		return vec4(0);
-	}
-	vec3 rgb = (top.a*top.rgb+base.a*base.rgb*(1-top.a))/a;
-	return vec4(rgb, a);
 }
 
 void main()

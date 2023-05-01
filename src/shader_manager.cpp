@@ -18,7 +18,7 @@ static std::optional<std::string> ReadFromFileWithRecursiveInclude(const std::st
 	std::string contents((std::istreambuf_iterator<char>(file)),
 		std::istreambuf_iterator<char>());
 
-	std::regex include_regex("#include\\s+\"([^\"]+)\"");
+	std::regex include_regex("#include\\s+\"([^\"]+)\"\\s*;?");
 	std::smatch include_match;
 
 	while (std::regex_search(contents, include_match, include_regex))

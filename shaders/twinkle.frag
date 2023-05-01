@@ -1,44 +1,11 @@
 #version 120
 
-#define PI 3.1415926535897932384626433832795
-#define SQRT2 1.41421356237
+#include "shaders\\include\\blend.glsl";
+#include "shaders\\include\\math_utils.glsl";
+#include "shaders\\include\\standard_uniforms.glsl";
 
-uniform vec2 _wh;
 uniform vec2 width_and_height;
 uniform vec2 position;
-uniform float _time;
-uniform sampler2D _noise_texture;
-#define noise_size 1000
-float rand01(vec2 uv)
-{
-	uv = fract(uv / noise_size);
-	return texture2D(_noise_texture, 1 - uv).r;
-}
-
-vec4 blend(vec4 base, vec4 top)
-{
-	float a = top.a + base.a * (1 - top.a);
-	if (abs(a) < 0.0001)
-	{
-		return vec4(0);
-	}
-	vec3 rgb = (top.a * top.rgb + base.a * base.rgb * (1 - top.a)) / a;
-	return vec4(rgb, a);
-}
-
-mat2 rot(float theta)
-{
-	float s = sin(theta);
-	float c = cos(theta);
-	mat2 m = mat2(c, -s, s, c);
-	return m;
-}
-
-float radial_falloff(float r, float a, float b)
-{
-	float f = 1 / (max((r - a), 0) / (b - a) + 1);
-	return smoothstep(0.5, 1, f);
-}
 
 float twinkle(vec2 uv)
 {

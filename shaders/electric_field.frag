@@ -2,35 +2,16 @@
 
 #include "shaders\\include\\standard_uniforms.glsl";
 #include "shaders\\include\\math_utils.glsl";
+#include "shaders\\include\\blend.glsl";
 #include "shaders\\include\\game_constants.glsl";
 #include "shaders\\include\\colors.glsl";
 #include "shaders\\include\\rand.glsl";
+#include "shaders\\include\\particles.glsl";
 
 uniform float charge_sign;
 uniform float charge_strength;
 uniform float movement_animation_time;
 uniform vec2 field_vector;
-
-float particle(vec2 uv, float charge_sign)
-{
-	float AA = 0.01;
-	float LINES_WIDTH = 0.15;
-	float SIGN_SIZE = 0.2;
-
-	float r = length(uv);
-	vec2 uv_4 = abs(uv);
-	vec2 uv_8 = vec2(max(uv_4.x, uv_4.y), min(uv_4.x, uv_4.y));
-	vec2 uv_sign = charge_sign < 0 ? uv_4 : uv_8;
-	float pluss_base = smoothstep(0, AA, LINES_WIDTH / 2.f - uv_sign.y)
-		* smoothstep(0, AA, SIGN_SIZE - uv_sign.x);
-	vec2 rounding_vector = uv_sign - vec2(SIGN_SIZE, 0);
-	float pluss_tip = smoothstep(0, AA, LINES_WIDTH / 2.f - length(rounding_vector));
-	float pluss = max(pluss_base, pluss_tip);
-	float ring_inner_mask = smoothstep(0, AA, r - 0.5 + LINES_WIDTH);
-	float ring_outer_mask = smoothstep(0, AA, 0.5 - r);
-	float ring = ring_inner_mask * ring_outer_mask;
-	return ring_outer_mask - pluss;
-}
 
 #define CELL_SIZE 90
 
@@ -81,17 +62,6 @@ vec4 arrow(vec2 uv, vec2 wh_rotated)
 	gradient_t = clamp(gradient_t, 0, 1);
 	vec3 rgb = mix(vec3(0.17), vec3(0.12), gradient_t);
 	return vec4(rgb, arrow);
-}
-
-vec4 blend(vec4 base, vec4 top)
-{
-	float a = top.a + base.a * (1 - top.a);
-	if (abs(a) < 0.0001)
-	{
-		return vec4(0);
-	}
-	vec3 rgb = (top.a * top.rgb + base.a * base.rgb * (1 - top.a)) / a;
-	return vec4(rgb, a);
 }
 
 void main()

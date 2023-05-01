@@ -1,6 +1,7 @@
 #version 120
 
-#define PI 3.1415926535897932384626433832795
+#include "shaders\\include\\math_utils.glsl";
+
 #define MAX_N 64
 
 uniform int segment_last_updated;
@@ -10,10 +11,6 @@ uniform vec2 path[MAX_N];
 uniform vec2 origin;
 
 #define QUARTER_TURN mat2(0, 1, -1, 0)
-mat2 inverse(mat2 m) {
-  return mat2(m[1][1],-m[0][1],
-             -m[1][0], m[0][0]) / (m[0][0]*m[1][1] - m[0][1]*m[1][0]);
-}
 
 void main()
 {
