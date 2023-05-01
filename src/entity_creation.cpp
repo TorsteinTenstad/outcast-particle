@@ -167,29 +167,34 @@ EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int 
 
 EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function)
 {
-	return CreateBlockingPopupMenu(level, level_size, title, confirm_function, {});
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function }, { "Cancel", []() {} } }, {});
 }
-EntitiesHandle
-CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function, EntitiesHandle middle_entities)
+EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities)
 {
 	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<ConfirmMenuEntity>(id); });
+	for (int id : GetIds(middle_entities))
+	{
+		level.AddComponent<ConfirmMenuEntity>(id);
+	}
 
 	CreateScreenWideBlur(level, level_size, 150);
 
-	auto confirm_func = [&level, confirm_function]() {
+	EntitiesHandle title_handle = ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), title, 150));
+	std::vector<EntitiesHandle> button_row;
+	auto close_menu = [&level]() {
 		for (int entity_id : level.GetIdsWithComponent<ConfirmMenuEntity>())
 		{
 			level.EnsureExistenceOfComponent<ScheduledDelete>(entity_id)->frames_left_to_live = 0;
 		}
-		confirm_function();
 	};
-	auto cancel_func = [&level]() { level.DeleteEntitiesWith<ConfirmMenuEntity>(); };
+	for (const auto& [button_text, button_function] : button_functions)
+	{
+		auto button_function_with_close = [close_menu = close_menu, button_function = button_function]() {close_menu(); button_function(); };
+		button_row.push_back(ToEntitiesHandle(CreateMenuButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text)));
+	}
 
-	EntitiesHandle title_handle = ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), title, 150));
-	EntitiesHandle confirm_button = ToEntitiesHandle(CreateMenuButton(level, sf::Vector2f(0, 0), confirm_func, "Confirm"));
-	EntitiesHandle cancel_button = ToEntitiesHandle(CreateMenuButton(level, sf::Vector2f(0, 0), cancel_func, "Cancel"));
-	EntitiesHandle button_row = HorizontalEntityLayout(level, sf::Vector2f(0, 0), { confirm_button, cancel_button }, level_size.x / 12.f);
-	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row }, level_size.y / 6.f);
+	EntitiesHandle button_row_handle = HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 12.f);
+	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row_handle }, level_size.y / 6.f);
 	for (int id : GetIds(menu_items))
 	{
 		level.GetComponent<DrawPriority>(id)->draw_priority = 200;
