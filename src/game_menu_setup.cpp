@@ -11,12 +11,6 @@
 #include "utils/container_operations.hpp"
 #include "utils/string_manip.hpp"
 
-void Game::ButtonFuncEditLevel()
-{
-	is_in_level_editing_ = true;
-	SetLevel(LEVEL_MENU);
-}
-
 void Game::GoToMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
