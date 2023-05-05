@@ -70,6 +70,14 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 	}
 	for (auto [entity, component] : level.GetEntitiesWith<Charge>())
 	{
+		if (PlayerBehaviors* player_behaviors = level.RawGetComponent<PlayerBehaviors>(entity))
+		{
+			if (player_behaviors->is_neutral)
+			{
+				DeleteChildrenOwnedBy<StrengthIndicator>(level, entity);
+				continue;
+			}
+		}
 		unsigned category_idx = FindClosest(PARTICLE_CHARGE_CATEGORIES, abs(component->charge));
 		UpdateStrengthIndicator(level, entity, category_idx);
 	}

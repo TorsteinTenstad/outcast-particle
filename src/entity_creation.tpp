@@ -21,3 +21,18 @@ Shader* GetSingletonScreenWideFragmentShaderChildId(Level& level, int parent_id,
 	int child_id = GetSingletonChildId<ResponsibleComponent>(level, parent_id, child_creation_func);
 	return level.GetComponent<Shader>(child_id);
 }
+
+template <class ResponsibleComponent>
+void DeleteChildrenOwnedBy(Level& level, int parent_id)
+{
+	if (Children* children = level.RawGetComponent<Children>(parent_id))
+	{
+		auto it = children->ids_owned_by_component.find(typeid(ResponsibleComponent));
+		if (it == children->ids_owned_by_component.end()) { return; }
+		for (int child : it->second)
+		{
+			level.DeleteEntity(child);
+		}
+		children->ids_owned_by_component.erase(typeid(ResponsibleComponent));
+	}
+}
