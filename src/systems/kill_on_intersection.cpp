@@ -9,23 +9,17 @@
 #include "level.hpp"
 #include "systems/_pure_DO_systems.hpp"
 
-#include <iostream>
-
 void KillOnIntersectionSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != PLAY_MODE || level.ComputeState() != PLAYING)
-	{
-		return;
-	}
+	if (level.GetMode() == EDIT_MODE) { return; }
 
 	for (auto& [entity_id, intersection] : level.GetEntitiesWith<Intersection>())
 	{
+		if (level.ComputeState() != PLAYING && level.HasComponents<Player>(entity_id)) { continue; } //Needed to make other particles die after entering goal
 		for (auto& i : intersection->intersecting_ids)
 		{
-			if (!level.HasComponents<KillOnIntersection>(i))
-			{
-				continue;
-			}
+			if (!level.HasComponents<KillOnIntersection>(i)) { continue; }
+
 			if (SoundInfo* sound_info = level.GetComponent<SoundInfo>(i))
 			{
 				sound_info->play_sound = true;

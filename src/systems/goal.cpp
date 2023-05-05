@@ -19,10 +19,7 @@
 
 void GoalSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != PLAY_MODE)
-	{
-		return;
-	}
+	if (level.GetMode() == EDIT_MODE) { return; }
 	for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
 		for (auto intersecting_id : intersection->entered_this_frame_ids)
@@ -50,11 +47,8 @@ void GoalSystem::Update(Level& level, float dt)
 	{
 		for (auto intersecting_id : intersection->intersecting_ids)
 		{
-			if (!level.HasComponents<Wormhole>(intersecting_id))
-			{
-				continue;
-			}
-			level.RemoveComponents<Acceleration, ReceivedForces, Trail>(entity_id);
+			if (!level.HasComponents<Wormhole>(intersecting_id)) { continue; }
+			level.RemoveComponents<Acceleration, ReceivedForces, Trail, Charge>(entity_id);
 			FillColor* fill_color = level.EnsureExistenceOfComponent<FillColor>(entity_id);
 
 			assert(level.HasComponents<Position>(intersecting_id));

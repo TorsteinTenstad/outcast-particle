@@ -6,7 +6,7 @@
 
 struct DeveloperOptions
 {
-	bool all_level_groups_are_editable = false;
+	bool all_level_groups_are_editable = true; //Should be false in release
 };
 
 struct Globals
