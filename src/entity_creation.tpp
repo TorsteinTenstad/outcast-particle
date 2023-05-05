@@ -4,7 +4,6 @@
 template <class ResponsibleComponent>
 int GetSingletonChildId(Level& level, int parent_id, std::function<int(Level&)> child_creation_func)
 {
-	assert(level.HasComponents<ResponsibleComponent>(parent_id));
 	Children* children = level.EnsureExistenceOfComponent<Children>(parent_id);
 	if (children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
 	{

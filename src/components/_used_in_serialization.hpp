@@ -1,5 +1,6 @@
 #pragma once
 #include "components/button_events.hpp"
+#include "components/children.hpp"
 #include "components/coin.hpp"
 #include "components/collision.hpp"
 #include "components/draw_info.hpp"
@@ -13,6 +14,7 @@
 #include "components/player.hpp"
 #include "components/position.hpp"
 #include "components/screen_wide_shader_effects.hpp"
+#include "components/shader.hpp"
 #include "components/size.hpp"
 #include "components/sound_info.hpp"
 #include "components/tag.hpp"

@@ -1,5 +1,15 @@
+#ifndef __MATH_UTILS__
+#define __MATH_UTILS__
+
 #define PI 3.1415926535897932384626433832795
 #define SQRT2 1.41421356237
+
+float repeat(float val, float period){
+    return fract(val/period)*period;
+}
+float get_repeat_id(float val, float period){
+    return floor(val/period);
+}
 
 float radial_falloff(float r, float a, float b)
 {
@@ -47,3 +57,5 @@ float sin01(float x)
 {
     return 0.5*sin(2*PI*x)+0.5;
 }
+
+#endif //__MATH_UTILS__

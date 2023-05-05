@@ -1,4 +1,4 @@
-#include "level.hpp"
+#include "components/_used_in_serialization.hpp"
 
 class BPEditableEntity
 {

@@ -42,8 +42,8 @@ typename std::map<K, V>::const_iterator PrevInMap(const std::map<K, V>& m, K key
 }
 
 // NOTE: The array is assumed sorted
-template <class T, std::size_t SIZE>
-unsigned FindClosest(const std::array<T, SIZE>& sorted_arr, const T& value)
+template <class T>
+unsigned FindClosest(const std::vector<T>& sorted_arr, const T& value)
 {
 	for (unsigned i = 0; i < sorted_arr.size(); ++i)
 	{

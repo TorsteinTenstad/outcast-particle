@@ -3,19 +3,55 @@
 #include "components/player.hpp"
 #include "components/size.hpp"
 #include "constants.hpp"
+#include "entity_creation.hpp"
 #include "level.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/container_operations.hpp"
+#include "utils/get_size.hpp"
 #include "utils/math.hpp"
-#include <cassert>
+
+static int CreateStrengthIndicator(Level& level)
+{
+	EntityHandle handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * 0.75f * float(BLOCK_SIZE), 0, "", false);
+	int id = GetId(handle);
+	level.AddComponent<Shader>(id)->fragment_shader_path = "shaders\\strength_indicator.frag";
+	return id;
+}
+
+class StrengthIndicator
+{};
+
+static void UpdateStrengthIndicator(Level& level, int entity, int category_idx)
+{
+	int indicator_id = GetSingletonChildId<StrengthIndicator>(level, entity, CreateStrengthIndicator);
+	level.GetComponent<Shader>(indicator_id)->float_uniforms["category_idx"] = category_idx;
+	sf::Vector2f top_right_offset = GetSize(level, entity, false) / 2.f;
+	top_right_offset -= level.GetComponent<WidthAndHeight>(indicator_id)->width_and_height / 2.f;
+	top_right_offset.y *= -1;
+	level.GetComponent<Position>(indicator_id)->position = level.GetComponent<Position>(entity)->position + top_right_offset;
+	level.GetComponent<DrawPriority>(indicator_id)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority;
+}
 
 void SetDrawInfoSystem::Update(Level& level, float dt)
 {
+	for (auto [entity, component] : level.GetEntitiesWith<Charge>())
+	{
+		unsigned category_idx = FindClosest(PARTICLE_CHARGE_CATEGORIES, abs(component->charge));
+		UpdateStrengthIndicator(level, entity, category_idx);
+	}
+	for (auto [entity, component] : level.GetEntitiesWith<ElectricField>())
+	{
+		unsigned category_idx = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(component->field_vector));
+		UpdateStrengthIndicator(level, entity, category_idx);
+	}
+	for (auto [entity, component] : level.GetEntitiesWith<MagneticField>())
+	{
+		unsigned category_idx = FindClosest(MAGNETIC_FIELD_STRENGTH_CATEGORIES, abs(component->field_strength));
+		UpdateStrengthIndicator(level, entity, category_idx);
+	}
+
 	for (auto const& [entity_id, charge, shader] : level.GetEntitiesWith<Charge, Shader>())
 	{
-		//int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, charge->charge);
-		//shader->vec4_uniforms["inner_color"] = PARTICLE_INNER_COLOR[category];
-		//shader->vec4_uniforms["outer_color"] = PARTICLE_OUTER_COLOR[category];
 		shader->float_uniforms["charge"] = charge->charge;
 		shader->float_uniforms["sign_alpha"] = level.HasComponents<PlayerBehaviors>(entity_id) ? 0 : 1;
 	}

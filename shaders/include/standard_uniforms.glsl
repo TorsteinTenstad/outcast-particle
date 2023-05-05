@@ -9,4 +9,4 @@ uniform vec2 _wh;
 uniform vec2 _view_size;
 uniform vec2 _view_center;
 
-#endif
+#endif //__STANDARD_UNIFORMS__

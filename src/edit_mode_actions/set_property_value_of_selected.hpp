@@ -7,7 +7,13 @@
 #include "level.hpp"
 #include "undo_system.hpp"
 #include "utils/container_operations.hpp"
+#include "utils/math.hpp"
 #include <vector>
+
+static void SetMagnitudeOfFloat(float& x, float magnitude)
+{
+	x = Sign(x) * magnitude;
+}
 
 class SetPropertyValueOfSelected : public MergeableUndoableAction<SetPropertyValueOfSelected>
 {
@@ -65,11 +71,11 @@ public:
 			int property_value_idx = property_value_idx_.value();
 			for (int entity : particles_)
 			{
-				level_.GetComponent<Charge>(entity)->charge = PARTICLE_CHARGE_CATEGORIES[property_value_idx];
+				SetMagnitudeOfFloat(level_.GetComponent<Charge>(entity)->charge, PARTICLE_CHARGE_CATEGORIES[property_value_idx]);
 			}
 			for (int entity : magnetic_fields_)
 			{
-				level_.GetComponent<MagneticField>(entity)->field_strength = MAGNETIC_FIELD_STRENGTH_CATEGORIES[property_value_idx];
+				SetMagnitudeOfFloat(level_.GetComponent<MagneticField>(entity)->field_strength, MAGNETIC_FIELD_STRENGTH_CATEGORIES[property_value_idx]);
 			}
 			for (int entity : electric_fields_)
 			{
@@ -78,7 +84,7 @@ public:
 			}
 			for (int entity : walls_)
 			{
-				level_.GetComponent<Collision>(entity)->bounce_factor = WALL_BOUNCE_CATEGORIES[property_value_idx];
+				SetMagnitudeOfFloat(level_.GetComponent<Collision>(entity)->bounce_factor, WALL_BOUNCE_CATEGORIES[property_value_idx]);
 			}
 		}
 		for (int entity : particles_)
