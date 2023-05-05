@@ -12,7 +12,10 @@
 
 std::optional<float> GetNavigatorRequest(Level& level, ScrollWindow* scroll_window, float top, float bottom)
 {
-	if (scroll_window->menu_navigator.has_value() && level.GetComponent<MenuNavigator>(scroll_window->menu_navigator.value())->moved_itself_this_frame)
+	if (!scroll_window->menu_navigator.has_value()) { return std::nullopt; }
+	int menu_navigator = scroll_window->menu_navigator.value();
+	if (!level.IdExists(menu_navigator)) { return std::nullopt; } //Menu navigators may be inactive
+	if (level.GetComponent<MenuNavigator>(menu_navigator)->moved_itself_this_frame)
 	{
 		sf::Vector2f menu_navigator_position = level.GetComponent<Position>(scroll_window->menu_navigator.value())->position;
 		float distance_above_top = (top + scroll_window->entity_height / 2) - menu_navigator_position.y;
@@ -81,12 +84,12 @@ void UpdateScrollingEntities(Level& level, ScrollWindow* scroll_window, float mo
 		shader->float_uniforms["top"] = top;
 		shader->float_uniforms["bottom"] = bottom;
 	}
-	if (scroll_window->menu_navigator.has_value())
-	{
-		Shader* shader = level.GetComponent<Shader>(scroll_window->menu_navigator.value());
-		shader->float_uniforms["top"] = top;
-		shader->float_uniforms["bottom"] = bottom;
-	}
+	if (!scroll_window->menu_navigator.has_value()) { return; }
+	int menu_navigator = scroll_window->menu_navigator.value();
+	if (!level.IdExists(menu_navigator)) { return; } //Menu navigators may be inactive
+	Shader* shader = level.GetComponent<Shader>(menu_navigator);
+	shader->float_uniforms["top"] = top;
+	shader->float_uniforms["bottom"] = bottom;
 }
 
 void ScrollSystem::Update(Level& level, float dt)

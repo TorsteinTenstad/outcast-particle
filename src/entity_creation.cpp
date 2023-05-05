@@ -190,10 +190,16 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 	for (const auto& [button_text, button_function] : button_functions)
 	{
 		auto button_function_with_close = [close_menu = close_menu, button_function = button_function]() {close_menu(); button_function(); };
-		button_row.push_back(ToEntitiesHandle(CreateMenuButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text)));
+		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, sf::Keyboard::Unknown)));
 	}
 
 	EntitiesHandle button_row_handle = HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 12.f);
+	int menu_navigator_id = GetId(CreateMenuNavigator(level));
+	MenuNavigator* menu_navigator = level.GetComponent<MenuNavigator>(menu_navigator_id);
+	menu_navigator->menu_items = GetIds(button_row_handle);
+	menu_navigator->increment_key = sf::Keyboard::Left;
+	menu_navigator->decrement_key = sf::Keyboard::Right;
+	level.GetComponent<DrawPriority>(menu_navigator_id)->draw_priority = 200;
 	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row_handle }, level_size.y / 6.f);
 	for (int id : GetIds(menu_items))
 	{
