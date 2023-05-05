@@ -32,8 +32,42 @@ static void UpdateStrengthIndicator(Level& level, int entity, int category_idx)
 	level.GetComponent<DrawPriority>(indicator_id)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority;
 }
 
+class StaticIndicator
+{};
+
+static int CreateStaticIndicator(Level& level)
+{
+	EntityHandle handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * 0.5f * float(BLOCK_SIZE), 0, "content\\textures\\lock.png", false);
+	int id = GetId(handle);
+	level.AddComponent<StaticIndicator>(id);
+	return id;
+}
+
+static void UpdateStaticIndicator(Level& level, int entity)
+{
+	int indicator_id = GetSingletonChildId<StaticIndicator>(level, entity, CreateStaticIndicator);
+	sf::Vector2f top_right_offset = GetSize(level, entity, false) / 2.f;
+	top_right_offset -= level.GetComponent<WidthAndHeight>(indicator_id)->width_and_height / 2.f;
+	top_right_offset.x *= -1;
+	top_right_offset.y *= -1;
+	level.GetComponent<Position>(indicator_id)->position = level.GetComponent<Position>(entity)->position + top_right_offset;
+	level.GetComponent<DrawPriority>(indicator_id)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority;
+}
+
 void SetDrawInfoSystem::Update(Level& level, float dt)
 {
+	if (level.GetMode() == EDIT_MODE)
+	{
+		for (auto [entity, component] : level.GetEntitiesWith<Charge>())
+		{
+			if (level.HasComponents<ReceivedForces>(entity)) { continue; }
+			UpdateStaticIndicator(level, entity);
+		}
+	}
+	else
+	{
+		level.DeleteEntitiesWith<StaticIndicator>();
+	}
 	for (auto [entity, component] : level.GetEntitiesWith<Charge>())
 	{
 		unsigned category_idx = FindClosest(PARTICLE_CHARGE_CATEGORIES, abs(component->charge));

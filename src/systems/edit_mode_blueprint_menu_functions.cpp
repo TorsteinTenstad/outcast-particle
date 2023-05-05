@@ -11,7 +11,7 @@
 class BlueprintMenuItem
 {};
 
-const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
+const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
 
 void OpenBlueprintMenu(Level& level)
