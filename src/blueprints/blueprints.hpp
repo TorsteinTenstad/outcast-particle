@@ -102,6 +102,8 @@ class BPWall : public BPEditableEntity
 {
 	Wall wall = {};
 	DrawPriority draw_priority = { 4 };
+
+	// [Serialize]
 	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
 
 	// [Serialize]

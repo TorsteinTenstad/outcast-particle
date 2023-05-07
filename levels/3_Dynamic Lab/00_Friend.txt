@@ -2,10 +2,10 @@ name=Untitled;grid_size_id=1;editable=1
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(540,1800)}Charge{charge=10000}Velocity{velocity=(100,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPGoal":Tag{tag=BPGoal}Position{position=(3480,480)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(1620,1860)}
-"BPWall":Tag{tag=BPWall}Position{position=(60,1080)}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(120,2160)}
-"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(3840,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(120,2160)}
-"BPWall":Tag{tag=BPWall}Position{position=(1140,120)}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(2040,240)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,1080)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(3840,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1140,120)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(2040,240)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2280,360)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(3240,1800)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1260,1020)}WidthAndHeight{width_and_height=(180,60)}
@@ -13,9 +13,9 @@ name=Untitled;grid_size_id=1;editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(1260,900)}WidthAndHeight{width_and_height=(240,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1380,960)}WidthAndHeight{width_and_height=(60,180)}
 "BPMovingParticle":Tag{tag=BPMovingParticle}Position{position=(2580,1860)}Charge{charge=-10000}Velocity{velocity=(0,0)}
-"BPWall":Tag{tag=BPWall}Position{position=(2580,900)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,840)}
-"BPWall":Tag{tag=BPWall}Position{position=(1260,1500)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,1080)}
-"BPWall":Tag{tag=BPWall}Position{position=(3360,120)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(720,240)}
+"BPWall":Tag{tag=BPWall}Position{position=(2580,900)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,840)}
+"BPWall":Tag{tag=BPWall}Position{position=(1260,1500)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,1080)}
+"BPWall":Tag{tag=BPWall}Position{position=(3360,120)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(720,240)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2580,1380)}WidthAndHeight{width_and_height=(180,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2460,1320)}WidthAndHeight{width_and_height=(60,180)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2580,1260)}WidthAndHeight{width_and_height=(240,60)}
@@ -25,6 +25,6 @@ name=Untitled;grid_size_id=1;editable=1
 "BPMovingParticle":Tag{tag=BPMovingParticle}Position{position=(300,1620)}Charge{charge=-10000}Velocity{velocity=(0,0)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2460,360)}WidthAndHeight{width_and_height=(60,300)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2280,180)}WidthAndHeight{width_and_height=(420,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(2580,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(840,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(2580,240)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,480)}
+"BPWall":Tag{tag=BPWall}Position{position=(2580,60)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(840,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(2580,240)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,480)}
 "BPMovingParticle":Tag{tag=BPMovingParticle}Position{position=(1260,420)}Charge{charge=-10000}Velocity{velocity=(0,0)}

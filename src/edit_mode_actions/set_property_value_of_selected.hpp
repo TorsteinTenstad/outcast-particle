@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/sound_info.hpp"
 #include "components/collision.hpp"
 #include "components/editable.hpp"
 #include "components/grid_adaptive_textures.hpp"
@@ -34,6 +35,7 @@ private:
 
 	std::vector<int> walls_;
 	std::vector<float> walls_original_values_;
+	std::vector<std::string> walls_original_sound_values_;
 
 	friend class SetPropertyValueOfSelected;
 
@@ -58,10 +60,11 @@ public:
 			electric_fields_.push_back(entity);
 			electric_fields_original_values_.push_back(component->field_vector);
 		}
-		for (auto [entity, selected, component, wall] : level.GetEntitiesWith<Selected, Collision, Wall>())
+		for (auto [entity, selected, component, wall, sound_info] : level.GetEntitiesWith<Selected, Collision, Wall, SoundInfo>())
 		{
 			walls_.push_back(entity);
 			walls_original_values_.push_back(component->bounce_factor);
+			walls_original_sound_values_.push_back(sound_info->sound_path);
 		}
 	}
 	void Do()
@@ -85,6 +88,7 @@ public:
 			for (int entity : walls_)
 			{
 				SetMagnitudeOfFloat(level_.GetComponent<Collision>(entity)->bounce_factor, WALL_BOUNCE_CATEGORIES[property_value_idx]);
+				level_.GetComponent<SoundInfo>(entity)->sound_path = WALL_SOUND_CATEGORIES[property_value_idx];
 			}
 		}
 		for (int entity : particles_)
@@ -110,9 +114,10 @@ public:
 		{
 			level_.GetComponent<ElectricField>(entity)->field_vector = original_value;
 		}
-		for (const auto& [entity, original_value] : zip(walls_, walls_original_values_))
+		for (const auto& [entity, original_value, original_sound_value] : zip(walls_, walls_original_values_, walls_original_sound_values_))
 		{
 			level_.GetComponent<Collision>(entity)->bounce_factor = original_value;
+			level_.GetComponent<SoundInfo>(entity)->sound_path = original_sound_value;
 		}
 	}
 	bool TryMerge(const SetPropertyValueOfSelected& next_action) override

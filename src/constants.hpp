@@ -50,6 +50,14 @@ const std::vector<float> WALL_BOUNCE_CATEGORIES = {
 	1.75,
 };
 
+const std::vector<std::string> WALL_SOUND_CATEGORIES = {
+	"content\\sounds\\wall_1.wav",
+	"content\\sounds\\wall_2.wav",
+	"content\\sounds\\wall_3.wav",
+	"content\\sounds\\wall_4.wav",
+	"content\\sounds\\wall_5.wav"
+};
+
 const std::vector<sf::Keyboard::Key> CATEGORY_KEYS = {
 	sf::Keyboard::Num1,
 	sf::Keyboard::Num2,

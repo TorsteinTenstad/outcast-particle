@@ -162,6 +162,49 @@ void DeserializeComponent(Player* c, const std::string& entity_str_rep)
         }
     }
 }
+void SerializeComponent(const SoundInfo* c, std::string& str_rep)
+{
+	str_rep += "SoundInfo{";
+	str_rep += "play_sound=";
+	str_rep += ToString(c->play_sound);
+	str_rep += ";";
+	str_rep += "sound_volume=";
+	str_rep += ToString(c->sound_volume);
+	str_rep += ";";
+	str_rep += "loop_sound=";
+	str_rep += ToString(c->loop_sound);
+	str_rep += ";";
+	str_rep += "sound_path=";
+	str_rep += ToString(c->sound_path);
+	str_rep += "}";
+}
+
+void DeserializeComponent(SoundInfo* c, const std::string& entity_str_rep)
+{
+    std::string component_str = GetSubstrBetween(entity_str_rep, "SoundInfo{", "}");
+    std::vector<std::string> variables = SplitString(component_str, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "play_sound")
+        {
+            FromString(c->play_sound, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "sound_volume")
+        {
+            FromString(c->sound_volume, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "loop_sound")
+        {
+            FromString(c->loop_sound, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "sound_path")
+        {
+            FromString(c->sound_path, statement_parts[1]);
+        }
+    }
+}
 void SerializeComponent(const Collision* c, std::string& str_rep)
 {
 	str_rep += "Collision{";
@@ -325,6 +368,7 @@ void Level::SaveToFile(std::string savefile_path)
         {
             SerializeComponent(GetComponent<Tag>(entity_id), entity_string);
             SerializeComponent(GetComponent<Position>(entity_id), entity_string);
+            SerializeComponent(GetComponent<SoundInfo>(entity_id), entity_string);
             SerializeComponent(GetComponent<Collision>(entity_id), entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>(entity_id), entity_string);
         }
@@ -509,8 +553,8 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity_id, {});
             AddComponent<Wall>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
+            DeserializeComponent(AddComponent<SoundInfo>(entity_id),line);
             DeserializeComponent(AddComponent<Collision>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
         }
@@ -676,9 +720,9 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Editable>(entity_id, {});
             AddComponent<Wall>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 4 });
-            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Tag>(entity_id, {"BPWall"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });
+            AddComponent<SoundInfo>(entity_id, { "content\\sounds\\thud.wav" });
             AddComponent<Collision>(entity_id, { 0.2, 75 });
             AddComponent<WidthAndHeight>(entity_id, { sf::Vector2f(120, 120) });
             break;

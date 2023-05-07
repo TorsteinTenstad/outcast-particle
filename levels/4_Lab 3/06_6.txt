@@ -1,8 +1,8 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPGoal":Tag{tag=BPGoal}Position{position=(3360,1800)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(840,720)}Charge{charge=-2500}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"BPWall":Tag{tag=BPWall}Position{position=(60,1020)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2040)}
-"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,1020)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2040)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,120)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(600,480)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(600,960)}Charge{charge=10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1920,480)}Charge{charge=10000}
@@ -23,6 +23,6 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(3540,720)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3300,1140)}WidthAndHeight{width_and_height=(900,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1200,1500)}WidthAndHeight{width_and_height=(2220,60)}
-"BPWall":Tag{tag=BPWall}Position{position=(1140,1320)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(2160,240)}
-"BPWall":Tag{tag=BPWall}Position{position=(3480,1320)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(1080,240)}
+"BPWall":Tag{tag=BPWall}Position{position=(1140,1320)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(2160,240)}
+"BPWall":Tag{tag=BPWall}Position{position=(3480,1320)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(1080,240)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3780,1800)}WidthAndHeight{width_and_height=(60,660)}
