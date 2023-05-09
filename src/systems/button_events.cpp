@@ -1,4 +1,5 @@
 #include "components/button_events.hpp"
+#include "Components/sound_info.hpp"
 #include "components/button.hpp"
 #include "components/draw_info.hpp"
 #include "components/menu_navigator.hpp"
@@ -51,6 +52,10 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key])
 		{
+			if (!level.HasComponents<PressedThisFrame>(entity_id) && level.HasComponents<SoundInfo>(entity_id))
+			{
+				level.GetComponent<SoundInfo>(entity_id)->play_sound = true;
+			}
 			level.EnsureExistenceOfComponent<PressedThisFrame>(entity_id);
 			level.EnsureExistenceOfComponent<Pressed>(entity_id); //When holding down, keys can act as being pressed multiple times without being released on between
 		}
@@ -111,6 +116,10 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (pressed_this_frame)
 		{
+			if (!level.HasComponents<PressedThisFrame>(entity_id) && level.HasComponents<SoundInfo>(entity_id))
+			{
+				level.GetComponent<SoundInfo>(entity_id)->play_sound = true;
+			}
 			level.EnsureExistenceOfComponent<PressedThisFrame>(entity_id);
 			level.EnsureExistenceOfComponent<Pressed>(entity_id);
 		}

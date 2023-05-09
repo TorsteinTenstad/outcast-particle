@@ -10,7 +10,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3120,480)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(720,720)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(3120,1680)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(720,720)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(3360,1080)}WidthAndHeight{width_and_height=(60,360)}
-"BPWall":Tag{tag=BPWall}Position{position=(60,420)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\bouncy_wall.wav}Collision{bounce_factor=1;friction=75}WidthAndHeight{width_and_height=(120,840)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,420)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\wall_4.wav}Collision{bounce_factor=1;friction=75}WidthAndHeight{width_and_height=(120,840)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1380,780)}WidthAndHeight{width_and_height=(2700,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1800,60)}WidthAndHeight{width_and_height=(3540,60)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1380,1380)}WidthAndHeight{width_and_height=(2700,60)}

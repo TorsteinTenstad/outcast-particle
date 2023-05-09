@@ -1,4 +1,5 @@
 #include "entity_creation.hpp"
+#include "Components/sound_info.hpp"
 #include "SFML/Graphics/Text.hpp"
 #include "components/button.hpp"
 #include "components/button_events.hpp"
@@ -70,6 +71,7 @@ EntityHandle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Ve
 	auto [id, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\white.png", false);
 	level.AddComponent<FillColor>(id);
 	level.AddComponent<Shader>(id, { "", "shaders\\round_corners.frag", {}, {}, {} });
+	level.AddComponent<SoundInfo>(id)->sound_path = "content\\sounds\\click.wav";
 	return { id, size };
 }
 EntityHandle CreateMouseEventButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
