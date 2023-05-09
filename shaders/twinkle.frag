@@ -3,6 +3,7 @@
 #include "shaders\\include\\blend.glsl";
 #include "shaders\\include\\math_utils.glsl";
 #include "shaders\\include\\standard_uniforms.glsl";
+#include "shaders\\include\\rand.glsl";
 
 uniform vec2 width_and_height;
 uniform vec2 position;

@@ -5,6 +5,8 @@
 #include "shaders\\include\\game_constants.glsl";
 #include "shaders\\include\\blend.glsl";
 #include "shaders\\include\\gem.glsl";
+#include "shaders\\include\\rand.glsl";
+#include "shaders\\include\\round_corners.glsl";
 
 float coin_size = 120;
 float coin_spacing = 60;
@@ -22,12 +24,7 @@ void main()
 	float margin = gem_size*margin_ratio;
 	float gem_r = gem_size/2.f;
 
-
-    float r = _wh.y/4;
-	vec2 folded_coords = abs(xy-(_wh)/2);
-    vec2 r_smaller_box = min(folded_coords, vec2(_wh)/2-r);
-    vec2 dist_from_smaller_box = folded_coords-r_smaller_box;
-    float round_corner_mask = 1-smoothstep(r-2, r+2, length(dist_from_smaller_box));
+    float round_corner_mask = get_rounded_corners_alpha(xy, _wh);
 
     vec4 color = vec4(0.4, 0.4, 0.4, 1);
 

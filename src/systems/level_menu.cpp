@@ -70,12 +70,9 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	std::string at_level_id = ui->at_level_id.value();
 	for (int i = 0; i < 4; i++)
 	{
-		if (level_completion_time_records->count(i) == 0)
-		{
-			continue;
-		}
+		if (level_completion_time_records->count(i) == 0) { continue; }
 		std::map<std::string, float> i_coin_record = level_completion_time_records->at(i);
-		if (i_coin_record.count(at_level_id) > 1)
+		if (i_coin_record.count(at_level_id) > 0)
 		{
 			level.GetComponent<FillColor>(ui->stats_block_ids[i])->color.a = 255;
 			level.GetComponent<Text>(ui->stats_block_ids[i])->content = RightShiftString(CreateBadgeText(i_coin_record.at(at_level_id), 2 + globals.general_config.display_precise_badge_time), 16);
