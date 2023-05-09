@@ -21,11 +21,6 @@ void SoundSystem::Update(Level& level, float dt)
 
 		if (sound_info->play_sound)
 		{
-
-			if (MAX_VOLUME.count(sound_path) > 0)
-			{
-				max_volume = MAX_VOLUME[sound_path];
-			}
 			sounds_[sound_path].setBuffer(sound_buffers_[sound_path]);
 			sounds_[sound_path].setVolume(max_volume * sound_info->sound_volume * globals.general_config.sound_volume / 100);
 			sounds_[sound_path].play();
