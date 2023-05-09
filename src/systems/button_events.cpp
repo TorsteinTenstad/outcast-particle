@@ -52,7 +52,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key])
 		{
-			if (!level.HasComponents<PressedThisFrame>(entity_id) && level.HasComponents<SoundInfo>(entity_id))
+			if (!level.HasComponents<Pressed>(entity_id) && level.HasComponents<SoundInfo>(entity_id))
 			{
 				level.GetComponent<SoundInfo>(entity_id)->play_sound = true;
 			}
@@ -116,7 +116,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (pressed_this_frame)
 		{
-			if (!level.HasComponents<PressedThisFrame>(entity_id) && level.HasComponents<SoundInfo>(entity_id))
+			if (!level.HasComponents<Pressed>(entity_id) && level.HasComponents<SoundInfo>(entity_id))
 			{
 				level.GetComponent<SoundInfo>(entity_id)->play_sound = true;
 			}
