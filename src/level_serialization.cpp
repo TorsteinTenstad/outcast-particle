@@ -528,7 +528,6 @@ void Level::LoadFromFile(std::string savefile_path)
             AddComponent<Laser>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 3 });
             AddComponent<OrientationDependentDrawInfo>(entity_id, {});
-            AddComponent<KillOnIntersection>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\laser.wav" });
             DeserializeComponent(AddComponent<Position>(entity_id),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity_id),line);
@@ -697,7 +696,6 @@ int Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Laser>(entity_id, {});
             AddComponent<DrawPriority>(entity_id, { 3 });
             AddComponent<OrientationDependentDrawInfo>(entity_id, {});
-            AddComponent<KillOnIntersection>(entity_id, {});
             AddComponent<SoundInfo>(entity_id, { "content\\sounds\\laser.wav" });
             AddComponent<Tag>(entity_id, {"BPLaser"});
             AddComponent<Position>(entity_id, { sf::Vector2f(0, 0) });

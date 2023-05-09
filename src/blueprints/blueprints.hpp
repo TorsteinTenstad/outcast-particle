@@ -81,8 +81,6 @@ class BPLaser : public BPEditableEntity
 	DrawPriority draw_priority = { 3 };
 	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { 60 };
-	KillOnIntersection kill_on_intersection = {};
-	SoundInfo sound_info = { "content\\sounds\\laser.wav" };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 60) };
