@@ -7,6 +7,7 @@
 #include "shaders\\include\\rand.glsl";
 #include "shaders\\include\\particles.glsl";
 #include "shaders\\include\\blend.glsl";
+#include "shaders\\include\\fields.glsl";
 
 
 uniform float charge_sign;
@@ -14,6 +15,8 @@ uniform float movement_animation_time;
 uniform float field_strength;
 
 #define CELL_SIZE 90
+#define MAX_FIELD_STRENGTH 0.8
+#define MIN_FIELD_STRENGTH 0.05
 
 float particle_grid(vec2 xy, mat2 m_rot, vec2 cell_size, float n, float relative_particle_size, vec2 rand_seed)
 {
@@ -49,7 +52,7 @@ float particles(vec2 xy, float particles_per_cell_side, float speed, float rand_
 	return particle_grid(gc, rot(-theta), vec2(1 / particles_per_cell_side), n, 0.6, rand_seed + id);
 }
 
-vec4 crosses_and_dots(vec2 xy)
+float crosses_and_dots(vec2 xy, float thickness_factor)
 {
 	vec2 c = xy / vec2(BLOCK_SIZE);
 	vec2 gc = fract(c);
@@ -61,39 +64,40 @@ vec4 crosses_and_dots(vec2 xy)
 	vec2 gc_8 = vec2(max(gc_4.x, gc_4.y), min(gc_4.x, gc_4.y));
 
 	float AA = 0.02;
-	float line_width = 0.15;
+	float line_width = 0.15*thickness_factor;
 	float crosses_size = 0.35;
-	float crosses_mask = smoothstep(0, AA, line_width / 2.f - gc_8.y)
-		* smoothstep(0, AA, crosses_size - gc_8.x);
+	float crosses_mask = smoothstep(0, AA, line_width / 2.f - gc_8.y) * smoothstep(0, AA, crosses_size - gc_8.x);
 
-	float dots_mask = smoothstep(0, AA, 0.15 - length(gc));
+	float dots_mask = smoothstep(0, AA, line_width - length(gc));
 
-	float alpha = field_strength > 0 ? dots_mask : crosses_mask;
-	vec3 light_purple = vec3(0.7890625, 0.6953125, 0.8359375);
-	vec3 purple = vec3(0.59375, 0.3046875, 0.63671875);
-	vec3 rgb = mix(vec3(0.17), vec3(0.12), 1 - (gc.x + gc.y));
-	return vec4(rgb, alpha);
+	return field_strength > 0 ? dots_mask : crosses_mask;
 }
 
 void main()
 {
-	vec2 xy = gl_TexCoord[0].xy * _wh;
+	vec2 uv = gl_TexCoord[0].xy;
+	vec2 xy = uv * _wh;
 
 	vec4 background_color = vec4(vec3(1), 0);
 	vec4 color = background_color;
 
 	vec3 particle_rgb = get_flat_particle_color(charge_sign);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 12, 20, 1.142) * 0.1 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 10, 20, 1.142) * 0.1 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 10, 40, 1.721) * 0.2 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 8, 40, 1.721) * 0.2 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 8, 60, 1.161) * 0.3 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 6, 60, 1.161) * 0.3 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 6, 80, 1.511) * 0.4 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 4, 80, 1.511) * 0.4 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 12, 20, 1.142) * 0.1 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 10, 20, 1.142) * 0.1 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 10, 40, 1.721) * 0.2 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 8, 40, 1.721) * 0.2 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 8, 60, 1.161) * 0.3 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 6, 60, 1.161) * 0.3 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 6, 80, 1.511) * 0.4 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 4, 80, 1.511) * 0.4 * 1.5));
 
-	color = blend(color, crosses_and_dots((xy)));
+	float field_strength01 = get_linearized_log2_field_strength01(field_strength, MIN_FIELD_STRENGTH, MAX_FIELD_STRENGTH);
+	vec3 field_rgb = get_field_rgb(uv, field_strength01);
+	float thickness_factor = get_field_thickness_factor(field_strength01);
+	float crosses_and_dots_mask = crosses_and_dots(xy, thickness_factor);
+
+	color = blend(color, vec4(field_rgb, crosses_and_dots_mask));
 	color = blend(color, particles_color);
 
 	gl_FragColor = color;

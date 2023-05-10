@@ -50,6 +50,7 @@ static void UpdateLevelPreview(Level& level, LevelMenuUI* ui,
 		ui->displaying_level_id = level_id;
 		ui->at_level_id = level_id;
 		LevelMenuUI::last_at_level_id[at_group] = level_id;
+		LevelMenuUI::last_at_level_group = at_group;
 		GenerateLevelPreview(level, ui, level_id, generate_level_texture);
 		return;
 	}
@@ -244,7 +245,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	const std::map<std::string, std::vector<std::string>>& level_groups = level_manager_->GetLevels();
 	if (!ui->at_group.has_value())
 	{
-		ui->at_group = level_groups.begin()->first;
+		ui->at_group = LevelMenuUI::last_at_level_group.value_or(level_groups.begin()->first);
 	}
 	std::string at_group = ui->at_group.value();
 	bool levels_are_editable = GetGroupDisplayNameFromGroupName(at_group) == EDITABLE_LEVELS_FOLDER_DISPLAY_NAME || globals.developer_options.all_level_groups_are_editable;
@@ -252,8 +253,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	if (!ui->at_level_id.has_value())
 	{
 		std::vector<std::string> levels_in_group = level_groups.at(at_group);
-		auto it = ui->last_at_level_id.find(at_group);
-		if (it != ui->last_at_level_id.end())
+		auto it = LevelMenuUI::last_at_level_id.find(at_group);
+		if (it != LevelMenuUI::last_at_level_id.end())
 		{
 			ui->at_level_id = it->second;
 		}

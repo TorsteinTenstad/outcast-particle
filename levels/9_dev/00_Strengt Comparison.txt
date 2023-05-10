@@ -1,10 +1,10 @@
 name=Untitled;grid_size_id=1;editable=1
-"BPPlayer":Tag{tag=BPPlayer}Position{position=(3240,1440)}Charge{charge=625}Velocity{velocity=(-0.000591562,0.10279)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+"BPPlayer":Tag{tag=BPPlayer}Position{position=(3060,1740)}Charge{charge=625}Velocity{velocity=(-0.000591562,0.10279)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
 "BPGoal":Tag{tag=BPGoal}Position{position=(3240,1080)}
-"BPWall":Tag{tag=BPWall}Position{position=(60,1080)}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(120,2160)}
-"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(3840,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(120,2160)}
-"BPWall":Tag{tag=BPWall}Position{position=(1920,60)}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(3840,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,1080)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,2100)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(3840,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,1080)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(120,2160)}
+"BPWall":Tag{tag=BPWall}Position{position=(1920,60)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=}Collision{bounce_factor=1;friction=0}WidthAndHeight{width_and_height=(3840,120)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1920,1560)}Charge{charge=-160000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(1200,1560)}Charge{charge=-10000}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(840,1560)}Charge{charge=-2500}
@@ -25,3 +25,7 @@ name=Untitled;grid_size_id=1;editable=1
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(840,480)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(240,240)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(1200,480)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(240,240)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(1560,480)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(240,240)}
+"BPWall":Tag{tag=BPWall}Position{position=(2940,1620)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(2940,1860)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3240,1860)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3240,1620)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}

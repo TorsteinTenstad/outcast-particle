@@ -4,6 +4,8 @@
 #define LIGHT_GREEN vec3(0.6953125, 0.87109375, 0.5390625)
 #define BLUE vec3(0.1171875, 0.46875, 0.703125)
 #define LIGHT_BLUE vec3(0.6484375, 0.8046875, 0.88671875)
+#define PURPLE vec3(0.580392157, 0.403921569, 0.741176471)
+#define LIGHT_PURPLE vec3(0.77254902, 0.690196078, 0.835294118)
 
 vec3 get_flat_particle_color(float charge_sign)
 {

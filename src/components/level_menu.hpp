@@ -15,6 +15,7 @@ class LevelMenuUI
 {
 public:
 	inline static std::map<std::string, std::string> last_at_level_id;
+	inline static std::optional<std::string> last_at_level_group;
 
 	std::optional<std::string> at_level_id;
 	std::optional<std::string> at_group;
