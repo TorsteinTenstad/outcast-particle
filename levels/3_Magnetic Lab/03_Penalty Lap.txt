@@ -31,5 +31,5 @@ name=Untitled;grid_size_id=2;editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(4860,1260)}WidthAndHeight{width_and_height=(60,780)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(5280,480)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(720,720)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(4080,480)}
-"BPWall":Tag{tag=BPWall}Position{position=(4080,1620)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1440,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(4080,2460)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1440,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(4080,1620)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1440,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(4080,2460)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1440,120)}

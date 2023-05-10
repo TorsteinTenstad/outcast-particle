@@ -1,5 +1,6 @@
 #include "level_manager.hpp"
 #include "folder_definitions.hpp"
+#include "level.hpp"
 #include "utils/level_id.hpp"
 #include <cassert>
 #include <filesystem>

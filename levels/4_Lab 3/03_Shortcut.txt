@@ -1,11 +1,11 @@
 name=Untitled;grid_size_id=1;editable=1
 "BPGoal":Tag{tag=BPGoal}Position{position=(2880,1080)}
 "BPPlayer":Tag{tag=BPPlayer}Position{position=(480,360)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
-"BPWall":Tag{tag=BPWall}Position{position=(180,360)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,720)}
+"BPWall":Tag{tag=BPWall}Position{position=(180,360)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,720)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(840,60)}WidthAndHeight{width_and_height=(1020,60)}
 "BPStaticParticle":Tag{tag=BPStaticParticle}Position{position=(180,360)}Charge{charge=10000}
 "BPLaser":Tag{tag=BPLaser}Position{position=(60,1380)}WidthAndHeight{width_and_height=(60,1380)}
-"BPWall":Tag{tag=BPWall}Position{position=(2280,60)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1920,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(2280,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1920,120)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1380,780)}WidthAndHeight{width_and_height=(60,1500)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1080,2100)}WidthAndHeight{width_and_height=(2040,60)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(3480,1800)}ElectricField{field_vector=(-0,-0.125)}WidthAndHeight{width_and_height=(480,480)}
@@ -15,8 +15,8 @@ name=Untitled;grid_size_id=1;editable=1
 "BPCoin":Tag{tag=BPCoin}Position{position=(1080,720)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(2280,1080)}
 "BPCoin":Tag{tag=BPCoin}Position{position=(360,1800)}
-"BPWall":Tag{tag=BPWall}Position{position=(2340,2100)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(3000,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(3780,1020)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(120,2040)}
+"BPWall":Tag{tag=BPWall}Position{position=(2340,2100)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(3000,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(3780,1020)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(120,2040)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(1080,360)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(480,480)}
 "BPElectricField":Tag{tag=BPElectricField}Position{position=(1080,1800)}ElectricField{field_vector=(0.5,-0)}WidthAndHeight{width_and_height=(480,480)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(720,1080)}MagneticField{field_strength=0.2}WidthAndHeight{width_and_height=(1200,480)}
@@ -25,6 +25,6 @@ name=Untitled;grid_size_id=1;editable=1
 "BPLaser":Tag{tag=BPLaser}Position{position=(3180,1080)}WidthAndHeight{width_and_height=(60,900)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(2880,1500)}WidthAndHeight{width_and_height=(660,60)}
 "BPMagneticField":Tag{tag=BPMagneticField}Position{position=(2280,1800)}MagneticField{field_strength=0.4}WidthAndHeight{width_and_height=(480,480)}
-"BPWall":Tag{tag=BPWall}Position{position=(3480,60)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\thud.wav}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(480,120)}
-"BPWall":Tag{tag=BPWall}Position{position=(60,1860)}SoundInfo{play_sound=0;sound_volume=1;loop_sound=0;sound_path=content\sounds\wall_4.wav}Collision{bounce_factor=1;friction=75}WidthAndHeight{width_and_height=(120,600)}
+"BPWall":Tag{tag=BPWall}Position{position=(3480,60)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(480,120)}
+"BPWall":Tag{tag=BPWall}Position{position=(60,1860)}Collision{bounce_factor=1;friction=75}WidthAndHeight{width_and_height=(120,600)}
 "BPLaser":Tag{tag=BPLaser}Position{position=(1680,1500)}WidthAndHeight{width_and_height=(660,60)}
