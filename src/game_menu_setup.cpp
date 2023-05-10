@@ -1,6 +1,7 @@
 #include "components/draw_info.hpp"
 #include "components/level_menu.hpp"
 #include "components/physics.hpp"
+#include "components/player.hpp"
 #include "components/position.hpp"
 #include "components/scroll.hpp"
 #include "components/size.hpp"
@@ -46,6 +47,7 @@ void Game::GoToMainMenu()
 	active_level_->GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset);
 
 	int player_id = active_level_->AddBlueprint(BPPlayer);
+	active_level_->GetComponent<Player>(player_id)->can_go_neutral = false;
 	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
 	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
 	active_level_->GetComponent<Charge>(player_id)->charge *= -1;
@@ -92,6 +94,7 @@ void Game::GoToOptionsMenu()
 	int entity_position_x = level_size.x - 8 * BLOCK_SIZE;
 
 	int player_id = active_level_->AddBlueprint(BPPlayer);
+	active_level_->GetComponent<Player>(player_id)->can_go_neutral = false;
 	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
 	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
 
