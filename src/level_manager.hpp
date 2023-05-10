@@ -14,5 +14,5 @@ public:
 	const std::map<std::string, std::vector<std::string>>& GetLevels() const;
 	std::string CreateNewLevel(std::string group_name);
 	bool DeleteLevel(std::string level_id);
-	void RenameLevel(const std::string& old_level_id, const std::string& new_display_name);
+	std::string RenameLevel(const std::string& old_level_id, const std::string& new_display_name);
 };

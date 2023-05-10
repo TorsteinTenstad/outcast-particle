@@ -1,5 +1,6 @@
 #pragma once
 #include "components/level_menu.hpp"
+#include "Components/sound_info.hpp"
 #include "components/button.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
@@ -222,8 +223,9 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 				level.AddComponent<TextBox>(rename_box_id);
 				auto rename_func = [&level, level_manager_ = level_manager_, level_id = level_id, text_id = text_id, ui, rename_box_id]() {
 					std::string new_display_name = level.GetComponent<Text>(rename_box_id)->content;
-					level_manager_->RenameLevel(level_id, new_display_name);
+					std::string new_level_id = level_manager_->RenameLevel(level_id, new_display_name);
 					level.GetComponent<Text>(text_id)->content = new_display_name;
+					RequestRedraw(level, ui, GetGroupNameFromId(new_level_id), new_level_id);
 				};
 				CreateBlockingPopupMenu(level, level.GetSize(), "Rename level", { { "Rename", rename_func }, { "Cancel", []() {} } }, ToEntitiesHandle((rename_box)));
 			}
@@ -293,8 +295,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	// Group navigation buttons
 	for (int p : { -1, 1 })
 	{
-		auto [entity_id, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key] =
-			level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey>();
+		auto [entity_id, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key, sound_info] =
+			level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey, SoundInfo>();
 
 		if (p == -1)
 		{
@@ -312,6 +314,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		text->content = p < 0 ? "<" : ">";
 		shader->fragment_shader_path = "shaders\\round_corners.frag";
 		position->position = sf::Vector2f(BUTTONS_PANEL_CENTER + p * (4) * float(BLOCK_SIZE), TITLE_H / 2);
+		sound_info->sound_path = "content\\sounds\\click.wav";
 	}
 	// Scroll window
 	auto [menu_navigator_id, _] = CreateMenuNavigator(level, 1);

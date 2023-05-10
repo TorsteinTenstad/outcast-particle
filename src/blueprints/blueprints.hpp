@@ -72,7 +72,7 @@ class BPPlayer : public BPEditableEntity
 	Velocity velocity = { sf::Vector2f(0, 0) };
 
 	// [Serialize]
-	Player player = { true, true, 1000 };
+	Player player = {};
 };
 
 class BPLaser : public BPEditableEntity
@@ -81,8 +81,6 @@ class BPLaser : public BPEditableEntity
 	DrawPriority draw_priority = { 3 };
 	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { 60 };
-	KillOnIntersection kill_on_intersection = {};
-	SoundInfo sound_info = { "content\\sounds\\laser.wav" };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 60) };
@@ -151,9 +149,20 @@ class BPMagneticField : public BPEditableEntity
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
+class BPText : public BPEditableEntity
+{
+	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
+	DrawPriority draw_priority = { 100 };
+
+	// [Serialize]
+	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
+
+	// [Serialize]
+	Text text = {};
+};
 class BPTextPopupSpawner : public BPEditableEntity
 {
-	DrawInfo draw_info = {};
+	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
 	DrawPriority draw_priority = { 2 };
 
 	// [Serialize]
