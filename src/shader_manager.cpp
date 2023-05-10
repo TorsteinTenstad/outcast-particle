@@ -11,7 +11,7 @@ static std::optional<std::string> ReadFromFileWithRecursiveInclude(const std::st
 	std::ifstream file(path);
 	if (!file)
 	{
-		std::cerr << "Error: could not open file \"" << path << "\"\n";
+		assert(path.size() == 0);
 		return std::nullopt;
 	}
 

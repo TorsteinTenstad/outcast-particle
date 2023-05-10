@@ -11,7 +11,7 @@ int GetLevelNumberFromId(const std::string& level_id)
 {
 	int number;
 	std::string number_str = SplitString(GetLevelNameFromId(level_id), "_").front();
-	if (number_str.empty() || number_str.find_first_not_of("0123456789") == std::string::npos)
+	if (number_str.empty() || number_str.find_first_not_of("0123456789") != std::string::npos)
 	{
 		return 0;
 	}
