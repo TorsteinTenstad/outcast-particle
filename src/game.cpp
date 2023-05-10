@@ -58,15 +58,15 @@ Game::Game() :
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<SetWallSoundSystem>();
-	RegisterGameSystem<IntersectionSystem>();
-	RegisterGameSystem<CollisionSystem>();
-	RegisterGameSystem<GoalSystem>();
-	RegisterGameSystem<TimerSystem>();
-	RegisterGameSystem<LaserProximitySystem>();
-	RegisterGameSystem<AddKillOnIntersectionSystem>();
-	RegisterGameSystem<KillOnIntersectionSystem>();
-	RegisterGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 
+	RegisterPhysicsGameSystem<IntersectionSystem>();
+	RegisterPhysicsGameSystem<CollisionSystem>();
+	RegisterPhysicsGameSystem<GoalSystem>();
+	RegisterPhysicsGameSystem<TimerSystem>();
+	RegisterPhysicsGameSystem<LaserProximitySystem>();
+	RegisterPhysicsGameSystem<AddKillOnIntersectionSystem>();
+	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
+	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 	RegisterPhysicsGameSystem<ElectricForceSystem>();
 	RegisterPhysicsGameSystem<ElectricFieldForceSystem>();
 	RegisterPhysicsGameSystem<MagneticFieldForceSystem>();
@@ -158,10 +158,10 @@ Level& Game::SetLevel(std::string level_id)
 void Game::Update(float dt)
 {
 	globals.time = absolute_clock.getElapsedTime().asSeconds();
-	if (dt > 1.f / 30)
+	if (dt > 1.f / 20)
 	{
 		//std::cout << "Lag spike detected, overriding dt\n";
-		dt = 1.f / 30;
+		dt = 1.f / 20;
 	}
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
