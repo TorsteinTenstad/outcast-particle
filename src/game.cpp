@@ -58,13 +58,13 @@ Game::Game() :
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<SetWallSoundSystem>();
+	RegisterGameSystem<LaserProximitySystem>();
+	RegisterGameSystem<AddKillOnIntersectionSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();
 	RegisterPhysicsGameSystem<GoalSystem>();
 	RegisterPhysicsGameSystem<TimerSystem>();
-	RegisterPhysicsGameSystem<LaserProximitySystem>();
-	RegisterPhysicsGameSystem<AddKillOnIntersectionSystem>();
 	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
 	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
 	RegisterPhysicsGameSystem<ElectricForceSystem>();

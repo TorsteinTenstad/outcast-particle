@@ -60,7 +60,7 @@ void LaserProximitySystem::Update(Level& level, float dt)
 	});
 
 	auto sound_info = level.GetComponent<SoundInfo>(id);
-	if (smallest_laser_distance >= minimum_laser_distance || (level.GetMode() != PLAY_MODE))
+	if (smallest_laser_distance >= minimum_laser_distance || level.GetMode() != PLAY_MODE)
 	{
 		sound_info->sound_volumes[DEFAULT] = 0;
 		return;
