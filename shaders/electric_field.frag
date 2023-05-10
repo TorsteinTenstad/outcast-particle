@@ -7,6 +7,7 @@
 #include "shaders\\include\\colors.glsl";
 #include "shaders\\include\\rand.glsl";
 #include "shaders\\include\\particles.glsl";
+#include "shaders\\include\\fields.glsl";
 
 uniform float charge_sign;
 uniform float charge_strength;
@@ -14,6 +15,8 @@ uniform float movement_animation_time;
 uniform vec2 field_vector;
 
 #define CELL_SIZE 90
+#define MAX_FIELD_STRENGTH 1
+#define MIN_FIELD_STRENGTH 0.0625
 
 float particle_grid(vec2 uv, vec2 cell_size, float relative_particle_size, float rand_seed)
 {
@@ -31,16 +34,16 @@ float particle_grid(vec2 uv, vec2 cell_size, float relative_particle_size, float
 	return particle((gc - offset) / particle_d, charge_sign) * existence;
 }
 
-vec4 arrow(vec2 uv, vec2 wh_rotated)
+float arrow(vec2 uv, vec2 wh_rotated, float thickness_factor)
 {
 	uv = wh_rotated * fract(uv / wh_rotated);
 	vec2 c = uv / vec2(120);
 	vec2 gc = vec2(fract(c.x), c.y);
 	float gc_id = floor(c.x);
 
-	float arrow_head_length = 0.18;
+	float arrow_head_length = 0.18*thickness_factor;
 	float arrow_head_width = 0.6;
-	float arrow_line_width = 0.13;
+	float arrow_line_width = 0.13*thickness_factor;
 	float margin = 0.15;
 	float center_dist = abs(gc.x - 0.5);
 	float arrow_c = gc.y - (wh_rotated.y / 120) + 1 * center_dist;
@@ -56,17 +59,13 @@ vec4 arrow(vec2 uv, vec2 wh_rotated)
 	lines_mask *= smoothstep(0, AA, c.y - margin);
 
 	float arrow = max(arrow_front_mask * arrow_back_mask * arrow_width_mask, lines_mask);
-	//float gradient_t = 1-smoothstep(0, 100, wh_rotated.y -uv.y);
-	float gradient_t = smoothstep(0, 1, 1 - smoothstep(wh_rotated.y, 0, uv.y));
-	//float gradient_t = 1/(1+(wh_rotated.y - uv.y - margin*120)/10);
-	gradient_t = clamp(gradient_t, 0, 1);
-	vec3 rgb = mix(vec3(0.17), vec3(0.12), gradient_t);
-	return vec4(rgb, arrow);
+	return arrow;
 }
 
 void main()
 {
-	vec2 xy = gl_TexCoord[0].xy * _wh;
+	vec2 uv = gl_TexCoord[0].xy;
+	vec2 xy = uv * _wh;
 	float theta = atan(field_vector.x, field_vector.y);
 	mat2 m_rot = rot(theta);
 
@@ -75,14 +74,17 @@ void main()
 
 	vec3 particle_rgb = get_flat_particle_color(charge_sign);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(90, -100 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(60, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(30, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161) * 0.3 * 0.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(00, -400 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511) * 0.4 * 0.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(90, -100 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(60, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(30, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161) * 0.3 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(00, -400 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511) * 0.4 * 1.5));
 
-	vec4 arrow_color = arrow((xy) * m_rot, abs(_wh * m_rot));
-	color = blend(color, arrow_color);
+	float field_strength01 = get_linearized_log2_field_strength01(length(field_vector), MIN_FIELD_STRENGTH, MAX_FIELD_STRENGTH);
+	vec3 field_rgb = get_field_rgb(m_rot*uv, field_strength01);
+	float thickness_factor = get_field_thickness_factor(field_strength01);
+	float arrow_mask = arrow((xy) * m_rot, abs(_wh * m_rot), thickness_factor);
 
+	color = blend(color, vec4(field_rgb, arrow_mask));
 	color = blend(color, particles_color);
 
 	gl_FragColor = color;

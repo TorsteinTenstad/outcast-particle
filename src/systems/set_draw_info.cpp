@@ -10,20 +10,21 @@
 #include "utils/get_size.hpp"
 #include "utils/math.hpp"
 
+class StrengthIndicator
+{};
+
 static int CreateStrengthIndicator(Level& level)
 {
 	EntityHandle handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * 0.75f * float(BLOCK_SIZE), 0, "", false);
 	int id = GetId(handle);
 	level.AddComponent<Shader>(id)->fragment_shader_path = "shaders\\strength_indicator.frag";
+	level.AddComponent<StrengthIndicator>(id);
 	return id;
 }
 
-class StrengthIndicator
-{};
-
 static void UpdateStrengthIndicator(Level& level, int entity, int category_idx)
 {
-	int indicator_id = GetSingletonChildId<StrengthIndicator>(level, entity, CreateStrengthIndicator);
+	int indicator_id = GetSingletonChildId<Charge>(level, entity, CreateStrengthIndicator);
 	level.GetComponent<Shader>(indicator_id)->float_uniforms["category_idx"] = category_idx;
 	sf::Vector2f top_right_offset = GetSize(level, entity, false) / 2.f;
 	top_right_offset -= level.GetComponent<WidthAndHeight>(indicator_id)->width_and_height / 2.f;
@@ -60,36 +61,26 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 	{
 		for (auto [entity, component] : level.GetEntitiesWith<Charge>())
 		{
+			unsigned category_idx = FindClosest(PARTICLE_CHARGE_CATEGORIES, abs(component->charge));
+			UpdateStrengthIndicator(level, entity, category_idx);
+
 			if (level.HasComponents<ReceivedForces>(entity)) { continue; }
 			UpdateStaticIndicator(level, entity);
+
+			if (PlayerBehaviors* player_behaviors = level.RawGetComponent<PlayerBehaviors>(entity))
+			{
+				if (player_behaviors->is_neutral)
+				{
+					DeleteChildrenOwnedBy<Charge>(level, entity);
+					continue;
+				}
+			}
 		}
 	}
 	else
 	{
 		level.DeleteEntitiesWith<StaticIndicator>();
-	}
-	for (auto [entity, component] : level.GetEntitiesWith<Charge>())
-	{
-		if (PlayerBehaviors* player_behaviors = level.RawGetComponent<PlayerBehaviors>(entity))
-		{
-			if (player_behaviors->is_neutral)
-			{
-				DeleteChildrenOwnedBy<StrengthIndicator>(level, entity);
-				continue;
-			}
-		}
-		unsigned category_idx = FindClosest(PARTICLE_CHARGE_CATEGORIES, abs(component->charge));
-		UpdateStrengthIndicator(level, entity, category_idx);
-	}
-	for (auto [entity, component] : level.GetEntitiesWith<ElectricField>())
-	{
-		unsigned category_idx = FindClosest(ELECTRIC_FIELD_STRENGTH_CATEGORIES, Magnitude(component->field_vector));
-		UpdateStrengthIndicator(level, entity, category_idx);
-	}
-	for (auto [entity, component] : level.GetEntitiesWith<MagneticField>())
-	{
-		unsigned category_idx = FindClosest(MAGNETIC_FIELD_STRENGTH_CATEGORIES, abs(component->field_strength));
-		UpdateStrengthIndicator(level, entity, category_idx);
+		level.DeleteEntitiesWith<StrengthIndicator>();
 	}
 
 	for (auto const& [entity_id, charge, shader] : level.GetEntitiesWith<Charge, Shader>())

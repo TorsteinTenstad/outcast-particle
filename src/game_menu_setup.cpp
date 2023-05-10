@@ -53,6 +53,7 @@ void Game::GoToMainMenu()
 
 void Game::GoToLevelMenu()
 {
+	is_in_level_editing_ = false;
 	active_level_id_ = LEVEL_MENU;
 	active_level_->ResetSize();
 	active_level_->CreateEntityWith<ReDrawLevelMenuRequest>();
