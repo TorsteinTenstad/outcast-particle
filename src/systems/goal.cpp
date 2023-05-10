@@ -30,7 +30,7 @@ void GoalSystem::Update(Level& level, float dt)
 			}
 			if (SoundInfo* sound_info = level.RawGetComponent<SoundInfo>(intersecting_id))
 			{
-				sound_info->play_sound = true;
+				sound_info->play_sound.push(DEFAULT);
 			}
 			else
 			{

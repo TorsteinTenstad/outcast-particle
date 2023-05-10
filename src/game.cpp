@@ -57,6 +57,7 @@ Game::Game() :
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_manager_.GetLevels(), &level_completion_time_records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
+	RegisterGameSystem<SetWallSoundSystem>();
 	RegisterGameSystem<IntersectionSystem>();
 	RegisterGameSystem<CollisionSystem>();
 	RegisterGameSystem<GoalSystem>();

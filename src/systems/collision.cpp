@@ -93,8 +93,8 @@ void CollisionSystem::Update(Level& level, float dt)
 					{
 						collision_sound_factor = 1;
 					}
-					intersecting_entity_sound_info->sound_volume = collision_sound_factor * collision_sound_factor;
-					intersecting_entity_sound_info->play_sound = true;
+					intersecting_entity_sound_info->sound_volumes[DEFAULT] = collision_sound_factor * collision_sound_factor;
+					intersecting_entity_sound_info->play_sound.push(DEFAULT);
 				}
 			}
 		}

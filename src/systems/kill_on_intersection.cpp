@@ -22,7 +22,7 @@ void KillOnIntersectionSystem::Update(Level& level, float dt)
 
 			if (SoundInfo* sound_info = level.GetComponent<SoundInfo>(i))
 			{
-				sound_info->play_sound = true;
+				sound_info->play_sound.push(DEFAULT);
 			}
 			if (Face* face = level.RawGetComponent<Face>(entity_id))
 			{

@@ -60,7 +60,7 @@ class BPPlayer : public BPEditableEntity
 	Trail trail = {};
 	DrawPriority draw_priority = { 12 };
 	Shader shader = { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} };
-	SoundInfo sound_info = { "content\\sounds\\wav.wav" };
+	SoundInfo sound_info = { { { DEFAULT, "content\\sounds\\wav.wav" }, { TO_NEUTRAL, "content\\sounds\\to_neutral.wav" }, { FROM_NEUTRAL, "content\\sounds\\from_neutral.wav" } } };
 	Face face = {};
 	ForceVisualization force_visualization = {};
 	PlayerBehaviors player_behaviors = {};
@@ -93,16 +93,14 @@ class BPCoin : public BPEditableEntity
 	SegmentedGlowEffect segmented_glow_effect = {};
 	Children children = {};
 	Radius radius = { 60 };
-	SoundInfo sound_info = { "content\\sounds\\coin.wav" };
+	SoundInfo sound_info = { { { DEFAULT, "content\\sounds\\coin.wav" } } };
 };
 
 class BPWall : public BPEditableEntity
 {
 	Wall wall = {};
 	DrawPriority draw_priority = { 4 };
-
-	// [Serialize]
-	SoundInfo sound_info = { "content\\sounds\\thud.wav" };
+	SoundInfo sound_info = { { { DEFAULT, "content\\sounds\\wall_3.wav" } } };
 
 	// [Serialize]
 	Collision collision = { 0.2, 75 };
@@ -119,7 +117,7 @@ class BPGoal : public BPEditableEntity
 	Goal goal = {};
 	Wormhole wormhole = {};
 	Mass mass = {};
-	SoundInfo sound_info = { "content\\sounds\\happy_transition.wav", false, 1 };
+	SoundInfo sound_info = { { { DEFAULT, "content\\sounds\\happy_transition.wav" } } };
 	Radius Radius = { 240 };
 };
 

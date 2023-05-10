@@ -14,7 +14,7 @@ void AddKillOnIntersectionSystem::Update(Level& level, float dt)
 	{
 		int child_id = GetSingletonChildId<Laser>(level, laser_id, [](Level& level) {
 			auto [id, kill_on_intersection, position, width_and_height] = level.CreateEntityWith<KillOnIntersection, Position, WidthAndHeight>();
-			level.AddComponent<SoundInfo>(id)->sound_path = "content\\sounds\\laser.wav";
+			level.AddComponent<SoundInfo>(id)->sound_paths = { { DEFAULT, "content\\sounds\\laser.wav" } };
 			return id;
 		});
 		level.GetComponent<WidthAndHeight>(child_id)->width_and_height = width_and_height->width_and_height - sf::Vector2f(40, 40);

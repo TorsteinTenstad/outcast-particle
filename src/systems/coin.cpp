@@ -35,7 +35,7 @@ void CoinSystem::Update(Level& level, float dt)
 			assert(level.HasComponents<SegmentedGlowEffect>(id));
 			level.RemoveComponents<Coin>(id);
 			level.GetComponent<SegmentedGlowEffect>(id)->animation_start_time = globals.time;
-			level.GetComponent<SoundInfo>(id)->play_sound = true;
+			level.GetComponent<SoundInfo>(id)->play_sound.push(DEFAULT);
 			level.AddComponent<ScheduledDelete>(id)->delete_at = globals.time + 1;
 			counter += 1;
 		}

@@ -9,6 +9,14 @@ struct DeveloperOptions
 	bool all_level_groups_are_editable = true; //Should be false in release
 };
 
+enum SoundTypes
+{
+	DEFAULT,
+	ON_CLICK,
+	TO_NEUTRAL,
+	FROM_NEUTRAL
+};
+
 struct Globals
 {
 	sf::RenderWindow render_window;

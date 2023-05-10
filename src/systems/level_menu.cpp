@@ -314,7 +314,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		text->content = p < 0 ? "<" : ">";
 		shader->fragment_shader_path = "shaders\\round_corners.frag";
 		position->position = sf::Vector2f(BUTTONS_PANEL_CENTER + p * (4) * float(BLOCK_SIZE), TITLE_H / 2);
-		sound_info->sound_path = "content\\sounds\\click.wav";
+		sound_info->sound_paths = { { ON_CLICK, "content\\sounds\\click.wav" } };
 	}
 	// Scroll window
 	auto [menu_navigator_id, _] = CreateMenuNavigator(level, 1);

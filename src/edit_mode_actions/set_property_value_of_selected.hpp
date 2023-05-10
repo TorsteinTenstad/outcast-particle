@@ -35,7 +35,6 @@ private:
 
 	std::vector<int> walls_;
 	std::vector<float> walls_original_values_;
-	std::vector<std::string> walls_original_sound_values_;
 
 	friend class SetPropertyValueOfSelected;
 
@@ -64,7 +63,6 @@ public:
 		{
 			walls_.push_back(entity);
 			walls_original_values_.push_back(component->bounce_factor);
-			walls_original_sound_values_.push_back(sound_info->sound_path);
 		}
 	}
 	void Do()
@@ -88,7 +86,6 @@ public:
 			for (int entity : walls_)
 			{
 				SetMagnitudeOfFloat(level_.GetComponent<Collision>(entity)->bounce_factor, WALL_BOUNCE_CATEGORIES[property_value_idx]);
-				level_.GetComponent<SoundInfo>(entity)->sound_path = WALL_SOUND_CATEGORIES[property_value_idx];
 			}
 		}
 		for (int entity : particles_)
@@ -114,10 +111,9 @@ public:
 		{
 			level_.GetComponent<ElectricField>(entity)->field_vector = original_value;
 		}
-		for (const auto& [entity, original_value, original_sound_value] : zip(walls_, walls_original_values_, walls_original_sound_values_))
+		for (const auto& [entity, original_value] : zip(walls_, walls_original_values_))
 		{
 			level_.GetComponent<Collision>(entity)->bounce_factor = original_value;
-			level_.GetComponent<SoundInfo>(entity)->sound_path = original_sound_value;
 		}
 	}
 	bool TryMerge(const SetPropertyValueOfSelected& next_action) override

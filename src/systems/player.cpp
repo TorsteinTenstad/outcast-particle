@@ -10,11 +10,6 @@
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
 
-class ToNeutralSound
-{};
-class FromNeutralSound
-{};
-
 void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 {
 	int player_i = 0;
@@ -36,8 +31,7 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 		{
 			if (!player_behaviors->is_neutral)
 			{
-				int id = level.GetSingletonId<ToNeutralSound>([](ECSScene& level) {int id = level.CreateEntityId(); level.AddComponent<SoundInfo>(id)->sound_path = "content\\sounds\\to_neutral.wav"; return id; });
-				level.GetComponent<SoundInfo>(id)->play_sound = true;
+				sound_info->play_sound.push(TO_NEUTRAL);
 			}
 			player_behaviors->default_charge = charge->charge;
 			player_behaviors->is_neutral = true;
@@ -45,15 +39,14 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 		}
 		if (player_behaviors->is_neutral && !cursor_and_keys.key_down[neutral_key])
 		{
-			int id = level.GetSingletonId<FromNeutralSound>([](ECSScene& level) {int id = level.CreateEntityId(); level.AddComponent<SoundInfo>(id)->sound_path = "content\\sounds\\from_neutral.wav"; return id; });
-			level.GetComponent<SoundInfo>(id)->play_sound = true;
+			sound_info->play_sound.push(FROM_NEUTRAL);
 
 			charge->charge = player_behaviors->default_charge;
 			player_behaviors->is_neutral = false;
 		}
 		if (cursor_and_keys.key_pressed_this_frame[switch_key] && player_behaviors->switch_key_is_up && player->can_switch_charge)
 		{
-			sound_info->play_sound = true;
+			sound_info->play_sound.push(DEFAULT);
 			charge->charge = -charge->charge;
 			player_behaviors->default_charge = -player_behaviors->default_charge;
 			shader->float_uniforms["start_switch_charge_animation"] = globals.time;

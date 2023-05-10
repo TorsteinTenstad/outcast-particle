@@ -1,4 +1,5 @@
 #include "components/button.hpp"
+#include "Components/sound_info.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
 #include "components/position.hpp"
@@ -34,6 +35,13 @@ void ButtonSystem::Update(Level& level, float dt)
 		else
 		{
 			fill_color->color = mouse_interaction_dependent_fill_color->default_color;
+		}
+	}
+	for (auto [entity_id, pressed_this_frame, sound_info] : level.GetEntitiesWith<PressedThisFrame, SoundInfo>())
+	{
+		if (sound_info->sound_paths.count(ON_CLICK) == 1)
+		{
+			sound_info->play_sound.push(ON_CLICK);
 		}
 	}
 
