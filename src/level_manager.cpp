@@ -57,10 +57,11 @@ bool LevelManager::DeleteLevel(std::string level_id)
 	return std::filesystem::remove(level_id);
 }
 
-void LevelManager::RenameLevel(const std::string& old_level_id, const std::string& new_display_name)
+std::string LevelManager::RenameLevel(const std::string& old_level_id, const std::string& new_display_name)
 {
 	std::string new_level_id = AssembleLevelId(GetGroupNameFromId(old_level_id), GetLevelNumberFromId(old_level_id), new_display_name);
-	return RawRenameLevel(old_level_id, new_level_id);
+	RawRenameLevel(old_level_id, new_level_id);
+	return new_level_id;
 }
 
 void LevelManager::RawRenameLevel(const std::string& old_level_id, const std::string& new_level_id)

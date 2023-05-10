@@ -226,8 +226,9 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 				level.AddComponent<TextBox>(rename_box_id);
 				auto rename_func = [&level, level_manager_ = level_manager_, level_id = level_id, text_id = text_id, ui, rename_box_id]() {
 					std::string new_display_name = level.GetComponent<Text>(rename_box_id)->content;
-					level_manager_->RenameLevel(level_id, new_display_name);
+					std::string new_level_id = level_manager_->RenameLevel(level_id, new_display_name);
 					level.GetComponent<Text>(text_id)->content = new_display_name;
+					RequestRedraw(level, ui, GetGroupNameFromId(new_level_id), new_level_id);
 				};
 				CreateBlockingPopupMenu(level, level.GetSize(), "Rename level", { { "Rename", rename_func }, { "Cancel", []() {} } }, ToEntitiesHandle((rename_box)));
 			}

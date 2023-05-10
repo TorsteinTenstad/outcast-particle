@@ -15,6 +15,7 @@ std::string ToBlueprintTag(Blueprint blueprint)
 		"BPGoal",
 		"BPElectricField",
 		"BPMagneticField",
+		"BPText",
 		"BPTextPopupSpawner"})[(int(blueprint))];
 }
 
@@ -32,5 +33,6 @@ Blueprint ToBlueprintEnum(std::string blueprint_tag)
 		{"BPGoal", BPGoal},
 		{"BPElectricField", BPElectricField},
 		{"BPMagneticField", BPMagneticField},
+		{"BPText", BPText},
 		{"BPTextPopupSpawner", BPTextPopupSpawner}}).at(blueprint_tag);
 }

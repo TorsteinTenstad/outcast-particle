@@ -9,6 +9,7 @@
 
 void AddKillOnIntersectionSystem::Update(Level& level, float dt)
 {
+	if (level.GetMode() != PLAY_MODE) { return; }
 	for (auto [laser_id, laser, width_and_height, position] : level.GetEntitiesWith<Laser, WidthAndHeight, Position>())
 	{
 		int child_id = GetSingletonChildId<Laser>(level, laser_id, [](Level& level) {

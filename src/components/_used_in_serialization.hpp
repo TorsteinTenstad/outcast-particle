@@ -18,5 +18,6 @@
 #include "components/size.hpp"
 #include "components/sound_info.hpp"
 #include "components/tag.hpp"
+#include "components/text.hpp"
 #include "components/text_popup.hpp"
 #include "components/trail.hpp"

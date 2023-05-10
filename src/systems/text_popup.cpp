@@ -17,6 +17,7 @@ void TextPopupSystem::Update(Level& level, float dt)
 	{
 		draw_info->image_path = level.GetMode() == EDIT_MODE ? "content\\textures\\white.png" : "content\\textures\\transparent.png";
 	}
+	if (level.GetMode() == EDIT_MODE) { return; }
 	for (auto [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
 		for (auto& i : intersection->entered_this_frame_ids)
@@ -32,7 +33,7 @@ void TextPopupSystem::Update(Level& level, float dt)
 				popup_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 				popup_animated_position->start_time = globals.time;
 				popup_animated_position->animation_func = [&](float t) { return sf::Vector2f(level.GetSize().x / 2, 180 * 2 * (Ease(2 * t - 0.5, 1, 3) - 0.5)); };
-				level.AddComponent<ScheduledDelete>(popup_id)->delete_at = globals.time + 5;
+				//level.AddComponent<ScheduledDelete>(popup_id)->delete_at = globals.time + 5;
 			}
 		}
 	}
