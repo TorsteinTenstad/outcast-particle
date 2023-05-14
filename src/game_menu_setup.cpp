@@ -13,17 +13,18 @@
 
 void Game::GoToMainMenu()
 {
+	Level& level = active_level_.GetActiveState();
 	active_level_id_ = MAIN_MENU;
 	is_in_level_editing_ = false;
-	active_level_->ResetSize();
-	sf::Vector2f level_size = active_level_->GetSize();
+	level.ResetSize();
+	sf::Vector2f level_size = level.GetSize();
 
 	float x_center_offset = -8 * BLOCK_SIZE;
 	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
 	std::vector<EntitiesHandle> entities_handles;
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text) {
-		EntityHandle button_handle = CreateNavigatorButton(*active_level_, sf::Vector2f(0, 0), button_function, button_text, sf::Keyboard::Unknown);
+		EntityHandle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, button_text, sf::Keyboard::Unknown);
 		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
@@ -32,44 +33,46 @@ void Game::GoToMainMenu()
 	AddButton([]() {}, "Credits");
 	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
 
-	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
+	auto [ids, height] = VerticalEntityLayout(level, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
 
-	CreateMenuNavigator(*active_level_);
+	CreateMenuNavigator(level);
 
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Volatile\n  Particle";
 	title_position->position.x = level_size.x / 2.f + x_center_offset;
 	title_position->position.y = 2 * BLOCK_SIZE;
 
-	int static_particle_id = active_level_->AddBlueprint(BPStaticParticle);
-	active_level_->GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset);
+	int static_particle_id = level.AddBlueprint(BPStaticParticle);
+	level.GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset);
 
-	int player_id = active_level_->AddBlueprint(BPPlayer);
-	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
-	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
-	active_level_->GetComponent<Charge>(player_id)->charge *= -1;
+	int player_id = level.AddBlueprint(BPPlayer);
+	level.GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
+	level.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
+	level.GetComponent<Charge>(player_id)->charge *= -1;
 }
 
 void Game::GoToLevelMenu()
 {
+	Level& level = active_level_.GetActiveState();
 	active_level_id_ = LEVEL_MENU;
-	active_level_->ResetSize();
-	active_level_->CreateEntityWith<ReDrawLevelMenuRequest>();
+	level.ResetSize();
+	level.CreateEntityWith<ReDrawLevelMenuRequest>();
 }
 
 void Game::GoToOptionsMenu()
 {
+	Level& level = active_level_.GetActiveState();
 	active_level_id_ = OPTIONS_MENU;
-	active_level_->ResetSize();
-	sf::Vector2f level_size = active_level_->GetSize();
+	level.ResetSize();
+	sf::Vector2f level_size = level.GetSize();
 
 	float x_center_offset = -8 * BLOCK_SIZE;
 	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
 
 	std::vector<EntitiesHandle> entities_handles;
 	auto AddButton = [&](std::string level_id, std::string button_text) {
-		EntityHandle button_handle = CreateNavigatorButton(*active_level_, sf::Vector2f(0, 0), std::bind(&Game::SetLevel, this, level_id), button_text, sf::Keyboard::Unknown);
+		EntityHandle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), std::bind(&Game::SetLevel, this, level_id), button_text, sf::Keyboard::Unknown);
 		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
@@ -78,11 +81,11 @@ void Game::GoToOptionsMenu()
 	AddButton(GRAPHICS_AND_DISPLAY_MENU, "Display & Graphics");
 	AddButton(MAIN_MENU, "Main Menu");
 
-	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
+	auto [ids, height] = VerticalEntityLayout(level, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
 
-	CreateMenuNavigator(*active_level_);
+	CreateMenuNavigator(level);
 
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
+	auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Options";
 	title_position->position.x = level_size.x / 2.f + x_center_offset;
@@ -90,19 +93,19 @@ void Game::GoToOptionsMenu()
 
 	int entity_position_x = level_size.x - 8 * BLOCK_SIZE;
 
-	int player_id = active_level_->AddBlueprint(BPPlayer);
-	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
-	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
+	int player_id = level.AddBlueprint(BPPlayer);
+	level.GetComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
+	level.GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
 
-	int electric_field_1 = active_level_->AddBlueprint(BPElectricField);
-	active_level_->GetComponent<Position>(electric_field_1)->position = sf::Vector2f(entity_position_x, 360);
-	active_level_->GetComponent<ElectricField>(electric_field_1)->field_vector = sf::Vector2f(0, 0.25);
-	active_level_->GetComponent<WidthAndHeight>(electric_field_1)->width_and_height = sf::Vector2f(480, 240);
+	int electric_field_1 = level.AddBlueprint(BPElectricField);
+	level.GetComponent<Position>(electric_field_1)->position = sf::Vector2f(entity_position_x, 360);
+	level.GetComponent<ElectricField>(electric_field_1)->field_vector = sf::Vector2f(0, 0.25);
+	level.GetComponent<WidthAndHeight>(electric_field_1)->width_and_height = sf::Vector2f(480, 240);
 
-	int electric_field_2 = active_level_->AddBlueprint(BPElectricField);
-	active_level_->GetComponent<Position>(electric_field_2)->position = sf::Vector2f(entity_position_x, 1800);
-	active_level_->GetComponent<ElectricField>(electric_field_2)->field_vector = sf::Vector2f(0, -0.25);
-	active_level_->GetComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
+	int electric_field_2 = level.AddBlueprint(BPElectricField);
+	level.GetComponent<Position>(electric_field_2)->position = sf::Vector2f(entity_position_x, 1800);
+	level.GetComponent<ElectricField>(electric_field_2)->field_vector = sf::Vector2f(0, -0.25);
+	level.GetComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
 }
 
 static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> description_texts, std::vector<EntitiesCreator> create_buttons)
@@ -145,27 +148,29 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 
 void Game::GoToKeyConfigMenu()
 {
+	Level& level = active_level_.GetActiveState();
 	active_level_id_ = KEY_CONFIG_MENU;
-	active_level_->ResetSize();
-	sf::Vector2f level_size = active_level_->GetSize();
+	level.ResetSize();
+	sf::Vector2f level_size = level.GetSize();
 
 	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT };
 	std::vector<EntitiesCreator> EntitiesCreator;
 	for (auto key : keys)
 	{
-		EntitiesCreator.push_back(std::bind(&CreateKeyConfigButton, std::ref(*active_level_), std::placeholders::_1, key));
+		EntitiesCreator.push_back(std::bind(&CreateKeyConfigButton, std::ref(level), std::placeholders::_1, key));
 	}
 	std::vector<std::string> description_texts = { "Switch charge", "Go neutral", "Move Up", "Move Left", "Move Down", "Move Right" };
 	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
-	SetupOptionsSubMenu(*active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
+	SetupOptionsSubMenu(level, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()
 {
+	Level& level = active_level_.GetActiveState();
 	active_level_id_ = GRAPHICS_AND_DISPLAY_MENU;
-	active_level_->ResetSize();
-	sf::Vector2f level_size = active_level_->GetSize();
+	level.ResetSize();
+	sf::Vector2f level_size = level.GetSize();
 
 	std::vector<std::string> button_texts = {
 		BoolToStringAsEnabledOrDisabled(globals.general_config.fullscreen),
@@ -192,23 +197,24 @@ void Game::GoToGraphicsAndDisplayMenu()
 	std::vector<EntitiesCreator> EntitiesCreator;
 	for (unsigned i = 0; i < button_functions.size(); i++)
 	{
-		EntitiesCreator.push_back(std::bind(&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, button_functions[i], button_texts[i]));
+		EntitiesCreator.push_back(std::bind(&CreateOptionsButton, std::ref(level), std::placeholders::_1, button_functions[i], button_texts[i]));
 	}
 	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
-	SetupOptionsSubMenu(*active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
+	SetupOptionsSubMenu(level, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 }
 
 void Game::GoToMusicAndSoundMenu()
 {
+	Level& level = active_level_.GetActiveState();
 	active_level_id_ = MUSIC_AND_SOUND_MENU;
-	active_level_->ResetSize();
-	sf::Vector2f level_size = active_level_->GetSize();
+	level.ResetSize();
+	sf::Vector2f level_size = level.GetSize();
 
 	std::vector<EntitiesCreator> EntitiesCreator = {
-		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, &globals.general_config.sound_volume),
+		std::bind(&CreateSliderButton, std::ref(level), std::placeholders::_1, &globals.general_config.sound_volume),
 		std::bind(
-			&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds))
+			&CreateOptionsButton, std::ref(level), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds))
 	};
 
 	std::vector<std::string> description_texts = {
@@ -218,5 +224,5 @@ void Game::GoToMusicAndSoundMenu()
 
 	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
-	SetupOptionsSubMenu(*active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
+	SetupOptionsSubMenu(level, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 }

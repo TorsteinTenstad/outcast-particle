@@ -35,10 +35,15 @@ void Level::SetMode(LevelMode new_mode)
 	if (mode_ == EDIT_MODE)
 	{
 		SaveToFile();
+		Push().LoadFromFile(savefile_path_);
 	}
 	if (new_mode == EDIT_MODE)
 	{
-		LoadFromFile();
+		bool popped = TryPop();
+		if (!popped)
+		{
+			LoadFromFile();
+		}
 	}
 	mode_ = new_mode;
 }

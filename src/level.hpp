@@ -6,6 +6,7 @@
 #include "ecs/ecs_scene_with_inactive_layer.hpp"
 #include "globals.hpp"
 #include "level_mode.hpp"
+#include "multi_state.hpp"
 #include "ui_origin.hpp"
 #include "undo_system.hpp"
 #include <array>
@@ -25,7 +26,7 @@ const std::array<sf::Vector2u, 5> LEVEL_SIZES { { sf::Vector2u(16, 9), sf::Vecto
 
 #define DEFAULT_LEVEL_GRID_SIZE_ID 1
 
-class Level : public ECSSceneWithInactiveLayer
+class Level : public ECSSceneWithInactiveLayer, public MultiStateObject<Level>
 {
 private:
 	std::string savefile_path_;

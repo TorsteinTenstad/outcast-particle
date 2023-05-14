@@ -23,7 +23,6 @@
 #include <thread>
 
 Game::Game() :
-	active_level_(std::make_unique<Level>()),
 	level_manager_(LEVELS_FOLDER)
 {
 	RegisterGameSystem<LevelReadyScreenSystem>();
@@ -102,8 +101,8 @@ Level& Game::SetLevelAndEdit(std::string level_id)
 
 Level& Game::SetLevel(std::string level_id)
 {
-	assert(active_level_->GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
-	active_level_ = std::move(std::make_unique<Level>());
+	assert(active_level_.GetActiveState().GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
+	active_level_.Reset();
 	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
 	if (IsMenu(active_level_id_) && !level_id_is_top)
 	{
@@ -142,16 +141,16 @@ Level& Game::SetLevel(std::string level_id)
 	}
 	else
 	{
-		active_level_->LoadFromFile(level_id);
+		active_level_.GetActiveState().LoadFromFile(level_id);
 		if (globals.general_config.use_ready_mode)
 		{
-			active_level_->SetMode(READY_MODE);
+			active_level_.GetActiveState().SetMode(READY_MODE);
 		}
 	}
 	globals.time_of_last_level_enter = globals.time;
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;
-	return *active_level_;
+	return active_level_.GetActiveState();
 }
 
 void Game::Update(float dt)
@@ -165,20 +164,20 @@ void Game::Update(float dt)
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_ids_)
 	{
-		game_systems_.at(system_id)->Update(*active_level_, dt);
+		game_systems_.at(system_id)->Update(active_level_.GetActiveState(), dt);
 		if (restart_update_loop_)
 		{
 			restart_update_loop_ = false;
 			return;
 		}
 	}
-	if (active_level_->GetMode() == PLAY_MODE)
+	if (active_level_.GetActiveState().GetMode() == PLAY_MODE)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{
 			for (const auto& system_id : physics_game_system_ids_)
 			{
-				game_systems_[system_id]->Update(*active_level_, dt / physics_ticks_per_frame_);
+				game_systems_[system_id]->Update(active_level_.GetActiveState(), dt / physics_ticks_per_frame_);
 				if (restart_update_loop_)
 				{
 					restart_update_loop_ = false;
