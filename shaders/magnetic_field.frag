@@ -92,7 +92,7 @@ void main()
 	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 6, 80, 1.511) * 0.4 * 1.5));
 	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 4, 80, 1.511) * 0.4 * 1.5));
 
-	float field_strength01 = get_linearized_log2_field_strength01(field_strength, MIN_FIELD_STRENGTH, MAX_FIELD_STRENGTH);
+	float field_strength01 = get_linearized_log2_field_strength01(abs(field_strength), MIN_FIELD_STRENGTH, MAX_FIELD_STRENGTH);
 	vec3 field_rgb = get_field_rgb(uv, field_strength01);
 	float thickness_factor = get_field_thickness_factor(field_strength01);
 	float crosses_and_dots_mask = crosses_and_dots(xy, thickness_factor);
