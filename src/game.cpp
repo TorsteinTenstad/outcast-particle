@@ -107,7 +107,7 @@ Level& Game::SetLevel(std::string level_id)
 	assert(active_level_->GetMode() == PAUSE_MODE || IsMenu(active_level_id_));
 	active_level_ = std::move(std::make_unique<Level>());
 	bool level_id_is_top = (!menu_stack.empty() && level_id == menu_stack.top());
-	if (IsMenu(active_level_id_) && !level_id_is_top)
+	if (IsMenu(active_level_id_) && !level_id_is_top && active_level_id_ != level_id)
 	{
 		menu_stack.push(active_level_id_);
 	}
@@ -246,7 +246,6 @@ void Game::ResetKeyConfig()
 	KeyConfig key_config;
 	globals.key_config = key_config;
 	SetLevel(KEY_CONFIG_MENU);
-	menu_stack.pop();
 }
 
 void Game::ExitGame()
