@@ -57,6 +57,7 @@ private:
 	std::string GenerateLevelTexture(std::string level_id, unsigned width, unsigned height);
 	void CheckFullscreen();
 	void ToggleFullscreen();
+	void ResetKeyConfig();
 	void ExitGame();
 
 	void GoToMainMenu();

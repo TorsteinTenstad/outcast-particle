@@ -160,6 +160,8 @@ void Game::GoToKeyConfigMenu()
 	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
 
 	SetupOptionsSubMenu(*active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
+	CreateButton(
+		*active_level_, sf::Vector2f(level_size.x / 2.f + 8 * BLOCK_SIZE, level_size.y - 2 * BLOCK_SIZE), sf::Vector2f(5 * BLOCK_SIZE, 2 * BLOCK_SIZE), std::bind(&CreateConfirmMenu, std::ref(*active_level_), level_size, "Are you sure?", [&]() { Game::ResetKeyConfig(); }), "Reset", 120);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()

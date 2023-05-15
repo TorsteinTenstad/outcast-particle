@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "controls_config.hpp"
 #include "entity_creation.hpp"
 #include "folder_definitions.hpp"
 #include "systems/_pure_DO_systems.hpp"
@@ -238,6 +239,14 @@ void Game::GoToLastMenu()
 		return;
 	}
 	SetLevel(menu_stack.top());
+}
+
+void Game::ResetKeyConfig()
+{
+	KeyConfig key_config;
+	globals.key_config = key_config;
+	SetLevel(KEY_CONFIG_MENU);
+	menu_stack.pop();
 }
 
 void Game::ExitGame()
