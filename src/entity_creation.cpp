@@ -37,11 +37,11 @@ EntitiesHandle ToEntitiesHandle(EntityHandle EntityHandle)
 
 EntityHandle CreateScrollWindow(ECSScene& level, sf::Vector2f position, sf::Vector2f width_and_height, float entity_height)
 {
-	int id = level.CreateEntityId();
-	level.AddComponent<Position>(id)->position = position;
-	level.AddComponent<WidthAndHeight>(id)->width_and_height = width_and_height;
-	level.AddComponent<ScrollWindow>(id)->entity_height = entity_height;
-	return { id, width_and_height };
+	Entity entity = level.CreateEntity();
+	level.AddComponent<Position>(entity)->position = position;
+	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
+	level.AddComponent<ScrollWindow>(entity)->entity_height = entity_height;
+	return { entity, width_and_height };
 }
 
 EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size)

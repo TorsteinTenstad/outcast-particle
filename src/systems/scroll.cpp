@@ -31,7 +31,7 @@ std::optional<float> GetNavigatorRequest(Level& level, ScrollWindow* scroll_wind
 	}
 	return std::nullopt;
 }
-std::optional<float> GetScrollBarRequest(Level& level, const CursorAndKeys& cursor_and_keys, std::optional<Entity> scroll_bar)
+std::optional<float> GetScrollBarRequest(Level& level, const CursorAndKeys& cursor_and_keys, std::optional<Entity> scroll_bar, float view_h, float total_h)
 {
 	if (!scroll_bar.has_value()
 		|| !level.HasComponents<Pressed>(scroll_bar.value())
@@ -39,7 +39,9 @@ std::optional<float> GetScrollBarRequest(Level& level, const CursorAndKeys& curs
 	{
 		return std::nullopt;
 	}
-	return cursor_and_keys.last_frame_cursor_position.y - cursor_and_keys.cursor_position.y;
+	float bar_h = level.GetComponent<WidthAndHeight>(scroll_bar.value())->width_and_height.x;
+	float bar_max_travel = view_h - bar_h;
+	return total_h * (cursor_and_keys.last_frame_cursor_position.y - cursor_and_keys.cursor_position.y) / bar_max_travel;
 }
 
 std::optional<Entity> GetScrollBarEntity(Level& level, Entity entity, ScrollWindow* scroll_window, WidthAndHeight* width_and_height, Position* scroll_window_position, float total_h)
@@ -112,7 +114,7 @@ void ScrollSystem::Update(Level& level, float dt)
 
 		std::optional<Entity> scroll_bar = GetScrollBarEntity(level, entity, scroll_window, width_and_height, scroll_window_position, total_h);
 		float requested_movement = cursor_and_keys_.mouse_wheel_delta * 180;
-		requested_movement = GetScrollBarRequest(level, cursor_and_keys_, scroll_bar).value_or(requested_movement);
+		requested_movement = GetScrollBarRequest(level, cursor_and_keys_, scroll_bar, view_h, total_h).value_or(requested_movement);
 		requested_movement = GetNavigatorRequest(level, scroll_window, top, bottom).value_or(requested_movement);
 
 		float requested_scrolled_distance = scroll_window->scrolled_distance + requested_movement;
