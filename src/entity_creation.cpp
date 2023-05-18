@@ -116,6 +116,16 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 	return { entity, size };
 }
 
+EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key, sf::Vector2f size)
+{
+	auto [entity, _] = CreateMenuButton(level, position, button_function, button_text);
+	level.AddComponent<ShortcutKey>(entity)->key = shortcut_key;
+	level.AddComponent<MenuNavigable>(entity);
+	level.GetComponent<WidthAndHeight>(entity)->width_and_height = size;
+
+	return { entity, size };
+}
+
 EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size)
 {
 	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE) * buttons_height_in_block_size / 2.f;
@@ -164,7 +174,7 @@ EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int 
 {
 	EntityHandle handle = CreateTexturedRectangle(level, level_size / 2.f, level_size, draw_priority, "", false);
 	Entity entity = GetEntity(handle);
-	level.AddComponent<FillColor>(entity)->color = sf::Color(30, 30, 30, 220);
+	level.AddComponent<FillColor>(entity)->color = sf::Color(30, 30, 30, 240);
 	level.AddComponent<ReceivesButtonEvents>(entity);
 	return handle;
 }
@@ -173,7 +183,7 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 {
 	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function }, { "Cancel", []() {} } }, {});
 }
-EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities, bool vertical)
+EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities)
 {
 	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ConfirmMenuEntity>(entity); });
 	for (Entity entity : GetEntities(middle_entities))
@@ -194,17 +204,17 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 	for (const auto& [button_text, button_function] : button_functions)
 	{
 		auto button_function_with_close = [close_menu = close_menu, button_function = button_function]() {close_menu(); button_function(); };
-		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, sf::Keyboard::Unknown)));
+		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, sf::Keyboard::Unknown, sf::Vector2f(6, 2) * float(BLOCK_SIZE))));
 	}
 
-	EntitiesHandle button_row_handle = vertical ? VerticalEntityLayout(level, sf::Vector2f(0, 0), button_row, BLOCK_SIZE) : HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 16.f);
+	EntitiesHandle button_row_handle = HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 12.f);
 	Entity menu_navigator_entity = GetEntity(CreateMenuNavigator(level));
 	MenuNavigator* menu_navigator = level.GetComponent<MenuNavigator>(menu_navigator_entity);
 	menu_navigator->menu_items = GetEntities(button_row_handle);
 	menu_navigator->increment_key = sf::Keyboard::Right;
 	menu_navigator->decrement_key = sf::Keyboard::Left;
 	level.GetComponent<DrawPriority>(menu_navigator_entity)->draw_priority = 200;
-	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row_handle }, level_size.y / 6.f);
+	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row_handle }, level_size.y / 12.f);
 	for (Entity entity : GetEntities(menu_items))
 	{
 		level.GetComponent<DrawPriority>(entity)->draw_priority = 200;
