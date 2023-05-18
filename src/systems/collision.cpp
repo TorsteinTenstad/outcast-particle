@@ -16,9 +16,9 @@ void CollisionSystem::Update(Level& level, float dt)
 		return;
 	}
 
-	for (auto& [entity_id, intersection, collision, velocity, position, radius] : level.GetEntitiesWith<Intersection, Collision, Velocity, Position, Radius>())
+	for (auto& [entity, intersection, collision, velocity, position, radius] : level.GetEntitiesWith<Intersection, Collision, Velocity, Position, Radius>())
 	{
-		for (auto& intersecting_id : intersection->intersecting_ids)
+		for (auto& intersecting_id : intersection->intersecting_entities)
 		{
 			Collision* intersecting_entity_collision = level.RawGetComponent<Collision>(intersecting_id);
 			WidthAndHeight* intersecting_entity_width_and_height = level.RawGetComponent<WidthAndHeight>(intersecting_id);

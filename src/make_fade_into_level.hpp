@@ -2,4 +2,4 @@
 #include "level.hpp"
 #include <string>
 
-void MakeFadeIntoLevel(Level& level, int entity_id, std::string active_level_id);
+void MakeFadeIntoLevel(Level& level, Entity entity, std::string active_level_id);

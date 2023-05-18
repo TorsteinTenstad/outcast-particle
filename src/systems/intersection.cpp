@@ -53,26 +53,26 @@ static bool CheckIntersection(Position* square_position, Position* circle_positi
 }
 
 template <class SizeType, class OtherSizeType>
-static void UpdateIntersectionForSizeTypePair(Intersection* intersection, std::vector<int> previous_intersecting_ids,
-	int entity_id, int other_entity_id,
+static void UpdateIntersectionForSizeTypePair(Intersection* intersection, std::vector<Entity> previous_intersecting_entities,
+	Entity entity, Entity other_entity,
 	Position* position, Position* other_position,
 	SizeType size, OtherSizeType other_size)
 {
-	if (entity_id != other_entity_id)
+	if (entity != other_entity)
 	{
 		if (CheckIntersection(position, other_position, size, other_size))
 		{
-			intersection->intersecting_ids.push_back(other_entity_id);
-			if (std::count(previous_intersecting_ids.begin(), previous_intersecting_ids.end(), other_entity_id) == 0)
+			intersection->intersecting_entities.push_back(other_entity);
+			if (std::count(previous_intersecting_entities.begin(), previous_intersecting_entities.end(), other_entity) == 0)
 			{
-				intersection->entered_this_frame_ids.push_back(other_entity_id);
+				intersection->entities_entered_this_frame.push_back(other_entity);
 			}
-			intersection->left_this_frame_ids.erase(
+			intersection->entities_left_this_frame.erase(
 				std::remove(
-					intersection->left_this_frame_ids.begin(),
-					intersection->left_this_frame_ids.end(),
-					other_entity_id),
-				intersection->left_this_frame_ids.end());
+					intersection->entities_left_this_frame.begin(),
+					intersection->entities_left_this_frame.end(),
+					other_entity),
+				intersection->entities_left_this_frame.end());
 		}
 	}
 }
@@ -80,20 +80,20 @@ static void UpdateIntersectionForSizeTypePair(Intersection* intersection, std::v
 template <class SizeType>
 static void UpdateIntersectionForEntitiesWith(Level& level)
 {
-	for (auto [entity_id, intersection, size, position] : level.GetEntitiesWith<Intersection, SizeType, Position>())
+	for (auto [entity, intersection, size, position] : level.GetEntitiesWith<Intersection, SizeType, Position>())
 	{
-		intersection->entered_this_frame_ids.clear();
-		std::vector<int> previous_intersecting_ids = intersection->intersecting_ids;
-		intersection->left_this_frame_ids.clear();
-		intersection->intersecting_ids.swap(intersection->left_this_frame_ids);
+		intersection->entities_entered_this_frame.clear();
+		std::vector<Entity> previous_intersecting_entities = intersection->intersecting_entities;
+		intersection->entities_left_this_frame.clear();
+		intersection->intersecting_entities.swap(intersection->entities_left_this_frame);
 
-		for (auto const& [other_entity_id, radius_b, other_position] : level.GetEntitiesWith<Radius, Position>())
+		for (auto const& [other_entity, radius_b, other_position] : level.GetEntitiesWith<Radius, Position>())
 		{
-			UpdateIntersectionForSizeTypePair(intersection, previous_intersecting_ids, entity_id, other_entity_id, position, other_position, size, radius_b);
+			UpdateIntersectionForSizeTypePair(intersection, previous_intersecting_entities, entity, other_entity, position, other_position, size, radius_b);
 		}
-		for (auto const& [other_entity_id, other_width_and_height, other_position] : level.GetEntitiesWith<WidthAndHeight, Position>())
+		for (auto const& [other_entity, other_width_and_height, other_position] : level.GetEntitiesWith<WidthAndHeight, Position>())
 		{
-			UpdateIntersectionForSizeTypePair(intersection, previous_intersecting_ids, entity_id, other_entity_id, position, other_position, size, other_width_and_height);
+			UpdateIntersectionForSizeTypePair(intersection, previous_intersecting_entities, entity, other_entity, position, other_position, size, other_width_and_height);
 		}
 	}
 }

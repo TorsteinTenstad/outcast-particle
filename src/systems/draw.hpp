@@ -25,5 +25,5 @@ public:
 
 private:
 	void Draw(Level& level, sf::RenderTarget* render_target, std::map<int, std::vector<EntityBoundDrawable>> drawables, bool use_shaders);
-	sf::Shader* SetupSFMLShader(Level& level, const Shader* shader, std::optional<int> entity_id);
+	sf::Shader* SetupSFMLShader(Level& level, const Shader* shader, std::optional<Entity> entity);
 };

@@ -24,16 +24,16 @@ private:
 	std::optional<int> property_value_idx_;
 	int flip_;
 
-	std::vector<int> particles_;
+	std::vector<Entity> particles_;
 	std::vector<float> particles_original_values_;
 
-	std::vector<int> magnetic_fields_;
+	std::vector<Entity> magnetic_fields_;
 	std::vector<float> magnetic_fields_original_values_;
 
-	std::vector<int> electric_fields_;
+	std::vector<Entity> electric_fields_;
 	std::vector<sf::Vector2f> electric_fields_original_values_;
 
-	std::vector<int> walls_;
+	std::vector<Entity> walls_;
 	std::vector<float> walls_original_values_;
 
 	friend class SetPropertyValueOfSelected;
@@ -70,29 +70,29 @@ public:
 		if (property_value_idx_.has_value())
 		{
 			int property_value_idx = property_value_idx_.value();
-			for (int entity : particles_)
+			for (Entity entity : particles_)
 			{
 				SetMagnitudeOfFloat(level_.GetComponent<Charge>(entity)->charge, PARTICLE_CHARGE_CATEGORIES[property_value_idx]);
 			}
-			for (int entity : magnetic_fields_)
+			for (Entity entity : magnetic_fields_)
 			{
 				SetMagnitudeOfFloat(level_.GetComponent<MagneticField>(entity)->field_strength, MAGNETIC_FIELD_STRENGTH_CATEGORIES[property_value_idx]);
 			}
-			for (int entity : electric_fields_)
+			for (Entity entity : electric_fields_)
 			{
 				sf::Vector2f& v = level_.GetComponent<ElectricField>(entity)->field_vector;
 				v = Normalized(v) * ELECTRIC_FIELD_STRENGTH_CATEGORIES[property_value_idx];
 			}
-			for (int entity : walls_)
+			for (Entity entity : walls_)
 			{
 				SetMagnitudeOfFloat(level_.GetComponent<Collision>(entity)->bounce_factor, WALL_BOUNCE_CATEGORIES[property_value_idx]);
 			}
 		}
-		for (int entity : particles_)
+		for (Entity entity : particles_)
 		{
 			level_.GetComponent<Charge>(entity)->charge *= flip_;
 		}
-		for (int entity : magnetic_fields_)
+		for (Entity entity : magnetic_fields_)
 		{
 			level_.GetComponent<MagneticField>(entity)->field_strength *= flip_;
 		}

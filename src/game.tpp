@@ -23,11 +23,11 @@ System& Game::RegisterGameSystem(std::vector<int>& category)
 template <class System>
 System& Game::RegisterGameSystem()
 {
-	return RegisterGameSystem<System>(game_system_ids_);
+	return RegisterGameSystem<System>(game_system_entities_);
 }
 
 template <class System>
 System& Game::RegisterPhysicsGameSystem()
 {
-	return RegisterGameSystem<System>(physics_game_system_ids_);
+	return RegisterGameSystem<System>(physics_game_system_entities_);
 }

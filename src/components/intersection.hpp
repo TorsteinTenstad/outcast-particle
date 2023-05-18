@@ -1,10 +1,11 @@
 #pragma once
+#include "ecs/entity.hpp"
 #include <vector>
 
 class Intersection
 {
 public:
-	std::vector<int> intersecting_ids;
-	std::vector<int> entered_this_frame_ids;
-	std::vector<int> left_this_frame_ids;
+	std::vector<Entity> intersecting_entities;
+	std::vector<Entity> entities_entered_this_frame;
+	std::vector<Entity> entities_left_this_frame;
 };

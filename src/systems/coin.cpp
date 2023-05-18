@@ -23,20 +23,20 @@ void CoinSystem::Update(Level& level, float dt)
 	CoinCounter* coin_counter = level.GetSingleton<CoinCounter>();
 	int& counter = coin_counter->coin_counter;
 
-	for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
+	for (auto& [entity, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
-		for (auto& id : intersection->entered_this_frame_ids)
+		for (auto& entity : intersection->entities_entered_this_frame)
 		{
-			if (!level.HasComponents<Coin>(id))
+			if (!level.HasComponents<Coin>(entity))
 			{
 				continue;
 			}
-			assert(level.HasComponents<Coin>(id));
-			assert(level.HasComponents<SegmentedGlowEffect>(id));
-			level.RemoveComponents<Coin>(id);
-			level.GetComponent<SegmentedGlowEffect>(id)->animation_start_time = globals.time;
-			level.GetComponent<SoundInfo>(id)->play_sound.push(DEFAULT);
-			level.AddComponent<ScheduledDelete>(id)->delete_at = globals.time + 1;
+			assert(level.HasComponents<Coin>(entity));
+			assert(level.HasComponents<SegmentedGlowEffect>(entity));
+			level.RemoveComponents<Coin>(entity);
+			level.GetComponent<SegmentedGlowEffect>(entity)->animation_start_time = globals.time;
+			level.GetComponent<SoundInfo>(entity)->play_sound.push(DEFAULT);
+			level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + 1;
 			counter += 1;
 		}
 	}

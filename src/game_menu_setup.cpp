@@ -35,24 +35,24 @@ void Game::GoToMainMenu()
 	AddButton(std::bind(&Game::SetLevel, this, CREDITS_MENU), "Credits");
 	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
 
-	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
+	auto [entities, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
 
 	CreateMenuNavigator(*active_level_);
 
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
+	auto [title_entity, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Volatile\n  Particle";
 	title_position->position.x = level_size.x / 2.f + x_center_offset;
 	title_position->position.y = 2 * BLOCK_SIZE;
 
-	int static_particle_id = active_level_->AddBlueprint(BPStaticParticle);
+	Entity static_particle_id = active_level_->AddBlueprint(BPStaticParticle);
 	active_level_->GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset);
 
-	int player_id = active_level_->AddBlueprint(BPPlayer);
-	active_level_->GetComponent<Player>(player_id)->can_go_neutral = false;
-	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
-	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(460, 0);
-	active_level_->GetComponent<Charge>(player_id)->charge *= -1;
+	Entity player_entity = active_level_->AddBlueprint(BPPlayer);
+	active_level_->GetComponent<Player>(player_entity)->can_go_neutral = false;
+	active_level_->GetComponent<Position>(player_entity)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
+	active_level_->GetComponent<Velocity>(player_entity)->velocity = sf::Vector2f(460, 0);
+	active_level_->GetComponent<Charge>(player_entity)->charge *= -1;
 }
 
 void Game::GoToLevelMenu()
@@ -83,11 +83,11 @@ void Game::GoToOptionsMenu()
 	AddButton(GRAPHICS_AND_DISPLAY_MENU, "Display & Graphics");
 	AddButton(MAIN_MENU, "Main Menu");
 
-	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
+	auto [entities, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
 
 	CreateMenuNavigator(*active_level_);
 
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
+	auto [title_entity, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 250;
 	title_text->content = "Options";
 	title_position->position.x = level_size.x / 2.f + x_center_offset;
@@ -95,17 +95,17 @@ void Game::GoToOptionsMenu()
 
 	int entity_position_x = level_size.x - 8 * BLOCK_SIZE;
 
-	int player_id = active_level_->AddBlueprint(BPPlayer);
-	active_level_->GetComponent<Player>(player_id)->can_go_neutral = false;
-	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, 1200);
-	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(0, 1000);
+	Entity player_entity = active_level_->AddBlueprint(BPPlayer);
+	active_level_->GetComponent<Player>(player_entity)->can_go_neutral = false;
+	active_level_->GetComponent<Position>(player_entity)->position = sf::Vector2f(entity_position_x, 1200);
+	active_level_->GetComponent<Velocity>(player_entity)->velocity = sf::Vector2f(0, 1000);
 
-	int electric_field_1 = active_level_->AddBlueprint(BPElectricField);
+	Entity electric_field_1 = active_level_->AddBlueprint(BPElectricField);
 	active_level_->GetComponent<Position>(electric_field_1)->position = sf::Vector2f(entity_position_x, 360);
 	active_level_->GetComponent<ElectricField>(electric_field_1)->field_vector = sf::Vector2f(0, 0.25);
 	active_level_->GetComponent<WidthAndHeight>(electric_field_1)->width_and_height = sf::Vector2f(480, 240);
 
-	int electric_field_2 = active_level_->AddBlueprint(BPElectricField);
+	Entity electric_field_2 = active_level_->AddBlueprint(BPElectricField);
 	active_level_->GetComponent<Position>(electric_field_2)->position = sf::Vector2f(entity_position_x, 1800);
 	active_level_->GetComponent<ElectricField>(electric_field_2)->field_vector = sf::Vector2f(0, -0.25);
 	active_level_->GetComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
@@ -176,14 +176,14 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	sf::Vector2f button_position = sf::Vector2f(1.33 * level_size.x / 2.f, 2 * BLOCK_SIZE);
 
 	//Create menu title
-	auto [title_entity_id, title_text, title_draw_priority, title_position] = level.CreateEntityWith<Text, DrawPriority, Position>();
+	auto [title_entity, title_text, title_draw_priority, title_position] = level.CreateEntityWith<Text, DrawPriority, Position>();
 	title_text->size = 150;
 	title_text->content = menu_title;
 	title_position->position.x = level_size.x / 2.f;
 	title_position->position.y = 2 * BLOCK_SIZE;
 
 	//Set up scroll window
-	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
+	auto [scroll_window_entity, scroll_window, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
 	scroll_window->entity_height = 2 * BLOCK_SIZE;
 	width_and_height->width_and_height = level_size - sf::Vector2f(8 * BLOCK_SIZE, 8 * BLOCK_SIZE);
 	position->position = level_size / 2.f;
@@ -192,11 +192,11 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	for (unsigned i = 0; i < description_texts.size(); ++i)
 	{
 		button_position.y += 3 * BLOCK_SIZE;
-		auto [button_ids, button_height] = create_buttons[i](button_position);
+		auto [button_entities, button_height] = create_buttons[i](button_position);
 		sf::Vector2f description_position = sf::Vector2f(level_size.x - button_position.x, button_position.y);
 		auto [description_id, description_height] = CreateScrollingText(level, description_position, description_texts[i]);
 		scroll_window->entities.insert(scroll_window->entities.end(), { description_id });
-		scroll_window->entities.insert(scroll_window->entities.end(), button_ids.begin(), button_ids.end());
+		scroll_window->entities.insert(scroll_window->entities.end(), button_entities.begin(), button_entities.end());
 	}
 
 	//Add menu button

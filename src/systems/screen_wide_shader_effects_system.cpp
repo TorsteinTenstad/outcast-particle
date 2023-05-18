@@ -10,16 +10,16 @@
 
 void ScreenWideShaderEffectsSystem::Update(Level& level, float dt)
 {
-	for (const auto& [entity_id, segmented_glow_effect, children, draw_priority, position] : level.GetEntitiesWith<SegmentedGlowEffect, Children, DrawPriority, Position>())
+	for (const auto& [entity, segmented_glow_effect, children, draw_priority, position] : level.GetEntitiesWith<SegmentedGlowEffect, Children, DrawPriority, Position>())
 	{
-		Shader* shader = GetSingletonScreenWideFragmentShaderChildId<SegmentedGlowEffect>(level, entity_id, "shaders\\segmented_glow_effect.frag", draw_priority->draw_priority - 1);
+		Shader* shader = GetSingletonScreenWideFragmentShaderChildId<SegmentedGlowEffect>(level, entity, "shaders\\segmented_glow_effect.frag", draw_priority->draw_priority - 1);
 		shader->vec_uniforms["origin"] = position->position;
 		shader->float_uniforms["animation_start_time"] = segmented_glow_effect->animation_start_time.value_or(-1);
 	}
 
-	for (const auto& [entity_id, twinkle_effect, children, draw_priority, width_and_height, position] : level.GetEntitiesWith<TwinkleEffect, Children, DrawPriority, WidthAndHeight, Position>())
+	for (const auto& [entity, twinkle_effect, children, draw_priority, width_and_height, position] : level.GetEntitiesWith<TwinkleEffect, Children, DrawPriority, WidthAndHeight, Position>())
 	{
-		Shader* shader = GetSingletonScreenWideFragmentShaderChildId<TwinkleEffect>(level, entity_id, "shaders\\twinkle.frag", draw_priority->draw_priority + 1);
+		Shader* shader = GetSingletonScreenWideFragmentShaderChildId<TwinkleEffect>(level, entity, "shaders\\twinkle.frag", draw_priority->draw_priority + 1);
 		shader->vec_uniforms["position"] = position->position;
 		shader->vec_uniforms["width_and_height"] = width_and_height->width_and_height;
 	}

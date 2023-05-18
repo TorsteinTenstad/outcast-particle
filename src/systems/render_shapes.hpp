@@ -10,11 +10,11 @@ class RenderShapesSystem : public GameSystem
 {
 private:
 	std::map<std::string, sf::Texture> textures_;
-	std::map<int, sf::RectangleShape> rectangle_shapes_;
-	std::map<int, sf::CircleShape> circle_shapes_;
+	std::map<Entity, sf::RectangleShape> rectangle_shapes_;
+	std::map<Entity, sf::CircleShape> circle_shapes_;
 
 	sf::Texture* GetLoadedSFMLTexture(std::string image_path);
-	EntityBoundDrawable RenderShapesSystem::RenderShape(int entity_id, sf::Shape* shape, sf::Texture* texture, sf::Vector2f w_h, sf::Color fill_color, bool tile, Position* position);
+	EntityBoundDrawable RenderShapesSystem::RenderShape(Entity entity, sf::Shape* shape, sf::Texture* texture, sf::Vector2f w_h, sf::Color fill_color, bool tile, Position* position);
 
 public:
 	using GameSystem::GameSystem;

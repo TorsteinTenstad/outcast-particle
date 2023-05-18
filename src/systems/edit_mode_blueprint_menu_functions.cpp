@@ -1,6 +1,7 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
+#include "components/not_serialized.hpp"
 #include "components/position.hpp"
 #include "components/size.hpp"
 #include "ecs/entity_creation_observer.hpp"
@@ -16,35 +17,35 @@ const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParti
 
 void OpenBlueprintMenu(Level& level)
 {
-	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<BlueprintMenuItem>(id); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<BlueprintMenuItem, NotSerialized>(entity); });
 
 	{ //Background
 		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);
 		auto size = sf::Vector2f(BLUEPRINT_MENU_WIDTH, level.GetSize().y);
-		auto [id, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
-		level.AddComponent<ReceivesButtonEvents>(id);
+		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
+		level.AddComponent<ReceivesButtonEvents>(entity);
 	}
 
 	std::vector<EntitiesHandle> blueprints;
 	for (const auto& blueprint : BLUEPRINT_ENTRIES)
 	{
-		int entity_id = level.AddBlueprint(blueprint);
-		sf::Vector2f size = GetSize(level, entity_id, false);
-		blueprints.push_back(ToEntitiesHandle({ entity_id, size }));
-		level.GetComponent<DrawPriority>(entity_id)->draw_priority += UI_BASE_DRAW_PRIORITY;
+		Entity entity = level.AddBlueprint(blueprint);
+		sf::Vector2f size = GetSize(level, entity, false);
+		blueprints.push_back(ToEntitiesHandle({ entity, size }));
+		level.GetComponent<DrawPriority>(entity)->draw_priority += UI_BASE_DRAW_PRIORITY;
 	}
 	VerticalEntityLayout(level, sf::Vector2f(BLUEPRINT_MENU_WIDTH / 2, BLOCK_SIZE), blueprints, BLOCK_SIZE, StartEdge);
 }
 
-//Handle selection from blueprint menu. Return any selected id.
-std::optional<int> UpdateBlueprintMenu(Level& level)
+//Handle selection from blueprint menu. Return any selected entity.
+std::optional<Entity> UpdateBlueprintMenu(Level& level)
 {
-	for (auto& [entity_id, pressed_this_frame, blueprint_menu_item, draw_priority] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority>())
+	for (auto& [entity, pressed_this_frame, blueprint_menu_item, draw_priority] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority>())
 	{
 		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
-		level.RemoveComponents<BlueprintMenuItem>(entity_id);
+		level.RemoveComponents<BlueprintMenuItem>(entity);
 		CloseBlueprintMenu(level);
-		return entity_id;
+		return entity;
 	}
 	return {};
 }

@@ -29,8 +29,8 @@ private:
 
 	int next_available_system_id_ = 0;
 	std::map<std::type_index, int> type_to_system_id_;
-	std::vector<int> game_system_ids_;
-	std::vector<int> physics_game_system_ids_;
+	std::vector<int> game_system_entities_;
+	std::vector<int> physics_game_system_entities_;
 	std::map<int, std::unique_ptr<GameSystem>> game_systems_;
 
 	sf::Clock absolute_clock;

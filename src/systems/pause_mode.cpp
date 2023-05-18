@@ -67,7 +67,7 @@ void PauseMode::Update(Level& level, float dt)
 }
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
-	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<PauseMenuItem>(id); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<PauseMenuItem>(entity); });
 	LevelState level_state = level.ComputeState();
 	std::vector<EntitiesHandle> entities_handles;
 	std::string menu_title;
@@ -124,21 +124,31 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	if (previous_mode == EDIT_MODE)
 	{
 		AddButton([&]() { level.SetMode(EDIT_MODE); }, "Continue editing", sf::Keyboard::Escape);
-		AddButton([&]() { level.editor.Clear(); level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
+		AddButton([&]() { level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
+	}
 
-		AddButton(std::bind(&CreateConfirmMenu, std::ref(level), level.GetSize(), "Are you sure you want to leave level editing?", [&]() { set_level_(LEVEL_MENU); }), "Level Menu", sf::Keyboard::Unknown);
-		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
+	if (is_in_level_editing_)
+	{
+		std::function<void(void)> return_to_level_menu_func = [&level, set_level_ = this->set_level_]() {
+			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(LEVEL_MENU); } }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); } }, { "Cancel", [&]() {} } }, {});
+		};
+
+		std::function<void(void)> return_to_main_menu_func = [&level, set_level_ = this->set_level_]() {
+			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(MAIN_MENU); } }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); } }, { "Cancel", [&]() {} } }, {});
+		};
+
+		AddButton(return_to_level_menu_func, "Level Menu", sf::Keyboard::Unknown);
+		AddButton(return_to_main_menu_func, "Main menu", sf::Keyboard::Unknown);
 	}
 	else
 	{
-		AddButton([&]() { set_level_(LEVEL_MENU)
-		; }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
 	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240));
 	entities_handles.insert(entities_handles.begin(), ToEntitiesHandle(title_handle));
 
-	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
+	auto [entities, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
 	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
 }

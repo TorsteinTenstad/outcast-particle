@@ -38,15 +38,15 @@ void DrawSystem::Draw(Level& level, sf::RenderTarget* render_target, std::map<in
 		for (auto entity_bound_drawable : entity_bound_drawables)
 		{
 			if (use_shaders
-				&& entity_bound_drawable.entity_id.has_value()
-				&& level.HasComponents<Shader>(entity_bound_drawable.entity_id.value()))
+				&& entity_bound_drawable.entity.has_value()
+				&& level.HasComponents<Shader>(entity_bound_drawable.entity.value()))
 			{
-				render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(level, level.GetComponent<Shader>(entity_bound_drawable.entity_id.value()), entity_bound_drawable.entity_id));
+				render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(level, level.GetComponent<Shader>(entity_bound_drawable.entity.value()), entity_bound_drawable.entity));
 			}
 			else if (use_shaders
 					 && entity_bound_drawable.shader.has_value())
 			{
-				render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(level, entity_bound_drawable.shader.value(), entity_bound_drawable.entity_id));
+				render_target->draw(*entity_bound_drawable.drawable, SetupSFMLShader(level, entity_bound_drawable.shader.value(), entity_bound_drawable.entity));
 			}
 			else
 			{
@@ -57,7 +57,7 @@ void DrawSystem::Draw(Level& level, sf::RenderTarget* render_target, std::map<in
 	level.drawables.clear();
 }
 
-sf::Shader* DrawSystem::SetupSFMLShader(Level& level, const Shader* shader, std::optional<int> entity_id)
+sf::Shader* DrawSystem::SetupSFMLShader(Level& level, const Shader* shader, std::optional<Entity> entity)
 {
 	sf::Shader& sfml_shader = shader_manager_.GetLoadedSFMLShader(shader->vertex_shader_path, shader->fragment_shader_path);
 	for (const auto& [name, value] : shader->float_uniforms)
@@ -85,11 +85,11 @@ sf::Shader* DrawSystem::SetupSFMLShader(Level& level, const Shader* shader, std:
 	sfml_shader.setUniform("_view_center", globals.render_window.getView().getCenter());
 	sfml_shader.setUniform("_texture", sf::Shader::CurrentTexture);
 	sfml_shader.setUniform("_noise_texture", noise_texture_);
-	if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity_id.value_or(-1)))
+	if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity.value_or(-1)))
 	{
 		sfml_shader.setUniform("_wh", width_and_height->width_and_height);
 	}
-	if (Radius* radius = level.RawGetComponent<Radius>(entity_id.value_or(-1)))
+	if (Radius* radius = level.RawGetComponent<Radius>(entity.value_or(-1)))
 	{
 		sfml_shader.setUniform("_wh", sf::Vector2f(2, 2) * radius->radius);
 	}

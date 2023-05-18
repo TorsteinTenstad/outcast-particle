@@ -7,7 +7,7 @@ class ResizeSelected : public MergeableUndoableAction<ResizeSelected>
 {
 private:
 	Level& level_;
-	std::vector<int> entities_;
+	std::vector<Entity> entities_;
 	std::vector<sf::Vector2f> original_sizes_;
 	sf::Vector2f size_delta_;
 
@@ -27,7 +27,7 @@ public:
 	}
 	void Do()
 	{
-		for (int entity : entities_)
+		for (Entity entity : entities_)
 		{
 			sf::Vector2f& width_and_height = level_.GetComponent<WidthAndHeight>(entity)->width_and_height;
 			float smallest_allowed_size = level_.GetComponent<Editable>(entity)->smallest_allowed_size;
@@ -39,7 +39,7 @@ public:
 	void Undo()
 	{
 		int i = 0;
-		for (int entity : entities_)
+		for (Entity entity : entities_)
 		{
 			sf::Vector2f& width_and_height = level_.GetComponent<WidthAndHeight>(entity)->width_and_height;
 			width_and_height = original_sizes_[i++];

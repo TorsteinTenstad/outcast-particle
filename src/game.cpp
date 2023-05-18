@@ -169,7 +169,7 @@ void Game::Update(float dt)
 		dt = 1.f / 20;
 	}
 	sfml_event_handler_.Update(cursor_and_keys_);
-	for (const auto& system_id : game_system_ids_)
+	for (const auto& system_id : game_system_entities_)
 	{
 		game_systems_.at(system_id)->Update(*active_level_, dt);
 		if (restart_update_loop_)
@@ -182,7 +182,7 @@ void Game::Update(float dt)
 	{
 		for (int i = 0; i < physics_ticks_per_frame_; ++i)
 		{
-			for (const auto& system_id : physics_game_system_ids_)
+			for (const auto& system_id : physics_game_system_entities_)
 			{
 				game_systems_[system_id]->Update(*active_level_, dt / physics_ticks_per_frame_);
 				if (restart_update_loop_)

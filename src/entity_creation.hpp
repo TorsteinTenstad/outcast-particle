@@ -3,20 +3,20 @@
 #include <string>
 #include <vector>
 
-typedef std::tuple<int, sf::Vector2f> EntityHandle;
-typedef std::tuple<std::vector<int>, sf::Vector2f> EntitiesHandle;
+typedef std::tuple<Entity, sf::Vector2f> EntityHandle;
+typedef std::tuple<std::vector<Entity>, sf::Vector2f> EntitiesHandle;
 typedef std::function<EntityHandle(sf::Vector2f)> EntityCreator;
 typedef std::function<EntitiesHandle(sf::Vector2f)> EntitiesCreator;
 
 template <class T>
-int GetId(T& handle)
+Entity GetEntity(T& handle)
 {
-	return std::get<int>(handle);
+	return std::get<Entity>(handle);
 }
 template <class T>
-std::vector<int> GetIds(T& handle)
+std::vector<Entity> GetEntities(T& handle)
 {
-	return std::get<std::vector<int>>(handle);
+	return std::get<std::vector<Entity>>(handle);
 }
 template <class T>
 sf::Vector2f GetSize(T& handle)
@@ -31,8 +31,8 @@ EntitiesHandle ToEntitiesHandle(EntityHandle handle, EntityHandles... handles)
 		std::max(GetSize(handle).x, GetSize(handles).x...),
 		std::max(GetSize(handle).y, GetSize(handles).y...));
 
-	std::vector<int> ids = std::vector<int>({ GetId(handle), GetId(handles)... });
-	return { ids, total_size };
+	std::vector<Entity> entities = std::vector<Entity>({ GetEntity(handle), GetEntity(handles)... });
+	return { entities, total_size };
 }
 
 EntitiesHandle ToEntitiesHandle(EntityHandle EntityHandle);
@@ -51,6 +51,7 @@ EntityHandle CreateSizedButtonTemplate(ECSScene& level, sf::Vector2f position);
 EntityHandle CreateButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> on_click, std::string text, unsigned textsize);
 EntityHandle CreateMenuButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
 EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key);
+EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key, sf::Vector2f size);
 EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key);
 EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool tile);
 EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position);
@@ -61,6 +62,6 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities);
 EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f);
 EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle);
-int CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
+Entity CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 
 #include "entity_creation.tpp"

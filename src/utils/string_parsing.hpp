@@ -2,12 +2,14 @@
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Keyboard.hpp"
+#include <optional>
 #include <sstream>
 #include <string>
 #include <vector>
 
-std::string GetSubstrBetween(std::string s, std::string prefix, std::string postfix);
+std::optional<std::string> GetSubstrBetween(std::string s, std::optional<std::string> prefix, std::optional<std::string> postfix);
 std::vector<std::string> SplitString(std::string s, std::string delimiter);
+bool IsNumeric(const std::string& s);
 
 std::string ToString(std::string x);
 std::string ToString(float x);

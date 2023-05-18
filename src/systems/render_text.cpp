@@ -11,7 +11,7 @@
 
 void RenderTextSystem::Update(Level& level, float dt)
 {
-	for (auto const& [entity_id, text, draw_priority, position] : level.GetEntitiesWith<Text, DrawPriority, Position>())
+	for (auto const& [entity, text, draw_priority, position] : level.GetEntitiesWith<Text, DrawPriority, Position>())
 	{
 		if (font_.count(text->font_path) == 0)
 		{
@@ -22,15 +22,15 @@ void RenderTextSystem::Update(Level& level, float dt)
 			sf::Text alignment_reference = sf::Text("N", font_[text->font_path], text->size);
 			text_height_[text->font_path][text->size] = alignment_reference.getLocalBounds().height / 2 + alignment_reference.getLocalBounds().top;
 		}
-		text_[entity_id].setString(text->content);
-		text_[entity_id].setFont(font_[text->font_path]);
-		text_[entity_id].setCharacterSize(text->size);
-		sf::FloatRect bounds = text_[entity_id].getLocalBounds();
-		text_[entity_id].setOrigin(bounds.width / 2 + bounds.left, text_height_[text->font_path][text->size]);
-		text_[entity_id].setPosition(position->position);
-		text_[entity_id].setFillColor(text->color);
-		text_[entity_id].setOutlineColor(text->outline_color);
-		text_[entity_id].setOutlineThickness(text->outline_thickness);
-		level.drawables[draw_priority->draw_priority].push_back({ &text_[entity_id], text->apply_shader ? entity_id : std::optional<int>() });
+		text_[entity].setString(text->content);
+		text_[entity].setFont(font_[text->font_path]);
+		text_[entity].setCharacterSize(text->size);
+		sf::FloatRect bounds = text_[entity].getLocalBounds();
+		text_[entity].setOrigin(bounds.width / 2 + bounds.left, text_height_[text->font_path][text->size]);
+		text_[entity].setPosition(position->position);
+		text_[entity].setFillColor(text->color);
+		text_[entity].setOutlineColor(text->outline_color);
+		text_[entity].setOutlineThickness(text->outline_thickness);
+		level.drawables[draw_priority->draw_priority].push_back({ &text_[entity], text->apply_shader ? entity : std::optional<Entity>() });
 	}
 }

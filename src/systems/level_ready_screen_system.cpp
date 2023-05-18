@@ -26,21 +26,21 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 	float level_scale = level.GetScale();
 
 	level.GetSingleton<ReadyScreen>([&level_size, &level_scale](ECSScene& level) {
-		int entity_id = level.CreateEntityId();
-		level.AddComponent<DrawInfo>(entity_id)->image_path = "content\\textures\\transparent.png";
-		level.AddComponent<DrawPriority>(entity_id)->draw_priority = UI_BASE_DRAW_PRIORITY + 5;
-		level.AddComponent<Position>(entity_id)->position = level_size / 2.f;
-		level.AddComponent<WidthAndHeight>(entity_id)->width_and_height = sf::Vector2f(0.75 * level_size.x, (3.f / 18.f) * level_size.y);
-		level.AddComponent<FillColor>(entity_id);
-		Text* text = level.AddComponent<Text>(entity_id);
+		Entity entity = level.CreateEntity();
+		level.AddComponent<DrawInfo>(entity)->image_path = "content\\textures\\transparent.png";
+		level.AddComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 5;
+		level.AddComponent<Position>(entity)->position = level_size / 2.f;
+		level.AddComponent<WidthAndHeight>(entity)->width_and_height = sf::Vector2f(0.75 * level_size.x, (3.f / 18.f) * level_size.y);
+		level.AddComponent<FillColor>(entity);
+		Text* text = level.AddComponent<Text>(entity);
 		text->content = "Press any key to start";
 		text->outline_color = sf::Color::Black;
 		text->size = 200 * level_scale;
 		text->outline_thickness = 10 * level_scale;
-		AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(entity_id);
+		AnimatedOpacity* animated_opacity = level.AddComponent<AnimatedOpacity>(entity);
 		animated_opacity->animation_func = [](float t) { return sf::Uint8(255 * Smoothstep(0.5 * std::cos(PI * t) + 0.5)); };
 		animated_opacity->start_time = globals.time;
-		return entity_id;
+		return entity;
 	});
 
 	auto conditionally_enter_play_mode = [&level](bool enter) {

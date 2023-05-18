@@ -10,10 +10,10 @@ static sf::Vector2f CalculateElectricFieldForce(Charge* particle, ElectricField*
 
 void ElectricFieldForceSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, received_forces, intersection, charge] : level.GetEntitiesWith<ReceivedForces, Intersection, Charge>())
+	for (auto [entity, received_forces, intersection, charge] : level.GetEntitiesWith<ReceivedForces, Intersection, Charge>())
 	{
 		received_forces->electric_field_force = sf::Vector2f(0, 0);
-		for (auto& intersecting_id : intersection->intersecting_ids)
+		for (auto& intersecting_id : intersection->intersecting_entities)
 		{
 			if (ElectricField* electric_field = level.RawGetComponent<ElectricField>(intersecting_id))
 			{

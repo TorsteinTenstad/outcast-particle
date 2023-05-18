@@ -36,13 +36,13 @@ class TextBoxCurser
 
 void TextBoxSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, text_box, text, draw_priority, position] : level.GetEntitiesWith<TextBox, Text, DrawPriority, Position>())
+	for (auto [entity, text_box, text, draw_priority, position] : level.GetEntitiesWith<TextBox, Text, DrawPriority, Position>())
 	{
 		EditString(text->content, cursor_and_keys_.text_input);
 		RemoveChars(text->content, text_box->illegal_characters);
 
-		int cursor_id = GetSingletonChildId<TextBox>(level, entity_id, [text_size = text->size, draw_priority = draw_priority->draw_priority](Level& level) {
-			int cursor_id = level.CreateEntityId();
+		Entity cursor_id = GetSingletonChildId<TextBox>(level, entity, [text_size = text->size, draw_priority = draw_priority->draw_priority](Level& level) {
+			Entity cursor_id = level.CreateEntity();
 			level.AddComponent<Position>(cursor_id);
 			level.AddComponent<Text>(cursor_id)->size = text_size;
 			level.AddComponent<DrawPriority>(cursor_id)->draw_priority = draw_priority;

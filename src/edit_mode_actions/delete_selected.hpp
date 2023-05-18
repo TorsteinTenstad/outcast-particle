@@ -10,13 +10,13 @@ class DeleteSelected : public UndoableAction
 {
 private:
 	Level& level_;
-	std::vector<int> entities_;
+	std::vector<Entity> entities_;
 
 public:
 	DeleteSelected(Level& level) :
 		level_(level)
 	{
-		for (int entity : level.GetIdsWithComponent<Selected>())
+		for (Entity entity : level.GetEntitiesWithComponent<Selected>())
 		{
 			// There should be at least 1 Goal and Player in the level, so we don't allow deletion of all
 			bool player_found = false;

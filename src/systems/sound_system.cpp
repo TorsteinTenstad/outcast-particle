@@ -12,7 +12,7 @@
 void SoundSystem::Update(Level& level, float dt)
 {
 	float max_volume = 100; //SFML uses 0-100 for volume, we use 0-1
-	for (auto const& [entity_id, sound_info] : level.GetEntitiesWith<SoundInfo>())
+	for (auto const& [entity, sound_info] : level.GetEntitiesWith<SoundInfo>())
 	{
 		if (!sound_info->play_sound.empty())
 		{

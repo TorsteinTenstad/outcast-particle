@@ -17,7 +17,7 @@ class EntityBoundDrawable
 {
 public:
 	sf::Drawable* drawable;
-	std::optional<int> entity_id;
+	std::optional<Entity> entity;
 	std::optional<Shader*> shader;
 };
 
@@ -43,8 +43,8 @@ public:
 
 	std::map<int, std::vector<EntityBoundDrawable>> drawables; // Indexed by draw priority
 
-	int AddBlueprint(Blueprint blueprint);
-	int AddBlueprint(std::string blueprint_tag);
+	Entity AddBlueprint(Blueprint blueprint);
+	Entity AddBlueprint(std::string blueprint_tag);
 
 	LevelState ComputeState();
 	LevelMode GetMode();

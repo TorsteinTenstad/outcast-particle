@@ -8,10 +8,10 @@
 template <class InputType, class OutputType>
 std::vector<OutputType> ApplyFuncToVector(std::vector<InputType> vec, std::function<OutputType(InputType)> func)
 {
-	std::vector<OutputType> result = {};
+	std::vector<OutputType> result;
 	for (auto& x : vec)
 	{
-		result.push_back(func(x));
+		result.emplace_back(func(x));
 	}
 	return result;
 }

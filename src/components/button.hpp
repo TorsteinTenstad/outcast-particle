@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Window/Keyboard.hpp"
+#include "ecs/entity.hpp"
 #include <functional>
 #include <string>
 
@@ -44,7 +45,7 @@ class SliderButton
 {
 public:
 	int* slider_value; //float normalized from 0-100.
-	int slider_text_id;
-	int slider_button_id;
-	int slider_bar_id;
+	Entity slider_text;
+	Entity slider_button;
+	Entity slider_bar;
 };

@@ -5,55 +5,65 @@
 #include "components/size.hpp"
 #include "level.hpp"
 #include "systems/_pure_DO_systems.hpp"
+#include "utils/container_operations.hpp"
 #include <cassert>
 
-static int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possible_positions)
+static SnapPosition GetNextSnapPosition(Level& level, const MenuNavigator* menu_navigator, std::vector<SnapPosition> possible_positions, std::function<bool(const SnapPosition&, const SnapPosition&)> ordering_comparison)
 {
-	for (auto it = possible_positions.rbegin(); it != possible_positions.rend(); ++it)
-	{
-		if (it->first < menu_navigator->currently_at_entity_id)
-		{
-			return it->first;
-		}
-	}
-	return possible_positions.rbegin()->first;
-}
-
-static int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possible_positions)
-{
-	for (auto it = possible_positions.begin(); it != possible_positions.end(); ++it)
-	{
-		if (it->first > menu_navigator->currently_at_entity_id)
-		{
-			return it->first;
-		}
-	}
-	return possible_positions.begin()->first;
-}
-
-static std::map<int, sf::Vector2f> GetPossiblePossiblePositions(Level& level, MenuNavigator* menu_navigator)
-{
-	std::map<int, sf::Vector2f> possible_positions;
-	if (menu_navigator->menu_items.has_value())
-	{
-		for (int entity_id : menu_navigator->menu_items.value())
-		{
-			auto [width_and_height, position] = level.GetComponents<WidthAndHeight, Position>(entity_id);
-
-			possible_positions[entity_id] = position->position;
-			possible_positions[entity_id].x -= width_and_height->width_and_height.x / 2;
-		}
-	}
-	else
-	{
-		for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>())
-		{
-			possible_positions[entity_id] = position->position;
-			possible_positions[entity_id].x -= width_and_height->width_and_height.x / 2;
-		}
-	}
 	assert(possible_positions.size() > 0);
+	assert(menu_navigator->current_snap_position.has_value());
+	std::sort(possible_positions.begin(), possible_positions.end(), ordering_comparison);
+	auto found_it = std::find_if(possible_positions.begin(), possible_positions.end(), [&](SnapPosition x) { return ordering_comparison(menu_navigator->current_snap_position.value(), x); });
+	if (found_it == possible_positions.end()) { found_it = possible_positions.begin(); }
+	return *found_it;
+}
+
+static SnapPosition GetNextSnapPositionBelow(Level& level, const MenuNavigator* menu_navigator, std::vector<SnapPosition> possible_positions)
+{
+	return GetNextSnapPosition(level, menu_navigator, possible_positions, [](auto a, auto b) { return a.ordering < b.ordering; });
+}
+static SnapPosition GetNextSnapPositionAbove(Level& level, const MenuNavigator* menu_navigator, std::vector<SnapPosition> possible_positions)
+{
+	return GetNextSnapPosition(level, menu_navigator, possible_positions, [](auto a, auto b) { return a.ordering > b.ordering; });
+}
+
+template <class View>
+static Entity DropComponentsFromView(View view)
+{
+	return std::get<Entity>(view);
+}
+
+template <class View>
+static std::vector<Entity> DropComponentsFromViews(std::vector<View> views)
+{
+	std::function<Entity(View)> f = DropComponentsFromView<View>;
+	return ApplyFuncToVector(views, f);
+}
+
+static std::vector<SnapPosition> GetPossiblePossiblePositions(Level& level, MenuNavigator* menu_navigator)
+{
+	std::vector<SnapPosition> possible_positions;
+	std::vector<Entity> menu_items = menu_navigator->menu_items.value_or(DropComponentsFromViews(level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>()));
+	for (Entity entity : menu_items)
+	{
+		possible_positions.emplace_back(level, entity);
+	}
 	return possible_positions;
+}
+
+template <class... Components>
+std::tuple<Entity, Components*...> GetHighestDrawPriority(std::vector<std::tuple<Entity, Components*...>> entity_views)
+{
+	return *std::max_element(entity_views.begin(), entity_views.end(), [](const std::tuple<Entity, Components*...>& a, const std::tuple<Entity, Components*...>& b) {
+		return std::get<DrawPriority*>(a)->draw_priority < std::get<DrawPriority*>(b)->draw_priority;
+	});
+}
+
+static void MoveToSnapPosition(Level& level, Entity entity, MenuNavigator* menu_navigator, const SnapPosition& snap_position)
+{
+	menu_navigator->current_snap_position = snap_position;
+	menu_navigator->moved_itself_this_frame = true;
+	level.GetComponent<Position>(entity)->position = snap_position.position - sf::Vector2f(level.GetComponent<WidthAndHeight>(entity)->width_and_height.x, 0);
 }
 
 void MenuNavigatorSystem::Update(Level& level, float dt)
@@ -61,49 +71,48 @@ void MenuNavigatorSystem::Update(Level& level, float dt)
 	auto navigators = level.GetEntitiesWith<MenuNavigator, DrawPriority, WidthAndHeight, Position>();
 	if (navigators.size() == 0)
 	{
-		for (int entity_id : level.inactive_entities.GetIdsWithComponent<MenuNavigator>())
+		for (Entity entity : level.inactive_entities.GetEntitiesWithComponent<MenuNavigator>())
 		{
-			level.ActivateEntities(entity_id);
+			level.ActivateEntities(entity);
 		}
 		navigators = level.GetEntitiesWith<MenuNavigator, DrawPriority, WidthAndHeight, Position>();
 	}
 	if (navigators.size() == 0) { return; }
-	for (auto [entity_id, menu_navigator, draw_priority, width_and_height, position] : navigators)
+
+	auto highest_priority_navigator = GetHighestDrawPriority(navigators);
+
+	for (auto navigator_view : navigators)
 	{
-		if (entity_id != std::get<int>(navigators.back()))
-		{
-			level.DeactivateEntities(entity_id);
-			continue;
-		};
-		menu_navigator->moved_itself_this_frame = false;
-		std::optional<int>& at_id = menu_navigator->currently_at_entity_id;
-		std::map<int, sf::Vector2f> possible_positions = GetPossiblePossiblePositions(level, menu_navigator);
+		Entity entity = std::get<Entity>(navigator_view);
+		if (entity == std::get<Entity>(highest_priority_navigator)) { continue; }
+		level.DeactivateEntities(entity);
+	}
 
-		if (cursor_and_keys_.key_pressed_this_frame[menu_navigator->increment_key]
-			|| !at_id.has_value())
-		{
-			cursor_and_keys_.key_pressed_this_frame[menu_navigator->increment_key] = false;
-			at_id = SnapToNextBelow(level, menu_navigator, possible_positions);
-			menu_navigator->moved_itself_this_frame = true;
-		}
-		else if (cursor_and_keys_.key_pressed_this_frame[menu_navigator->decrement_key])
-		{
-			cursor_and_keys_.key_pressed_this_frame[menu_navigator->decrement_key] = false;
-			at_id = SnapToNextAbove(level, menu_navigator, possible_positions);
-			menu_navigator->moved_itself_this_frame = true;
-		}
-		else
-		{
-			for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigable, WidthAndHeight, Position>())
-			{
-				at_id = hovered_started_this_frame_id;
-				menu_navigator->moved_itself_this_frame = true;
-				break;
-			}
-		}
-		assert(at_id.has_value());
+	auto [entity, menu_navigator, draw_priority, width_and_height, position] = highest_priority_navigator;
+	menu_navigator->moved_itself_this_frame = false;
+	std::vector<SnapPosition> possible_positions = GetPossiblePossiblePositions(level, menu_navigator);
+	assert(possible_positions.size() > 0);
 
-		position->position = possible_positions[at_id.value()];
-		position->position.x -= width_and_height->width_and_height.x;
+	if (!menu_navigator->current_snap_position.has_value())
+	{
+		return MoveToSnapPosition(level, entity, menu_navigator, *std::min_element(possible_positions.begin(), possible_positions.end(), [](auto a, auto b) { return a.ordering < b.ordering; }));
+	}
+	else if (cursor_and_keys_.key_pressed_this_frame[menu_navigator->increment_key])
+	{
+		cursor_and_keys_.key_pressed_this_frame[menu_navigator->increment_key] = false;
+		MoveToSnapPosition(level, entity, menu_navigator, GetNextSnapPositionBelow(level, menu_navigator, possible_positions));
+	}
+	else if (cursor_and_keys_.key_pressed_this_frame[menu_navigator->decrement_key])
+	{
+		cursor_and_keys_.key_pressed_this_frame[menu_navigator->decrement_key] = false;
+		MoveToSnapPosition(level, entity, menu_navigator, GetNextSnapPositionAbove(level, menu_navigator, possible_positions));
+	}
+	else
+	{
+		for (auto [hovered_started_this_frame_id, hovered_started_this_frame, menu_navigable, width_and_height, position] : level.GetEntitiesWith<HoveredStartedThisFrame, MenuNavigable, WidthAndHeight, Position>())
+		{
+			MoveToSnapPosition(level, entity, menu_navigator, SnapPosition(level, hovered_started_this_frame_id));
+			break;
+		}
 	}
 }

@@ -20,9 +20,9 @@
 void GoalSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() == EDIT_MODE) { return; }
-	for (auto& [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
+	for (auto& [entity, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
-		for (auto intersecting_id : intersection->entered_this_frame_ids)
+		for (auto intersecting_id : intersection->entities_entered_this_frame)
 		{
 			if (!level.HasComponents<Goal>(intersecting_id))
 			{
@@ -36,20 +36,20 @@ void GoalSystem::Update(Level& level, float dt)
 			{
 				assert(false);
 			}
-			level.RemoveComponents<Player>(entity_id);
-			level.RemoveComponents<ForceVisualization>(entity_id);
-			level.AddComponent<ScheduledDelete>(entity_id)->delete_at = globals.time + 2;
+			level.RemoveComponents<Player>(entity);
+			level.RemoveComponents<ForceVisualization>(entity);
+			level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + 2;
 			level.GetComponent<Goal>(intersecting_id)->is_goal = true;
 			break;
 		}
 	}
-	for (auto& [entity_id, intersection, radius, velocity, position] : level.GetEntitiesWith<Intersection, Radius, Velocity, Position>())
+	for (auto& [entity, intersection, radius, velocity, position] : level.GetEntitiesWith<Intersection, Radius, Velocity, Position>())
 	{
-		for (auto intersecting_id : intersection->intersecting_ids)
+		for (auto intersecting_id : intersection->intersecting_entities)
 		{
 			if (!level.HasComponents<Wormhole>(intersecting_id)) { continue; }
-			level.RemoveComponents<Acceleration, ReceivedForces, Trail, Charge>(entity_id);
-			FillColor* fill_color = level.EnsureExistenceOfComponent<FillColor>(entity_id);
+			level.RemoveComponents<Acceleration, ReceivedForces, Trail, Charge>(entity);
+			FillColor* fill_color = level.EnsureExistenceOfComponent<FillColor>(entity);
 
 			assert(level.HasComponents<Position>(intersecting_id));
 			assert(level.HasComponents<Radius>(intersecting_id));

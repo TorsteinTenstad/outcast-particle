@@ -1,4 +1,5 @@
 #pragma once
+#include "ecs/entity.hpp"
 #include <map>
 #include <optional>
 #include <string>
@@ -22,18 +23,18 @@ public:
 
 	std::optional<std::string> displaying_level_id;
 
-	std::optional<int> new_level_button_id;
-	int menu_navigator_id;
-	int level_preview_id;
-	int next_group_button_id;
-	int prev_group_button_id;
-	int dot_indicator_id;
+	std::optional<Entity> new_level_button_id;
+	Entity menu_navigator_entity;
+	Entity level_preview_entity;
+	Entity next_group_button_entity;
+	Entity prev_group_button_entity;
+	Entity dot_indicator_entity;
 
-	std::vector<int> button_entity_ids = {};
-	std::vector<int> text_entity_ids = {};
-	std::vector<int> rename_level_button_entity_ids = {};
-	std::vector<int> edit_level_button_entity_ids = {};
-	std::vector<int> delete_level_button_entity_ids = {};
+	std::vector<Entity> button_entities = {};
+	std::vector<Entity> text_entities = {};
+	std::vector<Entity> rename_level_button_entities = {};
+	std::vector<Entity> edit_level_button_entities = {};
+	std::vector<Entity> delete_level_button_entities = {};
 
-	std::vector<int> stats_block_ids = {};
+	std::vector<Entity> stats_block_entities = {};
 };

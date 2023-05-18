@@ -8,10 +8,10 @@ class AddEntity : public UndoableAction
 {
 private:
 	Level& level_;
-	int entity_;
+	Entity entity_;
 
 public:
-	AddEntity(Level& level, int entity) :
+	AddEntity(Level& level, Entity entity) :
 		level_(level),
 		entity_(entity)
 	{

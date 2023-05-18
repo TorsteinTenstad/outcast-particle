@@ -13,7 +13,7 @@
 void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 {
 	int player_i = 0;
-	for (const auto& [entity_id, player, player_behaviors, received_forces, charge, children, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Children, Shader, SoundInfo, Position>())
+	for (const auto& [entity, player, player_behaviors, received_forces, charge, children, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Children, Shader, SoundInfo, Position>())
 	{
 		int x_direction = 0;
 		x_direction -= cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_LEFT] ? 1 : 0;
@@ -58,7 +58,7 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 
 void SetTextures(Level& level)
 {
-	for (auto const& [entity_id, player, player_behaviors, charge, draw_info, children, face] : level.GetEntitiesWith<Player, PlayerBehaviors, Charge, DrawInfo, Children, Face>())
+	for (auto const& [entity, player, player_behaviors, charge, draw_info, children, face] : level.GetEntitiesWith<Player, PlayerBehaviors, Charge, DrawInfo, Children, Face>())
 	{
 		float nonzero_charge = 0;
 		if (charge->charge != 0)
@@ -89,7 +89,7 @@ void PlayerSystem::Update(Level& level, float dt)
 		return;
 	}
 	LevelMode level_mode = level.GetMode();
-	for (auto const& [entity_id, player, player_behaviors, shader] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader>())
+	for (auto const& [entity, player, player_behaviors, shader] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader>())
 	{
 		shader->float_uniforms["time_of_last_level_enter"] = level_mode == READY_MODE ? globals.time_of_last_level_enter : -1;
 	}
