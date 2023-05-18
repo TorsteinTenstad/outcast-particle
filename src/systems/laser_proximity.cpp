@@ -40,7 +40,7 @@ void LaserProximitySystem::Update(Level& level, float dt)
 
 	float minimum_laser_distance = 750;
 	float smallest_laser_distance = minimum_laser_distance;
-	for (auto [player_id, player, player_position] : level.GetEntitiesWith<Player, Position>())
+	for (auto [player_entity, player, player_position] : level.GetEntitiesWith<Player, Position>())
 	{
 		for (auto [laser_id, kill_on_intersection, laser_position, laser_width_and_height] : level.GetEntitiesWith<Laser, Position, WidthAndHeight>())
 		{
@@ -51,15 +51,15 @@ void LaserProximitySystem::Update(Level& level, float dt)
 			}
 		}
 	}
-	int id = level.GetSingletonId<LaserProximity>([](ECSScene& level) {
-		auto [id, sound_info] = level.CreateEntityWith<SoundInfo>();
+	Entity entity = level.GetSingletonId<LaserProximity>([](ECSScene& level) {
+		auto [entity, sound_info] = level.CreateEntityWith<SoundInfo>();
 		sound_info->sound_paths = { { DEFAULT, "content\\sounds\\laser_proximity.wav" } };
 		sound_info->play_sound.push(DEFAULT);
 		sound_info->loop_sounds = { { DEFAULT, true } };
-		return id;
+		return entity;
 	});
 
-	auto sound_info = level.GetComponent<SoundInfo>(id);
+	auto sound_info = level.GetComponent<SoundInfo>(entity);
 	if (smallest_laser_distance >= minimum_laser_distance || level.GetMode() != PLAY_MODE)
 	{
 		sound_info->sound_volumes[DEFAULT] = 0;

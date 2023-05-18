@@ -23,7 +23,7 @@ static sf::Vector2f CalcAcceleration(ReceivedForces* received_forces, Mass* mass
 
 void ForceSystem::Update(Level& level, float dt)
 {
-	for (auto const& [entity_id, received_forces, mass, acceleration] : level.GetEntitiesWith<ReceivedForces, Mass, Acceleration>())
+	for (auto const& [entity, received_forces, mass, acceleration] : level.GetEntitiesWith<ReceivedForces, Mass, Acceleration>())
 	{
 		acceleration->acceleration = CalcAcceleration(received_forces, mass, GLOBAL_MAX_ACCELERATION);
 	}

@@ -2,37 +2,37 @@
 #include <cassert>
 
 template <class ResponsibleComponent>
-int GetSingletonChildId(Level& level, int parent_id, std::function<int(Level&)> child_creation_func)
+Entity GetSingletonChildId(Level& level, Entity parent, std::function<Entity(Level&)> child_creation_func)
 {
-	Children* children = level.EnsureExistenceOfComponent<Children>(parent_id);
-	if (children->ids_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
+	Children* children = level.EnsureExistenceOfComponent<Children>(parent);
+	if (children->entities_owned_by_component.count(typeid(ResponsibleComponent)) == 0)
 	{
-		int child_id = child_creation_func(level);
-		children->ids_owned_by_component[typeid(ResponsibleComponent)].push_back(child_id);
+		Entity child = child_creation_func(level);
+		children->entities_owned_by_component[typeid(ResponsibleComponent)].push_back(child);
 	}
-	assert(children->ids_owned_by_component[typeid(ResponsibleComponent)].size() == 1);
-	return children->ids_owned_by_component[typeid(ResponsibleComponent)][0];
+	assert(children->entities_owned_by_component[typeid(ResponsibleComponent)].size() == 1);
+	return children->entities_owned_by_component[typeid(ResponsibleComponent)][0];
 }
 
 template <class ResponsibleComponent>
-Shader* GetSingletonScreenWideFragmentShaderChildId(Level& level, int parent_id, std::string shader_path, int draw_priority)
+Shader* GetSingletonScreenWideFragmentShaderChildId(Level& level, Entity parent, std::string shader_path, int draw_priority)
 {
-	std::function<int(Level&)> child_creation_func = [shader_path, draw_priority](Level& level) { return CreateScreenWideFragmentShaderEntity(level, shader_path, draw_priority); };
-	int child_id = GetSingletonChildId<ResponsibleComponent>(level, parent_id, child_creation_func);
-	return level.GetComponent<Shader>(child_id);
+	std::function<Entity(Level&)> child_creation_func = [shader_path, draw_priority](Level& level) { return CreateScreenWideFragmentShaderEntity(level, shader_path, draw_priority); };
+	Entity child = GetSingletonChildId<ResponsibleComponent>(level, parent, child_creation_func);
+	return level.GetComponent<Shader>(child);
 }
 
 template <class ResponsibleComponent>
-void DeleteChildrenOwnedBy(Level& level, int parent_id)
+void DeleteChildrenOwnedBy(Level& level, Entity parent)
 {
-	if (Children* children = level.RawGetComponent<Children>(parent_id))
+	if (Children* children = level.RawGetComponent<Children>(parent))
 	{
-		auto it = children->ids_owned_by_component.find(typeid(ResponsibleComponent));
-		if (it == children->ids_owned_by_component.end()) { return; }
-		for (int child : it->second)
+		auto it = children->entities_owned_by_component.find(typeid(ResponsibleComponent));
+		if (it == children->entities_owned_by_component.end()) { return; }
+		for (Entity child : it->second)
 		{
 			level.DeleteEntity(child);
 		}
-		children->ids_owned_by_component.erase(typeid(ResponsibleComponent));
+		children->entities_owned_by_component.erase(typeid(ResponsibleComponent));
 	}
 }

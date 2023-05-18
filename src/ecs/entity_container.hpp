@@ -1,11 +1,12 @@
 #pragma once
+#include "ecs/entity.hpp"
 #include <cassert>
 #include <functional>
 #include <map>
 #include <memory>
 #include <typeindex>
 
-typedef int Key;
+typedef Entity Key;
 
 class ComponentMap
 {

@@ -13,14 +13,14 @@
 
 void TextPopupSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, text_popup_spawner, draw_info] : level.GetEntitiesWith<TextPopupSpawner, DrawInfo>())
+	for (auto [entity, text_popup_spawner, draw_info] : level.GetEntitiesWith<TextPopupSpawner, DrawInfo>())
 	{
 		draw_info->image_path = level.GetMode() == EDIT_MODE ? "content\\textures\\white.png" : "content\\textures\\transparent.png";
 	}
 	if (level.GetMode() == EDIT_MODE) { return; }
-	for (auto [entity_id, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
+	for (auto [entity, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
-		for (auto& i : intersection->entered_this_frame_ids)
+		for (auto& i : intersection->entities_entered_this_frame)
 		{
 			if (TextPopupSpawner* text_popup_spawner = level.RawGetComponent<TextPopupSpawner>(i))
 			{

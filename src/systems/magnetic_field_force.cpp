@@ -13,10 +13,10 @@ static sf::Vector2f CalculateMagneticFieldForce(Charge* particle_charge, Velocit
 
 void MagneticFieldForceSystem::Update(Level& level, float dt)
 {
-	for (auto& [entity_id, received_forces, intersection, charge, velocity] : level.GetEntitiesWith<ReceivedForces, Intersection, Charge, Velocity>())
+	for (auto& [entity, received_forces, intersection, charge, velocity] : level.GetEntitiesWith<ReceivedForces, Intersection, Charge, Velocity>())
 	{
 		sf::Vector2f magnetic_field_force;
-		for (const auto& intersection_id : intersection->intersecting_ids)
+		for (const auto& intersection_id : intersection->intersecting_entities)
 		{
 			if (MagneticField* magnetic_field = level.RawGetComponent<MagneticField>(intersection_id))
 			{

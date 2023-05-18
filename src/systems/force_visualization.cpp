@@ -15,23 +15,23 @@ void ForceVisualizationSystem::Update(Level& level, float dt)
 	{
 		return;
 	}
-	for (const auto& [entity_id, force_visualization, children, radius, player_charge, draw_priority, player_position] : level.GetEntitiesWith<ForceVisualization, Children, Radius, Charge, DrawPriority, Position>())
+	for (const auto& [entity, force_visualization, children, radius, player_charge, draw_priority, player_position] : level.GetEntitiesWith<ForceVisualization, Children, Radius, Charge, DrawPriority, Position>())
 	{
-		std::function<int(Level&)> child_creation_func = [active_level_id = active_level_id_, draw_priority = draw_priority](Level& level) {
-			int entity_id = CreateScreenWideFragmentShaderEntity(level, "shaders\\force.frag", 9);
-			MakeFadeIntoLevel(level, entity_id, active_level_id);
-			return entity_id;
+		std::function<Entity(Level&)> child_creation_func = [active_level_id = active_level_id_, draw_priority = draw_priority](Level& level) {
+			Entity entity = CreateScreenWideFragmentShaderEntity(level, "shaders\\force.frag", 9);
+			MakeFadeIntoLevel(level, entity, active_level_id);
+			return entity;
 		};
-		int child_id = GetSingletonChildId<ForceVisualization>(level, entity_id, child_creation_func);
-		Shader* shader = level.GetComponent<Shader>(child_id);
+		Entity child = GetSingletonChildId<ForceVisualization>(level, entity, child_creation_func);
+		Shader* shader = level.GetComponent<Shader>(child);
 
 		shader->vec_uniforms["player_pos"] = player_position->position;
 		shader->float_uniforms["charge_radius"] = radius->radius;
 
 		int charge_i = 0;
-		for (const auto [particle_entity_id, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())
+		for (const auto [particle_entity, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())
 		{
-			if (particle_entity_id == entity_id)
+			if (particle_entity == entity)
 			{
 				continue;
 			}

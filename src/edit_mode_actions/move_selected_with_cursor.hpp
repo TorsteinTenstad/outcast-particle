@@ -18,7 +18,7 @@ class MoveSelectedWithCursor : public MergeableUndoableAction<MoveSelectedWithCu
 {
 private:
 	Level& level_;
-	std::vector<int> entities_;
+	std::vector<Entity> entities_;
 	std::vector<sf::Vector2f> original_positions_;
 	std::vector<sf::Vector2f> new_positions_;
 
@@ -41,7 +41,7 @@ private:
 	void SetPositions(std::vector<sf::Vector2f>& positions)
 	{
 		int i = 0;
-		for (int entity : entities_)
+		for (Entity entity : entities_)
 		{
 			sf::Vector2f& position = level_.GetComponent<Position>(entity)->position;
 			position = positions[i++];

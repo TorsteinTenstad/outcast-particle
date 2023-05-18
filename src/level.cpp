@@ -11,7 +11,7 @@
 
 LevelState Level::ComputeState()
 {
-	for (auto& [entity_id, goal] : GetEntitiesWith<Goal>())
+	for (auto& [entity, goal] : GetEntitiesWith<Goal>())
 	{
 		if (goal->is_goal)
 		{

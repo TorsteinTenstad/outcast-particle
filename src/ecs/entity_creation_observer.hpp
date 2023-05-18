@@ -7,11 +7,11 @@ class ECSScene;
 class EntityCreationObserver
 {
 private:
-	std::function<void(ECSScene&, int)> f_;
+	std::function<void(ECSScene&, Entity)> f_;
 	ECSScene& subject_;
 
 public:
-	EntityCreationObserver(ECSScene& subject, std::function<void(ECSScene&, int)> f);
+	EntityCreationObserver(ECSScene& subject, std::function<void(ECSScene&, Entity)> f);
 	~EntityCreationObserver();
-	void Notify(int created_id);
+	void Notify(Entity created_id);
 };

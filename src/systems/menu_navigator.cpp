@@ -7,11 +7,11 @@
 #include "systems/_pure_DO_systems.hpp"
 #include <cassert>
 
-static int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possible_positions)
+static Entity SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map<Entity, sf::Vector2f> possible_positions)
 {
 	for (auto it = possible_positions.rbegin(); it != possible_positions.rend(); ++it)
 	{
-		if (it->first < menu_navigator->currently_at_entity_id)
+		if (it->first < menu_navigator->currently_at_entity)
 		{
 			return it->first;
 		}
@@ -19,11 +19,11 @@ static int SnapToNextAbove(Level& level, MenuNavigator* menu_navigator, std::map
 	return possible_positions.rbegin()->first;
 }
 
-static int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map<int, sf::Vector2f> possible_positions)
+static Entity SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map<Entity, sf::Vector2f> possible_positions)
 {
 	for (auto it = possible_positions.begin(); it != possible_positions.end(); ++it)
 	{
-		if (it->first > menu_navigator->currently_at_entity_id)
+		if (it->first > menu_navigator->currently_at_entity)
 		{
 			return it->first;
 		}
@@ -31,25 +31,25 @@ static int SnapToNextBelow(Level& level, MenuNavigator* menu_navigator, std::map
 	return possible_positions.begin()->first;
 }
 
-static std::map<int, sf::Vector2f> GetPossiblePossiblePositions(Level& level, MenuNavigator* menu_navigator)
+static std::map<Entity, sf::Vector2f> GetPossiblePossiblePositions(Level& level, MenuNavigator* menu_navigator)
 {
-	std::map<int, sf::Vector2f> possible_positions;
+	std::map<Entity, sf::Vector2f> possible_positions;
 	if (menu_navigator->menu_items.has_value())
 	{
-		for (int entity_id : menu_navigator->menu_items.value())
+		for (Entity entity : menu_navigator->menu_items.value())
 		{
-			auto [width_and_height, position] = level.GetComponents<WidthAndHeight, Position>(entity_id);
+			auto [width_and_height, position] = level.GetComponents<WidthAndHeight, Position>(entity);
 
-			possible_positions[entity_id] = position->position;
-			possible_positions[entity_id].x -= width_and_height->width_and_height.x / 2;
+			possible_positions[entity] = position->position;
+			possible_positions[entity].x -= width_and_height->width_and_height.x / 2;
 		}
 	}
 	else
 	{
-		for (auto [entity_id, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>())
+		for (auto [entity, menu_navigator, width_and_height, position] : level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>())
 		{
-			possible_positions[entity_id] = position->position;
-			possible_positions[entity_id].x -= width_and_height->width_and_height.x / 2;
+			possible_positions[entity] = position->position;
+			possible_positions[entity].x -= width_and_height->width_and_height.x / 2;
 		}
 	}
 	assert(possible_positions.size() > 0);
@@ -61,23 +61,23 @@ void MenuNavigatorSystem::Update(Level& level, float dt)
 	auto navigators = level.GetEntitiesWith<MenuNavigator, DrawPriority, WidthAndHeight, Position>();
 	if (navigators.size() == 0)
 	{
-		for (int entity_id : level.inactive_entities.GetIdsWithComponent<MenuNavigator>())
+		for (Entity entity : level.inactive_entities.GetEntitiesWithComponent<MenuNavigator>())
 		{
-			level.ActivateEntities(entity_id);
+			level.ActivateEntities(entity);
 		}
 		navigators = level.GetEntitiesWith<MenuNavigator, DrawPriority, WidthAndHeight, Position>();
 	}
 	if (navigators.size() == 0) { return; }
-	for (auto [entity_id, menu_navigator, draw_priority, width_and_height, position] : navigators)
+	for (auto [entity, menu_navigator, draw_priority, width_and_height, position] : navigators)
 	{
-		if (entity_id != std::get<int>(navigators.back()))
+		if (entity != std::get<Entity>(navigators.back()))
 		{
-			level.DeactivateEntities(entity_id);
+			level.DeactivateEntities(entity);
 			continue;
 		};
 		menu_navigator->moved_itself_this_frame = false;
-		std::optional<int>& at_id = menu_navigator->currently_at_entity_id;
-		std::map<int, sf::Vector2f> possible_positions = GetPossiblePossiblePositions(level, menu_navigator);
+		std::optional<Entity>& at_id = menu_navigator->currently_at_entity;
+		std::map<Entity, sf::Vector2f> possible_positions = GetPossiblePossiblePositions(level, menu_navigator);
 
 		if (cursor_and_keys_.key_pressed_this_frame[menu_navigator->increment_key]
 			|| !at_id.has_value())

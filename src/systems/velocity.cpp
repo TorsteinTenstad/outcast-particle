@@ -3,7 +3,7 @@
 
 void VelocitySystem::Update(Level& level, float dt)
 {
-	for (auto const& [entity_id, velocity, position] : level.GetEntitiesWith<Velocity, Position>())
+	for (auto const& [entity, velocity, position] : level.GetEntitiesWith<Velocity, Position>())
 	{
 		position->position += velocity->velocity * dt;
 	}

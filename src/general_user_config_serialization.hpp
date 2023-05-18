@@ -34,7 +34,10 @@ void SerializeComponent(const GeneralConfig* c, std::string& str_rep)
 
 void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
 {
-    std::string component_str = GetSubstrBetween(entity_str_rep, "GeneralConfig{", "}");
+    std::optional<std::string> component_str_opt = GetSubstrBetween(entity_str_rep, "GeneralConfig{", "}");
+    if (!component_str_opt.has_value()) { return; }
+	std::string component_str = component_str_opt.value();
+
     std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {

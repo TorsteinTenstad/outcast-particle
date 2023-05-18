@@ -10,7 +10,7 @@
 class RenderTextSystem : public GameSystem
 {
 private:
-	std::map<int, sf::Text> text_;
+	std::map<Entity, sf::Text> text_;
 	std::map<std::string, std::map<unsigned int, float>> text_height_;
 	std::map<std::string, sf::Font> font_;
 

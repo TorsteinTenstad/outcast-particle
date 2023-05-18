@@ -13,7 +13,7 @@
 std::optional<float> GetNavigatorRequest(Level& level, ScrollWindow* scroll_window, float top, float bottom)
 {
 	if (!scroll_window->menu_navigator.has_value()) { return std::nullopt; }
-	int menu_navigator = scroll_window->menu_navigator.value();
+	Entity menu_navigator = scroll_window->menu_navigator.value();
 	if (!level.IdExists(menu_navigator)) { return std::nullopt; } //Menu navigators may be inactive
 	if (level.GetComponent<MenuNavigator>(menu_navigator)->moved_itself_this_frame)
 	{
@@ -31,7 +31,7 @@ std::optional<float> GetNavigatorRequest(Level& level, ScrollWindow* scroll_wind
 	}
 	return std::nullopt;
 }
-std::optional<float> GetScrollBarRequest(Level& level, const CursorAndKeys& cursor_and_keys, std::optional<int> scroll_bar)
+std::optional<float> GetScrollBarRequest(Level& level, const CursorAndKeys& cursor_and_keys, std::optional<Entity> scroll_bar)
 {
 	if (!scroll_bar.has_value()
 		|| !level.HasComponents<Pressed>(scroll_bar.value())
@@ -42,17 +42,17 @@ std::optional<float> GetScrollBarRequest(Level& level, const CursorAndKeys& curs
 	return cursor_and_keys.last_frame_cursor_position.y - cursor_and_keys.cursor_position.y;
 }
 
-std::optional<int> GetScrollBarEntity(Level& level, int entity_id, ScrollWindow* scroll_window, WidthAndHeight* width_and_height, Position* scroll_window_position, float total_h)
+std::optional<Entity> GetScrollBarEntity(Level& level, Entity entity, ScrollWindow* scroll_window, WidthAndHeight* width_and_height, Position* scroll_window_position, float total_h)
 {
 	float view_w = width_and_height->width_and_height.x;
 	float view_h = width_and_height->width_and_height.y;
 	if (total_h < view_h)
 	{
-		level.DeleteChildEntitiesOwnedByComponent<ScrollWindow>(entity_id);
+		level.DeleteChildEntitiesOwnedByComponent<ScrollWindow>(entity);
 		return std::nullopt;
 	}
 	float scroll_bar_w = 0.5 * float(BLOCK_SIZE);
-	int scroll_bar = GetSingletonChildId<ScrollWindow>(level, entity_id, [view_w, scroll_bar_w, window_x = scroll_window_position->position.x](Level& level) {
+	Entity scroll_bar = GetSingletonChildId<ScrollWindow>(level, entity, [view_w, scroll_bar_w, window_x = scroll_window_position->position.x](Level& level) {
 		auto [scroll_bar, _] = CreateMouseEventButton(level, sf::Vector2f(window_x + view_w / 2 + scroll_bar_w, 0), sf::Vector2f(scroll_bar_w, 0));
 		return scroll_bar;
 	});
@@ -60,32 +60,32 @@ std::optional<int> GetScrollBarEntity(Level& level, int entity_id, ScrollWindow*
 	return scroll_bar;
 }
 
-void UpdateScrollBar(Level& level, std::optional<int> scroll_bar, ScrollWindow* scroll_window, WidthAndHeight* width_and_height, Position* scroll_window_position, float total_h, float max_scroll_distance)
+void UpdateScrollBar(Level& level, std::optional<Entity> scroll_bar, ScrollWindow* scroll_window, WidthAndHeight* width_and_height, Position* scroll_window_position, float total_h, float max_scroll_distance)
 {
 	float view_h = width_and_height->width_and_height.y;
 	if (!scroll_bar.has_value()) { return; }
-	int entity_id = scroll_bar.value();
+	Entity entity = scroll_bar.value();
 
 	float scroll_bar_h = view_h * view_h / total_h;
 	float relative_y_travel = scroll_window->scrolled_distance / max_scroll_distance;
 	float scroll_bar_position_y = scroll_window_position->position.y
 								  - view_h / 2 + scroll_bar_h / 2 + relative_y_travel * (view_h - scroll_bar_h);
 
-	level.GetComponent<WidthAndHeight>(entity_id)->width_and_height.y = scroll_bar_h;
-	level.GetComponent<Position>(entity_id)->position.y = scroll_bar_position_y;
+	level.GetComponent<WidthAndHeight>(entity)->width_and_height.y = scroll_bar_h;
+	level.GetComponent<Position>(entity)->position.y = scroll_bar_position_y;
 }
 
 void UpdateScrollingEntities(Level& level, ScrollWindow* scroll_window, float movement, float top, float bottom)
 {
-	for (auto entity_id : scroll_window->entities)
+	for (auto entity : scroll_window->entities)
 	{
-		auto [shader, position] = level.GetComponents<Shader, Position>(entity_id);
+		auto [shader, position] = level.GetComponents<Shader, Position>(entity);
 		position->position.y += movement;
 		shader->float_uniforms["top"] = top;
 		shader->float_uniforms["bottom"] = bottom;
 	}
 	if (!scroll_window->menu_navigator.has_value()) { return; }
-	int menu_navigator = scroll_window->menu_navigator.value();
+	Entity menu_navigator = scroll_window->menu_navigator.value();
 	if (!level.IdExists(menu_navigator)) { return; } //Menu navigators may be inactive
 	Shader* shader = level.GetComponent<Shader>(menu_navigator);
 	shader->float_uniforms["top"] = top;
@@ -94,7 +94,7 @@ void UpdateScrollingEntities(Level& level, ScrollWindow* scroll_window, float mo
 
 void ScrollSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, scroll_window, width_and_height, scroll_window_position] : level.GetEntitiesWith<ScrollWindow, WidthAndHeight, Position>())
+	for (auto [entity, scroll_window, width_and_height, scroll_window_position] : level.GetEntitiesWith<ScrollWindow, WidthAndHeight, Position>())
 	{
 		if (scroll_window->entities.size() == 0)
 		{
@@ -110,7 +110,7 @@ void ScrollSystem::Update(Level& level, float dt)
 		float max_scroll_distance = std::min(0.f, -(total_h - view_h));
 		float old_scrolled_distance = scroll_window->scrolled_distance;
 
-		std::optional<int> scroll_bar = GetScrollBarEntity(level, entity_id, scroll_window, width_and_height, scroll_window_position, total_h);
+		std::optional<Entity> scroll_bar = GetScrollBarEntity(level, entity, scroll_window, width_and_height, scroll_window_position, total_h);
 		float requested_movement = cursor_and_keys_.mouse_wheel_delta * 180;
 		requested_movement = GetScrollBarRequest(level, cursor_and_keys_, scroll_bar).value_or(requested_movement);
 		requested_movement = GetNavigatorRequest(level, scroll_window, top, bottom).value_or(requested_movement);

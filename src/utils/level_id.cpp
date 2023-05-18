@@ -3,6 +3,7 @@
 #include "folder_definitions.hpp"
 #include "level_id.hpp"
 #include "utils/string_parsing.hpp"
+#include <cassert>
 #include <filesystem>
 
 // Level ID format: level\\<group-number>_<group-display-name>\\<level-number>_<level-display-name>.txt
@@ -11,8 +12,9 @@ int GetLevelNumberFromId(const std::string& level_id)
 {
 	int number;
 	std::string number_str = SplitString(GetLevelNameFromId(level_id), "_").front();
-	if (number_str.empty() || number_str.find_first_not_of("0123456789") != std::string::npos)
+	if (!IsNumeric(number_str))
 	{
+		assert(false);
 		return 0;
 	}
 	FromString(number, number_str);

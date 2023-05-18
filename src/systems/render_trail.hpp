@@ -10,7 +10,7 @@
 class RenderTrailSystem : public GameSystem
 {
 private:
-	std::map<int, std::array<sf::ConvexShape, TRAIL_N>> segments_;
+	std::map<Entity, std::array<sf::ConvexShape, TRAIL_N>> segments_;
 
 public:
 	using GameSystem::GameSystem;

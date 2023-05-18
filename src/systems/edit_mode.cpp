@@ -32,10 +32,10 @@ const float DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY = PI / 2;
 
 static void ShowCopyPreview(Level& level, sf::Vector2f origin)
 {
-	for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
+	for (auto [entity, selected, position] : level.GetEntitiesWith<Selected, Position>())
 	{
-		if (level.HasComponents<Player>(entity_id)) { continue; }
-		int copy = level.CopyEntity(entity_id);
+		if (level.HasComponents<Player>(entity)) { continue; }
+		Entity copy = level.CopyEntity(entity);
 		level.GetComponent<Position>(copy)->position = origin + selected->mouse_offset;
 		level.RemoveComponents<Selected>(copy);
 		level.EnsureExistenceOfComponent<ScheduledDelete>(copy)->frames_left_to_live = 1;
@@ -55,7 +55,7 @@ Tool ComputeCurrentTool(Level& level, CursorAndKeys cursor_and_keys)
 	{
 		return Idle;
 	}
-	if (level.GetIdsWithComponent<Pressed>().size() > 0)
+	if (level.GetEntitiesWithComponent<Pressed>().size() > 0)
 	{
 		return Moving;
 	}
@@ -67,9 +67,9 @@ void EditModeSystem::Update(Level& level, float dt)
 	auto level_mode = level.GetMode();
 	if (level_mode != EDIT_MODE)
 	{
-		if (level_mode != PAUSE_MODE && level.GetIdsWithComponent<Selected>().size() > 0)
+		if (level_mode != PAUSE_MODE && level.GetEntitiesWithComponent<Selected>().size() > 0)
 		{
-			level.editor.Do<SelectEntities>(level, std::vector<int> {}, level.GetIdsWithComponent<Selected>());
+			level.editor.Do<SelectEntities>(level, std::vector<Entity> {}, level.GetEntitiesWithComponent<Selected>());
 		}
 		return;
 	}
@@ -84,7 +84,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Handle selection of entity in blueprint menu:
-	if (std::optional<int> selected_entity = UpdateBlueprintMenu(level))
+	if (std::optional<Entity> selected_entity = UpdateBlueprintMenu(level))
 	{
 		level.editor.Do<AddEntity>(level, selected_entity.value());
 	}
@@ -94,27 +94,27 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Rectangle select
 	if (current_tool == Selecting)
 	{
-		std::function<int(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
-		int rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
+		std::function<Entity(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
+		Entity rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
 		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
 		size = Abs(size);
 		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = size;
 		level.GetComponent<Position>(rectangle_select_tool_id)->position = position;
-		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entered_this_frame_ids)
+		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entities_entered_this_frame)
 		{
 			if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
 			{
-				level.editor.Do<SelectEntities>(level, std::vector<int>({ entity }), std::vector<int>({}));
+				level.editor.Do<SelectEntities>(level, std::vector<Entity>({ entity }), std::vector<Entity>({}));
 			}
 		}
 		if (current_tool == Selecting)
 		{
-			for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->left_this_frame_ids)
+			for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entities_left_this_frame)
 			{
 				if (level.HasComponents<Editable, Selected>(entity))
 				{
-					level.editor.Do<SelectEntities>(level, std::vector<int>({}), std::vector<int>({ entity }));
+					level.editor.Do<SelectEntities>(level, std::vector<Entity>({}), std::vector<Entity>({ entity }));
 				}
 			}
 		}
@@ -125,16 +125,16 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Select entities on click:
-	for (auto [entity_id, pressed_this_frame, editable] : level.GetEntitiesWith<PressedThisFrame, Editable>())
+	for (auto [entity, pressed_this_frame, editable] : level.GetEntitiesWith<PressedThisFrame, Editable>())
 	{
-		if (!level.HasComponents<Selected>(entity_id))
+		if (!level.HasComponents<Selected>(entity))
 		{
 			bool deselect_others = !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES];
-			level.editor.Do<SelectEntities>(level, std::vector<int>({ entity_id }), deselect_others ? level.GetIdsWithComponent<Selected>() : std::vector<int> {});
+			level.editor.Do<SelectEntities>(level, std::vector<Entity>({ entity }), deselect_others ? level.GetEntitiesWithComponent<Selected>() : std::vector<Entity> {});
 		}
 		else if (cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 		{
-			level.editor.Do<SelectEntities>(level, std::vector<int> {}, std::vector<int>({ entity_id }));
+			level.editor.Do<SelectEntities>(level, std::vector<Entity> {}, std::vector<Entity>({ entity }));
 		}
 	}
 
@@ -142,13 +142,13 @@ void EditModeSystem::Update(Level& level, float dt)
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
 		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{
-		level.editor.Do<SelectEntities>(level, std::vector<int> {}, level.GetIdsWithComponent<Selected>());
+		level.editor.Do<SelectEntities>(level, std::vector<Entity> {}, level.GetEntitiesWithComponent<Selected>());
 	}
 
 	// Move entities with the curser:
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 	{
-		for (auto [entity_id, selected, position] : level.GetEntitiesWith<Selected, Position>())
+		for (auto [entity, selected, position] : level.GetEntitiesWith<Selected, Position>())
 		{
 			selected->mouse_offset = position->position - cursor_and_keys_.cursor_position;
 		}
@@ -218,7 +218,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	return;
 
 	// Edit velocity:
-	for (auto [entity_id, selected, velocity] : level.GetEntitiesWith<Selected, Velocity>())
+	for (auto [entity, selected, velocity] : level.GetEntitiesWith<Selected, Velocity>())
 	{
 		float velocity_magnitude = Magnitude(velocity->velocity);
 		float velocity_angle = Angle(velocity->velocity);

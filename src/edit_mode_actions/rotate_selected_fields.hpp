@@ -8,7 +8,7 @@ class RotateSelectedFields : public MergeableUndoableAction<RotateSelectedFields
 {
 private:
 	Level& level_;
-	std::vector<int> entities_;
+	std::vector<Entity> entities_;
 	float radians_;
 
 	friend class RotateSelectedFields;
@@ -28,7 +28,7 @@ public:
 private:
 	void Rotate(float radians)
 	{
-		for (int entity : entities_)
+		for (Entity entity : entities_)
 		{
 			sf::Vector2f& field_vector = level_.GetComponent<ElectricField>(entity)->field_vector;
 			field_vector = GetRotated(field_vector, radians);

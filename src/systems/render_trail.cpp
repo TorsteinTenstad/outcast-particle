@@ -12,7 +12,7 @@
 
 void RenderTrailSystem::Update(Level& level, float dt)
 {
-	for (auto [entity_id, trail, radius, draw_priority, position] : level.GetEntitiesWith<Trail, Radius, DrawPriority, Position>())
+	for (auto [entity, trail, radius, draw_priority, position] : level.GetEntitiesWith<Trail, Radius, DrawPriority, Position>())
 	{
 		if (trail->path.size() == 0)
 		{
@@ -31,14 +31,14 @@ void RenderTrailSystem::Update(Level& level, float dt)
 			unit_normal = GetQuarterTurnRotation(Normalized(trail->path[i + 1]));
 			p3 = global_segment_position + trail->path[i] + radius->radius * trail->widths[i + 1] * unit_normal;
 			p4 = global_segment_position + trail->path[i] - radius->radius * trail->widths[i + 1] * unit_normal;
-			segments_[entity_id][i] = sf::ConvexShape();
-			segments_[entity_id][i].setPointCount(4);
-			segments_[entity_id][i].setPoint(0, p1);
-			segments_[entity_id][i].setPoint(1, p2);
-			segments_[entity_id][i].setPoint(2, p3);
-			segments_[entity_id][i].setPoint(3, p4);
-			segments_[entity_id][i].setFillColor(sf::Color(200, 200, 200, 127 * pow((float)(trail->path.size() - i) / trail->path.size(), 2)));
-			level.drawables[draw_priority->draw_priority].push_back({ &segments_[entity_id][i] });
+			segments_[entity][i] = sf::ConvexShape();
+			segments_[entity][i].setPointCount(4);
+			segments_[entity][i].setPoint(0, p1);
+			segments_[entity][i].setPoint(1, p2);
+			segments_[entity][i].setPoint(2, p3);
+			segments_[entity][i].setPoint(3, p4);
+			segments_[entity][i].setFillColor(sf::Color(200, 200, 200, 127 * pow((float)(trail->path.size() - i) / trail->path.size(), 2)));
+			level.drawables[draw_priority->draw_priority].push_back({ &segments_[entity][i] });
 			global_segment_position += trail->path[i];
 			p1 = p4;
 			p2 = p3;

@@ -11,7 +11,7 @@ void TrailSystem::Update(Level& level, float dt)
 	{
 		return;
 	}
-	for (auto& [entity_id, trail, radius, velocity] : level.GetEntitiesWith<Trail, Radius, Velocity>())
+	for (auto& [entity, trail, radius, velocity] : level.GetEntitiesWith<Trail, Radius, Velocity>())
 	{
 		trail->path.insert(trail->path.begin(), -velocity->velocity * dt - (radius->radius / TRAIL_N) * Normalized(velocity->velocity));
 		if (trail->path.size() > TRAIL_N)

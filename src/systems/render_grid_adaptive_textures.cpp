@@ -49,7 +49,7 @@ void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subs
 		shape.setSize(level.GetSize());
 		shape.setTexture(&texture.getTexture());
 		shape.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
-		level.drawables[draw_priority].push_back({ &shape, std::optional<int>(), &shader });
+		level.drawables[draw_priority].push_back({ &shape, std::optional<Entity>(), &shader });
 	}
 }
 
@@ -68,12 +68,12 @@ static void SetAndAssertSync(std::optional<T>& current, T new_val)
 
 static void LaserDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> get_render_texture)
 {
-	for (auto const& [entity_id, laser, draw_priority, width_and_height, position] : level.GetEntitiesWith<Laser, DrawPriority, WidthAndHeight, Position>())
+	for (auto const& [entity, laser, draw_priority, width_and_height, position] : level.GetEntitiesWith<Laser, DrawPriority, WidthAndHeight, Position>())
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);
 		float alpha = 255;
-		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity_id))
+		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity))
 		{
 			alpha = fill_color->color.a;
 		}
@@ -84,7 +84,7 @@ static void LaserDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> g
 
 static void WallDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> get_render_texture)
 {
-	for (auto const& [entity_id, wall, collision, draw_priority, width_and_height, position] : level.GetEntitiesWith<Wall, Collision, DrawPriority, WidthAndHeight, Position>())
+	for (auto const& [entity, wall, collision, draw_priority, width_and_height, position] : level.GetEntitiesWith<Wall, Collision, DrawPriority, WidthAndHeight, Position>())
 	{
 		sf::RectangleShape shape = sf::RectangleShape(width_and_height->width_and_height);
 		shape.setPosition(position->position - width_and_height->width_and_height / 2.f);

@@ -20,9 +20,9 @@ void TimerSystem::Update(Level& level, float dt)
 	}
 
 	sf::Vector2f level_size = level.GetSize();
-	int entity_id = level.GetSingletonId<TimerButton>([level_size](ECSScene& level) {
-		auto [entity_id, _] = CreateTimerButton(level, sf::Vector2f(level_size.x - 2.5 * BLOCK_SIZE, 0.5 * BLOCK_SIZE));
-		return entity_id;
+	Entity entity = level.GetSingletonId<TimerButton>([level_size](ECSScene& level) {
+		auto [entity, _] = CreateTimerButton(level, sf::Vector2f(level_size.x - 2.5 * BLOCK_SIZE, 0.5 * BLOCK_SIZE));
+		return entity;
 	});
-	level.GetComponent<Text>(entity_id)->content = CreateBadgeText(level.GetSingleton<LevelCompletionTimer>()->duration, 2 + globals.general_config.display_precise_badge_time);
+	level.GetComponent<Text>(entity)->content = CreateBadgeText(level.GetSingleton<LevelCompletionTimer>()->duration, 2 + globals.general_config.display_precise_badge_time);
 }

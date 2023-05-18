@@ -1,5 +1,6 @@
 #pragma once
 #include "components/children.hpp"
+#include "ecs/entity.hpp"
 #include "ecs/entity_creation_observer.hpp"
 #include "entity_container.hpp"
 #include <functional>
@@ -16,7 +17,6 @@ class ECSScene
 	friend class ECSSceneWithInactiveLayer;
 
 protected:
-	int next_available_entity_id_ = 0;
 	EntityContainer entity_container_;
 
 protected:
@@ -28,63 +28,63 @@ public:
 
 protected:
 	template <class Component>
-	bool HasComponent(int entity_id);
+	bool HasComponent(Entity entity);
 
 public:
 	template <class... Component>
-	bool HasComponents(int entity_id);
+	bool HasComponents(Entity entity);
 
-	bool IdExists(int entity_id);
+	bool IdExists(Entity entity);
 
-	virtual int CreateEntityId();
+	Entity CreateEntity();
 	void Clear();
 
 	template <class Component>
-	Component* EnsureExistenceOfComponent(int entity_id);
+	Component* EnsureExistenceOfComponent(Entity entity);
 
 	template <class... Component>
-	std::tuple<Component*...> EnsureExistenceOfComponents(int entity_id);
+	std::tuple<Component*...> EnsureExistenceOfComponents(Entity entity);
 
 	template <class Component>
-	Component* AddComponent(int entity_id);
+	Component* AddComponent(Entity entity);
 
 	template <class Component>
-	Component* AddComponent(int entity_id, Component&& value);
+	Component* AddComponent(Entity entity, Component&& value);
 
 	template <class... Component>
-	std::tuple<Component*...> AddComponents(int entity_id);
+	std::tuple<Component*...> AddComponents(Entity entity);
 
 	template <class Component>
-	Component* GetComponent(int entity_id);
+	Component* GetComponent(Entity entity);
 
 	template <class... Component>
-	std::tuple<Component*...> GetComponents(int entity_id);
+	std::tuple<Component*...> GetComponents(Entity entity);
 
 	template <class Component>
-	Component* RawGetComponent(int entity_id);
+	Component* RawGetComponent(Entity entity);
 
 	template <class... Component>
-	std::tuple<Component*...> RawGetComponents(int entity_id);
+	std::tuple<Component*...> RawGetComponents(Entity entity);
 
 	template <class Component>
-	void DeleteChildEntitiesOwnedByComponent(int entity_id);
+	void DeleteChildEntitiesOwnedByComponent(Entity entity);
 
 protected:
 	template <class Component>
-	bool RemoveComponent(int entity_id);
+	bool RemoveComponent(Entity entity);
 
 public:
 	template <class... Component>
-	bool RemoveComponents(int entity_id);
+	bool RemoveComponents(Entity entity);
 
 	template <class Component>
-	std::vector<int> GetIdsWithComponent();
+	std::vector<Entity> GetEntitiesWithComponent();
 
 	template <class... Component>
-	std::vector<std::tuple<int, Component*...>> GetEntitiesWith();
+	std::vector<std::tuple<Entity, Component*...>> GetEntitiesWith();
 
 	template <class... Component>
-	std::tuple<int, Component*...> CreateEntityWith();
+	std::tuple<Entity, Component*...> CreateEntityWith();
 
 	template <class... Component>
 	void DeleteEntitiesWith();
@@ -92,11 +92,11 @@ public:
 	template <class Component>
 	void ClearComponent();
 
-	void DeleteEntity(int id);
+	void DeleteEntity(Entity entity);
 
-	void DeleteEntity(std::optional<int> id);
+	void DeleteEntity(std::optional<Entity> entity);
 
-	int CopyEntity(int from_id);
+	Entity CopyEntity(Entity from_id);
 
 #include "ecs/ecs_scene_singleton_functions.tpp"
 };

@@ -1,6 +1,8 @@
 #include "ecs/ecs_scene.hpp"
 #include "game.hpp"
+#include "utils/random.hpp"
 #include "utils/string_parsing.hpp"
+#include <cstdlib>
 #include <functional>
 #include <iostream>
 #include <optional>
@@ -20,19 +22,20 @@ void ECSScene::RemoveEntityCreationObserver(EntityCreationObserver* entity_creat
 	}
 }
 
-int ECSScene::CreateEntityId()
+Entity ECSScene::CreateEntity()
 {
-	int new_id = next_available_entity_id_++;
+	Entity new_entity(Rand());
+
 	for (auto entity_creation_observer : entity_creation_observers)
 	{
-		entity_creation_observer->Notify(new_id);
+		entity_creation_observer->Notify(new_entity);
 	}
-	return new_id;
+	return new_entity;
 }
 
-bool ECSScene::IdExists(int entity_id)
+bool ECSScene::IdExists(Entity entity)
 {
-	return entity_container_.Exists(entity_id);
+	return entity_container_.Exists(entity);
 }
 
 void ECSScene::Clear()
@@ -40,36 +43,36 @@ void ECSScene::Clear()
 	return entity_container_.Clear();
 }
 
-int ECSScene::CopyEntity(int from_id)
+Entity ECSScene::CopyEntity(Entity from_entity)
 {
-	int to_id = CreateEntityId();
-	entity_container_.CopyEntity(from_id, to_id);
-	if (Children* children = RawGetComponent<Children>(to_id))
+	Entity to_entity = CreateEntity();
+	entity_container_.CopyEntity(from_entity, to_entity);
+	if (Children* children = RawGetComponent<Children>(to_entity))
 	{
-		children->ids_owned_by_component.clear();
+		children->entities_owned_by_component.clear();
 	}
-	return to_id;
+	return to_entity;
 }
 
-void ECSScene::DeleteEntity(std::optional<int> id)
+void ECSScene::DeleteEntity(std::optional<Entity> entity)
 {
-	if (id.has_value())
+	if (entity.has_value())
 	{
-		DeleteEntity(id.value());
+		DeleteEntity(entity.value());
 	}
 }
 
-void ECSScene::DeleteEntity(int id)
+void ECSScene::DeleteEntity(Entity entity)
 {
-	if (Children* children = RawGetComponent<Children>(id))
+	if (Children* children = RawGetComponent<Children>(entity))
 	{
-		for (auto& [component_type_id, child_ids] : children->ids_owned_by_component)
+		for (auto& [component_type_id, child_entities] : children->entities_owned_by_component)
 		{
-			for (auto& child_id : child_ids)
+			for (auto& child : child_entities)
 			{
-				DeleteEntity(child_id);
+				DeleteEntity(child);
 			}
 		}
 	}
-	entity_container_.DeleteEntity(id);
+	entity_container_.DeleteEntity(entity);
 }

@@ -3,19 +3,19 @@
 #include "undo_system.hpp"
 #include <vector>
 
-static void Deselect(Level& level, std::vector<int> entity_ids)
+static void Deselect(Level& level, std::vector<Entity> entities)
 {
-	for (int id : entity_ids)
+	for (Entity entity : entities)
 	{
-		level.RemoveComponents<Selected>(id);
+		level.RemoveComponents<Selected>(entity);
 	}
 }
 
-static void Select(Level& level, std::vector<int> entity_ids)
+static void Select(Level& level, std::vector<Entity> entities)
 {
-	for (int id : entity_ids)
+	for (Entity entity : entities)
 	{
-		level.EnsureExistenceOfComponent<Selected>(id);
+		level.EnsureExistenceOfComponent<Selected>(entity);
 	}
 }
 
@@ -23,13 +23,13 @@ class SelectEntities : public MergeableUndoableAction<SelectEntities>
 {
 private:
 	Level& level_;
-	std::vector<int> entities_to_select_;
-	std::vector<int> entities_to_deselect_;
+	std::vector<Entity> entities_to_select_;
+	std::vector<Entity> entities_to_deselect_;
 
 	friend class SelectEntities;
 
 public:
-	SelectEntities(Level& level, std::vector<int>&& entities_to_select, std::vector<int>&& entities_to_deselect) :
+	SelectEntities(Level& level, std::vector<Entity>&& entities_to_select, std::vector<Entity>&& entities_to_deselect) :
 		level_(level),
 		entities_to_select_(entities_to_select),
 		entities_to_deselect_(entities_to_deselect)

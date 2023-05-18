@@ -50,7 +50,10 @@ void SerializeComponent(const {component}* c, std::string& str_rep)
         cpp += f"""
 void DeserializeComponent({component}* c, const std::string& entity_str_rep)
 {{
-    std::string component_str = GetSubstrBetween(entity_str_rep, "{component}{{", "}}");
+    std::optional<std::string> component_str_opt = GetSubstrBetween(entity_str_rep, "{component}{{", "}}");
+    if (!component_str_opt.has_value()) {{ return; }}
+	std::string component_str = component_str_opt.value();
+
     std::vector<std::string> variables = SplitString(component_str, ";");
     for (auto variable : variables)
     {{
@@ -82,12 +85,10 @@ void Level::SaveToFile(std::string savefile_path)
     f << "name=" << name << ";grid_size_id=" << ToString(grid_size_id) << ";editable=" << ToString(editable) << "\\n";
 
     std::string entity_string;
-    for (auto& [entity_id, tag] : GetEntitiesWith<Tag>())
+    for (auto& [entity, tag] : GetEntitiesWith<Tag>())
     {
-        if (HasComponent<NotSerialized>(entity_id)){
-            continue;
-        }
-        f << "\\"" << tag->tag << "\\":";
+        if (HasComponent<NotSerialized>(entity)) { continue; }
+        entity_string += entity.ToString() + ":";
 """
     end = """
         f << entity_string << "\\n";
@@ -102,7 +103,7 @@ void Level::SaveToFile(std::string savefile_path)
         {{"""
         for component in blueprint.get("explicit", []):
             body += f"""
-            SerializeComponent(GetComponent<{component}>(entity_id), entity_string);"""
+            SerializeComponent(GetComponent<{component}>(entity), entity_string);"""
         body += """
         }
         """
@@ -144,9 +145,19 @@ void Level::LoadFromFile(std::string savefile_path)
 
     while (getline(f, line))
     {
-        int entity_id = CreateEntityId();
-        std::string tag = GetSubstrBetween(line, "\\\"", "\\\"");
-        AddComponent<Tag>(entity_id)->tag = tag;
+		std::optional<std::string> id_opt = GetSubstrBetween(line, std::nullopt, ":");
+		std::optional<std::string> tag_opt = GetSubstrBetween(line, "Tag{tag=", "}");
+		if (!id_opt.has_value() || !tag_opt.has_value() || !IsNumeric(id_opt.value()))
+		{
+			assert(false);
+			continue;
+		}
+		std::string id = id_opt.value();
+		std::string tag = tag_opt.value();
+
+		Entity entity(std::stoull(id));
+
+        AddComponent<Tag>(entity)->tag = tag;
 """
     end = """
     }
@@ -162,12 +173,12 @@ void Level::LoadFromFile(std::string savefile_path)
             if component == 'Tag':
                 continue
             body += f"""
-            AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
+            AddComponent<{component}>(entity, {value.replace(';', '')});"""
         for component in blueprint.get("explicit", []):
             if component == 'Tag':
                 continue
             body += f"""
-            DeserializeComponent(AddComponent<{component}>(entity_id),line);"""
+            DeserializeComponent(AddComponent<{component}>(entity),line);"""
         body += """
         }
         """
@@ -176,19 +187,19 @@ void Level::LoadFromFile(std::string savefile_path)
 
 def gen_add_blueprint(data):
     start = """
-int Level::AddBlueprint(std::string blueprint_tag){
+Entity Level::AddBlueprint(std::string blueprint_tag){
     return AddBlueprint(ToBlueprintEnum(blueprint_tag));
 }
 
-int Level::AddBlueprint(Blueprint blueprint)
+Entity Level::AddBlueprint(Blueprint blueprint)
 {
-    int entity_id = CreateEntityId();
+    Entity entity = CreateEntityId();
     switch (blueprint){"""
     end = """
         default:
             assert(false);
     }
-    return entity_id;
+    return entity;
 }"""
     body = ""
     for (tag, blueprint) in data.items():
@@ -197,10 +208,10 @@ int Level::AddBlueprint(Blueprint blueprint)
         for (component, value) in blueprint.get(
                 "implicit", {}).items():
             body += f"""
-            AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
+            AddComponent<{component}>(entity, {value.replace(';', '')});"""
         for (component, value) in blueprint.get("explicit", {}).items():
             body += f"""
-            AddComponent<{component}>(entity_id, {value.replace(';', '')});"""
+            AddComponent<{component}>(entity, {value.replace(';', '')});"""
         body += f"""
             break;"""
     return start + body + end

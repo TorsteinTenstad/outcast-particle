@@ -9,7 +9,7 @@ class CopySelected : public UndoableAction
 {
 private:
 	Level& level_;
-	std::vector<int> entities_;
+	std::vector<Entity> entities_;
 
 public:
 	CopySelected(Level& level, sf::Vector2f origin) :
@@ -18,7 +18,7 @@ public:
 		for (auto [entity, selected, position] : level.GetEntitiesWith<Selected, Position>())
 		{
 			if (level.HasComponents<Player>(entity)) { continue; }
-			int copy = level.CopyEntity(entity);
+			Entity copy = level.CopyEntity(entity);
 			level.GetComponent<Position>(copy)->position = origin + selected->mouse_offset;
 			level.RemoveComponents<Selected>(copy);
 			level.DeactivateEntities(copy);

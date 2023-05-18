@@ -1,4 +1,9 @@
 {
+    "C_Cpp.debuggerSettings": {
+        "miDebuggerAdditionalStartupCommands": "-enable-pretty-printing",
+        "visualStudioCode": true
+    },
+    "C_Cpp.justMyCode": true,
     "cmake.configureOnOpen": false,
     "editor.formatOnSave": true,
     "configurationProvider": "ms-vscode.cmake-tools",

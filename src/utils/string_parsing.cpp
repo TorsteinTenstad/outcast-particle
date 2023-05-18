@@ -1,23 +1,20 @@
 #pragma once
 #include "utils/string_parsing.hpp"
 #include <cassert>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <vector>
 
-std::string GetSubstrBetween(std::string s, std::string prefix, std::string postfix)
+std::optional<std::string> GetSubstrBetween(std::string s, std::optional<std::string> prefix, std::optional<std::string> postfix)
 {
-	auto prefix_idx = s.find(prefix);
-	if (prefix_idx == std::string::npos)
-	{
-		return "";
-	}
-	s = s.substr(prefix_idx + prefix.length());
-	auto postfix_idx = s.find(postfix);
-	if (postfix_idx == std::string::npos)
-	{
-		return "";
-	}
+	auto prefix_idx = prefix.has_value() ? s.find(prefix.value()) : 0;
+	auto prefix_len = prefix.has_value() ? prefix.value().length() : 0;
+	if (prefix_idx == std::string::npos) { return std::nullopt; }
+	s = s.substr(prefix_idx + prefix_len);
+	if (!postfix.has_value()) { return s; }
+	auto postfix_idx = s.find(postfix.value());
+	if (postfix_idx == std::string::npos) { return std::nullopt; }
 	s = s.substr(0, postfix_idx);
 	return s;
 }
@@ -39,6 +36,11 @@ std::vector<std::string> SplitString(std::string s, std::string delimiter)
 	substrings.push_back(s.substr(last_delimiter_idx, s.size()));
 	return substrings;
 }
+bool IsNumeric(const std::string& s)
+{
+	return !s.empty() && s.find_first_not_of("0123456789") == std::string::npos;
+}
+
 std::string ToString(std::string x)
 {
 	return x;

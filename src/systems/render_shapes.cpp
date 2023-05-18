@@ -31,7 +31,7 @@ sf::Texture* RenderShapesSystem::RegisterTexture(std::string identifier)
 	return &textures_[identifier];
 }
 
-EntityBoundDrawable RenderShapesSystem::RenderShape(int entity_id, sf::Shape* shape, sf::Texture* texture, sf::Vector2f w_h, sf::Color fill_color, bool tile, Position* position)
+EntityBoundDrawable RenderShapesSystem::RenderShape(Entity entity, sf::Shape* shape, sf::Texture* texture, sf::Vector2f w_h, sf::Color fill_color, bool tile, Position* position)
 {
 	if (tile)
 	{
@@ -47,7 +47,7 @@ EntityBoundDrawable RenderShapesSystem::RenderShape(int entity_id, sf::Shape* sh
 	shape->setTexture(texture);
 	shape->setPosition(position->position);
 	shape->setFillColor(fill_color);
-	return { shape, entity_id };
+	return { shape, entity };
 }
 
 void RenderShapesSystem::Update(Level& level, float dt)
@@ -56,18 +56,18 @@ void RenderShapesSystem::Update(Level& level, float dt)
 	{
 		textures_.clear();
 	}
-	for (auto const& [entity_id, draw_info, draw_priority, position] : level.GetEntitiesWith<DrawInfo, DrawPriority, Position>())
+	for (auto const& [entity, draw_info, draw_priority, position] : level.GetEntitiesWith<DrawInfo, DrawPriority, Position>())
 	{
 		sf::Shape* shape;
-		if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity_id))
+		if (WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity))
 		{
-			rectangle_shapes_[entity_id].setSize(width_and_height->width_and_height);
-			shape = &rectangle_shapes_[entity_id];
+			rectangle_shapes_[entity].setSize(width_and_height->width_and_height);
+			shape = &rectangle_shapes_[entity];
 		}
-		else if (Radius* radius = level.RawGetComponent<Radius>(entity_id))
+		else if (Radius* radius = level.RawGetComponent<Radius>(entity))
 		{
-			circle_shapes_[entity_id].setRadius(radius->radius);
-			shape = &circle_shapes_[entity_id];
+			circle_shapes_[entity].setRadius(radius->radius);
+			shape = &circle_shapes_[entity];
 		}
 		else
 		{
@@ -75,9 +75,9 @@ void RenderShapesSystem::Update(Level& level, float dt)
 		}
 
 		sf::Texture* texture = GetLoadedSFMLTexture(draw_info->image_path);
-		sf::Vector2f size = GetSize(level, entity_id, false);
-		sf::Color fill_color = level.HasComponents<FillColor>(entity_id) ? level.GetComponent<FillColor>(entity_id)->color : sf::Color::White;
-		EntityBoundDrawable entity_bound_drawable = RenderShape(entity_id, shape, texture, size, fill_color, draw_info->tile, position);
+		sf::Vector2f size = GetSize(level, entity, false);
+		sf::Color fill_color = level.HasComponents<FillColor>(entity) ? level.GetComponent<FillColor>(entity)->color : sf::Color::White;
+		EntityBoundDrawable entity_bound_drawable = RenderShape(entity, shape, texture, size, fill_color, draw_info->tile, position);
 
 		level.drawables[draw_priority->draw_priority].push_back(entity_bound_drawable);
 	}

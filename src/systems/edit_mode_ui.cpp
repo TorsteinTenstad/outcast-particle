@@ -43,16 +43,16 @@ static void UpdateUI(Level& level, EditModeUI* ui)
 
 static void SetupUI(Level& level, EditModeUI* ui)
 {
-	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<EditModeUIEntity>(id); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<EditModeUIEntity>(entity); });
 	{
 		float w = 3 * BLOCK_SIZE;
-		auto [entity_id, size] = CreateButton(
+		auto [entity, size] = CreateButton(
 			level,
 			sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2),
 			sf::Vector2f(w, UI_BAR_HEIGHT),
 			[&level]() { ToggleBlueprintMenu(level); },
 			"+",
 			200);
-		level.AddComponent<ShortcutKey>(entity_id)->key = sf::Keyboard::B;
+		level.AddComponent<ShortcutKey>(entity)->key = sf::Keyboard::B;
 	}
 }

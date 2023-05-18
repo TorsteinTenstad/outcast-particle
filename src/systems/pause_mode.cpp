@@ -67,7 +67,7 @@ void PauseMode::Update(Level& level, float dt)
 }
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
-	auto e = EntityCreationObserver(level, [](ECSScene& level, int id) { level.AddComponent<PauseMenuItem>(id); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<PauseMenuItem>(entity); });
 	LevelState level_state = level.ComputeState();
 	std::vector<EntitiesHandle> entities_handles;
 	std::string menu_title;
@@ -131,14 +131,13 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	}
 	else
 	{
-		AddButton([&]() { set_level_(LEVEL_MENU)
-		; }, "Level menu", sf::Keyboard::Unknown);
+		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
 	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240));
 	entities_handles.insert(entities_handles.begin(), ToEntitiesHandle(title_handle));
 
-	auto [ids, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
+	auto [entities, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
 	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
 }

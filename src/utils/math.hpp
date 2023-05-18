@@ -23,7 +23,7 @@ sf::Vector2f GetQuarterTurnRotation(sf::Vector2f v);
 float Dot(sf::Vector2f u, sf::Vector2f v);
 
 template <class T>
-int Sign(T x)
+int8_t Sign(T x)
 {
 	if (x < 0)
 	{
