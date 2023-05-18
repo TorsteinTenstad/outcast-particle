@@ -21,6 +21,7 @@
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "globals.hpp"
 #include "systems/_pure_DO_systems.hpp"
+#include "utils/check_intersection.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/get_size.hpp"
 #include "utils/level_id.hpp"
@@ -96,11 +97,25 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		std::function<Entity(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
 		Entity rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
+		WidthAndHeight* width_and_height = level.GetComponent<WidthAndHeight>(rectangle_select_tool_id);
+		Position* tool_position = level.GetComponent<Position>(rectangle_select_tool_id);
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
-		sf::Vector2f position = cursor_and_keys_.cursor_position + size / 2.f;
 		size = Abs(size);
-		level.GetComponent<WidthAndHeight>(rectangle_select_tool_id)->width_and_height = size;
-		level.GetComponent<Position>(rectangle_select_tool_id)->position = position;
+		width_and_height->width_and_height = size;
+		tool_position->position = cursor_and_keys_.cursor_position + size / 2.f;
+
+		/*
+		if (current_tool == Selecting)
+		{
+			for (auto [entity, editable, selected, position] : level.GetEntitiesWith<Editable, Selected, Position>())
+			{
+				if (CheckIntersection(tool_position, position, size, ))
+				{
+				}
+			}
+		}
+		*/
+
 		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entities_entered_this_frame)
 		{
 			if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
