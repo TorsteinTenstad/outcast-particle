@@ -73,6 +73,11 @@ public:
 	}
 	UndoSystem(const UndoSystem& other) = delete;
 
+	bool Empty()
+	{
+		return next_action_ == actions_.begin();
+	}
+
 	template <class Action, class... Args>
 	void Do(Args&&... args)
 	{
@@ -96,10 +101,7 @@ public:
 	}
 	bool Undo()
 	{
-		if (next_action_ == actions_.begin())
-		{
-			return false;
-		}
+		if (Empty()) { return false; }
 		std::advance(next_action_, -1);
 		(*next_action_)->Undo();
 		return true;
@@ -116,9 +118,16 @@ public:
 		return true;
 	}
 
+	void UndoAll()
+	{
+		while (Undo()) {}
+	}
+
+	/*
 	void Clear()
 	{
 		actions_.clear();
 		next_action_ = actions_.end();
 	}
+	*/
 };

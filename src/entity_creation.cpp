@@ -173,7 +173,7 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 {
 	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function }, { "Cancel", []() {} } }, {});
 }
-EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities)
+EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities, bool vertical)
 {
 	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ConfirmMenuEntity>(entity); });
 	for (Entity entity : GetEntities(middle_entities))
@@ -197,12 +197,12 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, sf::Keyboard::Unknown)));
 	}
 
-	EntitiesHandle button_row_handle = HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 12.f);
+	EntitiesHandle button_row_handle = vertical ? VerticalEntityLayout(level, sf::Vector2f(0, 0), button_row, BLOCK_SIZE) : HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 16.f);
 	Entity menu_navigator_entity = GetEntity(CreateMenuNavigator(level));
 	MenuNavigator* menu_navigator = level.GetComponent<MenuNavigator>(menu_navigator_entity);
 	menu_navigator->menu_items = GetEntities(button_row_handle);
-	menu_navigator->increment_key = sf::Keyboard::Left;
-	menu_navigator->decrement_key = sf::Keyboard::Right;
+	menu_navigator->increment_key = sf::Keyboard::Right;
+	menu_navigator->decrement_key = sf::Keyboard::Left;
 	level.GetComponent<DrawPriority>(menu_navigator_entity)->draw_priority = 200;
 	EntitiesHandle menu_items = VerticalEntityLayout(level, level_size / 2.f, { title_handle, middle_entities, button_row_handle }, level_size.y / 6.f);
 	for (Entity entity : GetEntities(menu_items))

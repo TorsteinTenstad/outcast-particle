@@ -206,7 +206,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 				|| level.HasComponents<HoveredStartedThisFrame>(edit_level_button_id)
 				|| level.HasComponents<HoveredStartedThisFrame>(delete_button_id))
 			{
-				level.GetComponent<MenuNavigator>(ui->menu_navigator_entity)->currently_at_entity = main_button_id;
+				level.GetComponent<MenuNavigator>(ui->menu_navigator_entity)->current_snap_position = SnapPosition(level, main_button_id);
 			}
 			if (level.HasComponents<ReleasedThisFrame>(delete_button_id))
 			{
@@ -382,7 +382,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	{
 		if (ui->at_level_id == level_id)
 		{
-			level.GetComponent<MenuNavigator>(menu_navigator_entity)->currently_at_entity = button_id;
+			level.GetComponent<MenuNavigator>(menu_navigator_entity)->current_snap_position = SnapPosition(level, button_id);
 			break;
 		}
 	}

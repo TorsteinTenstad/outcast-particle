@@ -30,7 +30,7 @@ static void UpdateStrengthIndicator(Level& level, Entity entity, unsigned catego
 	top_right_offset -= level.GetComponent<WidthAndHeight>(indicator_entity)->width_and_height / 2.f;
 	top_right_offset.y *= -1;
 	level.GetComponent<Position>(indicator_entity)->position = level.GetComponent<Position>(entity)->position + top_right_offset;
-	level.GetComponent<DrawPriority>(indicator_entity)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority;
+	level.GetComponent<DrawPriority>(indicator_entity)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority + 1;
 }
 
 class StaticIndicator
@@ -52,7 +52,7 @@ static void UpdateStaticIndicator(Level& level, Entity entity)
 	top_right_offset.x *= -1;
 	top_right_offset.y *= -1;
 	level.GetComponent<Position>(indicator_entity)->position = level.GetComponent<Position>(entity)->position + top_right_offset;
-	level.GetComponent<DrawPriority>(indicator_entity)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority;
+	level.GetComponent<DrawPriority>(indicator_entity)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority + 1;
 }
 
 void SetDrawInfoSystem::Update(Level& level, float dt)

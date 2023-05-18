@@ -95,8 +95,8 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 
 	for (auto [entity, menu_navigator] : entities_with_menu_navigator)
 	{
-		if (!menu_navigator->currently_at_entity.has_value()) { continue; }
-		Entity at_id = menu_navigator->currently_at_entity.value();
+		if (!menu_navigator->current_snap_position.has_value()) { continue; }
+		Entity at_id = menu_navigator->current_snap_position.value().entity;
 		if (level.HasComponents<ReceivesButtonEvents>(at_id))
 		{
 			hovering_entities.push_back({ at_id,
