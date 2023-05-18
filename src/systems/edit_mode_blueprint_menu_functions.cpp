@@ -1,6 +1,7 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
+#include "components/not_serialized.hpp"
 #include "components/position.hpp"
 #include "components/size.hpp"
 #include "ecs/entity_creation_observer.hpp"
@@ -16,7 +17,7 @@ const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParti
 
 void OpenBlueprintMenu(Level& level)
 {
-	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<BlueprintMenuItem>(entity); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<BlueprintMenuItem, NotSerialized>(entity); });
 
 	{ //Background
 		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);
