@@ -1,3 +1,4 @@
+#include "Components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/level_menu.hpp"
 #include "components/physics.hpp"
@@ -11,6 +12,7 @@
 #include "level.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/string_manip.hpp"
+#include <tuple>
 
 void Game::GoToMainMenu()
 {
@@ -30,7 +32,7 @@ void Game::GoToMainMenu()
 
 	AddButton(std::bind(&Game::SetLevel, this, LEVEL_MENU), "Play");
 	AddButton(std::bind(&Game::SetLevel, this, OPTIONS_MENU), "Options");
-	AddButton([]() {}, "Credits");
+	AddButton(std::bind(&Game::SetLevel, this, CREDITS_MENU), "Credits");
 	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
 
 	auto [ids, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
@@ -109,6 +111,63 @@ void Game::GoToOptionsMenu()
 	active_level_->GetComponent<WidthAndHeight>(electric_field_2)->width_and_height = sf::Vector2f(480, 240);
 }
 
+void Game::GoToCreditsMenu()
+{
+	active_level_id_ = CREDITS_MENU;
+	active_level_->ResetSize();
+	sf::Vector2f level_size = active_level_->GetSize();
+
+	float x_center_offset = -8 * BLOCK_SIZE;
+	float y_offset = level_size.y - 8 * BLOCK_SIZE;
+
+	CreateText(*active_level_, sf::Vector2f(level_size.x / 2.f + x_center_offset, 2 * BLOCK_SIZE), "Credits", 250);
+
+	auto scroll_window_handle = CreateScrollWindow(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), sf::Vector2f(level_size.x * 2 / 5, level_size.y - 4 * BLOCK_SIZE), 2.5 * BLOCK_SIZE);
+	int scroll_window_id = std::get<0>(scroll_window_handle);
+
+	std::vector<EntitiesHandle> entities_handles;
+	auto AddText = [&](std::string text, unsigned size) {
+		EntityHandle text_handle = CreateScrollingText(*active_level_, sf::Vector2f(0, 0), text, size);
+		entities_handles.push_back(ToEntitiesHandle(text_handle));
+		(*active_level_).GetComponent<ScrollWindow>(scroll_window_id)->entities.push_back(std::get<0>(text_handle));
+	};
+
+	std::vector<std::pair<std::string, unsigned>> texts_with_size = { { "Lead Developer", 140 }, { "Torstein Tenstad", 120 }, { "", 120 }, { "Assistant Developer", 140 }, { "Simen Storesund", 120 }, { "", 120 }, { "Many thanks to", 140 }, { "Magne Tenstad", 120 }, { "Åsne Hella", 120 }, { "Alexander Wulfsberg", 120 }, { "Henrik Storesund", 120 }, { "And of course to you!", 120 } };
+
+	for (auto [text, size] : texts_with_size)
+	{
+		AddText(text, size);
+	}
+
+	auto [ids, heights] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, 4 * BLOCK_SIZE), entities_handles, 0.5 * BLOCK_SIZE, StartEdge);
+
+	float entity_position_x = level_size.x - 8 * BLOCK_SIZE;
+	float entity_position_y = level_size.y / 2;
+
+	int player_id = active_level_->AddBlueprint(BPPlayer);
+	active_level_->GetComponent<Player>(player_id)->can_go_neutral = false;
+	active_level_->GetComponent<Position>(player_id)->position = sf::Vector2f(entity_position_x, entity_position_y);
+	active_level_->GetComponent<Velocity>(player_id)->velocity = sf::Vector2f(rand() % 4000 - 2000, rand() % 4000 - 2000);
+
+	auto AddWall = [&](sf::Vector2f position, sf::Vector2f width_and_height) {
+		int id = active_level_->AddBlueprint(BPWall);
+		active_level_->GetComponent<Position>(id)->position = position;
+		active_level_->GetComponent<WidthAndHeight>(id)->width_and_height = width_and_height;
+		active_level_->GetComponent<Collision>(id)->bounce_factor = 1.005;
+	};
+
+	AddWall(sf::Vector2f(24 * BLOCK_SIZE, 1 * BLOCK_SIZE), sf::Vector2f(12 * BLOCK_SIZE, BLOCK_SIZE));
+	AddWall(sf::Vector2f(entity_position_x, level_size.y - BLOCK_SIZE), sf::Vector2f(12 * BLOCK_SIZE, BLOCK_SIZE));
+	AddWall(sf::Vector2f(18 * BLOCK_SIZE, entity_position_y), sf::Vector2f(BLOCK_SIZE, 16 * BLOCK_SIZE));
+	AddWall(sf::Vector2f(level_size.x - 2 * BLOCK_SIZE, entity_position_y), sf::Vector2f(BLOCK_SIZE, 16 * BLOCK_SIZE));
+
+	AddWall(sf::Vector2f(level_size.x - 5 * BLOCK_SIZE, level_size.y - 8 * BLOCK_SIZE), sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+	AddWall(sf::Vector2f(level_size.x - 10 * BLOCK_SIZE, level_size.y - 12 * BLOCK_SIZE), sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+	AddWall(sf::Vector2f(level_size.x - 6 * BLOCK_SIZE, level_size.y - 15 * BLOCK_SIZE), sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+	AddWall(sf::Vector2f(level_size.x - 11 * BLOCK_SIZE, level_size.y - 6 * BLOCK_SIZE), sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+	AddWall(sf::Vector2f(level_size.x - 8 * BLOCK_SIZE, level_size.y - 4 * BLOCK_SIZE), sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+}
+
 static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::function<Level&(void)> set_level, std::vector<std::string> description_texts, std::vector<EntitiesCreator> create_buttons)
 {
 	assert(description_texts.size() == create_buttons.size());
@@ -126,9 +185,7 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	//Set up scroll window
 	auto [scroll_window_entity_id, scroll_window, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
 	scroll_window->entity_height = 2 * BLOCK_SIZE;
-	width_and_height->width_and_height = level_size;
-	width_and_height->width_and_height.x -= 8 * BLOCK_SIZE;
-	width_and_height->width_and_height.y -= 8 * BLOCK_SIZE;
+	width_and_height->width_and_height = level_size - sf::Vector2f(8 * BLOCK_SIZE, 8 * BLOCK_SIZE);
 	position->position = level_size / 2.f;
 
 	//Create buttons, texts and add to scroll window

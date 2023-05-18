@@ -142,6 +142,10 @@ Level& Game::SetLevel(std::string level_id)
 	{
 		GoToMusicAndSoundMenu();
 	}
+	else if (level_id == CREDITS_MENU)
+	{
+		GoToCreditsMenu();
+	}
 	else
 	{
 		active_level_->LoadFromFile(level_id);

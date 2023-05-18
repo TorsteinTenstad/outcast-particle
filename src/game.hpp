@@ -63,6 +63,7 @@ private:
 	void GoToMainMenu();
 	void GoToLevelMenu();
 	void GoToOptionsMenu();
+	void GoToCreditsMenu();
 	void GoToKeyConfigMenu();
 	void GoToGraphicsAndDisplayMenu();
 	void GoToMusicAndSoundMenu();

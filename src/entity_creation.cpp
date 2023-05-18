@@ -8,6 +8,7 @@
 #include "components/position.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/screen_wide_shader_effects.hpp"
+#include "components/scroll.hpp"
 #include "components/shader.hpp"
 #include "components/size.hpp"
 #include "components/sticky_button.hpp"
@@ -32,6 +33,15 @@ EntitiesHandle ToEntitiesHandle(EntityHandle EntityHandle)
 {
 	auto [id, size] = EntityHandle;
 	return EntitiesHandle({ id }, size);
+}
+
+EntityHandle CreateScrollWindow(ECSScene& level, sf::Vector2f position, sf::Vector2f width_and_height, float entity_height)
+{
+	int id = level.CreateEntityId();
+	level.AddComponent<Position>(id)->position = position;
+	level.AddComponent<WidthAndHeight>(id)->width_and_height = width_and_height;
+	level.AddComponent<ScrollWindow>(id)->entity_height = entity_height;
+	return { id, width_and_height };
 }
 
 EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size)
