@@ -97,40 +97,30 @@ void EditModeSystem::Update(Level& level, float dt)
 	{
 		std::function<Entity(ECSScene&)> creation_func = [](ECSScene& scene) { return std::get<0>(scene.CreateEntityWith<Intersection, WidthAndHeight, Position>()); };
 		Entity rectangle_select_tool_id = level.GetSingletonId<EditModeRectangleSelectTool>(creation_func);
-		WidthAndHeight* width_and_height = level.GetComponent<WidthAndHeight>(rectangle_select_tool_id);
+		WidthAndHeight* tool_width_and_height = level.GetComponent<WidthAndHeight>(rectangle_select_tool_id);
 		Position* tool_position = level.GetComponent<Position>(rectangle_select_tool_id);
 		sf::Vector2f size = cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left] - cursor_and_keys_.cursor_position;
-		size = Abs(size);
-		width_and_height->width_and_height = size;
 		tool_position->position = cursor_and_keys_.cursor_position + size / 2.f;
+		size = Abs(size);
+		tool_width_and_height->width_and_height = size;
 
-		/*
-		if (current_tool == Selecting)
+		for (auto [entity, editable, position] : level.GetEntitiesWith<Editable, Position>())
 		{
-			for (auto [entity, editable, selected, position] : level.GetEntitiesWith<Editable, Selected, Position>())
+			WidthAndHeight* width_and_height = level.RawGetComponent<WidthAndHeight>(entity);
+			Radius* radius = level.RawGetComponent<Radius>(entity);
+			bool intersects_rectangle_tool = ((width_and_height && CheckIntersection(tool_position, position, tool_width_and_height, width_and_height))
+											  || (radius && CheckIntersection(tool_position, position, tool_width_and_height, radius)));
+			bool is_selected = level.HasComponents<Selected>(entity);
+
+			if (is_selected && !intersects_rectangle_tool)
 			{
-				if (CheckIntersection(tool_position, position, size, ))
-				{
-				}
+				level.editor.Do<SelectEntities>(level, std::vector<Entity>({}), std::vector<Entity>({ entity }));
+				continue;
 			}
-		}
-		*/
-
-		for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entities_entered_this_frame)
-		{
-			if (level.HasComponents<Editable>(entity) && !level.HasComponents<Selected>(entity))
+			if (!is_selected && intersects_rectangle_tool)
 			{
 				level.editor.Do<SelectEntities>(level, std::vector<Entity>({ entity }), std::vector<Entity>({}));
-			}
-		}
-		if (current_tool == Selecting)
-		{
-			for (auto entity : level.GetComponent<Intersection>(rectangle_select_tool_id)->entities_left_this_frame)
-			{
-				if (level.HasComponents<Editable, Selected>(entity))
-				{
-					level.editor.Do<SelectEntities>(level, std::vector<Entity>({}), std::vector<Entity>({ entity }));
-				}
+				continue;
 			}
 		}
 	}
