@@ -191,9 +191,13 @@ EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int 
 
 EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function)
 {
-	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function }, { "Cancel", []() {} } }, {});
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {});
 }
-EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::pair<std::string, std::function<void(void)>>> button_functions, EntitiesHandle middle_entities)
+EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title)
+{
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, {});
+}
+EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities)
 {
 	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ConfirmMenuEntity>(entity); });
 	for (Entity entity : GetEntities(middle_entities))
@@ -211,10 +215,10 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 			level.EnsureExistenceOfComponent<ScheduledDelete>(entity)->frames_left_to_live = 0;
 		}
 	};
-	for (const auto& [button_text, button_function] : button_functions)
+	for (const auto& [button_text, button_function, shortcut_key] : button_info)
 	{
 		auto button_function_with_close = [close_menu = close_menu, button_function = button_function]() {close_menu(); button_function(); };
-		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, sf::Keyboard::Unknown, sf::Vector2f(6, 2) * float(BLOCK_SIZE))));
+		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, shortcut_key, sf::Vector2f(6, 2) * float(BLOCK_SIZE))));
 	}
 
 	EntitiesHandle button_row_handle = HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 12.f);

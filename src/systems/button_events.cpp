@@ -52,6 +52,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key])
 		{
+			cursor_and_keys_.key_pressed_this_frame[shortcut_key->key] = false;
 			level.EnsureExistenceOfComponent<PressedThisFrame>(entity);
 			level.EnsureExistenceOfComponent<Pressed>(entity); //When holding down, keys can act as being pressed multiple times without being released on between
 		}
@@ -61,6 +62,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 	{
 		if (cursor_and_keys_.key_released_this_frame[shortcut_key->key])
 		{
+			cursor_and_keys_.key_released_this_frame[shortcut_key->key] = false;
 			level.AddComponent<ReleasedThisFrame>(entity);
 			level.RemoveComponents<Pressed>(entity);
 		}

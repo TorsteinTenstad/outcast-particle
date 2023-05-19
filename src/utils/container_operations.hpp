@@ -16,6 +16,12 @@ std::vector<OutputType> ApplyFuncToVector(std::vector<InputType> vec, std::funct
 	return result;
 }
 
+template <class T, class U>
+bool Contains(T container, U element)
+{
+	return std::find(container.begin(), container.end(), element) != container.end();
+}
+
 template <class K, class V>
 typename std::map<K, V>::const_iterator NextInMap(const std::map<K, V>& m, K key)
 {

@@ -130,11 +130,11 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	if (is_in_level_editing_)
 	{
 		std::function<void(void)> return_to_level_menu_func = [&level, set_level_ = this->set_level_]() {
-			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(LEVEL_MENU); } }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); } }, { "Cancel", [&]() {} } }, {});
+			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {});
 		};
 
 		std::function<void(void)> return_to_main_menu_func = [&level, set_level_ = this->set_level_]() {
-			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(MAIN_MENU); } }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); } }, { "Cancel", [&]() {} } }, {});
+			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(MAIN_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {});
 		};
 
 		AddButton(return_to_level_menu_func, "Level Menu", sf::Keyboard::Unknown);

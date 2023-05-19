@@ -188,6 +188,11 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	}
 	if (ui->new_level_button_id.has_value() && level.HasComponents<ReleasedThisFrame>(ui->new_level_button_id.value()))
 	{
+		if (!globals.content_lock_options.level_editing_is_available)
+		{
+			CreateBlockingInformationMenu(level, level.GetSize(), "Creating custom levels requires full version");
+			return;
+		}
 		std::string new_level_id = level_manager_->CreateNewLevel(at_group);
 		return RequestRedraw(level, ui, at_group, new_level_id);
 	}
@@ -228,7 +233,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 					level.GetComponent<Text>(text_id)->content = new_display_name;
 					RequestRedraw(level, ui, GetGroupNameFromId(new_level_id), new_level_id);
 				};
-				CreateBlockingPopupMenu(level, level.GetSize(), "Rename level", { { "Rename", rename_func }, { "Cancel", []() {} } }, ToEntitiesHandle((rename_box)));
+				CreateBlockingPopupMenu(level, level.GetSize(), "Rename level", { { "Rename", rename_func, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, ToEntitiesHandle((rename_box)));
 			}
 			else if (level.HasComponents<ReleasedThisFrame>(edit_level_button_id))
 			{
@@ -375,7 +380,11 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	std::vector<EntitiesHandle> scroll_menu_items;
 	for (const auto& level_id : level_groups.at(at_group))
 	{
-		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), [level_id, set_level = set_level_]() { set_level(level_id); });
+		std::string group_display_name = GetGroupDisplayNameFromId(level_id);
+		bool level_is_content_locked = globals.content_lock_options.accessible_level_groups.has_value() && !Contains(globals.content_lock_options.accessible_level_groups.value(), group_display_name);
+		std::function<void(void)> enter_level = [level_id, set_level = set_level_]() { set_level(level_id); };
+		std::function<void(void)> show_level_inaccessible = [&level, group_display_name]() { CreateBlockingInformationMenu(level, level.GetSize(), "Levels from " + group_display_name + " requires full version"); };
+		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), level_is_content_locked ? show_level_inaccessible : enter_level);
 		scroll_menu_items.push_back(row);
 	}
 	for (const auto& [button_id, level_id] : zip(ui->button_entities, level_groups.at(at_group)))
