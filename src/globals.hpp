@@ -7,15 +7,24 @@
 #include <string>
 #include <vector>
 
-struct DeveloperOptions
-{
-	bool all_level_groups_are_editable = true; //Should be false in release
-};
+const std::vector<std::string> level_groups_accessible_in_trial = { "Lab 0", "Lab 1" };
+const std::vector<std::string> editable_level_groups = { "Custom Levels" };
 
-struct ContentLockOptions
+class ContentAccessOptions
 {
-	bool level_editing_is_available = false;
-	std::optional<std::vector<std::string>> accessible_level_groups = std::optional<std::vector<std::string>>({ "Lab 0", "Lab 1" });
+private:
+	const bool IS_TRIAL_BUILD = false; // true when building the free version of the game
+	const bool DEVELOPER_OPTIONS_ENABLED = true;
+
+	bool all_level_groups_are_editable = false; // Should be false in release
+	bool is_trial_build = IS_TRIAL_BUILD;
+
+public:
+	void ToggleAllLevelsAreEditable();
+	void ToggleTrialBuild();
+
+	bool IsLevelGroupEditable(const std::string& group_display_name);
+	bool IsLevelAccessible(const std::string& level_id);
 };
 
 enum SoundTypes
@@ -33,8 +42,7 @@ struct Globals
 	float time_of_last_level_enter = 0;
 	KeyConfig key_config;
 	GeneralConfig general_config;
-	DeveloperOptions developer_options;
-	ContentLockOptions content_lock_options;
+	ContentAccessOptions content_access_options;
 };
 
 extern Globals& globals;

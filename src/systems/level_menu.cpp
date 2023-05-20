@@ -139,12 +139,20 @@ void LevelMenuSystem::Update(Level& level, float dt)
 	if (LevelMenuUI* ui = level.FindSingleton<LevelMenuUI>())
 	{
 		if (cursor_and_keys_.key_down[sf::Keyboard::LControl]
-			&& cursor_and_keys_.key_down[sf::Keyboard::LShift]
-			&& cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F3])
+			&& cursor_and_keys_.key_down[sf::Keyboard::LShift])
 		{
-			assert(ui->at_group.has_value());
-			globals.developer_options.all_level_groups_are_editable = !globals.developer_options.all_level_groups_are_editable;
-			RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
+			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F3])
+			{
+				assert(ui->at_group.has_value());
+				globals.content_access_options.ToggleAllLevelsAreEditable();
+				RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
+			}
+			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F4])
+			{
+				assert(ui->at_group.has_value());
+				globals.content_access_options.ToggleTrialBuild();
+				RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
+			}
 		}
 		UpdateUI(level, ui);
 	}
@@ -188,7 +196,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	}
 	if (ui->new_level_button_id.has_value() && level.HasComponents<ReleasedThisFrame>(ui->new_level_button_id.value()))
 	{
-		if (!globals.content_lock_options.level_editing_is_available)
+		if (!globals.content_access_options.IsLevelGroupEditable(at_group))
 		{
 			CreateBlockingInformationMenu(level, level.GetSize(), "Creating custom levels requires full version");
 			return;
@@ -253,7 +261,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		ui->at_group = LevelMenuUI::last_at_level_group.value_or(level_groups.begin()->first);
 	}
 	std::string at_group = ui->at_group.value();
-	bool levels_are_editable = GetGroupDisplayNameFromGroupName(at_group) == EDITABLE_LEVELS_FOLDER_DISPLAY_NAME || globals.developer_options.all_level_groups_are_editable;
+	bool levels_are_editable = globals.content_access_options.IsLevelGroupEditable(at_group);
 
 	if (!ui->at_level_id.has_value())
 	{
@@ -381,10 +389,9 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	for (const auto& level_id : level_groups.at(at_group))
 	{
 		std::string group_display_name = GetGroupDisplayNameFromId(level_id);
-		bool level_is_content_locked = globals.content_lock_options.accessible_level_groups.has_value() && !Contains(globals.content_lock_options.accessible_level_groups.value(), group_display_name);
 		std::function<void(void)> enter_level = [level_id, set_level = set_level_]() { set_level(level_id); };
 		std::function<void(void)> show_level_inaccessible = [&level, group_display_name]() { CreateBlockingInformationMenu(level, level.GetSize(), "Levels from " + group_display_name + " requires full version"); };
-		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), level_is_content_locked ? show_level_inaccessible : enter_level);
+		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), globals.content_access_options.IsLevelAccessible(level_id) ? enter_level : show_level_inaccessible);
 		scroll_menu_items.push_back(row);
 	}
 	for (const auto& [button_id, level_id] : zip(ui->button_entities, level_groups.at(at_group)))
