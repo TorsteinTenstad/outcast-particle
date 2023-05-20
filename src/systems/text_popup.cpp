@@ -7,9 +7,13 @@
 #include "components/scheduled_delete.hpp"
 #include "components/size.hpp"
 #include "components/text.hpp"
+#include "entity_creation.hpp"
 #include "level.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
+
+class TextPopupEntityDeleteFlag
+{};
 
 void TextPopupSystem::Update(Level& level, float dt)
 {
@@ -17,23 +21,29 @@ void TextPopupSystem::Update(Level& level, float dt)
 	{
 		draw_info->image_path = level.GetMode() == EDIT_MODE ? "content\\textures\\white.png" : "content\\textures\\transparent.png";
 	}
-	if (level.GetMode() == EDIT_MODE) { return; }
+	if (level.GetMode() != PLAY_MODE || level.ComputeState() != PLAYING)
+	{
+		level.DeleteEntitiesWith<TextPopupEntityDeleteFlag>();
+		return;
+	}
 	for (auto [entity, player, intersection] : level.GetEntitiesWith<Player, Intersection>())
 	{
-		for (auto& i : intersection->entities_entered_this_frame)
+		for (auto text_box_popup_spawner_entity : intersection->intersecting_entities)
 		{
-			if (TextPopupSpawner* text_popup_spawner = level.RawGetComponent<TextPopupSpawner>(i))
+			if (TextPopupSpawner* text_popup_spawner = level.RawGetComponent<TextPopupSpawner>(text_box_popup_spawner_entity))
 			{
-				auto [popup_id, popup_width_and_height, popup_draw_info, popup_text, popup_draw_priority, popup_position, popup_animated_position] =
-					level.CreateEntityWith<WidthAndHeight, DrawInfo, Text, DrawPriority, Position, AnimatedPosition>();
-				popup_draw_info->image_path = "content\\textures\\gray.png";
-				popup_width_and_height->width_and_height = sf::Vector2f(2400, 240);
-				popup_text->content = text_popup_spawner->content;
-				popup_text->size = 100;
-				popup_draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-				popup_animated_position->start_time = globals.time;
-				popup_animated_position->animation_func = [&](float t) { return sf::Vector2f(level.GetSize().x / 2, 180 * 2 * (Ease(2 * t - 0.5, 1, 3) - 0.5)); };
-				//level.AddComponent<ScheduledDelete>(popup_id)->delete_at = globals.time + 5;
+				GetSingletonChildId<TextPopupSpawner>(level, text_box_popup_spawner_entity, [content = text_popup_spawner->content](Level& level) {
+					auto [popup_entity, size] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(2400, 240), UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
+					auto [popup_text, popup_animated_position] = level.AddComponents<Text, AnimatedPosition>(popup_entity);
+					level.AddComponent<TextPopupEntityDeleteFlag>(popup_entity);
+					popup_text->content = content;
+					popup_text->size = 100;
+					popup_animated_position->start_time = globals.time;
+					popup_animated_position->animation_func = [&](float t) { return sf::Vector2f(level.GetSize().x / 2, 180 * 2 * (Ease(2 * t - 0.5, 1, 3) - 0.5)); };
+
+					//level.AddComponent<ScheduledDelete>(popup_entity)->delete_at = globals.time + 5;
+					return popup_entity;
+				});
 			}
 		}
 	}
