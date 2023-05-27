@@ -1,8 +1,8 @@
 
 #include "components/goal.hpp"
+#include "components/collision.hpp"
 #include "components/draw_info.hpp"
 #include "components/intersection.hpp"
-#include "components/physics.hpp"
 #include "components/player.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/screen_wide_shader_effects.hpp"
@@ -37,6 +37,7 @@ void GoalSystem::Update(Level& level, float dt)
 				assert(false);
 			}
 			level.RemoveComponents<Player>(entity);
+			level.RemoveComponents<Collision>(entity);
 			level.RemoveComponents<ForceVisualization>(entity);
 			level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + 2;
 			level.GetComponent<Goal>(intersecting_id)->is_goal = true;

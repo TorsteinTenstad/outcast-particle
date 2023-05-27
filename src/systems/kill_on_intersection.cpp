@@ -32,7 +32,7 @@ void KillOnIntersectionSystem::Update(Level& level, float dt)
 			level.RemoveComponents<Velocity>(entity);
 			level.RemoveComponents<Player>(entity);
 
-			level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + 2;
+			level.EnsureExistenceOfComponent<ScheduledDelete>(entity)->delete_at = globals.time + 2;
 			Shader* shader = level.EnsureExistenceOfComponent<Shader>(entity);
 			shader->vertex_shader_path = "shaders\\zapped.vert";
 			shader->float_uniforms["start_animation"] = globals.time;
