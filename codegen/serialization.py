@@ -156,6 +156,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		std::string tag = tag_opt.value();
 
 		Entity entity(std::stoull(id));
+        NotifyObservers(entity);
 
         AddComponent<Tag>(entity)->tag = tag;
 """
@@ -193,7 +194,7 @@ Entity Level::AddBlueprint(std::string blueprint_tag){
 
 Entity Level::AddBlueprint(Blueprint blueprint)
 {
-    Entity entity = CreateEntityId();
+    Entity entity = CreateEntity();
     switch (blueprint){"""
     end = """
         default:

@@ -27,6 +27,7 @@ Game::Game() :
 	active_level_(std::make_unique<Level>()),
 	level_manager_(LEVELS_FOLDER)
 {
+	RegisterGameSystem<TrailerIntroHelperSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
@@ -154,7 +155,6 @@ Level& Game::SetLevel(std::string level_id)
 			active_level_->SetMode(READY_MODE);
 		}
 	}
-	globals.time_of_last_level_enter = globals.time;
 	active_level_id_ = level_id;
 	restart_update_loop_ = true;
 	return *active_level_;

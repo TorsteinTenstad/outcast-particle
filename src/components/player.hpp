@@ -8,6 +8,10 @@ public:
 	float move_force = 0;
 };
 
+class DeadPlayer
+{
+};
+
 class PlayerBehaviors
 {
 public:

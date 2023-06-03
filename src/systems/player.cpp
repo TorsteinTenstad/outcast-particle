@@ -1,4 +1,5 @@
 #include "components/player.hpp"
+#include "components/creation_data.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
 #include "components/shader.hpp"
@@ -89,8 +90,8 @@ void PlayerSystem::Update(Level& level, float dt)
 		return;
 	}
 	LevelMode level_mode = level.GetMode();
-	for (auto const& [entity, player, player_behaviors, shader] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader>())
+	for (auto const& [entity, player, player_behaviors, shader, creation_data] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader, CreationData>())
 	{
-		shader->float_uniforms["time_of_last_level_enter"] = level_mode == READY_MODE ? globals.time_of_last_level_enter : -1;
+		shader->float_uniforms["creation_animation_time"] = level_mode == EDIT_MODE ? -1 : creation_data->creation_time;
 	}
 }

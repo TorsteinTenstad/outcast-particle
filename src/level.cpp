@@ -1,4 +1,5 @@
 #include "level.hpp"
+#include "components/creation_data.hpp"
 #include "components/goal.hpp"
 #include "components/player.hpp"
 #include "game.hpp"
@@ -9,6 +10,16 @@
 #include <optional>
 #include <string>
 
+static void OnEntityCreation(ECSScene& scene, Entity entity)
+{
+	scene.AddComponent<CreationData>(entity)->creation_time = globals.time;
+}
+
+Level::Level() :
+	entity_creation_observer_(*this, OnEntityCreation)
+{
+}
+
 LevelState Level::ComputeState()
 {
 	for (auto& [entity, goal] : GetEntitiesWith<Goal>())
@@ -18,7 +29,7 @@ LevelState Level::ComputeState()
 			return COMPLETED;
 		}
 	}
-	if (GetEntitiesWith<Player>().size() == 0)
+	if (GetEntitiesWith<DeadPlayer>().size() > 0)
 	{
 		return FAILED;
 	}
