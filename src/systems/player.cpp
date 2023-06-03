@@ -90,7 +90,7 @@ void PlayerSystem::Update(Level& level, float dt)
 		return;
 	}
 	LevelMode level_mode = level.GetMode();
-	for (auto const& [entity, player, player_behaviors, shader, creation_data] : level.GetEntitiesWith<Player, PlayerBehaviors, Shader, CreationData>())
+	for (auto const& [entity, shader, creation_data] : level.GetEntitiesWith<Shader, CreationData>())
 	{
 		shader->float_uniforms["creation_animation_time"] = level_mode == EDIT_MODE ? -1 : creation_data->creation_time;
 	}
