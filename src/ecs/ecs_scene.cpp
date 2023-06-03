@@ -25,12 +25,17 @@ void ECSScene::RemoveEntityCreationObserver(EntityCreationObserver* entity_creat
 Entity ECSScene::CreateEntity()
 {
 	Entity new_entity(Rand());
+	NotifyObservers(new_entity);
+	return new_entity;
+}
+
+void ECSScene::NotifyObservers(Entity new_entity)
+{
 
 	for (auto entity_creation_observer : entity_creation_observers)
 	{
 		entity_creation_observer->Notify(new_entity);
 	}
-	return new_entity;
 }
 
 bool ECSScene::IdExists(Entity entity)

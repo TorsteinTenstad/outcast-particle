@@ -37,6 +37,7 @@ public:
 	bool IdExists(Entity entity);
 
 	Entity CreateEntity();
+	void NotifyObservers(Entity entity);
 	void Clear();
 
 	template <class Component>

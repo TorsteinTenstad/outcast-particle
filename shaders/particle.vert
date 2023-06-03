@@ -2,7 +2,6 @@
 
 uniform float _time = 0.;
 uniform vec2 _wh;
-uniform float start_switch_charge_animation = -1.;
 uniform float creation_animation_time = -1.;
 #define PI 3.1415926535897932384626433832795
 
@@ -26,13 +25,8 @@ void main()
 
     vec2 offset = vec2(0, 0);
 
-	float switch_charge_t = (_time - start_switch_charge_animation)*8;
 	float creation_t = (_time - creation_animation_time)*3;
-	if (0 < start_switch_charge_animation && 0 < switch_charge_t && switch_charge_t < 1)
-	{
-        offset -= 0.1*centered_coord*sin(PI*switch_charge_t);
-	}
-    else if (0 <= creation_t && creation_t < 1.5)
+    if (0 <= creation_t && creation_t < 1.5)
 	{
         offset -= 0.5*centered_coord*(1-ease(creation_t-0.5));
 	}

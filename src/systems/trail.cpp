@@ -1,4 +1,5 @@
 #include "components/trail.hpp"
+#include "components/creation_data.hpp"
 #include "components/physics.hpp"
 #include "components/size.hpp"
 #include "level.hpp"
@@ -7,12 +8,10 @@
 
 void TrailSystem::Update(Level& level, float dt)
 {
-	if (globals.time - globals.time_of_last_level_enter < 0.3) // Because of pop-in animation
+	for (auto& [entity, trail, radius, velocity, creation_data] : level.GetEntitiesWith<Trail, Radius, Velocity, CreationData>())
 	{
-		return;
-	}
-	for (auto& [entity, trail, radius, velocity] : level.GetEntitiesWith<Trail, Radius, Velocity>())
-	{
+		if (globals.time - creation_data->creation_time < 0.3) { return; } // Because of pop-in animation
+
 		trail->path.insert(trail->path.begin(), -velocity->velocity * dt - (radius->radius / TRAIL_N) * Normalized(velocity->velocity));
 		if (trail->path.size() > TRAIL_N)
 		{

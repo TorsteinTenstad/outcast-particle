@@ -32,9 +32,11 @@ private:
 	LevelMode mode_ = PLAY_MODE;
 	int grid_size_id = DEFAULT_LEVEL_GRID_SIZE_ID;
 
+	EntityCreationObserver entity_creation_observer_;
+
 public:
 	Level(const Level&) = delete;
-	Level() = default;
+	Level();
 	bool editable = false;
 	std::string name = "Untitled";
 	sf::Vector2f ui_bars_size = sf::Vector2f(0, 0);

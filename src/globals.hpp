@@ -39,7 +39,6 @@ struct Globals
 {
 	sf::RenderWindow render_window;
 	float time = 0;
-	float time_of_last_level_enter = 0;
 	KeyConfig key_config;
 	GeneralConfig general_config;
 	ContentAccessOptions content_access_options;
