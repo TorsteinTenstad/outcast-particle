@@ -30,7 +30,6 @@ class BPMovingParticle : public BPStaticParticle
 	Mass mass = {};
 	Intersection intersection = {};
 	Collision collision = {};
-	Trail trail = {};
 
 	// [Serialize]
 	Velocity velocity = { sf::Vector2f(0, 0) };
@@ -53,6 +52,7 @@ class BPPlayer : public BPEditableEntity
 
 	Acceleration acceleration = {};
 	ReceivedForces received_forces = {};
+	Trail trail = {};
 	Mass mass = {};
 	Intersection intersection = {};
 	Collision collision = {};

@@ -62,7 +62,7 @@ void GoalSystem::Update(Level& level, float dt)
 			float vel_angle = Angle(velocity->velocity);
 			float vel_magnitude = Magnitude(velocity->velocity);
 			float relative_angle = vel_angle - pos_angle;
-			float spiral_theta = 10 * PI * dt;
+			float spiral_theta = 40 * PI * dt;
 			if (abs(relative_angle) > PI)
 			{
 				vel_angle = pos_angle - Sign(relative_angle) * (PI / 2 - spiral_theta);
