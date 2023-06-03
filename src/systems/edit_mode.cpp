@@ -3,6 +3,7 @@
 #include "components/button_events.hpp"
 #include "components/editable.hpp"
 #include "components/intersection.hpp"
+#include "components/not_serialized.hpp"
 #include "components/physics.hpp"
 #include "components/position.hpp"
 #include "components/scheduled_delete.hpp"
@@ -87,6 +88,8 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Handle selection of entity in blueprint menu:
 	if (std::optional<Entity> selected_entity = UpdateBlueprintMenu(level))
 	{
+		Entity entity = selected_entity.value();
+		level.RemoveComponents<NotSerialized>(entity);
 		level.editor.Do<AddEntity>(level, selected_entity.value());
 	}
 

@@ -27,7 +27,7 @@ Game::Game() :
 	active_level_(std::make_unique<Level>()),
 	level_manager_(LEVELS_FOLDER)
 {
-	RegisterGameSystem<TrailerIntroHelperSystem>();
+	//RegisterGameSystem<TrailerIntroHelperSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();

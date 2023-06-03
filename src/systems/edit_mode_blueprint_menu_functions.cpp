@@ -1,6 +1,7 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
+#include "components/editable.hpp"
 #include "components/not_serialized.hpp"
 #include "components/position.hpp"
 #include "components/size.hpp"
@@ -23,7 +24,7 @@ void OpenBlueprintMenu(Level& level)
 		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);
 		auto size = sf::Vector2f(BLUEPRINT_MENU_WIDTH, level.GetSize().y);
 		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
-		level.AddComponent<ReceivesButtonEvents>(entity);
+		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
 
 	std::vector<EntitiesHandle> blueprints;
@@ -40,7 +41,7 @@ void OpenBlueprintMenu(Level& level)
 //Handle selection from blueprint menu. Return any selected entity.
 std::optional<Entity> UpdateBlueprintMenu(Level& level)
 {
-	for (auto& [entity, pressed_this_frame, blueprint_menu_item, draw_priority] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority>())
+	for (auto& [entity, pressed_this_frame, blueprint_menu_item, draw_priority, editable] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority, Editable>())
 	{
 		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
 		level.RemoveComponents<BlueprintMenuItem>(entity);

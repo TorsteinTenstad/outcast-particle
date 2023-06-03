@@ -8,10 +8,6 @@
 
 LevelManager::LevelManager(std::string levels_folder)
 {
-	Level level;
-	level.LoadFromFile("levels\\new_level_template.txt");
-	level.SaveToFile();
-
 	const std::filesystem::path levels_folder_path { levels_folder };
 	for (const auto& folder : std::filesystem::directory_iterator { levels_folder_path })
 	{
@@ -24,9 +20,6 @@ LevelManager::LevelManager(std::string levels_folder)
 			std::string level_id = level_file_path.path().string();
 			std::string group = GetGroupNameFromId(level_id);
 			levels_[group].push_back(level_id);
-			Level level;
-			level.LoadFromFile(level_id);
-			level.SaveToFile();
 		}
 	}
 }
