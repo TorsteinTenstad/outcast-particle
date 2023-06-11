@@ -1,6 +1,7 @@
 #pragma once
+#include "ecs/non_copyable.hpp"
 
-class CreationData
+class CreationData : NonCopyableInternally
 {
 public:
 	float creation_time = -1;

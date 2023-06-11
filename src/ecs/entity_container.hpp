@@ -1,5 +1,6 @@
 #pragma once
 #include "ecs/entity.hpp"
+#include "ecs/non_copyable.hpp"
 #include <cassert>
 #include <functional>
 #include <map>
@@ -44,6 +45,7 @@ public:
 	}
 	void CopyComponent(Key from_key, Key to_key)
 	{
+		if constexpr (std::is_base_of<NonCopyableInternally, Component>::value) { return; }
 		auto it = map_.find(from_key);
 		if (it == map_.end())
 		{
@@ -54,6 +56,7 @@ public:
 	}
 	void CopyComponent(Key from_key, ComponentMap* to_other_map)
 	{
+		if constexpr (std::is_base_of<NonCopyableExternally, Component>::value) { return; }
 		auto it = map_.find(from_key);
 		if (it == map_.end())
 		{
