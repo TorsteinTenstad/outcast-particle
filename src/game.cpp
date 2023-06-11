@@ -62,6 +62,7 @@ Game::Game() :
 	RegisterGameSystem<SetWallSoundSystem>();
 	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<AddKillOnIntersectionSystem>();
+	RegisterGameSystem<ExitGameSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();

@@ -34,6 +34,7 @@ void CursorAndKeys::ResetFrameEvents()
 		mouse_button_released_this_frame[button] = false;
 	}
 	text_input.clear();
+	window_close_button_pressed_this_frame = false;
 }
 
 void CursorAndKeys::ResetAllKeysAndButtons()

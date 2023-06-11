@@ -28,6 +28,8 @@ public:
 
 	std::vector<std::string> text_input;
 
+	bool window_close_button_pressed_this_frame = false;
+
 	CursorAndKeys();
 	void ResetFrameEvents();
 	void ResetAllKeysAndButtons();

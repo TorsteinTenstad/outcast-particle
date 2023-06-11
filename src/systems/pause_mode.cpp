@@ -9,12 +9,12 @@
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
 #include "utils/string_manip.hpp"
-#include < sstream>
 #include <algorithm>
 #include <functional>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
+#include <sstream>
 #include <string>
 
 class PauseMenuItem
@@ -127,7 +127,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		AddButton([&]() { level.SetMode(READY_MODE); }, "Test level", sf::Keyboard::Unknown);
 	}
 
-	if (is_in_level_editing_)
+	if (is_in_level_editing_ && !level.editor.Empty())
 	{
 		std::function<void(void)> return_to_level_menu_func = [&level, set_level_ = this->set_level_]() {
 			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {});

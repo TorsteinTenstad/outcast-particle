@@ -26,7 +26,7 @@ void SFMLEventHandler::Update(CursorAndKeys& cursor_and_keys)
 	{
 		if (event.type == sf::Event::Closed)
 		{
-			globals.render_window.close();
+			cursor_and_keys.window_close_button_pressed_this_frame = true;
 		}
 		if (event.type == sf::Event::KeyPressed && event.key.code != sf::Keyboard::Unknown)
 		{
