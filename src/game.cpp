@@ -3,7 +3,6 @@
 #include "entity_creation.hpp"
 #include "folder_definitions.hpp"
 #include "systems/_pure_DO_systems.hpp"
-#include "systems/coin.hpp"
 #include "systems/draw.hpp"
 #include "systems/level_completion_time.hpp"
 #include "systems/level_menu.hpp"
@@ -33,7 +32,7 @@ Game::Game() :
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
-	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &level_completion_time_records_, &level_coin_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &level_completion_time_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
 	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly // Consumes button events
@@ -69,7 +68,7 @@ Game::Game() :
 	RegisterPhysicsGameSystem<GoalSystem>();
 	RegisterPhysicsGameSystem<TimerSystem>();
 	RegisterPhysicsGameSystem<KillOnIntersectionSystem>();
-	RegisterPhysicsGameSystem<CoinSystem>().SetCoinRecords(&level_coin_records_);
+	RegisterPhysicsGameSystem<CoinSystem>();
 	RegisterPhysicsGameSystem<ElectricForceSystem>();
 	RegisterPhysicsGameSystem<ElectricFieldForceSystem>();
 	RegisterPhysicsGameSystem<MagneticFieldForceSystem>();

@@ -108,14 +108,12 @@ static void RequestRedrawIfLevelGroupIsNew(Level& level, LevelMenuUI* ui, std::s
 void LevelMenuSystem::Give(
 	LevelManager* level_manager,
 	const std::map<int, std::map<std::string, float>>* level_completion_time_records,
-	const std::map<std::string, int>* level_coin_records,
 	std::function<Level&(std::string)> set_level,
 	std::function<Level&(std::string)> set_level_and_edit,
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 {
 	level_manager_ = level_manager;
 	level_completion_time_records_ = level_completion_time_records;
-	level_coin_records = level_coin_records;
 	set_level_ = set_level;
 	set_level_and_edit_ = set_level_and_edit;
 	generate_level_texture_ = generate_level_texture;

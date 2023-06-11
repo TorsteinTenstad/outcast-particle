@@ -6,13 +6,9 @@
 #include "components/screen_wide_shader_effects.hpp"
 #include "components/sound_info.hpp"
 #include "globals.hpp"
-#include "systems/coin.hpp"
+#include "systems/_pure_DO_systems.hpp"
 #include <cassert>
 
-void CoinSystem::SetCoinRecords(std::map<std::string, int>* coin_records)
-{
-	level_coin_records_ = coin_records;
-}
 void CoinSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != PLAY_MODE)
@@ -35,11 +31,5 @@ void CoinSystem::Update(Level& level, float dt)
 			level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + 1;
 			counter += 1;
 		}
-	}
-
-	if (level.ComputeState() == COMPLETED && counter > (*level_coin_records_)[active_level_id_])
-	{
-		(*level_coin_records_)[active_level_id_] = counter;
-		return;
 	}
 }

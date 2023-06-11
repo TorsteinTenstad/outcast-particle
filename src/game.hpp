@@ -23,7 +23,6 @@ private:
 	std::string active_level_id_ = MAIN_MENU;
 	std::unique_ptr<Level> active_level_;
 	std::map<int, std::map<std::string, float>> level_completion_time_records_;
-	std::map<std::string, int> level_coin_records_;
 
 	LevelManager level_manager_;
 
