@@ -27,11 +27,7 @@ void CoinSystem::Update(Level& level, float dt)
 	{
 		for (auto& entity : intersection->entities_entered_this_frame)
 		{
-			if (!level.HasComponents<Coin>(entity))
-			{
-				continue;
-			}
-			assert(level.HasComponents<Coin>(entity));
+			if (!level.HasComponents<Coin>(entity)) { continue; }
 			assert(level.HasComponents<SegmentedGlowEffect>(entity));
 			level.RemoveComponents<Coin>(entity);
 			level.GetComponent<SegmentedGlowEffect>(entity)->animation_start_time = globals.time;

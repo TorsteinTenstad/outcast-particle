@@ -51,10 +51,10 @@ Game::Game() :
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
-	RegisterGameSystem<ScreenWideShaderEffectsSystem>();
 	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
+	RegisterGameSystem<ScreenWideShaderEffectsSystem>(); // Must be below EditModeSystem for effects to be visible on copy
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
 	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_manager_.GetLevels(), &level_completion_time_records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
