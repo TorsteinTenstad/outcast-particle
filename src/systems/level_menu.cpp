@@ -36,32 +36,6 @@ static void GenerateLevelPreview(Level& level, LevelMenuUI* ui,
 	level.GetComponent<DrawInfo>(ui->level_preview_entity)->image_path = texture_identifier;
 }
 
-static void UpdateLevelPreview(Level& level, LevelMenuUI* ui,
-	const std::map<std::string, std::vector<std::string>>& level_groups,
-	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
-{
-	assert(ui->at_group.has_value());
-	std::string at_group = ui->at_group.value();
-	for (const auto& [button_entity, level_id] : zip(ui->button_entities, level_groups.at(at_group)))
-	{
-		if (!level.HasComponents<HoveredStartedThisFrame>(button_entity)) { continue; }
-		if (ui->displaying_level_id.has_value() && ui->displaying_level_id.value() == level_id) { continue; }
-
-		ui->displaying_level_id = level_id;
-		ui->at_level_id = level_id;
-		LevelMenuUI::last_at_level_id[at_group] = level_id;
-		LevelMenuUI::last_at_level_group = at_group;
-		GenerateLevelPreview(level, ui, level_id, generate_level_texture);
-		return;
-	}
-	if (ui->new_level_button_id.has_value()
-		&& level.HasComponents<HoveredStartedThisFrame>(ui->new_level_button_id.value()))
-	{
-		GenerateLevelPreview(level, ui, NEW_LEVEL_TEMPLATE_FILE, generate_level_texture);
-		ui->displaying_level_id = NEW_LEVEL_TEMPLATE_FILE;
-	}
-}
-
 static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	const RecordsManager* records)
 {
@@ -76,6 +50,34 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 
 		level.GetComponent<FillColor>(ui->stats_block_entities[i])->color.a = record.has_value() ? 255 : 0;
 		level.GetComponent<Text>(ui->stats_block_entities[i])->content = record.has_value() ? RightShiftString(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 16) : "";
+	}
+}
+
+static void UpdateLevelPreviewAndStatsBadges(Level& level, LevelMenuUI* ui,
+	const std::map<std::string, std::vector<std::string>>& level_groups,
+	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture,
+	const RecordsManager* records_)
+{
+	assert(ui->at_group.has_value());
+	std::string at_group = ui->at_group.value();
+	for (const auto& [button_entity, level_id] : zip(ui->button_entities, level_groups.at(at_group)))
+	{
+		if (!level.HasComponents<HoveredStartedThisFrame>(button_entity)) { continue; }
+		if (ui->displaying_level_id.has_value() && ui->displaying_level_id.value() == level_id) { continue; }
+
+		ui->displaying_level_id = level_id;
+		ui->at_level_id = level_id;
+		LevelMenuUI::last_at_level_id[at_group] = level_id;
+		LevelMenuUI::last_at_level_group = at_group;
+		GenerateLevelPreview(level, ui, level_id, generate_level_texture);
+		UpdateStatsBadges(level, ui, records_);
+		return;
+	}
+	if (ui->new_level_button_id.has_value()
+		&& level.HasComponents<HoveredStartedThisFrame>(ui->new_level_button_id.value()))
+	{
+		GenerateLevelPreview(level, ui, NEW_LEVEL_TEMPLATE_FILE, generate_level_texture);
+		ui->displaying_level_id = NEW_LEVEL_TEMPLATE_FILE;
 	}
 }
 
@@ -154,8 +156,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	assert(ui->at_group.has_value());
 	std::string at_group = ui->at_group.value();
 
-	UpdateLevelPreview(level, ui, level_manager_->GetLevels(), generate_level_texture_);
-	UpdateStatsBadges(level, ui, records_);
+	UpdateLevelPreviewAndStatsBadges(level, ui, level_manager_->GetLevels(), generate_level_texture_, records_);
 
 	if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_entity))
 	{
