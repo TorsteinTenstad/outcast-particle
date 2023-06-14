@@ -2,6 +2,7 @@
 #include "components/creation_data.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
+#include "components/player_input_tracker.hpp"
 #include "components/shader.hpp"
 #include "components/sound_info.hpp"
 #include "controls_config.hpp"
@@ -30,10 +31,8 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 
 		if (!player_behaviors->is_neutral && cursor_and_keys.key_pressed_this_frame[neutral_key] && player->can_go_neutral)
 		{
-			if (!player_behaviors->is_neutral)
-			{
-				sound_info->play_sound.push(TO_NEUTRAL);
-			}
+			sound_info->play_sound.push(TO_NEUTRAL);
+			level.GetSingleton<PlayerInputTracker>()->neutral_was_used = true;
 			player_behaviors->default_charge = charge->charge;
 			player_behaviors->is_neutral = true;
 			charge->charge = 0;

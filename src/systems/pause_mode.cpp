@@ -25,11 +25,11 @@ const std::map<LevelState, float> PAUSE_MENU_DELAY { { COMPLETED, 2.f }, { PLAYI
 void PauseMode::Give(
 	std::function<Level&(std::string)> set_level,
 	const std::map<std::string, std::vector<std::string>>* level_groups,
-	const std::map<int, std::map<std::string, float>>* level_completion_time_records)
+	const RecordsManager* records)
 {
 	set_level_ = set_level;
 	level_groups_ = level_groups;
-	level_completion_time_records_ = level_completion_time_records;
+	records_ = records;
 }
 void PauseMode::Update(Level& level, float dt)
 {
@@ -93,7 +93,10 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 
 			float duration = level.GetSingleton<LevelCompletionTimer>()->duration;
 			int coin_count = level.GetSingleton<CoinCounter>()->coin_counter;
-			bool is_new_record = duration == level_completion_time_records_->at(coin_count).at(active_level_id_);
+
+			std::optional<float> record = records_->GetRecord(active_level_id_, coin_count);
+			assert(record.has_value());
+			bool is_new_record = duration == record.value_or(0);
 			std::stringstream ss;
 
 			EntityHandle badge_handle = CreateStatsBadge(level, sf::Vector2f(0, 0), coin_count, 255, RightShiftString(CreateBadgeText(duration, 2 + globals.general_config.display_precise_badge_time), 16), is_new_record);

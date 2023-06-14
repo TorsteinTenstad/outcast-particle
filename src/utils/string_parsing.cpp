@@ -55,21 +55,26 @@ std::string ToString(sf::Color x)
 {
 	return "(" + ToString(x.r) + "," + ToString(x.g) + "," + ToString(x.b) + ")";
 }
-void FromString(std::string& x, std::string s)
+Error_t FromString(std::string& x, std::string s)
 {
 	x = s;
+	return SUCCESS;
 }
-void FromString(sf::Keyboard::Key& x, std::string s)
+Error_t FromString(sf::Keyboard::Key& x, std::string s)
 {
 	FromString((int&)x, s);
+	return SUCCESS;
 }
-void FromString(bool& x, std::string s)
+Error_t FromString(bool& x, std::string s)
 {
 	x = (s == "1");
+	return SUCCESS;
 }
-void FromString(sf::Color& x, std::string s)
+Error_t FromString(sf::Color& x, std::string s)
 {
 	x = sf::Color(255, 0, 255);
+	assert(false);
+	return SUCCESS;
 }
 
 std::string UTF32ToUTF8(sf::Uint32 utf32_char)

@@ -7,35 +7,6 @@
 #include "level.hpp"
 #include "utils/string_parsing.hpp"
 
-template <typename K, typename V>
-inline std::string ToString(const std::map<K, V>& map)
-{
-	std::string str_rep;
-	for (const auto& i : map)
-	{
-		str_rep += ToString(i.first);
-		str_rep += "; ";
-		str_rep += ToString(i.second);
-		str_rep += "\n";
-	}
-	return str_rep;
-}
-
-template <typename K, typename V>
-inline void FromString(std::map<K, V>& map, std::string s)
-{
-	std::vector<std::string> keys_and_values = SplitString(s, "\n");
-	K key;
-	V value;
-	for (auto& i : keys_and_values)
-	{
-		std::vector<std::string> pair = SplitString(i, "; ");
-		FromString(key, pair[0]);
-		FromString(value, pair[1]);
-		map[key] = value;
-	}
-}
-
 //The MapOfMap-functions should only be called for maps with maps as values
 template <typename K, typename V>
 void SaveMapOfMapToFile(std::string savefile_path, std::map<K, V> map_of_map)

@@ -24,7 +24,8 @@
 
 Game::Game() :
 	active_level_(std::make_unique<Level>()),
-	level_manager_(LEVELS_FOLDER)
+	level_manager_(LEVELS_FOLDER),
+	records_(std::string(USER_FOLDER) + "\\records.txt")
 {
 	//RegisterGameSystem<TrailerIntroHelperSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();
@@ -32,7 +33,7 @@ Game::Game() :
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
-	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &level_completion_time_records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
 	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly // Consumes button events
@@ -41,7 +42,7 @@ Game::Game() :
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>(); // Must
-	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&level_completion_time_records_);
+	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&records_);
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
 	RegisterGameSystem<TextBoxSystem>();
@@ -55,7 +56,7 @@ Game::Game() :
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ScreenWideShaderEffectsSystem>(); // Must be below EditModeSystem for effects to be visible on copy
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
-	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_manager_.GetLevels(), &level_completion_time_records_);
+	RegisterGameSystem<PauseMode>().Give(std::bind(&Game::SetLevel, this, std::placeholders::_1), &level_manager_.GetLevels(), &records_);
 	RegisterGameSystem<ScheduledDeleteSystem>();
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<SetWallSoundSystem>();
@@ -81,7 +82,6 @@ Game::Game() :
 		std::filesystem::create_directory(USER_FOLDER);
 	}
 
-	LoadMapOfMapFromFile("user\\records.txt", level_completion_time_records_);
 	LoadOptionsFromFile("user\\controls_config.txt", "user\\general_config.txt");
 
 	CheckFullscreen();
@@ -91,7 +91,6 @@ Game::Game() :
 
 Game::~Game()
 {
-	SaveMapOfMapToFile("user\\records.txt", level_completion_time_records_);
 	SaveOptionsToFile("user\\controls_config.txt", "user\\general_config.txt");
 }
 
@@ -120,7 +119,6 @@ Level& Game::SetLevel(std::string level_id)
 	if (level_id == MAIN_MENU)
 	{
 		GoToMainMenu();
-		SaveMapOfMapToFile("user\\records.txt", level_completion_time_records_);
 		menu_stack = {};
 	}
 	else if (level_id == LEVEL_MENU)

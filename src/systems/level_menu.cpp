@@ -63,7 +63,7 @@ static void UpdateLevelPreview(Level& level, LevelMenuUI* ui,
 }
 
 static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
-	const std::map<int, std::map<std::string, float>>* level_completion_time_records)
+	const RecordsManager* records)
 {
 	if (!ui->at_level_id.has_value())
 	{
@@ -72,18 +72,10 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	std::string at_level_id = ui->at_level_id.value();
 	for (int i = 0; i < 4; i++)
 	{
-		if (level_completion_time_records->count(i) == 0) { continue; }
-		std::map<std::string, float> i_coin_record = level_completion_time_records->at(i);
-		if (i_coin_record.count(at_level_id) > 0)
-		{
-			level.GetComponent<FillColor>(ui->stats_block_entities[i])->color.a = 255;
-			level.GetComponent<Text>(ui->stats_block_entities[i])->content = RightShiftString(CreateBadgeText(i_coin_record.at(at_level_id), 2 + globals.general_config.display_precise_badge_time), 16);
-		}
-		else
-		{
-			level.GetComponent<FillColor>(ui->stats_block_entities[i])->color.a = 0;
-			level.GetComponent<Text>(ui->stats_block_entities[i])->content = "";
-		}
+		std::optional<float> record = records->GetRecord(at_level_id, i);
+
+		level.GetComponent<FillColor>(ui->stats_block_entities[i])->color.a = record.has_value() ? 255 : 0;
+		level.GetComponent<Text>(ui->stats_block_entities[i])->content = record.has_value() ? RightShiftString(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 16) : "";
 	}
 }
 
@@ -107,13 +99,13 @@ static void RequestRedrawIfLevelGroupIsNew(Level& level, LevelMenuUI* ui, std::s
 
 void LevelMenuSystem::Give(
 	LevelManager* level_manager,
-	const std::map<int, std::map<std::string, float>>* level_completion_time_records,
+	const RecordsManager* records,
 	std::function<Level&(std::string)> set_level,
 	std::function<Level&(std::string)> set_level_and_edit,
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 {
 	level_manager_ = level_manager;
-	level_completion_time_records_ = level_completion_time_records;
+	records_ = records;
 	set_level_ = set_level;
 	set_level_and_edit_ = set_level_and_edit;
 	generate_level_texture_ = generate_level_texture;
@@ -163,7 +155,7 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	std::string at_group = ui->at_group.value();
 
 	UpdateLevelPreview(level, ui, level_manager_->GetLevels(), generate_level_texture_);
-	UpdateStatsBadges(level, ui, level_completion_time_records_);
+	UpdateStatsBadges(level, ui, records_);
 
 	if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_entity))
 	{

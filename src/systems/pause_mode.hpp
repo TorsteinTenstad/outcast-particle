@@ -1,4 +1,5 @@
 #include "game_system.hpp"
+#include "records_manager.hpp"
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -8,7 +9,7 @@ class PauseMode : public GameSystem
 private:
 	std::function<Level&(std::string)> set_level_;
 	const std::map<std::string, std::vector<std::string>>* level_groups_;
-	const std::map<int, std::map<std::string, float>>* level_completion_time_records_;
+	const RecordsManager* records_;
 
 	void SetupPauseMenu(Level& level, LevelMode previous_mode);
 
@@ -17,6 +18,6 @@ public:
 	void Give(
 		std::function<Level&(std::string)> set_level,
 		const std::map<std::string, std::vector<std::string>>* level_groups,
-		const std::map<int, std::map<std::string, float>>* level_completion_time_records);
+		const RecordsManager* records);
 	void Update(Level& level, float dt);
 };

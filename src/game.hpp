@@ -5,6 +5,7 @@
 #include "general_user_config.hpp"
 #include "level.hpp"
 #include "level_manager.hpp"
+#include "records_manager.hpp"
 #include "sfml_event_handler.hpp"
 
 #include <memory>
@@ -22,8 +23,8 @@ private:
 
 	std::string active_level_id_ = MAIN_MENU;
 	std::unique_ptr<Level> active_level_;
-	std::map<int, std::map<std::string, float>> level_completion_time_records_;
 
+	RecordsManager records_;
 	LevelManager level_manager_;
 
 	int next_available_system_id_ = 0;
