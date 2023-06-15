@@ -4,7 +4,7 @@
 void ExitGameSystem::Update(Level& level, float dt)
 {
 	if (!cursor_and_keys_.window_close_button_pressed_this_frame) { return; }
-	if (level.GetMode() != EDIT_MODE || level.editor.Empty())
+	if (!is_in_level_editing_ || level.editor.Empty())
 	{
 		globals.render_window.close();
 	}

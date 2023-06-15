@@ -147,8 +147,11 @@ void EditModeSystem::Update(Level& level, float dt)
 	}
 
 	// Conditional deselect all:
-	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left] && level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
-		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY] && !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
+	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left]
+		&& level.GetEntitiesWithComponent<Selected>().size() != 0
+		&& level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
+		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY]
+		&& !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{
 		level.editor.Do<SelectEntities>(level, std::vector<Entity> {}, level.GetEntitiesWithComponent<Selected>());
 	}
@@ -161,7 +164,9 @@ void EditModeSystem::Update(Level& level, float dt)
 			selected->mouse_offset = position->position - cursor_and_keys_.cursor_position;
 		}
 	}
-	if (current_tool == Moving && cursor_and_keys_.cursor_moved_this_frame)
+	if (current_tool == Moving
+		&& cursor_and_keys_.cursor_moved_this_frame
+		&& level.GetEntitiesWithComponent<Selected>().size() != 0)
 	{
 		level.editor.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}
