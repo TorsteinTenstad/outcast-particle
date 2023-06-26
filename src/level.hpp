@@ -63,4 +63,5 @@ public:
 	void LoadFromFile();
 	void SaveToFile(std::string savefile_path);
 	void LoadFromFile(std::string savefile_path);
+	void DiscardChanges();
 };

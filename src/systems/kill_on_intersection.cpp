@@ -30,8 +30,10 @@ void KillOnIntersectionSystem::Update(Level& level, float dt)
 			}
 			level.RemoveComponents<Intersection>(entity);
 			level.RemoveComponents<Velocity>(entity);
-			level.RemoveComponents<Player>(entity);
-			level.CreateEntityWith<DeadPlayer>();
+			if (level.RemoveComponent<Player>(entity))
+			{
+				level.CreateEntityWith<DeadPlayer>();
+			}
 
 			level.EnsureExistenceOfComponent<ScheduledDelete>(entity)->delete_at = globals.time + 2;
 			Shader* shader = level.EnsureExistenceOfComponent<Shader>(entity);

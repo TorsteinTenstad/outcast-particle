@@ -4,9 +4,20 @@
 void ExitGameSystem::Update(Level& level, float dt)
 {
 	if (!cursor_and_keys_.window_close_button_pressed_this_frame) { return; }
-	if (!is_in_level_editing_ || level.editor.Empty())
+	if (level.editor.IsEmpty() || !is_in_level_editing_)
 	{
 		globals.render_window.close();
 	}
-	CreateBlockingPopupMenu(level, level.GetSize(), "Save changes before exit?", { { "Save", [&]() { level.SaveToFile(); globals.render_window.close(); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); globals.render_window.close(); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {});
+	CreateBlockingPopupMenu(level, level.GetSize(), "Save changes before exit?", { { "Save", [&]() {
+																						globals.render_window.close();
+																						level.SaveToFile();
+																					},
+																					   sf::Keyboard::Unknown },
+																					 { "Discard", [&]() {
+																						  level.DiscardChanges();
+																						  globals.render_window.close();
+																					  },
+																						 sf::Keyboard::Unknown },
+																					 { "Cancel", [&]() {}, sf::Keyboard::Escape } },
+		{});
 }

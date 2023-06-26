@@ -85,11 +85,14 @@ void EditModeSystem::Update(Level& level, float dt)
 		level.editor.Redo();
 	}
 
-	// Handle selection of entity in blueprint menu:
+	// Blueprint menu:
+	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
+	{
+		ToggleBlueprintMenu(level);
+	}
 	if (std::optional<Entity> selected_entity = UpdateBlueprintMenu(level))
 	{
 		Entity entity = selected_entity.value();
-		level.RemoveComponents<NotSerialized>(entity);
 		level.editor.Do<AddEntity>(level, selected_entity.value());
 	}
 

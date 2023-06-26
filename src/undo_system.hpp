@@ -70,10 +70,11 @@ public:
 	UndoSystem()
 	{
 		next_action_ = actions_.end();
+		auto first_action = actions_.begin();
 	}
 	UndoSystem(const UndoSystem& other) = delete;
 
-	bool Empty()
+	bool IsEmpty()
 	{
 		return next_action_ == actions_.begin();
 	}
@@ -101,7 +102,7 @@ public:
 	}
 	bool Undo()
 	{
-		if (Empty()) { return false; }
+		if (IsEmpty()) { return false; }
 		std::advance(next_action_, -1);
 		(*next_action_)->Undo();
 		return true;

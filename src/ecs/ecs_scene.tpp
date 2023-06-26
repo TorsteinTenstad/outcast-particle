@@ -110,9 +110,9 @@ bool ECSScene::RemoveComponent(Entity entity)
 }
 
 template <class... Component>
-bool ECSScene::RemoveComponents(Entity entity)
+void ECSScene::RemoveComponents(Entity entity)
 {
-	return (RemoveComponent<Component>(entity) || ...);
+	auto results = (RemoveComponent<Component>(entity), ...);
 }
 
 template <class... Component>

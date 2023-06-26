@@ -1,4 +1,5 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
+#include "components/blueprint_menu_item.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
 #include "components/editable.hpp"
@@ -9,9 +10,6 @@
 #include "entity_creation.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/get_size.hpp"
-
-class BlueprintMenuItem
-{};
 
 const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
@@ -44,7 +42,7 @@ std::optional<Entity> UpdateBlueprintMenu(Level& level)
 	for (auto& [entity, pressed_this_frame, blueprint_menu_item, draw_priority, editable] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority, Editable>())
 	{
 		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
-		level.RemoveComponents<BlueprintMenuItem>(entity);
+		level.RemoveComponents<BlueprintMenuItem, NotSerialized>(entity);
 		CloseBlueprintMenu(level);
 		return entity;
 	}

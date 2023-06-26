@@ -1,3 +1,4 @@
+#include "components/blueprint_menu_item.hpp"
 #include "components/draw_info.hpp"
 #include "components/physics.hpp"
 #include "components/screen_wide_shader_effects.hpp"
@@ -17,9 +18,6 @@ void ForceVisualizationSystem::Update(Level& level, float dt)
 	}
 	for (const auto& [entity, force_visualization, children, radius, player_charge, draw_priority, player_position] : level.GetEntitiesWith<ForceVisualization, Children, Radius, Charge, DrawPriority, Position>())
 	{
-		auto charges = level.GetEntitiesWith<Charge, Position>();
-		if (charges.size() == 1) { continue; }
-
 		std::function<Entity(Level&)> child_creation_func = [active_level_id = active_level_id_, draw_priority = draw_priority](Level& level) {
 			Entity entity = CreateScreenWideFragmentShaderEntity(level, "shaders\\force.frag", 9);
 			MakeFadeIntoLevel(level, entity, active_level_id);
@@ -32,12 +30,11 @@ void ForceVisualizationSystem::Update(Level& level, float dt)
 		shader->float_uniforms["charge_radius"] = radius->radius;
 
 		int charge_i = 0;
-		for (const auto [particle_entity, particle_charge, particle_position] : charges)
+		for (const auto [particle_entity, particle_charge, particle_position] : level.GetEntitiesWith<Charge, Position>())
 		{
-			if (particle_entity == entity)
-			{
-				continue;
-			}
+
+			if (particle_entity == entity) { continue; }
+			if (level.HasComponents<BlueprintMenuItem>(particle_entity)) { continue; }
 			sf::Vector2i particle_screen_space_position = globals.render_window.mapCoordsToPixel(particle_position->position);
 			if (Magnitude(player_position->position - particle_position->position) < radius->radius / 4)
 			{

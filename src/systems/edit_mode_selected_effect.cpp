@@ -25,6 +25,9 @@ void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 	Entity entity = level.GetSingletonId<SelectedEffect>([&level](ECSScene& scene) {
 		return CreateScreenWideFragmentShaderEntity(level, "shaders\\selected_effect.frag", 50);
 	});
+	auto level_size = level.GetSize();
+	level.GetComponent<WidthAndHeight>(entity)->width_and_height = level_size;
+	level.GetComponent<Position>(entity)->position = level_size / 2.f;
 	Shader* shader = level.GetComponent<Shader>(entity);
 	int i = 0;
 	for (const auto& [entity, selected, editable, draw_priority, width_and_height, position] : level.GetEntitiesWith<Selected, Editable, DrawPriority, WidthAndHeight, Position>())

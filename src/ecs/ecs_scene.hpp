@@ -70,13 +70,12 @@ public:
 	template <class Component>
 	void DeleteChildEntitiesOwnedByComponent(Entity entity);
 
-protected:
+public:
 	template <class Component>
 	bool RemoveComponent(Entity entity);
 
-public:
 	template <class... Component>
-	bool RemoveComponents(Entity entity);
+	void RemoveComponents(Entity entity);
 
 	template <class Component>
 	std::vector<Entity> GetEntitiesWithComponent();
