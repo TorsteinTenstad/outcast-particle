@@ -1,0 +1,19 @@
+name=Untitled;grid_size_id=1;editable=1
+569939778536478130:Tag{tag=BPCoin}Position{position=(3240,600)}
+598239476714109674:Tag{tag=BPPlayer}Position{position=(1980,600)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+3844290798944282725:Tag{tag=BPWall}Position{position=(1620,1260)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(2760,120)}
+4629230488646739869:Tag{tag=BPGoal}Position{position=(600,1560)}
+5084147908225815965:Tag{tag=BPWall}Position{position=(1920,1980)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3120,360)}
+5442527944563439944:Tag{tag=BPWall}Position{position=(1620,900)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(2760,120)}
+6275954416587021947:Tag{tag=BPWall}Position{position=(1920,180)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,360)}
+7093550224080184522:Tag{tag=BPStaticParticle}Position{position=(3360,180)}Charge{charge=-10000}
+8001369825146715480:Tag{tag=BPCoin}Position{position=(3240,1560)}
+9044868179196539742:Tag{tag=BPTextPopupSpawner}Position{position=(1620,600)}WidthAndHeight{width_and_height=(1320,480)}TextPopupSpawner{content=Press Space to switch charge}
+9271854885181291275:Tag{tag=BPWall}Position{position=(180,1260)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,1800)}
+10670508056889787940:Tag{tag=BPWall}Position{position=(3660,1260)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,1800)}
+11187902846917608822:Tag{tag=BPCoin}Position{position=(1200,600)}
+11216871117688587830:Tag{tag=BPLaser}Position{position=(900,600)}WidthAndHeight{width_and_height=(60,540)}
+11648524561159435889:Tag{tag=BPWall}Position{position=(1620,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(2520,240)}
+13760232376298169428:Tag{tag=BPStaticParticle}Position{position=(3660,1680)}Charge{charge=10000}
+16110750890889956570:Tag{tag=BPStaticParticle}Position{position=(600,600)}Charge{charge=10000}
+16496184024096834285:Tag{tag=BPLaser}Position{position=(2940,1080)}WidthAndHeight{width_and_height=(60,300)}

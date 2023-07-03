@@ -1,6 +1,6 @@
 name=Untitled;grid_size_id=1;editable=1
 1943886898626957310:Tag{tag=BPStaticParticle}Position{position=(3120,1980)}Charge{charge=-10000}
-2672165745852217827:Tag{tag=BPWall}Position{position=(1440,600)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,600)}
+2672165745852217827:Tag{tag=BPWall}Position{position=(1440,540)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,600)}
 3083171902606724053:Tag{tag=BPWall}Position{position=(2280,1980)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,360)}
 3275255171066572976:Tag{tag=BPWall}Position{position=(2640,840)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,1200)}
 3350038763805643841:Tag{tag=BPWall}Position{position=(1920,180)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,360)}
@@ -11,7 +11,7 @@ name=Untitled;grid_size_id=1;editable=1
 11354406754904912624:Tag{tag=BPWall}Position{position=(1020,780)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(720,120)}
 11411976442045143978:Tag{tag=BPStaticParticle}Position{position=(540,180)}Charge{charge=10000}
 12054386814292915386:Tag{tag=BPGoal}Position{position=(3120,720)}
-12973883177707638937:Tag{tag=BPWall}Position{position=(1440,1620)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,720)}
+12973883177707638937:Tag{tag=BPWall}Position{position=(1440,1680)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,720)}
 15316783490775726869:Tag{tag=BPWall}Position{position=(1860,1380)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(720,120)}
 15635016749901032285:Tag{tag=BPStaticParticle}Position{position=(840,1320)}Charge{charge=10000}
 16633496057058146650:Tag{tag=BPCoin}Position{position=(1740,1620)}
