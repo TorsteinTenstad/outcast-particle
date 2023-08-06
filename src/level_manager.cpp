@@ -10,14 +10,17 @@ LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 {
 	for (const auto& folder : std::filesystem::directory_iterator { levels_dir })
 	{
-		if (!folder.is_directory())
+		if (!folder.is_directory()) { continue; }
+		std::string group = folder.path().stem().string();
+		if (std::find(editable_level_groups.begin(), editable_level_groups.end(), GetGroupDisplayNameFromGroupName(group)) != editable_level_groups.end()) //Editable level groups should be visible even if empty
 		{
-			continue;
+			levels_[group];
 		}
+
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
 			std::string level_id = level_file_path.path().string();
-			std::string group = GetGroupNameFromId(level_id);
+			assert(group == GetGroupNameFromId(level_id));
 			levels_[group].push_back(level_id);
 		}
 	}
