@@ -27,11 +27,23 @@ Error_t FromString(sf::Color& x, std::string s);
 std::string UTF32ToUTF8(sf::Uint32 utf32_char);
 
 template <class T>
-Error_t FromString(T& x, std::string s)
+Error_t FromString(T& x, const std::string& s)
 {
-	x = stod(s);
-	return SUCCESS;
+	try
+	{
+		x = std::stod(s);
+		return SUCCESS;
+	}
+	catch (const std::invalid_argument&)
+	{
+		return ERROR;
+	}
+	catch (const std::out_of_range&)
+	{
+		return ERROR;
+	}
 }
+
 template <class T>
 std::string ToString(T x)
 {

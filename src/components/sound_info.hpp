@@ -1,8 +1,15 @@
 #pragma once
-#include "globals.hpp"
 #include <map>
 #include <queue>
 #include <string>
+
+enum SoundTypes
+{
+	DEFAULT,
+	ON_CLICK,
+	TO_NEUTRAL,
+	FROM_NEUTRAL
+};
 
 class SoundInfo
 {

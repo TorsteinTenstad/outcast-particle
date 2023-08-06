@@ -1,11 +1,25 @@
 #include "records_manager.hpp"
+#include "globals.hpp"
+#include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 #include <limits>
 
 RecordsManager::RecordsManager(const std::filesystem::path& savefile) :
 	savefile_path_(savefile)
 {
-	FromFile(records_, savefile);
+	Error_t err = FromFile(records_, savefile);
+	if (err)
+	{
+		std::filesystem::path backup_path = savefile.parent_path() / (savefile.stem().string() + "_corrupt_backup_" + GetDateTimeIdentifier() + savefile.extension().string());
+		try
+		{
+			std::filesystem::rename(savefile, backup_path);
+			globals.errors.error_messages_to_display.push_back("Previously stored records was corrupted, and is backed up at " + backup_path.string());
+		}
+		catch (const std::filesystem::filesystem_error& e)
+		{
+		}
+	}
 }
 
 RecordsManager::~RecordsManager()

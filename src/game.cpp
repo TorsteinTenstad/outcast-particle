@@ -64,6 +64,7 @@ Game::Game() :
 	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<AddKillOnIntersectionSystem>();
 	RegisterGameSystem<ExitGameSystem>();
+	RegisterGameSystem<ShowErrorSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();

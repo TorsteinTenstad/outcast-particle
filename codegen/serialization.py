@@ -149,7 +149,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		std::optional<std::string> tag_opt = GetSubstrBetween(line, "Tag{tag=", "}");
 		if (!id_opt.has_value() || !tag_opt.has_value() || !IsNumeric(id_opt.value()))
 		{
-			assert(false);
+			globals.errors.corrupt_files.insert(savefile_path);
 			continue;
 		}
 		std::string id = id_opt.value();

@@ -3,7 +3,9 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "controls_config.hpp"
 #include "general_user_config.hpp"
+#include <deque>
 #include <optional>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -27,12 +29,11 @@ public:
 	bool IsLevelAccessible(const std::string& level_id);
 };
 
-enum SoundTypes
+class Errors
 {
-	DEFAULT,
-	ON_CLICK,
-	TO_NEUTRAL,
-	FROM_NEUTRAL
+public:
+	std::set<std::string> corrupt_files;
+	std::deque<std::string> error_messages_to_display;
 };
 
 struct Globals
@@ -42,6 +43,7 @@ struct Globals
 	KeyConfig key_config;
 	GeneralConfig general_config;
 	ContentAccessOptions content_access_options;
+	Errors errors;
 };
 
 extern Globals& globals;
