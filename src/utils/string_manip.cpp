@@ -1,7 +1,21 @@
 #include "utils/string_manip.hpp"
 #include <cassert>
+#include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <string>
+
+std::string GetDateTimeIdentifier()
+{
+	auto now = std::chrono::system_clock::now();
+	std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
+	std::tm* localTime = std::localtime(&nowTime);
+
+	std::ostringstream oss;
+	oss << std::put_time(localTime, "%Y%m%d_%H%M%S");
+
+	return oss.str();
+}
 
 void RemoveChars(std::string& s, const std::string& chars)
 {

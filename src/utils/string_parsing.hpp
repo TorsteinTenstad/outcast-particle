@@ -136,9 +136,9 @@ Error_t FromString(std::map<K, V>& map, std::string s)
 }
 
 template <class T>
-void ToFile(const T& x, std::string savefile_path)
+void ToFile(const T& x, const std::filesystem::path& file)
 {
-	std::ofstream f(savefile_path);
+	std::ofstream f(file);
 	if (f.fail())
 	{
 		assert(false);
@@ -148,9 +148,9 @@ void ToFile(const T& x, std::string savefile_path)
 }
 
 template <class T>
-Error_t FromFile(T& x, std::string savefile_path)
+Error_t FromFile(T& x, const std::filesystem::path& file)
 {
-	std::ifstream f(savefile_path);
+	std::ifstream f(file);
 
 	if (f.fail()) { return ERROR; }
 

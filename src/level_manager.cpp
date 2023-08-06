@@ -6,10 +6,9 @@
 #include <filesystem>
 #include <fstream>
 
-LevelManager::LevelManager(std::string levels_folder)
+LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 {
-	const std::filesystem::path levels_folder_path { levels_folder };
-	for (const auto& folder : std::filesystem::directory_iterator { levels_folder_path })
+	for (const auto& folder : std::filesystem::directory_iterator { levels_dir })
 	{
 		if (!folder.is_directory())
 		{

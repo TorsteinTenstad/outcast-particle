@@ -76,8 +76,8 @@ static void UpdateLevelPreviewAndStatsBadges(Level& level, LevelMenuUI* ui,
 	if (ui->new_level_button_id.has_value()
 		&& level.HasComponents<HoveredStartedThisFrame>(ui->new_level_button_id.value()))
 	{
-		GenerateLevelPreview(level, ui, NEW_LEVEL_TEMPLATE_FILE, generate_level_texture);
-		ui->displaying_level_id = NEW_LEVEL_TEMPLATE_FILE;
+		GenerateLevelPreview(level, ui, NEW_LEVEL_TEMPLATE_FILE.string(), generate_level_texture);
+		ui->displaying_level_id = NEW_LEVEL_TEMPLATE_FILE.string();
 	}
 }
 

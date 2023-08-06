@@ -7,7 +7,10 @@
 #include "components/shader.hpp"
 #include "components/size.hpp"
 #include "constants.hpp"
+#include "folder_definitions.hpp"
+#include "utils/string_manip.hpp"
 #include <cassert>
+#include <filesystem>
 
 void DrawSystem::Update(Level& level, float dt)
 {
@@ -17,6 +20,21 @@ void DrawSystem::Update(Level& level, float dt)
 	}
 	Draw(level, &globals.render_window, level.drawables, true);
 	globals.render_window.display();
+	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F2])
+	{
+		sf::Texture texture;
+		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
+		texture.update(globals.render_window);
+
+		std::filesystem::path screenshots_dir(SCREENSHOTS_FOLDER);
+		std::filesystem::create_directory(screenshots_dir);
+		std::string screenshot_path = (screenshots_dir / GetDateTimeIdentifier()).replace_extension(".png").string();
+
+		if (texture.copyToImage().saveToFile(screenshot_path))
+		{
+			std::cout << "Screenshot saved to " << screenshot_path << std::endl;
+		}
+	}
 }
 
 void DrawSystem::CaptureLevel(Level& level, sf::Texture* texture, unsigned width, unsigned height)

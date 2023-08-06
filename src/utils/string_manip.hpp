@@ -2,6 +2,7 @@
 #include "SFML/Window/Keyboard.hpp"
 #include <string>
 
+std::string GetDateTimeIdentifier();
 void RemoveChars(std::string& s, const std::string& chars);
 std::string HumanName(sf::Keyboard::Key key);
 std::string LeftShiftString(std::string string, int max_size);

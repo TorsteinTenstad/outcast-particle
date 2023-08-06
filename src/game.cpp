@@ -25,7 +25,7 @@
 Game::Game() :
 	active_level_(std::make_unique<Level>()),
 	level_manager_(LEVELS_FOLDER),
-	records_(std::string(USER_FOLDER) + "\\records.txt")
+	records_(USER_FOLDER / "records.txt")
 {
 	//RegisterGameSystem<TrailerIntroHelperSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();

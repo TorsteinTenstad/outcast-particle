@@ -2,10 +2,10 @@
 #include "utils/string_parsing.hpp"
 #include <limits>
 
-RecordsManager::RecordsManager(std::string savefile_path) :
-	savefile_path_(savefile_path)
+RecordsManager::RecordsManager(const std::filesystem::path& savefile) :
+	savefile_path_(savefile)
 {
-	FromFile(records_, savefile_path);
+	FromFile(records_, savefile);
 }
 
 RecordsManager::~RecordsManager()
