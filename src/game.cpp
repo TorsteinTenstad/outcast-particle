@@ -7,6 +7,7 @@
 #include "systems/level_completion_time.hpp"
 #include "systems/level_menu.hpp"
 #include "systems/menu_escape.hpp"
+#include "systems/music.hpp"
 #include "systems/pause_mode.hpp"
 #include "systems/render_grid_adaptive_textures.hpp"
 #include "systems/render_shapes.hpp"
@@ -31,6 +32,7 @@ Game::Game() :
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
+	RegisterGameSystem<MusicSystem>();
 	//RegisterGameSystem <EditModeUISystem>();
 	RegisterGameSystem<HelpMenuSystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
