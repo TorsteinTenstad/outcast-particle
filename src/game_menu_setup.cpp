@@ -270,12 +270,14 @@ void Game::GoToMusicAndSoundMenu()
 	std::vector<EntitiesCreator> EntitiesCreator = {
 		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, &globals.general_config.sound_volume),
 		std::bind(
-			&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds))
+			&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds)),
+		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, &globals.general_config.music_volume),
 	};
 
 	std::vector<std::string> description_texts = {
 		"SFX Volume",
-		"Ambient sounds"
+		"Ambient sounds",
+		"Music Volume"
 	};
 
 	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);

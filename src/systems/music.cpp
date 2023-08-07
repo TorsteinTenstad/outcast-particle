@@ -17,6 +17,6 @@ void MusicSystem::Update(Level& level, float dt)
 		music.play();
 		music.setLoop(true);
 		music_path_ = level.music_path;
-		music.setVolume(50);
 	}
+	music.setVolume(globals.general_config.music_volume);
 }
