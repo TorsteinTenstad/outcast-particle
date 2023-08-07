@@ -24,6 +24,9 @@ void SerializeComponent(const GeneralConfig* c, std::string& str_rep)
 	str_rep += "sound_volume=";
 	str_rep += ToString(c->sound_volume);
 	str_rep += ";";
+	str_rep += "music_volume=";
+	str_rep += ToString(c->music_volume);
+	str_rep += ";";
 	str_rep += "play_ambient_sounds=";
 	str_rep += ToString(c->play_ambient_sounds);
 	str_rep += ";";
@@ -62,6 +65,10 @@ void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "sound_volume")
         {
             FromString(c->sound_volume, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "music_volume")
+        {
+            FromString(c->music_volume, statement_parts[1]);
         }
         else if (statement_parts[0] == "play_ambient_sounds")
         {

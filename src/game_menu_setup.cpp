@@ -18,6 +18,7 @@ void Game::GoToMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
 	is_in_level_editing_ = false;
+	active_level_->music_path = "content\\music\\glorious_morning.wav";
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 

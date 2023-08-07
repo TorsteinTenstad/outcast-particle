@@ -132,6 +132,7 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 	level.AddComponent<ShortcutKey>(entity)->key = shortcut_key;
 	level.AddComponent<MenuNavigable>(entity);
 	level.GetComponent<WidthAndHeight>(entity)->width_and_height = size;
+	level.GetComponent<Text>(entity)->size = size.x / 10;
 
 	return { entity, size };
 }

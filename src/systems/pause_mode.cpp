@@ -71,11 +71,12 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	LevelState level_state = level.ComputeState();
 	std::vector<EntitiesHandle> entities_handles;
 	std::string menu_title;
+	float scale = level.GetScale();
 
 	CreateScreenWideBlur(level, level.GetSize(), UI_BASE_DRAW_PRIORITY - 1);
 
 	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text, sf::Keyboard::Key shortcut_key) {
-		EntityHandle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, button_text, shortcut_key);
+		EntityHandle button_handle = CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function, button_text, shortcut_key, sf::Vector2f(10, 2) * scale * float(BLOCK_SIZE));
 		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
@@ -149,9 +150,9 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
-	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240));
+	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240) * scale);
 	entities_handles.insert(entities_handles.begin(), ToEntitiesHandle(title_handle));
 
-	auto [entities, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE);
-	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
+	auto [entities, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE * scale);
+	auto [navigator_id, navigator_size] = CreateMenuNavigator(level, 2 * scale);
 }
