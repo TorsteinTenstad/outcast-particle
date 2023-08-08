@@ -59,6 +59,19 @@ EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string cont
 	return { entity, width_and_height };
 }
 
+EntityHandle CreateTextPopup(ECSScene& level, sf::Vector2f position, std::string content, float duration, bool has_backdrop)
+{
+	auto [entity, size] = CreateText(level, position, content, 120);
+	// if (has_backdrop)
+	// {
+	// 	level.AddComponent<DrawInfo>(entity, { "content\\textures\\white.png", false, 0 });
+	// 	level.AddComponent<FillColor>(entity);
+	// 	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\round_corners.frag";
+	// }
+	level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + duration;
+	return { entity, size };
+}
+
 EntityHandle CreateScrollingText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size)
 {
 	auto [entity, size] = CreateText(level, position, content, text_size);

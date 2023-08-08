@@ -7,6 +7,7 @@
 #include "components/size.hpp"
 #include "components/sticky_button.hpp"
 #include "components/text.hpp"
+#include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include "utils/string_manip.hpp"
@@ -52,11 +53,7 @@ void ButtonSystem::Update(Level& level, float dt)
 			if (key == (sf::Keyboard::Escape) && pressed_this_frame)
 			{
 				level.RemoveComponents<StickyButtonDown>(entity);
-				auto [error_text, text, position, draw_priority, scheduled_delete] = level.CreateEntityWith<Text, Position, DrawPriority, ScheduledDelete>();
-				text->content = "Escape can't be \n bound as key";
-				position->position = sf::Vector2f(4.5, 1) * float(BLOCK_SIZE);
-				draw_priority->draw_priority = 101;
-				scheduled_delete->delete_at = globals.time + 3;
+				CreateTextPopup(level, sf::Vector2f(4.5, 1) * float(BLOCK_SIZE), "Escape can't be \n bound as key", 3, false);
 				continue;
 			}
 			if (pressed_this_frame)

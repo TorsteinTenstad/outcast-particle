@@ -1,22 +1,30 @@
 
 #include "music.hpp"
-
-/*
-store currently playing (plus bool?)
-play music (bool for stop too?)
-check if the level's music string is similar to its own, and change song accordingly
-check for possible volume changes etc
-
-*/
+#include "entity_creation.hpp"
 
 void MusicSystem::Update(Level& level, float dt)
 {
-	if (music_path_ != level.music_path)
+	std::string music_path;
+	if (is_in_level_editing_)
 	{
-		music.openFromFile(level.music_path);
+		music_path = "content\\music\\edit_mode.wav";
+	}
+	else
+	{
+		music_path = level.music_path;
+	}
+
+	if (music_path_ != music_path)
+	{
+		if (!music.openFromFile(music_path))
+		{
+			music.openFromFile("content\\music\\bliss.wav");
+			CreateTextPopup(level, sf::Vector2f(4.5, 1) * float(BLOCK_SIZE), "Failed to load \n intended music", 3, true);
+		}
 		music.play();
 		music.setLoop(true);
-		music_path_ = level.music_path;
+		music_path_ = music_path;
 	}
+
 	music.setVolume(globals.general_config.music_volume);
 }
