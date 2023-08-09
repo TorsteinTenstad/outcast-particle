@@ -5,7 +5,7 @@
 void MusicSystem::Update(Level& level, float dt)
 {
 	std::string music_path;
-	if (is_in_level_editing_)
+	if (is_in_level_editing_ && level.GetMode() != PLAY_MODE)
 	{
 		music_path = "content\\music\\edit_mode.wav";
 	}
