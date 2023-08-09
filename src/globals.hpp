@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "controls_config.hpp"
+#include "error.hpp"
 #include "general_user_config.hpp"
 #include <deque>
 #include <optional>
@@ -29,13 +30,6 @@ public:
 	bool IsLevelAccessible(const std::string& level_id);
 };
 
-class Errors
-{
-public:
-	std::set<std::string> corrupt_files;
-	std::deque<std::string> error_messages_to_display;
-};
-
 struct Globals
 {
 	sf::RenderWindow render_window;
@@ -43,7 +37,7 @@ struct Globals
 	KeyConfig key_config;
 	GeneralConfig general_config;
 	ContentAccessOptions content_access_options;
-	Errors errors;
+	Error errors;
 };
 
 extern Globals& globals;

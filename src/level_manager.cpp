@@ -17,14 +17,24 @@ LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 			levels_[group];
 		}
 
+		std::vector<std::string> corrupt_files;
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
 			std::string level_id = level_file_path.path().string();
 			assert(group == GetGroupNameFromId(level_id));
 			levels_[group].push_back(level_id);
 			Level level;
-			Error_t err = level.LoadFromFile(level_id);
-			if (err) { globals.errors.corrupt_files.insert(level_id); }
+			Error err = level.LoadFromFile(level_id);
+			if (err) { corrupt_files.push_back(level_id); }
+		}
+		if (corrupt_files.size() > 0)
+		{
+			std::string message = "Failed to load game files correctly, consider re-installing.";
+			for (const std::string& filename : corrupt_files)
+			{
+				message += "\n\t" + filename;
+			}
+			globals.errors += Error(ErrorNumber::LOAD_LEVEL, message);
 		}
 	}
 }

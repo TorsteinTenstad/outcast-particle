@@ -1,29 +1,54 @@
 #pragma once
+#include <deque>
+#include <optional>
+#include <string>
 
-class Error_t
+enum class ErrorNumber : int
 {
-private:
-	bool is_error_;
+	UNKNOWN_ERROR = 0,
+	LOAD_FROM_FILE = 100,
+	LOAD_LEVEL,
+	LOAD_SHADER,
+	LOAD_RECORDS,
+	LOAD_WAV
+};
 
+class ErrorInfo
+{
 public:
-	Error_t() :
-		is_error_(false) {}
-	Error_t(bool is_error) :
-		is_error_(is_error) {}
+	ErrorNumber error_number = ErrorNumber::UNKNOWN_ERROR;
+	std::optional<std::string> message;
+};
+
+class Error
+{
+public:
+	std::deque<ErrorInfo> error_infos;
+
+	Error() {}
+	Error(ErrorNumber error_number) :
+		error_infos({ { error_number, std::nullopt } }) {}
+	Error(ErrorNumber error_number, std::string message) :
+		error_infos({ { error_number, message } }) {}
+
 	operator bool() const
 	{
-		return is_error_;
+		return error_infos.size() > 0;
 	}
-	Error_t operator+(const Error_t& other) const
+
+	Error operator+(const Error& other) const
 	{
-		return Error_t(is_error_ || other.is_error_);
+		Error result = *this;
+		result.error_infos.insert(result.error_infos.end(), other.error_infos.begin(), other.error_infos.end());
+		return result;
 	}
-	Error_t& operator+=(const Error_t& other)
+
+	Error& operator+=(const Error& other)
 	{
-		is_error_ = is_error_ || other.is_error_;
+		this->error_infos.insert(this->error_infos.end(), other.error_infos.begin(), other.error_infos.end());
 		return *this;
 	}
 };
 
-#define ERROR Error_t(true)
-#define SUCCESS Error_t(false)
+#define ERROR Error(ErrorNumber::UNKNOWN_ERROR)
+#define SUCCESS Error()

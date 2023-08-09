@@ -19,15 +19,15 @@ std::string ToString(std::string x);
 std::string ToString(float x);
 std::string ToString(sf::Color x);
 
-Error_t FromString(std::string& x, std::string s);
-Error_t FromString(sf::Keyboard::Key& x, std::string s);
-Error_t FromString(bool& x, std::string s);
-Error_t FromString(sf::Color& x, std::string s);
+Error FromString(std::string& x, std::string s);
+Error FromString(sf::Keyboard::Key& x, std::string s);
+Error FromString(bool& x, std::string s);
+Error FromString(sf::Color& x, std::string s);
 
 std::string UTF32ToUTF8(sf::Uint32 utf32_char);
 
 template <class T>
-Error_t FromString(T& x, const std::string& s)
+Error FromString(T& x, const std::string& s)
 {
 	try
 	{
@@ -55,10 +55,10 @@ std::string ToString(sf::Vector2<T> x)
 	return "(" + ToString(x.x) + "," + ToString(x.y) + ")";
 }
 template <class T>
-Error_t FromString(sf::Vector2<T>& x, std::string s)
+Error FromString(sf::Vector2<T>& x, std::string s)
 {
 	std::vector<std::string> x_y = SplitString(s.substr(1, s.length() - 1), ",");
-	Error_t err;
+	Error err;
 	err += FromString(x.x, x_y[0]);
 	err += FromString(x.y, x_y[1]);
 	return err;
@@ -80,7 +80,7 @@ std::string ToString(const std::tuple<T...>& tuple)
 }
 
 template <class... T>
-Error_t FromString(std::tuple<T...>& tuple, std::string s)
+Error FromString(std::tuple<T...>& tuple, std::string s)
 {
 	std::vector<std::string> elements;
 
@@ -103,7 +103,7 @@ Error_t FromString(std::tuple<T...>& tuple, std::string s)
 	}
 
 	std::size_t index = 0;
-	Error_t err = ((FromString(std::get<T>(tuple), elements[index++])) + ...);
+	Error err = ((FromString(std::get<T>(tuple), elements[index++])) + ...);
 	return err;
 }
 
@@ -122,12 +122,12 @@ std::string ToString(const std::map<K, V>& map)
 }
 
 template <class K, class V>
-Error_t FromString(std::map<K, V>& map, std::string s)
+Error FromString(std::map<K, V>& map, std::string s)
 {
 	std::vector<std::string> keys_and_values = SplitString(s, "\n");
 	K key;
 	V value;
-	Error_t err;
+	Error err;
 	for (auto& line : keys_and_values)
 	{
 		if (line.empty()) { continue; }
@@ -161,7 +161,7 @@ void ToFile(const T& x, const std::filesystem::path& file)
 }
 
 template <class T>
-Error_t FromFile(T& x, const std::filesystem::path& file)
+Error FromFile(T& x, const std::filesystem::path& file)
 {
 	std::ifstream f(file);
 
@@ -169,6 +169,6 @@ Error_t FromFile(T& x, const std::filesystem::path& file)
 
 	std::stringstream buffer;
 	buffer << f.rdbuf();
-	Error_t err = FromString(x, buffer.str());
+	Error err = FromString(x, buffer.str());
 	return err;
 }

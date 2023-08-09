@@ -467,9 +467,9 @@ void Level::SaveToFile(std::string savefile_path)
     }
 }
 
-Error_t Level::LoadFromFile(std::string savefile_path)
+Error Level::LoadFromFile(std::string savefile_path)
 {
-	Error_t err;
+	Error err;
     savefile_path_ = savefile_path;
     Clear();
 

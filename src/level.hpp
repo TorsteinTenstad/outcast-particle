@@ -62,8 +62,8 @@ public:
 	void ModifyLevelSize(int increment);
 
 	void SaveToFile();
-	Error_t LoadFromFile();
+	Error LoadFromFile();
 	void SaveToFile(std::string savefile_path);
-	Error_t LoadFromFile(std::string savefile_path);
+	Error LoadFromFile(std::string savefile_path);
 	void DiscardChanges();
 };
