@@ -23,17 +23,27 @@ float GAt(vec2 gc_id)
 	return texture2D(_texture, (gc_id + vec2(0.5, 0.5)) / vec2(grid_width, grid_height)).g;
 }
 
+//Should be syncronized with globals::WALL_BOUNCE_CATEGORIES
 vec3 ColorOf(float g_val)
 {
-	if (g_val < 0.1)
+	float bounce_factor = g_val*2-0.01; // Scaled in render_grid_adaptive_textures.cpp to handle values > 1, biased to make following thresholds reliable
+	if (bounce_factor < 0.0)
+	{
+		return vec3(0.1);
+	}
+	if (bounce_factor < 0.05)
 	{
 		return vec3(0.3);
 	}
-	if (g_val < 0.6)
+	if (bounce_factor < 0.2)
 	{
 		return vec3(0.45);
 	}
-	return vec3(0.5, 0.8, 0.5);
+	if  (bounce_factor < 1.0)
+	{
+		return vec3(0.5, 0.8, 0.5);
+	}
+	return vec3(0.7, 1, 0.7);
 }
 float DepthOf(float g_val)
 {
