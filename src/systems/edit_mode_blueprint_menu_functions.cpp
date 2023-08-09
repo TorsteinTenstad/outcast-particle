@@ -106,7 +106,7 @@ void OpenMusicMenu(Level& level)
 		buttons.push_back(ToEntitiesHandle({ entity, size }));
 		level.GetComponent<DrawPriority>(entity)->draw_priority += UI_BASE_DRAW_PRIORITY;
 	}
-	VerticalEntityLayout(level, sf::Vector2f(BLUEPRINT_MENU_WIDTH, BLOCK_SIZE), buttons, BLOCK_SIZE, StartEdge);
+	VerticalEntityLayout(level, sf::Vector2f(BLUEPRINT_MENU_WIDTH, BLOCK_SIZE), buttons, BLOCK_SIZE / 2, StartEdge);
 }
 
 void ToggleMusicMenu(Level& level)
