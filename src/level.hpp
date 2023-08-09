@@ -4,6 +4,7 @@
 #include "constants.hpp"
 #include "cursor_and_keys.hpp"
 #include "ecs/ecs_scene_with_inactive_layer.hpp"
+#include "error.hpp"
 #include "globals.hpp"
 #include "level_mode.hpp"
 #include "ui_origin.hpp"
@@ -61,8 +62,8 @@ public:
 	void ModifyLevelSize(int increment);
 
 	void SaveToFile();
-	void LoadFromFile();
+	Error LoadFromFile();
 	void SaveToFile(std::string savefile_path);
-	void LoadFromFile(std::string savefile_path);
+	Error LoadFromFile(std::string savefile_path);
 	void DiscardChanges();
 };

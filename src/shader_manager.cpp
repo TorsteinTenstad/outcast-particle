@@ -1,4 +1,5 @@
 #include "shader_manager.hpp"
+#include "globals.hpp"
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -53,7 +54,7 @@ static void LoadShader(sf::Shader& new_sfml_shader, const std::string& vertex_sh
 	}
 	else
 	{
-		assert(false);
+		globals.errors += Error(ErrorNumber::LOAD_SHADER, "");
 	}
 }
 

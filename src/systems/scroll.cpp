@@ -89,7 +89,8 @@ void UpdateScrollingEntities(Level& level, ScrollWindow* scroll_window, float mo
 	if (!scroll_window->menu_navigator.has_value()) { return; }
 	Entity menu_navigator = scroll_window->menu_navigator.value();
 	if (!level.IdExists(menu_navigator)) { return; } //Menu navigators may be inactive
-	Shader* shader = level.GetComponent<Shader>(menu_navigator);
+	Shader* shader = level.EnsureExistenceOfComponent<Shader>(menu_navigator);
+	shader->fragment_shader_path = "shaders\\scroll.frag";
 	shader->float_uniforms["top"] = top;
 	shader->float_uniforms["bottom"] = bottom;
 }

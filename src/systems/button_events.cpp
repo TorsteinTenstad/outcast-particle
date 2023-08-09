@@ -4,10 +4,29 @@
 #include "components/draw_info.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/position.hpp"
+#include "components/scroll.hpp"
 #include "components/size.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include <algorithm>
+
+bool PointIsInside(sf::Vector2f point, WidthAndHeight* width_and_height, Position* position)
+{
+	sf::Vector2f offset = Abs(position->position - point);
+	return (offset.x < width_and_height->width_and_height.x / 2) && (offset.y < width_and_height->width_and_height.y / 2);
+}
+
+bool CursorIsOutsideScrollWindowContainingEntity(Level& level, Entity entity, sf::Vector2f cursor_position)
+{
+	auto scroll_windows = level.GetEntitiesWith<ScrollWindow, WidthAndHeight, Position>();
+	for (const auto& [_, scroll_window, width_and_heigh, position] : scroll_windows)
+	{
+		if (PointIsInside(cursor_position, width_and_heigh, position)) { continue; }
+		if (std::find(scroll_window->entities.begin(), scroll_window->entities.end(), entity) == scroll_window->entities.end()) { continue; }
+		return true;
+	}
+	return false;
+}
 
 // Return vector has elements containing (draw_priority, entity)
 std::vector<std::tuple<Entity, Entity>> GetEntitiesIntersectingMouse(Level& level, sf::Vector2f cursor_position)
@@ -15,20 +34,15 @@ std::vector<std::tuple<Entity, Entity>> GetEntitiesIntersectingMouse(Level& leve
 	std::vector<std::tuple<Entity, Entity>> entities_intersecting_mouse;
 	for (auto [entity, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, ReceivesButtonEvents, DrawPriority, Position>())
 	{
-		if (Magnitude(cursor_position - position->position) < radius->radius)
-		{
-			entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity });
-		}
+		if (Magnitude(cursor_position - position->position) > radius->radius) { continue; }
+		if (CursorIsOutsideScrollWindowContainingEntity(level, entity, cursor_position)) { continue; }
+		entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity });
 	}
 	for (auto [entity, width_and_height, can_receive_press, draw_priority, position] : level.GetEntitiesWith<WidthAndHeight, ReceivesButtonEvents, DrawPriority, Position>())
 	{
-		float w = width_and_height->width_and_height.x;
-		float h = width_and_height->width_and_height.y;
-		sf::Vector2f offset = Abs(position->position - cursor_position);
-		if (offset.x < w / 2 && offset.y < h / 2)
-		{
-			entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity });
-		}
+		if (!PointIsInside(cursor_position, width_and_height, position)) { continue; }
+		if (CursorIsOutsideScrollWindowContainingEntity(level, entity, cursor_position)) { continue; }
+		entities_intersecting_mouse.push_back({ draw_priority->draw_priority, entity });
 	}
 	return entities_intersecting_mouse;
 }

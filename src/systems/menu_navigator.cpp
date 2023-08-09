@@ -3,6 +3,7 @@
 #include "components/draw_info.hpp"
 #include "components/position.hpp"
 #include "components/size.hpp"
+#include "entity_creation.hpp"
 #include "level.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/container_operations.hpp"
@@ -43,12 +44,27 @@ static std::vector<Entity> DropComponentsFromViews(std::vector<View> views)
 static std::vector<SnapPosition> GetPossiblePossiblePositions(Level& level, MenuNavigator* menu_navigator)
 {
 	std::vector<SnapPosition> possible_positions;
-	std::vector<Entity> menu_items = menu_navigator->menu_items.value_or(DropComponentsFromViews(level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>()));
-	for (Entity entity : menu_items)
+	if (menu_navigator->menu_items.has_value())
 	{
-		possible_positions.emplace_back(level, entity);
+		for (Entity entity : menu_navigator->menu_items.value())
+		{
+			if (!level.HasComponents<WidthAndHeight, Position>(entity))
+			{
+				assert(false);
+				continue;
+			}
+			possible_positions.emplace_back(level, entity);
+		}
+		return possible_positions;
 	}
-	return possible_positions;
+	else
+	{
+		for (const auto& x : level.GetEntitiesWith<MenuNavigable, WidthAndHeight, Position>())
+		{
+			possible_positions.emplace_back(level, GetEntity(x));
+		}
+		return possible_positions;
+	}
 }
 
 template <class... Components>
@@ -91,7 +107,11 @@ void MenuNavigatorSystem::Update(Level& level, float dt)
 	auto [entity, menu_navigator, draw_priority, width_and_height, position] = highest_priority_navigator;
 	menu_navigator->moved_itself_this_frame = false;
 	std::vector<SnapPosition> possible_positions = GetPossiblePossiblePositions(level, menu_navigator);
-	assert(possible_positions.size() > 0);
+	if (possible_positions.size() == 0)
+	{
+		assert(false);
+		return;
+	}
 
 	if (!menu_navigator->current_snap_position.has_value())
 	{

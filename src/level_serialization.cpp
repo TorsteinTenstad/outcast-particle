@@ -467,8 +467,9 @@ void Level::SaveToFile(std::string savefile_path)
     }
 }
 
-void Level::LoadFromFile(std::string savefile_path)
+Error Level::LoadFromFile(std::string savefile_path)
 {
+	Error err;
     savefile_path_ = savefile_path;
     Clear();
 
@@ -482,15 +483,15 @@ void Level::LoadFromFile(std::string savefile_path)
 		std::vector<std::string> property_statement_parts = SplitString(property_str, "=");
 		if (property_statement_parts[0] == "name")
 		{
-			FromString(name, property_statement_parts[1]);
+			err += FromString(name, property_statement_parts[1]);
 		}
 		else if (property_statement_parts[0] == "grid_size_id")
 		{
-			FromString(grid_size_id, property_statement_parts[1]);
+			err += FromString(grid_size_id, property_statement_parts[1]);
 		}
 		else if (property_statement_parts[0] == "editable")
 		{
-			FromString(editable, property_statement_parts[1]);
+			err += FromString(editable, property_statement_parts[1]);
 		}
 		else
 		{
@@ -504,7 +505,7 @@ void Level::LoadFromFile(std::string savefile_path)
 		std::optional<std::string> tag_opt = GetSubstrBetween(line, "Tag{tag=", "}");
 		if (!id_opt.has_value() || !tag_opt.has_value() || !IsNumeric(id_opt.value()))
 		{
-			globals.errors.corrupt_files.insert(savefile_path);
+            err += ERROR;
 			continue;
 		}
 		std::string id = id_opt.value();
@@ -688,6 +689,7 @@ void Level::LoadFromFile(std::string savefile_path)
         }
         
     }
+    return err;
 }
 
 Entity Level::AddBlueprint(std::string blueprint_tag){

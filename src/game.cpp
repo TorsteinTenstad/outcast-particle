@@ -42,6 +42,7 @@ Game::Game() :
 	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly // Consumes button events
 	RegisterGameSystem<ButtonEventsSystem>();
 	RegisterGameSystem<StickyButtonSystem>();
+	RegisterGameSystem<ExitGameSystem>(); //Should be close after ButtonSystem for exiting to go smoothly.
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>(); // Must
@@ -65,7 +66,6 @@ Game::Game() :
 	RegisterGameSystem<SetWallSoundSystem>();
 	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<AddKillOnIntersectionSystem>();
-	RegisterGameSystem<ExitGameSystem>();
 	RegisterGameSystem<ShowErrorSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();

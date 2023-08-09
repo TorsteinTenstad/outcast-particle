@@ -1,6 +1,7 @@
 #include "entity_creation.hpp"
 #include "Components/sound_info.hpp"
 #include "SFML/Graphics/Text.hpp"
+#include "components/blocking_popup_menu_entity.hpp"
 #include "components/button.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
@@ -17,9 +18,6 @@
 #include "utils/math.hpp"
 #include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
-
-class ConfirmMenuEntity
-{};
 
 EntitiesCreator AdaptToEntitiesCreator(EntityCreator EntityCreator)
 {
@@ -156,7 +154,6 @@ EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_
 	auto [entity, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", false);
 	level.AddComponent<FillColor>(entity)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(entity);
-	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll.frag";
 	return { entity, size };
 }
 
@@ -207,16 +204,17 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 {
 	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {});
 }
-EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title)
+EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::string body)
 {
-	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, {});
+	EntitiesHandle body_handle = body.empty() ? EntitiesHandle() : ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), body, 80));
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, body_handle);
 }
 EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities)
 {
-	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ConfirmMenuEntity>(entity); });
+	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<BlockingPopupMenuEntity>(entity); });
 	for (Entity entity : GetEntities(middle_entities))
 	{
-		level.AddComponent<ConfirmMenuEntity>(entity);
+		level.AddComponent<BlockingPopupMenuEntity>(entity);
 	}
 
 	CreateScreenWideBlur(level, level_size, 150);
@@ -224,7 +222,7 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 	EntitiesHandle title_handle = ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), title, 150));
 	std::vector<EntitiesHandle> button_row;
 	auto close_menu = [&level]() {
-		for (Entity entity : level.GetEntitiesWithComponent<ConfirmMenuEntity>())
+		for (Entity entity : level.GetEntitiesWithComponent<BlockingPopupMenuEntity>())
 		{
 			level.EnsureExistenceOfComponent<ScheduledDelete>(entity)->frames_left_to_live = 0;
 		}
