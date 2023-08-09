@@ -128,9 +128,10 @@ Error_t FromString(std::map<K, V>& map, std::string s)
 	K key;
 	V value;
 	Error_t err;
-	for (auto& i : keys_and_values)
+	for (auto& line : keys_and_values)
 	{
-		std::vector<std::string> pair = SplitString(i, ";");
+		if (line.empty()) { continue; }
+		std::vector<std::string> pair = SplitString(line, ";");
 		if (pair.size() < 2)
 		{
 			err += ERROR;

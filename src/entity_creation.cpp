@@ -207,9 +207,10 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 {
 	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {});
 }
-EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title)
+EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::string body)
 {
-	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, {});
+	EntitiesHandle body_handle = body.empty() ? EntitiesHandle() : ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), body, 80));
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, body_handle);
 }
 EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities)
 {

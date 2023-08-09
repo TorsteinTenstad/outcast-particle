@@ -22,6 +22,9 @@ LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 			std::string level_id = level_file_path.path().string();
 			assert(group == GetGroupNameFromId(level_id));
 			levels_[group].push_back(level_id);
+			Level level;
+			Error_t err = level.LoadFromFile(level_id);
+			if (err) { globals.errors.corrupt_files.insert(level_id); }
 		}
 	}
 }

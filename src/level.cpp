@@ -84,9 +84,9 @@ void Level::ModifyLevelSize(int increment)
 	grid_size_id += GetValidNewSizeId(increment);
 }
 
-void Level::LoadFromFile()
+Error_t Level::LoadFromFile()
 {
-	LoadFromFile(savefile_path_);
+	return LoadFromFile(savefile_path_);
 }
 
 void Level::SaveToFile()

@@ -19,7 +19,6 @@ void ShowErrorSystem::Update(Level& level, float dt)
 	{
 		std::string message = globals.errors.error_messages_to_display.front();
 		globals.errors.error_messages_to_display.pop_front();
-		std::cout << message << std::endl;
-		//CreateBlockingInformationMenu(level, level.GetSize(), message);
+		CreateBlockingInformationMenu(level, level.GetSize(), "", message);
 	}
 }
