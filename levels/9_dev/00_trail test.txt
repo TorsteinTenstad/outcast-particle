@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1
+name=Untitled;grid_size_id=1;editable=1;music_path=content\music\edit_mode.wav
 378963978071091605:Tag{tag=BPWall}Position{position=(1920,60)}Collision{bounce_factor=1;friction=75}WidthAndHeight{width_and_height=(3600,120)}
 3560506879789191034:Tag{tag=BPCoin}Position{position=(1380,1080)}
 3833995493911862952:Tag{tag=BPGoal}Position{position=(2820,1080)}

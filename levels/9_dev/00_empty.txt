@@ -1,1 +1,1 @@
-name=Untitled;grid_size_id=1;editable=1
+name=Untitled;grid_size_id=1;editable=1;music_path=content\music\edit_mode.wav

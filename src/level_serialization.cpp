@@ -358,7 +358,7 @@ void DeserializeComponent(TextPopupSpawner* c, const std::string& entity_str_rep
 void Level::SaveToFile(std::string savefile_path)
 {
     std::ofstream f(savefile_path);
-    f << "name=" << name << ";grid_size_id=" << ToString(grid_size_id) << ";editable=" << ToString(editable) << "\n";
+    f << "name=" << name << ";grid_size_id=" << ToString(grid_size_id) << ";editable=" << ToString(editable) << ";music_path=" << ToString(music_path) << "\n";
 
     std::string entity_string;
     for (auto& [entity, tag] : GetEntitiesWith<Tag>())
@@ -493,6 +493,10 @@ Error Level::LoadFromFile(std::string savefile_path)
 		{
 			err += FromString(editable, property_statement_parts[1]);
 		}
+        else if (property_statement_parts[0] == "music_path")
+        {
+            err += FromString(music_path, property_statement_parts[1]);
+        }
 		else
 		{
 			assert(property_statement_parts[0].length() == 0);
