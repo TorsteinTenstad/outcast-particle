@@ -68,7 +68,7 @@ void PauseMode::Update(Level& level, float dt)
 }
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
-	CloseBlueprintMenu(level);
+	BlueprintMenu().Close(level);
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<PauseMenuItem>(entity); });
 	LevelState level_state = level.ComputeState();
 	std::vector<EntitiesHandle> entities_handles;

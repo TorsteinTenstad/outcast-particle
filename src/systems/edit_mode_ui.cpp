@@ -22,7 +22,7 @@ void EditModeUISystem::Update(Level& level, float dt)
 	if (level.GetMode() != EDIT_MODE)
 	{
 		level.ui_bars_size = sf::Vector2f(0, 0);
-		CloseBlueprintMenu(level);
+		BlueprintMenu().Close(level);
 		level.DeleteEntitiesWith<EditModeUIEntity>();
 		return;
 	}
@@ -50,7 +50,7 @@ static void SetupUI(Level& level, EditModeUI* ui)
 			level,
 			sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2),
 			sf::Vector2f(w, UI_BAR_HEIGHT),
-			[&level]() { ToggleBlueprintMenu(level); },
+			[&level]() { BlueprintMenu().Toggle(level); },
 			"+",
 			200);
 		level.AddComponent<ShortcutKey>(entity)->key = sf::Keyboard::B;
