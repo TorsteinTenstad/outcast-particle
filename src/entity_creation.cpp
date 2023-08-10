@@ -42,7 +42,7 @@ EntityHandle CreateScrollWindow(ECSScene& level, sf::Vector2f position, sf::Vect
 	return { entity, width_and_height };
 }
 
-EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size)
+EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size, sf::Vector2f layout_size)
 {
 	Entity entity = level.CreateEntity();
 	level.AddComponent<Position>(entity)->position = position;
@@ -51,7 +51,7 @@ EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string cont
 	level.AddComponent<Text>(entity)->content = content;
 	level.GetComponent<Text>(entity)->size = text_size;
 
-	sf::Vector2f width_and_height = sf::Vector2f(10, 2) * float(BLOCK_SIZE);
+	sf::Vector2f width_and_height = layout_size;
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
 	//level.AddComponent<DrawInfo>(entity); // For debugging layout
 	return { entity, width_and_height };

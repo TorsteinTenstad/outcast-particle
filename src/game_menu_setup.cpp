@@ -118,40 +118,54 @@ void Game::GoToCreditsMenu()
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
-	float x_center_offset = -8 * BLOCK_SIZE;
+	float x_center_offset = -7 * BLOCK_SIZE;
 	float y_offset = level_size.y - 8 * BLOCK_SIZE;
 
 	CreateText(*active_level_, sf::Vector2f(level_size.x / 2.f + x_center_offset, 2 * BLOCK_SIZE), "Credits", 250);
 
-	auto scroll_window_handle = CreateScrollWindow(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), sf::Vector2f(level_size.x * 2 / 5, level_size.y - 4 * BLOCK_SIZE), 2.5 * BLOCK_SIZE);
+	//auto scroll_window_handle = CreateScrollWindow(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), sf::Vector2f(level_size.x * 2 / 5, level_size.y - 4 * BLOCK_SIZE), 2.5 * BLOCK_SIZE);
 
-	std::vector<EntitiesHandle> entities_handles;
-	auto AddText = [&](std::string text, unsigned size) {
-		EntityHandle text_handle = CreateScrollingText(*active_level_, sf::Vector2f(0, 0), text, size);
-		entities_handles.push_back(ToEntitiesHandle(text_handle));
-		(*active_level_).GetComponent<ScrollWindow>(GetEntity(scroll_window_handle))->entities.push_back(GetEntity(text_handle));
+#if 0
+	std::vector<std::string> lines = {
+		"       Lead Developer  Torstein Tenstad     ",
+		"  Assistant Developer  Simen Storesund      ",
+		"       Many thanks to  Magne Tenstad        ",
+		"                       Aasne Hella          ",
+		"                       Alexander Wulfsberg  ",
+		"                       Henrik Storesund     ",
+		"                       And of course to you!"
 	};
-
-	std::vector<std::pair<std::string, unsigned>> texts_with_size = { { "Lead Developer", 140 }, { "Torstein Tenstad", 120 }, { "", 120 }, { "Assistant Developer", 140 }, { "Simen Storesund", 120 }, { "", 120 }, { "Many thanks to", 140 }, { "Magne Tenstad", 120 }, { "Åsne Hella", 120 }, { "Alexander Wulfsberg", 120 }, { "Henrik Storesund", 120 }, { "And of course to you!", 120 } };
-
-	for (auto [text, size] : texts_with_size)
+#else
+	std::vector<std::string> lines = {
+		"Lead Developer          Torstein Tenstad",
+		"Assistant Developer      Simen Storesund",
+		"Many thanks to             Magne Tenstad",
+		"                             Aasne Hella",
+		"                     Alexander Wulfsberg",
+		"                        Henrik Storesund",
+		"                   And of course to you!"
+	};
+#endif
+	std::vector<EntitiesHandle> entities_handles;
+	for (const auto& line : lines)
 	{
-		AddText(text, size);
+		EntityHandle text_handle = CreateText(*active_level_, sf::Vector2f(0, 0), line, 90, sf::Vector2f(0, 180));
+		entities_handles.push_back(ToEntitiesHandle(text_handle));
 	}
 
-	auto [ids, heights] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, 4 * BLOCK_SIZE), entities_handles, 0.5 * BLOCK_SIZE, StartEdge);
+	auto [ids, heights] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, 4 * BLOCK_SIZE), entities_handles, 0, StartEdge);
 
 	float entity_position_x = level_size.x - 8 * BLOCK_SIZE;
 	float entity_position_y = level_size.y / 2;
 
 	Entity player = active_level_->AddBlueprint(BPPlayer);
 	active_level_->GetComponent<Player>(player)->can_go_neutral = false;
-	active_level_->GetComponent<Position>(player)->position = sf::Vector2f(entity_position_x, entity_position_y);
+	active_level_->GetComponent<Position>(player)->position = sf::Vector2f(entity_position_x + BLOCK_SIZE, entity_position_y);
 	active_level_->GetComponent<Velocity>(player)->velocity = sf::Vector2f(rand() % 4000 - 2000, rand() % 4000 - 2000);
 
 	auto AddWall = [&](sf::Vector2f position, sf::Vector2f width_and_height) {
 		Entity entity = active_level_->AddBlueprint(BPWall);
-		active_level_->GetComponent<Position>(entity)->position = position;
+		active_level_->GetComponent<Position>(entity)->position = position + sf::Vector2f(BLOCK_SIZE, 0);
 		active_level_->GetComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
 		active_level_->GetComponent<Collision>(entity)->bounce_factor = 1.005;
 	};
