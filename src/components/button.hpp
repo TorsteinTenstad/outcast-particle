@@ -28,6 +28,12 @@ public:
 	std::function<void(void)> func;
 };
 
+class CanDisableButton
+{
+public:
+	std::function<bool(void)> func;
+};
+
 class KeyConfigButton
 {
 public:

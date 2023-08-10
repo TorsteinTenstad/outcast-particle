@@ -78,6 +78,10 @@ public:
 	{
 		return next_action_ == actions_.begin();
 	}
+	bool IsAtEnd()
+	{
+		return next_action_ == actions_.end();
+	}
 
 	template <class Action, class... Args>
 	void Do(Args&&... args)

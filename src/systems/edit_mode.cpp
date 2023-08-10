@@ -1,5 +1,6 @@
 #pragma once
 #include "edit_mode.hpp"
+#include "components/button.hpp"
 #include "components/button_events.hpp"
 #include "components/editable.hpp"
 #include "components/intersection.hpp"
@@ -159,6 +160,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left]
 		&& level.GetEntitiesWithComponent<Selected>().size() != 0
 		&& level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
+		&& level.GetEntitiesWith<PressedThisFrame, OnReleasedThisFrame>().size() == 0
 		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY]
 		&& !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
 	{

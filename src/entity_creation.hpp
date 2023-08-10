@@ -56,6 +56,7 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key);
 EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool tile);
 EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position);
+EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string button_text, unsigned text_size, std::function<bool(void)> deactivate_function);
 EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size = 2.f);
 EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
 EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority);

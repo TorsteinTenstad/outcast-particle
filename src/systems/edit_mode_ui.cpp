@@ -1,7 +1,9 @@
 #include "components/button.hpp"
+#include "edit_mode_actions/set_property_value_of_selected.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
+#include "utils/string_parsing.hpp"
 
 class EditModeUI
 {
@@ -46,13 +48,21 @@ static void SetupUI(Level& level, EditModeUI* ui)
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<EditModeUIEntity>(entity); });
 	{
 		float w = 3 * BLOCK_SIZE;
-		auto [entity, size] = CreateButton(
-			level,
-			sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2),
-			sf::Vector2f(w, UI_BAR_HEIGHT),
-			[&level]() { ToggleBlueprintMenu(level); },
-			"+",
-			200);
-		level.AddComponent<ShortcutKey>(entity)->key = sf::Keyboard::B;
+		sf::Vector2f standard_size = sf::Vector2f(2 * BLOCK_SIZE, 1.5 * BLOCK_SIZE);
+		sf::Vector2f narrow_size = sf::Vector2f(1.5 * BLOCK_SIZE, 1.5 * BLOCK_SIZE);
+		auto [add_entity, add_size] = CreateButton(
+			level, sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2), standard_size, [&level]() { ToggleBlueprintMenu(level); }, "+", 200);
+		level.AddComponent<ShortcutKey>(add_entity)->key = sf::Keyboard::B;
+
+		auto [undo_entity, undo_size] = CreateCanDisableButton(
+			level, sf::Vector2f(3 * w / 2, -UI_BAR_HEIGHT / 2), standard_size, [&]() { level.editor.Undo(); }, "<-", 200, [&]() { return !level.editor.IsEmpty(); });
+		auto [redo_entity, redo_size] = CreateCanDisableButton(
+			level, sf::Vector2f((5 * w - BLOCK_SIZE) / 2, -UI_BAR_HEIGHT / 2), standard_size, [&]() { level.editor.Redo(); }, "->", 200, [&]() { return !level.editor.IsAtEnd(); });
+
+		for (int i = 0; i < 5; i++)
+		{
+			auto [increment_button, increment_size] = CreateCanDisableButton(
+				level, sf::Vector2f(3.25 * w + 2 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2), narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, ToString(i + 1), 200, [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); });
+		}
 	}
 }
