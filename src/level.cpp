@@ -1,5 +1,6 @@
 #include "level.hpp"
 #include "components/creation_data.hpp"
+#include "components/edit_mode.hpp"
 #include "components/goal.hpp"
 #include "components/player.hpp"
 #include "game.hpp"
@@ -82,6 +83,7 @@ int Level::GetValidNewSizeId(int increment)
 void Level::ModifyLevelSize(int increment)
 {
 	grid_size_id += GetValidNewSizeId(increment);
+	GetSingleton<EditModeUI>()->initialized = false;
 }
 
 Error Level::LoadFromFile()

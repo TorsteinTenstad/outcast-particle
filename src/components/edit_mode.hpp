@@ -4,3 +4,9 @@ class EditMode
 {
 public:
 };
+
+class EditModeUI
+{
+public:
+	bool initialized = false;
+};

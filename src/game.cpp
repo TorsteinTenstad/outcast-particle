@@ -32,6 +32,7 @@ Game::Game() :
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
+	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<MusicSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<HelpMenuSystem>();
@@ -57,7 +58,6 @@ Game::Game() :
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
 	RegisterGameSystem<ViewSystem>();
-	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ScreenWideShaderEffectsSystem>(); // Must be below EditModeSystem for effects to be visible on copy
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
