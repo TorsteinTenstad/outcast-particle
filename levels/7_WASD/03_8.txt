@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1
+name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
 167356376845061342:Tag{tag=BPWall}Position{position=(2220,540)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,1080)}
 996269442087598270:Tag{tag=BPCoin}Position{position=(1140,780)}
 2060874957363581503:Tag{tag=BPWall}Position{position=(3300,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,960)}
@@ -16,7 +16,7 @@ name=Untitled;grid_size_id=1;editable=1
 13432044076985419878:Tag{tag=BPElectricField}Position{position=(2700,1800)}ElectricField{field_vector=(0.25,-0)}WidthAndHeight{width_and_height=(120,480)}
 13590040348235743144:Tag{tag=BPWall}Position{position=(1920,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,120)}
 13761354516681020004:Tag{tag=BPElectricField}Position{position=(3540,1080)}ElectricField{field_vector=(0,0.0625)}WidthAndHeight{width_and_height=(240,480)}
-13920098449126606113:Tag{tag=BPLaser}Position{position=(60,1080)}WidthAndHeight{width_and_height=(60,1980)}
+13920098449126606113:Tag{tag=BPLaser}Position{position=(60,1080)}WidthAndHeight{width_and_height=(60,1980)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 14784904015319229099:Tag{tag=BPElectricField}Position{position=(2160,1380)}ElectricField{field_vector=(0.25,-0)}WidthAndHeight{width_and_height=(960,360)}
 15087510673448024169:Tag{tag=BPWall}Position{position=(2700,1320)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,480)}
 16979147712916184626:Tag{tag=BPElectricField}Position{position=(1140,300)}ElectricField{field_vector=(-0.25,0)}WidthAndHeight{width_and_height=(360,360)}

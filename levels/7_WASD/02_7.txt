@@ -1,10 +1,10 @@
-name=Untitled;grid_size_id=1;editable=1
-1127769166400076952:Tag{tag=BPLaser}Position{position=(900,1080)}WidthAndHeight{width_and_height=(60,720)}
+name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+1127769166400076952:Tag{tag=BPLaser}Position{position=(900,1080)}WidthAndHeight{width_and_height=(60,720)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 2454952747615716561:Tag{tag=BPGoal}Position{position=(3480,1080)}
-2574244010189731743:Tag{tag=BPLaser}Position{position=(2580,1080)}WidthAndHeight{width_and_height=(60,720)}
+2574244010189731743:Tag{tag=BPLaser}Position{position=(2580,1080)}WidthAndHeight{width_and_height=(60,720)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 3771360080527128142:Tag{tag=BPWall}Position{position=(3780,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2160)}
-4591023089709829034:Tag{tag=BPLaser}Position{position=(2940,2100)}WidthAndHeight{width_and_height=(660,60)}
-4818854694224047707:Tag{tag=BPLaser}Position{position=(1740,1080)}WidthAndHeight{width_and_height=(60,720)}
+4591023089709829034:Tag{tag=BPLaser}Position{position=(2940,2100)}WidthAndHeight{width_and_height=(660,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
+4818854694224047707:Tag{tag=BPLaser}Position{position=(1740,1080)}WidthAndHeight{width_and_height=(60,720)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 5627175137634928478:Tag{tag=BPWall}Position{position=(60,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2160)}
 6619678450607273732:Tag{tag=BPPlayer}Position{position=(480,1800)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=0;move_force=1000}
 8071443893362120102:Tag{tag=BPWall}Position{position=(1740,2100)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1800,120)}
@@ -12,7 +12,7 @@ name=Untitled;grid_size_id=1;editable=1
 11088311230832409943:Tag{tag=BPWall}Position{position=(3480,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,120)}
 11608402069961862357:Tag{tag=BPWall}Position{position=(1740,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1800,120)}
 12824892198424444847:Tag{tag=BPElectricField}Position{position=(1680,1800)}ElectricField{field_vector=(-0,-0.5)}WidthAndHeight{width_and_height=(3120,480)}
-13674989548972663021:Tag{tag=BPLaser}Position{position=(2940,60)}WidthAndHeight{width_and_height=(660,60)}
-16878218000315196851:Tag{tag=BPLaser}Position{position=(480,60)}WidthAndHeight{width_and_height=(780,60)}
-18051443303743775088:Tag{tag=BPLaser}Position{position=(480,2100)}WidthAndHeight{width_and_height=(780,60)}
+13674989548972663021:Tag{tag=BPLaser}Position{position=(2940,60)}WidthAndHeight{width_and_height=(660,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
+16878218000315196851:Tag{tag=BPLaser}Position{position=(480,60)}WidthAndHeight{width_and_height=(780,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
+18051443303743775088:Tag{tag=BPLaser}Position{position=(480,2100)}WidthAndHeight{width_and_height=(780,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 18281327354975491100:Tag{tag=BPElectricField}Position{position=(1680,360)}ElectricField{field_vector=(0,0.5)}WidthAndHeight{width_and_height=(3120,480)}
