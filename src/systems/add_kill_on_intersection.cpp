@@ -12,12 +12,19 @@ void AddKillOnIntersectionSystem::Update(Level& level, float dt)
 	if (level.GetMode() != PLAY_MODE) { return; }
 	for (auto [laser_id, laser, width_and_height, position] : level.GetEntitiesWith<Laser, WidthAndHeight, Position>())
 	{
-		Entity child = GetSingletonChildId<Laser>(level, laser_id, [](Level& level) {
-			auto [entity, kill_on_intersection, position, width_and_height] = level.CreateEntityWith<KillOnIntersection, Position, WidthAndHeight>();
-			level.AddComponent<SoundInfo>(entity)->sound_paths = { { DEFAULT, "content\\sounds\\laser.wav" } };
-			return entity;
-		});
-		level.GetComponent<WidthAndHeight>(child)->width_and_height = width_and_height->width_and_height - sf::Vector2f(40, 40);
-		level.GetComponent<Position>(child)->position = position->position;
+		if (laser->kill_on_intersection_enabled)
+		{
+			Entity child = GetSingletonChildId<Laser>(level, laser_id, [](Level& level) {
+				auto [entity, kill_on_intersection, position, width_and_height] = level.CreateEntityWith<KillOnIntersection, Position, WidthAndHeight>();
+				level.AddComponent<SoundInfo>(entity)->sound_paths = { { DEFAULT, "content\\sounds\\laser.wav" } };
+				return entity;
+			});
+			level.GetComponent<WidthAndHeight>(child)->width_and_height = width_and_height->width_and_height - sf::Vector2f(40, 40);
+			level.GetComponent<Position>(child)->position = position->position;
+		}
+		else
+		{
+			DeleteChildrenOwnedBy<Laser>(level, laser_id);
+		}
 	}
 }

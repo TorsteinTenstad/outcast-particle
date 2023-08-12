@@ -50,6 +50,8 @@ Game::Game() :
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
 	RegisterGameSystem<TextBoxSystem>();
+	RegisterGameSystem<TogglingLaserSystem>();
+	RegisterGameSystem<AddKillOnIntersectionSystem>(); // Should be directly below TogglingLaserSystem for 
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
@@ -65,7 +67,6 @@ Game::Game() :
 	RegisterGameSystem<TextPopupSystem>();
 	RegisterGameSystem<SetWallSoundSystem>();
 	RegisterGameSystem<LaserProximitySystem>();
-	RegisterGameSystem<AddKillOnIntersectionSystem>();
 	RegisterGameSystem<ShowErrorSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();

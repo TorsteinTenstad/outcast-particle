@@ -51,6 +51,22 @@ const std::vector<float> WALL_BOUNCE_CATEGORIES = {
 	1.75,
 };
 
+const std::vector<float> TOGGLING_LASER_DUTY_CYCLE_CATEGORIES = {
+	1,
+	0.5,
+	0.5,
+	0.5,
+	0.5,
+};
+
+const std::vector<float> TOGGLING_LASER_PERIOD_CATEGORIES = {
+	1,
+	1,
+	2,
+	3,
+	4,
+};
+
 const std::vector<std::string> WALL_SOUND_CATEGORIES = {
 	"content\\sounds\\wall_1.wav",
 	"content\\sounds\\wall_2.wav",

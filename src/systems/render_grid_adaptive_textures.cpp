@@ -53,19 +53,6 @@ void RenderGridAdaptiveTexturesSystem::UpdateTexture(Level& level, unsigned subs
 	}
 }
 
-template <class T>
-static void SetAndAssertSync(std::optional<T>& current, T new_val)
-{
-	if (current.has_value())
-	{
-		assert(current.value() == new_val);
-	}
-	else
-	{
-		current = new_val;
-	}
-}
-
 static void LaserDrawFunc(Level& level, std::function<sf::RenderTexture&(int)> get_render_texture)
 {
 	for (auto const& [entity, laser, draw_priority, width_and_height, position] : level.GetEntitiesWith<Laser, DrawPriority, WidthAndHeight, Position>())

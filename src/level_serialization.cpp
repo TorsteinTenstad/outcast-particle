@@ -180,6 +180,45 @@ void DeserializeComponent(Player* c, const std::string& entity_str_rep)
         }
     }
 }
+void SerializeComponent(const TogglingLaser* c, std::string& str_rep)
+{
+	str_rep += "TogglingLaser{";
+	str_rep += "period_s=";
+	str_rep += ToString(c->period_s);
+	str_rep += ";";
+	str_rep += "duty_cycle=";
+	str_rep += ToString(c->duty_cycle);
+	str_rep += ";";
+	str_rep += "phase=";
+	str_rep += ToString(c->phase);
+	str_rep += "}";
+}
+
+void DeserializeComponent(TogglingLaser* c, const std::string& entity_str_rep)
+{
+    std::optional<std::string> component_str_opt = GetSubstrBetween(entity_str_rep, "TogglingLaser{", "}");
+    if (!component_str_opt.has_value()) { return; }
+	std::string component_str = component_str_opt.value();
+
+    std::vector<std::string> variables = SplitString(component_str, ";");
+    for (auto variable : variables)
+    {
+        std::vector<std::string> statement_parts = SplitString(variable, "=");
+
+        if (statement_parts[0] == "period_s")
+        {
+            FromString(c->period_s, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "duty_cycle")
+        {
+            FromString(c->duty_cycle, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "phase")
+        {
+            FromString(c->phase, statement_parts[1]);
+        }
+    }
+}
 void SerializeComponent(const Collision* c, std::string& str_rep)
 {
 	str_rep += "Collision{";
@@ -408,6 +447,7 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Tag>(entity), entity_string);
             SerializeComponent(GetComponent<Position>(entity), entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>(entity), entity_string);
+            SerializeComponent(GetComponent<TogglingLaser>(entity), entity_string);
         }
         
         if (tag->tag == "BPCoin")
@@ -601,9 +641,10 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity, { 60 });
             AddComponent<Laser>(entity, {});
             AddComponent<DrawPriority>(entity, { 3 });
-            AddComponent<OrientationDependentDrawInfo>(entity, {});
+            AddComponent<FillColor>(entity, {});
             DeserializeComponent(AddComponent<Position>(entity),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
+            DeserializeComponent(AddComponent<TogglingLaser>(entity),line);
         }
         
         if (tag == "BPCoin")
@@ -779,10 +820,11 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Editable>(entity, { 60 });
             AddComponent<Laser>(entity, {});
             AddComponent<DrawPriority>(entity, { 3 });
-            AddComponent<OrientationDependentDrawInfo>(entity, {});
+            AddComponent<FillColor>(entity, {});
             AddComponent<Tag>(entity, {"BPLaser"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             AddComponent<WidthAndHeight>(entity, { sf::Vector2f(120, 60) });
+            AddComponent<TogglingLaser>(entity, {});
             break;
         case BPCoin:
             AddComponent<ReceivesButtonEvents>(entity, {});

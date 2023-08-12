@@ -79,11 +79,13 @@ class BPLaser : public BPEditableEntity
 {
 	Laser laser = {};
 	DrawPriority draw_priority = { 3 };
-	OrientationDependentDrawInfo orientation_dependent_draw_info = {};
 	Editable editable = { 60 };
+	FillColor fill_color = {};
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(120, 60) };
+	// [Serialize]
+	TogglingLaser toggling_laser = {};
 };
 
 class BPCoin : public BPEditableEntity
