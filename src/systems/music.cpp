@@ -1,6 +1,7 @@
 
 #include "music.hpp"
 #include "entity_creation.hpp"
+#include "globals.hpp"
 
 void MusicSystem::Update(Level& level, float dt)
 {
@@ -19,7 +20,8 @@ void MusicSystem::Update(Level& level, float dt)
 		if (!music.openFromFile(music_path))
 		{
 			music.openFromFile("content\\music\\bliss.wav");
-			CreateTextPopup(level, sf::Vector2f(4.5, 1) * float(BLOCK_SIZE), "Failed to load \n intended music", 3, true);
+			globals.errors += Error(ErrorNumber::LOAD_WAV, "Failed to load music from\n" + music_path);
+			//CreateTextPopup(level, sf::Vector2f(4.5, 1) * float(BLOCK_SIZE), "Failed to load \n intended music", 3, true);
 		}
 		music.play();
 		music.setLoop(true);
