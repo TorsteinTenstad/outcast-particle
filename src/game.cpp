@@ -59,6 +59,7 @@ Game::Game() :
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
 	RegisterGameSystem<ViewSystem>();
+	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ScreenWideShaderEffectsSystem>(); // Must be below EditModeSystem for effects to be visible on copy
 	RegisterGameSystem<EditModeSelectedEffectSystem>();
@@ -68,7 +69,6 @@ Game::Game() :
 	RegisterGameSystem<SetWallSoundSystem>();
 	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<ShowErrorSystem>();
-	RegisterGameSystem<DrawSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();
