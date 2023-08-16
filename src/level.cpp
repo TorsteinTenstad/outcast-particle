@@ -84,7 +84,6 @@ int Level::GetValidNewSizeId(int increment)
 void Level::ModifyLevelSize(int increment)
 {
 	grid_size_id += GetValidNewSizeId(increment);
-	GetSingleton<EditModeUI>()->initialized = false; //TODO: Improve design?
 }
 
 Error Level::LoadFromFile()
