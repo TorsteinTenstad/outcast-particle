@@ -8,6 +8,22 @@ public:
 	std::string illegal_characters = "\"*/:<>?\\|_\r\n";
 };
 
+enum class TextOrigin : int
+{
+	TOP_LEFT,
+	TOP_RIGHT,
+	TOP_CENTER,
+	CENTER_LEFT,
+	CENTER_RIGHT,
+	CENTER_CENTER,
+	BOTTOM_LEFT,
+	BOTTOM_RIGHT,
+	BOTTOM_CENTER,
+	REFERENCE_HEIGHT_LEFT,
+	REFERENCE_HEIGHT_RIGHT,
+	REFERENCE_HEIGHT_CENTER
+};
+
 class Text
 {
 public:
@@ -18,4 +34,5 @@ public:
 	float outline_thickness = 0;
 	std::string font_path = "content\\monof55.ttf";
 	bool apply_shader = false;
+	TextOrigin origin = TextOrigin::REFERENCE_HEIGHT_CENTER;
 };

@@ -148,9 +148,9 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 	return { entity, size };
 }
 
-EntityHandle CreateMenuNavigator(ECSScene& level, float buttons_height_in_block_size)
+EntityHandle CreateMenuNavigator(ECSScene& level)
 {
-	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE) * buttons_height_in_block_size / 2.f;
+	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE);
 	auto [entity, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", false);
 	level.AddComponent<FillColor>(entity)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(entity);
@@ -182,15 +182,6 @@ EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::
 	return { { entity, button_text_entity }, size };
 }
 
-EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position)
-{
-	auto [entity, size] = CreateSizedButtonTemplate(level, position);
-	level.AddComponent<Text>(entity);
-	level.GetComponent<WidthAndHeight>(entity)->width_and_height = sf::Vector2f(5 * BLOCK_SIZE, 1 * BLOCK_SIZE);
-	level.GetComponent<FillColor>(entity)->color.a = 50;
-	return { entity, size };
-}
-
 EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string button_text, unsigned text_size, std::function<bool(void)> deactivate_function)
 {
 	auto [entity, button_size] = CreateButton(level, position, size, button_function, button_text, 120);
@@ -208,16 +199,16 @@ EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int 
 	return handle;
 }
 
-EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function)
+EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::function<void(void)> confirm_function, float scale)
 {
-	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {});
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Confirm", confirm_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {}, scale);
 }
-EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::string body)
+EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::string body, float scale)
 {
 	EntitiesHandle body_handle = body.empty() ? EntitiesHandle() : ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), body, 80));
-	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, body_handle);
+	return CreateBlockingPopupMenu(level, level_size, title, { { "Ok", []() {}, sf::Keyboard::Escape } }, body_handle, scale);
 }
-EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities)
+EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities, float scale)
 {
 	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<BlockingPopupMenuEntity>(entity); });
 	for (Entity entity : GetEntities(middle_entities))
@@ -227,7 +218,7 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 
 	CreateScreenWideBlur(level, level_size, 150);
 
-	EntitiesHandle title_handle = ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), title, 150));
+	EntitiesHandle title_handle = ToEntitiesHandle(CreateText(level, sf::Vector2f(0, 0), title, 150 * scale));
 	std::vector<EntitiesHandle> button_row;
 	auto close_menu = [&level]() {
 		for (Entity entity : level.GetEntitiesWithComponent<BlockingPopupMenuEntity>())
@@ -238,7 +229,7 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 	for (const auto& [button_text, button_function, shortcut_key] : button_info)
 	{
 		auto button_function_with_close = [close_menu = close_menu, button_function = button_function]() {close_menu(); button_function(); };
-		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, shortcut_key, sf::Vector2f(6, 2) * float(BLOCK_SIZE))));
+		button_row.push_back(ToEntitiesHandle(CreateNavigatorButton(level, sf::Vector2f(0, 0), button_function_with_close, button_text, shortcut_key, sf::Vector2f(6, 2) * float(BLOCK_SIZE) * scale)));
 	}
 
 	EntitiesHandle button_row_handle = HorizontalEntityLayout(level, sf::Vector2f(0, 0), button_row, level_size.x / 12.f);
@@ -280,7 +271,7 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f
 
 	//Adding text entity
 	float text_x_position = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x / 2 + 1.5 * BLOCK_SIZE;
-	auto [button_text, button_text_size] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), RightShiftString(ToString(*(f)), 3));
+	auto [button_text, button_text_size] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), LeftPad(ToString(*(f)), 3));
 
 	//Connect slider bar, slider and text to background button
 	level.GetComponent<SliderButton>(parent_button)->slider_bar = slider_bar;
@@ -290,18 +281,18 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f
 	return { { parent_button, slider_bar, slider, button_text }, size };
 }
 
-EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle)
+EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle, float scale)
 {
 	Entity entity = level.CreateEntity();
 
 	level.AddComponent<DrawInfo>(entity, { "content\\textures\\gray.png", false, 0 });
 	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\stats_badge.frag";
 	level.GetComponent<Shader>(entity)->int_uniforms["n_collected"] = coin_number;
-	sf::Vector2f width_and_height = sf::Vector2f(7.5, 1.5) * float(BLOCK_SIZE);
+	sf::Vector2f width_and_height = sf::Vector2f(7.5, 1.5) * float(BLOCK_SIZE) * scale;
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
 	level.AddComponent<Position>(entity)->position = position;
 	level.AddComponent<FillColor>(entity)->color.a = alpha;
-	level.AddComponent<Text>(entity)->size = 100;
+	level.AddComponent<Text>(entity)->size = (100 * scale);
 	level.GetComponent<Text>(entity)->content = text;
 	level.AddComponent<DrawPriority>(entity)->draw_priority = 100;
 	if (twinkle)

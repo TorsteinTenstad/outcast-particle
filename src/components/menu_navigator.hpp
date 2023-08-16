@@ -12,6 +12,7 @@ struct SnapPosition
 {
 	Entity entity;
 	sf::Vector2f position;
+	float snap_entity_height;
 	float ordering;
 
 	SnapPosition(Level& level, Entity entity) :
@@ -20,6 +21,7 @@ struct SnapPosition
 		auto [width_and_height, position_component] = level.GetComponents<WidthAndHeight, Position>(entity);
 		position = position_component->position;
 		position.x -= width_and_height->width_and_height.x / 2;
+		snap_entity_height = width_and_height->width_and_height.y;
 		ordering = position.x + position.y;
 	}
 };

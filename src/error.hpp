@@ -10,7 +10,8 @@ enum class ErrorNumber : int
 	LOAD_LEVEL,
 	LOAD_SHADER,
 	LOAD_RECORDS,
-	LOAD_WAV
+	LOAD_WAV,
+	LOAD_FONT
 };
 
 class ErrorInfo

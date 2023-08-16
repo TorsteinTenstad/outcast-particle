@@ -102,7 +102,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			bool is_new_record = duration == record.value_or(0);
 			std::stringstream ss;
 
-			EntityHandle badge_handle = CreateStatsBadge(level, sf::Vector2f(0, 0), coin_count, 255, RightShiftString(CreateBadgeText(duration, 2 + globals.general_config.display_precise_badge_time), 16), is_new_record);
+			EntityHandle badge_handle = CreateStatsBadge(level, sf::Vector2f(0, 0), coin_count, 255, LeftPad(CreateBadgeText(duration, 2 + globals.general_config.display_precise_badge_time), 16), is_new_record, level.GetScale());
 			entities_handles.push_back(ToEntitiesHandle(badge_handle));
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
@@ -136,11 +136,11 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	if (is_in_level_editing_ && !level.editor.IsEmpty())
 	{
 		std::function<void(void)> return_to_level_menu_func = [&level, set_level_ = this->set_level_]() {
-			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {});
+			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(LEVEL_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {}, level.GetScale());
 		};
 
 		std::function<void(void)> return_to_main_menu_func = [&level, set_level_ = this->set_level_]() {
-			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(MAIN_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(MAIN_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {});
+			CreateBlockingPopupMenu(std::ref(level), level.GetSize(), "Save changes?", { { "Save", [&]() { set_level_(MAIN_MENU); }, sf::Keyboard::Unknown }, { "Discard", [&]() { level.editor.UndoAll(); level.SaveToFile(); set_level_(MAIN_MENU); }, sf::Keyboard::Unknown }, { "Cancel", [&]() {}, sf::Keyboard::Escape } }, {}, level.GetScale());
 		};
 
 		AddButton(return_to_level_menu_func, "Level Menu", sf::Keyboard::Unknown);
@@ -156,5 +156,5 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	entities_handles.insert(entities_handles.begin(), ToEntitiesHandle(title_handle));
 
 	auto [entities, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE * scale);
-	auto [navigator_id, navigator_size] = CreateMenuNavigator(level, 2 * scale);
+	auto [navigator_id, navigator_size] = CreateMenuNavigator(level);
 }

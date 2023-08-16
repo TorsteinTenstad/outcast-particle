@@ -231,11 +231,14 @@ void Game::GoToKeyConfigMenu()
 		EntitiesCreator.push_back(std::bind(&CreateKeyConfigButton, std::ref(*active_level_), std::placeholders::_1, key));
 	}
 	std::vector<std::string> description_texts = { "Switch charge", "Go neutral", "Move Up", "Move Left", "Move Down", "Move Right" };
-	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
+	std::function<std::string(std::string)> left_shift_description_texts = [](std::string s) { return RightPad(s, 17); };
 
 	SetupOptionsSubMenu(*active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 	CreateButton(
-		*active_level_, sf::Vector2f(level_size.x / 2.f + 8 * BLOCK_SIZE, level_size.y - 2 * BLOCK_SIZE), sf::Vector2f(5 * BLOCK_SIZE, 2 * BLOCK_SIZE), std::bind(&CreateConfirmMenu, std::ref(*active_level_), level_size, "Are you sure you want to \n reset all key-bindings?", [&]() { Game::ResetKeyConfig(); }), "Reset", 120);
+		*active_level_, sf::Vector2f(level_size.x / 2.f + 8 * BLOCK_SIZE, level_size.y - 2 * BLOCK_SIZE), sf::Vector2f(5 * BLOCK_SIZE, 2 * BLOCK_SIZE), std::bind(
+																																							&CreateConfirmMenu, std::ref(*active_level_), level_size, "Are you sure you want to \n reset all key-bindings?", [&]() { Game::ResetKeyConfig(); }, 1),
+		"Reset",
+		120);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()
@@ -271,7 +274,7 @@ void Game::GoToGraphicsAndDisplayMenu()
 	{
 		EntitiesCreator.push_back(std::bind(&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, button_functions[i], button_texts[i]));
 	}
-	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
+	std::function<std::string(std::string)> left_shift_description_texts = [](std::string s) { return RightPad(s, 17); };
 
 	SetupOptionsSubMenu(*active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 }
@@ -295,7 +298,7 @@ void Game::GoToMusicAndSoundMenu()
 		"Music Volume"
 	};
 
-	std::function<std::string(std::string)> left_shift_description_texts = std::bind(&LeftShiftString, std::placeholders::_1, 17);
+	std::function<std::string(std::string)> left_shift_description_texts = [](std::string s) { return RightPad(s, 17); };
 
 	SetupOptionsSubMenu(*active_level_, "Graphics and Display", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 }

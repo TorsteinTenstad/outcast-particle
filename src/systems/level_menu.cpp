@@ -49,7 +49,7 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		std::optional<float> record = records->GetRecord(at_level_id, i);
 
 		level.GetComponent<FillColor>(ui->stats_block_entities[i])->color.a = record.has_value() ? 255 : 0;
-		level.GetComponent<Text>(ui->stats_block_entities[i])->content = record.has_value() ? RightShiftString(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 16) : "";
+		level.GetComponent<Text>(ui->stats_block_entities[i])->content = record.has_value() ? LeftPad(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 16) : "";
 	}
 }
 
@@ -322,7 +322,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		sound_info->sound_paths = { { ON_CLICK, "content\\sounds\\click.wav" } };
 	}
 	// Scroll window
-	auto [menu_navigator_entity, _] = CreateMenuNavigator(level, 1);
+	auto [menu_navigator_entity, _] = CreateMenuNavigator(level);
 	ui->menu_navigator_entity = menu_navigator_entity;
 	ScrollWindow* scroll_window;
 	{

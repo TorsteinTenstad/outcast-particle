@@ -72,21 +72,28 @@ std::string HumanName(sf::Keyboard::Key key)
 	}
 }
 
-std::string LeftShiftString(std::string string, int max_size)
+std::string LeftPad(const std::string& original, size_t total_length, char pad_char)
 {
-	assert(string.size() <= max_size);
-	string.append(max_size - string.size(), ' ');
-	return (string);
+	if (total_length <= original.size())
+	{
+		assert(false);
+		return original;
+	}
+
+	std::string padding(total_length - original.size(), pad_char);
+	return padding + original;
 }
 
-std::string RightShiftString(std::string string, int max_size)
+std::string RightPad(const std::string& original, size_t total_length, char pad_char)
 {
-	assert(string.size() <= max_size);
-	size_t size_difference = size_t(max_size) - string.size();
-	std::string shifted_string = std::string(size_difference, ' ');
-	shifted_string += string;
+	if (total_length <= original.size())
+	{
+		assert(false);
+		return original;
+	}
 
-	return shifted_string;
+	std::string padding(total_length - original.size(), pad_char);
+	return original + padding;
 }
 
 std::string BoolToStringAsEnabledOrDisabled(bool x)
@@ -106,6 +113,6 @@ std::string CreateBadgeText(float f, int precision)
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
 	ss << f;
-	ss << "s";
+	//ss << "s";
 	return ss.str();
 }

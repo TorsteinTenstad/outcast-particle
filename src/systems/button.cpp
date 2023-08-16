@@ -77,7 +77,7 @@ void ButtonSystem::Update(Level& level, float dt)
 
 		*(slider_button->slider_value) = Clamp(int(50 * relative_cursor_x_pos / half_slider_width + 50), 0, 100);
 		level.GetComponent<Position>(slider_button->slider_button)->position.x = std::max(slider_x_pos - half_slider_width, std::min(slider_x_pos + half_slider_width, slider_x_pos + relative_cursor_x_pos));
-		level.GetComponent<Text>(slider_button->slider_text)->content = RightShiftString(ToString(*(slider_button->slider_value)), 3);
+		level.GetComponent<Text>(slider_button->slider_text)->content = LeftPad(ToString(*(slider_button->slider_value)), 3);
 	}
 
 	for (auto [entity, hovered_started_this_frame, on_hovered_started_this_frame] : level.GetEntitiesWith<HoveredStartedThisFrame, OnHoveredStartedThisFrame>())

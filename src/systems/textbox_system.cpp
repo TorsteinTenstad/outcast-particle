@@ -52,7 +52,7 @@ void TextBoxSystem::Update(Level& level, float dt)
 			return cursor_id;
 		});
 
-		level.GetComponent<Text>(cursor_id)->content = RightShiftString("|", text->content.length() + 1);
+		level.GetComponent<Text>(cursor_id)->content = LeftPad("|", text->content.length() + 1);
 		level.GetComponent<Position>(cursor_id)->position = position->position + sf::Vector2f(0, -0.06 * text->size);
 	}
 }

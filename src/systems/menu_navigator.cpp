@@ -79,7 +79,10 @@ static void MoveToSnapPosition(Level& level, Entity entity, MenuNavigator* menu_
 {
 	menu_navigator->current_snap_position = snap_position;
 	menu_navigator->moved_itself_this_frame = true;
-	level.GetComponent<Position>(entity)->position = snap_position.position - sf::Vector2f(level.GetComponent<WidthAndHeight>(entity)->width_and_height.x, 0);
+
+	sf::Vector2f size = sf::Vector2f(1, 1.5) * snap_position.snap_entity_height / 2.f;
+	level.GetComponent<WidthAndHeight>(entity)->width_and_height = size;
+	level.GetComponent<Position>(entity)->position = snap_position.position - sf::Vector2f(size.x, 0);
 }
 
 void MenuNavigatorSystem::Update(Level& level, float dt)
@@ -105,6 +108,7 @@ void MenuNavigatorSystem::Update(Level& level, float dt)
 	}
 
 	auto [entity, menu_navigator, draw_priority, width_and_height, position] = highest_priority_navigator;
+
 	menu_navigator->moved_itself_this_frame = false;
 	std::vector<SnapPosition> possible_positions = GetPossiblePossiblePositions(level, menu_navigator);
 	if (possible_positions.size() == 0)

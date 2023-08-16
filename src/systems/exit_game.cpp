@@ -43,5 +43,5 @@ void ExitGameSystem::Update(Level& level, float dt)
 		save_and_quit_request = true;
 	};
 
-	CreateBlockingPopupMenu(level, level.GetSize(), "Save changes before exit?", { { "Save", save_function, sf::Keyboard::Unknown }, { "Discard", discard_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {});
+	CreateBlockingPopupMenu(level, level.GetSize(), "Save changes before exit?", { { "Save", save_function, sf::Keyboard::Unknown }, { "Discard", discard_function, sf::Keyboard::Unknown }, { "Cancel", []() {}, sf::Keyboard::Escape } }, {}, level.GetScale());
 }
