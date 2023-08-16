@@ -70,15 +70,16 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
 	CloseBlueprintMenu(level);
 
+	LevelState level_state = level.ComputeState();
+
 	if (is_in_level_editing_ && previous_mode == PLAY_MODE)
 	{
 		level.LoadFromFile();
 	}
 
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<PauseMenuItem>(entity); });
-	LevelState level_state = level.ComputeState();
 	std::vector<EntitiesHandle> entities_handles;
-	std::string menu_title = "Title";
+	std::string menu_title = "Paused";
 	float scale = level.GetScale();
 
 	CreateScreenWideBlur(level, level.GetSize(), UI_BASE_DRAW_PRIORITY - 1);
@@ -158,7 +159,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
-	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240) * scale);
+	EntityHandle title_handle = CreateText(level, sf::Vector2f(0, 0), menu_title, unsigned(240) * scale, sf::Vector2f(10, 2) * float(BLOCK_SIZE) * scale);
 	entities_handles.insert(entities_handles.begin(), ToEntitiesHandle(title_handle));
 
 	auto [entities, height] = VerticalEntityLayout(level, level.GetSize() / 2.f, entities_handles, BLOCK_SIZE * scale);
