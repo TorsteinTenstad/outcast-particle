@@ -32,9 +32,7 @@ Game::Game() :
 	RegisterGameSystem<LevelReadyScreenSystem>();
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
-	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<MusicSystem>();
-	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<HelpMenuSystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -45,6 +43,7 @@ Game::Game() :
 	RegisterGameSystem<StickyButtonSystem>();
 	RegisterGameSystem<CanDisableButtonSystem>();
 	RegisterGameSystem<ExitGameSystem>(); //Should be close after ButtonSystem for exiting to go smoothly.
+	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>(); // Must
@@ -69,6 +68,7 @@ Game::Game() :
 	RegisterGameSystem<SetWallSoundSystem>();
 	RegisterGameSystem<LaserProximitySystem>();
 	RegisterGameSystem<ShowErrorSystem>();
+	RegisterGameSystem<DrawSystem>();
 
 	RegisterPhysicsGameSystem<IntersectionSystem>();
 	RegisterPhysicsGameSystem<CollisionSystem>();
@@ -160,7 +160,7 @@ Level& Game::SetLevel(std::string level_id)
 		}
 	}
 	active_level_id_ = level_id;
-	globals.restart_game_loop = true;
+	globals.skip_drawing_this_frame = true;
 	return *active_level_;
 }
 
@@ -176,11 +176,6 @@ void Game::Update(float dt)
 	for (const auto& system_id : game_system_entities_)
 	{
 		game_systems_.at(system_id)->Update(*active_level_, dt);
-		if (globals.restart_game_loop)
-		{
-			globals.restart_game_loop = false;
-			return;
-		}
 	}
 	if (active_level_->GetMode() == PLAY_MODE)
 	{
@@ -189,11 +184,6 @@ void Game::Update(float dt)
 			for (const auto& system_id : physics_game_system_entities_)
 			{
 				game_systems_[system_id]->Update(*active_level_, dt / physics_ticks_per_frame_);
-				if (globals.restart_game_loop)
-				{
-					globals.restart_game_loop = false;
-					return;
-				}
 			}
 			cursor_and_keys_.ResetFrameEvents();
 		}

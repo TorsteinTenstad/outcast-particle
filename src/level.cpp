@@ -51,7 +51,7 @@ void Level::SetMode(LevelMode new_mode)
 	if (new_mode == EDIT_MODE)
 	{
 		LoadFromFile();
-		globals.restart_game_loop = true;
+		globals.skip_drawing_this_frame = true;
 	}
 	mode_ = new_mode;
 }
@@ -84,7 +84,7 @@ int Level::GetValidNewSizeId(int increment)
 void Level::ModifyLevelSize(int increment)
 {
 	grid_size_id += GetValidNewSizeId(increment);
-	GetSingleton<EditModeUI>()->initialized = false;
+	GetSingleton<EditModeUI>()->initialized = false; //TODO: Improve design?
 }
 
 Error Level::LoadFromFile()

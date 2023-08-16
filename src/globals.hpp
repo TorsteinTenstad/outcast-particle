@@ -34,7 +34,7 @@ struct Globals
 {
 	sf::RenderWindow render_window;
 	float time = 0;
-	bool restart_game_loop = false;
+	bool skip_drawing_this_frame = false;
 	KeyConfig key_config;
 	GeneralConfig general_config;
 	ContentAccessOptions content_access_options;

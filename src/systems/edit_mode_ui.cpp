@@ -85,7 +85,7 @@ static void SetupUI(Level& level, EditModeUI* ui)
 			std::vector<int> increment = { 1, -1 };
 			std::vector<std::string> text = { "-", "+" };
 			CreateCanDisableButton(
-				level, sf::Vector2f(23.5 * BLOCK_SIZE + 2.25 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&, increment, i]() { level.editor.Do<ModifyLevelSize>(level, increment[i]); }, text[i], default_text_size, [&, increment, i]() { return (level.GetValidNewSizeId(increment[i]) != 0); });
+				level, sf::Vector2f(23.5 * BLOCK_SIZE + 2.25 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&, increment, i]() {level.editor.Do<ModifyLevelSize>(level, increment[i]); globals.skip_drawing_this_frame = true; }, text[i], default_text_size, [&, increment, i]() { return (level.GetValidNewSizeId(increment[i]) != 0); });
 		}
 
 		CreateButton(
