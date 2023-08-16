@@ -22,6 +22,10 @@ void RescaleEditModeUi(Level& level)
 	{
 		level.GetComponent<Position>(entity)->position *= scale_rate;
 		level.GetComponent<WidthAndHeight>(entity)->width_and_height *= scale_rate;
+		if (Text* text = level.RawGetComponent<Text>(entity))
+		{
+			text->size *= scale_rate;
+		}
 	}
 }
 
@@ -113,7 +117,7 @@ static void SetupUI(Level& level, EditModeUI* ui)
 		}
 
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(28.75 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2), standard_size, [&]() { ToggleMusicMenu(level); }, "content\\textures\\music.png", default_text_size, []() { return false; });
+			level, sf::Vector2f(28.75 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2), standard_size, [&]() { ToggleMusicMenu(level); }, "content\\textures\\music.png", default_text_size, []() { return true; });
 
 		Entity help_menu_entity = GetEntity(CreateMouseEventButton(
 			level, sf::Vector2f(31 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2), narrow_size));

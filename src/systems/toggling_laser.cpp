@@ -7,6 +7,7 @@
 
 void TogglingLaserSystem::Update(Level& level, float dt)
 {
+	if (level.GetMode() == PAUSE_MODE) { return; }
 	for (const auto& [entity, toggling_laser, laser, fill_color] : level.GetEntitiesWith<TogglingLaser, Laser, FillColor>())
 	{
 		assert(0 <= toggling_laser->duty_cycle && toggling_laser->duty_cycle <= 1);
