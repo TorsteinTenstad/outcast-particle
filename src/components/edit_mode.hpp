@@ -11,3 +11,6 @@ public:
 	bool initialized = false;
 	float level_scale = 1;
 };
+
+class EditModeUIEntity
+{};

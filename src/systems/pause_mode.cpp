@@ -5,7 +5,6 @@
 #include "components/size.hpp"
 #include "components/text.hpp"
 #include "components/timers.hpp"
-#include "edit_mode_blueprint_menu_functions.hpp"
 #include "entity_creation.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
@@ -68,7 +67,6 @@ void PauseMode::Update(Level& level, float dt)
 }
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
-	CloseBlueprintMenu(level);
 
 	LevelState level_state = level.ComputeState();
 

@@ -12,9 +12,6 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
 #include "utils/string_parsing.hpp"
 
-class EditModeUIEntity
-{};
-
 void RescaleEditModeUi(Level& level)
 {
 	float scale_rate = level.GetScale() / level.GetSingleton<EditModeUI>()->level_scale;

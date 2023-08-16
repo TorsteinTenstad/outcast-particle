@@ -2,6 +2,7 @@
 #include "components/blueprint_menu_item.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
+#include "components/edit_mode.hpp"
 #include "components/editable.hpp"
 #include "components/not_serialized.hpp"
 #include "components/position.hpp"
@@ -21,7 +22,7 @@ const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParti
 void OpenBlueprintMenu(Level& level)
 {
 	CloseMusicMenu(level);
-	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<BlueprintMenuItem, NotSerialized>(entity); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<BlueprintMenuItem, NotSerialized, EditModeUIEntity>(entity); });
 
 	{ //Background
 		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);
@@ -77,7 +78,7 @@ void OpenMusicMenu(Level& level)
 {
 	CloseBlueprintMenu(level);
 
-	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<MusicMenuItem, NotSerialized>(entity); });
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<MusicMenuItem, NotSerialized, EditModeUIEntity>(entity); });
 
 	float scale = level.GetScale();
 	{ //Background
@@ -96,8 +97,8 @@ void OpenMusicMenu(Level& level)
 	{
 		std::string music_path = entry.path().string();
 
-		auto [entity, size] = CreateNavigatorButton(
-			level, sf::Vector2f(0, 0), [&, music_path]() { level.music_path = music_path; }, SplitString(music_path, "\\").back(), sf::Keyboard::Unknown, sf::Vector2f(10, 2) * scale * float(BLOCK_SIZE));
+		auto [entity, size] = CreateButton(
+			level, sf::Vector2f(0, 0), sf::Vector2f(10, 2) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, SplitString(music_path, "\\").back(), 120);
 		level.AddComponent<StickyButton>(entity);
 		if (level.music_path == music_path)
 		{
