@@ -69,10 +69,16 @@ void PauseMode::Update(Level& level, float dt)
 void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 {
 	CloseBlueprintMenu(level);
+
+	if (is_in_level_editing_ && previous_mode == PLAY_MODE)
+	{
+		level.LoadFromFile();
+	}
+
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<PauseMenuItem>(entity); });
 	LevelState level_state = level.ComputeState();
 	std::vector<EntitiesHandle> entities_handles;
-	std::string menu_title;
+	std::string menu_title = "Title";
 	float scale = level.GetScale();
 
 	CreateScreenWideBlur(level, level.GetSize(), UI_BASE_DRAW_PRIORITY - 1);

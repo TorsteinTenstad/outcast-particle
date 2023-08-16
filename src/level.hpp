@@ -65,5 +65,4 @@ public:
 	Error LoadFromFile();
 	void SaveToFile(std::string savefile_path);
 	Error LoadFromFile(std::string savefile_path);
-	void DiscardChanges();
 };
