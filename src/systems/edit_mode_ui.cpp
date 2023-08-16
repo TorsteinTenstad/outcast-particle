@@ -1,13 +1,15 @@
 #include "components/button.hpp"
+#include "components/edit_mode.hpp"
+#include "components/physics.hpp"
+#include "components/text.hpp"
+#include "edit_mode_actions/modify_level_size.hpp"
+#include "edit_mode_actions/rotate_selected_fields.hpp"
+#include "edit_mode_actions/set_property_value_of_selected.hpp"
 #include "edit_mode_blueprint_menu_functions.hpp"
 #include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
-
-class EditModeUI
-{
-public:
-	bool initialized = false;
-};
+#include "systems/edit_mode_blueprint_menu_functions.hpp"
+#include "utils/string_parsing.hpp"
 
 class EditModeUIEntity
 {};
@@ -26,7 +28,7 @@ void EditModeUISystem::Update(Level& level, float dt)
 		level.DeleteEntitiesWith<EditModeUIEntity>();
 		return;
 	}
-	level.ui_bars_size = sf::Vector2f(0, UI_BAR_HEIGHT);
+	level.ui_bars_size = sf::Vector2f(0, UI_BAR_HEIGHT) * level.GetScale();
 	EditModeUI* ui = level.GetSingleton<EditModeUI>();
 
 	if (!ui->initialized)
@@ -43,16 +45,56 @@ static void UpdateUI(Level& level, EditModeUI* ui)
 
 static void SetupUI(Level& level, EditModeUI* ui)
 {
+	level.DeleteEntitiesWith<EditModeUIEntity>();
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<EditModeUIEntity>(entity); });
 	{
+		float scale = level.GetScale();
 		float w = 3 * BLOCK_SIZE;
-		auto [entity, size] = CreateButton(
-			level,
-			sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2),
-			sf::Vector2f(w, UI_BAR_HEIGHT),
-			[&level]() { ToggleBlueprintMenu(level); },
-			"+",
-			200);
-		level.AddComponent<ShortcutKey>(entity)->key = sf::Keyboard::B;
+		sf::Vector2f standard_size = sf::Vector2f(2 * BLOCK_SIZE, 1.5 * BLOCK_SIZE) * scale;
+		sf::Vector2f narrow_size = sf::Vector2f(1.5 * BLOCK_SIZE, 1.5 * BLOCK_SIZE) * scale;
+		int default_text_size = 200 * scale;
+
+		//Create add-entity-button:
+		auto [add_entity, add_size] = CreateButton(
+			level, sf::Vector2f(w / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&level]() { ToggleBlueprintMenu(level); }, "+", default_text_size);
+		level.AddComponent<ShortcutKey>(add_entity)->key = sf::Keyboard::B;
+
+		//Create undo- and redo-buttons:
+		CreateCanDisableButton(
+			level, sf::Vector2f(3 * w / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { level.editor.Undo(); }, "<-", default_text_size, [&]() { return !level.editor.IsEmpty(); });
+		CreateCanDisableButton(
+			level, sf::Vector2f((5 * w - 1.5 * BLOCK_SIZE) / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { level.editor.Redo(); }, "->", default_text_size, [&]() { return !level.editor.IsAtEnd(); });
+
+		//Create property value buttons:
+		for (int i = 0; i < 5; i++)
+		{
+			CreateCanDisableButton(
+				level, sf::Vector2f(9.5 / 3 * w + 1.75 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, ToString(i + 1), default_text_size, [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); });
+		}
+
+		//Create rotate-buttons:
+		for (int i = 0; i < 2; i++)
+		{
+			CreateCanDisableButton(
+				level, sf::Vector2f(19 * BLOCK_SIZE + 1.75 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size, [&, i]() { level.editor.Do<RotateSelectedFields>(level, PI / 2 * (-1 + 2 * i)); }, "O", default_text_size, [&]() { return (level.GetEntitiesWith<Selected, ElectricField>().size() != 0); });
+		}
+
+		//Create level size-buttons:
+		for (int i = 0; i < 2; i++)
+		{
+			std::vector<int> increment = { 1, -1 };
+			std::vector<std::string> text = { "-", "+" };
+			CreateCanDisableButton(
+				level, sf::Vector2f(23.5 * BLOCK_SIZE + 2.25 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&, increment, i]() { level.editor.Do<ModifyLevelSize>(level, increment[i]); }, text[i], default_text_size, [&, increment, i]() { return (level.GetValidNewSizeId(increment[i]) != 0); });
+		}
+
+		CreateButton(
+			level, sf::Vector2f(28.75 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { ToggleMusicMenu(level); }, "m", default_text_size);
+
+		Entity help_menu_entity = GetEntity(CreateMouseEventButton(
+			level, sf::Vector2f(31 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size));
+		level.AddComponent<Text>(help_menu_entity)->content = "?";
+		level.GetComponent<Text>(help_menu_entity)->size = default_text_size;
+		level.AddComponent<ShowHelpMenuButton>(help_menu_entity);
 	}
 }

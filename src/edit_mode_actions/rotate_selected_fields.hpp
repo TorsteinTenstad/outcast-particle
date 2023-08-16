@@ -1,4 +1,6 @@
 #pragma once
+#include "components/editable.hpp"
+#include "components/physics.hpp"
 #include "level.hpp"
 #include "undo_system.hpp"
 #include "utils/math.hpp"

@@ -28,6 +28,12 @@ public:
 	std::function<void(void)> func;
 };
 
+class CanDisableButton
+{
+public:
+	std::function<bool(void)> func;
+};
+
 class KeyConfigButton
 {
 public:
@@ -48,4 +54,10 @@ public:
 	Entity slider_text;
 	Entity slider_button;
 	Entity slider_bar;
+};
+
+class ShowHelpMenuButton
+{
+public:
+	bool menu_open = false;
 };

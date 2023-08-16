@@ -191,6 +191,14 @@ EntityHandle CreateTimerButton(ECSScene& level, sf::Vector2f position)
 	return { entity, size };
 }
 
+EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string button_text, unsigned text_size, std::function<bool(void)> deactivate_function)
+{
+	auto [entity, button_size] = CreateButton(level, position, size, button_function, button_text, 120);
+	level.GetComponent<Text>(entity)->size = text_size;
+	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
+	return { entity, button_size };
+}
+
 EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority)
 {
 	EntityHandle handle = CreateTexturedRectangle(level, level_size / 2.f, level_size, draw_priority, "", false);
