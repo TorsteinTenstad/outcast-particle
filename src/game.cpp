@@ -51,7 +51,7 @@ Game::Game() :
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
 	RegisterGameSystem<TextBoxSystem>();
 	RegisterGameSystem<TogglingLaserSystem>();
-	RegisterGameSystem<AddKillOnIntersectionSystem>(); // Should be directly below TogglingLaserSystem for 
+	RegisterGameSystem<AddKillOnIntersectionSystem>(); // Should be directly below TogglingLaserSystem for
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
@@ -159,7 +159,7 @@ Level& Game::SetLevel(std::string level_id)
 		}
 	}
 	active_level_id_ = level_id;
-	restart_update_loop_ = true;
+	globals.restart_game_loop = true;
 	return *active_level_;
 }
 
@@ -175,9 +175,9 @@ void Game::Update(float dt)
 	for (const auto& system_id : game_system_entities_)
 	{
 		game_systems_.at(system_id)->Update(*active_level_, dt);
-		if (restart_update_loop_)
+		if (globals.restart_game_loop)
 		{
-			restart_update_loop_ = false;
+			globals.restart_game_loop = false;
 			return;
 		}
 	}
@@ -188,9 +188,9 @@ void Game::Update(float dt)
 			for (const auto& system_id : physics_game_system_entities_)
 			{
 				game_systems_[system_id]->Update(*active_level_, dt / physics_ticks_per_frame_);
-				if (restart_update_loop_)
+				if (globals.restart_game_loop)
 				{
-					restart_update_loop_ = false;
+					globals.restart_game_loop = false;
 					return;
 				}
 			}

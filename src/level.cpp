@@ -50,6 +50,7 @@ void Level::SetMode(LevelMode new_mode)
 	if (new_mode == EDIT_MODE)
 	{
 		LoadFromFile();
+		globals.restart_game_loop = true;
 	}
 	mode_ = new_mode;
 }

@@ -16,7 +16,6 @@ class Game
 private:
 	int physics_ticks_per_frame_ = 10;
 
-	bool restart_update_loop_ = false;
 	bool is_in_level_editing_ = false;
 
 	std::stack<std::string> menu_stack;
