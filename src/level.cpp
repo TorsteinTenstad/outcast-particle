@@ -95,10 +95,3 @@ void Level::SaveToFile()
 {
 	SaveToFile(savefile_path_);
 }
-
-void Level::DiscardChanges()
-{
-	LoadFromFile();
-	editor.UndoAll();
-	SaveToFile();
-}
