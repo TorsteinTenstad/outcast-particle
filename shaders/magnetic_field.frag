@@ -83,19 +83,20 @@ void main()
 
 	vec3 particle_rgb = get_flat_particle_color(charge_sign);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 12, 20, 1.142) * 0.1 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 10, 20, 1.142) * 0.1 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 10, 40, 1.721) * 0.2 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 8, 40, 1.721) * 0.2 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 8, 60, 1.161) * 0.3 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)), 6, 60, 1.161) * 0.3 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 6, 80, 1.511) * 0.4 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)), 4, 80, 1.511) * 0.4 * 1.5));
 
 	float field_strength01 = get_linearized_log2_field_strength01(abs(field_strength), MIN_FIELD_STRENGTH, MAX_FIELD_STRENGTH);
 	vec3 field_rgb = get_field_rgb(uv, field_strength01);
 	float thickness_factor = get_field_thickness_factor(field_strength01);
 	float crosses_and_dots_mask = crosses_and_dots(xy, thickness_factor);
+	float speed_factor = get_field_speed_factor(field_strength01);
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 12, 20*speed_factor, 1.142) * 0.1 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(90, 0)), 10, 20*speed_factor, 1.142) * 0.1 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)), 10, 40*speed_factor, 1.721) * 0.2 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(60, 0)),  8, 40*speed_factor, 1.721) * 0.2 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)),  8, 60*speed_factor, 1.161) * 0.3 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(30, 0)),  6, 60*speed_factor, 1.161) * 0.3 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)),  6, 80*speed_factor, 1.511) * 0.4 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particles((xy + vec2(00, 0)),  4, 80*speed_factor, 1.511) * 0.4 * 1.5));
 
 	color = blend(color, vec4(field_rgb, crosses_and_dots_mask));
 	color = blend(color, particles_color);

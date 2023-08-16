@@ -68,20 +68,24 @@ void main()
 	vec2 xy = uv * _wh;
 	float theta = atan(field_vector.x, field_vector.y);
 	mat2 m_rot = rot(theta);
+	mat2 m_rot_inv = rot(-theta);
 
 	vec4 background_color = vec4(vec3(1), 0.0);
 	vec4 color = background_color;
 
 	vec3 particle_rgb = get_flat_particle_color(charge_sign);
 	vec4 particles_color = vec4(0);
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(90, -100 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(60, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(30, -200 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.161) * 0.3 * 1.5));
-	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(00, -400 * movement_animation_time), vec2(CELL_SIZE), 0.6, 1.511) * 0.4 * 1.5));
 
 	float field_strength01 = get_linearized_log2_field_strength01(length(field_vector), MIN_FIELD_STRENGTH, MAX_FIELD_STRENGTH);
-	vec3 field_rgb = get_field_rgb(m_rot*uv, field_strength01);
+	vec3 field_rgb = get_field_rgb(fract(m_rot_inv*uv), field_strength01);
 	float thickness_factor = get_field_thickness_factor(field_strength01);
+	float speed_factor = get_field_speed_factor(field_strength01);
+	float speed = movement_animation_time * speed_factor;
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(90, -100 * speed), vec2(CELL_SIZE), 0.6, 1.142) * 0.1 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(60, -200 * speed), vec2(CELL_SIZE), 0.6, 1.721) * 0.2 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(30, -300 * speed), vec2(CELL_SIZE), 0.6, 1.161) * 0.3 * 1.5));
+	particles_color = blend(particles_color, vec4(vec3(particle_rgb), particle_grid((xy) * m_rot + vec2(00, -400 * speed), vec2(CELL_SIZE), 0.6, 1.511) * 0.4 * 1.5));
+
 	float arrow_mask = arrow((xy) * m_rot, abs(_wh * m_rot), thickness_factor);
 
 	color = blend(color, vec4(field_rgb, arrow_mask));

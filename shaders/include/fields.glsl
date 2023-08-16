@@ -5,9 +5,15 @@ float get_linearized_log2_field_strength01(float field_strength, float min_stren
 }
 
 float get_field_thickness_factor(float field_strength01){
-	float thickness_variation = 0.2;
+	float thickness_variation = 0.3;
 	float thickness_factor = 1-thickness_variation + 2*thickness_variation*field_strength01;
 	return thickness_factor;
+}
+
+float get_field_speed_factor(float field_strength01){
+	float speed_variation = 0.6;
+	float speed_factor = 1-speed_variation + 2*speed_variation*field_strength01;
+	return speed_factor;
 }
 
 vec3 get_field_rgb(vec2 uv, float field_strength01){
