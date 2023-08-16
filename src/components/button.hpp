@@ -32,6 +32,7 @@ class CanDisableButton
 {
 public:
 	std::function<bool(void)> func;
+	sf::Uint8 deactivation_alpha = 50;
 };
 
 class KeyConfigButton

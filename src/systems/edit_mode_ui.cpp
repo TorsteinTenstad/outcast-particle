@@ -60,36 +60,44 @@ static void SetupUI(Level& level, EditModeUI* ui)
 		level.AddComponent<ShortcutKey>(add_entity)->key = sf::Keyboard::B;
 
 		//Create undo- and redo-buttons:
-		CreateCanDisableButton(
-			level, sf::Vector2f(3 * w / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { level.editor.Undo(); }, "<-", default_text_size, [&]() { return !level.editor.IsEmpty(); });
-		CreateCanDisableButton(
-			level, sf::Vector2f((5 * w - 1.5 * BLOCK_SIZE) / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { level.editor.Redo(); }, "->", default_text_size, [&]() { return !level.editor.IsAtEnd(); });
+		CreateCanDisableButtonWithIcon(
+			level, sf::Vector2f(3 * w / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { level.editor.Undo(); }, "content\\textures\\undo.png", default_text_size, [&]() { return !level.editor.IsEmpty(); });
+		CreateCanDisableButtonWithIcon(
+			level, sf::Vector2f((5 * w - 1.5 * BLOCK_SIZE) / 2, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { level.editor.Redo(); }, "content\\textures\\redo.png", default_text_size, [&]() { return !level.editor.IsAtEnd(); });
 
 		//Create property value buttons:
 		for (int i = 0; i < 5; i++)
 		{
-			CreateCanDisableButton(
-				level, sf::Vector2f(9.5 / 3 * w + 1.75 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, ToString(i + 1), default_text_size, [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); });
+			std::vector<std::string> icon_paths = {
+				"content\\textures\\1.png",
+				"content\\textures\\2.png",
+				"content\\textures\\3.png",
+				"content\\textures\\4.png",
+				"content\\textures\\5.png",
+			};
+			CreateCanDisableButtonWithIcon(
+				level, sf::Vector2f(9.5 / 3 * w + 1.75 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, icon_paths[i], default_text_size, [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); });
 		}
 
 		//Create rotate-buttons:
 		for (int i = 0; i < 2; i++)
 		{
-			CreateCanDisableButton(
-				level, sf::Vector2f(19 * BLOCK_SIZE + 1.75 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size, [&, i]() { level.editor.Do<RotateSelectedFields>(level, PI / 2 * (-1 + 2 * i)); }, "O", default_text_size, [&]() { return (level.GetEntitiesWith<Selected, ElectricField>().size() != 0); });
+			std::vector<std::string> icon_paths = { "content\\textures\\rotate_left.png", "content\\textures\\rotate_right.png" };
+			CreateCanDisableButtonWithIcon(
+				level, sf::Vector2f(19 * BLOCK_SIZE + 1.75 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size, [&, i]() { level.editor.Do<RotateSelectedFields>(level, PI / 2 * (-1 + 2 * i)); }, icon_paths[i], default_text_size, [&]() { return (level.GetEntitiesWith<Selected, ElectricField>().size() != 0); });
 		}
 
 		//Create level size-buttons:
 		for (int i = 0; i < 2; i++)
 		{
 			std::vector<int> increment = { 1, -1 };
-			std::vector<std::string> text = { "-", "+" };
-			CreateCanDisableButton(
-				level, sf::Vector2f(23.5 * BLOCK_SIZE + 2.25 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&, increment, i]() {level.editor.Do<ModifyLevelSize>(level, increment[i]); globals.skip_drawing_this_frame = true; }, text[i], default_text_size, [&, increment, i]() { return (level.GetValidNewSizeId(increment[i]) != 0); });
+			std::vector<std::string> icon_paths = { "content\\textures\\increase_size.png", "content\\textures\\decrease_size.png" };
+			CreateCanDisableButtonWithIcon(
+				level, sf::Vector2f(23.5 * BLOCK_SIZE + 2.25 * i * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&, increment, i]() {level.editor.Do<ModifyLevelSize>(level, increment[i]); globals.skip_drawing_this_frame = true; }, icon_paths[i], default_text_size, [&, increment, i]() { return (level.GetValidNewSizeId(increment[i]) != 0); });
 		}
 
-		CreateButton(
-			level, sf::Vector2f(28.75 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { ToggleMusicMenu(level); }, "m", default_text_size);
+		CreateCanDisableButtonWithIcon(
+			level, sf::Vector2f(28.75 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, standard_size, [&]() { ToggleMusicMenu(level); }, "content\\textures\\music.png", default_text_size, []() { return false; });
 
 		Entity help_menu_entity = GetEntity(CreateMouseEventButton(
 			level, sf::Vector2f(31 * BLOCK_SIZE, -UI_BAR_HEIGHT / 2) * scale, narrow_size));

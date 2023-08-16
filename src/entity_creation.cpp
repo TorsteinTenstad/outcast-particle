@@ -190,6 +190,17 @@ EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::
 	return { entity, button_size };
 }
 
+EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, unsigned text_size, std::function<bool(void)> deactivate_function)
+{
+	auto [entity, button_size] = CreateButton(level, position, size, button_function, "", 120);
+	auto [icon_entity, icon_size] = CreateTexturedRectangle(level, position, sf::Vector2f(size.y, size.y), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
+	level.AddComponent<FillColor>(icon_entity);
+	level.GetComponent<Text>(entity)->size = text_size;
+	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
+	level.AddComponent<CanDisableButton>(icon_entity)->func = deactivate_function;
+	return { { entity, icon_entity }, button_size };
+}
+
 EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority)
 {
 	EntityHandle handle = CreateTexturedRectangle(level, level_size / 2.f, level_size, draw_priority, "", false);
