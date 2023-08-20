@@ -48,6 +48,7 @@ Game::Game() :
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>(); // Must
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&records_);
+	RegisterGameSystem<WormholeSystem>();
 	RegisterGameSystem<AnimatedPropertiesSystem>();
 	RegisterGameSystem<FaceSystem>(); //Must be below AnimatedPropertiesSystem
 	RegisterGameSystem<TextBoxSystem>();
@@ -166,12 +167,12 @@ Level& Game::SetLevel(std::string level_id)
 
 void Game::Update(float dt)
 {
-	globals.time = absolute_clock.getElapsedTime().asSeconds();
 	if (dt > 1.f / 20)
 	{
 		//std::cout << "Lag spike detected, overriding dt\n";
 		dt = 1.f / 20;
 	}
+	globals.time += dt;
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_entities_)
 	{

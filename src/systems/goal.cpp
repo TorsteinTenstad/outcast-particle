@@ -44,46 +44,4 @@ void GoalSystem::Update(Level& level, float dt)
 			break;
 		}
 	}
-	for (auto& [entity, intersection, radius, velocity, position] : level.GetEntitiesWith<Intersection, Radius, Velocity, Position>())
-	{
-		for (auto intersecting_id : intersection->intersecting_entities)
-		{
-			if (!level.HasComponents<Wormhole>(intersecting_id)) { continue; }
-			level.RemoveComponents<Acceleration, ReceivedForces, Trail, Charge>(entity);
-			FillColor* fill_color = level.EnsureExistenceOfComponent<FillColor>(entity);
-
-			assert(level.HasComponents<Position>(intersecting_id));
-			assert(level.HasComponents<Radius>(intersecting_id));
-			Position* wormhole_position = level.GetComponent<Position>(intersecting_id);
-			Radius* wormhole_radius = level.GetComponent<Radius>(intersecting_id);
-			sf::Vector2f pos_offset = wormhole_position->position - position->position;
-			float relative_depth = std::min(1.f, Magnitude(pos_offset) / wormhole_radius->radius);
-			float pos_angle = Angle(pos_offset);
-			float vel_angle = Angle(velocity->velocity);
-			float vel_magnitude = Magnitude(velocity->velocity);
-			float relative_angle = vel_angle - pos_angle;
-			float spiral_theta = 40 * PI * dt;
-			if (abs(relative_angle) > PI)
-			{
-				vel_angle = pos_angle - Sign(relative_angle) * (PI / 2 - spiral_theta);
-			}
-			else if (abs(relative_angle) > (PI / 2 - spiral_theta))
-			{
-				vel_angle = pos_angle + Sign(relative_angle) * (PI / 2 - spiral_theta);
-			}
-			else
-			{
-				vel_angle = vel_angle - relative_angle * 2 * dt;
-			}
-
-			radius->radius = 108 * std::sqrt(relative_depth);
-
-			float target_vel_magnitude = std::sqrt(relative_depth) * 8 * radius->radius;
-			float snap = 8 * dt;
-			vel_magnitude = (1 - snap) * vel_magnitude + (snap)*target_vel_magnitude;
-			velocity->velocity = Vector2fFromPolar(vel_magnitude, vel_angle);
-			float color_val = sf::Uint8(255.f * Smoothstep(0.02, 0.1, relative_depth));
-			fill_color->color = sf::Color(color_val, color_val, color_val, color_val);
-		}
-	}
 }
