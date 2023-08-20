@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/System/Vector2.hpp"
+#include "components/editable.hpp"
 #include "components/player.hpp"
 #include "level.hpp"
 #include "undo_system.hpp"
