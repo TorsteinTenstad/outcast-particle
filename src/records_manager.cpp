@@ -30,7 +30,13 @@ RecordsManager::~RecordsManager()
 void RecordsManager::UpdateRecord(std::string level_id, int coins_collected, bool neutral_was_used, float time)
 {
 	std::tuple<std::string, int, bool> key = { level_id, coins_collected, neutral_was_used };
-	records_[key] = time;
+	auto existing_entry = records_.find(key);
+	if (existing_entry == records_.end())
+	{
+		records_[key] = time;
+		return;
+	}
+	existing_entry->second = std::min(existing_entry->second, time);
 }
 
 std::optional<float> RecordsManager::GetRecord(std::string level_id, int coins_collected, bool neutral_was_used) const
