@@ -1,3 +1,4 @@
+#include "components/blueprint_menu_item.hpp"
 #include "components/button.hpp"
 #include "components/draw_info.hpp"
 #include "components/edit_mode.hpp"
@@ -21,6 +22,7 @@ void RescaleEditModeUi(Level& level)
 	float scale_rate = level.GetScale() / level.GetSingleton<EditModeUI>()->level_scale;
 	for (auto& [entity, edit_mode_ui_entity] : level.GetEntitiesWith<EditModeUIEntity>())
 	{
+		if (level.HasComponents<BlueprintMenuItem>(entity)) { continue; }
 		level.GetComponent<Position>(entity)->position *= scale_rate;
 		level.GetComponent<WidthAndHeight>(entity)->width_and_height *= scale_rate;
 		if (Text* text = level.RawGetComponent<Text>(entity))
