@@ -205,10 +205,10 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	//Create buttons, texts and add to scroll window
 	for (unsigned i = 0; i < description_texts.size(); ++i)
 	{
-		button_position.y += 3 * BLOCK_SIZE;
+		button_position.y = (5 + 1.5 * i) * BLOCK_SIZE;
 		auto [button_entities, button_height] = create_buttons[i](button_position);
 		sf::Vector2f description_position = sf::Vector2f(level_size.x - button_position.x, button_position.y);
-		auto [description_id, description_height] = CreateScrollingText(level, description_position, description_texts[i]);
+		auto [description_id, description_height] = CreateScrollingText(level, description_position, description_texts[i], 80);
 		scroll_window->entities.insert(scroll_window->entities.end(), { description_id });
 		scroll_window->entities.insert(scroll_window->entities.end(), button_entities.begin(), button_entities.end());
 	}
@@ -286,10 +286,10 @@ void Game::GoToMusicAndSoundMenu()
 	sf::Vector2f level_size = active_level_->GetSize();
 
 	std::vector<EntitiesCreator> EntitiesCreator = {
-		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, &globals.general_config.sound_volume),
+		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.sound_volume),
 		std::bind(
 			&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds)),
-		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, &globals.general_config.music_volume),
+		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.music_volume),
 	};
 
 	std::vector<std::string> description_texts = {

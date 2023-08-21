@@ -160,13 +160,13 @@ EntityHandle CreateMenuNavigator(ECSScene& level)
 EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key)
 {
 	std::vector<Entity> entities = {};
-	auto [entity, size] = CreateSizedButtonTemplate(level, position);
+	auto [entity, size] = CreateButtonTemplate(level, position, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE));
 	level.AddComponent<MouseInteractionDependentFillColor>(entity);
 	level.AddComponent<ReceivesButtonEvents>(entity);
 	level.AddComponent<KeyConfigButton>(entity)->key = key;
 	level.AddComponent<StickyButton>(entity);
 	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-	auto [button_text, button_text_size] = CreateScrollingText(level, position, HumanName(*key));
+	auto [button_text, button_text_size] = CreateScrollingText(level, position, HumanName(*key), 80);
 	level.GetComponent<KeyConfigButton>(entity)->button_text = &level.GetComponent<Text>(button_text)->content;
 
 	return { { entity, button_text }, size };
@@ -175,8 +175,8 @@ EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf:
 EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text)
 {
 
-	auto [entity, size] = CreateMenuButton(level, position, on_click, "");
-	auto [button_text_entity, button_text_size] = CreateScrollingText(level, position, button_text);
+	auto [entity, size] = CreateButton(level, position, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), on_click, "", 80);
+	auto [button_text_entity, button_text_size] = CreateScrollingText(level, position, button_text, 80);
 	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	level.AddComponent<BinaryOptionsButton>(entity)->button_text = &level.GetComponent<Text>(button_text_entity)->content;
 	return { { entity, button_text_entity }, size };
@@ -258,10 +258,10 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 	return menu_items;
 }
 
-EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f)
+EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int* f)
 {
 	//Add parent button:
-	auto [parent_button, size] = CreateSizedButtonTemplate(level, position);
+	auto [parent_button, parent_size] = CreateButtonTemplate(level, position, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE));
 	level.AddComponent<ReceivesButtonEvents>(parent_button);
 	level.AddComponent<MouseInteractionDependentFillColor>(parent_button, {});
 	level.AddComponent<SliderButton>(parent_button)->slider_value = f;
@@ -269,8 +269,8 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f
 	//Creating slider bar:
 	auto [slider_bar, slider_bar_height] = CreateSizedButtonTemplate(level, position);
 	level.GetComponent<DrawPriority>(slider_bar)->draw_priority = 101;
-	level.GetComponent<Position>(slider_bar)->position.x -= 1 * BLOCK_SIZE;
-	level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height = sf::Vector2f(7, 0.1) * float(BLOCK_SIZE);
+	level.GetComponent<Position>(slider_bar)->position.x -= 0.1 * size.x;
+	level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height = sf::Vector2f(size.x * 0.7, size.y * 0.1);
 
 	//Creating slider:
 	float slider_x_pos = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x * (*(f)*0.01 - 0.5);
@@ -278,18 +278,18 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, int* f
 	auto [slider, slider_height] = CreateSizedButtonTemplate(level, sf::Vector2f(slider_x_pos, position.y));
 	level.GetComponent<DrawPriority>(slider)->draw_priority = 101;
 	level.RemoveComponents<WidthAndHeight>(slider);
-	level.AddComponent<Radius>(slider)->radius = BLOCK_SIZE / 4;
+	level.AddComponent<Radius>(slider)->radius = size.y / 8;
 
 	//Adding text entity
-	float text_x_position = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x / 2 + 1.5 * BLOCK_SIZE;
-	auto [button_text, button_text_size] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), LeftPad(ToString(*(f)), 3));
+	float text_x_position = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x / 2 + 0.1 * size.x;
+	auto [button_text, button_text_size] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), LeftPad(ToString(*(f)), 4), 80);
 
 	//Connect slider bar, slider and text to background button
 	level.GetComponent<SliderButton>(parent_button)->slider_bar = slider_bar;
 	level.GetComponent<SliderButton>(parent_button)->slider_button = slider;
 	level.GetComponent<SliderButton>(parent_button)->slider_text = button_text;
 
-	return { { parent_button, slider_bar, slider, button_text }, size };
+	return { { parent_button, slider_bar, slider, button_text }, parent_size };
 }
 
 EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle, float scale)
