@@ -1,4 +1,4 @@
-#include "systems/edit_mode_blueprint_menu_functions.hpp"
+#include "systems/edit_mode_menus.hpp"
 #include "components/blueprint_menu_item.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"

@@ -21,14 +21,12 @@ public:
 
 	void Toggle(Level& level)
 	{
-		if (level.GetEntitiesWith<MenuEntityTag>().size() > 0)
-		{
-			Close(level);
-		}
-		else
-		{
-			Open(level);
-		}
+		IsOpen(level) ? Close(level) : Open(level);
+	}
+
+	bool IsOpen(Level& level)
+	{
+		return level.GetEntitiesWith<MenuEntityTag>().size() > 0;
 	}
 };
 
@@ -49,6 +47,8 @@ public:
 	void Create(Level& level);
 };
 
+class HelpMenuItem
+{};
 class HelpMenu : public MenuHelper<HelpMenuItem>
 {
 public:

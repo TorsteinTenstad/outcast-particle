@@ -20,7 +20,7 @@
 #include "edit_mode_actions/rotate_selected_fields.hpp"
 #include "edit_mode_actions/select_entities.hpp"
 #include "edit_mode_actions/set_property_value_of_selected.hpp"
-#include "edit_mode_blueprint_menu_functions.hpp"
+#include "edit_mode_menus.hpp"
 #include "globals.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/check_intersection.hpp"
