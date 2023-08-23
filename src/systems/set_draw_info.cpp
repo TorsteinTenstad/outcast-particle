@@ -55,6 +55,25 @@ static void UpdateStaticIndicator(Level& level, Entity entity)
 	level.GetComponent<DrawPriority>(indicator_entity)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority + 1;
 }
 
+class VelocityIndicator
+{};
+
+static Entity CreateVelocityIndicator(Level& level)
+{
+	Entity entity = GetEntity(level.CreateEntityWith<Position, Radius, DrawInfo, DrawPriority, VelocityIndicator>());
+	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\velocity_indicator.frag";
+	return entity;
+}
+
+static void UpdateVelocityIndicator(Level& level, Entity entity, float magnitude, float angle)
+{
+	Entity indicator_entity = GetSingletonChildId<VelocityIndicator>(level, entity, CreateVelocityIndicator);
+	level.GetComponent<Position>(indicator_entity)->position = level.GetComponent<Position>(entity)->position;
+	level.GetComponent<DrawPriority>(indicator_entity)->draw_priority = level.GetComponent<DrawPriority>(entity)->draw_priority + 1;
+	level.GetComponent<Radius>(indicator_entity)->radius = magnitude;
+	level.GetComponent<Shader>(indicator_entity)->float_uniforms["angle"] = angle;
+}
+
 void SetDrawInfoSystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() == EDIT_MODE)
@@ -76,11 +95,16 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 				}
 			}
 		}
+		for (auto [entity, velocity] : level.GetEntitiesWith<Velocity>())
+		{
+			UpdateVelocityIndicator(level, entity, Magnitude(velocity->velocity), Angle(velocity->velocity));
+		}
 	}
 	else
-	{
+	{ //This naive delete makes the entity references in parents Children component invalid. Because of the save/load structure of edit mode this is currently fine, but may cause problems in the future
 		level.DeleteEntitiesWith<StaticIndicator>();
 		level.DeleteEntitiesWith<StrengthIndicator>();
+		level.DeleteEntitiesWith<VelocityIndicator>();
 	}
 
 	for (auto const& [entity, charge, shader] : level.GetEntitiesWith<Charge, Shader>())
