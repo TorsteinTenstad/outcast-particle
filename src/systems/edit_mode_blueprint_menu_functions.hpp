@@ -49,8 +49,6 @@ public:
 	void Create(Level& level);
 };
 
-class HelpMenuItem
-{};
 class HelpMenu : public MenuHelper<HelpMenuItem>
 {
 public:

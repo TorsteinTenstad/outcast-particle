@@ -2,3 +2,6 @@
 
 class BlueprintMenuItem
 {};
+
+class HelpMenuItem
+{};

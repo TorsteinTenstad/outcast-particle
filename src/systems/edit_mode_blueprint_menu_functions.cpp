@@ -21,9 +21,11 @@ const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParti
 
 void BlueprintMenu::Create(Level& level)
 {
+	HelpMenu().Close(level);
+	auto level_size = level.GetSize();
 	{ //Background
-		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);
-		auto size = sf::Vector2f(BLUEPRINT_MENU_WIDTH, level.GetSize().y);
+		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level_size.y / 2.f);
+		auto size = sf::Vector2f(BLUEPRINT_MENU_WIDTH, level_size.y);
 		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
 		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
@@ -56,10 +58,12 @@ std::optional<Entity> BlueprintMenu::Update(Level& level)
 //Initial implementation used BlueprintMenuItem - component for both blueprint menu and music menu, but this didn't allow closing one and opening the other simultaneously.
 void MusicMenu::Create(Level& level)
 {
+	HelpMenu().Close(level);
 	float scale = level.GetScale();
+	auto level_size = level.GetSize();
 	{ //Background
-		auto position = sf::Vector2f(BLUEPRINT_MENU_WIDTH * 2 * scale, level.GetSize().y / 2.f);
-		auto size = sf::Vector2f(4 * BLUEPRINT_MENU_WIDTH * scale, level.GetSize().y);
+		auto position = sf::Vector2f(level_size.x - BLUEPRINT_MENU_WIDTH * 2 * scale, level_size.y / 2.f);
+		auto size = sf::Vector2f(4 * BLUEPRINT_MENU_WIDTH * scale, level_size.y);
 		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
 		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
@@ -83,11 +87,13 @@ void MusicMenu::Create(Level& level)
 		buttons.push_back(ToEntitiesHandle({ entity, size }));
 		level.GetComponent<DrawPriority>(entity)->draw_priority += UI_BASE_DRAW_PRIORITY;
 	}
-	VerticalEntityLayout(level, sf::Vector2f(2 * BLUEPRINT_MENU_WIDTH, BLOCK_SIZE) * scale, buttons, BLOCK_SIZE * scale / 2, StartEdge);
+	VerticalEntityLayout(level, sf::Vector2f(level_size.x - 2 * BLUEPRINT_MENU_WIDTH * scale, BLOCK_SIZE * scale), buttons, BLOCK_SIZE * scale / 2, StartEdge);
 }
 
 void HelpMenu::Create(Level& level)
 {
+	BlueprintMenu().Close(level);
+	MusicMenu().Close(level);
 	auto level_size = level.GetSize();
 	CreateScreenWideBlur(level, level_size, UI_BASE_DRAW_PRIORITY - 1);
 }
