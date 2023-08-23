@@ -19,11 +19,8 @@
 const std::vector<Blueprint> BLUEPRINT_ENTRIES { BPStaticParticle, BPMovingParticle, BPLaser, BPWall, BPElectricField, BPMagneticField, BPCoin };
 #define BLUEPRINT_MENU_WIDTH (3 * BLOCK_SIZE)
 
-void OpenBlueprintMenu(Level& level)
+void BlueprintMenu::Create(Level& level)
 {
-	CloseMusicMenu(level);
-	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<BlueprintMenuItem, NotSerialized, EditModeUIEntity>(entity); });
-
 	{ //Background
 		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level.GetSize().y / 2.f);
 		auto size = sf::Vector2f(BLUEPRINT_MENU_WIDTH, level.GetSize().y);
@@ -43,43 +40,22 @@ void OpenBlueprintMenu(Level& level)
 }
 
 //Handle selection from blueprint menu. Return any selected entity.
-std::optional<Entity> UpdateBlueprintMenu(Level& level)
+std::optional<Entity> BlueprintMenu::Update(Level& level)
 {
 	for (auto& [entity, pressed_this_frame, blueprint_menu_item, draw_priority, editable] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority, Editable>())
 	{
 		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
 		level.RemoveComponents<BlueprintMenuItem, NotSerialized>(entity);
-		CloseBlueprintMenu(level);
+		Close(level);
 		return entity;
 	}
-	return {};
-}
-
-void CloseBlueprintMenu(Level& level)
-{
-	level.DeleteEntitiesWith<BlueprintMenuItem>();
-}
-
-void ToggleBlueprintMenu(Level& level)
-{
-	if (level.GetEntitiesWith<BlueprintMenuItem>().size() > 0)
-	{
-		CloseBlueprintMenu(level);
-	}
-	else
-	{
-		OpenBlueprintMenu(level);
-	}
+	return std::nullopt;
 }
 
 //TODO: Should the following functions get their own file, or can these functions be combined with the function above?
 //Initial implementation used BlueprintMenuItem - component for both blueprint menu and music menu, but this didn't allow closing one and opening the other simultaneously.
-void OpenMusicMenu(Level& level)
+void MusicMenu::Create(Level& level)
 {
-	CloseBlueprintMenu(level);
-
-	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<MusicMenuItem, NotSerialized, EditModeUIEntity>(entity); });
-
 	float scale = level.GetScale();
 	{ //Background
 		auto position = sf::Vector2f(BLUEPRINT_MENU_WIDTH * 2 * scale, level.GetSize().y / 2.f);
@@ -108,21 +84,4 @@ void OpenMusicMenu(Level& level)
 		level.GetComponent<DrawPriority>(entity)->draw_priority += UI_BASE_DRAW_PRIORITY;
 	}
 	VerticalEntityLayout(level, sf::Vector2f(2 * BLUEPRINT_MENU_WIDTH, BLOCK_SIZE) * scale, buttons, BLOCK_SIZE * scale / 2, StartEdge);
-}
-
-void ToggleMusicMenu(Level& level)
-{
-	if (level.GetEntitiesWith<MusicMenuItem>().size() > 0)
-	{
-		CloseMusicMenu(level);
-	}
-	else
-	{
-		OpenMusicMenu(level);
-	}
-}
-
-void CloseMusicMenu(Level& level)
-{
-	level.DeleteEntitiesWith<MusicMenuItem>();
 }

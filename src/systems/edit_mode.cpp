@@ -89,9 +89,9 @@ void EditModeSystem::Update(Level& level, float dt)
 	// Blueprint menu:
 	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
 	{
-		ToggleBlueprintMenu(level);
+		BlueprintMenu().Toggle(level);
 	}
-	if (std::optional<Entity> selected_entity = UpdateBlueprintMenu(level))
+	if (std::optional<Entity> selected_entity = BlueprintMenu().Update(level))
 	{
 		Entity entity = selected_entity.value();
 		level.editor.Do<AddEntity>(level, selected_entity.value());
@@ -100,7 +100,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	//Music menu:
 	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::M])
 	{
-		ToggleMusicMenu(level);
+		MusicMenu().Toggle(level);
 	}
 
 	Tool current_tool = ComputeCurrentTool(level, cursor_and_keys_);
