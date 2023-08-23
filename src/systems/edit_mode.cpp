@@ -156,17 +156,6 @@ void EditModeSystem::Update(Level& level, float dt)
 		}
 	}
 
-	// Conditional deselect all:
-	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left]
-		&& level.GetEntitiesWithComponent<Selected>().size() != 0
-		&& level.GetEntitiesWith<PressedThisFrame, Selected>().size() == 0
-		&& level.GetEntitiesWith<PressedThisFrame, OnReleasedThisFrame>().size() == 0
-		&& !cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY]
-		&& !cursor_and_keys_.key_down[globals.key_config.SELECT_MULTIPLE_ENTITIES])
-	{
-		level.editor.Do<SelectEntities>(level, std::vector<Entity> {}, level.GetEntitiesWithComponent<Selected>());
-	}
-
 	// Move entities with the curser:
 	if (cursor_and_keys_.mouse_button_pressed_this_frame[sf::Mouse::Left])
 	{

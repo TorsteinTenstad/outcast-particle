@@ -95,4 +95,9 @@ void ButtonSystem::Update(Level& level, float dt)
 		on_released_this_frame->func();
 		return;
 	}
+	for (auto [entity, pressed, on_pressed] : level.GetEntitiesWith<Pressed, OnPressed>())
+	{
+		on_pressed->func();
+		return;
+	}
 }

@@ -198,7 +198,16 @@ EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f posi
 	level.GetComponent<Text>(entity)->size = text_size;
 	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
 	level.AddComponent<CanDisableButton>(icon_entity)->func = deactivate_function;
+	level.GetComponent<CanDisableButton>(icon_entity)->regain_button_events = false;
 	return { { entity, icon_entity }, button_size };
+}
+
+EntitiesHandle CreateCanDisableOnPressButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, unsigned text_size, std::function<bool(void)> deactivate_function)
+{
+	auto [entity, button_size] = CreateCanDisableButtonWithIcon(level, position, size, button_function, icon_path, text_size, deactivate_function);
+	level.GetComponent<OnReleasedThisFrame>(entity[0])->func = []() {};
+	level.AddComponent<OnPressed>(entity[0])->func = button_function;
+	return { entity, button_size };
 }
 
 EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority)

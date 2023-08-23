@@ -1,7 +1,9 @@
 #pragma once
-#include "components/physics-hpp"
+#include "components/physics.hpp"
+#include "editable.hpp"
 #include "level.hpp"
 #include "undo_system.hpp"
+#include "utils/container_operations.hpp"
 #include "utils/math.hpp"
 #include <vector>
 
@@ -17,15 +19,16 @@ private:
 	friend class ChangeVelocityOfSelected;
 
 public:
-	MoveSelectedWithCursor(Level& level, float magnitude_delta, float angle_delta) :
-		level_(level)
+	ChangeVelocityOfSelected(Level& level, float magnitude_delta, float angle_delta) :
+		level_(level),
+		magnitude_delta(magnitude_delta),
+		angle_delta(angle_delta)
 	{
 		for (auto [entity, selected, velocity] : level.GetEntitiesWith<Selected, Velocity>())
 		{
 			assert(level.HasComponents<Editable>(entity));
 			entities_.push_back(entity);
 			original_velocities_.push_back(velocity->velocity);
-			new_velocities_.push_back(LimitAndSnapToGrid(level, mouse_pos + selected->mouse_offset, BLOCK_SIZE / 2));
 		}
 	}
 	void Do()
@@ -52,8 +55,8 @@ public:
 	TryMerge(const ChangeVelocityOfSelected& next_action) override
 	{
 		if (next_action.entities_ != entities_) { return false; }
-		next_action.magnitude_delta += magnitude_delta;
-		next_action.angle_delta += angle_delta;
+		magnitude_delta += next_action.magnitude_delta;
+		angle_delta += next_action.angle_delta;
 		return true;
 	}
 };

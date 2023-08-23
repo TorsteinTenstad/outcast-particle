@@ -11,7 +11,7 @@ void CanDisableButtonSystem::Update(Level& level, float dt)
 	{
 		if (button->func())
 		{
-			if (level.HasComponents<OnReleasedThisFrame>(entity))
+			if (button->regain_button_events)
 			{
 				level.EnsureExistenceOfComponent<ReceivesButtonEvents>(entity);
 			}
