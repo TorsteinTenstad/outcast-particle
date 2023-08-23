@@ -17,9 +17,11 @@
 #include "systems/edit_mode_blueprint_menu_functions.hpp"
 #include "utils/string_parsing.hpp"
 
-void RescaleEditModeUi(Level& level)
+void RescaleEditModeUi(Level& level, EditModeUI* ui)
 {
-	float scale_rate = level.GetScale() / level.GetSingleton<EditModeUI>()->level_scale;
+	float level_scale = level.GetScale();
+	float scale_rate = level_scale / ui->level_scale;
+	ui->level_scale = level.GetScale();
 	for (auto& [entity, edit_mode_ui_entity] : level.GetEntitiesWith<EditModeUIEntity>())
 	{
 		if (level.HasComponents<BlueprintMenuItem>(entity)) { continue; }
@@ -60,8 +62,7 @@ static void UpdateUI(Level& level, EditModeUI* ui)
 {
 	if (ui->level_scale != level.GetScale())
 	{
-		RescaleEditModeUi(level);
-		ui->level_scale = level.GetScale();
+		RescaleEditModeUi(level, ui);
 	}
 }
 
@@ -80,13 +81,12 @@ static void SetupUI(Level& level, EditModeUI* ui)
 		int default_text_size = 200;
 
 		//Create add-entity-button:
-		auto [add_entity, add_size] = CreateButton(
-			level, sf::Vector2f(1.25 * BLOCK_SIZE, row_one), narrow_size, [&level]() { BlueprintMenu().Toggle(level); }, "+", default_text_size);
-		level.AddComponent<ShortcutKey>(add_entity)->key = sf::Keyboard::B;
+		CreateCanDisableButtonWithIcon(
+			level, sf::Vector2f(1.25 * BLOCK_SIZE, row_one), narrow_size, [&level]() { BlueprintMenu().Toggle(level); }, "content\\textures\\add.png", default_text_size, []() { return true; });
 
 		//Create delete-button:
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(w, row_one), narrow_size, [&level]() { level.editor.Do<DeleteSelected>(level); }, "content\\textures\\delete.png", 200, [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); });
+			level, sf::Vector2f(w, row_one), narrow_size, [&level]() { level.editor.Do<DeleteSelected>(level); }, "content\\textures\\delete_entity.png", 200, [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); });
 
 		//Create undo- and redo-buttons:
 		CreateCanDisableButtonWithIcon(
@@ -143,10 +143,7 @@ static void SetupUI(Level& level, EditModeUI* ui)
 		CreateCanDisableButtonWithIcon(
 			level, sf::Vector2f(30.75 * BLOCK_SIZE, row_two), narrow_size, [&]() { MusicMenu().Toggle(level); }, "content\\textures\\music.png", default_text_size, []() { return true; });
 
-		Entity help_menu_entity = GetEntity(CreateMouseEventButton(
-			level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size));
-		level.AddComponent<Text>(help_menu_entity)->content = "?";
-		level.GetComponent<Text>(help_menu_entity)->size = default_text_size;
-		level.AddComponent<ShowHelpMenuButton>(help_menu_entity);
+		CreateCanDisableButtonWithIcon(
+			level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { HelpMenu().Toggle(level); }, "content\\textures\\help.png", default_text_size, []() { return true; });
 	}
 }

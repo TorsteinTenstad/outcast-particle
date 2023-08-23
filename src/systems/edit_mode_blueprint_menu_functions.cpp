@@ -85,3 +85,9 @@ void MusicMenu::Create(Level& level)
 	}
 	VerticalEntityLayout(level, sf::Vector2f(2 * BLUEPRINT_MENU_WIDTH, BLOCK_SIZE) * scale, buttons, BLOCK_SIZE * scale / 2, StartEdge);
 }
+
+void HelpMenu::Create(Level& level)
+{
+	auto level_size = level.GetSize();
+	CreateScreenWideBlur(level, level_size, UI_BASE_DRAW_PRIORITY - 1);
+}

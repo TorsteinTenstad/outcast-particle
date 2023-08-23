@@ -33,7 +33,6 @@ Game::Game() :
 	RegisterGameSystem<PlayerSystem>();
 	RegisterGameSystem<SoundSystem>();
 	RegisterGameSystem<MusicSystem>();
-	RegisterGameSystem<HelpMenuSystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	RegisterGameSystem<ButtonSystem>();

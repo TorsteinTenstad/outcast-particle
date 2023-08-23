@@ -56,9 +56,3 @@ public:
 	Entity slider_button;
 	Entity slider_bar;
 };
-
-class ShowHelpMenuButton
-{
-public:
-	bool menu_open = false;
-};

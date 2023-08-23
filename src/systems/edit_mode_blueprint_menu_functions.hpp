@@ -41,7 +41,17 @@ public:
 	std::optional<Entity> Update(Level& level);
 };
 
+class MusicMenuItem
+{};
 class MusicMenu : public MenuHelper<MusicMenuItem>
+{
+public:
+	void Create(Level& level);
+};
+
+class HelpMenuItem
+{};
+class HelpMenu : public MenuHelper<HelpMenuItem>
 {
 public:
 	void Create(Level& level);
