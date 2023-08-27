@@ -14,6 +14,7 @@
 #include "components/size.hpp"
 #include "components/sticky_button.hpp"
 #include "components/text.hpp"
+#include "components/tooltip.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/math.hpp"
 #include "utils/string_manip.hpp"
@@ -192,21 +193,21 @@ EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::
 	return { entity, button_size };
 }
 
-EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, unsigned text_size, std::function<bool(void)> deactivate_function)
+EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function)
 {
 	auto [entity, button_size] = CreateButton(level, position, size, button_function, "", 120);
 	auto [icon_entity, icon_size] = CreateTexturedRectangle(level, position, sf::Vector2f(size.y, size.y), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
 	level.AddComponent<FillColor>(icon_entity);
-	level.GetComponent<Text>(entity)->size = text_size;
+	level.AddComponent<Tooltip>(entity)->text = tooltip_text;
 	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
 	level.AddComponent<CanDisableButton>(icon_entity)->func = deactivate_function;
 	level.GetComponent<CanDisableButton>(icon_entity)->regain_button_events = false;
 	return { { entity, icon_entity }, button_size };
 }
 
-EntitiesHandle CreateCanDisableOnPressButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, unsigned text_size, std::function<bool(void)> deactivate_function)
+EntitiesHandle CreateCanDisableOnPressButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function)
 {
-	auto [entity, button_size] = CreateCanDisableButtonWithIcon(level, position, size, button_function, icon_path, text_size, deactivate_function);
+	auto [entity, button_size] = CreateCanDisableButtonWithIcon(level, position, size, button_function, icon_path, tooltip_text, deactivate_function);
 	level.GetComponent<OnReleasedThisFrame>(entity[0])->func = []() {};
 	level.AddComponent<OnPressed>(entity[0])->func = button_function;
 	return { entity, button_size };

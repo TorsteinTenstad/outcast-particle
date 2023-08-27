@@ -57,8 +57,8 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf::Keyboard::Key* key);
 EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int draw_priority, std::string image_path, bool tile = false);
 EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string button_text, unsigned text_size, std::function<bool(void)> deactivate_function);
-EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, unsigned text_size, std::function<bool(void)> deactivate_function);
-EntitiesHandle CreateCanDisableOnPressButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, unsigned text_size, std::function<bool(void)> deactivate_function);
+EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function);
+EntitiesHandle CreateCanDisableOnPressButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function);
 EntityHandle CreateMenuNavigator(ECSScene& level);
 EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::function<void(void)> on_click, std::string button_text);
 EntityHandle CreateScreenWideBlur(ECSScene& level, sf::Vector2f level_size, int draw_priority);

@@ -1,6 +1,7 @@
 #pragma once
 #include "components/level_menu.hpp"
 #include "Components/sound_info.hpp"
+#include "Components/tooltip.hpp"
 #include "components/button.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
@@ -300,18 +301,20 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	// Group navigation buttons
 	for (int p : { -1, 1 })
 	{
-		auto [entity, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key, sound_info] =
-			level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey, SoundInfo>();
+		auto [entity, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key, sound_info, tooltip] =
+			level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey, SoundInfo, Tooltip>();
 
 		if (p == -1)
 		{
 			ui->prev_group_button_entity = entity;
 			shortcut_key->key = sf::Keyboard::Key::Left;
+			tooltip->text = "Go to previous level group (Left arrow)";
 		}
 		if (p == 1)
 		{
 			ui->next_group_button_entity = entity;
 			shortcut_key->key = sf::Keyboard::Key::Right;
+			tooltip->text = "Go to next level group (Right arrow)";
 		}
 		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
 		draw_info->image_path = "content\\textures\\white.png";

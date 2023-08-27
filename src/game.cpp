@@ -42,6 +42,7 @@ Game::Game() :
 	RegisterGameSystem<StickyButtonSystem>();
 	RegisterGameSystem<CanDisableButtonSystem>();
 	RegisterGameSystem<ExitGameSystem>(); //Should be close after ButtonSystem for exiting to go smoothly.
+	RegisterGameSystem<TooltipSystem>();
 	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
