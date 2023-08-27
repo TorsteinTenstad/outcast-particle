@@ -252,6 +252,7 @@ void Game::GoToGraphicsAndDisplayMenu()
 		BoolToStringAsEnabledOrDisabled(globals.general_config.forces_are_visualized),
 		BoolToStringAsEnabledOrDisabled(globals.general_config.use_ready_mode),
 		BoolToStringAsEnabledOrDisabled(globals.general_config.show_timer),
+		BoolToStringAsEnabledOrDisabled(globals.general_config.show_show_tooltips),
 		BoolToStringAsEnabledOrDisabled(globals.general_config.display_precise_badge_time)
 	};
 	std::vector<std::function<void(void)>> button_functions = {
@@ -259,6 +260,7 @@ void Game::GoToGraphicsAndDisplayMenu()
 		[](void) { globals.general_config.forces_are_visualized = !globals.general_config.forces_are_visualized; },
 		[](void) { globals.general_config.use_ready_mode = !globals.general_config.use_ready_mode; },
 		[](void) { globals.general_config.show_timer = !globals.general_config.show_timer; },
+		[](void) { globals.general_config.show_show_tooltips = !globals.general_config.show_show_tooltips; },
 		[](void) { globals.general_config.display_precise_badge_time = !globals.general_config.display_precise_badge_time; }
 	};
 	std::vector<std::string> description_texts = {
@@ -266,6 +268,7 @@ void Game::GoToGraphicsAndDisplayMenu()
 		"Show Forces",
 		"Use Ready Mode",
 		"Show timer",
+		"Show tooltips",
 		"Detailed Timer"
 	};
 

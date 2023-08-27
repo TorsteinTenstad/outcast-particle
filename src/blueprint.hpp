@@ -16,8 +16,7 @@ enum Blueprint
 	BPGoal = 8,
 	BPElectricField = 9,
 	BPMagneticField = 10,
-	BPText = 11,
-	BPTextPopupSpawner = 12
+	BPTextPopupSpawner = 11
 };
     
 std::string ToBlueprintTag(Blueprint blueprint);

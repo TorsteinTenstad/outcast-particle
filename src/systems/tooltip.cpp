@@ -12,6 +12,7 @@ constexpr float TOOLTIP_BACKGROUND_PADDING = 20;
 
 void TooltipSystem::Update(Level& level, float dt)
 {
+	if (!globals.general_config.show_show_tooltips) { return; }
 	sf::Vector2f level_size = level.GetSize();
 	for (const auto [entity, tooltip, draw_priority, position] : level.GetEntitiesWith<Tooltip, DrawPriority, Position>())
 	{

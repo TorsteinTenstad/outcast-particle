@@ -301,87 +301,6 @@ void DeserializeComponent(MagneticField* c, const std::string& entity_str_rep)
         }
     }
 }
-void SerializeComponent(const Text* c, std::string& str_rep)
-{
-	str_rep += "Text{";
-	str_rep += "size=";
-	str_rep += ToString(c->size);
-	str_rep += ";";
-	str_rep += "color=";
-	str_rep += ToString(c->color);
-	str_rep += ";";
-	str_rep += "outline_color=";
-	str_rep += ToString(c->outline_color);
-	str_rep += ";";
-	str_rep += "outline_thickness=";
-	str_rep += ToString(c->outline_thickness);
-	str_rep += ";";
-	str_rep += "font_path=";
-	str_rep += ToString(c->font_path);
-	str_rep += ";";
-	str_rep += "apply_shader=";
-	str_rep += ToString(c->apply_shader);
-	str_rep += ";";
-	str_rep += "origin=";
-	str_rep += ToString(c->origin);
-	str_rep += ";";
-	str_rep += "render=";
-	str_rep += ToString(c->render);
-	str_rep += ";";
-	str_rep += "content=";
-	str_rep += ToString(c->content);
-	str_rep += "}";
-}
-
-void DeserializeComponent(Text* c, const std::string& entity_str_rep)
-{
-    std::optional<std::string> component_str_opt = GetSubstrBetween(entity_str_rep, "Text{", "}");
-    if (!component_str_opt.has_value()) { return; }
-	std::string component_str = component_str_opt.value();
-
-    std::vector<std::string> variables = SplitString(component_str, ";");
-    for (auto variable : variables)
-    {
-        std::vector<std::string> statement_parts = SplitString(variable, "=");
-
-        if (statement_parts[0] == "size")
-        {
-            FromString(c->size, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "color")
-        {
-            FromString(c->color, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "outline_color")
-        {
-            FromString(c->outline_color, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "outline_thickness")
-        {
-            FromString(c->outline_thickness, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "font_path")
-        {
-            FromString(c->font_path, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "apply_shader")
-        {
-            FromString(c->apply_shader, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "origin")
-        {
-            FromString(c->origin, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "render")
-        {
-            FromString(c->render, statement_parts[1]);
-        }
-        else if (statement_parts[0] == "content")
-        {
-            FromString(c->content, statement_parts[1]);
-        }
-    }
-}
 void SerializeComponent(const TextPopupSpawner* c, std::string& str_rep)
 {
 	str_rep += "TextPopupSpawner{";
@@ -498,14 +417,6 @@ void Level::SaveToFile(std::string savefile_path)
             SerializeComponent(GetComponent<Position>(entity), entity_string);
             SerializeComponent(GetComponent<MagneticField>(entity), entity_string);
             SerializeComponent(GetComponent<WidthAndHeight>(entity), entity_string);
-        }
-        
-        if (tag->tag == "BPText")
-        {
-            SerializeComponent(GetComponent<Tag>(entity), entity_string);
-            SerializeComponent(GetComponent<Position>(entity), entity_string);
-            SerializeComponent(GetComponent<WidthAndHeight>(entity), entity_string);
-            SerializeComponent(GetComponent<Text>(entity), entity_string);
         }
         
         if (tag->tag == "BPTextPopupSpawner")
@@ -725,17 +636,6 @@ Error Level::LoadFromFile(std::string savefile_path)
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
         }
         
-        if (tag == "BPText")
-        {
-            AddComponent<ReceivesButtonEvents>(entity, {});
-            AddComponent<Editable>(entity, {});
-            AddComponent<DrawInfo>(entity, { "content\\textures\\transparent.png", false, 0 });
-            AddComponent<DrawPriority>(entity, { 100 });
-            DeserializeComponent(AddComponent<Position>(entity),line);
-            DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
-            DeserializeComponent(AddComponent<Text>(entity),line);
-        }
-        
         if (tag == "BPTextPopupSpawner")
         {
             AddComponent<ReceivesButtonEvents>(entity, {});
@@ -898,16 +798,6 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             AddComponent<MagneticField>(entity, { 0.1 });
             AddComponent<WidthAndHeight>(entity, { sf::Vector2f(240, 240) });
-            break;
-        case BPText:
-            AddComponent<ReceivesButtonEvents>(entity, {});
-            AddComponent<Editable>(entity, {});
-            AddComponent<DrawInfo>(entity, { "content\\textures\\transparent.png", false, 0 });
-            AddComponent<DrawPriority>(entity, { 100 });
-            AddComponent<Tag>(entity, {"BPText"});
-            AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
-            AddComponent<WidthAndHeight>(entity, { sf::Vector2f(240, 240) });
-            AddComponent<Text>(entity, {});
             break;
         case BPTextPopupSpawner:
             AddComponent<ReceivesButtonEvents>(entity, {});

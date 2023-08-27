@@ -149,17 +149,6 @@ class BPMagneticField : public BPEditableEntity
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
 };
 
-class BPText : public BPEditableEntity
-{
-	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
-	DrawPriority draw_priority = { 100 };
-
-	// [Serialize]
-	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
-
-	// [Serialize]
-	Text text = {};
-};
 class BPTextPopupSpawner : public BPEditableEntity
 {
 	DrawInfo draw_info = { "content\\textures\\transparent.png", false, 0 };
