@@ -18,23 +18,6 @@
 #include "systems/edit_mode_menus.hpp"
 #include "utils/string_parsing.hpp"
 
-void RescaleEditModeUi(Level& level, EditModeUI* ui)
-{
-	float level_scale = level.GetScale();
-	float scale_rate = level_scale / ui->level_scale;
-	ui->level_scale = level.GetScale();
-	for (auto& [entity, edit_mode_ui_entity] : level.GetEntitiesWith<EditModeUIEntity>())
-	{
-		if (level.HasComponents<BlueprintMenuItem>(entity)) { continue; }
-		level.GetComponent<Position>(entity)->position *= scale_rate;
-		level.GetComponent<WidthAndHeight>(entity)->width_and_height *= scale_rate;
-		if (Text* text = level.RawGetComponent<Text>(entity))
-		{
-			text->size *= scale_rate;
-		}
-	}
-}
-
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui, float dt);
 
@@ -60,12 +43,7 @@ void EditModeUISystem::Update(Level& level, float dt)
 }
 
 static void UpdateUI(Level& level, EditModeUI* ui)
-{
-	if (ui->level_scale != level.GetScale())
-	{
-		RescaleEditModeUi(level, ui);
-	}
-}
+{}
 
 static void SetupUI(Level& level, EditModeUI* ui, float dt)
 {

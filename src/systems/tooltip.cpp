@@ -3,6 +3,7 @@
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
 #include "components/position.hpp"
+#include "components/scale_with_level.hpp"
 #include "components/size.hpp"
 #include "entity_creation.hpp"
 #include "utils/get_size.hpp"
@@ -25,7 +26,7 @@ void TooltipSystem::Update(Level& level, float dt)
 		std::function<Entity(Level&)> create_popup = [content = tooltip->text,
 														 draw_priority = draw_priority->draw_priority + 2](Level& level) {
 			Entity entity = level.CreateEntity();
-			level.AddComponents<WidthAndHeight, Position, DrawInfo>(entity);
+			level.AddComponents<WidthAndHeight, Position, DrawInfo, ScaleWithLevel>(entity);
 			level.AddComponent<DrawPriority>(entity)->draw_priority = draw_priority;
 			level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\tooltip_background.frag";
 			Text* text = level.AddComponent<Text>(entity);

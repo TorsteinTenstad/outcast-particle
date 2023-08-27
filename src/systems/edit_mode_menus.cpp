@@ -6,6 +6,7 @@
 #include "components/editable.hpp"
 #include "components/not_serialized.hpp"
 #include "components/position.hpp"
+#include "components/scale_with_level.hpp"
 #include "components/size.hpp"
 #include "components/sticky_button.hpp"
 #include "ecs/entity_creation_observer.hpp"
@@ -59,6 +60,8 @@ std::optional<Entity> BlueprintMenu::Update(Level& level)
 void MusicMenu::Create(Level& level)
 {
 	HelpMenu().Close(level);
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ScaleWithLevel>(entity); });
+
 	float scale = level.GetScale();
 	auto level_size = level.GetSize();
 	{ //Background
@@ -111,6 +114,7 @@ void HelpMenu::Create(Level& level)
 {
 	BlueprintMenu().Close(level);
 	MusicMenu().Close(level);
+	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ScaleWithLevel>(entity); });
 	auto level_size = level.GetSize();
 	CreateScreenWideBlur(level, level_size, UI_BASE_DRAW_PRIORITY - 1);
 

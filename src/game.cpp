@@ -44,6 +44,7 @@ Game::Game() :
 	RegisterGameSystem<ExitGameSystem>(); //Should be close after ButtonSystem for exiting to go smoothly.
 	RegisterGameSystem<TooltipSystem>();
 	RegisterGameSystem<EditModeUISystem>();
+	RegisterGameSystem<ScaleWithLevelSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
 	RegisterGameSystem<BackgroundSystem>(); // Must

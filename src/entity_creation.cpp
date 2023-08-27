@@ -7,6 +7,7 @@
 #include "components/draw_info.hpp"
 #include "components/menu_navigator.hpp"
 #include "components/position.hpp"
+#include "components/scale_with_level.hpp"
 #include "components/scheduled_delete.hpp"
 #include "components/screen_wide_shader_effects.hpp"
 #include "components/scroll.hpp"
@@ -199,6 +200,8 @@ EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f posi
 	auto [icon_entity, icon_size] = CreateTexturedRectangle(level, position, sf::Vector2f(size.y, size.y), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
 	level.AddComponent<FillColor>(icon_entity);
 	level.AddComponent<Tooltip>(entity)->text = tooltip_text;
+	level.AddComponent<ScaleWithLevel>(entity);
+	level.AddComponent<ScaleWithLevel>(icon_entity);
 	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
 	level.AddComponent<CanDisableButton>(icon_entity)->func = deactivate_function;
 	level.GetComponent<CanDisableButton>(icon_entity)->regain_button_events = false;
@@ -233,7 +236,7 @@ EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level
 }
 EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities, float scale)
 {
-	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<BlockingPopupMenuEntity>(entity); });
+	auto add_delete_identifier = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponents<BlockingPopupMenuEntity, ScaleWithLevel>(entity); });
 	for (Entity entity : GetEntities(middle_entities))
 	{
 		level.AddComponent<BlockingPopupMenuEntity>(entity);
