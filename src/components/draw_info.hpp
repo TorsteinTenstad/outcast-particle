@@ -2,6 +2,10 @@
 #include "SFML/Graphics/Color.hpp"
 #include <string>
 
+const sf::Color HOVERED_COLOR = sf::Color(200, 200, 200);
+const sf::Color PRESSED_COLOR = sf::Color(120, 120, 120);
+const sf::Color DEFAULT_COLOR = sf::Color(150, 150, 150);
+
 class DrawInfo
 {
 public:
@@ -25,9 +29,9 @@ public:
 class MouseInteractionDependentFillColor
 {
 public:
-	sf::Color hovered_color = sf::Color(200, 200, 200);
-	sf::Color pressed_color = sf::Color(120, 120, 120);
-	sf::Color default_color = sf::Color(150, 150, 150);
+	sf::Color hovered_color = HOVERED_COLOR;
+	sf::Color pressed_color = PRESSED_COLOR;
+	sf::Color default_color = DEFAULT_COLOR;
 };
 
 class ChargeDependentDrawInfo

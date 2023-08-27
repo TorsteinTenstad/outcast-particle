@@ -1,4 +1,5 @@
 #pragma once
+#include "components/text.hpp"
 #include "level.hpp"
 #include <string>
 #include <vector>
@@ -43,7 +44,7 @@ EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std:
 EntitiesHandle VerticalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_creators, float spacing, UiOrigin ui_origin = Center);
 EntitiesHandle HorizontalEntityLayout(ECSScene& level, sf::Vector2f position, std::vector<EntitiesHandle> entities_handles, float spacing, UiOrigin ui_origin = Center);
 EntityHandle CreateScrollWindow(ECSScene& level, sf::Vector2f position, sf::Vector2f width_and_height, float entity_height);
-EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size = 120, std::optional<sf::Vector2f> layout_size = std::nullopt);
+EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size = 120, std::optional<sf::Vector2f> layout_size = std::nullopt, TextOrigin text_origin = TextOrigin::REFERENCE_HEIGHT_CENTER);
 EntityHandle CreateTextPopup(ECSScene& level, sf::Vector2f position, std::string content, float duration, bool has_backdrop);
 EntityHandle CreateScrollingText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size = 120);
 EntityHandle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size);

@@ -42,14 +42,16 @@ EntityHandle CreateScrollWindow(ECSScene& level, sf::Vector2f position, sf::Vect
 	return { entity, width_and_height };
 }
 
-EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size, std::optional<sf::Vector2f> layout_size)
+EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string content, unsigned int text_size, std::optional<sf::Vector2f> layout_size, TextOrigin text_origin)
 {
 	Entity entity = level.CreateEntity();
 	level.AddComponent<Position>(entity)->position = position;
 	level.AddComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
 	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll.frag";
-	level.AddComponent<Text>(entity)->content = content;
-	level.GetComponent<Text>(entity)->size = text_size;
+	Text* text = level.AddComponent<Text>(entity);
+	text->content = content;
+	text->size = text_size;
+	text->origin = text_origin;
 
 	sf::Vector2f width_and_height = layout_size.value_or(sf::Vector2f(float(BLOCK_SIZE) * 10.f * content.size() / 17.f, 2 * text_size));
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
