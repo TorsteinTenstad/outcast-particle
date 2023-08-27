@@ -29,9 +29,9 @@ bool CursorIsOutsideScrollWindowContainingEntity(Level& level, Entity entity, sf
 }
 
 // Return vector has elements containing (draw_priority, entity)
-std::vector<std::tuple<Entity, Entity>> GetEntitiesIntersectingMouse(Level& level, sf::Vector2f cursor_position)
+std::vector<std::tuple<int, Entity>> GetEntitiesIntersectingMouse(Level& level, sf::Vector2f cursor_position)
 {
-	std::vector<std::tuple<Entity, Entity>> entities_intersecting_mouse;
+	std::vector<std::tuple<int, Entity>> entities_intersecting_mouse;
 	for (auto [entity, radius, can_receive_press, draw_priority, position] : level.GetEntitiesWith<Radius, ReceivesButtonEvents, DrawPriority, Position>())
 	{
 		if (Magnitude(cursor_position - position->position) > radius->radius) { continue; }
@@ -84,14 +84,24 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 
 	std::vector<std::tuple<Entity, bool, bool, bool>> hovering_entities = {};
 
-	std::vector<std::tuple<Entity, Entity>> entities_intersecting_mouse = {};
+	std::vector<std::tuple<int, Entity>> entities_intersecting_mouse = {};
 	entities_intersecting_mouse = GetEntitiesIntersectingMouse(level, cursor_and_keys_.cursor_position);
 
 	auto entities_with_menu_navigator = level.GetEntitiesWith<MenuNavigator>();
 
-	if (entities_intersecting_mouse.size() > 0)
+	bool pull_from_entities_intersecting_mouse = true;
+	while (entities_intersecting_mouse.size() > 0 && pull_from_entities_intersecting_mouse)
 	{
-		Entity top_intersecting_id = std::get<1>(*max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end()));
+		auto max_it = max_element(entities_intersecting_mouse.begin(), entities_intersecting_mouse.end());
+		Entity top_intersecting_id = std::get<1>(*max_it);
+		if (level.GetComponent<ReceivesButtonEvents>(top_intersecting_id)->block_lower_priority_entities)
+		{
+			pull_from_entities_intersecting_mouse = false;
+		}
+		else
+		{
+			entities_intersecting_mouse.erase(max_it);
+		}
 
 		bool mouse_hover_inactive =
 			entities_with_menu_navigator.size() > 0

@@ -4,6 +4,8 @@
 
 class ReceivesButtonEvents
 {
+public:
+	bool block_lower_priority_entities = true;
 };
 
 class Pressed
