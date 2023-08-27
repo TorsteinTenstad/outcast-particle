@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics/Color.hpp"
+#include <optional>
 #include <string>
 
 const sf::Color HOVERED_COLOR = sf::Color(200, 200, 200);
@@ -9,7 +10,7 @@ const sf::Color DEFAULT_COLOR = sf::Color(150, 150, 150);
 class DrawInfo
 {
 public:
-	std::string image_path = "";
+	std::optional<std::string> image_path = std::nullopt;
 	bool tile = false;
 	int quarter_turn_rotations = 0;
 };

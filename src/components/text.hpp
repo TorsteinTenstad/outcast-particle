@@ -1,5 +1,7 @@
 #pragma once
 #include "SFML/Graphics/Color.hpp"
+#include "SFML/System/Vector2.hpp"
+#include <optional>
 #include <string>
 
 class TextBox
@@ -35,4 +37,7 @@ public:
 	std::string font_path = "content\\monof55.ttf";
 	bool apply_shader = false;
 	TextOrigin origin = TextOrigin::REFERENCE_HEIGHT_CENTER;
+	bool render = true;
+	std::optional<sf::Vector2f> result_origin = std::nullopt;
+	std::optional<sf::Vector2f> result_size = std::nullopt;
 };

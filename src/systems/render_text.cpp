@@ -61,15 +61,21 @@ void RenderTextSystem::Update(Level& level, float dt)
 			sf::Text alignment_reference = sf::Text("0N", font_[text->font_path], text->size);
 			text_height_[text->font_path][text->size] = alignment_reference.getLocalBounds().height / 2 + alignment_reference.getLocalBounds().top;
 		}
-		text_[entity].setString(text->content);
-		text_[entity].setFont(font_[text->font_path]);
-		text_[entity].setCharacterSize(text->size);
-		sf::FloatRect bounds = text_[entity].getLocalBounds();
-		text_[entity].setOrigin(GetOrigin(text->origin, bounds, text_height_[text->font_path][text->size]));
-		text_[entity].setPosition(position->position);
-		text_[entity].setFillColor(text->color);
-		text_[entity].setOutlineColor(text->outline_color);
-		text_[entity].setOutlineThickness(text->outline_thickness);
-		level.drawables[draw_priority->draw_priority].push_back({ &text_[entity], text->apply_shader ? entity : std::optional<Entity>() });
+		sf::Text& sfml_text = text_[entity];
+		sfml_text.setString(text->content);
+		sfml_text.setFont(font_[text->font_path]);
+		sfml_text.setCharacterSize(text->size);
+		sf::FloatRect bounds = sfml_text.getLocalBounds();
+		sf::Vector2f origin = GetOrigin(text->origin, bounds, text_height_[text->font_path][text->size]);
+		sfml_text.setOrigin(origin);
+		sfml_text.setPosition(position->position);
+		sfml_text.setFillColor(text->color);
+		sfml_text.setOutlineColor(text->outline_color);
+		sfml_text.setOutlineThickness(text->outline_thickness);
+		text->result_origin = origin;
+		sf::FloatRect local_bounds = sfml_text.getLocalBounds();
+		text->result_size = sf::Vector2f(local_bounds.width, local_bounds.height);
+		if (!text->render) { continue; }
+		level.drawables[draw_priority->draw_priority].push_back({ &sfml_text, text->apply_shader ? entity : std::optional<Entity>() });
 	}
 }

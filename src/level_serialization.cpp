@@ -322,6 +322,12 @@ void SerializeComponent(const Text* c, std::string& str_rep)
 	str_rep += "apply_shader=";
 	str_rep += ToString(c->apply_shader);
 	str_rep += ";";
+	str_rep += "origin=";
+	str_rep += ToString(c->origin);
+	str_rep += ";";
+	str_rep += "render=";
+	str_rep += ToString(c->render);
+	str_rep += ";";
 	str_rep += "content=";
 	str_rep += ToString(c->content);
 	str_rep += "}";
@@ -361,6 +367,14 @@ void DeserializeComponent(Text* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "apply_shader")
         {
             FromString(c->apply_shader, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "origin")
+        {
+            FromString(c->origin, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "render")
+        {
+            FromString(c->render, statement_parts[1]);
         }
         else if (statement_parts[0] == "content")
         {

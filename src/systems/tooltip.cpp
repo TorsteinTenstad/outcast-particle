@@ -7,29 +7,53 @@
 #include "entity_creation.hpp"
 #include "utils/get_size.hpp"
 
+constexpr float TOOLTIP_BACKGROUND_PADDING = 20;
+
 void TooltipSystem::Update(Level& level, float dt)
 {
+	sf::Vector2f level_size = level.GetSize();
 	for (const auto [entity, tooltip, draw_priority, position] : level.GetEntitiesWith<Tooltip, DrawPriority, Position>())
 	{
 		if (!level.HasComponents<Hovered>(entity))
 		{
 			DeleteChildrenOwnedBy<Tooltip>(level, entity);
+			tooltip->hovered_s = 0;
 			continue;
 		}
-		std::function<Entity(Level&)> create_popup = [position = position->position + GetSize(level, entity, false) / 2.f,
-														 content = tooltip->text,
-														 draw_priority = draw_priority->draw_priority + 1](Level& level) {
+		tooltip->hovered_s += dt;
+		if (tooltip->hovered_s < tooltip->delay_s) { continue; }
+		std::function<Entity(Level&)> create_popup = [content = tooltip->text,
+														 draw_priority = draw_priority->draw_priority + 2](Level& level) {
 			Entity entity = level.CreateEntity();
-			level.AddComponent<Position>(entity)->position = position;
+			level.AddComponents<WidthAndHeight, Position, DrawInfo>(entity);
 			level.AddComponent<DrawPriority>(entity)->draw_priority = draw_priority;
-			level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll.frag";
+			level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\tooltip_background.frag";
 			Text* text = level.AddComponent<Text>(entity);
 			text->content = content;
-			text->size = 60;
-			text->origin = TextOrigin::TOP_LEFT;
-			level.AddComponent<WidthAndHeight>(entity);
+			text->size = 100 * level.GetScale();
+			text->origin = TextOrigin::CENTER_CENTER;
+			text->render = false;
+			text->color = sf::Color(220, 220, 220);
 			return entity;
 		};
 		Entity popup = GetSingletonChildId<Tooltip>(level, entity, create_popup);
+
+		Text* text = level.GetComponent<Text>(popup);
+		if (text->render) { continue; }
+		if (!text->result_size.has_value()) { continue; }
+		sf::Vector2f width_and_height = text->result_size.value() + sf::Vector2f(1, 1) * 2.f * TOOLTIP_BACKGROUND_PADDING;
+		sf::Vector2f entity_size = GetSize(level, entity, false);
+		sf::Vector2f pos = position->position + entity_size / 2.f + width_and_height / 2.f;
+		if (pos.x + width_and_height.x / 2 > level_size.x)
+		{
+			pos.x -= entity_size.x + width_and_height.x;
+		}
+		if (pos.y + width_and_height.y / 2 > level_size.y)
+		{
+			pos.y -= entity_size.y + width_and_height.y;
+		}
+		level.GetComponent<Position>(popup)->position = pos;
+		level.GetComponent<WidthAndHeight>(popup)->width_and_height = width_and_height;
+		text->render = true;
 	}
 }

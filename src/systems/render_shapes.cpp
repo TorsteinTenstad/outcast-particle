@@ -74,7 +74,7 @@ void RenderShapesSystem::Update(Level& level, float dt)
 			assert(false);
 		}
 
-		sf::Texture* texture = GetLoadedSFMLTexture(draw_info->image_path);
+		sf::Texture* texture = GetLoadedSFMLTexture(draw_info->image_path.value_or(""));
 		sf::Vector2f size = GetSize(level, entity, false);
 		sf::Color fill_color = level.HasComponents<FillColor>(entity) ? level.GetComponent<FillColor>(entity)->color : sf::Color::White;
 		EntityBoundDrawable entity_bound_drawable = RenderShape(entity, shape, texture, size, fill_color, draw_info->tile, position);

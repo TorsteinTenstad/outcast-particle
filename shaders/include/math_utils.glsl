@@ -48,6 +48,11 @@ float tanh(float x)
     return (exp(x)-exp(-x))/(exp(x)+exp(-x));
 }
 
+float min_component(vec2 v)
+{
+    return min(v.x, v.y);
+}
+
 float max_component(vec2 v)
 {
     return max(v.x, v.y);

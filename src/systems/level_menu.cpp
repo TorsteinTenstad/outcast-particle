@@ -366,13 +366,15 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		row_items.push_back(main_button);
 		const std::vector<std::vector<Entity>*> ui_button_containers = { &ui->rename_level_button_entities, &ui->edit_level_button_entities, &ui->delete_level_button_entities };
 		const std::vector<std::string> icon_paths = { "content\\textures\\edit.png", "content\\textures\\brush.png", "content\\textures\\delete.png" };
-		for (const auto& [ui_container, icon_path] : zip(ui_button_containers, icon_paths))
+		const std::vector<std::string> tooltips = { "Rename level", "Edit level", "Delete level" };
+		for (const auto& [ui_container, icon_path, tooltip] : zip(ui_button_containers, icon_paths, tooltips))
 		{
 			EntityHandle button_handle = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT));
 			EntityHandle icon_handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
 			Entity button_id = GetEntity(button_handle);
 			level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 			level.AddComponent<Shader>(GetEntity(icon_handle))->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.AddComponent<Tooltip>(button_id)->text = tooltip;
 			row_items.push_back(ToEntitiesHandle(button_handle, icon_handle));
 			ui_container->push_back(button_id);
 		}
