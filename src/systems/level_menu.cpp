@@ -301,28 +301,41 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	// Group navigation buttons
 	for (int p : { -1, 1 })
 	{
-		auto [entity, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, text, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key, sound_info, tooltip] =
-			level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, Text, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey, SoundInfo, Tooltip>();
+		sf::Vector2f pos = sf::Vector2f(BUTTONS_PANEL_CENTER + p * (4) * float(BLOCK_SIZE), TITLE_H / 2);
+		sf::Vector2f w_h = sf::Vector2f(2, 2) * float(BLOCK_SIZE);
+		{
+			auto [entity, draw_info, shader, fill_color, mouse_interaction_dependent_fill_color, draw_priority, width_and_height, position, receives_mouse_events, shortcut_key, sound_info, can_disable_button, tooltip] =
+				level.CreateEntityWith<DrawInfo, Shader, FillColor, MouseInteractionDependentFillColor, DrawPriority, WidthAndHeight, Position, ReceivesButtonEvents, ShortcutKey, SoundInfo, CanDisableButton, Tooltip>();
+			if (p == -1)
+			{
+				ui->prev_group_button_entity = entity;
+				shortcut_key->key = sf::Keyboard::Key::Left;
+				tooltip->text = "Go to previous level group [Left arrow]";
+			}
+			if (p == 1)
+			{
+				ui->next_group_button_entity = entity;
+				shortcut_key->key = sf::Keyboard::Key::Right;
+				tooltip->text = "Go to next level group [Right arrow]";
+			}
+			can_disable_button->func = [is_end = (p == -1) ? PrevInMap(level_groups, at_group)->first == at_group : NextInMap(level_groups, at_group)->first == at_group]() { return !is_end; };
+			position->position = pos;
+			width_and_height->width_and_height = w_h;
+			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
+			shader->fragment_shader_path = "shaders\\round_corners.frag";
+			sound_info->sound_paths = { { ON_CLICK, "content\\sounds\\click.wav" } };
+		}
 
-		if (p == -1)
 		{
-			ui->prev_group_button_entity = entity;
-			shortcut_key->key = sf::Keyboard::Key::Left;
-			tooltip->text = "Go to previous level group (Left arrow)";
+			auto [entity, draw_info, draw_priority, width_and_height, position, can_disable_button, fill_color] =
+				level.CreateEntityWith<DrawInfo, DrawPriority, WidthAndHeight, Position, CanDisableButton, FillColor>();
+			can_disable_button->func = [is_end = (p == -1) ? PrevInMap(level_groups, at_group)->first == at_group : NextInMap(level_groups, at_group)->first == at_group]() { return !is_end; };
+			can_disable_button->regain_button_events = false;
+			draw_info->image_path = (p == -1) ? "content\\textures\\prev.png" : "content\\textures\\next.png";
+			position->position = pos;
+			width_and_height->width_and_height = w_h;
+			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
 		}
-		if (p == 1)
-		{
-			ui->next_group_button_entity = entity;
-			shortcut_key->key = sf::Keyboard::Key::Right;
-			tooltip->text = "Go to next level group (Right arrow)";
-		}
-		draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-		draw_info->image_path = "content\\textures\\white.png";
-		width_and_height->width_and_height = sf::Vector2f(2, 2) * float(BLOCK_SIZE);
-		text->content = p < 0 ? "<" : ">";
-		shader->fragment_shader_path = "shaders\\round_corners.frag";
-		position->position = sf::Vector2f(BUTTONS_PANEL_CENTER + p * (4) * float(BLOCK_SIZE), TITLE_H / 2);
-		sound_info->sound_paths = { { ON_CLICK, "content\\sounds\\click.wav" } };
 	}
 	// Scroll window
 	auto [menu_navigator_entity, _] = CreateMenuNavigator(level);
@@ -400,9 +413,11 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	if (levels_are_editable)
 	{
-		EntitiesHandle new_level_button = AddLevelMenuButton(level, "+", BUTTONS_WIDTH);
-		ui->new_level_button_id = std::get<std::vector<Entity>>(new_level_button)[0];
-		scroll_menu_items.push_back(new_level_button);
+		EntitiesHandle new_level_button_handle = AddLevelMenuButton(level, "+", BUTTONS_WIDTH);
+		Entity new_level_button_entity = std::get<std::vector<Entity>>(new_level_button_handle)[0];
+		level.AddComponent<Tooltip>(new_level_button_entity)->text = "Create a new level";
+		ui->new_level_button_id = new_level_button_entity;
+		scroll_menu_items.push_back(new_level_button_handle);
 	}
 	auto [scroll_menu_item_entities, scroll_menu_items_size] = VerticalEntityLayout(level, sf::Vector2f(BUTTONS_PANEL_CENTER, TITLE_H), scroll_menu_items, BUTTONS_SPACING, StartEdge);
 	scroll_window->entities = scroll_menu_item_entities;
