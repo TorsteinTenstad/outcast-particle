@@ -5,6 +5,7 @@
 #include "components/edit_mode.hpp"
 #include "components/editable.hpp"
 #include "components/not_serialized.hpp"
+#include "components/player.hpp"
 #include "components/position.hpp"
 #include "components/scale_with_level.hpp"
 #include "components/size.hpp"
@@ -55,8 +56,6 @@ std::optional<Entity> BlueprintMenu::Update(Level& level)
 	return std::nullopt;
 }
 
-//TODO: Should the following functions get their own file, or can these functions be combined with the function above?
-//Initial implementation used BlueprintMenuItem - component for both blueprint menu and music menu, but this didn't allow closing one and opening the other simultaneously.
 void MusicMenu::Create(Level& level)
 {
 	HelpMenu().Close(level);
@@ -71,26 +70,43 @@ void MusicMenu::Create(Level& level)
 		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
 	std::vector<EntitiesHandle> buttons;
+
+	EntityHandle player_option_title = CreateText(level, sf::Vector2f(0, 0), "Player Controls", 200 * scale);
+	buttons.push_back(ToEntitiesHandle(player_option_title));
+
+	auto [entity, size] = CreateButton(
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
+	level.AddComponent<StickyButton>(entity);
+
+	auto [entity, size] = CreateButton(
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
+	level.AddComponent<StickyButton>(entity);
+
+	auto [entity, size] = CreateButton(
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
+	level.AddComponent<StickyButton>(entity);
+
 	std::string path = "content\\music";
 
-	EntityHandle title = CreateText(level, sf::Vector2f(0, 0), "Select Music", 200 * scale);
-	buttons.push_back(ToEntitiesHandle(title));
+	EntityHandle music_title = CreateText(level, sf::Vector2f(0, 0), "Select Music", 200 * scale);
+	buttons.push_back(ToEntitiesHandle(music_title));
 
 	for (const auto& entry : std::filesystem::directory_iterator(path))
 	{
 		std::string music_path = entry.path().string();
 
 		auto [entity, size] = CreateButton(
-			level, sf::Vector2f(0, 0), sf::Vector2f(10, 2) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, SplitString(music_path, "\\").back(), 120);
+			level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, SplitString(SplitString(music_path, "\\").back(), ".")[0], 60);
 		level.AddComponent<StickyButton>(entity);
 		if (level.music_path == music_path)
 		{
 			level.AddComponent<StickyButtonDown>(entity);
 		}
 		buttons.push_back(ToEntitiesHandle({ entity, size }));
-		level.GetComponent<DrawPriority>(entity)->draw_priority += UI_BASE_DRAW_PRIORITY;
+		level.GetComponent<DrawPriority>(entity)->draw_priority += 1;
 	}
-	VerticalEntityLayout(level, sf::Vector2f(level_size.x - 2 * BLUEPRINT_MENU_WIDTH * scale, BLOCK_SIZE * scale), buttons, BLOCK_SIZE * scale / 2, StartEdge);
+
+	VerticalEntityLayout(level, sf::Vector2f(level_size.x - 2 * BLUEPRINT_MENU_WIDTH * scale, BLOCK_SIZE * scale), buttons, BLOCK_SIZE * scale / 4, StartEdge);
 }
 
 static EntitiesHandle CreateIcon(Level& level, std::string image_path)
