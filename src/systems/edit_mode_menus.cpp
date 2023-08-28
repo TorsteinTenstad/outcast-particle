@@ -66,7 +66,7 @@ void MusicMenu::Create(Level& level)
 	{ //Background
 		auto position = sf::Vector2f(level_size.x - BLUEPRINT_MENU_WIDTH * 2 * scale, level_size.y / 2.f);
 		auto size = sf::Vector2f(4 * BLUEPRINT_MENU_WIDTH * scale, level_size.y);
-		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
+		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY - 1, "content\\textures\\gray.png", false);
 		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
 	std::vector<EntitiesHandle> buttons;
@@ -74,17 +74,23 @@ void MusicMenu::Create(Level& level)
 	EntityHandle player_option_title = CreateText(level, sf::Vector2f(0, 0), "Player Controls", 200 * scale);
 	buttons.push_back(ToEntitiesHandle(player_option_title));
 
-	auto [entity, size] = CreateButton(
+	auto [button_1, size_1] = CreateButton(
 		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
-	level.AddComponent<StickyButton>(entity);
+	level.AddComponent<StickyButton>(button_1);
+	if (level.GetSingleton<Player>()->can_switch_charge) { level.AddComponent<StickyButtonDown>(button_1); }
+	buttons.push_back(ToEntitiesHandle({ button_1, size_1 }));
 
-	auto [entity, size] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
-	level.AddComponent<StickyButton>(entity);
+	auto [button_2, size_2] = CreateButton(
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_go_neutral = !level.GetSingleton<Player>()->can_go_neutral; }, "Go Neutral", 60);
+	level.AddComponent<StickyButton>(button_2);
+	if (level.GetSingleton<Player>()->can_switch_charge) { level.AddComponent<StickyButtonDown>(button_2); }
+	buttons.push_back(ToEntitiesHandle({ button_2, size_2 }));
 
-	auto [entity, size] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
-	level.AddComponent<StickyButton>(entity);
+	auto [button_3, size_3] = CreateButton(
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { auto& move_force = level.GetSingleton<Player>()->move_force; move_force == 0 ? move_force = 1000 : move_force = 0; }, "WASD", 60);
+	level.AddComponent<StickyButton>(button_3);
+	if (!level.GetSingleton<Player>()->move_force == 0) { level.AddComponent<StickyButtonDown>(button_3); }
+	buttons.push_back(ToEntitiesHandle({ button_3, size_3 }));
 
 	std::string path = "content\\music";
 
@@ -97,7 +103,8 @@ void MusicMenu::Create(Level& level)
 
 		auto [entity, size] = CreateButton(
 			level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, SplitString(SplitString(music_path, "\\").back(), ".")[0], 60);
-		level.AddComponent<StickyButton>(entity);
+		level.AddComponent<StickyButton>(entity)->enforce_down = true;
+		level.GetComponent<StickyButton>(entity)->channel = 1;
 		if (level.music_path == music_path)
 		{
 			level.AddComponent<StickyButtonDown>(entity);

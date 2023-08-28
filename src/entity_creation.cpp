@@ -168,7 +168,7 @@ EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf:
 	level.AddComponent<MouseInteractionDependentFillColor>(entity);
 	level.AddComponent<ReceivesButtonEvents>(entity);
 	level.AddComponent<KeyConfigButton>(entity)->key = key;
-	level.AddComponent<StickyButton>(entity);
+	level.AddComponent<StickyButton>(entity)->channel = 1;
 	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
 	auto [button_text, button_text_size] = CreateScrollingText(level, position, HumanName(*key), 80);
 	level.GetComponent<KeyConfigButton>(entity)->button_text = &level.GetComponent<Text>(button_text)->content;
