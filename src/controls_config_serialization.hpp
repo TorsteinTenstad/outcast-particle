@@ -27,8 +27,20 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += "PLAYER_GO_NEUTRAL=";
 	str_rep += ToString(c->PLAYER_GO_NEUTRAL);
 	str_rep += ";";
-	str_rep += "MENU=";
-	str_rep += ToString(c->MENU);
+	str_rep += "OPEN_BLUEPRINT_MENU=";
+	str_rep += ToString(c->OPEN_BLUEPRINT_MENU);
+	str_rep += ";";
+	str_rep += "OPEN_MUSIC_MENU=";
+	str_rep += ToString(c->OPEN_MUSIC_MENU);
+	str_rep += ";";
+	str_rep += "OPEN_HELP_MENU=";
+	str_rep += ToString(c->OPEN_HELP_MENU);
+	str_rep += ";";
+	str_rep += "UNDO=";
+	str_rep += ToString(c->UNDO);
+	str_rep += ";";
+	str_rep += "REDO=";
+	str_rep += ToString(c->REDO);
 	str_rep += ";";
 	str_rep += "EDIT_MODE=";
 	str_rep += ToString(c->EDIT_MODE);
@@ -57,8 +69,11 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += "ALT_SENSITIVITY=";
 	str_rep += ToString(c->ALT_SENSITIVITY);
 	str_rep += ";";
-	str_rep += "ROTATE_ENTITY=";
-	str_rep += ToString(c->ROTATE_ENTITY);
+	str_rep += "ROTATE_ENTITY_CLOCKWISE=";
+	str_rep += ToString(c->ROTATE_ENTITY_CLOCKWISE);
+	str_rep += ";";
+	str_rep += "ROTATE_ENTITY_COUNTER_CLOCKWISE=";
+	str_rep += ToString(c->ROTATE_ENTITY_COUNTER_CLOCKWISE);
 	str_rep += ";";
 	str_rep += "INCREMENT_HEIGHT=";
 	str_rep += ToString(c->INCREMENT_HEIGHT);
@@ -124,9 +139,25 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         {
             FromString(c->PLAYER_GO_NEUTRAL, statement_parts[1]);
         }
-        else if (statement_parts[0] == "MENU")
+        else if (statement_parts[0] == "OPEN_BLUEPRINT_MENU")
         {
-            FromString(c->MENU, statement_parts[1]);
+            FromString(c->OPEN_BLUEPRINT_MENU, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "OPEN_MUSIC_MENU")
+        {
+            FromString(c->OPEN_MUSIC_MENU, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "OPEN_HELP_MENU")
+        {
+            FromString(c->OPEN_HELP_MENU, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "UNDO")
+        {
+            FromString(c->UNDO, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "REDO")
+        {
+            FromString(c->REDO, statement_parts[1]);
         }
         else if (statement_parts[0] == "EDIT_MODE")
         {
@@ -164,9 +195,13 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         {
             FromString(c->ALT_SENSITIVITY, statement_parts[1]);
         }
-        else if (statement_parts[0] == "ROTATE_ENTITY")
+        else if (statement_parts[0] == "ROTATE_ENTITY_CLOCKWISE")
         {
-            FromString(c->ROTATE_ENTITY, statement_parts[1]);
+            FromString(c->ROTATE_ENTITY_CLOCKWISE, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "ROTATE_ENTITY_COUNTER_CLOCKWISE")
+        {
+            FromString(c->ROTATE_ENTITY_COUNTER_CLOCKWISE, statement_parts[1]);
         }
         else if (statement_parts[0] == "INCREMENT_HEIGHT")
         {

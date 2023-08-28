@@ -2,12 +2,14 @@
 #include "SFML/Window/Keyboard.hpp"
 #include "ecs/entity.hpp"
 #include <functional>
+#include <optional>
 #include <string>
 
 class ShortcutKey
 {
 public:
 	sf::Keyboard::Key key;
+	std::optional<sf::Keyboard::Key> required_modifier_key = std::nullopt;
 };
 
 class OnReleasedThisFrame
