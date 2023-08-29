@@ -1,6 +1,7 @@
 #include "entity_creation.hpp"
 #include "Components/sound_info.hpp"
 #include "SFML/Graphics/Text.hpp"
+#include "SFML/Window/Keyboard.hpp"
 #include "components/blocking_popup_menu_entity.hpp"
 #include "components/button.hpp"
 #include "components/button_events.hpp"
@@ -194,14 +195,16 @@ EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::
 	return { entity, button_size };
 }
 
-EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function, sf::Keyboard::Key shortcut_key)
+EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function, sf::Keyboard::Key shortcut_key, bool shortcut_requires_ctrl)
 {
 	auto [entity, button_size] = CreateButton(level, position, size, button_function, "", 120);
 	auto [icon_entity, icon_size] = CreateTexturedRectangle(level, position, sf::Vector2f(size.y, size.y), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
 	level.AddComponent<FillColor>(icon_entity);
-	level.AddComponent<Tooltip>(entity)->text = tooltip_text + " [" + HumanName(shortcut_key) + "]";
+	std::string shortcut_modifier = shortcut_requires_ctrl ? "Ctrl + " : "";
+	level.AddComponent<Tooltip>(entity)->text = tooltip_text + " [" + shortcut_modifier + HumanName(shortcut_key) + "]";
 	level.AddComponent<ScaleWithLevel>(entity);
 	level.AddComponent<ShortcutKey>(entity)->key = shortcut_key;
+	level.GetComponent<ShortcutKey>(entity)->requires_ctrl_modifier = shortcut_requires_ctrl;
 	level.AddComponent<ScaleWithLevel>(icon_entity);
 	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
 	level.AddComponent<CanDisableButton>(icon_entity)->func = deactivate_function;

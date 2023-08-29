@@ -9,7 +9,7 @@ class ShortcutKey
 {
 public:
 	sf::Keyboard::Key key;
-	std::optional<sf::Keyboard::Key> required_modifier_key = std::nullopt;
+	bool requires_ctrl_modifier = false;
 };
 
 class OnReleasedThisFrame

@@ -64,7 +64,7 @@ void ButtonEventsSystem::Update(Level& level, float dt)
 
 	for (auto [entity, shortcut_key, receives_button_events] : level.GetEntitiesWith<ShortcutKey, ReceivesButtonEvents>())
 	{
-		if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key] && (!shortcut_key->required_modifier_key.has_value() || cursor_and_keys_.key_down[shortcut_key->required_modifier_key.value()]))
+		if (cursor_and_keys_.key_pressed_this_frame[shortcut_key->key] && (!shortcut_key->requires_ctrl_modifier || cursor_and_keys_.key_down[sf::Keyboard::LControl] || cursor_and_keys_.key_down[sf::Keyboard::RControl]))
 		{
 			cursor_and_keys_.key_pressed_this_frame[shortcut_key->key] = false;
 			level.EnsureExistenceOfComponent<PressedThisFrame>(entity);

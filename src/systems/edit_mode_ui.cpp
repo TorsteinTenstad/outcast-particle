@@ -69,9 +69,9 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 
 		// Undo- and redo-buttons:
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(1.25 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Undo(); }, "content\\textures\\undo.png", "Undo", [&]() { return !level.editor.IsEmpty() && (!HelpMenu().IsOpen(level)); }, globals.key_config.UNDO);
+			level, sf::Vector2f(1.25 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Undo(); }, "content\\textures\\undo.png", "Undo", [&]() { return !level.editor.IsEmpty() && (!HelpMenu().IsOpen(level)); }, globals.key_config.UNDO, true);
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(3. * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Redo(); }, "content\\textures\\redo.png", "Redo", [&]() { return !level.editor.IsAtEnd() && (!HelpMenu().IsOpen(level)); }, globals.key_config.REDO);
+			level, sf::Vector2f(3. * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Redo(); }, "content\\textures\\redo.png", "Redo", [&]() { return !level.editor.IsAtEnd() && (!HelpMenu().IsOpen(level)); }, globals.key_config.REDO, true);
 
 		// Level size-buttons:
 		for (int i = 0; i < 2; i++)
