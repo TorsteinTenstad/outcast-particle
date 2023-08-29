@@ -9,16 +9,11 @@ void StickyButtonSystem::Update(Level& level, float dt)
 	for (auto [entity, sticky_button, pressed_this_frame] : level.GetEntitiesWith<StickyButton, PressedThisFrame>())
 	{
 		bool button_is_down = level.HasComponents<StickyButtonDown>(entity);
-		if (!sticky_button->channel)
-		{
-			button_is_down ? level.RemoveComponents<StickyButtonDown>(entity) : level.AddComponent<StickyButtonDown>(entity);
-			return;
-		}
+		level.RemoveComponent<StickyButtonDown>(entity);
 
-		int channel = sticky_button->channel.value();
-		for (auto [entity, sticky_button, sticky_button_down] : level.GetEntitiesWith<StickyButton, StickyButtonDown>())
+		for (auto [other_entity, other_sticky_button, other_sticky_button_down] : level.GetEntitiesWith<StickyButton, StickyButtonDown>())
 		{
-			if (sticky_button->channel == channel) { level.RemoveComponents<StickyButtonDown>(entity); }
+			if (sticky_button->channel.has_value() && sticky_button->channel == other_sticky_button->channel) { level.RemoveComponents<StickyButtonDown>(other_entity); }
 		}
 		if (sticky_button->enforce_down || !button_is_down)
 		{
