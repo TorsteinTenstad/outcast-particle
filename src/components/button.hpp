@@ -3,12 +3,14 @@
 #include "ecs/entity.hpp"
 #include <array>
 #include <functional>
+#include <optional>
 #include <string>
 
 class ShortcutKey
 {
 public:
 	sf::Keyboard::Key key;
+	bool requires_ctrl_modifier = false;
 };
 
 class OnReleasedThisFrame

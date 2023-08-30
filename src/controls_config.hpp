@@ -10,7 +10,11 @@ public:
 	sf::Keyboard::Key PLAYER_MOVE_DOWN = sf::Keyboard::S;
 	sf::Keyboard::Key PLAYER_SWITCH_CHARGE = sf::Keyboard::Space;
 	sf::Keyboard::Key PLAYER_GO_NEUTRAL = sf::Keyboard::Enter;
-	sf::Keyboard::Key MENU = sf::Keyboard::Escape;
+	sf::Keyboard::Key OPEN_BLUEPRINT_MENU = sf::Keyboard::B;
+	sf::Keyboard::Key OPEN_MUSIC_MENU = sf::Keyboard::M;
+	sf::Keyboard::Key OPEN_HELP_MENU = sf::Keyboard::H;
+	sf::Keyboard::Key UNDO = sf::Keyboard::Z;
+	sf::Keyboard::Key REDO = sf::Keyboard::Y;
 	sf::Keyboard::Key EDIT_MODE = sf::Keyboard::Tab;
 	sf::Keyboard::Key INCREASE_LEVEL_SIZE = sf::Keyboard::Up;
 	sf::Keyboard::Key DECREASE_LEVEL_SIZE = sf::Keyboard::Down;
@@ -20,7 +24,8 @@ public:
 	sf::Keyboard::Key DELETE_ENTITY = sf::Keyboard::Delete;
 	sf::Keyboard::Key SNAP_TO_GRID = sf::Keyboard::LShift;
 	sf::Keyboard::Key ALT_SENSITIVITY = sf::Keyboard::RShift;
-	sf::Keyboard::Key ROTATE_ENTITY = sf::Keyboard::R;
+	sf::Keyboard::Key ROTATE_ENTITY_CLOCKWISE = sf::Keyboard::T;
+	sf::Keyboard::Key ROTATE_ENTITY_COUNTER_CLOCKWISE = sf::Keyboard::R;
 	sf::Keyboard::Key INCREMENT_HEIGHT = sf::Keyboard::W;
 	sf::Keyboard::Key DECREMENT_HEIGHT = sf::Keyboard::S;
 	sf::Keyboard::Key DECREMENT_WIDTH = sf::Keyboard::A;

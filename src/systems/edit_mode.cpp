@@ -77,32 +77,6 @@ void EditModeSystem::Update(Level& level, float dt)
 		return;
 	}
 
-	if (cursor_and_keys_.key_down[sf::Keyboard::LControl] && cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Z])
-	{
-		level.editor.Undo();
-	}
-	if (cursor_and_keys_.key_down[sf::Keyboard::LControl] && cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Y])
-	{
-		level.editor.Redo();
-	}
-
-	// Blueprint menu:
-	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::B])
-	{
-		BlueprintMenu().Toggle(level);
-	}
-	if (std::optional<Entity> selected_entity = BlueprintMenu().Update(level))
-	{
-		Entity entity = selected_entity.value();
-		level.editor.Do<AddEntity>(level, selected_entity.value());
-	}
-
-	//Music menu:
-	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::M])
-	{
-		MusicMenu().Toggle(level);
-	}
-
 	Tool current_tool = ComputeCurrentTool(level, cursor_and_keys_);
 
 	// Rectangle select
@@ -172,39 +146,6 @@ void EditModeSystem::Update(Level& level, float dt)
 		level.editor.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}
 
-	// Resize:
-	for (auto [key, size_delta_step] : std::vector<std::tuple<sf::Keyboard::Key, sf::Vector2f>>(
-			 { { globals.key_config.INCREMENT_HEIGHT, sf::Vector2f(0, 1) },
-				 { globals.key_config.DECREMENT_HEIGHT, sf::Vector2f(0, -1) },
-				 { globals.key_config.INCREMENT_WIDTH, sf::Vector2f(1, 0) },
-				 { globals.key_config.DECREMENT_WIDTH, sf::Vector2f(-1, 0) } }))
-	{
-		if (!cursor_and_keys_.key_pressed_this_frame[key]) { continue; }
-		level.editor.Do<ResizeSelected>(level, size_delta_step);
-	}
-
-	// Delete:
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.DELETE_ENTITY])
-	{
-		level.editor.Do<DeleteSelected>(level);
-	}
-
-	// Change level size:
-	for (auto [key, increment] : std::vector<std::tuple<sf::Keyboard::Key, int>>(
-			 { { globals.key_config.INCREASE_LEVEL_SIZE, +1 },
-				 { globals.key_config.DECREASE_LEVEL_SIZE, -1 } }))
-	{
-		if (!cursor_and_keys_.key_pressed_this_frame[key]) { continue; }
-		if (level.GetValidNewSizeId(increment) == 0) { continue; }
-		level.editor.Do<ModifyLevelSize>(level, increment);
-	}
-
-	// Rotate fields:
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.ROTATE_ENTITY])
-	{
-		level.editor.Do<RotateSelectedFields>(level, PI / 2);
-	}
-
 	// Copy selected:
 	if (cursor_and_keys_.key_down[globals.key_config.COPY_ENTITY])
 	{
@@ -216,45 +157,5 @@ void EditModeSystem::Update(Level& level, float dt)
 		{
 			ShowCopyPreview(level, cursor_and_keys_.mouse_button_last_pressed_position[sf::Mouse::Left]);
 		}
-	}
-
-	// Set charge, field strengths and wall bounce:
-	for (auto [i, key] : enumerate(CATEGORY_KEYS))
-	{
-		if (!cursor_and_keys_.key_pressed_this_frame[key]) { continue; }
-		level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt);
-	}
-	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.EDIT_MODE_FLIP_CHARGES_AND_FIELDS])
-	{
-		level.editor.Do<SetPropertyValueOfSelected>(level, std::nullopt, -1);
-	}
-
-	return;
-
-	// Edit velocity:
-	for (auto [entity, selected, velocity] : level.GetEntitiesWith<Selected, Velocity>())
-	{
-		float velocity_magnitude = Magnitude(velocity->velocity);
-		float velocity_angle = Angle(velocity->velocity);
-
-		float sensitivity_modifier = cursor_and_keys_.key_down[globals.key_config.ALT_SENSITIVITY] ? 4 : 1;
-		if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY])
-		{
-			velocity_magnitude += DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
-		}
-		if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY])
-		{
-			velocity_magnitude -= DEFAULT_VELOCITY_MAGNITUDE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
-		}
-		if (cursor_and_keys_.key_down[globals.key_config.INCREMENT_VELOCITY_ANGLE])
-		{
-			velocity_angle += DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
-		}
-		if (cursor_and_keys_.key_down[globals.key_config.DECREMENT_VELOCITY_ANGLE])
-		{
-			velocity_angle -= DEFAULT_VELOCITY_ANGLE_CHANGE_SENSITIVITY * dt / sensitivity_modifier;
-		}
-
-		velocity->velocity = Vector2fFromPolar(velocity_magnitude, velocity_angle);
 	}
 }
