@@ -1,5 +1,6 @@
 #include "systems/edit_mode_menus.hpp"
 #include "components/blueprint_menu_item.hpp"
+#include "components/button.hpp"
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
 #include "components/edit_mode.hpp"
@@ -71,7 +72,7 @@ void MusicMenu::Create(Level& level)
 	}
 	std::vector<EntitiesHandle> buttons;
 
-	EntityHandle player_option_title = CreateText(level, sf::Vector2f(0, 0), "Player Controls", 200 * scale);
+	EntityHandle player_option_title = CreateText(level, sf::Vector2f(0, 0), "Player Controls", 100 * scale);
 	buttons.push_back(ToEntitiesHandle(player_option_title));
 
 	auto [button_1, size_1] = CreateButton(
@@ -87,14 +88,24 @@ void MusicMenu::Create(Level& level)
 	buttons.push_back(ToEntitiesHandle({ button_2, size_2 }));
 
 	auto [button_3, size_3] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { auto& move_force = level.GetSingleton<Player>()->move_force; move_force == 0 ? move_force = 1000 : move_force = 0; }, "WASD", 60);
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->move_force = 0; }, "WASD", 60);
 	level.AddComponent<StickyButton>(button_3);
 	if (!level.GetSingleton<Player>()->move_force == 0) { level.AddComponent<StickyButtonDown>(button_3); }
 	buttons.push_back(ToEntitiesHandle({ button_3, size_3 }));
 
+	auto entity_copy = button_3;
+
+	auto [slider_entities, size_4] = CreateSliderButton(level, sf::Vector2f(0, 0), sf::Vector2f(8, 1) * scale * float(BLOCK_SIZE), &level.GetSingleton<Player>()->move_force, { 0, 1000 });
+	for (auto entity : slider_entities)
+	{
+		level.AddComponent<CanDisableButton>(entity)->func = [&, entity_copy]() { return level.HasComponents<StickyButtonDown>(entity_copy); };
+		if (!level.HasComponents<SliderButton>(entity)) { level.GetComponent<CanDisableButton>(entity)->regain_button_events = false; }
+	}
+	buttons.push_back({ slider_entities, size_4 });
+
 	std::string path = "content\\music";
 
-	EntityHandle music_title = CreateText(level, sf::Vector2f(0, 0), "Select Music", 200 * scale);
+	EntityHandle music_title = CreateText(level, sf::Vector2f(0, 0), "Select Music", 100 * scale);
 	buttons.push_back(ToEntitiesHandle(music_title));
 
 	for (const auto& entry : std::filesystem::directory_iterator(path))

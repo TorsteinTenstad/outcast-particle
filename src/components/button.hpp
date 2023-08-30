@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Window/Keyboard.hpp"
 #include "ecs/entity.hpp"
+#include <array>
 #include <functional>
 #include <string>
 
@@ -57,7 +58,8 @@ public:
 class SliderButton
 {
 public:
-	int* slider_value; //float normalized from 0-100.
+	int* slider_value; //int within range
+	std::array<int, 2> range = { 0, 100 };
 	Entity slider_text;
 	Entity slider_button;
 	Entity slider_bar;

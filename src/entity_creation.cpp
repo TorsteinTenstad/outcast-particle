@@ -273,13 +273,14 @@ EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size,
 	return menu_items;
 }
 
-EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int* f)
+EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int* f, std::array<int, 2> range)
 {
 	//Add parent button:
-	auto [parent_button, parent_size] = CreateButtonTemplate(level, position, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE));
+	auto [parent_button, parent_size] = CreateButtonTemplate(level, position, size);
 	level.AddComponent<ReceivesButtonEvents>(parent_button);
 	level.AddComponent<MouseInteractionDependentFillColor>(parent_button, {});
 	level.AddComponent<SliderButton>(parent_button)->slider_value = f;
+	level.GetComponent<SliderButton>(parent_button)->range = range;
 
 	//Creating slider bar:
 	auto [slider_bar, slider_bar_height] = CreateSizedButtonTemplate(level, position);
@@ -288,7 +289,7 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Ve
 	level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height = sf::Vector2f(size.x * 0.7, size.y * 0.1);
 
 	//Creating slider:
-	float slider_x_pos = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x * (*(f)*0.01 - 0.5);
+	float slider_x_pos = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x * (float(*(f)-range[0]) / (range[1] - range[0]) - 0.5);
 
 	auto [slider, slider_height] = CreateSizedButtonTemplate(level, sf::Vector2f(slider_x_pos, position.y));
 	level.GetComponent<DrawPriority>(slider)->draw_priority = 101;
@@ -297,7 +298,7 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Ve
 
 	//Adding text entity
 	float text_x_position = level.GetComponent<Position>(slider_bar)->position.x + level.GetComponent<WidthAndHeight>(slider_bar)->width_and_height.x / 2 + 0.1 * size.x;
-	auto [button_text, button_text_size] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), LeftPad(ToString(*(f)), 4), 80);
+	auto [button_text, button_text_size] = CreateScrollingText(level, sf::Vector2f(text_x_position, position.y), LeftPad(ToString(*(f)), int(log10(range[1]) + 2)), 80);
 
 	//Connect slider bar, slider and text to background button
 	level.GetComponent<SliderButton>(parent_button)->slider_bar = slider_bar;

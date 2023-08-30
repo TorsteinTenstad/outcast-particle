@@ -287,12 +287,12 @@ void Game::GoToMusicAndSoundMenu()
 	active_level_id_ = MUSIC_AND_SOUND_MENU;
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
-
+	std::array<int, 2> range = { 0, 100 };
 	std::vector<EntitiesCreator> EntitiesCreator = {
-		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.sound_volume),
+		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.sound_volume, range),
 		std::bind(
 			&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds)),
-		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.music_volume),
+		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.music_volume, range),
 	};
 
 	std::vector<std::string> description_texts = {
