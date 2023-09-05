@@ -76,19 +76,19 @@ void MusicMenu::Create(Level& level)
 	buttons.push_back(ToEntitiesHandle(player_option_title));
 
 	auto [button_1, size_1] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 60);
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_switch_charge = !level.GetSingleton<Player>()->can_switch_charge; }, "Switch Charge", 80);
 	level.AddComponent<StickyButton>(button_1);
 	if (level.GetSingleton<Player>()->can_switch_charge) { level.AddComponent<StickyButtonDown>(button_1); }
 	buttons.push_back(ToEntitiesHandle({ button_1, size_1 }));
 
 	auto [button_2, size_2] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_go_neutral = !level.GetSingleton<Player>()->can_go_neutral; }, "Go Neutral", 60);
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_go_neutral = !level.GetSingleton<Player>()->can_go_neutral; }, "Go Neutral", 80);
 	level.AddComponent<StickyButton>(button_2);
 	if (level.GetSingleton<Player>()->can_switch_charge) { level.AddComponent<StickyButtonDown>(button_2); }
 	buttons.push_back(ToEntitiesHandle({ button_2, size_2 }));
 
 	auto [button_3, size_3] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->move_force = 0; }, "WASD", 60);
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->move_force = 0; }, "WASD", 80);
 	level.AddComponent<StickyButton>(button_3);
 	if (!level.GetSingleton<Player>()->move_force == 0) { level.AddComponent<StickyButtonDown>(button_3); }
 	buttons.push_back(ToEntitiesHandle({ button_3, size_3 }));
@@ -113,7 +113,7 @@ void MusicMenu::Create(Level& level)
 		std::string music_path = entry.path().string();
 
 		auto [entity, size] = CreateButton(
-			level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, SplitString(SplitString(music_path, "\\").back(), ".")[0], 60);
+			level, sf::Vector2f(0, 0), sf::Vector2f(10, 1) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, SplitString(SplitString(music_path, "\\").back(), ".")[0], 80);
 		level.AddComponent<StickyButton>(entity)->enforce_down = true;
 		level.GetComponent<StickyButton>(entity)->channel = 1;
 		if (level.music_path == music_path)

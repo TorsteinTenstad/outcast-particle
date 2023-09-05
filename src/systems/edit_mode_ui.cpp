@@ -65,13 +65,13 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 
 		// Delete-button:
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(3 * BLOCK_SIZE, row_one), narrow_size, [&level]() { level.editor.Do<DeleteSelected>(level); }, "content\\textures\\delete_entity.png", "Delete selected elements", [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DELETE_ENTITY);
+			level, sf::Vector2f(3 * BLOCK_SIZE, row_one), narrow_size, [&level]() { level.editor.Do<DeleteSelected>(level); }, "content\\textures\\delete_entity.png", "Delete selected elements", [&level]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DELETE_ENTITY);
 
 		// Undo- and redo-buttons:
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(1.25 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Undo(); }, "content\\textures\\undo.png", "Undo", [&]() { return !level.editor.IsEmpty() && (!HelpMenu().IsOpen(level)); }, globals.key_config.UNDO, true);
+			level, sf::Vector2f(1.25 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Undo(); }, "content\\textures\\undo.png", "Undo", [&level]() { return !level.editor.IsEmpty() && (!HelpMenu().IsOpen(level)); }, globals.key_config.UNDO, true);
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(3. * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Redo(); }, "content\\textures\\redo.png", "Redo", [&]() { return !level.editor.IsAtEnd() && (!HelpMenu().IsOpen(level)); }, globals.key_config.REDO, true);
+			level, sf::Vector2f(3. * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Redo(); }, "content\\textures\\redo.png", "Redo", [&level]() { return !level.editor.IsAtEnd() && (!HelpMenu().IsOpen(level)); }, globals.key_config.REDO, true);
 
 		// Level size-buttons:
 		for (int i = 0; i < 2; i++)
@@ -86,13 +86,13 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 
 		// Resize buttons:
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(8 * BLOCK_SIZE, row_one), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(1, 0)); }, "content\\textures\\widen.png", "Make selected elements wider", [&]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_WIDTH);
+			level, sf::Vector2f(8 * BLOCK_SIZE, row_one), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(1, 0)); }, "content\\textures\\widen.png", "Make selected elements wider", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_WIDTH);
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(9.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(0, 1)); }, "content\\textures\\heighten.png", "Make selected elements taller", [&]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_HEIGHT);
+			level, sf::Vector2f(9.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(0, 1)); }, "content\\textures\\heighten.png", "Make selected elements taller", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_HEIGHT);
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(8 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(-1, 0)); }, "content\\textures\\narrow.png", "Make selected elements thinner", [&]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_WIDTH);
+			level, sf::Vector2f(8 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(-1, 0)); }, "content\\textures\\narrow.png", "Make selected elements thinner", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_WIDTH);
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(9.75 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(0, -1)); }, "content\\textures\\shorten.png", "Make selected elements shorter", [&]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_WIDTH);
+			level, sf::Vector2f(9.75 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(0, -1)); }, "content\\textures\\shorten.png", "Make selected elements shorter", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_WIDTH);
 
 		// Property value buttons:
 		std::vector<std::string> button_texts = {
@@ -112,18 +112,18 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		for (auto i = 0; i < 5; i++)
 		{
 			CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f((12.5 + 1.75 * i) * BLOCK_SIZE, -2.125 * BLOCK_SIZE), narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, button_texts[i], "TODO", [&]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0) && (!HelpMenu().IsOpen(level)); }, shortcut_keys[i]);
+				level, sf::Vector2f((12.5 + 1.75 * i) * BLOCK_SIZE, -2.125 * BLOCK_SIZE), narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, button_texts[i], "TODO", [&level]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0) && (!HelpMenu().IsOpen(level)); }, shortcut_keys[i]);
 		}
 
 		// Velocity buttons:
 		CreateCanDisableOnPressButtonWithIcon(
-			level, sf::Vector2f(21.75 * BLOCK_SIZE, row_one), narrow_size, [&, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, -300 * dt, 0); }, "content\\textures\\decrease_velocity.png", "Decrease velocity", [&]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_VELOCITY);
+			level, sf::Vector2f(21.75 * BLOCK_SIZE, row_one), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, -300.f * dt, 0.f); }, "content\\textures\\decrease_velocity.png", "Decrease velocity", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_VELOCITY);
 		CreateCanDisableOnPressButtonWithIcon(
-			level, sf::Vector2f(23.5 * BLOCK_SIZE, row_one), narrow_size, [&, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 300 * dt, 0); }, "content\\textures\\increase_velocity.png", "Increase velocity", [&]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_VELOCITY);
+			level, sf::Vector2f(23.5 * BLOCK_SIZE, row_one), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 300.f * dt, 0.f); }, "content\\textures\\increase_velocity.png", "Increase velocity", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_VELOCITY);
 		CreateCanDisableOnPressButtonWithIcon(
-			level, sf::Vector2f(21.75 * BLOCK_SIZE, row_two), narrow_size, [&, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 0, -dt); }, "content\\textures\\rotate_left.png", "Rotate velocity vector clockwise", [&]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_VELOCITY_ANGLE);
+			level, sf::Vector2f(21.75 * BLOCK_SIZE, row_two), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 0.f, -dt); }, "content\\textures\\rotate_left.png", "Rotate velocity vector clockwise", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.DECREMENT_VELOCITY_ANGLE);
 		CreateCanDisableOnPressButtonWithIcon(
-			level, sf::Vector2f(23.5 * BLOCK_SIZE, row_two), narrow_size, [&, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 0, +dt); }, "content\\textures\\rotate_right.png", "Rotate velocity vector counter-clockwise", [&]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_VELOCITY_ANGLE);
+			level, sf::Vector2f(23.5 * BLOCK_SIZE, row_two), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 0.f, +dt); }, "content\\textures\\rotate_right.png", "Rotate velocity vector counter-clockwise", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.INCREMENT_VELOCITY_ANGLE);
 
 		// Rotate buttons:
 		for (int i = 0; i < 2; i++)
@@ -131,13 +131,13 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 			std::vector<std::string> icon_paths = { "content\\textures\\rotate_90.png", "content\\textures\\counter_rotate_90.png" };
 			std::vector<sf::Keyboard::Key> shortcut_keys = { globals.key_config.ROTATE_ENTITY_CLOCKWISE, globals.key_config.ROTATE_ENTITY_COUNTER_CLOCKWISE };
 			CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(26.25 * BLOCK_SIZE + 1.75 * i * BLOCK_SIZE, row_one), narrow_size, [&, i]() { level.editor.Do<RotateSelectedFields>(level, PI / 2 * (1 - 2 * i)); }, icon_paths[i], "Rotate electronic fields", [&]() { return (level.GetEntitiesWith<Selected, ElectricField>().size() != 0) && (!HelpMenu().IsOpen(level)); }, shortcut_keys[i]);
+				level, sf::Vector2f(26.25 * BLOCK_SIZE + 1.75 * i * BLOCK_SIZE, row_one), narrow_size, [&, i]() { level.editor.Do<RotateSelectedFields>(level, PI / 2 * (1 - 2 * i)); }, icon_paths[i], "Rotate electronic fields", [&level]() { return (level.GetEntitiesWith<Selected, ElectricField>().size() != 0) && (!HelpMenu().IsOpen(level)); }, shortcut_keys[i]);
 		}
 
 		// Invert charge button:
 
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(27.125 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<SetPropertyValueOfSelected>(level, std::nullopt, -1); }, "content\\textures\\flip.png", "Flip direction of magnetic field and charge of particles", [&]() { return (level.GetEntitiesWith<Selected, MagneticField>().size() != 0 || level.GetEntitiesWith<Selected, Charge>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.EDIT_MODE_FLIP_CHARGES_AND_FIELDS);
+			level, sf::Vector2f(27.125 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<SetPropertyValueOfSelected>(level, std::nullopt, -1); }, "content\\textures\\flip.png", "Flip direction of magnetic field and charge of particles", [&level]() { return (level.GetEntitiesWith<Selected, MagneticField>().size() != 0 || level.GetEntitiesWith<Selected, Charge>().size() != 0) && (!HelpMenu().IsOpen(level)); }, globals.key_config.EDIT_MODE_FLIP_CHARGES_AND_FIELDS);
 
 		// Help menu button and music button:
 		CreateCanDisableButtonWithIcon(

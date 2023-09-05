@@ -3,8 +3,8 @@
 #include <optional>
 #include <string>
 
-const sf::Color HOVERED_COLOR = sf::Color(200, 200, 200);
-const sf::Color PRESSED_COLOR = sf::Color(120, 120, 120);
+const sf::Color HOVERED_COLOR = sf::Color(180, 180, 180);
+const sf::Color PRESSED_COLOR = sf::Color(100, 100, 100);
 const sf::Color DEFAULT_COLOR = sf::Color(150, 150, 150);
 
 class DrawInfo

@@ -235,10 +235,10 @@ void Game::GoToKeyConfigMenu()
 
 	SetupOptionsSubMenu(*active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);
 	CreateButton(
-		*active_level_, sf::Vector2f(level_size.x / 2.f + 8 * BLOCK_SIZE, level_size.y - 2 * BLOCK_SIZE), sf::Vector2f(5 * BLOCK_SIZE, 2 * BLOCK_SIZE), std::bind(
-																																							&CreateConfirmMenu, std::ref(*active_level_), level_size, "Are you sure you want to \n reset all key-bindings?", [&]() { Game::ResetKeyConfig(); }, 1),
+		*active_level_, sf::Vector2f(level_size.x / 2.f + 8.f * BLOCK_SIZE, level_size.y - 2.f * BLOCK_SIZE), sf::Vector2f(5.f * BLOCK_SIZE, 2.f * BLOCK_SIZE), std::bind(
+																																									&CreateConfirmMenu, std::ref(*active_level_), level_size, "Are you sure you want to \n reset all key-bindings?", [&]() { Game::ResetKeyConfig(); }, 1.f),
 		"Reset",
-		120);
+		120.f);
 }
 
 void Game::GoToGraphicsAndDisplayMenu()
