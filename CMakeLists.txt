@@ -7,8 +7,6 @@ FetchContent_Declare(SFML
     GIT_TAG 2.5.1)
 FetchContent_MakeAvailable(SFML)
 
-add_compile_options(/bigobj)
-
 aux_source_directory(src/ SRC_DIR)
 aux_source_directory(src/components/ COMPONENTS_DIR)
 aux_source_directory(src/systems/ SYSTEMS_DIR)
