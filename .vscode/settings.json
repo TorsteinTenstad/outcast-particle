@@ -1,4 +1,5 @@
 {
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}-${variant:gameVersion}-${variant:devOptions}",
     "C_Cpp.debuggerSettings": {
         "miDebuggerAdditionalStartupCommands": "-enable-pretty-printing",
         "visualStudioCode": true

@@ -1,0 +1,49 @@
+{
+  "buildType": {
+    "default": "debug",
+    "choices": {
+      "debug": {
+        "short": "Debug",
+        "long": "Debug",
+        "buildType": "Debug"
+      },
+      "release": {
+        "short": "Release",
+        "long": "Release",
+        "buildType": "Release"
+      }
+    }
+  },
+  "gameVersion": {
+    "default": "full",
+    "choices": {
+      "full": {
+        "short": "Full version",
+        "long": "Full version"
+      },
+      "trial": {
+        "short": "Trial version",
+        "long": "Trial version",
+        "settings": {
+          "CMAKE_CXX_FLAGS": "-D_TRIAL_VERSION"
+        }
+      }
+    }
+  },
+  "devOptions": {
+    "default": "none",
+    "choices": {
+      "none": {
+        "short": "No dev options",
+        "long": "No dev options"
+      },
+      "all": {
+        "short": "All dev options",
+        "long": "All dev options",
+        "settings": {
+          "CMAKE_CXX_FLAGS": "-D_DEVELOPER_OPTIONS_ENABLED"
+        }
+      }
+    }
+  }
+}

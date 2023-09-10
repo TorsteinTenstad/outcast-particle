@@ -25,7 +25,7 @@ if (WIN32 AND BUILD_SHARED_LIBS)
 endif()
 add_custom_command(TARGET volatile-particle-app POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-        "${PROJECT_SOURCE_DIR}/build/_deps/sfml-src/extlibs/bin/x64/openal32.dll"
+        "${CMAKE_CURRENT_BINARY_DIR}/_deps/sfml-src/extlibs/bin/x64/openal32.dll"
         $<TARGET_FILE_DIR:volatile-particle-app>)
 
 install(TARGETS volatile-particle-app)

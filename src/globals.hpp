@@ -13,13 +13,22 @@
 const std::vector<std::string> level_groups_accessible_in_trial = { "Lab 0", "Lab 1" };
 const std::vector<std::string> editable_level_groups = { "Custom Levels" };
 
+#ifdef _TRIAL_VERSION
+constexpr bool IS_TRIAL_BUILD = true;
+#else
+constexpr bool IS_TRIAL_BUILD = false;
+#endif
+
+#ifdef _DEVELOPER_OPTIONS_ENABLED
+constexpr bool DEVELOPER_OPTIONS_ENABLED = true;
+#else
+constexpr bool DEVELOPER_OPTIONS_ENABLED = false;
+#endif
+
 class ContentAccessOptions
 {
 private:
-	const bool IS_TRIAL_BUILD = false; // true when building the free version of the game
-	const bool DEVELOPER_OPTIONS_ENABLED = true;
-
-	bool all_level_groups_are_editable = false; // Should be false in release
+	bool all_level_groups_are_editable = false;
 	bool is_trial_build = IS_TRIAL_BUILD;
 
 public:
