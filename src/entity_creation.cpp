@@ -50,7 +50,7 @@ EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string cont
 	Entity entity = level.CreateEntity();
 	level.AddComponent<Position>(entity)->position = position;
 	level.AddComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
-	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll.frag";
+	level.AddComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\scroll.frag";
 	Text* text = level.AddComponent<Text>(entity);
 	text->content = content;
 	text->size = text_size;
@@ -67,9 +67,9 @@ EntityHandle CreateTextPopup(ECSScene& level, sf::Vector2f position, std::string
 	auto [entity, size] = CreateText(level, position, content, 120);
 	// if (has_backdrop)
 	// {
-	// 	level.AddComponent<DrawInfo>(entity, { "content\\textures\\white.png", false, 0 });
+	// 	level.AddComponent<DrawInfo>(entity, { "TEXTURES_DIR\\white.png", false, 0 });
 	// 	level.AddComponent<FillColor>(entity);
-	// 	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\round_corners.frag";
+	// 	level.GetComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\round_corners.frag";
 	// }
 	level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + duration;
 	return { entity, size };
@@ -94,10 +94,10 @@ EntityHandle CreateTexturedRectangle(ECSScene& level, sf::Vector2f position, sf:
 
 EntityHandle CreateButtonTemplate(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
 {
-	auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\white.png", false);
+	auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "TEXTURES_DIR\\white.png", false);
 	level.AddComponent<FillColor>(entity);
-	level.AddComponent<Shader>(entity, { "", "shaders\\round_corners.frag", {}, {}, {} });
-	level.AddComponent<SoundInfo>(entity)->sound_paths = { { ON_CLICK, "content\\sounds\\click.wav" } };
+	level.AddComponent<Shader>(entity, { "", "SHADERS_DIR\\round_corners.frag", {}, {}, {} });
+	level.AddComponent<SoundInfo>(entity)->sound_paths = { { ON_CLICK, "SOUNDS_DIR\\click.wav" } };
 	return { entity, size };
 }
 EntityHandle CreateMouseEventButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size)
@@ -156,7 +156,7 @@ EntityHandle CreateNavigatorButton(ECSScene& level, sf::Vector2f position, std::
 EntityHandle CreateMenuNavigator(ECSScene& level)
 {
 	sf::Vector2f size = sf::Vector2f(1, 1.5) * float(BLOCK_SIZE);
-	auto [entity, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "content\\textures\\menu_navigator.png", false);
+	auto [entity, _] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), size, UI_BASE_DRAW_PRIORITY + 2, "TEXTURES_DIR\\menu_navigator.png", false);
 	level.AddComponent<FillColor>(entity)->color = sf::Color(120, 120, 120);
 	level.AddComponent<MenuNavigator>(entity);
 	return { entity, size };
@@ -170,7 +170,7 @@ EntitiesHandle CreateKeyConfigButton(ECSScene& level, sf::Vector2f position, sf:
 	level.AddComponent<ReceivesButtonEvents>(entity);
 	level.AddComponent<KeyConfigButton>(entity)->key = key;
 	level.AddComponent<StickyButton>(entity)->channel = 1;
-	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	level.GetComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\scroll_and_round_corners.frag";
 	auto [button_text, button_text_size] = CreateScrollingText(level, position, HumanName(*key), 80);
 	level.GetComponent<KeyConfigButton>(entity)->button_text = &level.GetComponent<Text>(button_text)->content;
 
@@ -182,7 +182,7 @@ EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::
 
 	auto [entity, size] = CreateButton(level, position, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), on_click, "", 80);
 	auto [button_text_entity, button_text_size] = CreateScrollingText(level, position, button_text, 80);
-	level.GetComponent<Shader>(entity)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+	level.GetComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\scroll_and_round_corners.frag";
 	level.AddComponent<BinaryOptionsButton>(entity)->button_text = &level.GetComponent<Text>(button_text_entity)->content;
 	return { { entity, button_text_entity }, size };
 }
@@ -316,8 +316,8 @@ EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_n
 {
 	Entity entity = level.CreateEntity();
 
-	level.AddComponent<DrawInfo>(entity, { "content\\textures\\gray.png", false, 0 });
-	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\stats_badge.frag";
+	level.AddComponent<DrawInfo>(entity, { "TEXTURES_DIR\\gray.png", false, 0 });
+	level.AddComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\stats_badge.frag";
 	level.GetComponent<Shader>(entity)->int_uniforms["n_collected"] = coin_number;
 	sf::Vector2f width_and_height = sf::Vector2f(7.5, 1.5) * float(BLOCK_SIZE) * scale;
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;

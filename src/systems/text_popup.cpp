@@ -19,7 +19,7 @@ void TextPopupSystem::Update(Level& level, float dt)
 {
 	for (auto [entity, text_popup_spawner, draw_info] : level.GetEntitiesWith<TextPopupSpawner, DrawInfo>())
 	{
-		draw_info->image_path = level.GetMode() == EDIT_MODE ? "content\\textures\\white.png" : "content\\textures\\transparent.png";
+		draw_info->image_path = level.GetMode() == EDIT_MODE ? "TEXTURES_DIR\\white.png" : "TEXTURES_DIR\\transparent.png";
 	}
 	if (level.GetMode() != PLAY_MODE || level.ComputeState() != PLAYING)
 	{
@@ -33,7 +33,7 @@ void TextPopupSystem::Update(Level& level, float dt)
 			if (TextPopupSpawner* text_popup_spawner = level.RawGetComponent<TextPopupSpawner>(text_box_popup_spawner_entity))
 			{
 				GetSingletonChildId<TextPopupSpawner>(level, text_box_popup_spawner_entity, [content = text_popup_spawner->content](Level& level) {
-					auto [popup_entity, size] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(2400, 240), UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
+					auto [popup_entity, size] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(2400, 240), UI_BASE_DRAW_PRIORITY, "TEXTURES_DIR\\gray.png", false);
 					auto [popup_text, popup_animated_position] = level.AddComponents<Text, AnimatedPosition>(popup_entity);
 					level.AddComponent<TextPopupEntityDeleteFlag>(popup_entity);
 					popup_text->content = content;

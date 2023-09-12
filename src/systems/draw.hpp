@@ -18,7 +18,7 @@ public:
 	DrawSystem(std::string& active_level_id, bool& is_in_level_editing, CursorAndKeys& cursor_and_keys) :
 		GameSystem(active_level_id, is_in_level_editing, cursor_and_keys)
 	{
-		noise_texture_.loadFromFile("content\\textures\\noise.png");
+		noise_texture_.loadFromFile((TEXTURES_DIR / "noise.png").string());
 	}
 	void Update(Level& level, float dt);
 	void CaptureLevel(Level& level, sf::Texture* texture, unsigned width, unsigned height);

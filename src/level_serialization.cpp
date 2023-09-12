@@ -497,7 +497,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
-            AddComponent<Shader>(entity, { "", "shaders\\particle.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity, { 10 });
             AddComponent<ChargeDependentDrawInfo>(entity, {});
             AddComponent<Radius>(entity, { 108 });
@@ -510,7 +510,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
-            AddComponent<Shader>(entity, { "", "shaders\\particle.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity, { 11 });
             AddComponent<ChargeDependentDrawInfo>(entity, {});
             AddComponent<Radius>(entity, { 108 });
@@ -530,7 +530,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
             AddComponent<DrawPriority>(entity, { 1 });
-            AddComponent<Shader>(entity, { "", "shaders\\black_hole.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\black_hole.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
         }
@@ -549,8 +549,8 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<Collision>(entity, {});
             AddComponent<Children>(entity, {});
             AddComponent<DrawPriority>(entity, { 12 });
-            AddComponent<Shader>(entity, { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} });
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\wav.wav" }, { TO_NEUTRAL, "content\\sounds\\to_neutral.wav" }, { FROM_NEUTRAL, "content\\sounds\\from_neutral.wav" } } });
+            AddComponent<Shader>(entity, { "SHADERS_DIR\\player.vert", "SHADERS_DIR\\particle.frag", {}, {}, {} });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\wav.wav" }, { TO_NEUTRAL, "SOUNDS_DIR\\to_neutral.wav" }, { FROM_NEUTRAL, "SOUNDS_DIR\\from_neutral.wav" } } });
             AddComponent<Face>(entity, {});
             AddComponent<ForceVisualization>(entity, {});
             AddComponent<PlayerBehaviors>(entity, {});
@@ -581,7 +581,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<SegmentedGlowEffect>(entity, {});
             AddComponent<Children>(entity, {});
             AddComponent<Radius>(entity, { 60 });
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\coin.wav" } } });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\coin.wav" } } });
             DeserializeComponent(AddComponent<Position>(entity),line);
         }
         
@@ -591,7 +591,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity, {});
             AddComponent<Wall>(entity, {});
             AddComponent<DrawPriority>(entity, { 4 });
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\wall_3.wav" } } });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\wall_3.wav" } } });
             DeserializeComponent(AddComponent<Position>(entity),line);
             DeserializeComponent(AddComponent<Collision>(entity),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
@@ -602,12 +602,12 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
-            AddComponent<Shader>(entity, { "", "shaders\\wormhole.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity, { 2 });
             AddComponent<Goal>(entity, {});
             AddComponent<Wormhole>(entity, {});
             AddComponent<Mass>(entity, {});
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\happy_transition.wav" } } });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\happy_transition.wav" } } });
             AddComponent<Radius>(entity, { 240 });
             DeserializeComponent(AddComponent<Position>(entity),line);
         }
@@ -618,7 +618,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
             AddComponent<DrawPriority>(entity, { 1 });
-            AddComponent<Shader>(entity, { "", "shaders\\electric_field.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\electric_field.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity),line);
             DeserializeComponent(AddComponent<ElectricField>(entity),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
@@ -630,7 +630,7 @@ Error Level::LoadFromFile(std::string savefile_path)
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
             AddComponent<DrawPriority>(entity, { 1 });
-            AddComponent<Shader>(entity, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\magnetic_field.frag", {}, {}, {} });
             DeserializeComponent(AddComponent<Position>(entity),line);
             DeserializeComponent(AddComponent<MagneticField>(entity),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
@@ -640,7 +640,7 @@ Error Level::LoadFromFile(std::string savefile_path)
         {
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
-            AddComponent<DrawInfo>(entity, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawInfo>(entity, { "TEXTURES_DIR\\transparent.png", false, 0 });
             AddComponent<DrawPriority>(entity, { 2 });
             DeserializeComponent(AddComponent<Position>(entity),line);
             DeserializeComponent(AddComponent<WidthAndHeight>(entity),line);
@@ -669,7 +669,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
-            AddComponent<Shader>(entity, { "", "shaders\\particle.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity, { 10 });
             AddComponent<ChargeDependentDrawInfo>(entity, {});
             AddComponent<Radius>(entity, { 108 });
@@ -681,7 +681,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
-            AddComponent<Shader>(entity, { "", "shaders\\particle.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\particle.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity, { 11 });
             AddComponent<ChargeDependentDrawInfo>(entity, {});
             AddComponent<Radius>(entity, { 108 });
@@ -700,7 +700,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
             AddComponent<DrawPriority>(entity, { 1 });
-            AddComponent<Shader>(entity, { "", "shaders\\black_hole.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\black_hole.frag", {}, {}, {} });
             AddComponent<Tag>(entity, {"BPBlackHole"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             AddComponent<WidthAndHeight>(entity, { sf::Vector2f(240, 240) });
@@ -718,8 +718,8 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Collision>(entity, {});
             AddComponent<Children>(entity, {});
             AddComponent<DrawPriority>(entity, { 12 });
-            AddComponent<Shader>(entity, { "shaders\\player.vert", "shaders\\particle.frag", {}, {}, {} });
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\wav.wav" }, { TO_NEUTRAL, "content\\sounds\\to_neutral.wav" }, { FROM_NEUTRAL, "content\\sounds\\from_neutral.wav" } } });
+            AddComponent<Shader>(entity, { "SHADERS_DIR\\player.vert", "SHADERS_DIR\\particle.frag", {}, {}, {} });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\wav.wav" }, { TO_NEUTRAL, "SOUNDS_DIR\\to_neutral.wav" }, { FROM_NEUTRAL, "SOUNDS_DIR\\from_neutral.wav" } } });
             AddComponent<Face>(entity, {});
             AddComponent<ForceVisualization>(entity, {});
             AddComponent<PlayerBehaviors>(entity, {});
@@ -748,7 +748,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<SegmentedGlowEffect>(entity, {});
             AddComponent<Children>(entity, {});
             AddComponent<Radius>(entity, { 60 });
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\coin.wav" } } });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\coin.wav" } } });
             AddComponent<Tag>(entity, {"BPCoin"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             break;
@@ -757,7 +757,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Editable>(entity, {});
             AddComponent<Wall>(entity, {});
             AddComponent<DrawPriority>(entity, { 4 });
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\wall_3.wav" } } });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\wall_3.wav" } } });
             AddComponent<Tag>(entity, {"BPWall"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             AddComponent<Collision>(entity, { 0.2, 75 });
@@ -767,12 +767,12 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
-            AddComponent<Shader>(entity, { "", "shaders\\wormhole.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\wormhole.frag", {}, {}, {} });
             AddComponent<DrawPriority>(entity, { 2 });
             AddComponent<Goal>(entity, {});
             AddComponent<Wormhole>(entity, {});
             AddComponent<Mass>(entity, {});
-            AddComponent<SoundInfo>(entity, { { { DEFAULT, "content\\sounds\\happy_transition.wav" } } });
+            AddComponent<SoundInfo>(entity, { { { DEFAULT, "SOUNDS_DIR\\happy_transition.wav" } } });
             AddComponent<Radius>(entity, { 240 });
             AddComponent<Tag>(entity, {"BPGoal"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
@@ -782,7 +782,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
             AddComponent<DrawPriority>(entity, { 1 });
-            AddComponent<Shader>(entity, { "", "shaders\\electric_field.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\electric_field.frag", {}, {}, {} });
             AddComponent<Tag>(entity, {"BPElectricField"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             AddComponent<ElectricField>(entity, { sf::Vector2f(0, 0.25) });
@@ -793,7 +793,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
             AddComponent<Editable>(entity, {});
             AddComponent<DrawInfo>(entity, {});
             AddComponent<DrawPriority>(entity, { 1 });
-            AddComponent<Shader>(entity, { "", "shaders\\magnetic_field.frag", {}, {}, {} });
+            AddComponent<Shader>(entity, { "", "SHADERS_DIR\\magnetic_field.frag", {}, {}, {} });
             AddComponent<Tag>(entity, {"BPMagneticField"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });
             AddComponent<MagneticField>(entity, { 0.1 });
@@ -802,7 +802,7 @@ Entity Level::AddBlueprint(Blueprint blueprint)
         case BPTextPopupSpawner:
             AddComponent<ReceivesButtonEvents>(entity, {});
             AddComponent<Editable>(entity, {});
-            AddComponent<DrawInfo>(entity, { "content\\textures\\transparent.png", false, 0 });
+            AddComponent<DrawInfo>(entity, { "TEXTURES_DIR\\transparent.png", false, 0 });
             AddComponent<DrawPriority>(entity, { 2 });
             AddComponent<Tag>(entity, {"BPTextPopupSpawner"});
             AddComponent<Position>(entity, { sf::Vector2f(0, 0) });

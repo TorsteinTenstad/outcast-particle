@@ -17,7 +17,7 @@ static Entity CreateStrengthIndicator(Level& level)
 {
 	EntityHandle handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * 0.75f * float(BLOCK_SIZE), 0, "", false);
 	Entity entity = GetEntity(handle);
-	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\strength_indicator.frag";
+	level.AddComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\strength_indicator.frag";
 	level.AddComponent<StrengthIndicator>(entity);
 	return entity;
 }
@@ -38,7 +38,7 @@ class StaticIndicator
 
 static Entity CreateStaticIndicator(Level& level)
 {
-	EntityHandle handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * 0.5f * float(BLOCK_SIZE), 0, "content\\textures\\lock.png", false);
+	EntityHandle handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(1, 1) * 0.5f * float(BLOCK_SIZE), 0, "TEXTURES_DIR\\lock.png", false);
 	Entity entity = GetEntity(handle);
 	level.AddComponent<StaticIndicator>(entity);
 	return entity;
@@ -61,7 +61,7 @@ class VelocityIndicator
 static Entity CreateVelocityIndicator(Level& level)
 {
 	Entity entity = GetEntity(level.CreateEntityWith<Position, Radius, DrawInfo, DrawPriority, VelocityIndicator>());
-	level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\velocity_indicator.frag";
+	level.AddComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\velocity_indicator.frag";
 	return entity;
 }
 

@@ -8,7 +8,7 @@ void MusicSystem::Update(Level& level, float dt)
 	std::string music_path;
 	if (is_in_level_editing_ && level.GetMode() != PLAY_MODE)
 	{
-		music_path = "content\\music\\Edit Mode.wav";
+		music_path = "MUSIC_DIR\\Edit Mode.wav";
 	}
 	else
 	{
@@ -19,7 +19,7 @@ void MusicSystem::Update(Level& level, float dt)
 	{
 		if (!music.openFromFile(music_path))
 		{
-			music.openFromFile("content\\music\\Bliss.wav");
+			music.openFromFile("MUSIC_DIR\\Bliss.wav");
 			globals.errors += Error(ErrorNumber::LOAD_WAV, "Failed to load music from\n" + music_path);
 			//CreateTextPopup(level, sf::Vector2f(4.5, 1) * float(BLOCK_SIZE), "Failed to load \n intended music", 3, true);
 		}

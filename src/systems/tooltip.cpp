@@ -29,7 +29,7 @@ void TooltipSystem::Update(Level& level, float dt)
 			Entity entity = level.CreateEntity();
 			level.AddComponents<WidthAndHeight, Position, DrawInfo, ScaleWithLevel>(entity);
 			level.AddComponent<DrawPriority>(entity)->draw_priority = draw_priority;
-			level.AddComponent<Shader>(entity)->fragment_shader_path = "shaders\\tooltip_background.frag";
+			level.AddComponent<Shader>(entity)->fragment_shader_path = "SHADERS_DIR\\tooltip_background.frag";
 			Text* text = level.AddComponent<Text>(entity);
 			text->content = content;
 			text->size = 100 * level.GetScale();

@@ -1,3 +1,0 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
-11444703297835591654:Tag{tag=BPMagneticField}Position{position=(1800,1080)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(2040,2040)}
-14282585593611110283:Tag{tag=BPPlayer}Position{position=(900,1080)}Charge{charge=10000}Velocity{velocity=(-44.6909,-913.159)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}

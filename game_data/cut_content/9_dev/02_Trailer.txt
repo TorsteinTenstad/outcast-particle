@@ -1,0 +1,17 @@
+name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+1433610457250060282:Tag{tag=BPMovingParticle}Position{position=(1620,1260)}Charge{charge=2500}Velocity{velocity=(0,0)}
+1705096346092471011:Tag{tag=BPMovingParticle}Position{position=(1320,1800)}Charge{charge=2500}Velocity{velocity=(0,0)}
+2073621260103182851:Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(3600,120)}
+2228705912243426069:Tag{tag=BPStaticParticle}Position{position=(300,1800)}Charge{charge=-40000}
+4401130639064810028:Tag{tag=BPStaticParticle}Position{position=(300,360)}Charge{charge=-40000}
+4664656676295086474:Tag{tag=BPStaticParticle}Position{position=(300,1080)}Charge{charge=-40000}
+6440391115121152479:Tag{tag=BPLaser}Position{position=(540,1080)}WidthAndHeight{width_and_height=(60,1980)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
+7510822423957891702:Tag{tag=BPWall}Position{position=(1920,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3600,120)}
+8647034113261925864:Tag{tag=BPGoal}Position{position=(3480,1080)}
+8675539130572495101:Tag{tag=BPMovingParticle}Position{position=(1920,720)}Charge{charge=2500}Velocity{velocity=(0,0)}
+10488576440629943095:Tag{tag=BPMovingParticle}Position{position=(1500,360)}Charge{charge=2500}Velocity{velocity=(0,0)}
+10922774549838607031:Tag{tag=BPWall}Position{position=(60,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2160)}
+14043924239244325803:Tag{tag=BPMovingParticle}Position{position=(2040,1620)}Charge{charge=2500}Velocity{velocity=(0,0)}
+17691412881123895468:Tag{tag=BPPlayer}Position{position=(2340,1080)}Charge{charge=2500}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+17946856242970639197:Tag{tag=BPWall}Position{position=(3780,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2160)}
+18350588997463039422:Tag{tag=BPMovingParticle}Position{position=(1200,840)}Charge{charge=2500}Velocity{velocity=(0,0)}

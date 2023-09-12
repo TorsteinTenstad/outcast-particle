@@ -68,11 +68,11 @@ const std::vector<float> TOGGLING_LASER_PERIOD_CATEGORIES = {
 };
 
 const std::vector<std::string> WALL_SOUND_CATEGORIES = {
-	"content\\sounds\\wall_1.wav",
-	"content\\sounds\\wall_2.wav",
-	"content\\sounds\\wall_3.wav",
-	"content\\sounds\\wall_4.wav",
-	"content\\sounds\\wall_5.wav"
+	"SOUNDS_DIR\\wall_1.wav",
+	"SOUNDS_DIR\\wall_2.wav",
+	"SOUNDS_DIR\\wall_3.wav",
+	"SOUNDS_DIR\\wall_4.wav",
+	"SOUNDS_DIR\\wall_5.wav"
 };
 
 const std::vector<sf::Keyboard::Key> CATEGORY_KEYS = {

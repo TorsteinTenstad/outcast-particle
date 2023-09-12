@@ -28,4 +28,9 @@ add_custom_command(TARGET volatile-particle-app POST_BUILD
         "${CMAKE_CURRENT_BINARY_DIR}/_deps/sfml-src/extlibs/bin/x64/openal32.dll"
         $<TARGET_FILE_DIR:volatile-particle-app>)
 
+add_custom_command(TARGET volatile-particle-app POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_LIST_DIR}/game_data"
+        $<TARGET_FILE_DIR:volatile-particle-app>/game_data)
+
 install(TARGETS volatile-particle-app)

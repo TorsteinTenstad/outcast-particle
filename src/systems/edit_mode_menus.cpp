@@ -29,7 +29,7 @@ void BlueprintMenu::Create(Level& level)
 	{ //Background
 		auto position = sf::Vector2f(0.5 * BLUEPRINT_MENU_WIDTH, level_size.y / 2.f);
 		auto size = sf::Vector2f(BLUEPRINT_MENU_WIDTH, level_size.y);
-		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "content\\textures\\gray.png", false);
+		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY, "TEXTURES_DIR\\gray.png", false);
 		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
 
@@ -67,7 +67,7 @@ void MusicMenu::Create(Level& level)
 	{ //Background
 		auto position = sf::Vector2f(level_size.x - BLUEPRINT_MENU_WIDTH * 2 * scale, level_size.y / 2.f);
 		auto size = sf::Vector2f(4 * BLUEPRINT_MENU_WIDTH * scale, level_size.y);
-		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY - 1, "content\\textures\\gray.png", false);
+		auto [entity, _] = CreateTexturedRectangle(level, position, size, UI_BASE_DRAW_PRIORITY - 1, "TEXTURES_DIR\\gray.png", false);
 		level.AddComponents<ReceivesButtonEvents>(entity);
 	}
 	std::vector<EntitiesHandle> buttons;
@@ -103,7 +103,7 @@ void MusicMenu::Create(Level& level)
 	}
 	buttons.push_back({ slider_entities, size_4 });
 
-	std::string path = "content\\music";
+	std::string path = "MUSIC_DIR";
 
 	EntityHandle music_title = CreateText(level, sf::Vector2f(0, 0), "Select Music", 100 * scale);
 	buttons.push_back(ToEntitiesHandle(music_title));
@@ -138,7 +138,7 @@ static EntitiesHandle CreateIcon(Level& level, std::string image_path)
 	Entity button = GetEntity(level.CreateEntityWith<Position, DrawInfo>());
 	level.AddComponent<DrawPriority>(button)->draw_priority = 2 * UI_BASE_DRAW_PRIORITY;
 	level.AddComponent<WidthAndHeight>(button)->width_and_height = width_and_height;
-	level.AddComponent<Shader>(button)->fragment_shader_path = "shaders\\round_corners.frag";
+	level.AddComponent<Shader>(button)->fragment_shader_path = "SHADERS_DIR\\round_corners.frag";
 	level.AddComponent<FillColor>(button)->color = DEFAULT_COLOR;
 
 	return { { icon, button }, width_and_height };
@@ -156,18 +156,18 @@ void HelpMenu::Create(Level& level)
 	std::vector<EntitiesHandle> explanation_handles = {};
 
 	std::vector<std::tuple<std::string, std::vector<std::string>>> row_data = {
-		{ "Add an element to the level", { "content\\textures\\add.png" } },
-		{ "Delete all selected elements", { "content\\textures\\delete_entity.png" } },
-		{ "Undo and redo", { "content\\textures\\undo.png", "content\\textures\\redo.png" } },
-		{ "Increase or decrease level size", { "content\\textures\\increase_size.png", "content\\textures\\decrease_size.png" } },
-		{ "Change width and height of element", { "content\\textures\\widen.png", "content\\textures\\narrow.png", "content\\textures\\heighten.png", "content\\textures\\shorten.png" } },
-		{ "Set strength of charges and fields, bounciness of walls and timing of lasers", { "content\\textures\\1.png", "content\\textures\\2.png", "content\\textures\\3.png", "content\\textures\\4.png", "content\\textures\\5.png" } },
-		{ "Increase and decrease particle velocity", { "content\\textures\\increase_velocity.png", "content\\textures\\decrease_velocity.png" } },
-		{ "Change direction of particle velocity", { "content\\textures\\rotate_right.png", "content\\textures\\rotate_left.png" } },
-		{ "Change direction of electronic fields", { "content\\textures\\rotate_90.png", "content\\textures\\counter_rotate_90.png" } },
-		{ "Flip direction of magnetic fields, and sign of particle charge", { "content\\textures\\flip.png" } },
-		{ "Select track", { "content\\textures\\music.png" } },
-		{ "Open and close this help screen", { "content\\textures\\help.png" } },
+		{ "Add an element to the level", { "TEXTURES_DIR\\add.png" } },
+		{ "Delete all selected elements", { "TEXTURES_DIR\\delete_entity.png" } },
+		{ "Undo and redo", { "TEXTURES_DIR\\undo.png", "TEXTURES_DIR\\redo.png" } },
+		{ "Increase or decrease level size", { "TEXTURES_DIR\\increase_size.png", "TEXTURES_DIR\\decrease_size.png" } },
+		{ "Change width and height of element", { "TEXTURES_DIR\\widen.png", "TEXTURES_DIR\\narrow.png", "TEXTURES_DIR\\heighten.png", "TEXTURES_DIR\\shorten.png" } },
+		{ "Set strength of charges and fields, bounciness of walls and timing of lasers", { "TEXTURES_DIR\\1.png", "TEXTURES_DIR\\2.png", "TEXTURES_DIR\\3.png", "TEXTURES_DIR\\4.png", "TEXTURES_DIR\\5.png" } },
+		{ "Increase and decrease particle velocity", { "TEXTURES_DIR\\increase_velocity.png", "TEXTURES_DIR\\decrease_velocity.png" } },
+		{ "Change direction of particle velocity", { "TEXTURES_DIR\\rotate_right.png", "TEXTURES_DIR\\rotate_left.png" } },
+		{ "Change direction of electronic fields", { "TEXTURES_DIR\\rotate_90.png", "TEXTURES_DIR\\counter_rotate_90.png" } },
+		{ "Flip direction of magnetic fields, and sign of particle charge", { "TEXTURES_DIR\\flip.png" } },
+		{ "Select track", { "TEXTURES_DIR\\music.png" } },
+		{ "Open and close this help screen", { "TEXTURES_DIR\\help.png" } },
 	};
 
 	for (const auto& [explanation, icon_paths] : row_data)

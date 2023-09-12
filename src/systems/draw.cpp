@@ -31,7 +31,7 @@ void DrawSystem::Update(Level& level, float dt)
 		texture.create(globals.render_window.getSize().x, globals.render_window.getSize().y);
 		texture.update(globals.render_window);
 
-		std::filesystem::path screenshots_dir(SCREENSHOTS_FOLDER);
+		std::filesystem::path screenshots_dir(SCREENSHOTS_DIR);
 		std::filesystem::create_directory(screenshots_dir);
 		std::string screenshot_path = (screenshots_dir / GetDateTimeIdentifier()).replace_extension(".png").string();
 

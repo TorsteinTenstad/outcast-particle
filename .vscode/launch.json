@@ -11,6 +11,7 @@
             "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "stopAtEntry": false,
+            //"cwd": "${fileDirname}",
             "cwd": "${workspaceRoot}",
             "console": "newExternalWindow"
         }

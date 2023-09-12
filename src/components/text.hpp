@@ -34,7 +34,7 @@ public:
 	sf::Color color = sf::Color::White;
 	sf::Color outline_color = sf::Color::White;
 	float outline_thickness = 0;
-	std::string font_path = "content\\monof55.ttf";
+	std::string font_path = "game_data\\monof55.ttf";
 	bool apply_shader = false;
 	TextOrigin origin = TextOrigin::REFERENCE_HEIGHT_CENTER;
 	bool render = true;

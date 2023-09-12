@@ -25,8 +25,8 @@
 
 Game::Game() :
 	active_level_(std::make_unique<Level>()),
-	level_manager_(LEVELS_FOLDER),
-	records_(USER_FOLDER / "records.txt")
+	level_manager_(LEVELS_DIR),
+	records_(USER_DIR / "records.txt")
 {
 	//RegisterGameSystem<TrailerIntroHelperSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();
@@ -85,12 +85,12 @@ Game::Game() :
 	RegisterPhysicsGameSystem<AccelerationSystem>();
 	RegisterPhysicsGameSystem<VelocitySystem>();
 
-	if (!std::filesystem::exists(USER_FOLDER))
+	if (!std::filesystem::exists(USER_DIR))
 	{
-		std::filesystem::create_directory(USER_FOLDER);
+		std::filesystem::create_directory(USER_DIR);
 	}
 
-	LoadOptionsFromFile("user\\controls_config.txt", "user\\general_config.txt");
+	LoadOptionsFromFile("game_data\\user\\controls_config.txt", "game_data\\user\\general_config.txt");
 
 	CheckFullscreen();
 
@@ -99,7 +99,7 @@ Game::Game() :
 
 Game::~Game()
 {
-	SaveOptionsToFile("user\\controls_config.txt", "user\\general_config.txt");
+	SaveOptionsToFile("game_data\\user\\controls_config.txt", "game_data\\user\\general_config.txt");
 }
 
 Level& Game::SetLevelAndEdit(std::string level_id)

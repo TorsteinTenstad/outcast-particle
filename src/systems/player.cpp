@@ -73,7 +73,7 @@ void SetTextures(Level& level)
 			//int category = FindClosest(PARTICLE_CHARGE_CATEGORIES, nonzero_charge);
 			//draw_info->image_path = PLAYER_PARTICLE_NEUTRAL_TEXTURES[category];
 		}
-		face->image_path = "content\\textures\\face_" + std::string((nonzero_charge > 0) ? "plus.png" : "minus.png");
+		face->image_path = "TEXTURES_DIR\\face_" + std::string((nonzero_charge > 0) ? "plus.png" : "minus.png");
 	}
 }
 

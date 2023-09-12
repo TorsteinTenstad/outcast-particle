@@ -19,7 +19,7 @@ sf::Texture* RenderShapesSystem::GetLoadedSFMLTexture(std::string image_path)
 		bool loaded = textures_[image_path].loadFromFile(image_path);
 		if (!loaded)
 		{
-			textures_[image_path].loadFromFile("content\\textures\\white.png");
+			textures_[image_path].loadFromFile("TEXTURES_DIR\\white.png");
 		}
 		textures_[image_path].setSmooth(true);
 	}

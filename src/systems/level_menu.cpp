@@ -281,7 +281,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	{ // Dot indicator
 		auto [entity, shader, receives_button_events, draw_info, draw_priority, width_and_height, position] = level.CreateEntityWith<Shader, ReceivesButtonEvents, DrawInfo, DrawPriority, WidthAndHeight, Position>();
 		ui->dot_indicator_entity = entity;
-		shader->fragment_shader_path = "shaders\\dots_indicator.frag";
+		shader->fragment_shader_path = "SHADERS_DIR\\dots_indicator.frag";
 		shader->int_uniforms["n_dots"] = level_groups.size();
 		shader->int_uniforms["active_dot"] = std::distance(level_groups.cbegin(), level_groups.find(at_group));
 		position->position.x = BUTTONS_PANEL_CENTER;
@@ -322,8 +322,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			position->position = pos;
 			width_and_height->width_and_height = w_h;
 			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY;
-			shader->fragment_shader_path = "shaders\\round_corners.frag";
-			sound_info->sound_paths = { { ON_CLICK, "content\\sounds\\click.wav" } };
+			shader->fragment_shader_path = "SHADERS_DIR\\round_corners.frag";
+			sound_info->sound_paths = { { ON_CLICK, "SOUNDS_DIR\\click.wav" } };
 		}
 
 		{
@@ -331,7 +331,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 				level.CreateEntityWith<DrawInfo, DrawPriority, WidthAndHeight, Position, CanDisableButton, FillColor>();
 			can_disable_button->func = [is_end = (p == -1) ? PrevInMap(level_groups, at_group)->first == at_group : NextInMap(level_groups, at_group)->first == at_group]() { return !is_end; };
 			can_disable_button->regain_button_events = false;
-			draw_info->image_path = (p == -1) ? "content\\textures\\prev.png" : "content\\textures\\next.png";
+			draw_info->image_path = (p == -1) ? "TEXTURES_DIR\\prev.png" : "TEXTURES_DIR\\next.png";
 			position->position = pos;
 			width_and_height->width_and_height = w_h;
 			draw_priority->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
@@ -356,7 +356,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		// Button
 		auto [button_id, size] = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(width, BUTTONS_HEIGHT));
 		level.AddComponent<MenuNavigable>(button_id);
-		level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+		level.GetComponent<Shader>(button_id)->fragment_shader_path = "SHADERS_DIR\\scroll_and_round_corners.frag";
 		// Text
 		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(0, 0), button_text, 75u);
 
@@ -378,15 +378,15 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		}
 		row_items.push_back(main_button);
 		const std::vector<std::vector<Entity>*> ui_button_containers = { &ui->rename_level_button_entities, &ui->edit_level_button_entities, &ui->delete_level_button_entities };
-		const std::vector<std::string> icon_paths = { "content\\textures\\edit.png", "content\\textures\\brush.png", "content\\textures\\delete.png" };
+		const std::vector<std::string> icon_paths = { "TEXTURES_DIR\\edit.png", "TEXTURES_DIR\\brush.png", "TEXTURES_DIR\\delete.png" };
 		const std::vector<std::string> tooltips = { "Rename level", "Edit level", "Delete level" };
 		for (const auto& [ui_container, icon_path, tooltip] : zip(ui_button_containers, icon_paths, tooltips))
 		{
 			EntityHandle button_handle = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT));
 			EntityHandle icon_handle = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(edit_buttons_width, BUTTONS_HEIGHT), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
 			Entity button_id = GetEntity(button_handle);
-			level.GetComponent<Shader>(button_id)->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
-			level.AddComponent<Shader>(GetEntity(icon_handle))->fragment_shader_path = "shaders\\scroll_and_round_corners.frag";
+			level.GetComponent<Shader>(button_id)->fragment_shader_path = "SHADERS_DIR\\scroll_and_round_corners.frag";
+			level.AddComponent<Shader>(GetEntity(icon_handle))->fragment_shader_path = "SHADERS_DIR\\scroll_and_round_corners.frag";
 			level.AddComponent<Tooltip>(button_id)->text = tooltip;
 			row_items.push_back(ToEntitiesHandle(button_handle, icon_handle));
 			ui_container->push_back(button_id);

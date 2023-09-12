@@ -23,7 +23,7 @@ int GetLevelNumberFromId(const std::string& level_id)
 
 std::string AssembleLevelId(std::string group_name, int level_number, std::string level_display_name)
 {
-	std::filesystem::path path { LEVELS_FOLDER };
+	std::filesystem::path path { LEVELS_DIR };
 	path.append(group_name);
 	std::string level_name = ToString(level_number);
 	if (level_name.length() == 1)

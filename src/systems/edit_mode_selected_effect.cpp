@@ -23,7 +23,7 @@ void EditModeSelectedEffectSystem::Update(Level& level, float dt)
 	}
 
 	Entity entity = level.GetSingletonId<SelectedEffect>([&level](ECSScene& scene) {
-		return CreateScreenWideFragmentShaderEntity(level, "shaders\\selected_effect.frag", 50);
+		return CreateScreenWideFragmentShaderEntity(level, "SHADERS_DIR\\selected_effect.frag", 50);
 	});
 	auto level_size = level.GetSize();
 	level.GetComponent<WidthAndHeight>(entity)->width_and_height = level_size;

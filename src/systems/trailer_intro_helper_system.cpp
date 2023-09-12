@@ -17,7 +17,7 @@ void TrailerIntroHelperSystem::Update(Level& level, float dt)
 	if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::Num2])
 	{
 		Entity entity = level.AddBlueprint(BPStaticParticle);
-		level.GetComponent<Shader>(entity)->vertex_shader_path = "shaders\\particle.vert";
+		level.GetComponent<Shader>(entity)->vertex_shader_path = "SHADERS_DIR\\particle.vert";
 		level.GetComponent<Position>(entity)->position = sf::Vector2f(2 * level_size.x / 3, level_size.y / 2);
 	}
 }
