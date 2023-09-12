@@ -14,6 +14,25 @@
       }
     }
   },
+  "terminalMode": {
+    "default": "hideTerminal",
+    "choices": {
+      "hideTerminal": {
+        "short": "Hide terminal",
+        "long": "Hide terminal",
+        "settings": {
+          "_WIN32": "WIN32"
+        }
+      },
+      "showTerminal": {
+        "short": "Show Terminal",
+        "long": "Show Terminal",
+        "settings": {
+          "_WIN32": ""
+        }
+      }
+    }
+  },
   "gameVersion": {
     "default": "full",
     "choices": {

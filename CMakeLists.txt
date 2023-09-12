@@ -12,7 +12,7 @@ aux_source_directory(src/systems/ SYSTEMS_DIR)
 aux_source_directory(src/utils/ UTILS_DIR)
 aux_source_directory(src/ecs/ ECS_DIR)
 aux_source_directory(src/edit_mode_actions/ EDIT_MODE_ACTIONS_DIR)
-add_executable(volatile-particle-app WIN32 ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
+add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
 target_include_directories(volatile-particle-app PUBLIC src src/components src/systems)
 
@@ -31,7 +31,7 @@ add_custom_command(
 add_custom_command(
     TARGET volatile-particle-app
     POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
-        ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<BOOL:${ARCH_64BITS}>,x64,x86>/openal32.dll
+    ${CMAKE_CURRENT_BINARY_DIR}/_deps/sfml-src/extlibs/bin/x64/openal32.dll
         $<TARGET_FILE_DIR:volatile-particle-app>
 )
 
@@ -39,7 +39,7 @@ add_custom_command(
     TARGET volatile-particle-app
     POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_LIST_DIR}/game_data
-        $<TARGET_FILE_DIR:volatile-particle-app>/game_dat
+        $<TARGET_FILE_DIR:volatile-particle-app>/game_data
 )
 
 install(TARGETS volatile-particle-app)
