@@ -20,7 +20,6 @@ void ExitGameSystem::Update(Level& level, float dt)
 		if (level.GetMode() != EDIT_MODE)
 		{
 			level.LoadFromFile();
-			std::cout << level.editor.IsEmpty() << std::endl;
 		}
 		level.editor.UndoAll();
 		level.SaveToFile();

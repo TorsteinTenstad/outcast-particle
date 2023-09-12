@@ -11,6 +11,5 @@ void ShowErrorSystem::Update(Level& level, float dt)
 	ErrorInfo error_info = globals.errors.error_infos.front();
 	globals.errors.error_infos.pop_front();
 	std::string title = "Error " + ToString(static_cast<int>(error_info.error_number));
-	std::cout << title << std::endl;
 	CreateBlockingInformationMenu(level, level.GetSize(), title, error_info.message.value_or(""), level.GetScale());
 }

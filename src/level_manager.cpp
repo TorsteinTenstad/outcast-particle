@@ -8,7 +8,6 @@
 
 LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 {
-	std::cout << std::filesystem::absolute(levels_dir) << std::endl;
 	for (const auto& folder : std::filesystem::directory_iterator { levels_dir })
 	{
 		if (!folder.is_directory()) { continue; }

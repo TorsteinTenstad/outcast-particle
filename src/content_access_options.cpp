@@ -6,12 +6,10 @@
 void ContentAccessOptions::ToggleAllLevelsAreEditable()
 {
 	all_level_groups_are_editable = !all_level_groups_are_editable;
-	std::cout << "Developer option: all_level_groups_are_editable = " << all_level_groups_are_editable << "\n";
 }
 void ContentAccessOptions::ToggleTrialBuild()
 {
 	is_trial_build = !is_trial_build;
-	std::cout << "Developer option: is_trial_build = " << all_level_groups_are_editable << "\n";
 }
 
 bool ContentAccessOptions::IsLevelGroupEditable(const std::string& group_name)
