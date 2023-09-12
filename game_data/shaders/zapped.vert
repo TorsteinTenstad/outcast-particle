@@ -1,7 +1,7 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
 
 uniform float start_animation = -1.;
 

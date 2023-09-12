@@ -1,6 +1,6 @@
 #version 120
 
-#include "shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
 
 #define MAX_N 64
 

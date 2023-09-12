@@ -53,7 +53,7 @@ void LaserProximitySystem::Update(Level& level, float dt)
 	}
 	Entity entity = level.GetSingletonId<LaserProximity>([](ECSScene& level) {
 		auto [entity, sound_info] = level.CreateEntityWith<SoundInfo>();
-		sound_info->sound_paths = { { DEFAULT, "SOUNDS_DIR\\laser_proximity.wav" } };
+		sound_info->sound_paths = { { DEFAULT, (SOUNDS_DIR / "laser_proximity.wav").string() } };
 		sound_info->play_sound.push(DEFAULT);
 		sound_info->loop_sounds = { { DEFAULT, true } };
 		return entity;

@@ -1,12 +1,12 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\math_utils.glsl";
-#include "shaders\\include\\game_constants.glsl";
-#include "shaders\\include\\blend.glsl";
-#include "shaders\\include\\gem.glsl";
-#include "shaders\\include\\rand.glsl";
-#include "shaders\\include\\round_corners.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\game_constants.glsl";
+#include "game_data\\shaders\\include\\blend.glsl";
+#include "game_data\\shaders\\include\\gem.glsl";
+#include "game_data\\shaders\\include\\rand.glsl";
+#include "game_data\\shaders\\include\\round_corners.glsl";
 
 float coin_size = 120;
 float coin_spacing = 60;

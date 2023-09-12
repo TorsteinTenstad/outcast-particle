@@ -53,7 +53,7 @@ void RenderTextSystem::Update(Level& level, float dt)
 		{
 			if (!font_[text->font_path].loadFromFile(text->font_path))
 			{
-				globals.errors += Error(ErrorNumber::LOAD_FONT, "Failed to load font from\n" + text->font_path);
+				globals.errors += Error(ErrorNumber::LOAD_FONT, "Failed to load font from\n" + std::filesystem::absolute(std::filesystem::path(text->font_path)).string());
 			}
 		}
 		if (text_height_[text->font_path].count(text->size) == 0)

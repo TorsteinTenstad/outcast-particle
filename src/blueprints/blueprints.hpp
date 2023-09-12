@@ -12,7 +12,7 @@ class BPEditableEntity
 class BPStaticParticle : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
-	Shader shader = { "", "SHADERS_DIR\\particle.frag", {}, {}, {} };
+	Shader shader = { "", (SHADERS_DIR / "particle.frag").string(), {}, {}, {} };
 	DrawPriority draw_priority = { 10 };
 	ChargeDependentDrawInfo charge_dependent_draw_info = {};
 	Radius radius = { 108 };
@@ -39,7 +39,7 @@ class BPBlackHole : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
-	Shader shader = { "", "SHADERS_DIR\\black_hole.frag", {}, {}, {} };
+	Shader shader = { "", (SHADERS_DIR / "black_hole.frag").string(), {}, {}, {} };
 
 	// [Serialize]
 	WidthAndHeight width_and_height = { sf::Vector2f(240, 240) };
@@ -59,8 +59,8 @@ class BPPlayer : public BPEditableEntity
 	Children children = {};
 	Trail trail = {};
 	DrawPriority draw_priority = { 12 };
-	Shader shader = { "SHADERS_DIR\\player.vert", "SHADERS_DIR\\particle.frag", {}, {}, {} };
-	SoundInfo sound_info = { { { DEFAULT, "SOUNDS_DIR\\wav.wav" }, { TO_NEUTRAL, "SOUNDS_DIR\\to_neutral.wav" }, { FROM_NEUTRAL, "SOUNDS_DIR\\from_neutral.wav" } } };
+	Shader shader = { (SHADERS_DIR / "player.vert").string(), (SHADERS_DIR / "particle.frag").string(), {}, {}, {} };
+	SoundInfo sound_info = { { { DEFAULT, (SOUNDS_DIR / "wav.wav").string() }, { TO_NEUTRAL, (SOUNDS_DIR / "to_neutral.wav").string() }, { FROM_NEUTRAL, (SOUNDS_DIR / "from_neutral.wav").string() } } };
 	Face face = {};
 	ForceVisualization force_visualization = {};
 	PlayerBehaviors player_behaviors = {};
@@ -95,14 +95,14 @@ class BPCoin : public BPEditableEntity
 	SegmentedGlowEffect segmented_glow_effect = {};
 	Children children = {};
 	Radius radius = { 60 };
-	SoundInfo sound_info = { { { DEFAULT, "SOUNDS_DIR\\coin.wav" } } };
+	SoundInfo sound_info = { { { DEFAULT, (SOUNDS_DIR / "coin.wav").string() } } };
 };
 
 class BPWall : public BPEditableEntity
 {
 	Wall wall = {};
 	DrawPriority draw_priority = { 4 };
-	SoundInfo sound_info = { { { DEFAULT, "SOUNDS_DIR\\wall_3.wav" } } };
+	SoundInfo sound_info = { { { DEFAULT, (SOUNDS_DIR / "wall_3.wav").string() } } };
 
 	// [Serialize]
 	Collision collision = { 0.2, 75 };
@@ -114,12 +114,12 @@ class BPWall : public BPEditableEntity
 class BPGoal : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
-	Shader shader = { "", "SHADERS_DIR\\wormhole.frag", {}, {}, {} };
+	Shader shader = { "", (SHADERS_DIR / "wormhole.frag").string(), {}, {}, {} };
 	DrawPriority draw_priority = { 2 };
 	Goal goal = {};
 	Wormhole wormhole = {};
 	Mass mass = {};
-	SoundInfo sound_info = { { { DEFAULT, "SOUNDS_DIR\\happy_transition.wav" } } };
+	SoundInfo sound_info = { { { DEFAULT, (SOUNDS_DIR / "happy_transition.wav").string() } } };
 	Radius Radius = { 240 };
 };
 
@@ -127,7 +127,7 @@ class BPElectricField : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
-	Shader shader = { "", "SHADERS_DIR\\electric_field.frag", {}, {}, {} };
+	Shader shader = { "", (SHADERS_DIR / "electric_field.frag").string(), {}, {}, {} };
 
 	// [Serialize]
 	ElectricField electric_field = { sf::Vector2f(0, 0.25) };
@@ -140,7 +140,7 @@ class BPMagneticField : public BPEditableEntity
 {
 	DrawInfo draw_info = {};
 	DrawPriority draw_priority = { 1 };
-	Shader shader = { "", "SHADERS_DIR\\magnetic_field.frag", {}, {}, {} };
+	Shader shader = { "", (SHADERS_DIR / "magnetic_field.frag").string(), {}, {}, {} };
 
 	// [Serialize]
 	MagneticField magnetic_field = { 0.1 };
@@ -151,7 +151,7 @@ class BPMagneticField : public BPEditableEntity
 
 class BPTextPopupSpawner : public BPEditableEntity
 {
-	DrawInfo draw_info = { "TEXTURES_DIR\\transparent.png", false, 0 };
+	DrawInfo draw_info = { (TEXTURES_DIR / "transparent.png").string(), false, 0 };
 	DrawPriority draw_priority = { 2 };
 
 	// [Serialize]

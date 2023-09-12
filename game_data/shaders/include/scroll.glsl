@@ -1,5 +1,5 @@
-#include "shaders\\include\\game_constants.glsl";
-#include "shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\game_constants.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
 
 uniform float top = -100000000;
 uniform float bottom = 100000000;

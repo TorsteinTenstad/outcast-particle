@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\bliss.wav
 1127769166400076952:Tag{tag=BPLaser}Position{position=(900,1080)}WidthAndHeight{width_and_height=(60,720)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 2454952747615716561:Tag{tag=BPGoal}Position{position=(3480,1080)}
 2574244010189731743:Tag{tag=BPLaser}Position{position=(2580,1080)}WidthAndHeight{width_and_height=(60,720)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}

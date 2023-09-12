@@ -90,6 +90,6 @@ void RenderGridAdaptiveTexturesSystem::Update(Level& level, float dt)
 			texture.clear(sf::Color(0, 0, 0, 0));
 		}
 	}
-	UpdateTexture(level, 4u, "SHADERS_DIR\\adaptive_lasers.frag", LaserDrawFunc);
-	UpdateTexture(level, 2u, "SHADERS_DIR\\adaptive_walls.frag", WallDrawFunc);
+	UpdateTexture(level, 4u, (SHADERS_DIR / "adaptive_lasers.frag").string(), LaserDrawFunc);
+	UpdateTexture(level, 2u, (SHADERS_DIR / "adaptive_walls.frag").string(), WallDrawFunc);
 }

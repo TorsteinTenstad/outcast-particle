@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\bliss.wav
 682912533705084670:Tag{tag=BPGoal}Position{position=(3060,1740)}
 1341352999603149593:Tag{tag=BPWall}Position{position=(2340,660)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}
 2014210366970481602:Tag{tag=BPWall}Position{position=(3060,660)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}

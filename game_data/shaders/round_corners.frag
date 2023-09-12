@@ -1,7 +1,7 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\round_corners.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\round_corners.glsl";
 
 void main()
 {

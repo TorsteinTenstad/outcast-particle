@@ -30,7 +30,7 @@ void TimerSystem::Update(Level& level, float dt)
 		float margin = 20;
 		level.AddComponent<Position>(entity)->position = sf::Vector2f(level_size.x - margin, margin);
 		auto text_component = level.AddComponent<Text>(entity);
-		text_component->font_path = "game_data\\digits_mono.otf";
+		text_component->font_path = (FONTS_DIR / "digits_mono.otf").string();
 		text_component->origin = TextOrigin::TOP_RIGHT;
 		text_component->size *= level_scale;
 		return entity;

@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\bliss.wav
 657658824946958447:Tag{tag=BPStaticParticle}Position{position=(2100,180)}Charge{charge=10000}
 1947983386637458841:Tag{tag=BPStaticParticle}Position{position=(3660,900)}Charge{charge=-10000}
 2851848020660818595:Tag{tag=BPWall}Position{position=(900,720)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,720)}

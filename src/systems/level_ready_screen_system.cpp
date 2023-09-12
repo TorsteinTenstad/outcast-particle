@@ -27,7 +27,7 @@ void LevelReadyScreenSystem::Update(Level& level, float dt)
 
 	level.GetSingleton<ReadyScreen>([&level_size, &level_scale](ECSScene& level) {
 		Entity entity = level.CreateEntity();
-		level.AddComponent<DrawInfo>(entity)->image_path = "TEXTURES_DIR\\transparent.png";
+		level.AddComponent<DrawInfo>(entity)->image_path = (TEXTURES_DIR / "transparent.png").string();
 		level.AddComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 5;
 		level.AddComponent<Position>(entity)->position = level_size / 2.f;
 		level.AddComponent<WidthAndHeight>(entity)->width_and_height = sf::Vector2f(0.75 * level_size.x, (3.f / 18.f) * level_size.y);

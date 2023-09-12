@@ -39,7 +39,7 @@ std::string AssembleLevelId(std::string group_name, int level_number, std::strin
 std::string GetGroupNameFromId(const std::string& level_id)
 {
 	std::filesystem::path path { level_id };
-	return (++path.remove_filename().begin())->string();
+	return (++ ++path.remove_filename().begin())->string(); //TODO: This is bad. Group name should be computed relative to LEVELS_DIR
 }
 
 std::string GetGroupDisplayNameFromGroupName(const std::string& group_name)

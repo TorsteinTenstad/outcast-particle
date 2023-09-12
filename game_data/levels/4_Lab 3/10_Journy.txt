@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=2;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=2;editable=1;music_path=game_data\music\bliss.wav
 123573816514442675:Tag{tag=BPElectricField}Position{position=(540,3000)}ElectricField{field_vector=(0.25,-0)}WidthAndHeight{width_and_height=(120,240)}
 149526304518304103:Tag{tag=BPElectricField}Position{position=(3900,2280)}ElectricField{field_vector=(-0.0625,0)}WidthAndHeight{width_and_height=(120,480)}
 376966462681058797:Tag{tag=BPLaser}Position{position=(900,1620)}WidthAndHeight{width_and_height=(1560,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}

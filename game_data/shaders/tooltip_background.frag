@@ -1,8 +1,8 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\math_utils.glsl";
-#include "shaders\\include\\game_constants.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\game_constants.glsl";
 
 #define BORDER_RGB vec3(0.86274509803)
 #define BACKGROUND_RGB vec3(0.2)

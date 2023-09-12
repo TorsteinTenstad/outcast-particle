@@ -90,7 +90,7 @@ Game::Game() :
 		std::filesystem::create_directory(USER_DIR);
 	}
 
-	LoadOptionsFromFile("game_data\\user\\controls_config.txt", "game_data\\user\\general_config.txt");
+	LoadOptionsFromFile((USER_DIR / "controls_config.txt").string(), (USER_DIR / "general_config.txt").string());
 
 	CheckFullscreen();
 
@@ -99,7 +99,7 @@ Game::Game() :
 
 Game::~Game()
 {
-	SaveOptionsToFile("game_data\\user\\controls_config.txt", "game_data\\user\\general_config.txt");
+	SaveOptionsToFile((USER_DIR / "controls_config.txt").string(), (USER_DIR / "general_config.txt").string());
 }
 
 Level& Game::SetLevelAndEdit(std::string level_id)

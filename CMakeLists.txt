@@ -17,6 +17,10 @@ add_executable(volatile-particle-app ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR}
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
 target_include_directories(volatile-particle-app PUBLIC src src/components src/systems)
 
+IF(MSVC)
+    SET(CMAKE_CXX_FLAGS "/EHsc")
+ENDIF(MSVC)
+
 target_link_libraries(volatile-particle-app PRIVATE sfml-graphics sfml-audio)
 target_compile_features(volatile-particle-app PRIVATE cxx_std_17)
 if (WIN32 AND BUILD_SHARED_LIBS)

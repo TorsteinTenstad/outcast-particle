@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\bliss.wav
 33891103017996031:Tag{tag=BPElectricField}Position{position=(3420,600)}ElectricField{field_vector=(0.0625,-0)}WidthAndHeight{width_and_height=(120,240)}
 260464710270183376:Tag{tag=BPCoin}Position{position=(2400,1200)}
 518419838424780327:Tag{tag=BPCoin}Position{position=(2760,960)}

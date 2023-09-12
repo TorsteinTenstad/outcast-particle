@@ -1,8 +1,8 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\game_constants.glsl";
-#include "shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\game_constants.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
 
 vec4 arrows(vec2 uv, float AA, float n){
     float y_margin = 0.1;

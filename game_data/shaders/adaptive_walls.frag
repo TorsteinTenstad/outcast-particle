@@ -1,8 +1,8 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\rand.glsl";
-#include "shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\rand.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
 
 uniform float grid_width;
 uniform float grid_height;

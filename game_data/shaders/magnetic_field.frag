@@ -1,13 +1,13 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\math_utils.glsl";
-#include "shaders\\include\\game_constants.glsl";
-#include "shaders\\include\\colors.glsl";
-#include "shaders\\include\\rand.glsl";
-#include "shaders\\include\\particles.glsl";
-#include "shaders\\include\\blend.glsl";
-#include "shaders\\include\\fields.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\game_constants.glsl";
+#include "game_data\\shaders\\include\\colors.glsl";
+#include "game_data\\shaders\\include\\rand.glsl";
+#include "game_data\\shaders\\include\\particles.glsl";
+#include "game_data\\shaders\\include\\blend.glsl";
+#include "game_data\\shaders\\include\\fields.glsl";
 
 
 uniform float charge_sign;

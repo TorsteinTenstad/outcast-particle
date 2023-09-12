@@ -8,3 +8,4 @@ const std::filesystem::path SOUNDS_DIR = "game_data\\sounds";
 const std::filesystem::path SHADERS_DIR = "game_data\\shaders";
 const std::filesystem::path TEXTURES_DIR = "game_data\\textures";
 const std::filesystem::path MUSIC_DIR = "game_data\\music";
+const std::filesystem::path FONTS_DIR = "game_data\\fonts";

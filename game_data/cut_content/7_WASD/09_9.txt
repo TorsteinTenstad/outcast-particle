@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=3;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=3;editable=1;music_path=game_data\music\bliss.wav
 738286175343651760:Tag{tag=BPLaser}Position{position=(3840,4260)}WidthAndHeight{width_and_height=(7440,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 1059395262102227863:Tag{tag=BPWall}Position{position=(1140,3300)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}
 1269546231529126969:Tag{tag=BPMagneticField}Position{position=(480,2940)}MagneticField{field_strength=0.05}WidthAndHeight{width_and_height=(720,2520)}

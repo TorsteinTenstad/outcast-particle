@@ -1,7 +1,7 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
 
 #define PI 3.1415926535897932384626433832795
 #define MAX_ARRAY_SIZE 64

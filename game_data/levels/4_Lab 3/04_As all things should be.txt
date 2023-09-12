@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\bliss.wav
 537916851818381220:Tag{tag=BPStaticParticle}Position{position=(1080,780)}Charge{charge=-10000}
 2312054146799720788:Tag{tag=BPStaticParticle}Position{position=(1080,1380)}Charge{charge=-10000}
 9618902530345968826:Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3720,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}

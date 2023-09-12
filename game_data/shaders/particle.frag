@@ -1,9 +1,9 @@
 #version 120
 
-#include "shaders\\include\\standard_uniforms.glsl";
-#include "shaders\\include\\math_utils.glsl";
-#include "shaders\\include\\blend.glsl";
-#include "shaders\\include\\colors.glsl";
+#include "game_data\\shaders\\include\\standard_uniforms.glsl";
+#include "game_data\\shaders\\include\\math_utils.glsl";
+#include "game_data\\shaders\\include\\blend.glsl";
+#include "game_data\\shaders\\include\\colors.glsl";
 
 uniform vec4 inner_color;
 uniform vec4 outer_color;

@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=0;editable=1;music_path=content\music\bliss.wav
+name=Untitled;grid_size_id=0;editable=1;music_path=game_data\music\bliss.wav
 644780509670330051:Tag{tag=BPElectricField}Position{position=(780,180)}ElectricField{field_vector=(-0,-0.25)}WidthAndHeight{width_and_height=(1320,120)}
 3955418073324956658:Tag{tag=BPGoal}Position{position=(300,780)}
 6904843213330593638:Tag{tag=BPMagneticField}Position{position=(1260,780)}MagneticField{field_strength=0.1}WidthAndHeight{width_and_height=(360,360)}

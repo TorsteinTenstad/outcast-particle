@@ -40,7 +40,7 @@ public:
 	Level();
 	bool editable = false;
 	std::string name = "Untitled";
-	std::string music_path = "MUSIC_DIR\\Bliss.wav";
+	std::string music_path = (MUSIC_DIR / "Bliss.wav").string();
 	sf::Vector2f ui_bars_size = sf::Vector2f(0, 0);
 
 	UndoSystem editor;
