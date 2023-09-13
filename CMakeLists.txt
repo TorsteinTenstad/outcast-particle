@@ -15,14 +15,16 @@ aux_source_directory(src/systems/ SYSTEMS_DIR)
 aux_source_directory(src/utils/ UTILS_DIR)
 aux_source_directory(src/ecs/ ECS_DIR)
 aux_source_directory(src/edit_mode_actions/ EDIT_MODE_ACTIONS_DIR)
-add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
+add_executable(volatile-particle-app ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
 
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
 target_include_directories(volatile-particle-app PUBLIC src src/components src/systems)
 
 SET(CMAKE_CXX_FLAGS "/EHsc")
 
-target_link_libraries(volatile-particle-app PRIVATE sfml-graphics sfml-audio sfml-main)
+set(EXTLIBS_PATH ${CMAKE_CURRENT_BINARY_DIR}/_deps/sfml-src/extlibs/libs-msvc/x64)
+
+target_link_libraries(volatile-particle-app PRIVATE sfml-graphics sfml-system sfml-audio sfml-main opengl32 winmm gdi32 ${EXTLIBS_PATH}/freetype.lib ${EXTLIBS_PATH}/vorbisenc.lib ${EXTLIBS_PATH}/vorbisfile.lib ${EXTLIBS_PATH}/vorbis.lib ${EXTLIBS_PATH}/ogg.lib)
 target_compile_features(volatile-particle-app PRIVATE cxx_std_17)
 
 add_custom_command(
