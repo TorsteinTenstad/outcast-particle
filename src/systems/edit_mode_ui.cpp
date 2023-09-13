@@ -19,6 +19,13 @@
 #include "systems/edit_mode_menus.hpp"
 #include "utils/string_parsing.hpp"
 
+class TogglePlayerMenuButton
+{};
+class ToggleMusicMenuButton
+{};
+class ToggleBlueprintMenuButton
+{};
+
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui, float dt);
 
@@ -47,6 +54,15 @@ static void UpdateUI(Level& level, EditModeUI* ui)
 {
 	if (ui->use_saved_move_force) { level.GetSingleton<Player>()->move_force = ui->saved_move_force; }
 	else { level.GetSingleton<Player>()->move_force = 0; }
+
+	if (level.GetEntitiesWith<TogglePlayerMenuButton, StickyButtonDown>().size() > 0 && !PlayerMenu().IsOpen(level)) { PlayerMenu().Open(level); }
+	if (level.GetEntitiesWith<TogglePlayerMenuButton, StickyButtonDown>().size() == 0 && PlayerMenu().IsOpen(level)) { PlayerMenu().Close(level); }
+
+	if (level.GetEntitiesWith<ToggleMusicMenuButton, StickyButtonDown>().size() > 0 && !MusicMenu().IsOpen(level)) { MusicMenu().Open(level); }
+	if (level.GetEntitiesWith<ToggleMusicMenuButton, StickyButtonDown>().size() == 0 && MusicMenu().IsOpen(level)) { MusicMenu().Close(level); }
+
+	if (level.GetEntitiesWith<ToggleBlueprintMenuButton, StickyButtonDown>().size() > 0 && !BlueprintMenu().IsOpen(level)) { BlueprintMenu().Open(level); }
+	if (level.GetEntitiesWith<ToggleBlueprintMenuButton, StickyButtonDown>().size() == 0 && BlueprintMenu().IsOpen(level)) { BlueprintMenu().Close(level); }
 }
 
 static void SetupUI(Level& level, EditModeUI* ui, float dt)
@@ -66,8 +82,9 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		// Create add-entity-button:
 		{
 			auto [entity, _] = CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(1.25 * BLOCK_SIZE, row_one), narrow_size, [&level]() { BlueprintMenu().Toggle(level); }, (TEXTURES_DIR / "add.png").string(), "Toggle menu for adding elements", []() { return true; }, globals.key_config.OPEN_BLUEPRINT_MENU);
+				level, sf::Vector2f(1.25 * BLOCK_SIZE, row_one), narrow_size, []() {}, (TEXTURES_DIR / "add.png").string(), "Toggle menu for adding elements", []() { return true; }, globals.key_config.OPEN_BLUEPRINT_MENU);
 			level.AddComponent<StickyButton>(entity[0]);
+			level.AddComponent<ToggleBlueprintMenuButton>(entity[0]);
 		}
 		// Delete-button:
 		CreateCanDisableButtonWithIcon(
@@ -148,13 +165,15 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		// Help menu button and music button:
 		{
 			auto [entity, _] = CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_two), narrow_size, [&]() { MusicMenu().Toggle(level); }, (TEXTURES_DIR / "music.png").string(), "Toggle music menu", []() { return true; }, globals.key_config.OPEN_MUSIC_MENU);
+				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_two), narrow_size, []() {}, (TEXTURES_DIR / "music.png").string(), "Toggle music menu", []() { return true; }, globals.key_config.OPEN_MUSIC_MENU);
 			level.AddComponent<StickyButton>(entity[0])->channel = 2;
+			level.AddComponent<ToggleMusicMenuButton>(entity[0]);
 		}
 		{
 			auto [entity, _] = CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { PlayerMenu().Toggle(level); }, (TEXTURES_DIR / "help.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
+				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, []() {}, (TEXTURES_DIR / "help.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
 			level.AddComponent<StickyButton>(entity[0])->channel = 2;
+			level.AddComponent<TogglePlayerMenuButton>(entity[0]);
 		}
 	}
 }

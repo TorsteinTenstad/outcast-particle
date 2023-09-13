@@ -58,7 +58,6 @@ std::optional<Entity> BlueprintMenu::Update(Level& level)
 
 void MusicMenu::Create(Level& level)
 {
-	PlayerMenu().Close(level);
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ScaleWithLevel>(entity); });
 
 	float scale = level.GetScale();
@@ -113,7 +112,6 @@ static EntitiesHandle CreateIcon(Level& level, std::string image_path)
 
 void PlayerMenu::Create(Level& level)
 {
-	MusicMenu().Close(level);
 	auto e = EntityCreationObserver(level, [](ECSScene& level, Entity entity) { level.AddComponent<ScaleWithLevel>(entity); });
 
 	float scale = level.GetScale();

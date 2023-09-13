@@ -17,6 +17,7 @@ void DrawSystem::Update(Level& level, float dt)
 	if (globals.skip_drawing_this_frame)
 	{
 		globals.skip_drawing_this_frame = false;
+		level.drawables.clear();
 		return;
 	}
 	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.RESET_SHADERS_AND_TEXTURES])

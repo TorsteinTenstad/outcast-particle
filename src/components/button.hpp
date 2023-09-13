@@ -40,7 +40,7 @@ class CanDisableButton
 {
 public:
 	std::function<bool(void)> func;
-	sf::Uint8 deactivation_alpha = 50;
+	sf::Uint8 deactivation_alpha = 25;
 	bool regain_button_events = true;
 };
 
