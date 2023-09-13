@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.21)
 project(volatile-particle-app LANGUAGES CXX)
+
+set(BUILD_SHARED_LIBS OFF)
+set(SFML_USE_STATIC_STD_LIBS TRUE)
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -13,6 +16,10 @@ aux_source_directory(src/utils/ UTILS_DIR)
 aux_source_directory(src/ecs/ ECS_DIR)
 aux_source_directory(src/edit_mode_actions/ EDIT_MODE_ACTIONS_DIR)
 add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
+
+add_link_options(/NODEFAULTLIB:lib)
+set_property(TARGET volatile-particle-app PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
 target_include_directories(volatile-particle-app PUBLIC src src/components src/systems)
 
@@ -20,13 +27,6 @@ SET(CMAKE_CXX_FLAGS "/EHsc")
 
 target_link_libraries(volatile-particle-app PRIVATE sfml-graphics sfml-audio sfml-main)
 target_compile_features(volatile-particle-app PRIVATE cxx_std_17)
-
-add_custom_command(
-    TARGET volatile-particle-app
-    POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
-        $<TARGET_RUNTIME_DLLS:volatile-particle-app>
-        $<TARGET_FILE_DIR:volatile-particle-app> COMMAND_EXPAND_LISTS
-)
 
 add_custom_command(
     TARGET volatile-particle-app
