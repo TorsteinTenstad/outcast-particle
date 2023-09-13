@@ -47,10 +47,11 @@ public:
 	void Create(Level& level);
 };
 
-class HelpMenuItem
+class PlayerMenuItem
 {};
-class HelpMenu : public MenuHelper<HelpMenuItem>
+class PlayerMenu : public MenuHelper<PlayerMenuItem>
 {
 public:
 	void Create(Level& level);
 };
+
