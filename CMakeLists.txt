@@ -17,9 +17,6 @@ aux_source_directory(src/ecs/ ECS_DIR)
 aux_source_directory(src/edit_mode_actions/ EDIT_MODE_ACTIONS_DIR)
 add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
 
-add_link_options(/NODEFAULTLIB:lib)
-set_property(TARGET volatile-particle-app PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
 target_include_directories(volatile-particle-app PUBLIC src src/components src/systems)
 
