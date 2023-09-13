@@ -24,6 +24,7 @@ public:
 	std::optional<std::string> displaying_level_id;
 
 	std::optional<Entity> new_level_button_id;
+	std::optional<Entity> import_level_button_id;
 	Entity menu_navigator_entity;
 	Entity level_preview_entity;
 	Entity next_group_button_entity;
