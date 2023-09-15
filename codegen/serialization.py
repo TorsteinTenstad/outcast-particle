@@ -115,10 +115,11 @@ def gen_load_from_file(data):
 Error Level::LoadFromFile(std::string savefile_path)
 {
 	Error err;
-    savefile_path_ = savefile_path;
-    Clear();
 
     std::ifstream f(savefile_path);
+	if (f.fail()) { return ERROR; }
+    savefile_path_ = savefile_path;
+    Clear();
     std::string line;
 
     getline(f, line);
@@ -142,10 +143,6 @@ Error Level::LoadFromFile(std::string savefile_path)
         {
             err += FromString(music_path, property_statement_parts[1]);
         }
-		else
-		{
-			assert(property_statement_parts[0].length() == 0);
-		}
 	}
 
     while (getline(f, line))

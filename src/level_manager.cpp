@@ -63,16 +63,17 @@ std::string LevelManager::CreateNewLevel(std::string group_name)
 
 std::optional<std::string> LevelManager::ImportLevel(std::string path, std::string group_name)
 {
-	std::vector<std::string> filename_parts = SplitString(std::filesystem::path(path).stem().string(), "_");
-	int level_number;
-	Error err = FromString(level_number, filename_parts[0]);
-	if (err)
+	std::filesystem::path fs_path = std::filesystem::path(path);
+	if (fs_path.extension() != ".txt")
 	{
-		level_number = levels_.at(group_name).size() > 0 ? GetLevelNumberFromId(levels_.at(group_name).back()) + 1 : 0;
+		globals.errors += Error(ErrorNumber::LOAD_LEVEL, "Failed to import level due to unexpected extension. Expected \".txt\".\n" + path);
+		return std::nullopt;
 	}
+	std::vector<std::string> filename_parts = SplitString(fs_path.stem().string(), "_");
+	int level_number = levels_.at(group_name).size() > 0 ? GetLevelNumberFromId(levels_.at(group_name).back()) + 1 : 0;
 	std::string new_level_id = AssembleLevelId(group_name, level_number, filename_parts.back());
 	Level level;
-	err = level.LoadFromFile(path);
+	Error err = level.LoadFromFile(path);
 	if (err)
 	{
 		globals.errors += Error(ErrorNumber::LOAD_LEVEL, "Failed to import level\n" + path);
