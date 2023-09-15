@@ -17,6 +17,7 @@
 #include "game_system.hpp"
 #include "level.hpp"
 #include "level_menu.hpp"
+#include "platform_specific/platform_specific.hpp"
 #include "systems/level_menu.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
@@ -197,20 +198,16 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 		std::string new_level_id = level_manager_->CreateNewLevel(at_group);
 		return RequestRedraw(level, ui, at_group, new_level_id);
 	}
-	if (ui->import_level_button_id.has_value())
+	if (ui->import_level_button_id.has_value() && level.HasComponents<ReleasedThisFrame>(ui->import_level_button_id.value()))
 	{
-		Entity entity = ui->import_level_button_id.value();
-		if (OpenFileDialog* open_file_dialog = level.RawGetComponent<OpenFileDialog>(entity))
+		std::optional<std::string> path = GetPathFromOpenFileDialog();
+		if (path.has_value())
 		{
-			if (open_file_dialog->path.has_value())
+			std::optional<std::string> new_level_id = level_manager_->ImportLevel(path.value(), at_group);
+			if (new_level_id.has_value())
 			{
-				std::cout << open_file_dialog->path.value();
-				open_file_dialog->path = std::nullopt;
+				return RequestRedraw(level, ui, at_group, new_level_id);
 			}
-		}
-		if (level.HasComponents<ReleasedThisFrame>(entity))
-		{
-			level.AddComponent<OpenFileDialog>(entity);
 		}
 	}
 
@@ -430,24 +427,18 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	if (levels_are_editable)
 	{
-		std::vector<EntitiesHandle> new_level_row;
-		float w = BUTTONS_WIDTH / 2 - BUTTONS_SPACING / 2;
 		{
-			EntitiesHandle handle = AddLevelMenuButton(level, "+", w);
+			EntitiesHandle handle = AddLevelMenuButton(level, "Create a new level", BUTTONS_WIDTH);
 			Entity entity = std::get<std::vector<Entity>>(handle)[0];
-			level.AddComponent<Tooltip>(entity)->text = "Create a new level";
 			ui->new_level_button_id = entity;
-			new_level_row.push_back(handle);
+			scroll_menu_items.push_back(handle);
 		}
 		{
-			EntitiesHandle handle = AddLevelMenuButton(level, "Import level", w);
+			EntitiesHandle handle = AddLevelMenuButton(level, "Import level", BUTTONS_WIDTH);
 			Entity entity = std::get<std::vector<Entity>>(handle)[0];
-			level.RemoveComponent<MenuNavigable>(entity);
-			level.AddComponent<Tooltip>(entity)->text = "Import level";
 			ui->import_level_button_id = entity;
-			new_level_row.push_back(handle);
+			scroll_menu_items.push_back(handle);
 		}
-		scroll_menu_items.push_back(HorizontalEntityLayout(level, sf::Vector2f(0, 0), new_level_row, BUTTONS_SPACING));
 	}
 	auto [scroll_menu_item_entities, scroll_menu_items_size] = VerticalEntityLayout(level, sf::Vector2f(BUTTONS_PANEL_CENTER, TITLE_H), scroll_menu_items, BUTTONS_SPACING, StartEdge);
 	scroll_window->entities = scroll_menu_item_entities;
