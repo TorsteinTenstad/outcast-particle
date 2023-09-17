@@ -153,7 +153,7 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		}
 		{
 			auto [entity, _] = CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { PlayerMenu().Toggle(level); }, (TEXTURES_DIR / "help.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
+				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { PlayerMenu().Toggle(level); }, (TEXTURES_DIR / "player_icon.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
 			level.AddComponent<StickyButton>(entity[0])->channel = 2;
 		}
 	}
