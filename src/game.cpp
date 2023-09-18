@@ -35,6 +35,8 @@ Game::Game() :
 	RegisterGameSystem<MusicSystem>();
 	RegisterGameSystem<MenuEscapeSystem>().Give(std::bind(&Game::GoToLastMenu, this)); //Must be above button system
 	RegisterGameSystem<LevelMenuSystem>().Give(&level_manager_, &records_, std::bind(&Game::SetLevel, this, std::placeholders::_1), std::bind(&Game::SetLevelAndEdit, this, std::placeholders::_1), std::bind(&Game::GenerateLevelTexture, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	RegisterGameSystem<OpenFileDialogSystem>();
+	RegisterGameSystem<EditModeUISystem>(); // Should be above ButtonSystem for edit mode menus to not flash white on creation
 	RegisterGameSystem<ButtonSystem>();
 	RegisterGameSystem<ScrollSystem>();		   // Has timing interactions with LevelMenuSystem and ButtonEventsSystem
 	RegisterGameSystem<MenuNavigatorSystem>(); // Must be directly above ButtonEventsSystem for Hovered component to work correctly // Consumes button events
@@ -43,7 +45,6 @@ Game::Game() :
 	RegisterGameSystem<CanDisableButtonSystem>();
 	RegisterGameSystem<ExitGameSystem>(); //Should be close after ButtonSystem for exiting to go smoothly.
 	RegisterGameSystem<TooltipSystem>();
-	RegisterGameSystem<EditModeUISystem>();
 	RegisterGameSystem<ScaleWithLevelSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();

@@ -6,6 +6,7 @@
 #include "components/button_events.hpp"
 #include "components/draw_info.hpp"
 #include "components/menu_navigator.hpp"
+#include "components/open_file_dialog.hpp"
 #include "components/position.hpp"
 #include "components/scroll.hpp"
 #include "components/size.hpp"
@@ -16,6 +17,7 @@
 #include "game_system.hpp"
 #include "level.hpp"
 #include "level_menu.hpp"
+#include "platform_specific/platform_specific.hpp"
 #include "systems/level_menu.hpp"
 #include "utils/container_operations.hpp"
 #include "utils/level_id.hpp"
@@ -195,6 +197,18 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 		}
 		std::string new_level_id = level_manager_->CreateNewLevel(at_group);
 		return RequestRedraw(level, ui, at_group, new_level_id);
+	}
+	if (ui->import_level_button_id.has_value() && level.HasComponents<ReleasedThisFrame>(ui->import_level_button_id.value()))
+	{
+		std::optional<std::string> path = GetPathFromOpenFileDialog();
+		if (path.has_value())
+		{
+			std::optional<std::string> new_level_id = level_manager_->ImportLevel(path.value(), at_group);
+			if (new_level_id.has_value())
+			{
+				return RequestRedraw(level, ui, at_group, new_level_id);
+			}
+		}
 	}
 
 	if (ui->delete_level_button_entities.size() > 0)
@@ -413,11 +427,18 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 	if (levels_are_editable)
 	{
-		EntitiesHandle new_level_button_handle = AddLevelMenuButton(level, "+", BUTTONS_WIDTH);
-		Entity new_level_button_entity = std::get<std::vector<Entity>>(new_level_button_handle)[0];
-		level.AddComponent<Tooltip>(new_level_button_entity)->text = "Create a new level";
-		ui->new_level_button_id = new_level_button_entity;
-		scroll_menu_items.push_back(new_level_button_handle);
+		{
+			EntitiesHandle handle = AddLevelMenuButton(level, "Create a new level", BUTTONS_WIDTH);
+			Entity entity = std::get<std::vector<Entity>>(handle)[0];
+			ui->new_level_button_id = entity;
+			scroll_menu_items.push_back(handle);
+		}
+		{
+			EntitiesHandle handle = AddLevelMenuButton(level, "Import level", BUTTONS_WIDTH);
+			Entity entity = std::get<std::vector<Entity>>(handle)[0];
+			ui->import_level_button_id = entity;
+			scroll_menu_items.push_back(handle);
+		}
 	}
 	auto [scroll_menu_item_entities, scroll_menu_items_size] = VerticalEntityLayout(level, sf::Vector2f(BUTTONS_PANEL_CENTER, TITLE_H), scroll_menu_items, BUTTONS_SPACING, StartEdge);
 	scroll_window->entities = scroll_menu_item_entities;

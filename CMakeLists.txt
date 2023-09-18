@@ -8,13 +8,14 @@ FetchContent_MakeAvailable(SFML)
 
 aux_source_directory(src/ SRC_DIR)
 aux_source_directory(src/components/ COMPONENTS_DIR)
+aux_source_directory(src/platform_specific/windows PLATFORM_DIR)
 aux_source_directory(src/systems/ SYSTEMS_DIR)
 aux_source_directory(src/utils/ UTILS_DIR)
 aux_source_directory(src/ecs/ ECS_DIR)
 aux_source_directory(src/edit_mode_actions/ EDIT_MODE_ACTIONS_DIR)
-add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR})
+add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SYSTEMS_DIR} ${UTILS_DIR} ${ECS_DIR} ${EDIT_MODE_ACTIONS_DIR} ${PLATFORM_DIR})
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
-target_include_directories(volatile-particle-app PUBLIC src src/components src/systems)
+target_include_directories(volatile-particle-app PUBLIC src src/components src/systems src/platform_specific/)
 
 SET(CMAKE_CXX_FLAGS "/EHsc")
 

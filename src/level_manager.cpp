@@ -2,13 +2,21 @@
 #include "folder_definitions.hpp"
 #include "level.hpp"
 #include "utils/level_id.hpp"
+#include "utils/string_parsing.hpp"
 #include <cassert>
 #include <filesystem>
 #include <fstream>
 
-LevelManager::LevelManager(const std::filesystem::path& levels_dir)
+LevelManager::LevelManager(const std::filesystem::path& levels_dir) :
+	levels_dir_(levels_dir)
 {
-	for (const auto& folder : std::filesystem::directory_iterator { levels_dir })
+	Load();
+}
+
+void LevelManager::Load()
+{
+	std::vector<std::string> corrupt_files;
+	for (const auto& folder : std::filesystem::directory_iterator { levels_dir_ })
 	{
 		if (!folder.is_directory()) { continue; }
 		std::string group = folder.path().stem().string();
@@ -17,7 +25,6 @@ LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 			levels_[group];
 		}
 
-		std::vector<std::string> corrupt_files;
 		for (const auto& level_file_path : std::filesystem::directory_iterator { folder.path() })
 		{
 			std::string level_id = level_file_path.path().string();
@@ -27,15 +34,15 @@ LevelManager::LevelManager(const std::filesystem::path& levels_dir)
 			Error err = level.LoadFromFile(level_id);
 			if (err) { corrupt_files.push_back(level_id); }
 		}
-		if (corrupt_files.size() > 0)
+	}
+	if (corrupt_files.size() > 0)
+	{
+		std::string message = "Failed to load game levels:";
+		for (const std::string& filename : corrupt_files)
 		{
-			std::string message = "Failed to load game files correctly, consider re-installing.";
-			for (const std::string& filename : corrupt_files)
-			{
-				message += "\n\t" + filename;
-			}
-			globals.errors += Error(ErrorNumber::LOAD_LEVEL, message);
+			message += "\n\t" + filename;
 		}
+		globals.errors += Error(ErrorNumber::LOAD_LEVEL, message);
 	}
 }
 
@@ -50,6 +57,29 @@ std::string LevelManager::CreateNewLevel(std::string group_name)
 	std::string level_display_name = "Unnamed level";
 	std::string new_level_id = AssembleLevelId(group_name, level_number, level_display_name);
 	std::filesystem::copy_file(NEW_LEVEL_TEMPLATE_FILE, new_level_id);
+	levels_.at(group_name).push_back(new_level_id);
+	return new_level_id;
+}
+
+std::optional<std::string> LevelManager::ImportLevel(std::string path, std::string group_name)
+{
+	std::filesystem::path fs_path = std::filesystem::path(path);
+	if (fs_path.extension() != ".txt")
+	{
+		globals.errors += Error(ErrorNumber::LOAD_LEVEL, "Failed to import level due to unexpected extension. Expected \".txt\".\n" + path);
+		return std::nullopt;
+	}
+	std::vector<std::string> filename_parts = SplitString(fs_path.stem().string(), "_");
+	int level_number = levels_.at(group_name).size() > 0 ? GetLevelNumberFromId(levels_.at(group_name).back()) + 1 : 0;
+	std::string new_level_id = AssembleLevelId(group_name, level_number, filename_parts.back());
+	Level level;
+	Error err = level.LoadFromFile(path);
+	if (err)
+	{
+		globals.errors += Error(ErrorNumber::LOAD_LEVEL, "Failed to import level\n" + path);
+		return std::nullopt;
+	}
+	std::filesystem::copy_file(path, new_level_id);
 	levels_.at(group_name).push_back(new_level_id);
 	return new_level_id;
 }
