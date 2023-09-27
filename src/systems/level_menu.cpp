@@ -52,7 +52,7 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		std::optional<float> record = records->GetRecord(at_level_id, i);
 
 		level.GetComponent<FillColor>(ui->stats_block_entities[i])->color.a = record.has_value() ? 255 : 0;
-		level.GetComponent<Text>(ui->stats_block_entities[i])->content = record.has_value() ? LeftPad(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 16) : "";
+		level.GetComponent<Text>(ui->stats_block_entities[i])->content = record.has_value() ? LeftPad(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 14) : "";
 	}
 }
 
