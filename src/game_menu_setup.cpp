@@ -18,7 +18,7 @@ void Game::GoToMainMenu()
 {
 	active_level_id_ = MAIN_MENU;
 	is_in_level_editing_ = false;
-	active_level_->music_path = (MUSIC_DIR / "Genesis.wav").string();
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
@@ -59,6 +59,7 @@ void Game::GoToMainMenu()
 void Game::GoToLevelMenu()
 {
 	is_in_level_editing_ = false;
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_id_ = LEVEL_MENU;
 	active_level_->ResetSize();
 	active_level_->CreateEntityWith<ReDrawLevelMenuRequest>();
@@ -67,6 +68,7 @@ void Game::GoToLevelMenu()
 void Game::GoToOptionsMenu()
 {
 	active_level_id_ = OPTIONS_MENU;
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
@@ -115,6 +117,7 @@ void Game::GoToOptionsMenu()
 void Game::GoToCreditsMenu()
 {
 	active_level_id_ = CREDITS_MENU;
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
@@ -221,6 +224,7 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 void Game::GoToKeyConfigMenu()
 {
 	active_level_id_ = KEY_CONFIG_MENU;
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
@@ -244,6 +248,7 @@ void Game::GoToKeyConfigMenu()
 void Game::GoToGraphicsAndDisplayMenu()
 {
 	active_level_id_ = GRAPHICS_AND_DISPLAY_MENU;
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
@@ -285,6 +290,7 @@ void Game::GoToGraphicsAndDisplayMenu()
 void Game::GoToMusicAndSoundMenu()
 {
 	active_level_id_ = MUSIC_AND_SOUND_MENU;
+	active_level_->music_path = (DEFAULT_MENU_SONG).string();
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 	std::array<int, 2> range = { 0, 100 };
