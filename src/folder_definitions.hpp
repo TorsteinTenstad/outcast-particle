@@ -9,3 +9,5 @@ const std::filesystem::path SHADERS_DIR = "game_data\\shaders";
 const std::filesystem::path TEXTURES_DIR = "game_data\\textures";
 const std::filesystem::path MUSIC_DIR = "game_data\\music";
 const std::filesystem::path FONTS_DIR = "game_data\\fonts";
+const std::filesystem::path DEFAULT_MENU_SONG = "game_data\\music\\Genesis.wav";
+const std::filesystem::path DEFAULT_EDIT_MODE_SONG = "game_data\\music\\Fox.wav";
