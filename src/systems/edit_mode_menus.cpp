@@ -49,7 +49,7 @@ std::optional<Entity> BlueprintMenu::Update(Level& level)
 	for (auto& [entity, pressed_this_frame, blueprint_menu_item, draw_priority, editable] : level.GetEntitiesWith<PressedThisFrame, BlueprintMenuItem, DrawPriority, Editable>())
 	{
 		draw_priority->draw_priority -= UI_BASE_DRAW_PRIORITY;
-		level.RemoveComponents<BlueprintMenuItem, NotSerialized>(entity);
+		level.RemoveComponents<BlueprintMenuItem, NotSerialized, EditModeUIEntity>(entity);
 		Close(level);
 		return entity;
 	}

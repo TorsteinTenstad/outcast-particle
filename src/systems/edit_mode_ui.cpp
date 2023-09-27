@@ -115,7 +115,7 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		CreateCanDisableButtonWithIcon(
 			level, sf::Vector2f(8 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(-1, 0)); }, (TEXTURES_DIR / "narrow.png").string(), "Make selected elements thinner", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0); }, globals.key_config.DECREMENT_WIDTH);
 		CreateCanDisableButtonWithIcon(
-			level, sf::Vector2f(9.75 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(0, -1)); }, (TEXTURES_DIR / "shorten.png").string(), "Make selected elements shorter", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0); }, globals.key_config.DECREMENT_WIDTH);
+			level, sf::Vector2f(9.75 * BLOCK_SIZE, row_two), narrow_size, [&]() { level.editor.Do<ResizeSelected>(level, sf::Vector2f(0, -1)); }, (TEXTURES_DIR / "shorten.png").string(), "Make selected elements shorter", [&level]() { return (level.GetEntitiesWith<Selected, WidthAndHeight>().size() != 0); }, globals.key_config.DECREMENT_HEIGHT);
 
 		// Property value buttons:
 		std::vector<std::string> button_texts = {
@@ -171,7 +171,7 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		}
 		{
 			auto [entity, _] = CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, [&]() { PlayerMenu().Toggle(level); }, (TEXTURES_DIR / "player_icon.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
+				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, []() {}, (TEXTURES_DIR / "player_icon.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
 			level.AddComponent<StickyButton>(entity[0])->channel = 2;
 			level.AddComponent<TogglePlayerMenuButton>(entity[0]);
 		}
