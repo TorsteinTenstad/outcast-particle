@@ -150,6 +150,9 @@ void SerializeComponent(const Player* c, std::string& str_rep)
 	str_rep += "can_go_neutral=";
 	str_rep += ToString(c->can_go_neutral);
 	str_rep += ";";
+	str_rep += "can_move_self=";
+	str_rep += ToString(c->can_move_self);
+	str_rep += ";";
 	str_rep += "move_force=";
 	str_rep += ToString(c->move_force);
 	str_rep += "}";
@@ -173,6 +176,10 @@ void DeserializeComponent(Player* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "can_go_neutral")
         {
             FromString(c->can_go_neutral, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "can_move_self")
+        {
+            FromString(c->can_move_self, statement_parts[1]);
         }
         else if (statement_parts[0] == "move_force")
         {

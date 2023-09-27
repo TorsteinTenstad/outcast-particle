@@ -17,15 +17,17 @@ void ProcessPlayerControls(Level& level, CursorAndKeys& cursor_and_keys)
 	int player_i = 0;
 	for (const auto& [entity, player, player_behaviors, received_forces, charge, children, shader, sound_info, position] : level.GetEntitiesWith<Player, PlayerBehaviors, ReceivedForces, Charge, Children, Shader, SoundInfo, Position>())
 	{
-		int x_direction = 0;
-		x_direction -= cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_LEFT] ? 1 : 0;
-		x_direction += cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_RIGHT] ? 1 : 0;
-		int y_direction = 0;
-		y_direction -= cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_UP] ? 1 : 0;
-		y_direction += cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_DOWN] ? 1 : 0;
-		received_forces->player_force.x = x_direction * player->move_force;
-		received_forces->player_force.y = y_direction * player->move_force;
-
+		if (player->can_move_self)
+		{
+			int x_direction = 0;
+			x_direction -= cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_LEFT] ? 1 : 0;
+			x_direction += cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_RIGHT] ? 1 : 0;
+			int y_direction = 0;
+			y_direction -= cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_UP] ? 1 : 0;
+			y_direction += cursor_and_keys.key_down[globals.key_config.PLAYER_MOVE_DOWN] ? 1 : 0;
+			received_forces->player_force.x = x_direction * player->move_force;
+			received_forces->player_force.y = y_direction * player->move_force;
+		}
 		auto switch_key = player_i == 1 ? sf::Keyboard::C : globals.key_config.PLAYER_SWITCH_CHARGE;
 		auto neutral_key = player_i == 1 ? sf::Keyboard::V : globals.key_config.PLAYER_GO_NEUTRAL;
 

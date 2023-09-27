@@ -52,9 +52,6 @@ void EditModeUISystem::Update(Level& level, float dt)
 
 static void UpdateUI(Level& level, EditModeUI* ui)
 {
-	if (ui->use_saved_move_force) { level.GetSingleton<Player>()->move_force = ui->saved_move_force; }
-	else { level.GetSingleton<Player>()->move_force = 0; }
-
 	if (level.GetEntitiesWith<TogglePlayerMenuButton, StickyButtonDown>().size() > 0 && !PlayerMenu().IsOpen(level)) { PlayerMenu().Open(level); }
 	if (level.GetEntitiesWith<TogglePlayerMenuButton, StickyButtonDown>().size() == 0 && PlayerMenu().IsOpen(level)) { PlayerMenu().Close(level); }
 
