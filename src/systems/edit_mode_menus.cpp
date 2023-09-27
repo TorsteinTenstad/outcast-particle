@@ -139,17 +139,17 @@ void PlayerMenu::Create(Level& level)
 	buttons.push_back(ToEntitiesHandle({ button_2, size_2 }));
 
 	auto [button_3, size_3] = CreateButton(
-		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1.5) * scale * float(BLOCK_SIZE), [&]() {EditModeUI* ui = level.GetSingleton<EditModeUI>(); ui->use_saved_move_force = !ui->use_saved_move_force; }, "WASD", 80);
+		level, sf::Vector2f(0, 0), sf::Vector2f(10, 1.5) * scale * float(BLOCK_SIZE), [&]() { level.GetSingleton<Player>()->can_move_self = !level.GetSingleton<Player>()->can_move_self; }, "WASD", 80);
 	level.AddComponent<StickyButton>(button_3);
-	if (!level.GetSingleton<Player>()->move_force == 0) { level.AddComponent<StickyButtonDown>(button_3); }
+	if (level.GetSingleton<Player>()->can_move_self) { level.AddComponent<StickyButtonDown>(button_3); }
 	buttons.push_back(ToEntitiesHandle({ button_3, size_3 }));
 
 	auto entity_copy = button_3;
 
-	auto [slider_entities, size_4] = CreateSliderButton(level, sf::Vector2f(0, 0), sf::Vector2f(8, 1) * scale * float(BLOCK_SIZE), &level.GetSingleton<EditModeUI>()->saved_move_force, { 0, 5000 });
+	auto [slider_entities, size_4] = CreateSliderButton(level, sf::Vector2f(0, 0), sf::Vector2f(8, 1) * scale * float(BLOCK_SIZE), &level.GetSingleton<Player>()->move_force, { 0, 5000 });
 	for (auto entity : slider_entities)
 	{
-		level.AddComponent<CanDisableButton>(entity)->func = [&, entity_copy]() { return level.GetSingleton<EditModeUI>()->use_saved_move_force; };
+		level.AddComponent<CanDisableButton>(entity)->func = [&, entity_copy]() { return level.GetSingleton<Player>()->can_move_self; };
 		if (!level.HasComponents<SliderButton>(entity)) { level.GetComponent<CanDisableButton>(entity)->regain_button_events = false; }
 	}
 	buttons.push_back({ slider_entities, size_4 });
