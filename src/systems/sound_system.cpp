@@ -34,7 +34,7 @@ void SoundSystem::Update(Level& level, float dt)
 		{
 			assert(sound_info->sound_paths.count(loop_sound) == 1);
 			sounds_[sound_info->sound_paths.at(loop_sound)].setLoop(true);
-			sounds_[sound_info->sound_paths.at(loop_sound)].setVolume(max_volume * sound_info->sound_volumes.at(loop_sound) * globals.general_config.sound_volume / 100);
+			sounds_[sound_info->sound_paths.at(loop_sound)].setVolume(max_volume * sound_info->sound_volumes.at(loop_sound) * globals.general_config.ambient_volume / 50);
 		}
 	}
 

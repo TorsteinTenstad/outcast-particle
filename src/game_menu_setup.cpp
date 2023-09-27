@@ -290,15 +290,14 @@ void Game::GoToMusicAndSoundMenu()
 	std::array<int, 2> range = { 0, 100 };
 	std::vector<EntitiesCreator> EntitiesCreator = {
 		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.sound_volume, range),
-		std::bind(
-			&CreateOptionsButton, std::ref(*active_level_), std::placeholders::_1, [](void) { globals.general_config.play_ambient_sounds = !globals.general_config.play_ambient_sounds; }, BoolToStringAsEnabledOrDisabled(globals.general_config.play_ambient_sounds)),
 		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.music_volume, range),
+		std::bind(&CreateSliderButton, std::ref(*active_level_), std::placeholders::_1, sf::Vector2f(5 * BLOCK_SIZE, BLOCK_SIZE), &globals.general_config.ambient_volume, range),
 	};
 
 	std::vector<std::string> description_texts = {
 		"SFX Volume",
-		"Ambient sounds",
-		"Music Volume"
+		"Music Volume",
+		"Ambient sounds"
 	};
 
 	std::function<std::string(std::string)> left_shift_description_texts = [](std::string s) { return RightPad(s, 17); };
