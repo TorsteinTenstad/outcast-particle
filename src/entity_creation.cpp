@@ -323,8 +323,10 @@ EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_n
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
 	level.AddComponent<Position>(entity)->position = position;
 	level.AddComponent<FillColor>(entity)->color.a = alpha;
-	level.AddComponent<Text>(entity)->size = (100 * scale);
-	level.GetComponent<Text>(entity)->content = text;
+	Text* text_component = level.AddComponent<Text>(entity);
+	text_component->size = (100 * scale);
+	text_component->content = text;
+	text_component->font_path = (FONTS_DIR / "digits_mono.otf").string();
 	level.AddComponent<DrawPriority>(entity)->draw_priority = 100;
 	if (twinkle)
 	{

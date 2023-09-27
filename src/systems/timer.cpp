@@ -26,13 +26,15 @@ void TimerSystem::Update(Level& level, float dt)
 	float level_scale = level.GetScale();
 	Entity entity = level.GetSingletonId<TimerButton>([level_size, level_scale](ECSScene& level) {
 		Entity entity = level.CreateEntity();
-		level.AddComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY;
+		level.AddComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 10;
 		float margin = 20;
 		level.AddComponent<Position>(entity)->position = sf::Vector2f(level_size.x - margin, margin);
 		auto text_component = level.AddComponent<Text>(entity);
 		text_component->font_path = (FONTS_DIR / "digits_mono.otf").string();
 		text_component->origin = TextOrigin::TOP_RIGHT;
 		text_component->size *= level_scale;
+		text_component->outline_color = sf::Color(22, 22, 22, 225);
+		text_component->outline_thickness = 12;
 		return entity;
 	});
 	level.GetComponent<Text>(entity)->content = CreateBadgeText(level.GetSingleton<LevelCompletionTimer>()->duration, 2 + globals.general_config.display_precise_badge_time);

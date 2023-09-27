@@ -180,7 +180,12 @@ std::string CreateBadgeText(float f, int precision)
 {
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
+
+	if (f > -10.f && f < 10.f)
+	{
+		ss << std::setw(2 + precision + (precision > 0 ? 1 : 0)) << std::setfill('0');
+	}
+
 	ss << f;
-	//ss << "s";
 	return ss.str();
 }
