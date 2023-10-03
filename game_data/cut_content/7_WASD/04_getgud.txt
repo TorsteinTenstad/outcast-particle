@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\bliss.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 74867682305063286:Tag{tag=BPLaser}Position{position=(3300,1860)}WidthAndHeight{width_and_height=(60,372)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 795277094300569348:Tag{tag=BPLaser}Position{position=(240,540)}WidthAndHeight{width_and_height=(252,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 1250505622588114290:Tag{tag=BPWall}Position{position=(900,1020)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,120)}
