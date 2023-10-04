@@ -366,23 +366,33 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	}
 
 	// Level buttons
-	auto AddLevelMenuButton = [BUTTONS_HEIGHT](ECSScene& level, std::string button_text, float width) {
+	auto AddLevelMenuButton = [this, BUTTONS_HEIGHT](ECSScene& level, std::string level_id, float width) {
 		// Button
 		auto [button_id, size] = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(width, BUTTONS_HEIGHT));
 		level.AddComponent<MenuNavigable>(button_id);
 		level.GetComponent<Shader>(button_id)->fragment_shader_path = (SHADERS_DIR / "scroll_and_round_corners.frag").string();
 		// Text
-		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(0, 0), button_text, 75u);
+		auto [text_id, _] = CreateScrollingText(level, sf::Vector2f(BLOCK_SIZE / 2 - width / 2, 0), GetLevelDisplayNameFromId(level_id), 75u);
+		level.GetComponent<Text>(text_id)->origin = TextOrigin::REFERENCE_HEIGHT_LEFT;
 
 		EntitiesHandle main_button = { { button_id, text_id }, size };
+		level.GetComponent<Shader>(button_id)->vec4_uniforms["border_color"] = sf::Glsl::Vec4(records_->GetRecord(level_id).has_value() ? sf::Color(152, 223, 138) : sf::Color::White);
 		return main_button;
+		if (!records_->GetRecord(level_id).has_value())
+		{
+			return main_button;
+		}
+		auto color = level.GetComponent<MouseInteractionDependentFillColor>(button_id);
+		color->default_color = COMPLETED_DEFAULT_COLOR;
+		color->hovered_color = COMPLETED_HOVERED_COLOR;
+		color->pressed_color = COMPLETED_PRESSED_COLOR;
 	};
 
-	auto AddLevelMenuRow = [ui, AddLevelMenuButton, BUTTONS_WIDTH, BUTTONS_HEIGHT, levels_are_editable](ECSScene& level, std::string button_text, std::function<void()> button_function) {
+	auto AddLevelMenuRow = [ui, AddLevelMenuButton, BUTTONS_WIDTH, BUTTONS_HEIGHT, levels_are_editable](ECSScene& level, std::string level_id, std::function<void()> button_function) {
 		float edit_buttons_width = 1 * float(BLOCK_SIZE);
 		float edit_buttons_margin = 0.25 * float(BLOCK_SIZE);
 		std::vector<EntitiesHandle> row_items;
-		EntitiesHandle main_button = AddLevelMenuButton(level, button_text, levels_are_editable ? BUTTONS_WIDTH - 3 * (edit_buttons_width + edit_buttons_margin) : BUTTONS_WIDTH);
+		EntitiesHandle main_button = AddLevelMenuButton(level, level_id, levels_are_editable ? BUTTONS_WIDTH - 3 * (edit_buttons_width + edit_buttons_margin) : BUTTONS_WIDTH);
 		level.AddComponent<OnReleasedThisFrame>(std::get<std::vector<Entity>>(main_button)[0])->func = button_function;
 		ui->button_entities.push_back(std::get<std::vector<Entity>>(main_button)[0]);
 		ui->text_entities.push_back(std::get<std::vector<Entity>>(main_button)[1]);
@@ -414,7 +424,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::string group_display_name = GetGroupDisplayNameFromId(level_id);
 		std::function<void(void)> enter_level = [level_id, set_level = set_level_]() { set_level(level_id); };
 		std::function<void(void)> show_level_inaccessible = [&level, group_display_name]() { CreateBlockingInformationMenu(level, level.GetSize(), "Levels from " + group_display_name + " requires full version"); };
-		EntitiesHandle row = AddLevelMenuRow(level, GetLevelDisplayNameFromId(level_id), globals.content_access_options.IsLevelAccessible(level_id) ? enter_level : show_level_inaccessible);
+		EntitiesHandle row = AddLevelMenuRow(level, level_id, globals.content_access_options.IsLevelAccessible(level_id) ? enter_level : show_level_inaccessible);
 		scroll_menu_items.push_back(row);
 	}
 	for (const auto& [button_id, level_id] : zip(ui->button_entities, level_groups.at(at_group)))

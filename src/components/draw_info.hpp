@@ -7,6 +7,10 @@ const sf::Color HOVERED_COLOR = sf::Color(180, 180, 180);
 const sf::Color PRESSED_COLOR = sf::Color(100, 100, 100);
 const sf::Color DEFAULT_COLOR = sf::Color(150, 150, 150);
 
+const sf::Color COMPLETED_HOVERED_COLOR = sf::Color(152, 223, 138);
+const sf::Color COMPLETED_PRESSED_COLOR = sf::Color(44, 160, 44);
+const sf::Color COMPLETED_DEFAULT_COLOR = sf::Color(112, 200, 103);
+
 class DrawInfo
 {
 public:
