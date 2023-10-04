@@ -312,7 +312,7 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Ve
 	return { { parent_button, slider_bar, slider, button_text }, parent_size };
 }
 
-EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle, float scale)
+EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle, bool use_tooltip, float scale)
 {
 	Entity entity = level.CreateEntity();
 
@@ -328,6 +328,13 @@ EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_n
 	text_component->content = text;
 	text_component->font_path = (FONTS_DIR / "digits_mono.otf").string();
 	level.AddComponent<DrawPriority>(entity)->draw_priority = 100;
+	if (use_tooltip)
+	{
+		level.AddComponent<ReceivesButtonEvents>(entity);
+		Tooltip* tooltip = level.AddComponent<Tooltip>(entity);
+		tooltip->preferred_corner = PreferredTooltipCorner::TOP_RIGHT;
+		tooltip->text = "Best time with\n" + ToString(coin_number) + " or more gems";
+	}
 	if (twinkle)
 	{
 		level.AddComponent<TwinkleEffect>(entity);

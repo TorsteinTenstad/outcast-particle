@@ -463,7 +463,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<EntitiesHandle> entities_handles;
 		for (int i = 0; i < 4; i++)
 		{
-			EntityHandle stats_badge = CreateStatsBadge(level, sf::Vector2f(0, 0), i, 50, "", false);
+			EntityHandle stats_badge = CreateStatsBadge(level, sf::Vector2f(0, 0), i, 50, "", false, true);
 			level.GetComponent<FillColor>(GetEntity(stats_badge))->color.a = 0;
 			entities_handles.push_back(ToEntitiesHandle(stats_badge));
 		}

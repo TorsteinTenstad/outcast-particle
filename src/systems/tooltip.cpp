@@ -10,6 +10,25 @@
 
 constexpr float TOOLTIP_BACKGROUND_PADDING = 20;
 
+static std::tuple<int, int> GetPreferredNudges(PreferredTooltipCorner corner)
+{
+	switch (corner)
+	{
+		case PreferredTooltipCorner::TOP_RIGHT:
+			return { 1, -1 };
+		case PreferredTooltipCorner::TOP_LEFT:
+			return { -1, -1 };
+		case PreferredTooltipCorner::BOTTOM_RIGHT:
+			return { 1, 1 };
+		case PreferredTooltipCorner::BOTTOM_LEFT:
+			return { -1, 1 };
+
+		default:
+			assert(false);
+			return { 1, 1 };
+	}
+}
+
 void TooltipSystem::Update(Level& level, float dt)
 {
 	if (!globals.general_config.show_show_tooltips) { return; }
@@ -45,14 +64,17 @@ void TooltipSystem::Update(Level& level, float dt)
 		if (!text->result_size.has_value()) { continue; }
 		sf::Vector2f width_and_height = text->result_size.value() + sf::Vector2f(1, 1) * 2.f * TOOLTIP_BACKGROUND_PADDING;
 		sf::Vector2f entity_size = GetSize(level, entity, false);
-		sf::Vector2f pos = position->position + entity_size / 2.f + width_and_height / 2.f;
+		sf::Vector2f pos = position->position;
+		auto [preferred_x_nudge, preferred_y_nudge] = GetPreferredNudges(tooltip->preferred_corner);
+		pos.x += preferred_x_nudge * entity_size.x / 2 + width_and_height.x / 2;
+		pos.y += preferred_y_nudge * entity_size.y / 2 + width_and_height.y / 2;
 		if (pos.x + width_and_height.x / 2 > level_size.x)
 		{
-			pos.x -= entity_size.x + width_and_height.x;
+			pos.x -= preferred_x_nudge * entity_size.x + width_and_height.x;
 		}
 		if (pos.y + width_and_height.y / 2 > level_size.y)
 		{
-			pos.y -= entity_size.y + width_and_height.y;
+			pos.y -= preferred_y_nudge * entity_size.y + width_and_height.y;
 		}
 		level.GetComponent<Position>(popup)->position = pos;
 		level.GetComponent<WidthAndHeight>(popup)->width_and_height = width_and_height;
