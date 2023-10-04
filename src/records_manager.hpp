@@ -18,4 +18,5 @@ public:
 	std::optional<float> GetRecord(std::string level_id, int coins_collected, bool neutral_was_used) const;
 	std::optional<float> GetRecord(std::string level_id, int coins_collected) const;
 	std::optional<float> GetRecord(std::string level_id) const;
+	int GetCoinsCollected(std::string level_id) const;
 };

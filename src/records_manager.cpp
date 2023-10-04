@@ -70,3 +70,15 @@ std::optional<float> RecordsManager::GetRecord(std::string level_id) const
 	}
 	return record;
 }
+
+int RecordsManager::GetCoinsCollected(std::string level_id) const
+{
+	int max_coins_collected = 0;
+	for (const auto& [key, time] : records_)
+	{
+		auto [level_id_, i, neutral_was_used_] = key;
+		if (level_id_ != level_id) { continue; }
+		max_coins_collected = std::max(max_coins_collected, i);
+	}
+	return max_coins_collected;
+}
