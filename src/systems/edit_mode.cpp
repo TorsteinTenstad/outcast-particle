@@ -77,7 +77,7 @@ void EditModeSystem::Update(Level& level, float dt)
 		return;
 	}
 
-	if (std::optional<Entity> selected_entity = BlueprintMenu().Update(level))
+	if (std::optional<Entity> selected_entity = BlueprintMenu().HandleSelection(level))
 	{
 		Entity entity = selected_entity.value();
 		level.editor.Do<AddEntity>(level, selected_entity.value());

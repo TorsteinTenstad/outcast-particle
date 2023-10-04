@@ -19,13 +19,6 @@
 #include "systems/edit_mode_menus.hpp"
 #include "utils/string_parsing.hpp"
 
-class TogglePlayerMenuButton
-{};
-class ToggleMusicMenuButton
-{};
-class ToggleBlueprintMenuButton
-{};
-
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui, float dt);
 
@@ -52,14 +45,9 @@ void EditModeUISystem::Update(Level& level, float dt)
 
 static void UpdateUI(Level& level, EditModeUI* ui)
 {
-	if (level.GetEntitiesWith<TogglePlayerMenuButton, StickyButtonDown>().size() > 0 && !PlayerMenu().IsOpen(level)) { PlayerMenu().Open(level); }
-	if (level.GetEntitiesWith<TogglePlayerMenuButton, StickyButtonDown>().size() == 0 && PlayerMenu().IsOpen(level)) { PlayerMenu().Close(level); }
-
-	if (level.GetEntitiesWith<ToggleMusicMenuButton, StickyButtonDown>().size() > 0 && !MusicMenu().IsOpen(level)) { MusicMenu().Open(level); }
-	if (level.GetEntitiesWith<ToggleMusicMenuButton, StickyButtonDown>().size() == 0 && MusicMenu().IsOpen(level)) { MusicMenu().Close(level); }
-
-	if (level.GetEntitiesWith<ToggleBlueprintMenuButton, StickyButtonDown>().size() > 0 && !BlueprintMenu().IsOpen(level)) { BlueprintMenu().Open(level); }
-	if (level.GetEntitiesWith<ToggleBlueprintMenuButton, StickyButtonDown>().size() == 0 && BlueprintMenu().IsOpen(level)) { BlueprintMenu().Close(level); }
+	PlayerMenu().Update(level);
+	MusicMenu().Update(level);
+	BlueprintMenu().Update(level);
 }
 
 static void SetupUI(Level& level, EditModeUI* ui, float dt)
@@ -168,7 +156,7 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		}
 		{
 			auto [entity, _] = CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, []() {}, (TEXTURES_DIR / "player_icon.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_HELP_MENU);
+				level, sf::Vector2f(30.75 * BLOCK_SIZE, row_one), narrow_size, []() {}, (TEXTURES_DIR / "player_icon.png").string(), "Toggle player options menu", []() { return true; }, globals.key_config.OPEN_PLAYER_MENU);
 			level.AddComponent<StickyButton>(entity[0])->channel = 2;
 			level.AddComponent<TogglePlayerMenuButton>(entity[0]);
 		}

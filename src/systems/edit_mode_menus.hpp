@@ -3,7 +3,7 @@
 #include "components/not_serialized.hpp"
 #include "level.hpp"
 
-template <class MenuEntityTag>
+template <class MenuEntityTag, class ToggleButton>
 class MenuHelper
 {
 public:
@@ -14,9 +14,19 @@ public:
 		Create(level);
 	}
 
+	void Update(Level& level)
+	{
+		if (level.GetEntitiesWith<ToggleButton, StickyButtonDown>().size() > 0 && !IsOpen(level)) { Open(level); }
+		if (level.GetEntitiesWith<ToggleButton, StickyButtonDown>().size() == 0 && IsOpen(level)) { Close(level); }
+	}
+
 	void Close(Level& level)
 	{
 		level.DeleteEntitiesWith<MenuEntityTag>();
+		for (auto [entity, toggle_button, sticky_button_down] : level.GetEntitiesWith<ToggleButton, StickyButtonDown>())
+		{
+			level.RemoveComponent<StickyButtonDown>(entity);
+		}
 	}
 
 	void Toggle(Level& level)
@@ -30,28 +40,32 @@ public:
 	}
 };
 
-class BlueprintMenu : public MenuHelper<BlueprintMenuItem>
+class ToggleBlueprintMenuButton
+{};
+class BlueprintMenu : public MenuHelper<BlueprintMenuItem, ToggleBlueprintMenuButton>
 {
 public:
 	void Create(Level& level);
 
-	//Handle selection from blueprint menu. Return any selected entity.
-	std::optional<Entity> Update(Level& level);
+	std::optional<Entity> HandleSelection(Level& level);
 };
 
+class ToggleMusicMenuButton
+{};
 class MusicMenuItem
 {};
-class MusicMenu : public MenuHelper<MusicMenuItem>
+class MusicMenu : public MenuHelper<MusicMenuItem, ToggleMusicMenuButton>
 {
 public:
 	void Create(Level& level);
 };
 
+class TogglePlayerMenuButton
+{};
 class PlayerMenuItem
 {};
-class PlayerMenu : public MenuHelper<PlayerMenuItem>
+class PlayerMenu : public MenuHelper<PlayerMenuItem, TogglePlayerMenuButton>
 {
 public:
 	void Create(Level& level);
 };
-

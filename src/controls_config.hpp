@@ -12,7 +12,7 @@ public:
 	sf::Keyboard::Key PLAYER_GO_NEUTRAL = sf::Keyboard::Enter;
 	sf::Keyboard::Key OPEN_BLUEPRINT_MENU = sf::Keyboard::B;
 	sf::Keyboard::Key OPEN_MUSIC_MENU = sf::Keyboard::M;
-	sf::Keyboard::Key OPEN_HELP_MENU = sf::Keyboard::H;
+	sf::Keyboard::Key OPEN_PLAYER_MENU = sf::Keyboard::P;
 	sf::Keyboard::Key UNDO = sf::Keyboard::Z;
 	sf::Keyboard::Key REDO = sf::Keyboard::Y;
 	sf::Keyboard::Key EDIT_MODE = sf::Keyboard::Tab;

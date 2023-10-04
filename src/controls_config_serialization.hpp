@@ -33,8 +33,8 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += "OPEN_MUSIC_MENU=";
 	str_rep += ToString(c->OPEN_MUSIC_MENU);
 	str_rep += ";";
-	str_rep += "OPEN_HELP_MENU=";
-	str_rep += ToString(c->OPEN_HELP_MENU);
+	str_rep += "OPEN_PLAYER_MENU=";
+	str_rep += ToString(c->OPEN_PLAYER_MENU);
 	str_rep += ";";
 	str_rep += "UNDO=";
 	str_rep += ToString(c->UNDO);
@@ -147,9 +147,9 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         {
             FromString(c->OPEN_MUSIC_MENU, statement_parts[1]);
         }
-        else if (statement_parts[0] == "OPEN_HELP_MENU")
+        else if (statement_parts[0] == "OPEN_PLAYER_MENU")
         {
-            FromString(c->OPEN_HELP_MENU, statement_parts[1]);
+            FromString(c->OPEN_PLAYER_MENU, statement_parts[1]);
         }
         else if (statement_parts[0] == "UNDO")
         {
