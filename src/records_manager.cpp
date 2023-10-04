@@ -58,3 +58,15 @@ std::optional<float> RecordsManager::GetRecord(std::string level_id, int coins_c
 	if (!a.has_value() && !b.has_value()) { return std::nullopt; }
 	return std::min(a.value_or(std::numeric_limits<float>::max()), b.value_or(std::numeric_limits<float>::max()));
 }
+
+std::optional<float> RecordsManager::GetRecord(std::string level_id) const
+{
+	std::optional<float> record;
+	for (const auto& [key, time] : records_)
+	{
+		auto [level_id_, i, neutral_was_used_] = key;
+		if (level_id_ != level_id) { continue; }
+		record = std::min(time, record.value_or(std::numeric_limits<float>::max()));
+	}
+	return record;
+}
