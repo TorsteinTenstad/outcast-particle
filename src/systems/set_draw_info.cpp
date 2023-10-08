@@ -97,7 +97,7 @@ void SetDrawInfoSystem::Update(Level& level, float dt)
 		}
 		for (auto [entity, velocity] : level.GetEntitiesWith<Velocity>())
 		{
-			UpdateVelocityIndicator(level, entity, Magnitude(velocity->velocity), Angle(velocity->velocity));
+			//UpdateVelocityIndicator(level, entity, Magnitude(velocity->velocity), Angle(velocity->velocity));
 		}
 	}
 	else
