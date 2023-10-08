@@ -187,17 +187,10 @@ EntitiesHandle CreateOptionsButton(ECSScene& level, sf::Vector2f position, std::
 	return { { entity, button_text_entity }, size };
 }
 
-EntityHandle CreateCanDisableButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string button_text, unsigned text_size, std::function<bool(void)> deactivate_function)
-{
-	auto [entity, button_size] = CreateButton(level, position, size, button_function, button_text, 120);
-	level.GetComponent<Text>(entity)->size = text_size;
-	level.AddComponent<CanDisableButton>(entity)->func = deactivate_function;
-	return { entity, button_size };
-}
-
 EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function, sf::Keyboard::Key shortcut_key, bool shortcut_requires_ctrl)
 {
-	auto [entity, button_size] = CreateButton(level, position, size, button_function, "", 120);
+	auto [entity, button_size] = CreateMouseEventButton(level, position, size);
+	level.AddComponent<OnPressedThisFrame>(entity)->func = button_function;
 	auto [icon_entity, icon_size] = CreateTexturedRectangle(level, position, sf::Vector2f(size.y, size.y), UI_BASE_DRAW_PRIORITY + 1, icon_path, false);
 	level.AddComponent<FillColor>(icon_entity);
 	std::string shortcut_modifier = shortcut_requires_ctrl ? "Ctrl + " : "";
@@ -212,10 +205,10 @@ EntitiesHandle CreateCanDisableButtonWithIcon(ECSScene& level, sf::Vector2f posi
 	return { { entity, icon_entity }, button_size };
 }
 
-EntitiesHandle CreateCanDisableOnPressButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function, sf::Keyboard::Key shortcut_key)
+EntitiesHandle CreateCanDisableOnPressedButtonWithIcon(ECSScene& level, sf::Vector2f position, sf::Vector2f size, std::function<void(void)> button_function, std::string icon_path, std::string tooltip_text, std::function<bool(void)> deactivate_function, sf::Keyboard::Key shortcut_key)
 {
 	auto [entity, button_size] = CreateCanDisableButtonWithIcon(level, position, size, button_function, icon_path, tooltip_text, deactivate_function, shortcut_key);
-	level.GetComponent<OnReleasedThisFrame>(entity[0])->func = []() {};
+	level.RemoveComponent<OnReleasedThisFrame>(entity[0]);
 	level.AddComponent<OnPressed>(entity[0])->func = button_function;
 	return { entity, button_size };
 }

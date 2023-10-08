@@ -147,7 +147,7 @@ void EditModeSystem::Update(Level& level, float dt)
 	if (current_tool == Moving
 		&& cursor_and_keys_.cursor_moved_this_frame
 		&& level.GetEntitiesWithComponent<Selected>().size() != 0
-		&& level.GetEntitiesWith<Pressed, OnReleasedThisFrame>().size() == 0)
+		&& level.GetEntitiesWith<Pressed, EditModeUIEntity>().size() == 0)
 	{
 		level.editor.Do<MoveSelectedWithCursor>(level, cursor_and_keys_.cursor_position);
 	}

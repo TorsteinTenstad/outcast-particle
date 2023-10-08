@@ -124,13 +124,13 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		}
 
 		// Velocity buttons:
-		CreateCanDisableOnPressButtonWithIcon(
+		CreateCanDisableOnPressedButtonWithIcon(
 			level, sf::Vector2f(21.75 * BLOCK_SIZE, row_one), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, -300.f * dt, 0.f); }, (TEXTURES_DIR / "decrease_velocity.png").string(), "Decrease velocity", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0); }, globals.key_config.DECREMENT_VELOCITY);
-		CreateCanDisableOnPressButtonWithIcon(
+		CreateCanDisableOnPressedButtonWithIcon(
 			level, sf::Vector2f(23.5 * BLOCK_SIZE, row_one), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 300.f * dt, 0.f); }, (TEXTURES_DIR / "increase_velocity.png").string(), "Increase velocity", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0); }, globals.key_config.INCREMENT_VELOCITY);
-		CreateCanDisableOnPressButtonWithIcon(
+		CreateCanDisableOnPressedButtonWithIcon(
 			level, sf::Vector2f(21.75 * BLOCK_SIZE, row_two), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 0.f, -dt); }, (TEXTURES_DIR / "rotate_left.png").string(), "Rotate velocity vector clockwise", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0); }, globals.key_config.DECREMENT_VELOCITY_ANGLE);
-		CreateCanDisableOnPressButtonWithIcon(
+		CreateCanDisableOnPressedButtonWithIcon(
 			level, sf::Vector2f(23.5 * BLOCK_SIZE, row_two), narrow_size, [&level, dt]() { level.editor.Do<ChangeVelocityOfSelected>(level, 0.f, +dt); }, (TEXTURES_DIR / "rotate_right.png").string(), "Rotate velocity vector counter-clockwise", [&level]() { return (level.GetEntitiesWith<Selected, Velocity>().size() != 0); }, globals.key_config.INCREMENT_VELOCITY_ANGLE);
 
 		// Rotate buttons:

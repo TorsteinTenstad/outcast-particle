@@ -19,6 +19,12 @@ public:
 	std::function<void(void)> func;
 };
 
+class OnPressedThisFrame
+{
+public:
+	std::function<void(void)> func;
+};
+
 class OnHoveredStartedThisFrame
 {
 public:
