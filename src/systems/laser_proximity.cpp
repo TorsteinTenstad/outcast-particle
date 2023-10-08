@@ -60,11 +60,11 @@ void LaserProximitySystem::Update(Level& level, float dt)
 	});
 
 	auto sound_info = level.GetComponent<SoundInfo>(entity);
-	if (smallest_laser_distance >= minimum_laser_distance || level.GetMode() != PLAY_MODE)
+	if (smallest_laser_distance > minimum_laser_distance || level.GetMode() != PLAY_MODE)
 	{
 		sound_info->sound_volumes[DEFAULT] = 0;
 		return;
 	}
-	float volume = std::min(1.f, 750000 / (smallest_laser_distance * smallest_laser_distance * smallest_laser_distance));
+	float volume = smallest_laser_distance <= 0 ? 1.f : std::min(1.f, 750000 / (smallest_laser_distance * smallest_laser_distance * smallest_laser_distance));
 	sound_info->sound_volumes[DEFAULT] = volume;
 }
