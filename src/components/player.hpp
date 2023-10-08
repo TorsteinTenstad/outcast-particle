@@ -5,7 +5,7 @@ class Player
 public:
 	bool can_switch_charge = true;
 	bool can_go_neutral = true;
-	bool can_move_self = true;
+	bool can_move_self = false;
 	int move_force = 0;
 };
 

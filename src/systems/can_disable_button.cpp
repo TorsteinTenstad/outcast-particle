@@ -7,30 +7,27 @@
 
 void CanDisableButtonSystem::Update(Level& level, float dt)
 {
-	for (auto& [entity, button, fill_color] : level.GetEntitiesWith<CanDisableButton, FillColor>())
+	for (auto& [entity, button] : level.GetEntitiesWith<CanDisableButton>())
 	{
-		if (button->func())
+		bool enabled = button->func();
+		if (Text* text = level.RawGetComponent<Text>(entity))
+		{
+			text->color.a = enabled ? 255 : button->deactivation_alpha;
+		}
+		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity))
+		{
+			fill_color->color.a = enabled ? 255 : button->deactivation_alpha;
+		}
+		if (enabled)
 		{
 			if (button->regain_button_events)
 			{
 				level.EnsureExistenceOfComponent<ReceivesButtonEvents>(entity);
 			}
-			fill_color->color.a = 255;
-
-			if (Text* text = level.RawGetComponent<Text>(entity))
-			{
-				text->color.a = 255;
-			}
 		}
 		else
 		{
 			level.RemoveComponent<ReceivesButtonEvents>(entity);
-			fill_color->color.a = button->deactivation_alpha;
-
-			if (Text* text = level.RawGetComponent<Text>(entity))
-			{
-				text->color.a = button->deactivation_alpha;
-			}
 		}
 	}
 }

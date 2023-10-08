@@ -164,7 +164,9 @@ void PlayerMenu::Create(Level& level)
 	slider_tooltip->preferred_corner = PreferredTooltipCorner::TOP_RIGHT;
 	for (auto entity : slider_entities)
 	{
-		level.AddComponent<CanDisableButton>(entity)->func = [&, entity_copy]() { return level.GetSingleton<Player>()->can_move_self; };
+		CanDisableButton* can_disable_button = level.AddComponent<CanDisableButton>(entity);
+		can_disable_button->func = [&, entity_copy]() { return level.GetSingleton<Player>()->can_move_self; };
+		can_disable_button->deactivation_alpha = 0;
 		if (!level.HasComponents<SliderButton>(entity)) { level.GetComponent<CanDisableButton>(entity)->regain_button_events = false; }
 	}
 	buttons.push_back(VerticalEntityLayout(level, sf::Vector2f(0, 0), { ToEntitiesHandle(button_3_handle), slider_handle }, BLOCK_SIZE * scale / 4));
