@@ -22,17 +22,13 @@
 static void UpdateUI(Level& level, EditModeUI* ui);
 static void SetupUI(Level& level, EditModeUI* ui, float dt);
 
-#define UI_BAR_HEIGHT (4.25 * BLOCK_SIZE)
-
 void EditModeUISystem::Update(Level& level, float dt)
 {
 	if (level.GetMode() != EDIT_MODE)
 	{
-		level.ui_bars_size = sf::Vector2f(0, 0);
 		level.DeleteEntitiesWith<EditModeUIEntity>();
 		return;
 	}
-	level.ui_bars_size = sf::Vector2f(0, UI_BAR_HEIGHT) * level.GetScale();
 	EditModeUI* ui = level.GetSingleton<EditModeUI>();
 
 	if (!ui->initialized)

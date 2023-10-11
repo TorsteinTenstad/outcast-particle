@@ -48,7 +48,6 @@ Game::Game() :
 	RegisterGameSystem<ScaleWithLevelSystem>();
 	RegisterGameSystem<SetDrawInfoSystem>();
 	RegisterGameSystem<TrailSystem>();
-	RegisterGameSystem<BackgroundSystem>(); // Must
 	RegisterGameSystem<LevelCompletionTimeSystem>().SetLevelCompletionTimeRecords(&records_);
 	RegisterGameSystem<WormholeSystem>();
 	RegisterGameSystem<AnimatedPropertiesSystem>();
@@ -56,12 +55,13 @@ Game::Game() :
 	RegisterGameSystem<TextBoxSystem>();
 	RegisterGameSystem<TogglingLaserSystem>();
 	RegisterGameSystem<AddKillOnIntersectionSystem>(); // Should be directly below TogglingLaserSystem for
+	RegisterGameSystem<ViewSystem>();
+	RegisterGameSystem<BackgroundSystem>(); // Must be after ViewSystem for background to update to fit IU bar
 	RegisterGameSystem<RenderGridAdaptiveTexturesSystem>();
 	RegisterGameSystem<RenderTrailSystem>();
 	RegisterGameSystem<RenderShapesSystem>();
 	RegisterGameSystem<RenderTextSystem>();
 	RegisterGameSystem<ForceVisualizationSystem>();
-	RegisterGameSystem<ViewSystem>();
 	RegisterGameSystem<DrawSystem>();
 	RegisterGameSystem<EditModeSystem>();
 	RegisterGameSystem<ScreenWideShaderEffectsSystem>(); // Must be below EditModeSystem for effects to be visible on copy
