@@ -6,6 +6,7 @@
 
 void BackgroundSystem::Update(Level& level, float dt)
 {
+	return;
 	auto backgrounds = level.GetEntitiesWith<Background, DrawInfo, DrawPriority, WidthAndHeight, Position>();
 	if (backgrounds.size() == 0)
 	{

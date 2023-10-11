@@ -5,6 +5,7 @@
 
 void ViewSystem::Update(Level& level, float dt)
 {
+	return;
 	sf::Vector2f level_size = level.GetSize();
 	sf::Vector2f ui_inclusive_level_size = level_size + level.ui_bars_size;
 	sf::Vector2f view_center = level_size / 2.f - level.ui_bars_size / 2.f;

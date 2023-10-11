@@ -16,44 +16,24 @@
 
 void Game::GoToMainMenu()
 {
-	active_level_id_ = MAIN_MENU;
-	is_in_level_editing_ = false;
-	active_level_->music_path = (DEFAULT_MENU_SONG).string();
-	active_level_->ResetSize();
-	sf::Vector2f level_size = active_level_->GetSize();
+	Level& level = *active_level_;
+	sf::Vector2f level_size = level.GetSize();
+	float rx = level_size.x / 2.f;
+	float ry = level_size.y / 2.f;
+	globals.render_window.create(sf::VideoMode(1080, 1920), "Volatile Particle", sf::Style::Default);
+	globals.render_window.setVerticalSyncEnabled(true);
+	globals.render_window.setView(sf::View(level_size / 2.f, level_size));
 
-	float x_center_offset = -8 * BLOCK_SIZE;
-	float y_offset = level_size.y - 6.5 * BLOCK_SIZE;
+	CreateTexturedRectangle(level, sf::Vector2f(rx, ry), level_size, BACKGROUND_DRAW_PRIORITY, (TEXTURES_DIR / "background_T.png").string());
+	auto [on_paper_entity, _] = CreateTexturedRectangle(level, sf::Vector2f(rx, 0.5 * ry), sf::Vector2f(2829, 1738) * 0.5f, 1, (TEXTURES_DIR / "coulomb_on_paper.png").string());
+	level.AddComponent<FillColor>(on_paper_entity)->color = sf::Color(180, 180, 180);
 
-	std::vector<EntitiesHandle> entities_handles;
-	auto AddButton = [&](std::function<void(void)> button_function, std::string button_text) {
-		EntityHandle button_handle = CreateNavigatorButton(*active_level_, sf::Vector2f(0, 0), button_function, button_text, sf::Keyboard::Unknown);
-		entities_handles.push_back(ToEntitiesHandle(button_handle));
-	};
+	CreateText(level, sf::Vector2f(rx, BLOCK_SIZE), "Coulomb's law on paper:", 120, std::nullopt);
+	CreateText(level, sf::Vector2f(rx, ry), "Coulomb's law in game:", 120, std::nullopt);
 
-	AddButton(std::bind(&Game::SetLevel, this, LEVEL_MENU), "Play");
-	AddButton(std::bind(&Game::SetLevel, this, OPTIONS_MENU), "Options");
-	AddButton(std::bind(&Game::SetLevel, this, CREDITS_MENU), "Credits");
-	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
-
-	auto [entities, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
-
-	CreateMenuNavigator(*active_level_);
-
-	auto [title_entity, title_text, title_draw_priority, title_position] = active_level_->CreateEntityWith<Text, DrawPriority, Position>();
-	title_text->size = 250;
-	title_text->content = "Volatile\n  Particle";
-	title_position->position.x = level_size.x / 2.f + x_center_offset;
-	title_position->position.y = 2 * BLOCK_SIZE;
-
-	Entity static_particle_id = active_level_->AddBlueprint(BPStaticParticle);
-	active_level_->GetComponent<Position>(static_particle_id)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset);
-
-	Entity player_entity = active_level_->AddBlueprint(BPPlayer);
-	active_level_->GetComponent<Player>(player_entity)->can_go_neutral = false;
-	active_level_->GetComponent<Position>(player_entity)->position = sf::Vector2f(level_size.x / 2.f - x_center_offset, y_offset - 3.5 * BLOCK_SIZE);
-	active_level_->GetComponent<Velocity>(player_entity)->velocity = sf::Vector2f(460, 0);
-	active_level_->GetComponent<Charge>(player_entity)->charge *= -1;
+	level.GetComponent<Position>(level.AddBlueprint(BPStaticParticle))->position = sf::Vector2f(rx - 0.42 * rx, 1.5 * ry + 0.2 * ry + 0.5 * BLOCK_SIZE);
+	level.GetComponent<Position>(level.AddBlueprint(BPStaticParticle))->position = sf::Vector2f(rx, 1.5 * ry - 0.2 * ry + 0.5 * BLOCK_SIZE);
+	level.GetComponent<Position>(level.AddBlueprint(BPStaticParticle))->position = sf::Vector2f(rx + 0.42 * rx, 1.5 * ry + 0.2 * ry + 0.5 * BLOCK_SIZE);
 }
 
 void Game::GoToLevelMenu()

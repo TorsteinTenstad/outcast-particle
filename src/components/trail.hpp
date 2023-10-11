@@ -2,7 +2,7 @@
 #include "SFML/System/Vector2.hpp"
 #include <vector>
 
-#define TRAIL_N 64
+#define TRAIL_N 48
 
 class Trail
 {

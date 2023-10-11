@@ -55,6 +55,9 @@ EntityHandle CreateText(ECSScene& level, sf::Vector2f position, std::string cont
 	text->content = content;
 	text->size = text_size;
 	text->origin = text_origin;
+	text->outline_color = sf::Color::Black;
+	text->outline_thickness = 5;
+	text->font_path = (FONTS_DIR / "Gabarito-SemiBold.ttf").string();
 
 	sf::Vector2f width_and_height = layout_size.value_or(sf::Vector2f(float(BLOCK_SIZE) * 10.f * content.size() / 17.f, 2 * text_size));
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;

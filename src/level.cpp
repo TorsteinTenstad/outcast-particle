@@ -58,7 +58,7 @@ void Level::SetMode(LevelMode new_mode)
 
 sf::Vector2f Level::GetSize()
 {
-	return sf::Vector2f(LEVEL_SIZES[grid_size_id]) * float(BLOCK_SIZE);
+	return sf::Vector2f(1080, 1920) * 1.5f;
 }
 
 sf::Vector2u Level::GetGridSize()
