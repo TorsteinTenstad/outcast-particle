@@ -1,5 +1,7 @@
 
 #include "music.hpp"
+#include "components/select_music_button.hpp"
+#include "components/sticky_button.hpp"
 #include "entity_creation.hpp"
 #include "globals.hpp"
 #include <filesystem>
@@ -15,7 +17,10 @@ void MusicSystem::Update(Level& level, float dt)
 	{
 		music_path = level.music_path;
 	}
-
+	for (auto [entity, select_music_button, sticky_button_down] : level.GetEntitiesWith<SelectMusicButton, StickyButtonDown>())
+	{
+		music_path = select_music_button->music_path;
+	}
 	if (music_path_ != music_path)
 	{
 		if (!music.openFromFile(music_path))

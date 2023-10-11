@@ -9,6 +9,7 @@
 #include "components/player.hpp"
 #include "components/position.hpp"
 #include "components/scale_with_level.hpp"
+#include "components/select_music_button.hpp"
 #include "components/size.hpp"
 #include "components/sticky_button.hpp"
 #include "components/tooltip.hpp"
@@ -83,6 +84,7 @@ void MusicMenu::Create(Level& level)
 			level, sf::Vector2f(0, 0), sf::Vector2f(10, 1.5) * scale * float(BLOCK_SIZE), [&, music_path]() { level.music_path = music_path; }, music_fspath.filename().string(), 80);
 		level.AddComponent<StickyButton>(entity)->enforce_down = true;
 		level.GetComponent<StickyButton>(entity)->channel = 1;
+		level.AddComponent<SelectMusicButton>(entity)->music_path = music_path;
 		if (level.music_path == music_path)
 		{
 			level.AddComponent<StickyButtonDown>(entity);
