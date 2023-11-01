@@ -157,10 +157,7 @@ Level& Game::SetLevel(std::string level_id)
 	else
 	{
 		active_level_->LoadFromFile(level_id);
-		if (globals.general_config.use_ready_mode)
-		{
-			active_level_->SetMode(READY_MODE);
-		}
+		active_level_->SetMode(READY_MODE);
 	}
 	active_level_id_ = level_id;
 	globals.skip_drawing_this_frame = true;
@@ -220,7 +217,7 @@ void Game::CheckFullscreen()
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode(1280, 720), "Volatile Particle", sf::Style::Default);
+		globals.render_window.create(sf::VideoMode(1920, 1080), "Volatile Particle", sf::Style::Default);
 	}
 	globals.render_window.setVerticalSyncEnabled(true);
 }

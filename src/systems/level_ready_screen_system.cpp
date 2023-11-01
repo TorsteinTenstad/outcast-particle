@@ -17,8 +17,10 @@ public:
 
 void LevelReadyScreenSystem::Update(Level& level, float dt)
 {
-	if (level.GetMode() != READY_MODE)
+	if (level.GetMode() != READY_MODE) { return; }
+	if (!globals.general_config.use_ready_mode)
 	{
+		level.SetMode(PLAY_MODE);
 		return;
 	}
 
