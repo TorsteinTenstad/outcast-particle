@@ -311,6 +311,12 @@ void DeserializeComponent(MagneticField* c, const std::string& entity_str_rep)
 void SerializeComponent(const TextPopupSpawner* c, std::string& str_rep)
 {
 	str_rep += "TextPopupSpawner{";
+	str_rep += "alert_timer=";
+	str_rep += ToString(c->alert_timer);
+	str_rep += ";";
+	str_rep += "key=";
+	str_rep += ToString(c->key);
+	str_rep += ";";
 	str_rep += "content=";
 	str_rep += ToString(c->content);
 	str_rep += "}";
@@ -327,7 +333,15 @@ void DeserializeComponent(TextPopupSpawner* c, const std::string& entity_str_rep
     {
         std::vector<std::string> statement_parts = SplitString(variable, "=");
 
-        if (statement_parts[0] == "content")
+        if (statement_parts[0] == "alert_timer")
+        {
+            FromString(c->alert_timer, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "key")
+        {
+            FromString(c->key, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "content")
         {
             FromString(c->content, statement_parts[1]);
         }

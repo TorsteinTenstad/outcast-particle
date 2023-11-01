@@ -63,4 +63,9 @@ float sin01(float x)
     return 0.5*sin(2*PI*x)+0.5;
 }
 
+float cos01(float x)
+{
+    return 0.5*cos(2*PI*x)+0.5;
+}
+
 #endif //__MATH_UTILS__

@@ -133,21 +133,17 @@ void LevelMenuSystem::Update(Level& level, float dt)
 
 	if (LevelMenuUI* ui = level.FindSingleton<LevelMenuUI>())
 	{
-		if (cursor_and_keys_.key_down[sf::Keyboard::LControl]
-			&& cursor_and_keys_.key_down[sf::Keyboard::LShift])
+		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F3])
 		{
-			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F3])
-			{
-				assert(ui->at_group.has_value());
-				globals.content_access_options.ToggleAllLevelsAreEditable();
-				RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
-			}
-			if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F4])
-			{
-				assert(ui->at_group.has_value());
-				globals.content_access_options.ToggleTrialBuild();
-				RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
-			}
+			assert(ui->at_group.has_value());
+			globals.content_access_options.ToggleAllLevelsAreEditable();
+			RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
+		}
+		if (cursor_and_keys_.key_pressed_this_frame[sf::Keyboard::F4])
+		{
+			assert(ui->at_group.has_value());
+			globals.content_access_options.ToggleTrialBuild();
+			RequestRedraw(level, ui, ui->at_group.value(), ui->at_level_id);
 		}
 		UpdateUI(level, ui);
 	}
