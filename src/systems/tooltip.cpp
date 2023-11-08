@@ -60,6 +60,11 @@ void TooltipSystem::Update(Level& level, float dt)
 		Entity popup = GetSingletonChildId<Tooltip>(level, entity, create_popup);
 
 		Text* text = level.GetComponent<Text>(popup);
+		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity))
+		{
+			level.EnsureExistenceOfComponent<FillColor>(popup)->color = fill_color->color;
+			level.GetComponent<Text>(popup)->color = fill_color->color;
+		}
 		if (text->render) { continue; }
 		if (!text->result_size.has_value()) { continue; }
 		sf::Vector2f width_and_height = text->result_size.value() + sf::Vector2f(1, 1) * 2.f * TOOLTIP_BACKGROUND_PADDING;
@@ -78,11 +83,6 @@ void TooltipSystem::Update(Level& level, float dt)
 		}
 		level.GetComponent<Position>(popup)->position = pos;
 		level.GetComponent<WidthAndHeight>(popup)->width_and_height = width_and_height;
-		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity))
-		{
-			level.EnsureExistenceOfComponent<FillColor>(popup)->color = fill_color->color;
-			level.GetComponent<Text>(popup)->color = fill_color->color;
-		}
 		text->render = true;
 	}
 }
