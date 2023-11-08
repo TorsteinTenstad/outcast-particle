@@ -6,6 +6,7 @@
 #include "components/size.hpp"
 #include "components/sticky_button.hpp"
 #include "components/text.hpp"
+#include "components/tooltip.hpp"
 #include "edit_mode_actions/change_velocity_of_selected.hpp"
 #include "edit_mode_actions/copy_selected.hpp"
 #include "edit_mode_actions/delete_selected.hpp"
@@ -17,6 +18,7 @@
 #include "entity_creation.hpp"
 #include "systems/_pure_DO_systems.hpp"
 #include "systems/edit_mode_menus.hpp"
+#include "utils/string_manip.hpp"
 #include "utils/string_parsing.hpp"
 
 static void UpdateUI(Level& level, EditModeUI* ui);
@@ -39,11 +41,42 @@ void EditModeUISystem::Update(Level& level, float dt)
 	UpdateUI(level, ui);
 }
 
+class PropertyValueButton
+{
+public:
+	int property_value_idx = 0;
+};
+
 static void UpdateUI(Level& level, EditModeUI* ui)
 {
 	PlayerMenu().Update(level);
 	MusicMenu().Update(level);
 	BlueprintMenu().Update(level);
+	for (auto const [entity, property_value_button, tooltip, shortcut_key] : level.GetEntitiesWith<PropertyValueButton, Tooltip, ShortcutKey>())
+	{
+		tooltip->text = "";
+		if (level.GetEntitiesWith<Selected, Wall>().size() > 0)
+		{
+			tooltip->text += "Set wall bounciness to " + std::to_string(int(WALL_BOUNCE_CATEGORIES[property_value_button->property_value_idx] * 100)) + "%\n";
+		}
+		if (level.GetEntitiesWith<Selected, Laser>().size() > 0)
+		{
+			if (property_value_button->property_value_idx == 0)
+			{
+				tooltip->text += "Set laser to always on\n";
+			}
+			else
+			{
+				tooltip->text += "Set laser blink period to " + std::to_string(int(TOGGLING_LASER_PERIOD_CATEGORIES[property_value_button->property_value_idx])) + "s\n";
+			}
+		}
+		if (level.GetEntitiesWith<Selected, Charge>().size() > 0)
+		{
+			tooltip->text += "Set charge/field strength to " + std::to_string(property_value_button->property_value_idx + 1) + "\n";
+		}
+		std::string ctrl = (shortcut_key->requires_ctrl_modifier ? "Ctrl + " : "");
+		tooltip->text += "[" + ctrl + HumanName(shortcut_key->key) + "]";
+	}
 }
 
 static void SetupUI(Level& level, EditModeUI* ui, float dt)
@@ -115,8 +148,9 @@ static void SetupUI(Level& level, EditModeUI* ui, float dt)
 		};
 		for (auto i = 0; i < 5; i++)
 		{
-			CreateCanDisableButtonWithIcon(
-				level, sf::Vector2f((12.5 + 1.75 * i) * BLOCK_SIZE, -2.125 * BLOCK_SIZE), narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, button_texts[i], "TODO", [&level]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); }, shortcut_keys[i]);
+			auto entities_handle = CreateCanDisableButtonWithIcon(
+				level, sf::Vector2f((12.5 + 1.75 * i) * BLOCK_SIZE, -2.125 * BLOCK_SIZE), narrow_size, [&, i]() { level.editor.Do<SetPropertyValueOfSelected>(level, i, std::nullopt); }, button_texts[i], "", [&level]() { return (level.GetEntitiesWithComponent<Selected>().size() != 0); }, shortcut_keys[i]);
+			level.AddComponent<PropertyValueButton>(GetEntities(entities_handle)[0])->property_value_idx = i;
 		}
 
 		// Velocity buttons:
