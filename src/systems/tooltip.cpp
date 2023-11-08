@@ -46,7 +46,7 @@ void TooltipSystem::Update(Level& level, float dt)
 		std::function<Entity(Level&)> create_popup = [content = tooltip->text,
 														 draw_priority = draw_priority->draw_priority + 2](Level& level) {
 			Entity entity = level.CreateEntity();
-			level.AddComponents<WidthAndHeight, Position, DrawInfo, ScaleWithLevel>(entity);
+			level.AddComponents<WidthAndHeight, Position, DrawInfo, ScaleWithLevel, FillColor>(entity);
 			level.AddComponent<DrawPriority>(entity)->draw_priority = draw_priority;
 			level.AddComponent<Shader>(entity)->fragment_shader_path = (SHADERS_DIR / "tooltip_background.frag").string();
 			Text* text = level.AddComponent<Text>(entity);
@@ -78,6 +78,11 @@ void TooltipSystem::Update(Level& level, float dt)
 		}
 		level.GetComponent<Position>(popup)->position = pos;
 		level.GetComponent<WidthAndHeight>(popup)->width_and_height = width_and_height;
+		if (FillColor* fill_color = level.RawGetComponent<FillColor>(entity))
+		{
+			level.EnsureExistenceOfComponent<FillColor>(popup)->color = fill_color->color;
+			level.GetComponent<Text>(popup)->color = fill_color->color;
+		}
 		text->render = true;
 	}
 }

@@ -107,7 +107,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			bool is_new_record = duration == record.value_or(0);
 			std::stringstream ss;
 
-			EntityHandle badge_handle = CreateStatsBadge(level, sf::Vector2f(0, 0), coin_count, 255, LeftPad(CreateBadgeText(duration, 2 + globals.general_config.display_precise_badge_time), 14), is_new_record, level.GetScale());
+			EntityHandle badge_handle = CreateStatsBadge(level, sf::Vector2f(0, 0), coin_count, 255, LeftPad(CreateBadgeText(duration, 2 + globals.general_config.display_precise_badge_time), 14), is_new_record, false, level.GetScale());
 			entities_handles.push_back(ToEntitiesHandle(badge_handle));
 
 			auto level_group = level_groups_->at(GetGroupNameFromId(active_level_id_));
