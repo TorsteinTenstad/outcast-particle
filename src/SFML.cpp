@@ -24,7 +24,7 @@ void SFML::RunWindow(std::function<void(float)> update_func)
 		worst_frame_time = std::max(worst_frame_time, dt);
 		if (seconds_since_last_fps_print > 1)
 		{
-			std::cout << "FPS: " << fps << ", worst frame time: " << int(1000 * worst_frame_time) << " ms\n";
+			//std::cout << "FPS: " << fps << ", worst frame time: " << int(1000 * worst_frame_time) << " ms\n";
 			fps = 0;
 			worst_frame_time = 0;
 			seconds_since_last_fps_print = 0;
