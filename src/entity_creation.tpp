@@ -15,11 +15,10 @@ Entity GetSingletonChildId(Level& level, Entity parent, std::function<Entity(Lev
 }
 
 template <class ResponsibleComponent>
-Shader* GetSingletonScreenWideFragmentShaderChildId(Level& level, Entity parent, std::string shader_path, int draw_priority)
+Entity GetSingletonScreenWideFragmentShaderChildId(Level& level, Entity parent, std::string shader_path, int draw_priority)
 {
 	std::function<Entity(Level&)> child_creation_func = [shader_path, draw_priority](Level& level) { return CreateScreenWideFragmentShaderEntity(level, shader_path, draw_priority); };
-	Entity child = GetSingletonChildId<ResponsibleComponent>(level, parent, child_creation_func);
-	return level.GetComponent<Shader>(child);
+	return GetSingletonChildId<ResponsibleComponent>(level, parent, child_creation_func);
 }
 
 template <class ResponsibleComponent>
