@@ -1,5 +1,5 @@
 name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
-182406946077836559:Tag{tag=BPPlayer}Position{position=(240,300)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+182406946077836559:Tag{tag=BPPlayer}Position{position=(240,300)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 326694107085314694:Tag{tag=BPWall}Position{position=(2760,2100)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,120)}
 1647517555061623938:Tag{tag=BPWall}Position{position=(60,1140)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,2040)}
 1890128920933884421:Tag{tag=BPStaticParticle}Position{position=(2700,900)}Charge{charge=10000}

@@ -19,6 +19,6 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 12643520155063872369:Tag{tag=BPElectricField}Position{position=(960,1200)}ElectricField{field_vector=(-0.125,-1.83286e-07)}WidthAndHeight{width_and_height=(240,720)}
 16299779623358288906:Tag{tag=BPLaser}Position{position=(2100,900)}WidthAndHeight{width_and_height=(1920,60)}TogglingLaser{period_s=2;duty_cycle=0.5;phase=0}
 17690408885736439309:Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3780,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
-17691412881123895468:Tag{tag=BPPlayer}Position{position=(420,1200)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+17691412881123895468:Tag{tag=BPPlayer}Position{position=(420,1200)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 17697925022205928593:Tag{tag=BPElectricField}Position{position=(2280,1200)}ElectricField{field_vector=(0.125,1.42556e-07)}WidthAndHeight{width_and_height=(240,480)}
 18412860458815011450:Tag{tag=BPElectricField}Position{position=(300,1440)}ElectricField{field_vector=(0.125,1.42556e-07)}WidthAndHeight{width_and_height=(360,1200)}

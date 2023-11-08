@@ -8,7 +8,7 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 4411420010946643670:Tag{tag=BPWall}Position{position=(1920,1980)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3120,360)}
 4674854454726003820:Tag{tag=BPCoin}Position{position=(660,1500)}
 5119098024279524243:Tag{tag=BPCoin}Position{position=(3180,1500)}
-5852894694751638455:Tag{tag=BPPlayer}Position{position=(540,540)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+5852894694751638455:Tag{tag=BPPlayer}Position{position=(540,540)}Charge{charge=-10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 7918731727419591271:Tag{tag=BPLaser}Position{position=(1500,960)}WidthAndHeight{width_and_height=(60,300)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 8453264135373564236:Tag{tag=BPLaser}Position{position=(1500,480)}WidthAndHeight{width_and_height=(60,300)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 9612889444363386116:Tag{tag=BPStaticParticle}Position{position=(3660,1980)}Charge{charge=10000}

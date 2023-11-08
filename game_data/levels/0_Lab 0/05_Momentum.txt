@@ -15,7 +15,7 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 9504436957480468539:Tag{tag=BPLaser}Position{position=(2280,900)}WidthAndHeight{width_and_height=(540,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 9760280478244929747:Tag{tag=BPWall}Position{position=(2280,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,240)}
 11239385560737518573:Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,120)}
-11753021552068349112:Tag{tag=BPPlayer}Position{position=(540,600)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+11753021552068349112:Tag{tag=BPPlayer}Position{position=(540,600)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 12487752652356586135:Tag{tag=BPStaticParticle}Position{position=(540,1260)}Charge{charge=10000}
 12933796662242729669:Tag{tag=BPWall}Position{position=(1380,1020)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,360)}
 13698994170602201758:Tag{tag=BPLaser}Position{position=(1740,1740)}WidthAndHeight{width_and_height=(420,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}

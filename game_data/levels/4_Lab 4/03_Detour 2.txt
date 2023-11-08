@@ -20,5 +20,5 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 13225732263672908714:Tag{tag=BPElectricField}Position{position=(1320,300)}ElectricField{field_vector=(0.5,-0)}WidthAndHeight{width_and_height=(360,360)}
 14328183311724093568:Tag{tag=BPStaticParticle}Position{position=(180,1800)}Charge{charge=10000}
 14448243367448529784:Tag{tag=BPLaser}Position{position=(1560,540)}WidthAndHeight{width_and_height=(1020,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
-17309412363188393153:Tag{tag=BPPlayer}Position{position=(540,1800)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+17309412363188393153:Tag{tag=BPPlayer}Position{position=(540,1800)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 17581523993049107955:Tag{tag=BPGoal}Position{position=(720,360)}

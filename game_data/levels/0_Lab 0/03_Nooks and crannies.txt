@@ -2,7 +2,7 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 78575224292569239:Tag{tag=BPLaser}Position{position=(1860,1380)}WidthAndHeight{width_and_height=(480,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 82681549066312030:Tag{tag=BPWall}Position{position=(1740,720)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,720)}
 155295981929462716:Tag{tag=BPCoin}Position{position=(2760,600)}
-2814951524592295404:Tag{tag=BPPlayer}Position{position=(480,600)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+2814951524592295404:Tag{tag=BPPlayer}Position{position=(480,600)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 2826002221766630824:Tag{tag=BPGoal}Position{position=(3240,600)}
 3104214518544825382:Tag{tag=BPStaticParticle}Position{position=(3660,600)}Charge{charge=10000}
 3261693262009957234:Tag{tag=BPCoin}Position{position=(2040,600)}

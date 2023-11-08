@@ -1,5 +1,5 @@
 name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
-3351940628582647910:Tag{tag=BPPlayer}Position{position=(1080,300)}Charge{charge=-10000}Velocity{velocity=(-1570.2,1.40373)}Player{can_switch_charge=1;can_go_neutral=1;move_force=0}
+3351940628582647910:Tag{tag=BPPlayer}Position{position=(1080,300)}Charge{charge=-10000}Velocity{velocity=(-1570.2,1.40373)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
 3614882698959726610:Tag{tag=BPLaser}Position{position=(3780,1080)}WidthAndHeight{width_and_height=(60,2100)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 4675720168455331014:Tag{tag=BPLaser}Position{position=(1920,2100)}WidthAndHeight{width_and_height=(3720,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 5835162990400236922:Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3720,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
