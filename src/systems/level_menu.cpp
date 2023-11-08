@@ -452,6 +452,11 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		{
 			GenerateLevelPreview(level, ui, ui->at_level_id.value(), generate_level_texture_);
 		}
+		else if (ui->new_level_button_id.has_value())
+		{
+			GenerateLevelPreview(level, ui, NEW_LEVEL_TEMPLATE_FILE.string(), generate_level_texture_);
+			ui->displaying_level_id = NEW_LEVEL_TEMPLATE_FILE.string();
+		}
 	}
 
 	{ // Stats display
