@@ -208,7 +208,7 @@ static void SetupOptionsSubMenu(Level& level, std::string menu_title, std::funct
 	//Create buttons, texts and add to scroll window
 	for (unsigned i = 0; i < description_texts.size(); ++i)
 	{
-		button_position.y = (5 + 1.5 * i) * BLOCK_SIZE;
+		button_position.y = (5 + 1.25 * i) * BLOCK_SIZE;
 		auto [button_entities, button_height] = create_buttons[i](button_position);
 		sf::Vector2f description_position = sf::Vector2f(level_size.x - button_position.x, button_position.y);
 		auto [description_id, description_height] = CreateScrollingText(level, description_position, description_texts[i], 80);
@@ -228,13 +228,29 @@ void Game::GoToKeyConfigMenu()
 	active_level_->ResetSize();
 	sf::Vector2f level_size = active_level_->GetSize();
 
-	std::vector<sf::Keyboard::Key*> keys = { &globals.key_config.PLAYER_SWITCH_CHARGE, &globals.key_config.PLAYER_GO_NEUTRAL, &globals.key_config.PLAYER_MOVE_UP, &globals.key_config.PLAYER_MOVE_LEFT, &globals.key_config.PLAYER_MOVE_DOWN, &globals.key_config.PLAYER_MOVE_RIGHT };
+	std::vector<std::string> description_texts = {
+		"Switch charge",
+		"Go neutral",
+		"Restart level",
+		"Move Up",
+		"Move Left",
+		"Move Down",
+		"Move Right"
+	};
+	std::vector<sf::Keyboard::Key*> keys = {
+		&globals.key_config.PLAYER_SWITCH_CHARGE,
+		&globals.key_config.PLAYER_GO_NEUTRAL,
+		&globals.key_config.RESTART_LEVEL,
+		&globals.key_config.PLAYER_MOVE_UP,
+		&globals.key_config.PLAYER_MOVE_LEFT,
+		&globals.key_config.PLAYER_MOVE_DOWN,
+		&globals.key_config.PLAYER_MOVE_RIGHT
+	};
 	std::vector<EntitiesCreator> EntitiesCreator;
 	for (auto key : keys)
 	{
 		EntitiesCreator.push_back(std::bind(&CreateKeyConfigButton, std::ref(*active_level_), std::placeholders::_1, key));
 	}
-	std::vector<std::string> description_texts = { "Switch charge", "Go neutral", "Move Up", "Move Left", "Move Down", "Move Right" };
 	std::function<std::string(std::string)> left_shift_description_texts = [](std::string s) { return RightPad(s, 17); };
 
 	SetupOptionsSubMenu(*active_level_, "Key Config", std::bind(&Game::SetLevel, this, OPTIONS_MENU), ApplyFuncToVector(description_texts, left_shift_description_texts), EntitiesCreator);

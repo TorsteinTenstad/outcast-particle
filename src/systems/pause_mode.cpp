@@ -44,6 +44,12 @@ void PauseMode::Update(Level& level, float dt)
 	assert(level_state == COMPLETED || level_state == PLAYING || level_state == FAILED); // To remind us to verify the state logic when adding new states
 	assert(level_mode == PLAY_MODE || level_mode == PAUSE_MODE || level_mode == EDIT_MODE || level_mode == READY_MODE);
 
+	if (cursor_and_keys_.key_pressed_this_frame[globals.key_config.RESTART_LEVEL])
+	{
+		level.Restart();
+		return;
+	}
+
 	MenuDelayTimer* menu_delay_timer = level.GetSingleton<MenuDelayTimer>();
 	if (level_mode == PLAY_MODE && level_state != PLAYING)
 	{
@@ -124,7 +130,7 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			menu_title = "You Died";
 		}
 
-		AddButton([&]() {level.SetMode(READY_MODE); level.LoadFromFile(); }, "Restart level", sf::Keyboard::R);
+		AddButton([&]() { level.Restart(); }, "Restart level", sf::Keyboard::R);
 
 		if (is_in_level_editing_)
 		{

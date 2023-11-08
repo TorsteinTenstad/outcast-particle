@@ -53,6 +53,7 @@ public:
 	LevelState ComputeState();
 	LevelMode GetMode();
 	void SetMode(LevelMode level_mode);
+	void Restart();
 
 	sf::Vector2f GetSize();
 	sf::Vector2u GetGridSize();

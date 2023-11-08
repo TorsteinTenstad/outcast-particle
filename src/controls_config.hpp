@@ -10,6 +10,7 @@ public:
 	sf::Keyboard::Key PLAYER_MOVE_DOWN = sf::Keyboard::S;
 	sf::Keyboard::Key PLAYER_SWITCH_CHARGE = sf::Keyboard::Space;
 	sf::Keyboard::Key PLAYER_GO_NEUTRAL = sf::Keyboard::Enter;
+	sf::Keyboard::Key RESTART_LEVEL = sf::Keyboard::Delete;
 	sf::Keyboard::Key OPEN_BLUEPRINT_MENU = sf::Keyboard::B;
 	sf::Keyboard::Key OPEN_MUSIC_MENU = sf::Keyboard::M;
 	sf::Keyboard::Key OPEN_PLAYER_MENU = sf::Keyboard::P;

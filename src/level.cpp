@@ -56,6 +56,12 @@ void Level::SetMode(LevelMode new_mode)
 	mode_ = new_mode;
 }
 
+void Level::Restart()
+{
+	SetMode(READY_MODE);
+	LoadFromFile();
+}
+
 sf::Vector2f Level::GetSize()
 {
 	return sf::Vector2f(LEVEL_SIZES[grid_size_id]) * float(BLOCK_SIZE);
