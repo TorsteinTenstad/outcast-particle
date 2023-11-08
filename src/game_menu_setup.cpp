@@ -11,6 +11,7 @@
 #include "game.hpp"
 #include "level.hpp"
 #include "utils/container_operations.hpp"
+#include "utils/level_id.hpp"
 #include "utils/string_manip.hpp"
 #include <tuple>
 
@@ -31,9 +32,24 @@ void Game::GoToMainMenu()
 		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
+	auto go_to_custom_levels = [this]() {
+		std::optional<std::string> first_custom_level_group = std::nullopt;
+		for (const auto& [group_name, _] : level_manager_.GetLevels())
+		{
+			if (Contains(editable_level_groups, GetGroupDisplayNameFromGroupName(group_name)))
+			{
+				first_custom_level_group = group_name;
+				break;
+			}
+		}
+		LevelMenuUI::last_at_level_group = first_custom_level_group;
+		SetLevel(LEVEL_MENU);
+	};
+
 	AddButton(std::bind(&Game::SetLevel, this, LEVEL_MENU), "Play");
+	AddButton(go_to_custom_levels, "Custom Levels");
 	AddButton(std::bind(&Game::SetLevel, this, OPTIONS_MENU), "Options");
-	AddButton(std::bind(&Game::SetLevel, this, CREDITS_MENU), "Credits");
+	//AddButton(std::bind(&Game::SetLevel, this, CREDITS_MENU), "Credits");
 	AddButton(std::bind(&Game::ExitGame, this), "Exit Game");
 
 	auto [entities, height] = VerticalEntityLayout(*active_level_, sf::Vector2f(level_size.x / 2 + x_center_offset, y_offset), entities_handles, BLOCK_SIZE);
