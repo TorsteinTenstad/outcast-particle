@@ -13,6 +13,10 @@ class DeadPlayer
 {
 };
 
+class PlayerInGoalAnimation
+{
+};
+
 class PlayerBehaviors
 {
 public:

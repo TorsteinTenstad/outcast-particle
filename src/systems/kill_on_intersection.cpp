@@ -15,7 +15,7 @@ void KillOnIntersectionSystem::Update(Level& level, float dt)
 
 	for (auto& [entity, intersection] : level.GetEntitiesWith<Intersection>())
 	{
-		if (level.ComputeState() != PLAYING && level.HasComponents<Player>(entity)) { continue; } //Needed to make other particles die after entering goal
+		if (level.ComputeState() != PLAYING && (level.HasComponents<Player>(entity) || level.HasComponents<PlayerInGoalAnimation>(entity))) { continue; } //Needed to make other particles die after entering goal
 		for (auto& i : intersection->intersecting_entities)
 		{
 			if (!level.HasComponents<KillOnIntersection>(i)) { continue; }

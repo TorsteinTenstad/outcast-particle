@@ -37,6 +37,7 @@ void GoalSystem::Update(Level& level, float dt)
 				assert(false);
 			}
 			level.RemoveComponents<Player>(entity);
+			level.AddComponent<PlayerInGoalAnimation>(entity);
 			level.RemoveComponents<Collision>(entity);
 			level.RemoveComponents<ForceVisualization>(entity);
 			level.AddComponent<ScheduledDelete>(entity)->delete_at = globals.time + 2;
