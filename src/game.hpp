@@ -6,6 +6,7 @@
 #include "level.hpp"
 #include "level_manager.hpp"
 #include "records_manager.hpp"
+#include "server_transceiver.hpp"
 #include "sfml_event_handler.hpp"
 
 #include <memory>
@@ -34,6 +35,7 @@ private:
 
 	sf::Clock absolute_clock;
 
+	ServerTransceiver server_transceiver_;
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
 

@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "globals.hpp"
 #include "steam/steam_api.h"
+#include <cpr/cpr.h>
 #include <cstdlib>
 #include <ctime>
 #include <functional>
@@ -21,6 +22,10 @@ int main()
 		printf("Fatal Error - Steam must be running to play this game (SteamAPI_Init() failed).\n");
 		return 1;
 	}
+	cpr::Response r = cpr::Get(cpr::Url { "http://volatile-particle.deno.dev/" });
+	r.status_code;			  // 200
+	r.header["content-type"]; // application/json; charset=utf-8
+	r.text;					  // JSON text string
 
 	globals.steam_username = std::string(SteamFriends()->GetPersonaName());
 	globals.steam_user_id = SteamUser()->GetSteamID().ConvertToUint64();

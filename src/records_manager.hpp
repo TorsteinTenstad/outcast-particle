@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <functional>
 #include <map>
 #include <optional>
 #include <string>
@@ -9,6 +10,7 @@ class RecordsManager
 private:
 	std::filesystem::path savefile_path_;
 	std::map<std::tuple<std::string, int, bool>, float> records_;
+	std::vector<std::function<void(std::string, int, bool, float)>> listeners_;
 
 public:
 	RecordsManager(const std::filesystem::path& savefile);

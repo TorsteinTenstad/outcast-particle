@@ -6,6 +6,10 @@ FetchContent_Declare(SFML
     GIT_TAG 2.5.1)
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
+                         GIT_TAG 1.10.5)
+FetchContent_MakeAvailable(cpr)
+
 SET(CMAKE_CXX_FLAGS "/EHsc")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
@@ -22,7 +26,7 @@ add_executable(volatile-particle-app ${_WIN32} ${SRC_DIR} ${COMPONENTS_DIR} ${SY
 set_target_properties(volatile-particle-app PROPERTIES OUTPUT_NAME "Volatile Particle")
 target_include_directories(volatile-particle-app PUBLIC src src/components src/systems src/platform_specific/)
 
-target_link_libraries(volatile-particle-app PRIVATE sfml-graphics sfml-audio sfml-main PUBLIC ${STEAMAPI_BINARY_DIR})
+target_link_libraries(volatile-particle-app PRIVATE sfml-graphics sfml-audio sfml-main cpr::cpr PUBLIC ${STEAMAPI_BINARY_DIR})
 target_compile_features(volatile-particle-app PRIVATE cxx_std_17)
 
 add_custom_command(
