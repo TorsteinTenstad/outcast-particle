@@ -1,4 +1,5 @@
 # Build system
+cmake/steamworks_sdk.zip
 bin
 build
 out

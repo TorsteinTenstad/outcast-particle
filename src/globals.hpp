@@ -48,6 +48,8 @@ struct Globals
 	GeneralConfig general_config;
 	ContentAccessOptions content_access_options;
 	Error errors;
+	std::string steam_username;
+	uint64_t steam_user_id;
 };
 
 extern Globals& globals;
