@@ -37,5 +37,6 @@ public:
 	std::vector<Entity> edit_level_button_entities = {};
 	std::vector<Entity> delete_level_button_entities = {};
 
-	std::vector<Entity> stats_block_entities = {};
+	std::vector<Entity> badge_entities = {};
+	std::vector<Entity> record_block_entities = {};
 };

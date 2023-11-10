@@ -26,11 +26,11 @@ void main()
 
     float round_corner_mask = get_rounded_corners_alpha(xy, _wh);
 
-    vec4 color = vec4(0.4, 0.4, 0.4, 1);
+    vec4 color = gl_Color;
 
 	color = blend(color, gem((c_uv-vec2(1*margin+1*gem_r,0))/gem_size, GAME_SPACE_AA/gem_size)*vec4(vec3(1), clamp(float(n_collected)-0.f, 0.20f, 1.f)));
 	color = blend(color, gem((c_uv-vec2(2*margin+3*gem_r,0))/gem_size, GAME_SPACE_AA/gem_size)*vec4(vec3(1), clamp(float(n_collected)-1.f, 0.20f, 1.f)));
 	color = blend(color, gem((c_uv-vec2(3*margin+5*gem_r,0))/gem_size, GAME_SPACE_AA/gem_size)*vec4(vec3(1), clamp(float(n_collected)-2.f, 0.20f, 1.f)));
 
-	gl_FragColor = color * round_corner_mask * gl_Color;
+	gl_FragColor = color * round_corner_mask;
 }

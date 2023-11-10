@@ -305,17 +305,16 @@ EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Ve
 	return { { parent_button, slider_bar, slider, button_text }, parent_size };
 }
 
-EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle, bool use_tooltip, float scale)
+EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, sf::Vector2f width_and_height, int coin_number, std::string text, bool twinkle, bool use_tooltip, float scale)
 {
 	Entity entity = level.CreateEntity();
 
 	level.AddComponent<DrawInfo>(entity, { (TEXTURES_DIR / "gray.png").string(), false, 0 });
 	level.AddComponent<Shader>(entity)->fragment_shader_path = (SHADERS_DIR / "stats_badge.frag").string();
 	level.GetComponent<Shader>(entity)->int_uniforms["n_collected"] = coin_number;
-	sf::Vector2f width_and_height = sf::Vector2f(7.5, 1.5) * float(BLOCK_SIZE) * scale;
+	level.AddComponent<FillColor>(entity)->color = DEFAULT_COLOR;
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
 	level.AddComponent<Position>(entity)->position = position;
-	level.AddComponent<FillColor>(entity)->color.a = alpha;
 	Text* text_component = level.AddComponent<Text>(entity);
 	text_component->size = (100 * scale);
 	text_component->content = text;

@@ -65,7 +65,7 @@ EntitiesHandle CreateConfirmMenu(ECSScene& level, sf::Vector2f level_size, std::
 EntitiesHandle CreateBlockingInformationMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::string body = "", float scale = 1);
 EntitiesHandle CreateBlockingPopupMenu(ECSScene& level, sf::Vector2f level_size, std::string title, std::vector<std::tuple<std::string, std::function<void(void)>, sf::Keyboard::Key>> button_info, EntitiesHandle middle_entities, float scale = 1);
 EntitiesHandle CreateSliderButton(ECSScene& level, sf::Vector2f position, sf::Vector2f size, int* f, std::array<int, 2> range);
-EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, int coin_number, sf::Uint8 alpha, std::string text, bool twinkle, bool use_tooltip = false, float scale = 1);
+EntityHandle CreateStatsBadge(ECSScene& level, sf::Vector2f position, sf::Vector2f width_and_height, int coin_number, std::string text, bool twinkle, bool use_tooltip = false, float scale = 1);
 Entity CreateScreenWideFragmentShaderEntity(Level& level, std::string shader_path, int draw_priority);
 
 #include "entity_creation.tpp"
