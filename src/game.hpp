@@ -7,6 +7,7 @@
 #include "level_manager.hpp"
 #include "records_manager.hpp"
 #include "sfml_event_handler.hpp"
+#include "steam_leaderboards.h"
 
 #include <memory>
 #include <stack>
@@ -25,6 +26,7 @@ private:
 
 	RecordsManager records_;
 	LevelManager level_manager_;
+	SteamLeaderboards steam_leaderboards_;
 
 	int next_available_system_id_ = 0;
 	std::map<std::type_index, int> type_to_system_id_;
@@ -36,8 +38,6 @@ private:
 
 	SFMLEventHandler sfml_event_handler_;
 	CursorAndKeys cursor_and_keys_;
-
-	Level& GetActiveLevel();
 
 	template <class System>
 	System& GetGameSystem();

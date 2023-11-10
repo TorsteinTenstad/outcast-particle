@@ -26,7 +26,8 @@
 Game::Game() :
 	active_level_(std::make_unique<Level>()),
 	level_manager_(LEVELS_DIR),
-	records_(USER_DIR / "records.txt")
+	records_(USER_DIR / "records.txt"),
+	steam_leaderboards_(records_)
 {
 	//RegisterGameSystem<TrailerIntroHelperSystem>();
 	RegisterGameSystem<LevelReadyScreenSystem>();
@@ -173,6 +174,12 @@ void Game::Update(float dt)
 	}
 	globals.time += dt;
 	sfml_event_handler_.Update(cursor_and_keys_);
+	if (cursor_and_keys_.key_released_this_frame[sf::Keyboard::F11])
+	{
+		ToggleFullscreen();
+	}
+	steam_leaderboards_.Update();
+
 	for (const auto& system_id : game_system_entities_)
 	{
 		game_systems_.at(system_id)->Update(*active_level_, dt);

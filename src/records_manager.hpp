@@ -8,9 +8,9 @@ class RecordsManager
 {
 private:
 	std::filesystem::path savefile_path_;
-	std::map<std::tuple<std::string, int, bool>, float> records_;
 
 public:
+	std::map<std::tuple<std::string, int, bool>, float> records_;
 	RecordsManager(const std::filesystem::path& savefile);
 	~RecordsManager();
 
