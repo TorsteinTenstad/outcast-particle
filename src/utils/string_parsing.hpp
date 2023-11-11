@@ -36,11 +36,11 @@ Error FromString(T& x, const std::string& s)
 	}
 	catch (const std::invalid_argument&)
 	{
-		return ERROR;
+		return APP_ERROR;
 	}
 	catch (const std::out_of_range&)
 	{
-		return ERROR;
+		return APP_ERROR;
 	}
 }
 
@@ -99,7 +99,7 @@ Error FromString(std::tuple<T...>& tuple, std::string s)
 	// Check if the number of elements matches the tuple size
 	if (elements.size() != sizeof...(T))
 	{
-		return ERROR;
+		return APP_ERROR;
 	}
 
 	std::size_t index = 0;
@@ -134,12 +134,12 @@ Error FromString(std::map<K, V>& map, std::string s)
 		std::vector<std::string> pair = SplitString(line, ";");
 		if (pair.size() < 2)
 		{
-			err += ERROR;
+			err += APP_ERROR;
 			continue;
 		}
 		if (pair.size() > 2)
 		{
-			err += ERROR;
+			err += APP_ERROR;
 		}
 		err += FromString(key, pair[0]);
 		err += FromString(value, pair[1]);
@@ -165,7 +165,7 @@ Error FromFile(T& x, const std::filesystem::path& file)
 {
 	std::ifstream f(file);
 
-	if (f.fail()) { return ERROR; }
+	if (f.fail()) { return APP_ERROR; }
 
 	std::stringstream buffer;
 	buffer << f.rdbuf();

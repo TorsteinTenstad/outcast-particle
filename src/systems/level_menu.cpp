@@ -373,9 +373,9 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 	// Scroll window
 	auto [menu_navigator_entity, _] = CreateMenuNavigator(level);
 	ui->menu_navigator_entity = menu_navigator_entity;
-	ScrollWindow* scroll_window;
+	ScrollableEntityContainer* scroll_window;
 	{
-		auto [entity, scroll_window_local, width_and_height, position] = level.CreateEntityWith<ScrollWindow, WidthAndHeight, Position>();
+		auto [entity, scroll_window_local, width_and_height, position] = level.CreateEntityWith<ScrollableEntityContainer, WidthAndHeight, Position>();
 		scroll_window = scroll_window_local;
 		scroll_window->entity_height = BUTTONS_HEIGHT;
 		scroll_window->menu_navigator = menu_navigator_entity;

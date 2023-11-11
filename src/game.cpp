@@ -172,6 +172,7 @@ void Game::Update(float dt)
 		dt = 1.f / 20;
 	}
 	globals.time += dt;
+	server_transceiver_.Update();
 	sfml_event_handler_.Update(cursor_and_keys_);
 	for (const auto& system_id : game_system_entities_)
 	{
@@ -217,7 +218,7 @@ void Game::CheckFullscreen()
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode(1920, 1080), "Volatile Particle", sf::Style::Default);
+		globals.render_window.create(sf::VideoMode(800, 600), "Volatile Particle", sf::Style::Default);
 	}
 	globals.render_window.setVerticalSyncEnabled(true);
 }

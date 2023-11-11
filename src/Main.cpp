@@ -23,11 +23,6 @@ int main()
 		globals.steam_user_id = SteamUser()->GetSteamID().ConvertToUint64();
 	}
 
-	cpr::Response r = cpr::Get(cpr::Url { "http://volatile-particle.deno.dev/" });
-	r.status_code;			  // 200
-	r.header["content-type"]; // application/json; charset=utf-8
-	r.text;					  // JSON text string
-
 	std::srand(std::time(nullptr));
 	SFML sfml_app = SFML();
 	Game game = Game();

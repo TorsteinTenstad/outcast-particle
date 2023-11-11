@@ -458,7 +458,7 @@ Error Level::LoadFromFile(std::string savefile_path)
 	Error err;
 
     std::ifstream f(savefile_path);
-	if (f.fail()) { return ERROR; }
+	if (f.fail()) { return APP_ERROR; }
     savefile_path_ = savefile_path;
     Clear();
     std::string line;
@@ -492,7 +492,7 @@ Error Level::LoadFromFile(std::string savefile_path)
 		std::optional<std::string> tag_opt = GetSubstrBetween(line, "Tag{tag=", "}");
 		if (!id_opt.has_value() || !tag_opt.has_value() || !IsNumeric(id_opt.value()))
 		{
-            err += ERROR;
+            err += APP_ERROR;
 			continue;
 		}
 		std::string id = id_opt.value();

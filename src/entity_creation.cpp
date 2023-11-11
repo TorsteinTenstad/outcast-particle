@@ -41,7 +41,7 @@ EntityHandle CreateScrollWindow(ECSScene& level, sf::Vector2f position, sf::Vect
 	Entity entity = level.CreateEntity();
 	level.AddComponent<Position>(entity)->position = position;
 	level.AddComponent<WidthAndHeight>(entity)->width_and_height = width_and_height;
-	level.AddComponent<ScrollWindow>(entity)->entity_height = entity_height;
+	level.AddComponent<ScrollableEntityContainer>(entity)->entity_height = entity_height;
 	return { entity, width_and_height };
 }
 

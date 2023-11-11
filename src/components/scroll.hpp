@@ -6,7 +6,7 @@
 #include <optional>
 #include <vector>
 
-class ScrollWindow
+class ScrollableEntityContainer
 {
 public:
 	std::vector<Entity> entities;

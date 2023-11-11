@@ -18,7 +18,7 @@ bool PointIsInside(sf::Vector2f point, WidthAndHeight* width_and_height, Positio
 
 bool CursorIsOutsideScrollWindowContainingEntity(Level& level, Entity entity, sf::Vector2f cursor_position)
 {
-	auto scroll_windows = level.GetEntitiesWith<ScrollWindow, WidthAndHeight, Position>();
+	auto scroll_windows = level.GetEntitiesWith<ScrollableEntityContainer, WidthAndHeight, Position>();
 	for (const auto& [_, scroll_window, width_and_heigh, position] : scroll_windows)
 	{
 		if (PointIsInside(cursor_position, width_and_heigh, position)) { continue; }

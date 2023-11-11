@@ -51,5 +51,5 @@ public:
 	}
 };
 
-#define ERROR Error(ErrorNumber::UNKNOWN_ERROR)
+#define APP_ERROR Error(ErrorNumber::UNKNOWN_ERROR)
 #define SUCCESS Error()
