@@ -101,7 +101,10 @@
         "stack": "cpp",
         "cassert": "cpp",
         "complex": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "condition_variable": "cpp",
+        "future": "cpp",
+        "unordered_set": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"

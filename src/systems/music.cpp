@@ -4,6 +4,7 @@
 #include "components/sticky_button.hpp"
 #include "entity_creation.hpp"
 #include "globals.hpp"
+#include "math.h"
 #include <filesystem>
 
 void MusicSystem::Update(Level& level, float dt)
@@ -33,5 +34,5 @@ void MusicSystem::Update(Level& level, float dt)
 		music_path_ = music_path;
 	}
 
-	music.setVolume(globals.general_config.music_volume);
+	music.setVolume(std::pow(10, globals.general_config.music_volume / 50.f) - 1);
 }

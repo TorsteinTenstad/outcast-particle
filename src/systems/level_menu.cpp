@@ -29,6 +29,9 @@
 
 #define LEVEL_PREVIEW_SCALE 0.6
 
+class LeaderboardEntity
+{};
+
 static void GenerateLevelPreview(Level& level, LevelMenuUI* ui,
 	std::string level_id,
 	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
@@ -47,20 +50,31 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		return;
 	}
 	std::string at_level_id = ui->at_level_id.value();
-	bool no_active_badge_button = true;
+	bool active_badge_button = false;
 	for (int i = 0; i < 4; i++)
 	{
 		if (level.HasComponents<StickyButtonDown>(ui->badge_entities[i]))
 		{
 			globals.general_config.active_badge_button_id = i;
-			//TODO: Get record strings etc. Really, from this loop, the index is all I need...
-			no_active_badge_button = false;
+			active_badge_button = true;
+			level.GetComponent<Position>(ui->connector_entity)->position.y = level.GetComponent<Position>(ui->badge_entities[i])->position.y;
+			//TODO: Get record strings etc
 		}
 	}
+	if (!active_badge_button) { globals.general_config.active_badge_button_id = -1; }
+
+	for (auto [entity, fill_color, leaderboard_entity] : level.GetEntitiesWith<FillColor, LeaderboardEntity>())
+	{
+		fill_color->color.a = active_badge_button * 255;
+	}
+	for (auto [entity, text, leaderboard_entity] : level.GetEntitiesWith<Text, LeaderboardEntity>())
+	{
+		text->color.a = active_badge_button * 255;
+	}
+
 	for (int i = 0; i < 4; i++)
 	{
 		std::optional<float> record = records->GetRecord(at_level_id, i);
-		level.GetComponent<Text>(ui->record_block_entities[i])->color.a = no_active_badge_button ? 0 : 255;
 		level.GetComponent<Text>(ui->record_block_entities[i])->content = record.has_value() & i == globals.general_config.active_badge_button_id ? LeftPad(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 14) : "I'm not needed here";
 	}
 }
@@ -473,15 +487,29 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<EntitiesHandle> entities_handles;
 		std::vector<Entity> badge_entities;
 		std::vector<Entity> record_entities;
+		auto [backdrop_entity, backdrop_size] = CreateButtonTemplate(level, sf::Vector2f(badge_center_positions.x + 9.6 * BLOCK_SIZE, badge_center_positions.y), sf::Vector2f(12.7 * BLOCK_SIZE, 6.75 * BLOCK_SIZE));
+		auto [connector_entity, connector_size] = CreateButtonTemplate(level, sf::Vector2f(level_size.x * float(1 - LEVEL_PREVIEW_SCALE / 2), 0), sf::Vector2f(10 * BLOCK_SIZE, 1.5 * BLOCK_SIZE - 1));
+		for (Entity entity : { backdrop_entity, connector_entity })
+		{
+			level.AddComponents<LeaderboardEntity>(entity);
+			level.GetComponent<FillColor>(entity)->color = PRESSED_COLOR;
+			level.GetComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
+		}
+		ui->connector_entity = connector_entity;
+		level.RemoveComponents<Shader>(connector_entity);
+
 		for (int i = 0; i < 4; i++)
 		{
 			auto [badge_entity, size] = CreateMouseEventButton(level, sf::Vector2f(0, 0), sf::Vector2f(6, 1.5) * float(BLOCK_SIZE) * level.GetScale());
 			level.GetComponent<Shader>(badge_entity)->fragment_shader_path = (SHADERS_DIR / "stats_badge.frag").string();
 			level.GetComponent<Shader>(badge_entity)->int_uniforms["n_collected"] = i;
 			level.AddComponent<StickyButton>(badge_entity)->channel = 3;
-			auto [icon_entity, icon_size] = CreateTexturedRectangle(level, sf::Vector2f(2, 0) * float(BLOCK_SIZE), sf::Vector2f(1.35, 1.35) * BLOCK_SIZE, UI_BASE_DRAW_PRIORITY + 1, (TEXTURES_DIR / "leaderboard.png").string(), false);
-			auto [record_entity, record_size] = CreateButtonTemplate(level, sf::Vector2f(10, 0) * float(BLOCK_SIZE), sf::Vector2f(5, 1.5));
-			level.AddComponent<Text>(record_entity);
+			auto [icon_entity, icon_size] = CreateTexturedRectangle(level, sf::Vector2f(2, 0) * float(BLOCK_SIZE), sf::Vector2f(1.35, 1.35) * BLOCK_SIZE, UI_BASE_DRAW_PRIORITY + 2, (TEXTURES_DIR / "leaderboard.png").string(), false);
+			auto [record_entity, record_size] = CreateButtonTemplate(level, sf::Vector2f(9.6, 0) * float(BLOCK_SIZE), sf::Vector2f(11.7, 1) * BLOCK_SIZE);
+			level.AddComponent<Text>(record_entity)->size = 75u;
+			level.AddComponent<LeaderboardEntity>(record_entity);
+			level.GetComponent<FillColor>(record_entity)->color = DEFAULT_COLOR;
+			level.GetComponent<DrawPriority>(record_entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 2;
 			entities_handles.push_back({ { badge_entity, icon_entity, record_entity }, size });
 			badge_entities.push_back(badge_entity);
 			record_entities.push_back(record_entity);
