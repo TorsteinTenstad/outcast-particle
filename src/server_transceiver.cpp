@@ -13,7 +13,14 @@ float TimeFromServerFormat(int server_format) { return static_cast<float>(server
 
 ServerTransceiver::ServerTransceiver()
 {
-	SendUsernameRequest(globals.steam_user_id, globals.steam_username);
+	if (globals.steam_user_id.has_value() && globals.steam_username.has_value())
+	{
+		SendUsernameRequest(globals.steam_user_id.value(), globals.steam_username.value());
+	}
+	else
+	{
+		SendLeaderboardRequest(std::nullopt); // Get a non-personalized leaderboard
+	}
 }
 
 void ServerTransceiver::Update()
@@ -37,7 +44,8 @@ void ServerTransceiver::Update()
 		auto& async_response = pending_async_leaderboard_response_.value();
 		if (!pending_async_score_responses_.empty())
 		{
-			async_response.Cancel();
+			auto cancellation_result = async_response.Cancel();
+
 			pending_async_leaderboard_response_.reset();
 		}
 		else
@@ -102,7 +110,10 @@ void ServerTransceiver::Update()
 
 void ServerTransceiver::OnRecordUpdate(std::string level_id, int coins_collected, bool neutral_was_used, float time)
 {
-	SendScoreRequest(globals.steam_user_id, level_id, coins_collected, neutral_was_used, time);
+	if (globals.steam_user_id.has_value())
+	{
+		SendScoreRequest(globals.steam_user_id.value(), level_id, coins_collected, neutral_was_used, time);
+	}
 }
 
 std::vector<LeaderboardEntryDisplayInfo> ServerTransceiver::GetLeaderboardDisplayInfo(std::string level_id, int coins_collected)
@@ -118,12 +129,12 @@ void ServerTransceiver::SendUsernameRequest(uint64_t user_id, std::string userna
 		cpr::Body { nlohmann::json { { "userId", user_id }, { "username", username } }.dump() },
 		cpr::Header { { "Content-Type", "application/json" } });
 }
-void ServerTransceiver::SendLeaderboardRequest(uint64_t user_id)
+void ServerTransceiver::SendLeaderboardRequest(std::optional<uint64_t> user_id)
 {
 	assert(!pending_async_leaderboard_response_.has_value());
 	pending_async_leaderboard_response_ = cpr::GetAsync(
-		cpr::Url { std::string(SERVER_URL) + std::string("/leaderboard") },
-		cpr::Parameters { { "userId", std::to_string(user_id) } });
+		cpr::Url { std::string(SERVER_URL) + std::string("/leaderboards") },
+		cpr::Parameters { { "userId", std::to_string(user_id.value_or(0)) } });
 }
 void ServerTransceiver::SendScoreRequest(uint64_t user_id, std::string level_id, int coins_collected, bool neutral_was_used, float time)
 {
