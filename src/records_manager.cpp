@@ -31,12 +31,12 @@ void RecordsManager::UpdateRecord(std::string level_id, int coins_collected, boo
 {
 	std::tuple<std::string, int, bool> key = { level_id, coins_collected, neutral_was_used };
 	auto existing_entry = records_.find(key);
-	if (existing_entry != records_.end() && existing_entry->second <= time) { return; }
-	records_[key] = time;
 	for (const auto& listener : listeners_)
 	{
 		listener->OnRecordUpdate(level_id, coins_collected, neutral_was_used, time);
 	}
+	if (existing_entry != records_.end() && existing_entry->second <= time) { return; }
+	records_[key] = time;
 }
 
 std::optional<float> RecordsManager::GetRecord(std::string level_id, int coins_collected, bool neutral_was_used) const

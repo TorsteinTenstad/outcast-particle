@@ -6,7 +6,8 @@
 #include <chrono>
 #include <iostream>
 #include <string>
-#define SERVER_URL "http://localhost:8000"
+
+#define SERVER_URL "http://volatile-particle.deno.dev/"
 
 int TimeToServerFormat(float time) { return static_cast<int>(time * 1000.f); }
 float TimeFromServerFormat(int server_format) { return static_cast<float>(server_format) / 1000.f; }
@@ -72,9 +73,6 @@ void ServerTransceiver::Update()
 										entry["username"],
 										TimeFromServerFormat(entry["score"]),
 									});
-
-								//print the leaderboard
-								std::cout << "Level: " << level_display_name << " Coins: " << coins << " Rank: " << entry["rank"] << " Username: " << entry["username"] << " Score: " << TimeFromServerFormat(entry["score"]) << std::endl;
 							}
 						}
 					}

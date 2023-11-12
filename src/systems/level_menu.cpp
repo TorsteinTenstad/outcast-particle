@@ -73,18 +73,18 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	}
 
 	std::vector<LeaderboardEntryDisplayInfo> leaderboard_display_info = server_transceiver->GetLeaderboardDisplayInfo(at_level_id, globals.general_config.active_badge_button_id);
-	std::cout << "leaderboard_display_info.size() = " << leaderboard_display_info.size() << "\n";
-	for (int i = 0; i < 4; i++)
-	{
-		std::optional<float> record = records->GetRecord(at_level_id, i);
-		level.GetComponent<Text>(ui->record_block_entities[i])->content = record.has_value() & i == globals.general_config.active_badge_button_id ? LeftPad(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 14) : "I'm not needed here";
-	}
 
-	for (auto [i, info] : enumerate(leaderboard_display_info))
+	int i = 0;
+	for (auto entity : ui->record_block_entities)
 	{
-		std::string text = "#" + std::to_string(info.rank) + "   " + info.steam_username + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 14);
-		std::cout << text << "\n";
+		std::string text = "";
+		if (i < leaderboard_display_info.size())
+		{
+			LeaderboardEntryDisplayInfo info = leaderboard_display_info[i];
+			text = "#" + std::to_string(info.rank) + "   " + info.steam_username + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 14);
+		}
 		level.GetComponent<Text>(ui->record_block_entities[i])->content = text;
+		i++;
 	}
 }
 
