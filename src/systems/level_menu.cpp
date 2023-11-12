@@ -81,7 +81,14 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		if (i < leaderboard_display_info.size())
 		{
 			LeaderboardEntryDisplayInfo info = leaderboard_display_info[i];
-			text = "#" + std::to_string(info.rank) + "   " + info.steam_username + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 14);
+			std::string username_formatted = info.steam_username;
+			int username_format_length = 20;
+			if (username_formatted.size() > username_format_length)
+			{
+				username_formatted = username_formatted.substr(0, username_format_length - 3) + "...";
+			}
+			username_formatted = RightPad(username_formatted, username_format_length);
+			text = "#" + std::to_string(info.rank) + "   " + username_formatted + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 7) + "s";
 		}
 		level.GetComponent<Text>(entity)->content = text;
 		i++;

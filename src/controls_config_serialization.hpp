@@ -27,6 +27,9 @@ void SerializeComponent(const KeyConfig* c, std::string& str_rep)
 	str_rep += "PLAYER_GO_NEUTRAL=";
 	str_rep += ToString(c->PLAYER_GO_NEUTRAL);
 	str_rep += ";";
+	str_rep += "RESTART_LEVEL=";
+	str_rep += ToString(c->RESTART_LEVEL);
+	str_rep += ";";
 	str_rep += "OPEN_BLUEPRINT_MENU=";
 	str_rep += ToString(c->OPEN_BLUEPRINT_MENU);
 	str_rep += ";";
@@ -138,6 +141,10 @@ void DeserializeComponent(KeyConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "PLAYER_GO_NEUTRAL")
         {
             FromString(c->PLAYER_GO_NEUTRAL, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "RESTART_LEVEL")
+        {
+            FromString(c->RESTART_LEVEL, statement_parts[1]);
         }
         else if (statement_parts[0] == "OPEN_BLUEPRINT_MENU")
         {

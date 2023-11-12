@@ -38,6 +38,9 @@ void SerializeComponent(const GeneralConfig* c, std::string& str_rep)
 	str_rep += ";";
 	str_rep += "display_precise_badge_time=";
 	str_rep += ToString(c->display_precise_badge_time);
+	str_rep += ";";
+	str_rep += "active_badge_button_id=";
+	str_rep += ToString(c->active_badge_button_id);
 	str_rep += "}";
 }
 
@@ -91,6 +94,10 @@ void DeserializeComponent(GeneralConfig* c, const std::string& entity_str_rep)
         else if (statement_parts[0] == "display_precise_badge_time")
         {
             FromString(c->display_precise_badge_time, statement_parts[1]);
+        }
+        else if (statement_parts[0] == "active_badge_button_id")
+        {
+            FromString(c->active_badge_button_id, statement_parts[1]);
         }
         else {
             assert(false);
