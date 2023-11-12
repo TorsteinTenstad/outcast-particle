@@ -25,15 +25,26 @@ int main()
 	else
 	{
 		std::ifstream fallback_username_file("steam_username_fallback.txt");
+		std::ifstream fallback_user_id_file("steam_user_id_fallback.txt");
+		if (fallback_user_id_file.is_open())
+		{
+			std::string line;
+			std::getline(fallback_user_id_file, line);
+			globals.steam_username = line;
+			globals.steam_user_id = std::stoull(line);
+		}
 		if (fallback_username_file.is_open())
 		{
 			std::string line;
 			std::getline(fallback_username_file, line);
 			globals.steam_username = line;
-			globals.steam_user_id = 0;
-			for (char c : globals.steam_username.value())
+			if (!globals.steam_user_id.has_value())
 			{
-				globals.steam_user_id.value() += c;
+				globals.steam_user_id = 0;
+				for (char c : globals.steam_username.value())
+				{
+					globals.steam_user_id.value() += c;
+				}
 			}
 		}
 	}
