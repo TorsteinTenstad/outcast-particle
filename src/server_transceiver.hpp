@@ -18,7 +18,7 @@ public:
 	ServerTransceiver();
 	void Update();
 	void OnRecordUpdate(std::string level_id, int coins_collected, bool neutral_was_used, float time) override;
-	std::vector<LeaderboardEntryDisplayInfo> GetLeaderboardDisplayInfo(std::string level_id, int coins_collected);
+	std::vector<LeaderboardEntryDisplayInfo> GetLeaderboardDisplayInfo(std::string level_id, int coins_collected) const;
 
 private:
 	std::map<std::string, std::map<int, std::vector<LeaderboardEntryDisplayInfo>>> leaderboard_data_;

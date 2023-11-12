@@ -43,7 +43,7 @@ static void GenerateLevelPreview(Level& level, LevelMenuUI* ui,
 }
 
 static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
-	const RecordsManager* records)
+	const RecordsManager* records, const ServerTransceiver* server_transceiver)
 {
 	if (!ui->at_level_id.has_value())
 	{
@@ -72,10 +72,19 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		text->color.a = active_badge_button * 255;
 	}
 
+	std::vector<LeaderboardEntryDisplayInfo> leaderboard_display_info = server_transceiver->GetLeaderboardDisplayInfo(at_level_id, globals.general_config.active_badge_button_id);
+	std::cout << "leaderboard_display_info.size() = " << leaderboard_display_info.size() << "\n";
 	for (int i = 0; i < 4; i++)
 	{
 		std::optional<float> record = records->GetRecord(at_level_id, i);
 		level.GetComponent<Text>(ui->record_block_entities[i])->content = record.has_value() & i == globals.general_config.active_badge_button_id ? LeftPad(CreateBadgeText(record.value_or(0), 2 + globals.general_config.display_precise_badge_time), 14) : "I'm not needed here";
+	}
+
+	for (auto [i, info] : enumerate(leaderboard_display_info))
+	{
+		std::string text = "#" + std::to_string(info.rank) + "   " + info.steam_username + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 14);
+		std::cout << text << "\n";
+		level.GetComponent<Text>(ui->record_block_entities[i])->content = text;
 	}
 }
 
@@ -124,15 +133,14 @@ static void RequestRedrawIfLevelGroupIsNew(Level& level, LevelMenuUI* ui, std::s
 void LevelMenuSystem::Give(
 	LevelManager* level_manager,
 	const RecordsManager* records,
-	std::function<Level&(std::string)>
-		set_level,
-	std::function<Level&(std::string)>
-		set_level_and_edit,
-	std::function<std::string(std::string, unsigned, unsigned)>
-		generate_level_texture)
+	const ServerTransceiver* server_transceiver,
+	std::function<Level&(std::string)> set_level,
+	std::function<Level&(std::string)> set_level_and_edit,
+	std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture)
 {
 	level_manager_ = level_manager;
 	records_ = records;
+	server_transceiver_ = server_transceiver;
 	set_level_ = set_level;
 	set_level_and_edit_ = set_level_and_edit;
 	generate_level_texture_ = generate_level_texture;
@@ -178,7 +186,8 @@ void LevelMenuSystem::UpdateUI(Level& level, LevelMenuUI* ui)
 	std::string at_group = ui->at_group.value();
 
 	UpdateLevelPreview(level, ui, level_manager_->GetLevels(), generate_level_texture_, records_);
-	UpdateStatsBadges(level, ui, records_);
+
+	UpdateStatsBadges(level, ui, records_, server_transceiver_);
 
 	if (level.HasComponents<ReleasedThisFrame>(ui->next_group_button_entity))
 	{

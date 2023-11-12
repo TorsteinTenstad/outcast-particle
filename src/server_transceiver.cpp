@@ -72,6 +72,9 @@ void ServerTransceiver::Update()
 										entry["username"],
 										TimeFromServerFormat(entry["score"]),
 									});
+
+								//print the leaderboard
+								std::cout << "Level: " << level_display_name << " Coins: " << coins << " Rank: " << entry["rank"] << " Username: " << entry["username"] << " Score: " << TimeFromServerFormat(entry["score"]) << std::endl;
 							}
 						}
 					}
@@ -82,8 +85,9 @@ void ServerTransceiver::Update()
 	}
 	if (!pending_async_score_responses_.empty())
 	{
-		for (auto& async_response : pending_async_score_responses_)
+		for (auto it = pending_async_score_responses_.begin(); it != pending_async_score_responses_.end();)
 		{
+			auto& async_response = *it;
 			if (async_response.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
 			{
 				auto response = async_response.get();
@@ -91,16 +95,13 @@ void ServerTransceiver::Update()
 				{
 					std::cout << "Error " << response.status_code << ": " << response.text << std::endl;
 				}
+				it = pending_async_score_responses_.erase(it);
+			}
+			else
+			{
+				++it;
 			}
 		}
-		pending_async_score_responses_.erase(
-			std::remove_if(
-				pending_async_score_responses_.begin(),
-				pending_async_score_responses_.end(),
-				[](cpr::AsyncResponse& async_response) {
-					return async_response.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
-				}),
-			pending_async_score_responses_.end());
 		if (pending_async_score_responses_.empty())
 		{
 			SendLeaderboardRequest(globals.steam_user_id);
@@ -116,9 +117,13 @@ void ServerTransceiver::OnRecordUpdate(std::string level_id, int coins_collected
 	}
 }
 
-std::vector<LeaderboardEntryDisplayInfo> ServerTransceiver::GetLeaderboardDisplayInfo(std::string level_id, int coins_collected)
+std::vector<LeaderboardEntryDisplayInfo> ServerTransceiver::GetLeaderboardDisplayInfo(std::string level_id, int coins_collected) const
 {
-	return leaderboard_data_[GetLevelDisplayNameFromId(level_id)][coins_collected];
+	auto level_leaderboard_it = leaderboard_data_.find(GetLevelDisplayNameFromId(level_id));
+	if (level_leaderboard_it == leaderboard_data_.end()) { return {}; }
+	auto leaderboard_it = level_leaderboard_it->second.find(coins_collected);
+	if (leaderboard_it == level_leaderboard_it->second.end()) { return {}; }
+	return leaderboard_it->second;
 }
 
 void ServerTransceiver::SendUsernameRequest(uint64_t user_id, std::string username)
@@ -149,5 +154,6 @@ void ServerTransceiver::SendScoreRequest(uint64_t user_id, std::string level_id,
 					{ "neutralWasUsed", neutral_was_used },
 					{ "score", TimeToServerFormat(time) },
 				}
-					.dump() }));
+					.dump() },
+			cpr::Header { { "Content-Type", "application/json" } }));
 }
