@@ -26,7 +26,7 @@ void LevelCompletionTimeSystem::Update(Level& level, float dt)
 		level_completion_timer->duration += dt;
 		return;
 	}
-	if (level_state != COMPLETED || level.GetEntitiesWithComponent<ScoreHasBeenUpdated>().size() == 0) { return; }
+	if (level_state != COMPLETED || level.GetEntitiesWithComponent<ScoreHasBeenUpdated>().size() > 0) { return; }
 	records_->UpdateRecord(active_level_id_, coin_counter->coin_counter, player_input_tracker->neutral_was_used, level_completion_timer->duration);
 	level.CreateEntityWith<ScoreHasBeenUpdated>();
 }

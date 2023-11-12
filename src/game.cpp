@@ -220,7 +220,7 @@ void Game::CheckFullscreen()
 	}
 	else
 	{
-		globals.render_window.create(sf::VideoMode(800, 600), "Volatile Particle", sf::Style::Default);
+		globals.render_window.create(sf::VideoMode(1280, 720), "Volatile Particle", sf::Style::Default);
 	}
 	globals.render_window.setVerticalSyncEnabled(true);
 }

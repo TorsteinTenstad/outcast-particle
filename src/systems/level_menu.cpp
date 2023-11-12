@@ -83,7 +83,7 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 			LeaderboardEntryDisplayInfo info = leaderboard_display_info[i];
 			text = "#" + std::to_string(info.rank) + "   " + info.steam_username + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 14);
 		}
-		level.GetComponent<Text>(ui->record_block_entities[i])->content = text;
+		level.GetComponent<Text>(entity)->content = text;
 		i++;
 	}
 }
