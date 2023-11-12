@@ -93,6 +93,8 @@ Game::Game() :
 
 	LoadOptionsFromFile((USER_DIR / "controls_config.txt").string(), (USER_DIR / "general_config.txt").string());
 
+	records_.listeners_.push_back(&server_transceiver_);
+
 	CheckFullscreen();
 
 	GoToMainMenu();

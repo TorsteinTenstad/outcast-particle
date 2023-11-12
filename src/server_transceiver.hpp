@@ -11,11 +11,12 @@ struct LeaderboardEntryDisplayInfo
 	float time;
 };
 
-class ServerTransceiver
+class ServerTransceiver : public RecordsListener
 {
 public:
 	ServerTransceiver();
 	void Update();
+	void OnRecordUpdate(std::string level_id, int coins_collected, bool neutral_was_used, float time) override;
 	std::vector<LeaderboardEntryDisplayInfo> GetLeaderboardDisplayInfo(std::string level_id, int coins_collected);
 
 private:

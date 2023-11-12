@@ -13,9 +13,6 @@ float TimeFromServerFormat(int server_format) { return static_cast<float>(server
 
 ServerTransceiver::ServerTransceiver()
 {
-	cpr::Response r = cpr::Get(cpr::Url { std::string(SERVER_URL) + std::string("/") });
-	std::cout << r.status_code << std::endl;
-	std::cout << r.text << std::endl;
 	SendUsernameRequest(globals.steam_user_id, globals.steam_username);
 }
 
@@ -38,33 +35,41 @@ void ServerTransceiver::Update()
 	if (pending_async_leaderboard_response_.has_value())
 	{
 		auto& async_response = pending_async_leaderboard_response_.value();
-		if (async_response.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+		if (!pending_async_score_responses_.empty())
 		{
-			auto response = async_response.get();
-			if (response.status_code != 200)
+			async_response.Cancel();
+			pending_async_leaderboard_response_.reset();
+		}
+		else
+		{
+			if (async_response.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
 			{
-				std::cout << "Error " << response.status_code << ": " << response.text << std::endl;
-			}
-			else
-			{
-				nlohmann::json json_response = nlohmann::json::parse(response.text);
-				for (auto const& [level_display_name, level_leaderboard] : json_response.items())
+				auto response = async_response.get();
+				if (response.status_code != 200)
 				{
-					for (auto const& [coins, leaderboard] : level_leaderboard.items())
+					std::cout << "Error " << response.status_code << ": " << response.text << std::endl;
+				}
+				else
+				{
+					nlohmann::json json_response = nlohmann::json::parse(response.text);
+					for (auto const& [level_display_name, level_leaderboard] : json_response.items())
 					{
-						for (auto const& entry : leaderboard)
+						for (auto const& [coins, leaderboard] : level_leaderboard.items())
 						{
-							leaderboard_data_[level_display_name][std::stoi(coins)].push_back(
-								LeaderboardEntryDisplayInfo {
-									entry["rank"],
-									entry["username"],
-									TimeFromServerFormat(entry["score"]),
-								});
+							for (auto const& entry : leaderboard)
+							{
+								leaderboard_data_[level_display_name][std::stoi(coins)].push_back(
+									LeaderboardEntryDisplayInfo {
+										entry["rank"],
+										entry["username"],
+										TimeFromServerFormat(entry["score"]),
+									});
+							}
 						}
 					}
 				}
+				pending_async_leaderboard_response_.reset();
 			}
-			pending_async_leaderboard_response_.reset();
 		}
 	}
 	if (!pending_async_score_responses_.empty())
@@ -88,7 +93,16 @@ void ServerTransceiver::Update()
 					return async_response.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
 				}),
 			pending_async_score_responses_.end());
+		if (pending_async_score_responses_.empty())
+		{
+			SendLeaderboardRequest(globals.steam_user_id);
+		}
 	}
+}
+
+void ServerTransceiver::OnRecordUpdate(std::string level_id, int coins_collected, bool neutral_was_used, float time)
+{
+	SendScoreRequest(globals.steam_user_id, level_id, coins_collected, neutral_was_used, time);
 }
 
 std::vector<LeaderboardEntryDisplayInfo> ServerTransceiver::GetLeaderboardDisplayInfo(std::string level_id, int coins_collected)
