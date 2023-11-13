@@ -523,7 +523,7 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		}
 		ui->connector_entity = connector_entity;
 		level.RemoveComponents<Shader>(connector_entity);
-		auto [triple_dot_entity, triple_dot_size] = CreateTexturedRectangle(level, sf::Vector2f(9.6, 0) * float(BLOCK_SIZE), sf::Vector2f(1.25, 1.25) * BLOCK_SIZE, UI_BASE_DRAW_PRIORITY + 2, (TEXTURES_DIR / "more_vert.png").string(), false);
+		auto [triple_dot_entity, triple_dot_size] = CreateTexturedRectangle(level, sf::Vector2f(9.6, 0) * float(BLOCK_SIZE), sf::Vector2f(1, 1) * 0.5f * BLOCK_SIZE, UI_BASE_DRAW_PRIORITY + 2, (TEXTURES_DIR / "more_vert.png").string(), false);
 		std::get<FillColor*>(level.AddComponents<LeaderboardEntity, FillColor>(triple_dot_entity))->color = DEFAULT_COLOR; // Sacc readability to cut one line
 
 		for (int i = 0; i < 4; i++)
