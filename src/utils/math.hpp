@@ -2,7 +2,7 @@
 #include "SFML/System/Vector2.hpp"
 #include <array>
 
-#define PI 3.141593f
+constexpr float PI = 3.141593f;
 
 float& GetX(sf::Vector2f& v);
 float& GetY(sf::Vector2f& v);

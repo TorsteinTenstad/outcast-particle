@@ -12,6 +12,7 @@
 #include "systems/_pure_DO_systems.hpp"
 #include "utils/math.hpp"
 #include "utils/string_manip.hpp"
+#include "utils/string_parsing.hpp"
 
 class TextPopupEntity
 {};
@@ -35,19 +36,20 @@ void TextPopupSystem::Update(Level& level, float dt)
 		}
 		if (cursor_and_keys_.key_pressed_this_frame[text_popup_spawner->key])
 		{
-			text_popup_spawner->alert_timer = -3.5;
+			text_popup_spawner->alert_timer = -5.5;
 		}
 		if (player_is_intersecting)
 		{
 			text_popup_spawner->alert_timer += dt;
-			auto popup_entity = level.GetSingletonId<TextPopupEntity>([content = "Press " + HumanName(text_popup_spawner->key) + " to " + text_popup_spawner->content,
+			auto content_parts = SplitString(text_popup_spawner->content, "_");
+			auto popup_entity = level.GetSingletonId<TextPopupEntity>([content = content_parts.front() + HumanName(text_popup_spawner->key) + (content_parts.size() > 1 ? content_parts.back() : ""),
 																		  level_center = (level.GetSize().x / 2)](ECSScene& level) {
-				auto [popup_entity, size] = CreateTexturedRectangle(level, sf::Vector2f(0, 0), sf::Vector2f(2400, 240), UI_BASE_DRAW_PRIORITY, (TEXTURES_DIR / "gray.png").string(), false);
-				auto [popup_text, popup_animated_position, shader] = level.AddComponents<Text, AnimatedPosition, Shader>(popup_entity);
+				auto [popup_entity, size] = CreateTexturedRectangle(level, sf::Vector2f(level_center, 1.5 * BLOCK_SIZE), sf::Vector2f(2400, 240), UI_BASE_DRAW_PRIORITY, (TEXTURES_DIR / "gray.png").string(), false);
+				auto [popup_text, animated_opacity, shader] = level.AddComponents<Text, AnimatedOpacity, Shader>(popup_entity);
 				popup_text->content = content;
-				popup_text->size = 100;
-				popup_animated_position->start_time = globals.time;
-				popup_animated_position->animation_func = [level_center](float t) { return sf::Vector2f(level_center, 180 * 2 * (Ease(2 * t - 0.5, 1, 3) - 0.5)); };
+				popup_text->size = 120;
+				animated_opacity->start_time = globals.time;
+				animated_opacity->animation_func = [level_center](float t) { return (sf::Uint8)(255 * Ease(t, 0, 0)); };
 				shader->fragment_shader_path = (SHADERS_DIR / "text_popup.frag").string();
 				//level.AddComponent<ScheduledDelete>(popup_entity)->delete_at = globals.time + 5;
 				return popup_entity;
