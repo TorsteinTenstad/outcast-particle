@@ -12,7 +12,7 @@ Globals& globals = globals_;
 
 int main()
 {
-	if (SteamAPI_RestartAppIfNecessary(k_uAppIdInvalid)) // Replace with your App ID
+	if (SteamAPI_RestartAppIfNecessary(2420710)) // Replace with your App ID
 	{
 		return 1;
 	}
