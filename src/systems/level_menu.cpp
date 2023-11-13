@@ -50,31 +50,28 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		return;
 	}
 	std::string at_level_id = ui->at_level_id.value();
-	bool active_badge_button = false;
+	globals.general_config.active_badge_button_id = -1;
 	for (int i = 0; i < 4; i++)
 	{
 		if (level.HasComponents<StickyButtonDown>(ui->badge_entities[i]))
 		{
 			globals.general_config.active_badge_button_id = i;
-			active_badge_button = true;
 			level.GetComponent<Position>(ui->connector_entity)->position.y = level.GetComponent<Position>(ui->badge_entities[i])->position.y;
-			//TODO: Get record strings etc
 		}
 	}
-	if (!active_badge_button) { globals.general_config.active_badge_button_id = -1; }
-
 	for (auto [entity, fill_color, leaderboard_entity] : level.GetEntitiesWith<FillColor, LeaderboardEntity>())
 	{
-		fill_color->color.a = active_badge_button * 255;
-	}
-	for (auto [entity, text, leaderboard_entity] : level.GetEntitiesWith<Text, LeaderboardEntity>())
-	{
-		text->color.a = active_badge_button * 255;
+		fill_color->color.a = 255 * (globals.general_config.active_badge_button_id != -1);
 	}
 
 	std::vector<LeaderboardEntryDisplayInfo> leaderboard_display_info = server_transceiver->GetLeaderboardDisplayInfo(at_level_id, globals.general_config.active_badge_button_id);
 
 	int i = 0;
+	auto size = level.GetSize();
+	sf::Vector2f record_center_positions = sf::Vector2f(level.GetSize().x * (1 - LEVEL_PREVIEW_SCALE) + 12.6 * BLOCK_SIZE, level.GetSize().y * (0.5 + 0.5 * LEVEL_PREVIEW_SCALE));
+	std::vector<EntitiesHandle> records_layout;
+	int triple_dots_index = ui->record_block_entities.size();
+	int prev_rank = 0;
 	for (auto entity : ui->record_block_entities)
 	{
 		std::string text = "";
@@ -89,10 +86,22 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 			}
 			username_formatted = RightPad(username_formatted, username_format_length);
 			text = "#" + std::to_string(info.rank) + "   " + username_formatted + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 7) + "s";
+			if (info.rank - prev_rank > 1) { triple_dots_index = std::min(triple_dots_index, i); }
+			prev_rank = info.rank;
 		}
+		else
+		{
+			level.GetComponent<FillColor>(ui->triple_dot_entity)->color.a = 0;
+			level.GetComponent<FillColor>(entity)->color.a = 0;
+		}
+		records_layout.push_back(ToEntitiesHandle({ entity, level.GetComponent<WidthAndHeight>(entity)->width_and_height }));
+		level.GetComponent<Position>(entity)->position = sf::Vector2f(0, 0);
 		level.GetComponent<Text>(entity)->content = text;
 		i++;
 	}
+	records_layout.insert(records_layout.begin() + triple_dots_index, ToEntitiesHandle({ ui->triple_dot_entity, level.GetComponent<WidthAndHeight>(ui->triple_dot_entity)->width_and_height }));
+	level.GetComponent<Position>(ui->triple_dot_entity)->position = sf::Vector2f(0, 0);
+	auto entities = VerticalEntityLayout(level, record_center_positions, records_layout, BLOCK_SIZE / 4);
 }
 
 static void UpdateLevelPreview(Level& level, LevelMenuUI* ui, const std::map<std::string, std::vector<std::string>>& level_groups, std::function<std::string(std::string, unsigned, unsigned)> generate_level_texture, const RecordsManager* records_)
@@ -500,19 +509,22 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 
 	{ // Stats display
 		sf::Vector2f badge_center_positions = sf::Vector2f(level_size.x * (1 - LEVEL_PREVIEW_SCALE) + 3 * BLOCK_SIZE, level_size.y * (0.5 + 0.5 * LEVEL_PREVIEW_SCALE));
-		std::vector<EntitiesHandle> entities_handles;
+		std::vector<EntitiesHandle> badge_entities_handles;
+		std::vector<EntitiesHandle> record_entities_handles;
 		std::vector<Entity> badge_entities;
 		std::vector<Entity> record_entities;
 		auto [backdrop_entity, backdrop_size] = CreateButtonTemplate(level, sf::Vector2f(badge_center_positions.x + 9.6 * BLOCK_SIZE, badge_center_positions.y), sf::Vector2f(12.7 * BLOCK_SIZE, 6.75 * BLOCK_SIZE));
 		auto [connector_entity, connector_size] = CreateButtonTemplate(level, sf::Vector2f(level_size.x * float(1 - LEVEL_PREVIEW_SCALE / 2), 0), sf::Vector2f(10 * BLOCK_SIZE, 1.5 * BLOCK_SIZE - 1));
 		for (Entity entity : { backdrop_entity, connector_entity })
 		{
-			level.AddComponents<LeaderboardEntity>(entity);
+			level.AddComponent<LeaderboardEntity>(entity);
 			level.GetComponent<FillColor>(entity)->color = PRESSED_COLOR;
 			level.GetComponent<DrawPriority>(entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 1;
 		}
 		ui->connector_entity = connector_entity;
 		level.RemoveComponents<Shader>(connector_entity);
+		auto [triple_dot_entity, triple_dot_size] = CreateTexturedRectangle(level, sf::Vector2f(9.6, 0) * float(BLOCK_SIZE), sf::Vector2f(1.25, 1.25) * BLOCK_SIZE, UI_BASE_DRAW_PRIORITY + 2, (TEXTURES_DIR / "more_vert.png").string(), false);
+		std::get<FillColor*>(level.AddComponents<LeaderboardEntity, FillColor>(triple_dot_entity))->color = DEFAULT_COLOR; // Sacc readability to cut one line
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -526,7 +538,8 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 			level.AddComponent<LeaderboardEntity>(record_entity);
 			level.GetComponent<FillColor>(record_entity)->color = DEFAULT_COLOR;
 			level.GetComponent<DrawPriority>(record_entity)->draw_priority = UI_BASE_DRAW_PRIORITY + 2;
-			entities_handles.push_back({ { badge_entity, icon_entity, record_entity }, size });
+			badge_entities_handles.push_back({ { badge_entity, icon_entity }, size });
+			record_entities_handles.push_back(ToEntitiesHandle({ record_entity, record_size }));
 			badge_entities.push_back(badge_entity);
 			record_entities.push_back(record_entity);
 		}
@@ -535,8 +548,11 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		{
 			level.AddComponent<StickyButtonDown>(badge_entities[active_badge_button_id]);
 		}
-		auto [entities, heights] = VerticalEntityLayout(level, badge_center_positions, entities_handles, BLOCK_SIZE / 4);
+		auto [entities, heights] = VerticalEntityLayout(level, badge_center_positions, badge_entities_handles, BLOCK_SIZE / 4);
+		record_entities_handles.push_back(ToEntitiesHandle({ triple_dot_entity, triple_dot_size }));
+		auto record_handles = VerticalEntityLayout(level, badge_center_positions, record_entities_handles, BLOCK_SIZE / 4);
 		ui->badge_entities = badge_entities;
 		ui->record_block_entities = record_entities;
+		ui->triple_dot_entity = triple_dot_entity;
 	}
 }
