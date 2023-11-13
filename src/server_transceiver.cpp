@@ -2,6 +2,8 @@
 #include "cpr/cpr.h"
 #include "globals.hpp"
 #include "json.hpp"
+#include "utils/container_operations.hpp"
+#include "utils/hash.hpp"
 #include "utils/level_id.hpp"
 #include <chrono>
 #include <iostream>
@@ -116,9 +118,19 @@ void ServerTransceiver::OnRecordUpdate(std::string level_id, int coins_collected
 	}
 }
 
+inline std::string GetServerLevelId(std::string level_id)
+{
+	std::string server_level_id = GetLevelDisplayNameFromId(level_id);
+	if (Contains(editable_level_groups, GetGroupDisplayNameFromId(level_id)))
+	{
+		server_level_id += std::string("_") + std::to_string(HashFileContents(level_id));
+	}
+	return server_level_id;
+}
+
 std::vector<LeaderboardEntryDisplayInfo> ServerTransceiver::GetLeaderboardDisplayInfo(std::string level_id, int coins_collected) const
 {
-	auto level_leaderboard_it = leaderboard_data_.find(GetLevelDisplayNameFromId(level_id));
+	auto level_leaderboard_it = leaderboard_data_.find(GetServerLevelId(level_id));
 	if (level_leaderboard_it == leaderboard_data_.end()) { return {}; }
 	auto leaderboard_it = level_leaderboard_it->second.find(coins_collected);
 	if (leaderboard_it == level_leaderboard_it->second.end()) { return {}; }
@@ -148,7 +160,7 @@ void ServerTransceiver::SendScoreRequest(uint64_t user_id, std::string level_id,
 			cpr::Body {
 				nlohmann::json {
 					{ "userId", user_id },
-					{ "level", GetLevelDisplayNameFromId(level_id) },
+					{ "level", GetServerLevelId(level_id) },
 					{ "coins", coins_collected },
 					{ "neutralWasUsed", neutral_was_used },
 					{ "score", TimeToServerFormat(time) },
