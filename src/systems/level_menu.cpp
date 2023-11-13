@@ -47,6 +47,7 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 {
 	if (!ui->at_level_id.has_value())
 	{
+		level.DeleteEntitiesWith<LeaderboardEntity>();
 		return;
 	}
 	std::string at_level_id = ui->at_level_id.value();
@@ -74,10 +75,16 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	int prev_rank = 0;
 	for (auto entity : ui->record_block_entities)
 	{
+		level.GetComponent<Text>(entity)->outline_thickness = 0;
 		std::string text = "";
 		if (i < leaderboard_display_info.size())
 		{
 			LeaderboardEntryDisplayInfo info = leaderboard_display_info[i];
+			if (info.steam_username == globals.steam_username)
+			{
+				level.GetComponent<Text>(entity)->outline_color = sf::Color(80, 80, 80, 255);
+				level.GetComponent<Text>(entity)->outline_thickness = 5;
+			}
 			std::string username_formatted = info.steam_username;
 			int username_format_length = 20;
 			if (username_formatted.size() > username_format_length)
