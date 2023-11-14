@@ -19,6 +19,7 @@ public:
 	void Update();
 	void OnRecordUpdate(std::string level_id, int coins_collected, bool neutral_was_used, float time) override;
 	std::vector<LeaderboardEntryDisplayInfo> GetLeaderboardDisplayInfo(std::string level_id, int coins_collected) const;
+	bool has_received_leaderboard = false;
 
 private:
 	std::map<std::string, std::map<int, std::vector<LeaderboardEntryDisplayInfo>>> leaderboard_data_;

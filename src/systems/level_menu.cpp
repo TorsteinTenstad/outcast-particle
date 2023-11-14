@@ -73,6 +73,24 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	std::vector<EntitiesHandle> records_layout;
 	int triple_dots_index = ui->record_block_entities.size();
 	int prev_rank = 0;
+	std::string missing_record_text = "";
+	if (leaderboard_display_info.size() == 0)
+	{
+		if (server_transceiver->has_received_leaderboard)
+		{
+			missing_record_text = "No scores yet";
+		}
+		else
+		{
+			missing_record_text = "    Could not fetch\nleaderboard from server";
+			std::optional<float> local_record = records->GetRecord(at_level_id, globals.general_config.active_badge_button_id);
+			if (local_record.has_value())
+			{
+				leaderboard_display_info.push_back(LeaderboardEntryDisplayInfo { -1, globals.steam_username.value_or("You"), local_record.value() });
+			}
+		}
+	}
+	level.GetComponent<Text>(ui->backdrop_entity)->content = missing_record_text;
 	for (auto entity : ui->record_block_entities)
 	{
 		level.GetComponent<Text>(entity)->outline_thickness = 0;
@@ -80,7 +98,7 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 		if (i < leaderboard_display_info.size())
 		{
 			LeaderboardEntryDisplayInfo info = leaderboard_display_info[i];
-			if (info.steam_username == globals.steam_username)
+			if (info.steam_username == globals.steam_username.value_or("You"))
 			{
 				level.GetComponent<Text>(entity)->outline_color = sf::Color(80, 80, 80, 255);
 				level.GetComponent<Text>(entity)->outline_thickness = 5;
@@ -92,7 +110,8 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 				username_formatted = username_formatted.substr(0, username_format_length - 3) + "...";
 			}
 			username_formatted = RightPad(username_formatted, username_format_length);
-			text = "#" + std::to_string(info.rank) + "   " + username_formatted + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 7) + "s";
+			std::string rank_string = info.rank > 0 ? std::to_string(info.rank) : "?";
+			text = "#" + rank_string + "   " + username_formatted + " " + LeftPad(CreateBadgeText(info.time, 2 + globals.general_config.display_precise_badge_time), 7) + "s";
 			if (info.rank - prev_rank > 1) { triple_dots_index = std::min(triple_dots_index, i); }
 			prev_rank = info.rank;
 		}
@@ -522,6 +541,10 @@ void LevelMenuSystem::SetupUI(Level& level, LevelMenuUI* ui)
 		std::vector<Entity> record_entities;
 		auto [backdrop_entity, backdrop_size] = CreateButtonTemplate(level, sf::Vector2f(badge_center_positions.x + 9.6 * BLOCK_SIZE, badge_center_positions.y), sf::Vector2f(12.7 * BLOCK_SIZE, 6.75 * BLOCK_SIZE));
 		auto [connector_entity, connector_size] = CreateButtonTemplate(level, sf::Vector2f(level_size.x * float(1 - LEVEL_PREVIEW_SCALE / 2), 0), sf::Vector2f(10 * BLOCK_SIZE, 1.5 * BLOCK_SIZE - 1));
+		{
+			Text* text = level.AddComponent<Text>(backdrop_entity);
+			ui->backdrop_entity = backdrop_entity;
+		}
 		for (Entity entity : { backdrop_entity, connector_entity })
 		{
 			level.AddComponent<LeaderboardEntity>(entity);

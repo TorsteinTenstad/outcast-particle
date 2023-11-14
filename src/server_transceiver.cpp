@@ -62,6 +62,7 @@ void ServerTransceiver::Update()
 				}
 				else
 				{
+					has_received_leaderboard = true;
 					leaderboard_data_.clear();
 					nlohmann::json json_response = nlohmann::json::parse(response.text);
 					for (auto const& [level_display_name, level_leaderboard] : json_response.items())

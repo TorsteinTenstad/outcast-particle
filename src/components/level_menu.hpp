@@ -39,6 +39,7 @@ public:
 
 	std::vector<Entity> badge_entities = {};
 	std::vector<Entity> record_block_entities = {};
+	Entity backdrop_entity;
 	Entity connector_entity;
 	Entity triple_dot_entity;
 };
