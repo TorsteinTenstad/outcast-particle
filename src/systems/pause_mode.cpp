@@ -1,6 +1,7 @@
 #include "systems/pause_mode.hpp"
 #include "components/coin.hpp"
 #include "components/draw_info.hpp"
+#include "components/level_menu.hpp"
 #include "components/position.hpp"
 #include "components/size.hpp"
 #include "components/text.hpp"
@@ -93,6 +94,8 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 		entities_handles.push_back(ToEntitiesHandle(button_handle));
 	};
 
+	bool level_menu_button_added = false;
+
 	if (previous_mode == PLAY_MODE)
 	{
 		if (level_state == PLAYING)
@@ -122,6 +125,11 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 			if (next_level_index != level_group.end())
 			{
 				AddButton(std::bind(set_level_, *next_level_index), "Next level", sf::Keyboard::Unknown);
+			}
+			else
+			{
+				AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+				level_menu_button_added = true;
 			}
 		}
 
@@ -159,7 +167,10 @@ void PauseMode::SetupPauseMenu(Level& level, LevelMode previous_mode)
 	}
 	else
 	{
-		AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		if (!level_menu_button_added)
+		{
+			AddButton([&]() { set_level_(LEVEL_MENU); }, "Level menu", sf::Keyboard::Unknown);
+		}
 		AddButton([&]() { set_level_(MAIN_MENU); }, "Main menu", sf::Keyboard::Unknown);
 	}
 
