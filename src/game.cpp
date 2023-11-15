@@ -216,10 +216,16 @@ void Game::CheckFullscreen()
 	if (globals.general_config.fullscreen)
 	{
 		globals.render_window.create(sf::VideoMode::getFullscreenModes()[0], "Volatile Particle", sf::Style::Fullscreen);
+		sf::Image icon;
+		icon.loadFromFile((TEXTURES_DIR / "game_icon.png").string());
+		globals.render_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	}
 	else
 	{
 		globals.render_window.create(sf::VideoMode(1280, 720), "Volatile Particle", sf::Style::Default);
+		sf::Image icon;
+		icon.loadFromFile((TEXTURES_DIR / "game_icon.png").string());
+		globals.render_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	}
 	globals.render_window.setVerticalSyncEnabled(true);
 }
