@@ -35,6 +35,33 @@ void LevelManager::Load()
 			if (err) { corrupt_files.push_back(level_id); }
 		}
 	}
+	int next_available_group_order_index = 99;
+	for (auto it = editable_level_groups.rbegin(); it != editable_level_groups.rend(); ++it)
+	{
+		bool exists = false;
+		for (auto const& [level_group, _] : levels_)
+		{
+			if (*it == GetGroupDisplayNameFromGroupName(level_group))
+			{
+				exists = true;
+				break;
+			}
+		}
+		if (!exists)
+		{
+			std::string group_name = std::to_string(next_available_group_order_index) + "_" + *it;
+			levels_[group_name];
+			try
+			{
+				std::filesystem::create_directory(LEVELS_DIR / group_name);
+			}
+			catch (std::filesystem::filesystem_error& e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+		}
+	}
+
 	if (corrupt_files.size() > 0)
 	{
 		std::string message = "Failed to load game levels:";
