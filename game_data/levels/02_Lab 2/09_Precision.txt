@@ -3,6 +3,7 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 2122004819209583116:Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(3840,120)}
 2185663354195337211:Tag{tag=BPWall}Position{position=(720,60)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,120)}
 2951470973230031166:Tag{tag=BPLaser}Position{position=(2100,1320)}WidthAndHeight{width_and_height=(60,300)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
+3447716439800113048:Tag{tag=BPWall}Position{position=(1260,180)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(120,360)}
 3567721502390303265:Tag{tag=BPWall}Position{position=(2820,180)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(2040,360)}
 3950028237397813916:Tag{tag=BPElectricField}Position{position=(240,960)}ElectricField{field_vector=(-0.0625,0)}WidthAndHeight{width_and_height=(240,480)}
 4247519539540742052:Tag{tag=BPGoal}Position{position=(720,1800)}
@@ -14,6 +15,7 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 8622162565342434697:Tag{tag=BPStaticParticle}Position{position=(3660,1980)}Charge{charge=10000}
 8980898207306264819:Tag{tag=BPLaser}Position{position=(60,960)}WidthAndHeight{width_and_height=(60,540)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 9966346009880094773:Tag{tag=BPPlayer}Position{position=(720,240)}Charge{charge=10000}Velocity{velocity=(0,0)}Player{can_switch_charge=1;can_go_neutral=1;can_move_self=0;move_force=0}
+10087030397666705367:Tag{tag=BPLaser}Position{position=(1260,480)}WidthAndHeight{width_and_height=(60,300)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 10528381820344288448:Tag{tag=BPLaser}Position{position=(3780,1560)}WidthAndHeight{width_and_height=(60,540)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 10873232277416439077:Tag{tag=BPWall}Position{position=(3240,1920)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1200,240)}
 11022244708373098718:Tag{tag=BPStaticParticle}Position{position=(120,1380)}Charge{charge=-10000}
@@ -24,14 +26,15 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 12816237547032875064:Tag{tag=BPWall}Position{position=(2040,1080)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,480)}
 13691820371288844968:Tag{tag=BPWall}Position{position=(720,1440)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,240)}
 14285995481317087610:Tag{tag=BPElectricField}Position{position=(2400,1080)}ElectricField{field_vector=(-0,-0.0625)}WidthAndHeight{width_and_height=(480,240)}
+14316045135323454450:Tag{tag=BPLaser}Position{position=(1200,660)}WidthAndHeight{width_and_height=(180,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 14429186233340418865:Tag{tag=BPLaser}Position{position=(1860,1080)}WidthAndHeight{width_and_height=(60,300)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 14539635742067652507:Tag{tag=BPLaser}Position{position=(3780,600)}WidthAndHeight{width_and_height=(60,540)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 14995913399613228578:Tag{tag=BPWall}Position{position=(720,1260)}Collision{bounce_factor=0.05;friction=75}WidthAndHeight{width_and_height=(480,120)}
 15497744638738170301:Tag{tag=BPLaser}Position{position=(2040,1500)}WidthAndHeight{width_and_height=(180,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 15530298621458573663:Tag{tag=BPWall}Position{position=(240,1620)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,840)}
 15635368087394257064:Tag{tag=BPWall}Position{position=(240,360)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,720)}
-15778577194822257681:Tag{tag=BPCoin}Position{position=(1560,960)}
-17639346845147678206:Tag{tag=BPWall}Position{position=(1140,360)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(360,720)}
+15778577194822257681:Tag{tag=BPCoin}Position{position=(1560,360)}
+17639346845147678206:Tag{tag=BPWall}Position{position=(1080,360)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(240,720)}
 18092433748280424089:Tag{tag=BPWall}Position{position=(2400,900)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(480,120)}
 18147272894496554809:Tag{tag=BPWall}Position{position=(1500,1380)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(1080,360)}
 18324036221905035039:Tag{tag=BPCoin}Position{position=(3240,1080)}

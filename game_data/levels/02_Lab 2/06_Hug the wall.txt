@@ -17,8 +17,8 @@ name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
 12981818055969679691:Tag{tag=BPWall}Position{position=(600,1980)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(960,120)}
 13739319172770251069:Tag{tag=BPWall}Position{position=(2640,1980)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(2160,120)}
 14051798658673246623:Tag{tag=BPWall}Position{position=(600,300)}Collision{bounce_factor=0.2;friction=75}WidthAndHeight{width_and_height=(960,120)}
-14294055625798699178:Tag{tag=BPCoin}Position{position=(1800,600)}
-14431201488177337263:Tag{tag=BPCoin}Position{position=(1800,1680)}
+14294055625798699178:Tag{tag=BPCoin}Position{position=(1680,480)}
+14431201488177337263:Tag{tag=BPCoin}Position{position=(960,1800)}
 14432377592889260093:Tag{tag=BPElectricField}Position{position=(2280,600)}ElectricField{field_vector=(-0,-0.25)}WidthAndHeight{width_and_height=(480,480)}
 14560616035974901883:Tag{tag=BPStaticParticle}Position{position=(2700,1140)}Charge{charge=10000}
 14603850249957494374:Tag{tag=BPElectricField}Position{position=(1320,600)}ElectricField{field_vector=(-0,-0.25)}WidthAndHeight{width_and_height=(480,480)}
