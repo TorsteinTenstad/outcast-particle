@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Buzz.wav
 914855722905492645:Tag{tag=BPStaticParticle}Position{position=(360,360)}Charge{charge=-10000}
 1091589276819773949:Tag{tag=BPLaser}Position{position=(1920,60)}WidthAndHeight{width_and_height=(3780,60)}TogglingLaser{period_s=1;duty_cycle=1;phase=0}
 1194276904331207325:Tag{tag=BPCoin}Position{position=(2640,720)}

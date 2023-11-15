@@ -54,6 +54,7 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	globals.general_config.active_badge_button_id = -1;
 	for (int i = 0; i < 4; i++)
 	{
+		std::optional<float> record = records->GetRecord(at_level_id, i);
 		if (level.HasComponents<StickyButtonDown>(ui->badge_entities[i]))
 		{
 			globals.general_config.active_badge_button_id = i;
@@ -63,6 +64,10 @@ static void UpdateStatsBadges(Level& level, LevelMenuUI* ui,
 	for (auto [entity, fill_color, leaderboard_entity] : level.GetEntitiesWith<FillColor, LeaderboardEntity>())
 	{
 		fill_color->color.a = 255 * (globals.general_config.active_badge_button_id != -1);
+	}
+	for (auto [entity, text, leaderboard_entity] : level.GetEntitiesWith<Text, LeaderboardEntity>())
+	{
+		text->color.a = 255 * (globals.general_config.active_badge_button_id != -1);
 	}
 
 	std::vector<LeaderboardEntryDisplayInfo> leaderboard_display_info = server_transceiver->GetLeaderboardDisplayInfo(at_level_id, globals.general_config.active_badge_button_id);

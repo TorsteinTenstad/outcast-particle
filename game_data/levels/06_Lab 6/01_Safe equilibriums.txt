@@ -1,4 +1,4 @@
-name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Oasis.wav
+name=Untitled;grid_size_id=1;editable=1;music_path=game_data\music\Jrny.wav
 614969208979031978:Tag{tag=BPLaser}Position{position=(1320,1080)}WidthAndHeight{width_and_height=(60,1980)}TogglingLaser{period_s=3;duty_cycle=0.5;phase=0}
 1759131964926028571:Tag{tag=BPStaticParticle}Position{position=(720,1380)}Charge{charge=-10000}
 2073621260103182851:Tag{tag=BPWall}Position{position=(1920,2100)}Collision{bounce_factor=0.2;friction=0}WidthAndHeight{width_and_height=(3840,120)}
